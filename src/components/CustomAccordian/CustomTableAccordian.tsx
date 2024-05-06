@@ -255,7 +255,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     const [serviceIndex, setServiceIndex]: any = useState(0);
 
     const [addressOpenModal, setAddressOpenModal] = useState(false);
-    console.log("🚀 ~ Accordion ~ addressOpenModal:", addressOpenModal);
 
     const [open, setOpen] = useState<any>({});
     const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
@@ -316,7 +315,28 @@ const Accordion = (props: ICustomTableAccordion) => {
                 const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
 
                 if (data?.status) {
+                    // for (
+                    //     let i = 0;
+                    //     i < boxProductDetails?.boxInfo?.[0]?.products?.length;
+                    //     i++
+                    // ) {
+                    //     let element6 = document.getElementById(
+                    //         `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+                    //     );
+                    //     console.log("element6", element6);
+                    //     // if (element4) element4.classList.add("!border-red-500");
+                    //     // if (element6) element6.style.borderColor = "black";
+                    //     if (element6)
+                    //         element6.classList.add("!border-black-500");
+                    //     let element4: any = document.getElementById(
+                    //         `${orderDetails[2]?.title}`
+                    //     );
+                    //     console.log("element4", element4);
+                    //     if (element4) element4.style.borderColor = "black";
+                    // }
                     toast.success("Updated Product Successfully");
+                    //calling the getSellerCompleteData api again to get the updated details for updating the error borders
+                    getSellerOrderCompleteData(getAllSellerData?.data);
                     // getServiceList();
                     setServiceList([]);
                     setServiceRefresh(true);
@@ -1475,10 +1495,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                         // ("boxname");
                         // );
 
-                        if (element4) element4.classList.add("!border-red-500");
-                        if (element4) element4.style.borderColor = "red";
+                        // if (element4) element4.classList.add("!border-red-500");
 
-                        if (element5) element5.style.borderColor = "red";
+                        if (element4 && !enabled)
+                            element4.style.borderColor = "red";
+
+                        if (element5 && !enabled)
+                            element5.style.borderColor = "red";
+                        // if (element5) element5.classList.add("!border-red-500");
                     }
                     return toast.error(
                         "Please Select any existing box or create a new box"
@@ -1514,10 +1538,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                         // "boxname"
                         // );
 
-                        if (element4) element4.classList.add("!border-red-500");
-                        // if (element4) element4.style.borderColor = "red";
+                        // if (element4) element4.classList.add("!border-red-500");
+                        if (element4 && !enabled)
+                            element4.style.borderColor = "red";
 
-                        if (element5) element5.style.borderColor = "red";
+                        if (element5 && !enabled)
+                            element5.style.borderColor = "red";
                     }
                     return toast.error(
                         "Please Select any existing box or create a new box"
@@ -1554,10 +1580,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                         // "boxname"
                         // );
 
-                        if (element4) element4.classList.add("!border-red-500");
-                        // if (element4) element4.style.borderColor = "red";
+                        // if (element4) element4.classList.add("!border-red-500");
+                        if (element4 && !enabled)
+                            element4.style.borderColor = "red";
 
-                        if (element5) element5.style.borderColor = "red";
+                        if (element5 && !enabled)
+                            element5.style.borderColor = "red";
                     }
                     return toast.error(
                         "Please Select any existing box or create a new box"
@@ -1595,10 +1623,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                         // "boxname"
                         // );
 
-                        if (element4) element4.classList.add("!border-red-500");
+                        if (element4 && !enabled)
+                            element4.classList.add("!border-red-500");
                         // if (element4) element4.style.borderColor = "red";
 
-                        if (element5) element5.style.borderColor = "red";
+                        if (element5 && !enabled)
+                            element5.style.borderColor = "red";
                     }
                     return toast.error(
                         "Please Select any existing box or create a new box"
@@ -1636,10 +1666,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                         // "boxname"
                         // );
 
-                        if (element4) element4.classList.add("!border-red-500");
+                        if (element4 && !enabled)
+                            element4.classList.add("!border-red-500");
                         // if (element4) element4.style.borderColor = "red";
 
-                        if (element5) element5.style.borderColor = "red";
+                        if (element5 && !enabled)
+                            element5.style.borderColor = "red";
                     }
                     return toast.error(
                         "Please Select any existing box or create a new box"
@@ -1772,11 +1804,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                             `${orderDetails[2]?.title}`
                         );
 
-                        let element5: any = document.getElementById("boxname");
+                        let element5: any = document.getElementById("Box 1");
                         if (element5) element5.style.borderColor = "#E8E8E8";
-                        // if (element5) element5.classList.add("#E8E8E8");
-                        if (element4) element4.classList.add("!#E8E8E8");
-                        // f (element4) element4.style.borderColor = "#E8E8E8";
+
+                        if (element4 && !enabled)
+                            element4.classList.add("!#E8E8E8");
+
                         // getServiceList();
                     } else {
                         toast.error("Something went wrong");
@@ -1912,10 +1945,10 @@ const Accordion = (props: ICustomTableAccordion) => {
             //   0 ||
             getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length ===
                 0 ||
-            getDeliveryAddressData?.deliveryAddress?.locality?.trim()
-                ?.length === 0 ||
-            getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
-                ?.length === 0 ||
+            // getDeliveryAddressData?.deliveryAddress?.locality?.trim()
+            //     ?.length === 0 ||
+            // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
+            //     ?.length === 0 ||
             getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
             getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
             getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
@@ -1942,8 +1975,8 @@ const Accordion = (props: ICustomTableAccordion) => {
             // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
             // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
             getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-            getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
-            getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
+            // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+            // getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
             getPickAddressData?.pickUpAddress?.city?.length === 0 ||
             getPickAddressData?.pickUpAddress?.state?.length === 0 ||
             getPickAddressData?.pickUpAddress?.country?.length === 0 ||
@@ -1999,11 +2032,11 @@ const Accordion = (props: ICustomTableAccordion) => {
             // let element5: any = document.getElementById("Box 1");
             let element5: any = document.getElementById(
                 // `${boxProductDetails?.boxInfo?.[0]?.name}`
-                "boxname"
+                "Box 1"
             );
 
-            if (element4) element4.classList.add("!border-red-500");
-            if (element5) element5.style.borderColor = "red";
+            if (element4 && !enabled) element4.classList.add("!border-red-500");
+            if (element5 && !enabled) element5.style.borderColor = "red";
             // if (element5) element5.classList.add("!border-red-500");
         } else {
             // let element4: any = document.getElementById("Box Info  Product(s) x 5");
@@ -2011,11 +2044,16 @@ const Accordion = (props: ICustomTableAccordion) => {
                 `${orderDetails[2]?.title}`
             );
             // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            //     `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // );
             let element5: any = document.getElementById(
-                `${boxProductDetails?.boxInfo?.[0]?.name}`
+                // `${boxProductDetails?.boxInfo?.[0]?.name}`
+                "Box 1"
             );
+
             if (element4) element4.style.borderColor = "#E8E8E8";
-            if (element5) element5.style.borderColor = "#E8E8E8";
+            if (element5 && !enabled) element5.style.borderColor = "#E8E8E8";
         }
 
         for (
@@ -2037,8 +2075,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                     `${orderDetails[2]?.title}`
                 );
                 if (element6) element6.style.borderColor = "red";
-                if (element4) element4.style.borderColor = "red";
-                break;
+                if (element4 && !enabled) element4.style.borderColor = "red";
+                // break;
             } else {
                 let element4: any = document.getElementById(
                     `${orderDetails[2]?.title}`
@@ -2063,10 +2101,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                 // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
                 getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length ===
                     0 ||
-                getPickAddressData?.pickUpAddress?.locality?.trim()?.length ===
-                    0 ||
-                getPickAddressData?.pickUpAddress?.landmark?.trim().length ===
-                    0 ||
+                // getPickAddressData?.pickUpAddress?.locality?.trim()?.length ===
+                //     0 ||
+                // getPickAddressData?.pickUpAddress?.landmark?.trim().length ===
+                //     0 ||
                 getPickAddressData?.pickUpAddress?.city?.length === 0 ||
                 getPickAddressData?.pickUpAddress?.state?.length === 0 ||
                 getPickAddressData?.pickUpAddress?.country?.length === 0 ||
@@ -2105,18 +2143,18 @@ const Accordion = (props: ICustomTableAccordion) => {
                 //   ?.length === 0 ||
                 getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()
                     ?.length === 0 ||
-                getDeliveryAddressData?.deliveryAddress?.locality?.trim()
-                    ?.length === 0 ||
-                getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
-                    ?.length === 0 ||
+                // getDeliveryAddressData?.deliveryAddress?.locality?.trim()
+                //     ?.length === 0 ||
+                // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
+                //     ?.length === 0 ||
                 getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
                 getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
                 getDeliveryAddressData?.deliveryAddress?.country?.length ===
                     0 ||
                 getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
                 getDeliveryAddressData?.deliveryAddress?.pincode === 0 ||
-                getDeliveryAddressData?.deliveryAddress?.addressType?.length ===
-                    0 ||
+                // getDeliveryAddressData?.deliveryAddress?.addressType?.length ===
+                //     0 ||
                 (!gstRegex.test(
                     getDeliveryAddressData?.deliveryAddress?.gstNumber
                 ) &&
@@ -2960,7 +2998,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     className="border  border-black-600 p-2 flex justify-between w-full rounded-md"
                                                                                                     // id={`${eachBox.name}`}
                                                                                                     id={
-                                                                                                        "boxname"
+                                                                                                        "Box 1"
                                                                                                     }
                                                                                                     onClick={(
                                                                                                         e: any
@@ -3194,37 +3232,39 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           }}
                                                         /> */}
                                                                                                                 <div className="my-3 rounded-md">
-                                                                                                                    <p
-                                                                                                                        onClick={() => {
-                                                                                                                            setCustomInputBox(
-                                                                                                                                true
-                                                                                                                            );
-                                                                                                                            setExistingBox(
-                                                                                                                                false
-                                                                                                                            );
+                                                                                                                    {!enabled && (
+                                                                                                                        <p
+                                                                                                                            onClick={() => {
+                                                                                                                                setCustomInputBox(
+                                                                                                                                    true
+                                                                                                                                );
+                                                                                                                                setExistingBox(
+                                                                                                                                    false
+                                                                                                                                );
 
-                                                                                                                            setBoxName(
-                                                                                                                                false
-                                                                                                                            );
-                                                                                                                            // handleBoxAccordian();
-                                                                                                                        }}
-                                                                                                                        className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center  py-2 px-2 rounded-md border-[1.90px] border-black-600"
-                                                                                                                    >
-                                                                                                                        <span>
-                                                                                                                            <img
-                                                                                                                                src={
-                                                                                                                                    AddBoxIcon
-                                                                                                                                }
-                                                                                                                                alt="boxImage"
-                                                                                                                                className="w-4 h-4"
-                                                                                                                            />
-                                                                                                                        </span>
-                                                                                                                        <span className="font-open mt-1 ">
-                                                                                                                            Add
-                                                                                                                            Your
-                                                                                                                            Box
-                                                                                                                        </span>
-                                                                                                                    </p>
+                                                                                                                                setBoxName(
+                                                                                                                                    false
+                                                                                                                                );
+                                                                                                                                // handleBoxAccordian();
+                                                                                                                            }}
+                                                                                                                            className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center  py-2 px-2 rounded-md border-[1.90px] border-black-600"
+                                                                                                                        >
+                                                                                                                            <span>
+                                                                                                                                <img
+                                                                                                                                    src={
+                                                                                                                                        AddBoxIcon
+                                                                                                                                    }
+                                                                                                                                    alt="boxImage"
+                                                                                                                                    className="w-4 h-4"
+                                                                                                                                />
+                                                                                                                            </span>
+                                                                                                                            <span className="font-open mt-1 ">
+                                                                                                                                Add
+                                                                                                                                Your
+                                                                                                                                Box
+                                                                                                                            </span>
+                                                                                                                        </p>
+                                                                                                                    )}
                                                                                                                     <div className=" my-2">
                                                                                                                         {customInpuBox && (
                                                                                                                             <div className="">
@@ -3242,16 +3282,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                                                         .value,
                                                                                                                                                 }
                                                                                                                                             );
-                                                                                                                                            console.log(
-                                                                                                                                                " ---------- e.target.value: ",
-                                                                                                                                                e
-                                                                                                                                                    .target
-                                                                                                                                                    .value
-                                                                                                                                            );
-                                                                                                                                            console.log(
-                                                                                                                                                "----------------",
-                                                                                                                                                newBox
-                                                                                                                                            );
+
                                                                                                                                             if (
                                                                                                                                                 e
                                                                                                                                                     .target
@@ -4576,8 +4607,45 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     }
                                                                                                 </p>
                                                                                             </div>
+                                                                                            {/* changed the flatno */}
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        getPickAddressData
+                                                                                                            ?.pickUpAddress
+                                                                                                            ?.flatNo
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        enabled
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        let temp =
+                                                                                                            getPickAddressData;
+                                                                                                        temp.pickUpAddress.flatNo =
+                                                                                                            e.target.value;
+                                                                                                        setGetPickUpAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+                                                                                                    }}
+                                                                                                    inputError={
+                                                                                                        inputError
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
 
-                                                                                            <div className="w-[158px] xl:w-[274px]">
+                                                                                            {/* <div className="w-[158px] xl:w-[274px]">
                                                                                                 <CustomDropDown
                                                                                                     disabled={
                                                                                                         enabled
@@ -4617,7 +4685,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     ]}
                                                                                                     heading="Contact Type"
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                         </div>
                                                                                     )}
                                                                                 {item.title ===
@@ -4625,7 +4693,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         5 && (
                                                                                         <div className="flex gap-x-5 mt-4">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -4660,7 +4728,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         inputError
                                                                                                     }
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
@@ -4715,9 +4783,69 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                             );
                                                                                                         }
                                                                                                     }}
-                                                                                                    inputError={
-                                                                                                        inputError
+                                                                                                    // inputError={
+                                                                                                    //     inputError
+                                                                                                    // }
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
                                                                                                     }
+                                                                                                    value={
+                                                                                                        getPickAddressData
+                                                                                                            ?.pickUpAddress
+                                                                                                            ?.landmark
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        enabled
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        let temp =
+                                                                                                            getPickAddressData;
+                                                                                                        temp.pickUpAddress.landmark =
+                                                                                                            e.target.value;
+                                                                                                        setGetPickUpAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+
+                                                                                                        if (
+                                                                                                            e
+                                                                                                                .target
+                                                                                                                .value
+                                                                                                                ?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    landmark:
+                                                                                                                        "Field is required",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    landmark:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    // inputError={
+                                                                                                    //     inputError
+                                                                                                    // }
                                                                                                 />
                                                                                             </div>
                                                                                         </div>
@@ -4727,7 +4855,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         7 && (
                                                                                         <div className="flex gap-x-5 mt-4">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -4786,7 +4914,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         inputError
                                                                                                     }
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
@@ -4844,6 +4972,64 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     }
                                                                                                 />
                                                                                             </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        getPickAddressData
+                                                                                                            ?.pickUpAddress
+                                                                                                            ?.state
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        true
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        let temp =
+                                                                                                            getPickAddressData;
+                                                                                                        temp.pickUpAddress.state =
+                                                                                                            e.target.value;
+                                                                                                        setGetPickUpAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+
+                                                                                                        if (
+                                                                                                            e
+                                                                                                                .target
+                                                                                                                .value
+                                                                                                                ?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    state: "Field is required",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    state: "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    inputError={
+                                                                                                        inputError
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
                                                                                         </div>
                                                                                     )}
                                                                                 {item.title ===
@@ -4851,7 +5037,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         9 && (
                                                                                         <div className="flex gap-x-5 mt-4">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -4908,7 +5094,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         inputError
                                                                                                     }
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
@@ -4968,6 +5154,96 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     }
                                                                                                 />
                                                                                             </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        getPickAddressData
+                                                                                                            ?.pickUpAddress
+                                                                                                            ?.pincode
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        enabled
+                                                                                                    }
+                                                                                                    maxLength={
+                                                                                                        6
+                                                                                                    }
+                                                                                                    inputMode="numeric"
+                                                                                                    isRequired={
+                                                                                                        true
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        fetchPincodeData(
+                                                                                                            e,
+                                                                                                            item.title
+                                                                                                        );
+                                                                                                        const numericValue =
+                                                                                                            e.target?.value?.replace(
+                                                                                                                /[^0-9]/g,
+                                                                                                                ""
+                                                                                                            );
+                                                                                                        let temp =
+                                                                                                            getPickAddressData;
+
+                                                                                                        temp.pickUpAddress.pincode =
+                                                                                                            numericValue;
+                                                                                                        if (
+                                                                                                            numericValue?.length ===
+                                                                                                            6
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    pincode:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else if (
+                                                                                                            numericValue?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    pincode:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    pincode:
+                                                                                                                        "Pincode must be 6 digits",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+
+                                                                                                        setGetPickUpAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+                                                                                                    }}
+                                                                                                    inputError={
+                                                                                                        inputError
+                                                                                                    }
+                                                                                                />
+                                                                                                <p className="open-sans text-[12px] text-red-600">
+                                                                                                    {
+                                                                                                        validationError.pincode
+                                                                                                    }
+                                                                                                </p>
+                                                                                            </div>
                                                                                         </div>
                                                                                     )}
 
@@ -4977,7 +5253,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         11 && (
                                                                                         <div className="flex gap-x-5 mt-4 mb-2">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -5066,8 +5342,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         validationError.pincode
                                                                                                     }
                                                                                                 </p>
-                                                                                            </div>
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            </div> */}
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <div className="w-[158px] xl:w-[274px]">
                                                                                                     <CustomDropDown
                                                                                                         disabled={
@@ -5108,7 +5384,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         heading="Address Type"
                                                                                                     />
                                                                                                 </div>
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                         </div>
                                                                                     )}
 
@@ -5119,7 +5395,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                         <div className="">
                                                                                             <div className="  ">
                                                                                                 <div className="">
-                                                                                                    <div className="flex mt-2">
+                                                                                                    <div className="flex mt-0">
                                                                                                         <CustomInputWithImage
                                                                                                             placeholder="Pickup Date"
                                                                                                             imgSrc={
@@ -5376,6 +5652,65 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     }
                                                                                                 </p>
                                                                                             </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        getDeliveryAddressData
+                                                                                                            ?.deliveryAddress
+                                                                                                            .flatNo
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        enabled
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        let temp =
+                                                                                                            getDeliveryAddressData;
+                                                                                                        temp.deliveryAddress.flatNo =
+                                                                                                            e.target.value;
+                                                                                                        setGetDeliveryAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+                                                                                                        if (
+                                                                                                            e
+                                                                                                                .target
+                                                                                                                .value
+                                                                                                                ?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryFlatNo:
+                                                                                                                        "Field is required",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryFlatNo:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    inputError={
+                                                                                                        inputError
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
 
                                                                                             {/* </div> */}
                                                                                             {/* <div className="w-[158px] xl:w-[274px]">
@@ -5421,7 +5756,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         5 && (
                                                                                         <div className="flex gap-x-5 mt-4">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -5479,7 +5814,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         inputError
                                                                                                     }
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
@@ -5533,9 +5868,68 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                             );
                                                                                                         }
                                                                                                     }}
-                                                                                                    inputError={
-                                                                                                        inputError
+                                                                                                    // inputError={
+                                                                                                    //     inputError
+                                                                                                    // }
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
                                                                                                     }
+                                                                                                    value={
+                                                                                                        getDeliveryAddressData
+                                                                                                            ?.deliveryAddress
+                                                                                                            .landmark
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        enabled
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        let temp =
+                                                                                                            getDeliveryAddressData;
+                                                                                                        temp.deliveryAddress.landmark =
+                                                                                                            e.target.value;
+                                                                                                        setGetDeliveryAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+                                                                                                        if (
+                                                                                                            e
+                                                                                                                .target
+                                                                                                                .value
+                                                                                                                ?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryLandmark:
+                                                                                                                        "Field is required",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryLandmark:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    // inputError={
+                                                                                                    //     inputError
+                                                                                                    // }
                                                                                                 />
                                                                                             </div>
                                                                                         </div>
@@ -5545,7 +5939,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         7 && (
                                                                                         <div className="flex gap-x-5 mt-4">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -5603,7 +5997,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         inputError
                                                                                                     }
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
@@ -5662,6 +6056,65 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     }
                                                                                                 />
                                                                                             </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        getDeliveryAddressData
+                                                                                                            ?.deliveryAddress
+                                                                                                            .state
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        true
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        let temp =
+                                                                                                            getDeliveryAddressData;
+                                                                                                        temp.deliveryAddress.state =
+                                                                                                            e.target.value;
+                                                                                                        setGetDeliveryAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+                                                                                                        if (
+                                                                                                            e
+                                                                                                                .target
+                                                                                                                .value
+                                                                                                                ?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryState:
+                                                                                                                        "Field is required",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryState:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    inputError={
+                                                                                                        inputError
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
                                                                                         </div>
                                                                                     )}
                                                                                 {item.title ===
@@ -5670,7 +6123,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         9 && (
                                                                                         <div className="flex gap-x-5 mt-4">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -5728,7 +6181,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         inputError
                                                                                                     }
                                                                                                 />
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
@@ -5787,6 +6240,91 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                     }
                                                                                                 />
                                                                                             </div>
+                                                                                            <div className="xl:w-[274px]">
+                                                                                                <CustomInputBox
+                                                                                                    label={
+                                                                                                        Object.keys(
+                                                                                                            item
+                                                                                                        )[
+                                                                                                            index +
+                                                                                                                1
+                                                                                                        ]
+                                                                                                    }
+                                                                                                    inputMode="numeric"
+                                                                                                    maxLength={
+                                                                                                        6
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        getDeliveryAddressData
+                                                                                                            ?.deliveryAddress
+                                                                                                            .pincode
+                                                                                                    }
+                                                                                                    isDisabled={
+                                                                                                        enabled
+                                                                                                    }
+                                                                                                    onChange={(
+                                                                                                        e: any
+                                                                                                    ) => {
+                                                                                                        fetchPincodeData(
+                                                                                                            e,
+                                                                                                            item.title
+                                                                                                        );
+                                                                                                        const numericValue =
+                                                                                                            e.target.value.replace(
+                                                                                                                /[^0-9]/g,
+                                                                                                                ""
+                                                                                                            );
+                                                                                                        let temp =
+                                                                                                            getDeliveryAddressData;
+                                                                                                        temp.deliveryAddress.pincode =
+                                                                                                            numericValue;
+                                                                                                        if (
+                                                                                                            numericValue?.length ===
+                                                                                                            6
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryPincode:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else if (
+                                                                                                            numericValue?.length ===
+                                                                                                            0
+                                                                                                        ) {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryPincode:
+                                                                                                                        "",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        } else {
+                                                                                                            setValidationError(
+                                                                                                                {
+                                                                                                                    ...validationError,
+                                                                                                                    deliveryPincode:
+                                                                                                                        "Pincode must be 6 digits",
+                                                                                                                }
+                                                                                                            );
+                                                                                                        }
+                                                                                                        setGetDeliveryAddressData(
+                                                                                                            {
+                                                                                                                ...temp,
+                                                                                                            }
+                                                                                                        );
+                                                                                                    }}
+                                                                                                    inputError={
+                                                                                                        inputError
+                                                                                                    }
+                                                                                                />
+                                                                                                <p className="open-sans text-[12px] text-red-600">
+                                                                                                    {
+                                                                                                        validationError.deliveryPincode
+                                                                                                    }
+                                                                                                </p>
+                                                                                            </div>
                                                                                         </div>
                                                                                     )}
 
@@ -5795,7 +6333,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     index ===
                                                                                         11 && (
                                                                                         <div className="flex gap-x-5 mt-4 mb-2">
-                                                                                            <div className="xl:w-[274px]">
+                                                                                            {/* <div className="xl:w-[274px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
@@ -5879,7 +6417,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                         validationError.deliveryPincode
                                                                                                     }
                                                                                                 </p>
-                                                                                            </div>
+                                                                                            </div> */}
                                                                                             {/* <div className="xl:w-[274px]">
                                                 <div className="w-[158px] xl:w-[274px]">
                                                   <CustomDropDown
@@ -5922,8 +6460,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     "Delivery Address" &&
                                                                                     index ===
                                                                                         13 && (
-                                                                                        <div className="grid grid-cols-2   mt-2">
-                                                                                            <div className="xl:w-[360px] col-span-1 pl-2 xl:pl-4 2xl:pr-[70px] pr-[10px] xl:pr-[70px] 2xl:w-[360px]">
+                                                                                        <div className="grid grid-cols-2   mt-0">
+                                                                                            <div className="xl:w-[360px] col-span-1 pl-0 xl:pl-4 2xl:pr-[70px] pr-[10px] xl:pr-[70px] 2xl:w-[360px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
