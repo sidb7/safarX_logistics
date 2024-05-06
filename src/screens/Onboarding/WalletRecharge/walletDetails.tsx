@@ -4,7 +4,11 @@ import CustomDropDown from "../../../components/DropDown";
 import CustomButton from "../../../components/Button";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
-import { POST_ADD_BANK_DETAILS } from "../../../utils/ApiUrls";
+import {
+  POST_ADD_BANK_DETAILS,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
+} from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -17,7 +21,7 @@ const modalTitle = () => {
     <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
       <img
         className="my-auto ml-6  h-[25px] object-contain"
-        src={CompanyLogo}
+        src={LARGE_LOGO}
         alt="Company Logo"
       />
     </div>
@@ -98,7 +102,7 @@ const WalletDetails = () => {
           <div className="customScroll ">
             <div className="text-center md:mt-24 mb-[44px]  mt-[108px]">
               <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
-                Welcome to Shipyaari
+                Welcome to {WHITE_COMPANYNAME}
               </h1>
               <p className="mt-3 text-[16px] font-light leading-[22px] text-[#494949] font-Open">
                 Please fill your bank details
