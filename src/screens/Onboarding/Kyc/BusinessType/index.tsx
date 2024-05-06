@@ -11,6 +11,8 @@ import { POST } from "../../../../utils/webService";
 import {
   POST_BUSINESS_TYPE_URL,
   POST_SKIP_FOR_NOW_TRACKER,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { toast } from "react-hot-toast";
@@ -151,8 +153,8 @@ const BusinessType = (props: ITypeProps) => {
             <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
               <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
                 <img
-                  className="my-auto  object-contain"
-                  src={CompanyLogo}
+                  className="my-auto h-[25px]  object-contain"
+                  src={LARGE_LOGO}
                   alt="Company Logo"
                 />
               </div>
@@ -163,7 +165,7 @@ const BusinessType = (props: ITypeProps) => {
 
                 <WelcomeHeader
                   className="!mt-[44px] md:!mt-6"
-                  title="Welcome to Shipyaari"
+                  title={`Welcome to ${WHITE_COMPANYNAME}`}
                   content="Kindly complete your KYC"
                 />
 
@@ -230,8 +232,8 @@ const BusinessType = (props: ITypeProps) => {
     return (
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
         <img
-          className="my-auto  object-contain"
-          src={CompanyLogo}
+          className="my-auto  h-[25px] object-contain"
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
       </div>

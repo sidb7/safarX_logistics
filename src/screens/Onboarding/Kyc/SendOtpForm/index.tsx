@@ -22,6 +22,7 @@ import ErrorIcon from "../../../../assets/common/info-circle.svg";
 import { Spinner } from "../../../../components/Spinner";
 import TimerCounter from "../../../../components/TimerCountdown";
 import { ResponsiveState } from "../../../../utils/responsiveState";
+import { LARGE_LOGO, WHITE_COMPANYNAME } from "../../../../utils/ApiUrls";
 
 interface ITypeProps {}
 
@@ -454,12 +455,12 @@ const Index = (props: ITypeProps) => {
       >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
           <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-            <img src={CompanyLogo} alt="" className="h-[25px]" />
+            <img src={LARGE_LOGO} alt="" className="h-[25px]" />
           </div>
 
           <WelcomeHeader
             className="!mt-[44px] md:!mt-6"
-            title="Welcome to Shipyaari"
+            title={`Welcome to ${WHITE_COMPANYNAME}`}
             content="Kindly complete your KYC"
           />
 
