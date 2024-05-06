@@ -321,7 +321,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             </div>
           </div>
         ) : (
-          <div className="min-w-[90%] border-2 rounded-br rounded-bl border-t-0 ">
+          <div className="min-w-[90%] border-2 rounded-br rounded-bl border-t-0 mb-10">
             <div className="px-[1rem] w-[100%] pt-[1rem]">
               <DropDown
                 heading="Select A Box"
@@ -396,15 +396,14 @@ const ErrorModal = (props: ErrorModalProps) => {
                       inputMode="numeric"
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
-                          // onChaneDimensionHandler(e);
                           boxBoolean?.isSelectedBox
                             ? setSelectedBox({
                                 ...selectedBox,
-                                deadWeight: +e.target.value,
+                                deadWeight: e.target.value,
                               })
                             : setNewBox({
                                 ...newBox,
-                                deadWeight: +e.target.value,
+                                deadWeight: e.target.value,
                               });
                         }
                       }}
@@ -451,7 +450,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             boxBoolean?.isSelectedBox
                               ? setSelectedBox({
                                   ...selectedBox,
-                                  length: +e.target.value,
+                                  length: e.target.value,
                                   // volumetricWeight:
                                   //   (selectedBox.length *
                                   //     selectedBox.breadth *
@@ -460,7 +459,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 })
                               : setNewBox({
                                   ...newBox,
-                                  length: +e.target.value,
+                                  length: e.target.value,
                                   // volumetricWeight:
                                   //   (newBox.length *
                                   //     newBox.breadth *
@@ -491,7 +490,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             boxBoolean?.isSelectedBox
                               ? setSelectedBox({
                                   ...selectedBox,
-                                  breadth: +e.target.value,
+                                  breadth: e.target.value,
                                   // volumetricWeight:
                                   //   (selectedBox.length *
                                   //     selectedBox.breadth *
@@ -500,7 +499,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 })
                               : setNewBox({
                                   ...newBox,
-                                  breadth: +e.target.value,
+                                  breadth: e.target.value,
                                   // volumetricWeight:
                                   //   (newBox.length *
                                   //     newBox.breadth *
@@ -531,7 +530,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             boxBoolean?.isSelectedBox
                               ? setSelectedBox({
                                   ...selectedBox,
-                                  height: +e.target.value,
+                                  height: e.target.value,
                                   // volumetricWeight:
                                   //   (selectedBox.length *
                                   //     selectedBox.breadth *
@@ -540,7 +539,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 })
                               : setNewBox({
                                   ...newBox,
-                                  height: +e.target.value,
+                                  height: e.target.value,
                                   // volumetricWeight:
                                   //   (newBox.length *
                                   //     newBox.breadth *
@@ -1051,8 +1050,8 @@ const ErrorModal = (props: ErrorModalProps) => {
     switch (errorModalData.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
         return (
-          <div>
-            <div className="border-2 m-[1rem] rounded-md  overflow-auto max-h-[55vh] shadow-md">
+          <div className="h-[80vh] overflow-y-auto mb-20">
+            <div className="border-2 m-[1rem] rounded-md  overflow-auto max-h-[90vh] shadow-md">
               {productAndBoxDetails &&
                 productAndBoxDetails?.products?.map((data: any, index: any) => {
                   return (
@@ -1100,7 +1099,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                   <div>
                     <div className="flex min-w-[90%]">
                       <div
-                        className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
+                        className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between mb-5"
                         style={{
                           boxShadow:
                             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
