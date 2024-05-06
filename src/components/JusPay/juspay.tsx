@@ -6,6 +6,7 @@ import PaymentLoader from "../paymentLoader/paymentLoader";
 import { Spinner } from "../../components/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { PaymentSlice } from "../../redux/reducers/paymentReducer";
+import toast from "react-hot-toast";
 
 interface IProps {
   isDisabled?: boolean;
@@ -27,26 +28,30 @@ const JusPay = (props: IProps) => {
     amountFromRedux?: any,
     callbackUrlRedux?: any
   ) => {
-    setLoading(true);
-    let initialObject = {
-      amount: amountFromRedux ? amountFromRedux.toString() : amount,
-      callbackUrl: callbackUrlRedux ? callbackUrlRedux : callbackUrl,
-    };
+    if (amountFromRedux || amount) {
+      setLoading(true);
+      let initialObject = {
+        amount: amountFromRedux ? amountFromRedux.toString() : amount,
+        callbackUrl: callbackUrlRedux ? callbackUrlRedux : callbackUrl,
+      };
 
-    const { data: response } = await POST(INITIAL_RECHARGE, {
-      paymentObject: initialObject,
-      paymentGateway: "JUSPAY",
-    });
-    if (response?.success === true) {
-      if (response?.data?.status === "NEW") {
-        localStorage.setItem("order_id", response?.data?.order_id);
-        window.location.replace(response?.data?.payment_links?.web);
-        // setLoading(false);
+      const { data: response } = await POST(INITIAL_RECHARGE, {
+        paymentObject: initialObject,
+        paymentGateway: "JUSPAY",
+      });
+      if (response?.success === true) {
+        if (response?.data?.status === "NEW") {
+          localStorage.setItem("order_id", response?.data?.order_id);
+          window.location.replace(response?.data?.payment_links?.web);
+          // setLoading(false);
+        }
+      } else {
+        setLoading(false);
       }
+      dispatch(PaymentSlice.actions.paymentAmount(0));
     } else {
-      setLoading(false);
+      toast.error("Please select amount for recharge");
     }
-    dispatch(PaymentSlice.actions.paymentAmount(0));
   };
 
   // Added This UseEffect and following code for direct payment from View-Orders Draft Page Errors Section
@@ -59,14 +64,15 @@ const JusPay = (props: IProps) => {
     <>
       {paymentLoader ? (
         <PaymentLoader />
-      ) : loading ? (
-        <Spinner />
       ) : (
+        //  : loading ? (
+        //   <Spinner />
+        // )
         <div
           onClick={() => startPayments()}
           className="flex flex-col items-center gap-y-2 "
         >
-          <div className="w-20 h-20 flex justify-center items-center">
+          {/* <div className="w-20 h-20 flex justify-center items-center">
             <img
               src={JusPayIcon}
               alt=""
@@ -74,9 +80,9 @@ const JusPay = (props: IProps) => {
               width={60}
               className="ml-0 object-contain"
             />
-          </div>
+          </div> */}
           <button
-            disabled={isDisabled}
+            // disabled={isDisabled}
             type="button"
             //as a part of ui figma fixes commneted
             // className={`${
@@ -85,7 +91,7 @@ const JusPay = (props: IProps) => {
             //     : "!bg-opacity-50"
             // } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
           >
-            <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+            <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px]">
               Pay Now
             </p>
           </button>
