@@ -6460,8 +6460,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                     "Delivery Address" &&
                                                                                     index ===
                                                                                         13 && (
-                                                                                        <div className="grid grid-cols-2   mt-0">
-                                                                                            <div className="xl:w-[360px] col-span-1 pl-0 xl:pl-4 2xl:pr-[70px] pr-[10px] xl:pr-[70px] 2xl:w-[360px]">
+                                                                                        <div className="grid grid-cols-2  mt-0">
+                                                                                            <div className="xl:w-[360px] col-span-1   2xl:pr-[80px] pr-[10px] xl:pr-[80px] 2xl:w-[360px]">
                                                                                                 <CustomInputBox
                                                                                                     label={
                                                                                                         Object.keys(
