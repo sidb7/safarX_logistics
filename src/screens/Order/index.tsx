@@ -1409,14 +1409,25 @@ const Index = () => {
     filterPayLoadData?: any
   ) => {
     try {
-      const payload: any = {
-        skip,
-        limit,
-        pageNo,
-        sort,
-        currentStatus,
-        subStatus: "DRAFT",
-      };
+      let payload: any;
+      if (filterId === 1) {
+        payload = {
+          skip,
+          limit,
+          pageNo,
+          sort,
+          currentStatus,
+          subStatus: "DRAFT",
+        };
+      } else {
+        payload = {
+          skip,
+          limit,
+          pageNo,
+          sort,
+          currentStatus,
+        };
+      }
 
       let firstFilterData = [];
       let secondFilterData = [];
