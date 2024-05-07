@@ -208,6 +208,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       const { data } = await POST(LOGOUT);
       if (data?.success) {
         toast.success(data?.message);
+        navigate("/auth/login");
       } else {
         toast.error(data?.message);
       }
@@ -216,7 +217,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     }
     clearLocalStorage();
     sessionStorage.clear();
-    navigate("/");
   };
 
   // const socket = initSocket();
