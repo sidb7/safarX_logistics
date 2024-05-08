@@ -1100,6 +1100,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                   <div>
                     <div className="flex min-w-[90%]">
                       <div
+                        id="box"
                         className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
                         style={{
                           boxShadow:
@@ -1686,6 +1687,8 @@ const ErrorModal = (props: ErrorModalProps) => {
           }
         });
 
+        let box = document.getElementById("box");
+        if (box) box.style.border = "1px solid red";
         if (boxBoolean?.isNewBox || boxBoolean?.isSelectedBox) {
           if (
             boxBoolean?.isNewBox &&
@@ -1696,6 +1699,8 @@ const ErrorModal = (props: ErrorModalProps) => {
               newBox?.height <= 0)
           ) {
             return false;
+          } else {
+            if (box) box.style.border = "1px solid #E5E7EB";
           }
           if (
             boxBoolean?.isSelectedBox &&
@@ -1706,6 +1711,8 @@ const ErrorModal = (props: ErrorModalProps) => {
               selectedBox?.height <= 0)
           ) {
             return false;
+          } else {
+            if (box) box.style.border = "1px solid #E5E7EB";
           }
         } else {
           return false;
