@@ -281,7 +281,7 @@ const Index = () => {
               <div className="md:mb-11">
                 <CustomButton
                   onClick={onClickVerifyOtp}
-                  text="SUBMIT"
+                  text="SUBMIT OTP"
                   className="mt-4"
                 />
               </div>
