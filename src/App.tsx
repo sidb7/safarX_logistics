@@ -145,45 +145,45 @@ const App = () => {
       });
     }
 
-    // if (
-    //   Environment === "production" &&
-    //   userInfo !== undefined &&
-    //   userInfo !== null
-    // ) {
-    //   script = document.createElement("script");
-    //   script.src =
-    //     "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
-    //   script.crossOrigin = "anonymous";
-    //   document.body.appendChild(script);
+    if (
+      Environment === "production" &&
+      userInfo !== undefined &&
+      userInfo !== null
+    ) {
+      script = document.createElement("script");
+      script.src =
+        "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
+      script.crossOrigin = "anonymous";
+      document.body.appendChild(script);
 
-    //   scriptElement = document.createElement("script");
-    //   // console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
-    //   scriptElement.innerHTML = `
-    //       window.sentryOnLoad = function () {
-    //         Sentry.init({
-    //           integrations: [
-    //             new Sentry.Replay({
-    //               maskAllText: false,
-    //               maskAllInputs:false,
-    //               blockAllMedia: false,
-    //               unblock: ['.sentry-unblock, [data-sentry-unblock]'],
-    //               unmask: ['.sentry-unmask, [data-sentry-unmask]'],
-    //             }),
-    //           ],
-    //       release: "react-blaze@5.4.24",
+      scriptElement = document.createElement("script");
+      // console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
+      scriptElement.innerHTML = `
+          window.sentryOnLoad = function () {
+            Sentry.init({
+              integrations: [
+                new Sentry.Replay({
+                  maskAllText: false,
+                  maskAllInputs:false,
+                  blockAllMedia: false,
+                  unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+                  unmask: ['.sentry-unmask, [data-sentry-unmask]'],
+                }),
+              ],
+          release: "react-blaze@5.4.24",
 
-    //         });
-    //         Sentry.configureScope(function(scope) {
-    //           // Set user.id and user.email if available
-    //           if ('${sellerId}' && '${emailId}') {
-    //             scope.setUser({ id: '${sellerId}', email: '${emailId}' });
-    //           }
-    //         });
+            });
+            Sentry.configureScope(function(scope) {
+              // Set user.id and user.email if available
+              if ('${sellerId}' && '${emailId}') {
+                scope.setUser({ id: '${sellerId}', email: '${emailId}' });
+              }
+            });
 
-    //       };
-    //     `;
-    //   document.body.appendChild(scriptElement);
-    // }
+          };
+        `;
+      document.body.appendChild(scriptElement);
+    }
 
     return () => {
       if (script && script.parentNode) {
