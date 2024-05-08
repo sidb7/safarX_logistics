@@ -135,7 +135,7 @@ const App = () => {
             unblock: [".sentry-unblock, [data-sentry-unblock]"],
             unmask: [".sentry-unmask, [data-sentry-unmask]"],
             //    networkDetailAllowUrls: [window.location.origin],
-            networkDetailAllowUrls: ["*"],
+            networkDetailAllowUrls: ["https://api-seller.shipyaari.com"],
             networkRequestHeaders: ["Cache-Control"],
             networkResponseHeaders: ["Referrer-Policy"],
           }),
