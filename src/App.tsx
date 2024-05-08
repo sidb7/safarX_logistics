@@ -28,6 +28,8 @@ import { Integrations } from "@sentry/tracing";
 import * as Sentry from "@sentry/react";
 import "./styles/index.css";
 
+import { createRoot } from "react-dom/client";
+import { createBrowserRouter } from "react-router-dom";
 const timestamp = Date.now(); // Get the current timestamp in milliseconds
 const date = new Date(timestamp); // Create a Date object from the timestamp
 
@@ -126,16 +128,17 @@ const App = () => {
             isEmailRequired: true,
           }),
 
-          // Sentry.replayIntegration({
-          //   maskAllText: false,
-          //   maskAllInputs:false,
-          //   blockAllMedia: false,
-          //   unblock: ['.sentry-unblock, [data-sentry-unblock]'],
-          //   unmask: ['.sentry-unmask, [data-sentry-unmask]'],
-          // }),
-
+          Sentry.replayIntegration({
+            maskAllText: false,
+            maskAllInputs: false,
+            blockAllMedia: false,
+            unblock: [".sentry-unblock, [data-sentry-unblock]"],
+            unmask: [".sentry-unmask, [data-sentry-unmask]"],
+          }),
           new Integrations.BrowserTracing(),
         ],
+        tracePropagationTargets: ["*"],
+
         tracesSampleRate: 1.0,
         release: `blaze-react-seller@${formattedDate}`,
       });
