@@ -16,49 +16,52 @@ const BankProtected = ({ children }: Props) => {
   const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
+  let sellerId = sessionStorage.getItem("sellerId");
+
   //used getLocalStorage to get the token from local storage
 
   const localUserToken = getLocalStorage(
-    "891f5e6d-b3b3-4c16-929d-b06c3895e38d"
+    `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
   );
 
   React.useEffect(() => {
-    (async () => {
-      const response = await POST(VALIDATE_USER_TOKEN);
+    localUserToken &&
+      (async () => {
+        const response = await POST(VALIDATE_USER_TOKEN);
 
-      if (!response?.data?.success) {
-        setIsAuthenticated(false);
-        clearLocalStorage();
-        navigate("/auth/login");
-      } else {
-        const { nextStep, walletBalance } = response?.data?.data[0];
-        const { kyc, bank } = nextStep;
-
-        //if kyc not verified return to "/"
-        if (!kyc) {
-          navigate("/");
-          return;
-        }
-
-        //if bank not verified return to "/"
-        if (!bank || !(walletBalance > 0)) {
-          sessionStorage.setItem(
-            "kycValue",
-            JSON.stringify(response?.data?.data[0])
-          );
-          sessionStorage.setItem(
-            "walletAmt",
-            response?.data?.data[0]?.walletBalance
-          );
-          setIsAuthenticated(true);
-          dispatch(
-            setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
-          );
+        if (!response?.data?.success) {
+          setIsAuthenticated(false);
+          clearLocalStorage();
+          navigate("/auth/login");
         } else {
-          navigate("/");
+          const { nextStep, walletBalance } = response?.data?.data[0];
+          const { kyc, bank } = nextStep;
+
+          //if kyc not verified return to "/"
+          if (!kyc) {
+            navigate("/");
+            return;
+          }
+
+          //if bank not verified return to "/"
+          if (!bank || !(walletBalance > 0)) {
+            sessionStorage.setItem(
+              "kycValue",
+              JSON.stringify(response?.data?.data[0])
+            );
+            sessionStorage.setItem(
+              "walletAmt",
+              response?.data?.data[0]?.walletBalance
+            );
+            setIsAuthenticated(true);
+            dispatch(
+              setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
+            );
+          } else {
+            navigate("/");
+          }
         }
-      }
-    })();
+      })();
   }, [localUserToken, navigate]);
 
   if (isAuthenticated === true) {
