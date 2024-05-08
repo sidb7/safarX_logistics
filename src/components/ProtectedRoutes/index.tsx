@@ -36,39 +36,40 @@ const ProtectedRoute = ({ children }: Props) => {
   );
 
   React.useEffect(() => {
-    localUserToken &&
-      (async () => {
-        const response = await POST(VALIDATE_USER_TOKEN);
+    localUserToken
+      ? (async () => {
+          const response = await POST(VALIDATE_USER_TOKEN);
 
-        if (!response?.data?.success) {
-          setIsAuthenticated(false);
-          clearLocalStorage();
-          // {
-          //   pathname: "/search",
-          //   search: createSearchParams({ query: "someQuery" }).toString(),
-          // },
-          // { state: { someAttributeName: "someAttributeValue" } },
+          if (!response?.data?.success) {
+            setIsAuthenticated(false);
+            clearLocalStorage();
+            // {
+            //   pathname: "/search",
+            //   search: createSearchParams({ query: "someQuery" }).toString(),
+            // },
+            // { state: { someAttributeName: "someAttributeValue" } },
 
-          const navigationObject = constructNavigationObject(
-            "/auth/login",
-            window.location.search
-          );
-          navigate(navigationObject);
-        } else {
-          sessionStorage.setItem(
-            "kycValue",
-            JSON.stringify(response?.data?.data[0])
-          );
-          sessionStorage.setItem(
-            "walletAmt",
-            response?.data?.data[0]?.walletBalance
-          );
-          setIsAuthenticated(true);
-          dispatch(
-            setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
-          );
-        }
-      })();
+            const navigationObject = constructNavigationObject(
+              "/auth/login",
+              window.location.search
+            );
+            navigate(navigationObject);
+          } else {
+            sessionStorage.setItem(
+              "kycValue",
+              JSON.stringify(response?.data?.data[0])
+            );
+            sessionStorage.setItem(
+              "walletAmt",
+              response?.data?.data[0]?.walletBalance
+            );
+            setIsAuthenticated(true);
+            dispatch(
+              setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
+            );
+          }
+        })()
+      : navigate("/auth/login");
   }, [localUserToken, navigate]);
 
   if (isAuthenticated === true) {
