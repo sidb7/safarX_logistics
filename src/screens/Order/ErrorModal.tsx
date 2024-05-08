@@ -287,7 +287,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChaneDimensionHandler(e);
                         }
                       }}
-                      inputError={inputError}
+                      // inputError={inputError}
                     />
                     <InputBox
                       label="B"
@@ -300,7 +300,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChaneDimensionHandler(e);
                         }
                       }}
-                      inputError={inputError}
+                      // inputError={inputError}
                     />
                     <InputBox
                       label="H"
@@ -313,7 +313,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChaneDimensionHandler(e);
                         }
                       }}
-                      inputError={inputError}
+                      // inputError={inputError}
                     />
                   </div>
                 </div>
@@ -1058,6 +1058,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
                       <div className="flex min-w-[90%]">
                         <div
+                          id={index}
                           className="items-center cursor-pointer flex border-2 rounded-md w-[100%] justify-between"
                           style={{
                             boxShadow:
@@ -1099,7 +1100,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                   <div>
                     <div className="flex min-w-[90%]">
                       <div
-                        className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between mb-5"
+                        className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
                         style={{
                           boxShadow:
                             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -1676,6 +1677,15 @@ const ErrorModal = (props: ErrorModalProps) => {
   const switchForValidation = () => {
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
+        productAndBoxDetails?.products?.map((item: any, index: any) => {
+          const num: any = document.getElementById(index);
+          if (!item.deadWeight) {
+            if (num) num.style.border = "1px solid red";
+          } else {
+            if (num) num.style.border = "1px solid #E5E7EB";
+          }
+        });
+
         if (boxBoolean?.isNewBox || boxBoolean?.isSelectedBox) {
           if (
             boxBoolean?.isNewBox &&
@@ -1701,14 +1711,21 @@ const ErrorModal = (props: ErrorModalProps) => {
           return false;
         }
 
-        const dimensions = ["length", "breadth", "height", "deadWeight"];
-        for (const dimension of dimensions) {
-          for (let i = 0; i < productAndBoxDetails.products.length; i++) {
-            const productDimension =
-              productAndBoxDetails.products[i][dimension];
-            if (!productDimension || productDimension == 0) {
-              return false;
-            }
+        // const dimensions = ["length", "breadth", "height", "deadWeight"];
+        // for (const dimension of dimensions) {
+        //   for (let i = 0; i < productAndBoxDetails.products.length; i++) {
+        //     const productDimension =
+        //       productAndBoxDetails.products[i][dimension];
+        //     if (!productDimension || productDimension == 0) {
+        //       return false;
+        //     }
+        //   }
+        // }
+
+        for (let i = 0; i < productAndBoxDetails.products.length; i++) {
+          const productDimension = productAndBoxDetails.products[i].deadWeight;
+          if (!productDimension || productDimension == 0) {
+            return false;
           }
         }
         return true;
