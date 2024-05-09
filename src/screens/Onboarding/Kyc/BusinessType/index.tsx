@@ -32,7 +32,7 @@ const BusinessType = (props: ITypeProps) => {
   });
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const bussinessType: any = [];
 
@@ -50,15 +50,15 @@ const BusinessType = (props: ITypeProps) => {
   const selectedKycOption = bussinessType.join(", ");
 
   useEffect(() => {
-    // Attempt to retrieve the userInfo object from sessionStorage
-    const userInfoString = sessionStorage.getItem("userInfo");
+    // Attempt to retrieve the userInfo object from localStorage
+    const userInfoString = localStorage.getItem("userInfo");
     let initialBusinessType = "";
 
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
       if (userInfo.businessType) {
         initialBusinessType = userInfo.businessType;
-        sessionStorage.setItem(
+        localStorage.setItem(
           "businessType",
           initialBusinessType.toLocaleLowerCase()
         );
@@ -66,7 +66,7 @@ const BusinessType = (props: ITypeProps) => {
     }
 
     if (!initialBusinessType) {
-      initialBusinessType = sessionStorage.getItem("businessType") || "";
+      initialBusinessType = localStorage.getItem("businessType") || "";
     }
 
     if (initialBusinessType) {
@@ -81,7 +81,7 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitBusinessType = async () => {
     try {
-      let businessType = sessionStorage.getItem("businessType");
+      let businessType = localStorage.getItem("businessType");
       const payload = { businessType };
       setLoading(true);
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);

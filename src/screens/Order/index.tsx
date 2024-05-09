@@ -344,7 +344,7 @@ const Index = () => {
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
 
-  let syncChannelTextObj: any = sessionStorage.getItem("userInfo");
+  let syncChannelTextObj: any = localStorage.getItem("userInfo");
   syncChannelTextObj = JSON.parse(syncChannelTextObj);
 
   let syncChannelText = syncChannelTextObj?.nextStep?.isChannelIntegrated
@@ -886,7 +886,7 @@ const Index = () => {
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };
@@ -1520,7 +1520,7 @@ const Index = () => {
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };
@@ -1579,7 +1579,7 @@ const Index = () => {
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };

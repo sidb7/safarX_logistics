@@ -88,12 +88,7 @@ export const Home = (props: IOverview) => {
   const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
 
-  let kycCheck = sessionStorage.getItem("kycValue") as any;
-
-  if (!kycCheck) {
-    console.log("Unable to get kycCheck from session storage", kycCheck);
-  }
-
+  let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
 
   if (!kycCheck) {
@@ -336,39 +331,35 @@ export const Home = (props: IOverview) => {
     }
   };
   React.useMemo(async () => {
-    try {
-      let sellerId = sessionStorage.getItem("sellerId");
-      if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
-        await Promise.all([
-          getDashDetails(),
-          getRevenueAndOrderDetails(
-            {
-              apiStatus: "REVENUE",
-            },
-            SetRevenueAndOrderDetails
-          ),
-          getRevenueAndOrderDetails(
-            {
-              apiStatus: "ORDERCOUNT",
-            },
-            setOrderCount
-          ),
-          getRevenueAndOrderDetails(
-            {
-              apiStatus: "CODORDERCOUNT",
-            },
-            setCodCountOrder
-          ),
-          getRevenueAndOrderDetails(
-            {
-              apiStatus: "ADDRESSORDERCOUNT",
-            },
-            setAddressCountOrder
-          ),
-        ]);
-      }
-    } catch (error: any) {
-      console.log("ERROR::", error.message);
+    let sellerId = localStorage.getItem("sellerId");
+    if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
+      await Promise.all([
+        getDashDetails(),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "REVENUE",
+          },
+          SetRevenueAndOrderDetails
+        ),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "ORDERCOUNT",
+          },
+          setOrderCount
+        ),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "CODORDERCOUNT",
+          },
+          setCodCountOrder
+        ),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "ADDRESSORDERCOUNT",
+          },
+          setAddressCountOrder
+        ),
+      ]);
     }
   }, []);
 

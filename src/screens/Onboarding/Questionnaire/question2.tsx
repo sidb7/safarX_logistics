@@ -44,7 +44,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const question = questionsData[1]?.question;
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const dailyOrder: any = [];
 

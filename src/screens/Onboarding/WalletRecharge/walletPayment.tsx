@@ -127,7 +127,7 @@ const WalletPayment = () => {
   };
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");

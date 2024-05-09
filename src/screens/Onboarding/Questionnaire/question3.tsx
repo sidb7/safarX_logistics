@@ -55,7 +55,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   const question = questionsData[2]?.question;
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const sellerProducts: any = [];
 
