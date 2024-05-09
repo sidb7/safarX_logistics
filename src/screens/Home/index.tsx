@@ -91,6 +91,10 @@ export const Home = (props: IOverview) => {
   let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
 
+  if (!kycCheck) {
+    console.log("Unable to parse kycCheck", kycCheck);
+  }
+
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   // const isActive =
   //   roles?.roles?.[0]?.menu?.[0]?.menu?.[renderingComponents]?.pages?.[0]
@@ -260,6 +264,10 @@ export const Home = (props: IOverview) => {
 
     const data = GetCurrentPath() as any;
 
+    if (!data) {
+      console.log("Unable to get current path", data);
+    }
+
     if (data[1] === "overview") {
       setRenderingComponents(0);
       setIsActive(checkPageAuthorized("Overview"));
@@ -287,7 +295,9 @@ export const Home = (props: IOverview) => {
           });
           removeLocalStorage("phonePeTransactionId");
         }
-      } catch (error) {}
+      } catch (error: any) {
+        console.log("ERROR::", error.message);
+      }
     })();
   }, []);
 
@@ -317,7 +327,7 @@ export const Home = (props: IOverview) => {
         setStateFunction(response?.data?.[0]);
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.log("ERROR::", error.message);
     }
   };
   React.useMemo(async () => {
