@@ -502,7 +502,7 @@ const Index = () => {
         <div className="flex items-center justify-center h-screen">
           <img
             className="animate-bounce object-contain"
-            src={CompanyLogo}
+            src={LARGE_LOGO}
             alt=""
           />
         </div>
