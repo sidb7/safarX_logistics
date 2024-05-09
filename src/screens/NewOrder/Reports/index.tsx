@@ -34,10 +34,10 @@ const Reports = () => {
       label: "NPR Report",
       value: "NPRSTATUS",
     },
-    {
-      label: "NDR Report",
-      value: "NDRSTATUS",
-    },
+    // {
+    //   label: "NDR Report",
+    //   value: "NDRSTATUS",
+    // },
     {
       label: "Product Wise Status",
       value: "PRODUCTWISESTATUS",
