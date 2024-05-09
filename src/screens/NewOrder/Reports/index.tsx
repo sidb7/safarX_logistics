@@ -26,22 +26,22 @@ const Reports = () => {
       label: "Shipment Status Report",
       value: "SHIPMENTSTATUS",
     },
-    {
-      label: "Shipment Error Report",
-      value: "ERRORSHIPMENTSTATUS",
-    },
-    {
-      label: "NPR Report",
-      value: "NPRSTATUS",
-    },
-    {
-      label: "NDR Report",
-      value: "NDRSTATUS",
-    },
-    {
-      label: "Product Wise Status",
-      value: "PRODUCTWISESTATUS",
-    },
+    // {
+    //   label: "Shipment Error Report",
+    //   value: "ERRORSHIPMENTSTATUS",
+    // },
+    // {
+    //   label: "NPR Report",
+    //   value: "NPRSTATUS",
+    // },
+    // {
+    //   label: "NDR Report",
+    //   value: "NDRSTATUS",
+    // },
+    // {
+    //   label: "Product Wise Status",
+    //   value: "PRODUCTWISESTATUS",
+    // },
   ];
 
   const convertEpoch = (epochDate: any) => {
