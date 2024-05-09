@@ -89,7 +89,16 @@ export const Home = (props: IOverview) => {
   const roles = useSelector((state: any) => state?.roles);
 
   let kycCheck = sessionStorage.getItem("kycValue") as any;
+
+  if (!kycCheck) {
+    console.log("Unable to get kycCheck from session storage", kycCheck);
+  }
+
   kycCheck = JSON.parse(kycCheck);
+
+  if (!kycCheck) {
+    console.log("Unable to parse kycCheck", kycCheck);
+  }
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   // const isActive =
@@ -260,6 +269,10 @@ export const Home = (props: IOverview) => {
 
     const data = GetCurrentPath() as any;
 
+    if (!data) {
+      console.log("Unable to get current path", data);
+    }
+
     if (data[1] === "overview") {
       setRenderingComponents(0);
       setIsActive(checkPageAuthorized("Overview"));
@@ -287,7 +300,9 @@ export const Home = (props: IOverview) => {
           });
           removeLocalStorage("phonePeTransactionId");
         }
-      } catch (error) {}
+      } catch (error: any) {
+        console.log("ERROR::", error.message);
+      }
     })();
   }, []);
 
@@ -317,39 +332,43 @@ export const Home = (props: IOverview) => {
         setStateFunction(response?.data?.[0]);
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.log("ERROR::", error.message);
     }
   };
   React.useMemo(async () => {
-    let sellerId = sessionStorage.getItem("sellerId");
-    if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
-      await Promise.all([
-        getDashDetails(),
-        getRevenueAndOrderDetails(
-          {
-            apiStatus: "REVENUE",
-          },
-          SetRevenueAndOrderDetails
-        ),
-        getRevenueAndOrderDetails(
-          {
-            apiStatus: "ORDERCOUNT",
-          },
-          setOrderCount
-        ),
-        getRevenueAndOrderDetails(
-          {
-            apiStatus: "CODORDERCOUNT",
-          },
-          setCodCountOrder
-        ),
-        getRevenueAndOrderDetails(
-          {
-            apiStatus: "ADDRESSORDERCOUNT",
-          },
-          setAddressCountOrder
-        ),
-      ]);
+    try {
+      let sellerId = sessionStorage.getItem("sellerId");
+      if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
+        await Promise.all([
+          getDashDetails(),
+          getRevenueAndOrderDetails(
+            {
+              apiStatus: "REVENUE",
+            },
+            SetRevenueAndOrderDetails
+          ),
+          getRevenueAndOrderDetails(
+            {
+              apiStatus: "ORDERCOUNT",
+            },
+            setOrderCount
+          ),
+          getRevenueAndOrderDetails(
+            {
+              apiStatus: "CODORDERCOUNT",
+            },
+            setCodCountOrder
+          ),
+          getRevenueAndOrderDetails(
+            {
+              apiStatus: "ADDRESSORDERCOUNT",
+            },
+            setAddressCountOrder
+          ),
+        ]);
+      }
+    } catch (error: any) {
+      console.log("ERROR::", error.message);
     }
   }, []);
 
