@@ -38,10 +38,10 @@ const Reports = () => {
     //   label: "NDR Report",
     //   value: "NDRSTATUS",
     // },
-    // {
-    //   label: "Product Wise Status",
-    //   value: "PRODUCTWISESTATUS",
-    // },
+    {
+      label: "Product Wise Status",
+      value: "PRODUCTWISESTATUS",
+    },
   ];
 
   const convertEpoch = (epochDate: any) => {
