@@ -43,7 +43,7 @@ export const Breadcrum = ({
     return navigate(-1);
   };
 
-  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
   kycCheck = kycCheck?.nextStep?.kyc;
 

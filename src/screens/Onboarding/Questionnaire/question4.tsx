@@ -44,7 +44,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   // };
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const syService: any = [];
 

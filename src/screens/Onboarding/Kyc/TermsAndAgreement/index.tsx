@@ -94,7 +94,7 @@ export const ServiceComponent = (props: ITypeProps) => {
   };
 
   useEffect(() => {
-    const localAcceptTnC = sessionStorage.getItem("setAcceptTnCStatus") as any;
+    const localAcceptTnC = localStorage.getItem("setAcceptTnCStatus") as any;
     setAcceptTnC(localAcceptTnC);
   }, []);
 

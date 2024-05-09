@@ -88,7 +88,7 @@ export const Home = (props: IOverview) => {
   const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
 
-  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
@@ -321,7 +321,7 @@ export const Home = (props: IOverview) => {
     }
   };
   React.useMemo(async () => {
-    let sellerId = sessionStorage.getItem("sellerId");
+    let sellerId = localStorage.getItem("sellerId");
     if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
       await Promise.all([
         getDashDetails(),

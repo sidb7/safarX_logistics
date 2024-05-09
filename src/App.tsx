@@ -68,7 +68,7 @@ const App = () => {
   ReactGA.initialize(REACT_APP_GA4_ID);
 
   const [roomName, setRoomName] = useState<any>(
-    `${sessionStorage.getItem("sellerId")}`
+    `${localStorage.getItem("sellerId")}`
   );
 
   const dispatch = useDispatch();
@@ -95,7 +95,7 @@ const App = () => {
   console.log("packageversion", process.env.npm_package_version);
 
   //sentry code
-  const userInfoString = sessionStorage.getItem("userInfo");
+  const userInfoString = localStorage.getItem("userInfo");
   useEffect(() => {
     const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
     const sellerId = userInfo?.sellerId;
@@ -231,7 +231,7 @@ const App = () => {
   }, []);
 
   const loginFromSeller = (sellerData: any) => {
-    sessionStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
+    localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
 
     let signInUserReducerDetails = {
       email: sellerData.email,
@@ -240,9 +240,9 @@ const App = () => {
 
     dispatch(signInUser(signInUserReducerDetails));
 
-    sessionStorage.setItem("sellerId", sellerData.sellerId);
-    sessionStorage.setItem("userName", sellerData.name);
-    sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
+    localStorage.setItem("sellerId", sellerData.sellerId);
+    localStorage.setItem("userName", sellerData.name);
+    localStorage.setItem("userInfo", JSON.stringify(sellerData));
     setLocalStorage(`${sellerData.sellerId}_${tokenKey}`, sellerData.token);
 
     window?.dataLayer?.push({
@@ -255,8 +255,8 @@ const App = () => {
       isReturningUser: sellerData?.isReturningUser,
     });
 
-    const token = sessionStorage.getItem("sellerId")
-      ? `${sessionStorage.getItem(
+    const token = localStorage.getItem("sellerId")
+      ? `${localStorage.getItem(
           "sellerId"
         )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";
