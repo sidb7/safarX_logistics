@@ -26,14 +26,14 @@ const Reports = () => {
       label: "Shipment Status Report",
       value: "SHIPMENTSTATUS",
     },
-    // {
-    //   label: "Shipment Error Report",
-    //   value: "ERRORSHIPMENTSTATUS",
-    // },
-    // {
-    //   label: "NPR Report",
-    //   value: "NPRSTATUS",
-    // },
+    {
+      label: "Shipment Error Report",
+      value: "ERRORSHIPMENTSTATUS",
+    },
+    {
+      label: "NPR Report",
+      value: "NPRSTATUS",
+    },
     // {
     //   label: "NDR Report",
     //   value: "NDRSTATUS",
