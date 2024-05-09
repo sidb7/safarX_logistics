@@ -128,81 +128,84 @@ const App = () => {
             isEmailRequired: true,
           }),
 
-          Sentry.replayIntegration({
-            maskAllText: false,
-            maskAllInputs: false,
-            blockAllMedia: false,
-            unblock: [".sentry-unblock, [data-sentry-unblock]"],
-            unmask: [".sentry-unmask, [data-sentry-unmask]"],
-            //    networkDetailAllowUrls: [window.location.origin],
-            networkDetailAllowUrls: [
-              "api-seller.shipyaari.com",
-              "api-admin.shipyaari.com",
-            ],
-            networkRequestHeaders: ["Cache-Control"],
-            networkResponseHeaders: ["Referrer-Policy"],
-          }),
-          new Integrations.BrowserTracing(),
+          //   Sentry.replayIntegration({
+          //     maskAllText: false,
+          //     maskAllInputs: false,
+          //     blockAllMedia: false,
+          //     unblock: [".sentry-unblock, [data-sentry-unblock]"],
+          //     unmask: [".sentry-unmask, [data-sentry-unmask]"],
+          //     //    networkDetailAllowUrls: [window.location.origin],
+          //     networkDetailAllowUrls: [
+          //       "api-seller.shipyaari.com",
+          //       "api-admin.shipyaari.com",
+          //     ],
+          //     networkRequestHeaders: ["Cache-Control"],
+          //     networkResponseHeaders: ["Referrer-Policy"],
+          //   }),
+          //   new Integrations.BrowserTracing(),
         ],
-        tracePropagationTargets: ["*"],
+        // tracePropagationTargets: ["*"],
 
         tracesSampleRate: 1.0,
         release: `blaze-react-seller@${formattedDate}`,
       });
     }
 
-    // if (
-    //   Environment === "production" &&
-    //   userInfo !== undefined &&
-    //   userInfo !== null
-    // ) {
-    //   script = document.createElement("script");
-    //   script.src =
-    //     "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
-    //   script.crossOrigin = "anonymous";
-    //   document.body.appendChild(script);
+    if (
+      Environment === "production" &&
+      userInfo !== undefined &&
+      userInfo !== null
+    ) {
+      script = document.createElement("script");
+      script.src =
+        "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
+      script.crossOrigin = "anonymous";
+      document.body.appendChild(script);
 
-    //   scriptElement = document.createElement("script");
-    //   // console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
-    //   scriptElement.innerHTML = `
-    //       window.sentryOnLoad = function () {
-    //         Sentry.init({
-    //            dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
-    //           integrations: [
-    //             new Sentry.Replay({
-    //               maskAllText: false,
-    //               maskAllInputs:false,
-    //               blockAllMedia: false,
-    //               unblock: ['.sentry-unblock, [data-sentry-unblock]'],
-    //               unmask: ['.sentry-unmask, [data-sentry-unmask]'],
-    //                 networkDetailAllowUrls: ["*"],
-    //               networkRequestHeaders: ["Cache-Control"],
-    //              networkResponseHeaders: ["Referrer-Policy"],
-    //             }),
-    //           ],
-    //       release: "react-blaze@5.4.24",
+      scriptElement = document.createElement("script");
+      // console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
+      scriptElement.innerHTML = `
+          window.sentryOnLoad = function () {
+            Sentry.init({
+               dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+              integrations: [
+                new Sentry.Replay({
+                  maskAllText: false,
+                  maskAllInputs:false,
+                  blockAllMedia: false,
+                  unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+                  unmask: ['.sentry-unmask, [data-sentry-unmask]'],
+                   networkDetailAllowUrls: [
+              "api-seller.shipyaari.com",
+              "api-admin.shipyaari.com",
+            ],
+                  networkRequestHeaders: ["Cache-Control"],
+                 networkResponseHeaders: ["Referrer-Policy"],
+                }),
+              ],
+          release: "react-blaze@5.4.24",
 
-    //         });
-    //         Sentry.configureScope(function(scope) {
-    //           // Set user.id and user.email if available
-    //           if ('${sellerId}' && '${emailId}') {
-    //             scope.setUser({ id: '${sellerId}', email: '${emailId}' });
-    //           }
-    //         });
+            });
+            Sentry.configureScope(function(scope) {
+              // Set user.id and user.email if available
+              if ('${sellerId}' && '${emailId}') {
+                scope.setUser({ id: '${sellerId}', email: '${emailId}' });
+              }
+            });
 
-    //       };
-    //     `;
-    //   document.body.appendChild(scriptElement);
-    // }
+          };
+        `;
+      document.body.appendChild(scriptElement);
+    }
 
-    // return () => {
-    //   if (script && script.parentNode) {
-    //     script.parentNode.removeChild(script);
-    //   }
-    //   if (scriptElement && scriptElement.parentNode) {
-    //     scriptElement.parentNode.removeChild(scriptElement);
-    //   }
-    // };
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+      if (scriptElement && scriptElement.parentNode) {
+        scriptElement.parentNode.removeChild(scriptElement);
+      }
+    };
   }, [userInfoString]);
 
   useEffect(() => {
