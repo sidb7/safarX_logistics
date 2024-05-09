@@ -12,6 +12,8 @@
 }
 
 #sentry-feedback{
+right: auto !important;
+  /* Resetting 'right' property */
   left: 10px !important;
   position: fixed !important;
   bottom: 10px !important;
