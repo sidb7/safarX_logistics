@@ -16,7 +16,7 @@ const BankProtected = ({ children }: Props) => {
   const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
-  let sellerId = sessionStorage.getItem("sellerId");
+  let sellerId = localStorage.getItem("sellerId");
 
   //used getLocalStorage to get the token from local storage
 
@@ -45,11 +45,11 @@ const BankProtected = ({ children }: Props) => {
 
           //if bank not verified return to "/"
           if (!bank || !(walletBalance > 0)) {
-            sessionStorage.setItem(
+            localStorage.setItem(
               "kycValue",
               JSON.stringify(response?.data?.data[0])
             );
-            sessionStorage.setItem(
+            localStorage.setItem(
               "walletAmt",
               response?.data?.data[0]?.walletBalance
             );

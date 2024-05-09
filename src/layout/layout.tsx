@@ -45,7 +45,7 @@ export const CommonLayout = (props: Props) => {
     }
 
     clearLocalStorage();
-    sessionStorage.clear();
+    localStorage.clear();
   };
 
   useEffect(() => {

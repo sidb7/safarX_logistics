@@ -145,7 +145,7 @@ const WalletRecharge = () => {
   // }, []);
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
@@ -320,7 +320,7 @@ const WalletRecharge = () => {
   };
 
   const userDetailsFromSession = () => {
-    let temp: any = sessionStorage.getItem("userInfo");
+    let temp: any = localStorage.getItem("userInfo");
     temp = JSON.parse(temp);
     setDataFromSession(temp);
   };

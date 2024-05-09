@@ -28,7 +28,7 @@ const Index = () => {
   const signUpUser = useSelector((state: any) => state.signup);
 
   useEffect(() => {
-    let temp: any = sessionStorage.getItem("userInfo");
+    let temp: any = localStorage.getItem("userInfo");
     temp = JSON.parse(temp);
     setFirstName(temp?.firstName);
     setEmail(temp?.email);

@@ -118,7 +118,7 @@ const BusinessType = (props: ITypeProps) => {
           companyObj
         );
         if (response?.success) {
-          sessionStorage.setItem("setKycValue", "true");
+          localStorage.setItem("setKycValue", "true");
           setLoading(false);
           // toast.success(responses?.message);
         } else {

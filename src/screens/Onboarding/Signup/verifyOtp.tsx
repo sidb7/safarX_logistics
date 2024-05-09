@@ -84,16 +84,16 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
 
-      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
       if (response?.success === true) {
         localStorage.setItem(
           `${response?.data[0]?.sellerId}_${tokenKey}`,
           response?.data[0]?.token
         );
-        sessionStorage.setItem("userName", response?.data[0]?.name);
-        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        localStorage.setItem("userName", response?.data[0]?.name);
+        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
         // setLocalStorage(tokenKey, response?.data[0]?.token);
 
         window?.dataLayer?.push({
@@ -154,7 +154,7 @@ const Index = () => {
   }, [seconds]);
 
   useEffect(() => {
-    let temp: any = sessionStorage.getItem("userInfo");
+    let temp: any = localStorage.getItem("userInfo");
     temp = JSON.parse(temp);
     setEmail(temp?.email);
   }, []);

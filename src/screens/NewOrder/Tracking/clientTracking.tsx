@@ -186,7 +186,7 @@ const Tracking = () => {
   };
 
   const handleTrackOrderClick = async () => {
-    const getSellerId = sessionStorage.getItem("sellerId");
+    const getSellerId = localStorage.getItem("sellerId");
 
     setSellerId(getSellerId);
     getJwtTokenForUser(getSellerId);
