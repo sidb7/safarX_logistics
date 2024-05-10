@@ -49,7 +49,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
   // };
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const industryOptions: any = [];
 
