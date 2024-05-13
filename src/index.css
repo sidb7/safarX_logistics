@@ -57,3 +57,8 @@ tbody tr:nth-child(odd) {
 }
 
 
+.Toastify__close-button{
+  color: #a5a5a5 !important;
+}
+
+
