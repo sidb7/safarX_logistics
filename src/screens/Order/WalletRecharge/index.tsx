@@ -145,7 +145,7 @@ const WalletRecharge = () => {
   // }, []);
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
@@ -320,7 +320,7 @@ const WalletRecharge = () => {
   };
 
   const userDetailsFromSession = () => {
-    let temp: any = sessionStorage.getItem("userInfo");
+    let temp: any = localStorage.getItem("userInfo");
     temp = JSON.parse(temp);
     setDataFromSession(temp);
   };
@@ -487,16 +487,31 @@ const WalletRecharge = () => {
                       onChange={(e) => setWalletValue(e.target.value)}
                     />
                   </p> */}
-                  <CustomDropDown
-                    heading="Select Amount"
-                    value={walletValue}
-                    options={walletMenu}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setWalletValue(event.target.value);
-                    }}
-                    wrapperClass="w-[200px]"
-                    selectClassName="text-[18px] mt-6"
-                  />
+                  <div className="flex gap-4">
+                    <CustomDropDown
+                      heading="Select Amount"
+                      value={walletValue}
+                      options={walletMenu}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLSelectElement>
+                      ) => {
+                        setWalletValue(event.target.value);
+                      }}
+                      wrapperClass="w-[200px]"
+                      selectClassName="text-[18px] mt-6"
+                    />
+                    <JusPay
+                      isDisabled={isDisabled}
+                      amount={walletValue}
+                      callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                    />
+                  </div>
+
+                  {/* <JusPay
+                    isDisabled={isDisabled}
+                    amount={walletValue}
+                    callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                  /> */}
                   {/* <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
                     {moneyArr?.map((el: any, i: number) => {
                       return (
@@ -807,7 +822,7 @@ const WalletRecharge = () => {
                 </div>
               </div>
               {/* Payment Gateway */}
-              <div className="lg:grid grid-cols-2 mb-[30px] ">
+              {/* <div className="lg:grid grid-cols-2 mb-[30px] ">
                 <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-2">
                   <div className="flex  gap-x-2  text-[14px] mt-1">
                     <img
@@ -823,67 +838,6 @@ const WalletRecharge = () => {
                   </div>
 
                   <div className="flex mt-1 mb-6 gap-x-[1rem] cursor-pointer lg:mb-0 ml-4 mr-5">
-                    {/* <div className="flex flex-col items-center gap-y-2">
-                      <img
-                        src={
-                          "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
-                        }
-                        alt=""
-                        className="ml-0 object-contain w-20 h-20"
-                      />
-                      <Paytm
-                        isDisabled={isDisabled}
-                        text={"Paytm"}
-                        amt={walletValue}
-                        navigate={`${SELLER_WEB_URL}/wallet/view-wallet`}
-                      />
-                    </div>
-                    <div className="flex flex-col items-center gap-y-2">
-                      <img
-                        src={
-                          "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
-                        }
-                        alt=""
-                        className="ml-0 object-contain w-20 h-20"
-                      />
-                      <button
-                        disabled={isDisabled}
-                        type="button"
-                        className={`${
-                          !isDisabled
-                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                            : "!bg-opacity-50"
-                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                        onClick={handlePhonePeTransaction}
-                      >
-                        <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-                          PhonePe
-                        </p>
-                      </button>
-                    </div>
-                    <div className="flex flex-col items-center gap-y-2">
-                      <div className="w-20 h-20 flex justify-center items-center">
-                        <img
-                          src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
-                          alt=""
-                          className="ml-0 object-contain"
-                        />
-                      </div>
-                      <button
-                        disabled={isDisabled}
-                        type="button"
-                        className={`${
-                          !isDisabled
-                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                            : "!bg-opacity-50"
-                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                        onClick={handleRazorPayTransaction}
-                      >
-                        <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-                          RazorPay
-                        </p>
-                      </button>
-                    </div> */}
                     <JusPay
                       isDisabled={isDisabled}
                       amount={walletValue}
@@ -891,7 +845,7 @@ const WalletRecharge = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div
                 className="max-w-[900px] flex justify-between items-center cursor-pointer rounded-lg shadow-lg py-4 px-5 mb-[40px] font-medium max-sm:font-normal"
                 onClick={() => navigate("/wallet/transaction-history")}

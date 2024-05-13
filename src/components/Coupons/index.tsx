@@ -19,7 +19,7 @@ interface IIndexProps {}
 const Index: React.FunctionComponent<IIndexProps> = () => {
   const navigate = useNavigate();
 
-  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
   const onboardingStatus = kycCheck?.nextStep;
 

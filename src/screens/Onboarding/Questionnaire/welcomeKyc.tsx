@@ -12,7 +12,6 @@ import { POST } from "../../../utils/webService";
 import {
   POST_SKIP_FOR_NOW_TRACKER,
   POST_SUBMIT_QUESTIONNAIRE,
-  LARGE_LOGO,
 } from "../../../utils/ApiUrls";
 import TickLogo from "../../../assets/tick.svg";
 
@@ -32,7 +31,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
       <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={LARGE_LOGO}
+          src={CompanyLogo}
           alt="Company Logo"
         />
       </div>
@@ -84,7 +83,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
         <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
-            src={LARGE_LOGO}
+            src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>
