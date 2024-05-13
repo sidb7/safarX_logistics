@@ -52,6 +52,7 @@
     "react-select": "^5.8.0",
     "react-slick": "^0.29.0",
     "react-switch": "^7.0.0",
+    "react-toastify": "^10.0.5",
     "react-tooltip": "^5.18.0",
     "recharts": "^2.8.0",
     "slick-carousel": "^1.8.1",
