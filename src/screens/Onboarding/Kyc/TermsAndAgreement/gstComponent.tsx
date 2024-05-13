@@ -8,7 +8,11 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
-import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
+import {
+  GST_AGREEMENTS,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
+} from "../../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import { ResponsiveState } from "../../../../utils/responsiveState";
@@ -29,10 +33,10 @@ export const GSTComponent = (props: ITypeProps) => {
   const [loading, setLoading] = useState(false);
   const { isMdScreen } = ResponsiveState();
 
-  const userName = localStorage.getItem("fullname")?.replace(/,/g, " ");
-  const userNameForGst = localStorage.getItem("userName");
+  const userName = sessionStorage.getItem("fullname")?.replace(/,/g, " ");
+  const userNameForGst = sessionStorage.getItem("userName");
   useEffect(() => {
-    let data = localStorage.getItem("userInfo") as any;
+    let data = sessionStorage.getItem("userInfo") as any;
     data = JSON.parse(data);
 
     if (data !== "" && data !== null) {
@@ -55,7 +59,7 @@ export const GSTComponent = (props: ITypeProps) => {
     try {
       if (responses?.success) {
         setLoading(false);
-        localStorage.setItem("setAcceptTnCStatus", JSON.stringify(true));
+        sessionStorage.setItem("setAcceptTnCStatus", JSON.stringify(true));
         navigate("/onboarding/kyc-terms/service-agreement");
       } else {
         setLoading(false);
@@ -117,12 +121,12 @@ export const GSTComponent = (props: ITypeProps) => {
       >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
           <div className="product-box  bg-white flex justify-between  items-center w-full h-[60px] top-0 pl-5">
-            <img src={CompanyLogo} alt="" className="h-[25px]" />
+            <img src={LARGE_LOGO} alt="" className="h-[25px]" />
           </div>
 
           <WelcomeHeader
             className="!mt-[44px] md:!mt-6"
-            title="Welcome to Shipyaari"
+            title={`Welcome to ${WHITE_COMPANYNAME}`}
             content="Terms & Agreement"
           />
           <div className=" px-5 mb-3 md:mb-1 md:mx-5">

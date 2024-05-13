@@ -18,7 +18,7 @@ const HelpScreen = () => {
   const roles = useSelector((state: any) => state?.roles);
 
   const [tabName, setTabName] = useState(
-    localStorage.getItem("helpTab") || "FAQs"
+    sessionStorage.getItem("helpTab") || "FAQs"
   );
   const [faqType, setFAQType] = useState("all");
   const [showTable, setShowTable] = useState(false);
@@ -166,7 +166,7 @@ const HelpScreen = () => {
 ${renderingComponents === index && "!border-[#004EFF]"}
 `}
                       onClick={() => {
-                        localStorage.setItem("helpTab", statusName);
+                        sessionStorage.setItem("helpTab", statusName);
 
                         setScrollIndex(index);
                       }}

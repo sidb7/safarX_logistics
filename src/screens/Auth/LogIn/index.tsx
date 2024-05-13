@@ -16,6 +16,8 @@ import {
   POST_SIGN_IN_WITH_GOOGLE_URL,
   VALIDATE_USER_TOKEN,
   REACT_APP_GTM_ID,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -39,7 +41,7 @@ import { getQueryJson } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const { resetPassword, source, sellerEmail } = getQueryJson();
   let companyName = source?.toUpperCase();
@@ -65,7 +67,7 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
       let signInUserReducerDetails = {
         email: loginCredentials.email,
@@ -76,9 +78,9 @@ const Index = () => {
       dispatch(signInUser(signInUserReducerDetails));
 
       if (response?.success) {
-        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        localStorage.setItem("userName", response?.data[0]?.name);
-        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        sessionStorage.setItem("userName", response?.data[0]?.name);
+        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         setLocalStorage(
           `${response?.data[0]?.sellerId}_${tokenKey}`,
           response?.data[0]?.token
@@ -103,8 +105,8 @@ const Index = () => {
           user_id: response?.data[0]?.sellerId,
         });
 
-        const token = localStorage.getItem("sellerId")
-          ? `${localStorage.getItem(
+        const token = sessionStorage.getItem("sellerId")
+          ? `${sessionStorage.getItem(
               "sellerId"
             )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
           : "";
@@ -161,14 +163,14 @@ const Index = () => {
       payload
     );
 
-    localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       // setLocalStorage(tokenKey, response?.data[0]?.token);
-      localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
-      localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-      localStorage.setItem("userName", response?.data[0]?.name);
+      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+      sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      sessionStorage.setItem("userName", response?.data[0]?.name);
 
       window?.dataLayer?.push({
         event: "login",
@@ -189,8 +191,8 @@ const Index = () => {
         response?.data[0]?.token
       );
 
-      const token = localStorage.getItem("sellerId")
-        ? `${localStorage.getItem(
+      const token = sessionStorage.getItem("sellerId")
+        ? `${sessionStorage.getItem(
             "sellerId"
           )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
         : "";
@@ -228,23 +230,15 @@ const Index = () => {
   };
 
   useEffect(() => {
-    //adding token for preventing validateTokenApi to hit while logout and refreshing login screen
-    const token = localStorage.getItem("sellerId")
-      ? `${localStorage.getItem(
-          "sellerId"
-        )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-      : "";
-
     setTimeout(() => {
       setShowBootScreen(false);
     }, 2000);
-    token &&
-      (async () => {
-        const response = await POST(VALIDATE_USER_TOKEN);
-        if (response?.data?.success) {
-          navigate("/dashboard/overview");
-        }
-      })();
+    (async () => {
+      const response = await POST(VALIDATE_USER_TOKEN);
+      if (response?.data?.success) {
+        navigate("/dashboard/overview");
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -258,7 +252,8 @@ const Index = () => {
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          // src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
         <img
@@ -325,24 +320,15 @@ const Index = () => {
                 <div className="product-box flex items-center">
                   <img
                     className="m-4 h-[25px] object-contain"
-                    src={CompanyLogo}
+                    // src={CompanyLogo}
+                    src={LARGE_LOGO}
                     alt="Company Logo"
                   />
-                  <a
-                    href="https://app.shipyaari.com/shipyaari-tracking"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`ml-auto text-[#004EFF] underline p-4 font-Lato font-bold ${
-                      isMobileScreen ? "text-xs" : "text-sm"
-                    } leading-4 tracking-wide`}
-                  >
-                    TRACK ORDER
-                  </a>
                 </div>
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
                   <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
-                    Welcome to Shipyaari
+                    Welcome to {WHITE_COMPANYNAME}
                   </p>
                   <p className="text-center text-[#494949] font-Open font-light text-sm leading-[22px]">
                     Fast and Easy Shipping from your doorstep to your
@@ -516,7 +502,7 @@ const Index = () => {
         <div className="flex items-center justify-center h-screen">
           <img
             className="animate-bounce object-contain"
-            src={CompanyLogo}
+            src={LARGE_LOGO}
             alt=""
           />
         </div>

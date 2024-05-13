@@ -58,11 +58,14 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
 
       if (response?.status) {
         if (channelData?.channels?.length === 0) {
-          let channelSessionObj: any = localStorage.getItem("userInfo");
+          let channelSessionObj: any = sessionStorage.getItem("userInfo");
           channelSessionObj = JSON.parse(channelSessionObj);
           if (channelSessionObj.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = false;
-            localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            sessionStorage.setItem(
+              "userInfo",
+              JSON.stringify(channelSessionObj)
+            );
           }
         }
         toast.success("Channel Deactivated Successfully!!");
@@ -93,11 +96,11 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
   //         storeName,
   //       });
 
-  //       let channelSessionObj: any = localStorage.getItem("userInfo");
+  //       let channelSessionObj: any = sessionStorage.getItem("userInfo");
   //       channelSessionObj = JSON.parse(channelSessionObj);
   //       if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
   //         channelSessionObj.nextStep.isChannelIntegrated = true;
-  //         localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+  //         sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
   //       }
 
   //       let newAddedChannel = [
@@ -176,7 +179,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
 
         const selling_partner_id: any = searchParams.get("selling_partner_id");
 
-        const storeName = localStorage.getItem("amazon_store");
+        const storeName = sessionStorage.getItem("amazon_store");
 
         if (state && selling_partner_id) {
           console.log("AMAZON API");
@@ -187,17 +190,20 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
             storeName,
           };
           const createAmazonStore = await POST(CREATE_AMAZON_STORE, payload);
-          localStorage.removeItem("amazon_store");
+          sessionStorage.removeItem("amazon_store");
         }
 
         const { data: response } = await POST(GET_ALL_STORES, {});
         setLoading(false);
         if (response && response.data.length > 0) {
-          let channelSessionObj: any = localStorage.getItem("userInfo");
+          let channelSessionObj: any = sessionStorage.getItem("userInfo");
           channelSessionObj = JSON.parse(channelSessionObj);
           if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = true;
-            localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            sessionStorage.setItem(
+              "userInfo",
+              JSON.stringify(channelSessionObj)
+            );
           }
           let tempArr: any = [];
           response?.data?.forEach((item: any) => {
@@ -233,11 +239,14 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           });
           setChannelData({ channels: tempArr });
         } else {
-          let channelSessionObj: any = localStorage.getItem("userInfo");
+          let channelSessionObj: any = sessionStorage.getItem("userInfo");
           channelSessionObj = JSON.parse(channelSessionObj);
           if (channelSessionObj?.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = false;
-            localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            sessionStorage.setItem(
+              "userInfo",
+              JSON.stringify(channelSessionObj)
+            );
           }
         }
       } catch (error) {}

@@ -4,8 +4,6 @@ import "./landmarkDropdown.css";
 import { LANDMARK_API } from "../../utils/ApiUrls";
 import { useDebounce } from "../../hooks";
 
-export let LandMark: any;
-
 interface CustomInputWithDropDownProps {
   pastedData: any;
   value: any;
@@ -30,7 +28,6 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   const debouncedSearchTerm = useDebounce(searchTerm, 2000);
   const [apiCallMade, setApiCallMade] = useState(false);
   const dropdownRef = useRef(null);
-  LandMark = searchTerm;
 
   useEffect(() => {
     const closeDropdown = () => {

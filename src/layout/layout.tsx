@@ -36,7 +36,6 @@ export const CommonLayout = (props: Props) => {
         // socketCallbacks.disconnectSocket();
 
         toast.success(data?.message);
-        navigate("/auth/login");
       } else {
         toast.error(data?.message);
       }
@@ -45,7 +44,9 @@ export const CommonLayout = (props: Props) => {
     }
 
     clearLocalStorage();
-    localStorage.clear();
+    sessionStorage.clear();
+
+    navigate("/");
   };
 
   useEffect(() => {

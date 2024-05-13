@@ -310,7 +310,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
+        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };

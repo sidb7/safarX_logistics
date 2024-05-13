@@ -15,6 +15,8 @@ import InformativeIcon from "../../../assets/I icon.svg";
 import {
   POST_SIGN_UP_URL,
   POST_SIGN_UP_WITH_GOOGLE_URL,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -40,7 +42,7 @@ import * as Sentry from "@sentry/react";
 const Index = () => {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -100,7 +102,7 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       //setting the local storage  with site signing up to show in dataslayer
       localStorage.setItem("key", "Site");
       dispatch(signUpUser(sellerData));
@@ -117,7 +119,7 @@ const Index = () => {
           isReturningUser: isReturningUser,
         });
 
-        localStorage.setItem("userInfo", JSON.stringify(sellerData));
+        sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
         setLoading(false);
         const navigationObject = constructNavigationObject(
           "/onboarding/sendotp",
@@ -158,7 +160,7 @@ const Index = () => {
         payload
       );
       if (response?.success === true) {
-        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         dispatch(signUpUser(response.data[0]));
         setLoading(false);
         const navigationObject = constructNavigationObject(
@@ -244,25 +246,14 @@ const Index = () => {
                 <div className="product-box flex items-center ">
                   <img
                     className="m-4 h-[25px] object-contain"
-                    src={CompanyLogo}
+                    src={LARGE_LOGO}
                     alt="CompanyLogo"
                   />
-
-                  <a
-                    href="https://app.shipyaari.com/shipyaari-tracking"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`ml-auto text-[#004EFF] underline p-4 font-Lato font-bold ${
-                      isMobileScreen ? "text-xs" : "text-sm"
-                    } leading-4 tracking-wide`}
-                  >
-                    TRACK ORDER
-                  </a>
                 </div>
 
                 <div className="flex flex-col mt-12 lg:mt-2 mx-4 md:mx-[85px] gap-y-3">
                   <p className="text-center	leading-7 text-2xl font-bold font-Lato">
-                    Welcome to Shipyaari
+                    Welcome to {WHITE_COMPANYNAME}
                   </p>
                   <p className="text-center text-[#494949] font-Open font-light text-base leading-[22px] mb-7 lg:mb-0">
                     Fast and Easy Shipping from your doorstep to your
