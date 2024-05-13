@@ -5,7 +5,7 @@ import { tokenKey } from "./utility";
 axios.defaults.baseURL = SELLER_URL;
 
 const createHeader = (_URL: string, options = {}) => {
-  let sellerId = localStorage.getItem("sellerId");
+  let sellerId = sessionStorage.getItem("sellerId");
   let header = {
     Accept: "/",
     Authorization: `Bearer ${localStorage.getItem(`${sellerId}_${tokenKey}`)}`,

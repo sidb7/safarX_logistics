@@ -13,6 +13,8 @@ import {
   PHONEPE_TRANSACTION_STATUS,
   POST_SKIP_FOR_NOW_TRACKER,
   RECHARGE_STATUS,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
 
@@ -21,7 +23,7 @@ const modalTitle = () => {
     <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
       <img
         className=" ml-6  h-[25px] object-contain"
-        src={CompanyLogo}
+        src={LARGE_LOGO}
         alt="Company Logo"
       />
     </div>
@@ -90,7 +92,7 @@ const Cashondelivery = () => {
           <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
             <img
               className="my-auto h-[25px] object-contain"
-              src={CompanyLogo}
+              src={LARGE_LOGO}
               alt="Company Logo"
             />
           </div>

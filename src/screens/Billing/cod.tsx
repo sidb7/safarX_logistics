@@ -52,7 +52,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const getCodRemittedDetails = async () => {
     try {
       setLoading(true);
-      const payload = { sellerId: +`${localStorage.getItem("sellerId")}` };
+      const payload = { sellerId: +`${sessionStorage.getItem("sellerId")}` };
       // const payload = {
       //   sellerId: 2483, //only for testing
       // };
@@ -123,7 +123,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     // so dailyrpeortnumber, utrNO needs to given in payload too ,
 
     const payload = {
-      sellerId: +`${localStorage.getItem("sellerId")}`,
+      sellerId: +`${sessionStorage.getItem("sellerId")}`,
       reportNumber: reportNumber,
     };
     // const payload = {

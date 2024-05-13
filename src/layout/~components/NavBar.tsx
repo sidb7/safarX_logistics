@@ -7,6 +7,7 @@ import CloseMenu from "../../assets/Navbar/closeMenu.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { useSelector } from "react-redux";
+import { LARGE_LOGO, SMALL_LOGO, WHITE_COMPANYNAME } from "../../utils/ApiUrls";
 
 interface INavBarProps {
   openMobileSideBar: any;
@@ -169,9 +170,9 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           onClick={() => navigate(`/dashboard/overview`)}
         >
           {isHover ? (
-            <img src={ShipyaariLogo} alt="" className="!w-32 !h-8" />
+            <img src={LARGE_LOGO} alt="" className="!w-32 !h-8" />
           ) : (
-            <img src={CompanyLogo} alt="" />
+            <img src={SMALL_LOGO} alt="" />
           )}
         </div>
         {sideBarMenus?.map((e: any, index: number) => {

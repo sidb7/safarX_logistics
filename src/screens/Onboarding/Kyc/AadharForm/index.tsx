@@ -53,7 +53,7 @@ const Index = (props: ITypeProps) => {
   let routeCheck = route.includes("kyc-aadhar-form");
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
+  const sellerId = sessionStorage.getItem("sellerId");
 
   const { isMdScreen } = ResponsiveState();
 
@@ -72,12 +72,12 @@ const Index = (props: ITypeProps) => {
   }, [aadharNumber]);
 
   useEffect(() => {
-    let localbtype = localStorage.getItem("businessType");
+    let localbtype = sessionStorage.getItem("businessType");
 
-    let localaadharno = localStorage.getItem("aadharNumber");
-    let localclient_id = localStorage.getItem("client_id");
-    let localpanNumber = localStorage.getItem("panNumber");
-    let localgstNo = localStorage.getItem("gstNumber");
+    let localaadharno = sessionStorage.getItem("aadharNumber");
+    let localclient_id = sessionStorage.getItem("client_id");
+    let localpanNumber = sessionStorage.getItem("panNumber");
+    let localgstNo = sessionStorage.getItem("gstNumber");
 
     setBusinessType(localbtype);
     setAadharNo(localaadharno);
@@ -97,15 +97,15 @@ const Index = (props: ITypeProps) => {
 
         if (response?.success) {
           toast.success(response?.message);
-          localStorage.setItem("aadharNumber", aadharNumber);
-          localStorage.setItem("client_id", response.data.data.client_id);
+          sessionStorage.setItem("aadharNumber", aadharNumber);
+          sessionStorage.setItem("client_id", response.data.data.client_id);
           setOtp(true);
         } else {
           toast.error(response?.message);
         }
       } else {
         if (Number(otpNumber) !== 0) {
-          let clientId_session = localStorage.getItem("client_id");
+          let clientId_session = sessionStorage.getItem("client_id");
           const payload = {
             client_id: clientId_session,
             otp: Number(otpNumber),
@@ -149,7 +149,7 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         setMinutes(0);
         setSeconds(60);
-        localStorage.setItem("client_id", response.data.data.client_id);
+        sessionStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response.data.data.client_id);
 
         toast.success("Aadhar OTP Resent Successfully");
@@ -283,7 +283,7 @@ const Index = (props: ITypeProps) => {
               {!otp && (
                 <div className="flex  md:justify-center md:items-center px-5 md:px-0 pb-12 mb-[209px]">
                   <ServiceButton
-                    text="GET OTP"
+                    text="Get OTP"
                     disabled={!otpBtnStatus}
                     className={`bg-[#1C1C1C] !h-[36px] text-white w-full  md:!w-[320px] ${
                       otpBtnStatus === true
