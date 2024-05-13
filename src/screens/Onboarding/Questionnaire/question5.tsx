@@ -11,7 +11,7 @@ import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
 import { POST } from "../../../utils/webService";
-import { POST_SUBMIT_QUESTIONNAIRE, LARGE_LOGO } from "../../../utils/ApiUrls";
+import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 
 export const QuestionComponent5: React.FunctionComponent = (props: any) => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const QuestionComponent5: React.FunctionComponent = (props: any) => {
       <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={LARGE_LOGO}
+          src={CompanyLogo}
           alt="Company Logo"
         />
       </div>
@@ -133,7 +133,7 @@ export const QuestionComponent5: React.FunctionComponent = (props: any) => {
         <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
-            src={LARGE_LOGO}
+            src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>

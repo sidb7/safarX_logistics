@@ -19,7 +19,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const userInfo = sessionStorage.getItem("userInfo");
+    const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       try {
         const parsedUserInfo = JSON.parse(userInfo);
@@ -39,7 +39,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
         console.error("Failed to parse user info:", error);
       }
     } else {
-      console.log("No user info available in sessionStorage");
+      console.log("No user info available in localStorage");
     }
   }, [useNavigate()]);
 

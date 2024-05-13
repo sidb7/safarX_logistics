@@ -68,7 +68,7 @@ const PickUp = (props: ITypeProps) => {
         );
         if (responses?.success) {
           // toast.success(responses?.message);
-          sessionStorage.setItem("setKycValue", "true");
+          localStorage.setItem("setKycValue", "true");
           navigate("/onboarding/wallet-main");
           //Navigate Url's go here
           setLoading(false);

@@ -11,8 +11,6 @@ import { POST } from "../../../../utils/webService";
 import {
   POST_BUSINESS_TYPE_URL,
   POST_SKIP_FOR_NOW_TRACKER,
-  LARGE_LOGO,
-  WHITE_COMPANYNAME,
 } from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { toast } from "react-hot-toast";
@@ -34,7 +32,7 @@ const BusinessType = (props: ITypeProps) => {
   });
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const bussinessType: any = [];
 
@@ -52,15 +50,15 @@ const BusinessType = (props: ITypeProps) => {
   const selectedKycOption = bussinessType.join(", ");
 
   useEffect(() => {
-    // Attempt to retrieve the userInfo object from sessionStorage
-    const userInfoString = sessionStorage.getItem("userInfo");
+    // Attempt to retrieve the userInfo object from localStorage
+    const userInfoString = localStorage.getItem("userInfo");
     let initialBusinessType = "";
 
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
       if (userInfo.businessType) {
         initialBusinessType = userInfo.businessType;
-        sessionStorage.setItem(
+        localStorage.setItem(
           "businessType",
           initialBusinessType.toLocaleLowerCase()
         );
@@ -68,7 +66,7 @@ const BusinessType = (props: ITypeProps) => {
     }
 
     if (!initialBusinessType) {
-      initialBusinessType = sessionStorage.getItem("businessType") || "";
+      initialBusinessType = localStorage.getItem("businessType") || "";
     }
 
     if (initialBusinessType) {
@@ -83,7 +81,7 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitBusinessType = async () => {
     try {
-      let businessType = sessionStorage.getItem("businessType");
+      let businessType = localStorage.getItem("businessType");
       const payload = { businessType };
       setLoading(true);
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
@@ -153,8 +151,8 @@ const BusinessType = (props: ITypeProps) => {
             <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
               <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
                 <img
-                  className="my-auto h-[25px]  object-contain"
-                  src={LARGE_LOGO}
+                  className="my-auto  object-contain"
+                  src={CompanyLogo}
                   alt="Company Logo"
                 />
               </div>
@@ -165,7 +163,7 @@ const BusinessType = (props: ITypeProps) => {
 
                 <WelcomeHeader
                   className="!mt-[44px] md:!mt-6"
-                  title={`Welcome to ${WHITE_COMPANYNAME}`}
+                  title="Welcome to Shipyaari"
                   content="Kindly complete your KYC"
                 />
 
@@ -232,8 +230,8 @@ const BusinessType = (props: ITypeProps) => {
     return (
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
         <img
-          className="my-auto  h-[25px] object-contain"
-          src={LARGE_LOGO}
+          className="my-auto  object-contain"
+          src={CompanyLogo}
           alt="Company Logo"
         />
       </div>
