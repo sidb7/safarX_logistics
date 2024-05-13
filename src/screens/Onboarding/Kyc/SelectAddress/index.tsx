@@ -18,6 +18,8 @@ import {
   MAGIC_ADDRESS,
   GET_PROFILE_URL,
   LOGO_AND_BRAND,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../../utils/ApiUrls";
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-hot-toast";
@@ -118,7 +120,7 @@ const BusinessType = (props: ITypeProps) => {
           companyObj
         );
         if (response?.success) {
-          localStorage.setItem("setKycValue", "true");
+          sessionStorage.setItem("setKycValue", "true");
           setLoading(false);
           // toast.success(responses?.message);
         } else {
@@ -261,12 +263,16 @@ const BusinessType = (props: ITypeProps) => {
         >
           <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
             <div>
-              <div className="md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-                <img src={CompanyLogo} alt="" />
+              <div className="md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6  ">
+                <img
+                  className="m-4 h-[25px] object-contain"
+                  src={LARGE_LOGO}
+                  alt=""
+                />
               </div>
               <WelcomeHeader
                 className="!mt-[44px] md:!mt-6"
-                title="Welcome to Shipyaari"
+                title={`Welcome to ${WHITE_COMPANYNAME}`}
                 content="Select your"
                 whichAddress="Pickup"
                 Address="Address"

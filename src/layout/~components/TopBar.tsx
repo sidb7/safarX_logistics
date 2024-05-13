@@ -208,7 +208,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       const { data } = await POST(LOGOUT);
       if (data?.success) {
         toast.success(data?.message);
-        navigate("/auth/login");
       } else {
         toast.error(data?.message);
       }
@@ -216,7 +215,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       console.error(error);
     }
     clearLocalStorage();
-    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
   };
 
   // const socket = initSocket();
@@ -224,7 +224,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   // useEffect(() => {
   //   if (socket) {
   //     console.log("socketwallet", socket);
-  //     socket.emit("joinRoom", `${localStorage.getItem("sellerId")}`);
+  //     socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
   //     socket.on("wallet_balance_update", (newBalance: string) => {
   //       console.log("newWalletBalance", newBalance);
   //       dispatch(setWalletBalance({ amt: Number(newBalance) }));
@@ -319,13 +319,13 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               </div>
             )}
 
-            {localStorage.getItem("sellerId") && (
+            {sessionStorage.getItem("sellerId") && (
               <div className="hidden lg:block">
                 <div className="flex items-center max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]">
                   <img src={ProfileIcon} width={16} alt="" />
                   <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                     <div>Seller ID: </div>
-                    <div>{localStorage.getItem("sellerId")}</div>
+                    <div>{sessionStorage.getItem("sellerId")}</div>
                   </div>
                 </div>
               </div>

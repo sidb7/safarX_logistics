@@ -8,7 +8,11 @@ import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
-import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
+import {
+  POST_ACCEPT_AGREEMENTS,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
+} from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
@@ -94,7 +98,7 @@ export const ServiceComponent = (props: ITypeProps) => {
   };
 
   useEffect(() => {
-    const localAcceptTnC = localStorage.getItem("setAcceptTnCStatus") as any;
+    const localAcceptTnC = sessionStorage.getItem("setAcceptTnCStatus") as any;
     setAcceptTnC(localAcceptTnC);
   }, []);
 
@@ -107,11 +111,11 @@ export const ServiceComponent = (props: ITypeProps) => {
       >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
           <div className="product-box  bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
-            <img src={CompanyLogo} alt="" className="h-[25px]" />
+            <img src={LARGE_LOGO} alt="" className="h-[25px]" />
           </div>
           <WelcomeHeader
             className="!mt-[44px] md:!mt-6"
-            title="Welcome to Shipyaari"
+            title={`Welcome to ${WHITE_COMPANYNAME}`}
             content="Terms & Agreement"
           />
           <div className=" px-5  md:mb-0 md:mx-5 ">

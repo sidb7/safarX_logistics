@@ -44,7 +44,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   // console.log("🚀 ~ amountForTransaction:", amountForTransaction);
 
   const userDetailsFromSession = () => {
-    let temp: any = localStorage.getItem("userInfo");
+    let temp: any = sessionStorage.getItem("userInfo");
     // console.log("🚀 ~ userDetailsFromSession ~ temp:", temp);
     temp = JSON.parse(temp);
 

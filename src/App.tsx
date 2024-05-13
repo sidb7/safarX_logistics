@@ -28,8 +28,6 @@ import { Integrations } from "@sentry/tracing";
 import * as Sentry from "@sentry/react";
 import "./styles/index.css";
 
-import { createRoot } from "react-dom/client";
-import { createBrowserRouter } from "react-router-dom";
 const timestamp = Date.now(); // Get the current timestamp in milliseconds
 const date = new Date(timestamp); // Create a Date object from the timestamp
 
@@ -68,7 +66,7 @@ const App = () => {
   ReactGA.initialize(REACT_APP_GA4_ID);
 
   const [roomName, setRoomName] = useState<any>(
-    `${localStorage.getItem("sellerId")}`
+    `${sessionStorage.getItem("sellerId")}`
   );
 
   const dispatch = useDispatch();
@@ -95,7 +93,7 @@ const App = () => {
   console.log("packageversion", process.env.npm_package_version);
 
   //sentry code
-  const userInfoString = localStorage.getItem("userInfo");
+  const userInfoString = sessionStorage.getItem("userInfo");
   useEffect(() => {
     const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
     const sellerId = userInfo?.sellerId;
@@ -128,24 +126,16 @@ const App = () => {
             isEmailRequired: true,
           }),
 
-          //   Sentry.replayIntegration({
-          //     maskAllText: false,
-          //     maskAllInputs: false,
-          //     blockAllMedia: false,
-          //     unblock: [".sentry-unblock, [data-sentry-unblock]"],
-          //     unmask: [".sentry-unmask, [data-sentry-unmask]"],
-          //     //    networkDetailAllowUrls: [window.location.origin],
-          //     networkDetailAllowUrls: [
-          //       "api-seller.shipyaari.com",
-          //       "api-admin.shipyaari.com",
-          //     ],
-          //     networkRequestHeaders: ["Cache-Control"],
-          //     networkResponseHeaders: ["Referrer-Policy"],
-          //   }),
-          //   new Integrations.BrowserTracing(),
-        ],
-        // tracePropagationTargets: ["*"],
+          // Sentry.replayIntegration({
+          //   maskAllText: false,
+          //   maskAllInputs:false,
+          //   blockAllMedia: false,
+          //   unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+          //   unmask: ['.sentry-unmask, [data-sentry-unmask]'],
+          // }),
 
+          new Integrations.BrowserTracing(),
+        ],
         tracesSampleRate: 1.0,
         release: `blaze-react-seller@${formattedDate}`,
       });
@@ -167,7 +157,6 @@ const App = () => {
       scriptElement.innerHTML = `
           window.sentryOnLoad = function () {
             Sentry.init({
-               dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
               integrations: [
                 new Sentry.Replay({
                   maskAllText: false,
@@ -175,12 +164,6 @@ const App = () => {
                   blockAllMedia: false,
                   unblock: ['.sentry-unblock, [data-sentry-unblock]'],
                   unmask: ['.sentry-unmask, [data-sentry-unmask]'],
-                   networkDetailAllowUrls: [
-              "api-seller.shipyaari.com",
-              "api-admin.shipyaari.com",
-            ],
-                  networkRequestHeaders: ["Cache-Control"],
-                 networkResponseHeaders: ["Referrer-Policy"],
                 }),
               ],
           release: "react-blaze@5.4.24",
@@ -231,7 +214,7 @@ const App = () => {
   }, []);
 
   const loginFromSeller = (sellerData: any) => {
-    localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
+    sessionStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
 
     let signInUserReducerDetails = {
       email: sellerData.email,
@@ -240,9 +223,9 @@ const App = () => {
 
     dispatch(signInUser(signInUserReducerDetails));
 
-    localStorage.setItem("sellerId", sellerData.sellerId);
-    localStorage.setItem("userName", sellerData.name);
-    localStorage.setItem("userInfo", JSON.stringify(sellerData));
+    sessionStorage.setItem("sellerId", sellerData.sellerId);
+    sessionStorage.setItem("userName", sellerData.name);
+    sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
     setLocalStorage(`${sellerData.sellerId}_${tokenKey}`, sellerData.token);
 
     window?.dataLayer?.push({
@@ -255,8 +238,8 @@ const App = () => {
       isReturningUser: sellerData?.isReturningUser,
     });
 
-    const token = localStorage.getItem("sellerId")
-      ? `${localStorage.getItem(
+    const token = sessionStorage.getItem("sellerId")
+      ? `${sessionStorage.getItem(
           "sellerId"
         )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";

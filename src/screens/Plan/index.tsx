@@ -162,9 +162,9 @@ const Index = (props: ITypeProps) => {
                   />
                 </div>
                 {/* Table */}
-                {/* <div className="hidden lg:block">
+                <div className="hidden lg:block">
                   <ComparePlans />
-                </div> */}
+                </div>
               </>
             )}
           </div>

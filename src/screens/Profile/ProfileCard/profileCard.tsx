@@ -53,7 +53,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const [kycValue, setKycValue] = useState();
   let currentBalance = parseFloat(walletBalance?.toFixed(2));
   useEffect(() => {
-    const kyc = localStorage.getItem("setKycValue") as any;
+    const kyc = sessionStorage.getItem("setKycValue") as any;
     setKycValue(kyc);
   }, []);
 
