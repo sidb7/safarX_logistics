@@ -287,7 +287,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChaneDimensionHandler(e);
                         }
                       }}
-                      // inputError={inputError}
+                      inputError={inputError}
                     />
                     <InputBox
                       label="B"
@@ -300,7 +300,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChaneDimensionHandler(e);
                         }
                       }}
-                      // inputError={inputError}
+                      inputError={inputError}
                     />
                     <InputBox
                       label="H"
@@ -313,7 +313,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChaneDimensionHandler(e);
                         }
                       }}
-                      // inputError={inputError}
+                      inputError={inputError}
                     />
                   </div>
                 </div>
@@ -321,7 +321,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             </div>
           </div>
         ) : (
-          <div className="min-w-[90%] border-2 rounded-br rounded-bl border-t-0 mb-10">
+          <div className="min-w-[90%] border-2 rounded-br rounded-bl border-t-0 ">
             <div className="px-[1rem] w-[100%] pt-[1rem]">
               <DropDown
                 heading="Select A Box"
@@ -396,14 +396,15 @@ const ErrorModal = (props: ErrorModalProps) => {
                       inputMode="numeric"
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
+                          // onChaneDimensionHandler(e);
                           boxBoolean?.isSelectedBox
                             ? setSelectedBox({
                                 ...selectedBox,
-                                deadWeight: e.target.value,
+                                deadWeight: +e.target.value,
                               })
                             : setNewBox({
                                 ...newBox,
-                                deadWeight: e.target.value,
+                                deadWeight: +e.target.value,
                               });
                         }
                       }}
@@ -450,7 +451,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             boxBoolean?.isSelectedBox
                               ? setSelectedBox({
                                   ...selectedBox,
-                                  length: e.target.value,
+                                  length: +e.target.value,
                                   // volumetricWeight:
                                   //   (selectedBox.length *
                                   //     selectedBox.breadth *
@@ -459,7 +460,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 })
                               : setNewBox({
                                   ...newBox,
-                                  length: e.target.value,
+                                  length: +e.target.value,
                                   // volumetricWeight:
                                   //   (newBox.length *
                                   //     newBox.breadth *
@@ -490,7 +491,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             boxBoolean?.isSelectedBox
                               ? setSelectedBox({
                                   ...selectedBox,
-                                  breadth: e.target.value,
+                                  breadth: +e.target.value,
                                   // volumetricWeight:
                                   //   (selectedBox.length *
                                   //     selectedBox.breadth *
@@ -499,7 +500,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 })
                               : setNewBox({
                                   ...newBox,
-                                  breadth: e.target.value,
+                                  breadth: +e.target.value,
                                   // volumetricWeight:
                                   //   (newBox.length *
                                   //     newBox.breadth *
@@ -530,7 +531,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             boxBoolean?.isSelectedBox
                               ? setSelectedBox({
                                   ...selectedBox,
-                                  height: e.target.value,
+                                  height: +e.target.value,
                                   // volumetricWeight:
                                   //   (selectedBox.length *
                                   //     selectedBox.breadth *
@@ -539,7 +540,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 })
                               : setNewBox({
                                   ...newBox,
-                                  height: e.target.value,
+                                  height: +e.target.value,
                                   // volumetricWeight:
                                   //   (newBox.length *
                                   //     newBox.breadth *
@@ -1050,15 +1051,14 @@ const ErrorModal = (props: ErrorModalProps) => {
     switch (errorModalData.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
         return (
-          <div className="h-[80vh] overflow-y-auto mb-20">
-            <div className="border-2 m-[1rem] rounded-md  overflow-auto max-h-[90vh] shadow-md">
+          <div>
+            <div className="border-2 m-[1rem] rounded-md  overflow-auto max-h-[55vh] shadow-md">
               {productAndBoxDetails &&
                 productAndBoxDetails?.products?.map((data: any, index: any) => {
                   return (
                     <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
                       <div className="flex min-w-[90%]">
                         <div
-                          id={index}
                           className="items-center cursor-pointer flex border-2 rounded-md w-[100%] justify-between"
                           style={{
                             boxShadow:
@@ -1100,7 +1100,6 @@ const ErrorModal = (props: ErrorModalProps) => {
                   <div>
                     <div className="flex min-w-[90%]">
                       <div
-                        id="box"
                         className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
                         style={{
                           boxShadow:
@@ -1678,17 +1677,6 @@ const ErrorModal = (props: ErrorModalProps) => {
   const switchForValidation = () => {
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
-        productAndBoxDetails?.products?.map((item: any, index: any) => {
-          const num: any = document.getElementById(index);
-          if (!item.deadWeight) {
-            if (num) num.style.border = "1px solid red";
-          } else {
-            if (num) num.style.border = "1px solid #E5E7EB";
-          }
-        });
-
-        let box = document.getElementById("box");
-        if (box) box.style.border = "1px solid red";
         if (boxBoolean?.isNewBox || boxBoolean?.isSelectedBox) {
           if (
             boxBoolean?.isNewBox &&
@@ -1699,8 +1687,6 @@ const ErrorModal = (props: ErrorModalProps) => {
               newBox?.height <= 0)
           ) {
             return false;
-          } else {
-            if (box) box.style.border = "1px solid #E5E7EB";
           }
           if (
             boxBoolean?.isSelectedBox &&
@@ -1711,28 +1697,19 @@ const ErrorModal = (props: ErrorModalProps) => {
               selectedBox?.height <= 0)
           ) {
             return false;
-          } else {
-            if (box) box.style.border = "1px solid #E5E7EB";
           }
         } else {
           return false;
         }
 
-        // const dimensions = ["length", "breadth", "height", "deadWeight"];
-        // for (const dimension of dimensions) {
-        //   for (let i = 0; i < productAndBoxDetails.products.length; i++) {
-        //     const productDimension =
-        //       productAndBoxDetails.products[i][dimension];
-        //     if (!productDimension || productDimension == 0) {
-        //       return false;
-        //     }
-        //   }
-        // }
-
-        for (let i = 0; i < productAndBoxDetails.products.length; i++) {
-          const productDimension = productAndBoxDetails.products[i].deadWeight;
-          if (!productDimension || productDimension == 0) {
-            return false;
+        const dimensions = ["length", "breadth", "height", "deadWeight"];
+        for (const dimension of dimensions) {
+          for (let i = 0; i < productAndBoxDetails.products.length; i++) {
+            const productDimension =
+              productAndBoxDetails.products[i][dimension];
+            if (!productDimension || productDimension == 0) {
+              return false;
+            }
           }
         }
         return true;

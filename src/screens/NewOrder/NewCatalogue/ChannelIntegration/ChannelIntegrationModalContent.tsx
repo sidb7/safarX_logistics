@@ -105,11 +105,11 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             // setChannelData({ channels: newStore });
             setModalData({ isOpen: false });
             toast.success(data?.message);
-            let channelSessionObj: any = localStorage.getItem("userInfo");
+            let channelSessionObj: any = sessionStorage.getItem("userInfo");
             channelSessionObj = JSON.parse(channelSessionObj);
             if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
               channelSessionObj.nextStep.isChannelIntegrated = true;
-              localStorage.setItem(
+              sessionStorage.setItem(
                 "userInfo",
                 JSON.stringify(channelSessionObj)
               );
@@ -136,7 +136,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           );
           let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
 
-          const sellerId = localStorage.getItem("sellerId");
+          const sellerId = sessionStorage.getItem("sellerId");
 
           const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}?sellerId=${sellerId}`;
 
@@ -163,7 +163,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         } else if (channel === "AMAZON") {
           setIsLoading(true);
           const state = generateUniqueCode(8, 8);
-          localStorage.setItem("amazon_store", storeData.storeName);
+          sessionStorage.setItem("amazon_store", storeData.storeName);
           window.location.href = `${AMAZON_BASE_URL}/apps/authorize/consent?version=beta&application_id=${process.env.REACT_APP_AMAZON_APPLICATION_ID}&state=${state}`;
         }
         setIsLoading(false);
@@ -287,7 +287,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         //   JSON.stringify(updateWooCommerceToken)
         // );
         let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
-        const sellerId = localStorage.getItem("sellerId");
+        const sellerId = sessionStorage.getItem("sellerId");
         const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}?storeId=${storeId}`;
         try {
           const { data } = await axios.get(reqUrl);

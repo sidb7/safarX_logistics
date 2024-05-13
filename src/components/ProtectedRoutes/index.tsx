@@ -21,8 +21,6 @@ interface Props {
 }
 
 const ProtectedRoute = ({ children }: Props) => {
-  let sellerId = localStorage.getItem("sellerId");
-
   let [searchParams, setSearchParams]: any = useSearchParams();
   const navigate = useNavigate();
 
@@ -32,44 +30,42 @@ const ProtectedRoute = ({ children }: Props) => {
   //used getLocalStorage to get the token from local storage
 
   const localUserToken = getLocalStorage(
-    `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+    "891f5e6d-b3b3-4c16-929d-b06c3895e38d"
   );
 
   React.useEffect(() => {
-    localUserToken
-      ? (async () => {
-          const response = await POST(VALIDATE_USER_TOKEN);
+    (async () => {
+      const response = await POST(VALIDATE_USER_TOKEN);
 
-          if (!response?.data?.success) {
-            setIsAuthenticated(false);
-            clearLocalStorage();
-            // {
-            //   pathname: "/search",
-            //   search: createSearchParams({ query: "someQuery" }).toString(),
-            // },
-            // { state: { someAttributeName: "someAttributeValue" } },
+      if (!response?.data?.success) {
+        setIsAuthenticated(false);
+        clearLocalStorage();
+        // {
+        //   pathname: "/search",
+        //   search: createSearchParams({ query: "someQuery" }).toString(),
+        // },
+        // { state: { someAttributeName: "someAttributeValue" } },
 
-            const navigationObject = constructNavigationObject(
-              "/auth/login",
-              window.location.search
-            );
-            navigate(navigationObject);
-          } else {
-            localStorage.setItem(
-              "kycValue",
-              JSON.stringify(response?.data?.data[0])
-            );
-            localStorage.setItem(
-              "walletAmt",
-              response?.data?.data[0]?.walletBalance
-            );
-            setIsAuthenticated(true);
-            dispatch(
-              setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
-            );
-          }
-        })()
-      : navigate("/auth/login");
+        const navigationObject = constructNavigationObject(
+          "/auth/login",
+          window.location.search
+        );
+        navigate(navigationObject);
+      } else {
+        sessionStorage.setItem(
+          "kycValue",
+          JSON.stringify(response?.data?.data[0])
+        );
+        sessionStorage.setItem(
+          "walletAmt",
+          response?.data?.data[0]?.walletBalance
+        );
+        setIsAuthenticated(true);
+        dispatch(
+          setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
+        );
+      }
+    })();
   }, [localUserToken, navigate]);
 
   if (isAuthenticated === true) {

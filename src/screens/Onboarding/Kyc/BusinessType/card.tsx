@@ -32,7 +32,7 @@ const Card = (props: ITypesProps) => {
         } w-full lg:!w-[320px] relative`}
         onClick={(e: any) => {
           onClick({ [value]: true });
-          localStorage.setItem("businessType", value);
+          sessionStorage.setItem("businessType", value);
         }}
       >
         <div className="flex flex-col">
@@ -43,7 +43,7 @@ const Card = (props: ITypesProps) => {
               style={{ accentColor: "black" }}
               inputClassName="cursor-pointer"
               onChange={(e) => {
-                localStorage.setItem("businessType", e.target.value);
+                sessionStorage.setItem("businessType", e.target.value);
               }}
               checked={checked}
             />

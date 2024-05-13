@@ -19,7 +19,7 @@ import StarRating from "./starRating";
 import { GET, POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
 import CustomButton from "../../../components/Button";
-import { TRACKING } from "../../../utils/ApiUrls";
+import { TRACKING, LARGE_LOGO } from "../../../utils/ApiUrls";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { getQueryJson } from "../../../utils/utility";
 import CopyTooltip from "../../../components/CopyToClipboard";

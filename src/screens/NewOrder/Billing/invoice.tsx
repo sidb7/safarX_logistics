@@ -97,7 +97,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             ${renderingComponents === index && "!border-[#004EFF]"}
           `}
           onClick={() => {
-            localStorage.setItem("billingTab", statusName);
+            sessionStorage.setItem("billingTab", statusName);
             setScrollIndex(index);
           }}
           key={index}
