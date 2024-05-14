@@ -1,6 +1,8 @@
 import "../../../styles/packageStyle.css";
 import EditIcon from "../../../assets/Product/Edit.svg";
 import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
+import BlueBox from "../../../assets/Catalogue/blueBox.svg";
+import RedBox from "../../../assets/Catalogue/redBox.svg";
 interface IPackageBoxProps {
   recommended?: boolean;
   packageType: string;
@@ -20,6 +22,7 @@ interface IPackageBoxProps {
   setDeleteBoxIndex?: any;
   data?: any;
   setDeleteData?: any;
+  className?: any;
 }
 
 const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -41,13 +44,13 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   setDeleteData,
 }) => {
   return (
-    <div className={recommended ? "relative py-2" : "py-2"}>
+    <div className={`${data?.recommended ? "relative py-2" : "py-2"} `}>
       <div
-        className={`flex flex-col py-3 px-4 justify-center !w-64  ${
+        className={`flex flex-col py-3 px-4 justify-center  ${
           selected ? "border-[#004EFF]" : ""
         }  lg:w-full border-2 rounded-md  package-box `}
       >
-        {recommended ? (
+        {data?.recommended ? (
           <span
             className={`absolute top-0 bg-sky-500 rounded-md  border-2  border-sky-500 text-white text-xs px-4 h-[20px]`}
           >
@@ -61,7 +64,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
             {packageType}
           </div>
 
-          {showAction && (
+          {showAction && !data?.recommended && (
             <div className="cursor-pointer flex">
               <img
                 src={EditIcon}
@@ -88,6 +91,12 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
           <span className="leading-6  font-Open pl-1">{` |  ${height} x ${breadth} x ${length} cm`}</span>
         </div>
         <div className="text-gray-400">{boxType}</div>
+        {/* <div className="flex cursor-pointer items-center gap-x-1 self-end border-[1px] rounded-md px-[5px] pt-[2px] border-[#0C56FF]">
+          <span>
+            <img width={20} src={BlueBox} />
+          </span>
+          <span className="text-[#0C56FF]">10</span>
+        </div> */}
       </div>
     </div>
   );

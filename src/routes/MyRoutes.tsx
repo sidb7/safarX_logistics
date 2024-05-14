@@ -42,6 +42,7 @@ import BulkProducts from "../screens/NewOrder/NewCatalogue/ProductCatalogue/Bulk
 import SelectAddress from "../screens/Onboarding/Kyc/SelectAddress/index";
 import SelectAddressBilling from "../screens/Onboarding/Kyc/SelectAddress/billing";
 import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup";
+import BulkBoxes from "../screens/NewOrder/NewCatalogue/BoxCatalogue/BulkBoxes";
 
 import TransactionLayout from "../layout/TransactionLayout";
 // import WalletRecharge from "../screens/NewOrder/WalletRecharge";
@@ -998,6 +999,16 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/catalogues/catalogue/add-bulk-box/"
+            element={
+              <ProtectedRoute>
+                <BulkBoxes />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/catalogues/catalogue/edit-address"
             element={
@@ -1098,105 +1109,6 @@ const MyRoutes: React.FC = () => {
         <Route path="/help/ticket" element={<HelpScreen />} />
         <Route path="/help/agreements" element={<HelpScreen />} />
         <Route path="/help/ticket/view-all" element={<ViewAllTickets />} />
-        {/* Catalogue Routes */}
-        <Route>
-          <Route
-            path="/catalogues/channel-integration"
-            element={
-              <ProtectedRoute>
-                <Catalogue />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/address-book"
-            element={
-              <ProtectedRoute>
-                <Catalogue />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/product-catalogue"
-            element={
-              <ProtectedRoute>
-                <Catalogue />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/box-catalogue"
-            element={
-              <ProtectedRoute>
-                <Catalogue />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/channel-inventory"
-            element={
-              <ProtectedRoute>
-                <Catalogue />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/add-combo"
-            element={
-              <ProtectedRoute>
-                <AddComboScreen />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/add-product"
-            element={
-              <ProtectedRoute>
-                <AddProductScreen />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/add-box"
-            element={
-              <ProtectedRoute>
-                <AddBox />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/add-bulk-product/"
-            element={
-              <ProtectedRoute>
-                <BulkProducts />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/edit-address"
-            element={
-              <ProtectedRoute>
-                <EditAddress />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/add-address"
-            element={
-              <ProtectedRoute>
-                <AddAddress />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/catalogues/catalogue/add-product"
-            element={
-              <ProtectedRoute>
-                <CatalogueAddProduct />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
 
         {/* Wallet Routes */}
         <Route>
