@@ -344,7 +344,7 @@ const Index = () => {
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
 
-  let syncChannelTextObj: any = sessionStorage.getItem("userInfo");
+  let syncChannelTextObj: any = localStorage.getItem("userInfo");
   syncChannelTextObj = JSON.parse(syncChannelTextObj);
 
   let syncChannelText = syncChannelTextObj?.nextStep?.isChannelIntegrated
@@ -886,7 +886,7 @@ const Index = () => {
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };
@@ -1409,14 +1409,25 @@ const Index = () => {
     filterPayLoadData?: any
   ) => {
     try {
-      const payload: any = {
-        skip,
-        limit,
-        pageNo,
-        sort,
-        currentStatus,
-        subStatus: "DRAFT",
-      };
+      let payload: any;
+      if (filterId === 1) {
+        payload = {
+          skip,
+          limit,
+          pageNo,
+          sort,
+          currentStatus,
+          subStatus: "DRAFT",
+        };
+      } else {
+        payload = {
+          skip,
+          limit,
+          pageNo,
+          sort,
+          currentStatus,
+        };
+      }
 
       let firstFilterData = [];
       let secondFilterData = [];
@@ -1509,7 +1520,7 @@ const Index = () => {
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };
@@ -1568,7 +1579,7 @@ const Index = () => {
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
-        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
       )}`,
       "Content-Type": "application/json",
     };

@@ -22,9 +22,9 @@ const TimerCounter = (props: IProps) => {
   const [gstNumber, setGstNumber] = useState<any>();
 
   useEffect(() => {
-    let btype = sessionStorage.getItem("businessType");
-    let atype = sessionStorage.getItem("aadharNumber");
-    let gtype = sessionStorage.getItem("gstNumber");
+    let btype = localStorage.getItem("businessType");
+    let atype = localStorage.getItem("aadharNumber");
+    let gtype = localStorage.getItem("gstNumber");
 
     setBusinessType(btype);
     setAadharNumber(atype);
@@ -62,9 +62,9 @@ const TimerCounter = (props: IProps) => {
         setOTPNumber("");
         setMinutes(0);
         setSeconds(sec);
-        sessionStorage.setItem("client_id", response.data.data.client_id);
+        localStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response.data.data.client_id);
-        sessionStorage.setItem("client_id", response.data[0].data.client_id);
+        localStorage.setItem("client_id", response.data[0].data.client_id);
       } else {
         toast.error("Aadhar OTP Resent Failed!");
       }
@@ -82,7 +82,7 @@ const TimerCounter = (props: IProps) => {
       if (response?.success) {
         toast.success("GST OTP Resent Successfully");
         setOTPNumber("");
-        sessionStorage.setItem("client_id", response.data[0].data.client_id);
+        localStorage.setItem("client_id", response.data[0].data.client_id);
         setClientId(response.data[0].data.client_id);
         setMinutes(0);
         setSeconds(sec);

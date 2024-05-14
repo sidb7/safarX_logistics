@@ -10,7 +10,6 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
-import { LARGE_LOGO } from "../../../utils/ApiUrls";
 
 export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
       <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={LARGE_LOGO}
+          src={CompanyLogo}
           alt="Company Logo"
         />
       </div>
@@ -45,7 +44,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const question = questionsData[1]?.question;
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   const dailyOrder: any = [];
 
@@ -112,7 +111,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
         <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
-            src={LARGE_LOGO}
+            src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>
