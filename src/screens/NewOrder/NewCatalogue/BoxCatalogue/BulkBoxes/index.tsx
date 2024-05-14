@@ -9,8 +9,8 @@ import CustomButton from "../../../../../components/Button";
 import BottomLayout from "../../../../../components/Layout/bottomLayout";
 import * as XLSX from "xlsx";
 import {
-  BULK_PRODUCT_UPLOAD,
-  GET_PRODUCTS,
+  UPLOAD_BULK_BOXES,
+  GET_SELLER_BOX,
 } from "../../../../../utils/ApiUrls";
 import { Spinner } from "../../../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
@@ -43,7 +43,7 @@ const BulkUpload = (props: ITypeProps) => {
     try {
       setIsLoading(true);
 
-      const { data: response } = await POST(BULK_PRODUCT_UPLOAD, formData, {
+      const { data: response } = await POST(UPLOAD_BULK_BOXES, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -52,14 +52,14 @@ const BulkUpload = (props: ITypeProps) => {
       if (response?.success) {
         toast.success(response?.message);
       } else {
-        toast.error("Failed To Upload!");
+        toast.error("Failed To Upload!" || response?.message);
       }
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("An error occurred during file upload.");
     } finally {
       setIsLoading(false);
-      navigate("/catalogues/product-catalogue");
+      navigate("/catalogues/box-catalogue");
     }
     // finally {
     //   setIsLoading(false);
@@ -92,7 +92,24 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const generateExcelFile = async (data: any) => {
-    const ws = XLSX.utils.json_to_sheet(data);
+    const ws: any = XLSX.utils.json_to_sheet(data);
+
+    // // Get the range of the first column
+    // const range = XLSX.utils.decode_range(ws["!ref"]);
+    // for (let rowNum = range.s.r; rowNum <= range.e.r; rowNum++) {
+    //   const cellAddress = { r: rowNum, c: 0 }; // First column (index 0)
+    //   const cellRef = XLSX.utils.encode_cell(cellAddress);
+    //   const cell = ws[cellRef];
+    //   if (!cell) continue;
+    //   cell.s = { protection: { locked: true } }; // Set cell protection to locked
+    // }
+
+    // ws["!protect"] = {
+    //   selectLockedCells: false,
+    //   selectUnlockedCells: false,
+    //   sheet: true,
+    // };
+
     const wb = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
@@ -106,7 +123,7 @@ const BulkUpload = (props: ITypeProps) => {
     // Create a download link and trigger a click event
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Product_SampleFile.xlsx`;
+    a.download = `Box_SampleFile.xlsx`;
     a.click();
 
     // Clean up
@@ -185,7 +202,7 @@ const BulkUpload = (props: ITypeProps) => {
   // };
 
   const downloadSampleProducts = async () => {
-    const { data } = await POST(GET_PRODUCTS, {
+    const { data } = await POST(GET_SELLER_BOX, {
       skip: 0,
       limit: 1000,
       pageNo: 1,
@@ -193,17 +210,14 @@ const BulkUpload = (props: ITypeProps) => {
 
     let specificData = data.data.map((item: any) => {
       return {
-        Source: item?.source || "SHIPYAARI",
-        "Product Id": item?.productId,
+        "Box Id": item?.boxId,
         Name: item?.name,
-        Category: item?.category,
-        SKU: item?.sku,
+        Color: item?.color,
         "Length (cm)": item?.length,
         "Breadth (cm)": item?.breadth,
         "Height (cm)": item?.height,
         "Dead Weight (Kg)": item?.deadWeight,
-        "Unit Price (Rs)": item?.unitPrice,
-        "Unit Tax (Rs)": item?.unitTax,
+        "Price (Rs)": item?.price,
         // "Box Length (cm)": "",
         // "Box Breadth (cm)": "",
         // "Box Height (cm)": "",
@@ -249,10 +263,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   return (
     <>
-      <Breadcrum
-        label="Add Bulk Products"
-        component={renderHeaderComponent()}
-      />
+      <Breadcrum label="Add Bulk Boxes" component={renderHeaderComponent()} />
       <div className="h-[calc(100%-260px)] flex justify-center items-center">
         {isLoading ? (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -310,7 +321,7 @@ const BulkUpload = (props: ITypeProps) => {
         )}
       </div>
       <BottomLayout
-        customButtonText="Upload Products"
+        customButtonText="Upload Boxes"
         callApi={() => {
           handleFileUpload();
         }}

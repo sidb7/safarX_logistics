@@ -162,6 +162,7 @@ const CREATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/createSellerBox`;
 const UPDATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/updateSellerBox`;
 const DELETE_SELLER_BOX = `${SELLER_URL}/api/v1/box/deleteSellerBox`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
+const UPLOAD_BULK_BOXES = `${SELLER_BASE_URL}/box/uploadBulkBox`;
 
 //Combo Product URL
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
@@ -561,4 +562,5 @@ export {
   POST_WALLET_BALANCE,
   UPDATE_EXPIRED_WC_TOKEN,
   POST_SKIP_FOR_NOW_TRACKER,
+  UPLOAD_BULK_BOXES,
 };
