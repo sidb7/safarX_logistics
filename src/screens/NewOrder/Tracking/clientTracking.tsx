@@ -8,7 +8,7 @@ import Stepper from "./clientStepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { Spinner } from "../../../components/Spinner";
 import { GET, POST } from "../../../utils/webService";
-import { GET_CLIENTTRACKING_INFO, LARGE_LOGO } from "../../../utils/ApiUrls";
+import { GET_CLIENTTRACKING_INFO } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-hot-toast";
 import { convertEpochToDateTime } from "../../../utils/utility";
@@ -186,7 +186,7 @@ const Tracking = () => {
   };
 
   const handleTrackOrderClick = async () => {
-    const getSellerId = sessionStorage.getItem("sellerId");
+    const getSellerId = localStorage.getItem("sellerId");
 
     setSellerId(getSellerId);
     getJwtTokenForUser(getSellerId);
@@ -320,11 +320,7 @@ const Tracking = () => {
         <div className="mx-5">
           {/*shipyaari icon */}
           <div className="flex  justify-center p-3">
-            <img
-              className="mt-8 m-4 h-[60px] object-contain"
-              src={LARGE_LOGO}
-              alt="Shipyaari"
-            />
+            <img src={shipyaari} alt="Shipyaari" />
           </div>
           <div className="flex justify-center items-center py-4">
             <div className="w-[50rem]">
