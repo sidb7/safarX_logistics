@@ -128,12 +128,12 @@ const App = () => {
             isNameRequired: true,
             isEmailRequired: true,
           }),
-          Sentry.captureConsoleIntegration(),
-          Sentry.contextLinesIntegration(),
-          Sentry.linkedErrorsIntegration({
-            limit: 7,
-          }),
-          Sentry.debugIntegration(),
+          // Sentry.captureConsoleIntegration(),
+          // Sentry.contextLinesIntegration(),
+          // Sentry.linkedErrorsIntegration({
+          //   limit: 7,
+          // }),
+          // Sentry.debugIntegration(),
           //   Sentry.replayIntegration({
           //     maskAllText: false,
           //     maskAllInputs: false,
