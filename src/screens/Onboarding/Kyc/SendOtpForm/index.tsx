@@ -22,7 +22,6 @@ import ErrorIcon from "../../../../assets/common/info-circle.svg";
 import { Spinner } from "../../../../components/Spinner";
 import TimerCounter from "../../../../components/TimerCountdown";
 import { ResponsiveState } from "../../../../utils/responsiveState";
-import { LARGE_LOGO, WHITE_COMPANYNAME } from "../../../../utils/ApiUrls";
 
 interface ITypeProps {}
 
@@ -61,11 +60,11 @@ const Index = (props: ITypeProps) => {
 
   const { isLgScreen, isMdScreen } = ResponsiveState();
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   useEffect(() => {
     // Retrieve the 'kycValue' from session storage
-    const kycValueString = sessionStorage.getItem("kycValue");
+    const kycValueString = localStorage.getItem("kycValue");
     if (kycValueString) {
       const kycValue = JSON.parse(kycValueString);
       const kycDetails = kycValue.kycDetails;
@@ -107,7 +106,7 @@ const Index = (props: ITypeProps) => {
   }, [state]);
 
   useEffect(() => {
-    let btype = sessionStorage.getItem("businessType");
+    let btype = localStorage.getItem("businessType");
     setBusinessType(btype);
   }, []);
 
@@ -141,7 +140,7 @@ const Index = (props: ITypeProps) => {
       const payload = { pan_no: value };
       const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
 
-      sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
+      localStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
         // setTimeout(() => {
         //   console.log("Delayed for 1 second.");
@@ -164,7 +163,7 @@ const Index = (props: ITypeProps) => {
 
         // window?.dataLayer?.push({
         //   event: "KYCVerification",
-        //   sellerInfo: sessionStorage.getItem("userInfo"),
+        //   sellerInfo: localStorage.getItem("userInfo"),
         // });
       } else {
         setLoading(false);
@@ -195,11 +194,11 @@ const Index = (props: ITypeProps) => {
         setShowAaddharOtpBox(true);
         setVerifyOTP(true);
 
-        sessionStorage.setItem("aadharNumber", value);
-        sessionStorage.setItem("panNumber", panNumber);
-        sessionStorage.setItem("client_id", response.data.data.client_id);
+        localStorage.setItem("aadharNumber", value);
+        localStorage.setItem("panNumber", panNumber);
+        localStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response?.data?.data?.client_id);
-        let clientIdSession = sessionStorage.getItem("client_id");
+        let clientIdSession = localStorage.getItem("client_id");
         console.log("clientIdSe", clientIdSession);
 
         if (businessType === "individual") {
@@ -224,14 +223,14 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         setLoading(false);
-        sessionStorage.setItem("gstNumber", value);
-        sessionStorage.setItem("panNumber", panNumber);
-        sessionStorage.setItem("client_id", response.data[0].data.client_id);
+        localStorage.setItem("gstNumber", value);
+        localStorage.setItem("panNumber", panNumber);
+        localStorage.setItem("client_id", response.data[0].data.client_id);
         setShowgstOtpBox(true);
         setVerifyOTP(true);
         if (businessType === "business" || businessType === "company") {
           setLoading(false);
-          sessionStorage.setItem("client_id", response.data[0].data.client_id);
+          localStorage.setItem("client_id", response.data[0].data.client_id);
         } else {
           setLoading(false);
         }
@@ -311,7 +310,7 @@ const Index = (props: ITypeProps) => {
   const onVerifyOtp = async () => {
     try {
       if (Number(otpNumber) !== 0) {
-        let clientId_session = sessionStorage.getItem("client_id");
+        let clientId_session = localStorage.getItem("client_id");
         if (businessType === "individual") {
           const payload = {
             client_id: clientId_session,
@@ -330,7 +329,7 @@ const Index = (props: ITypeProps) => {
                 payload
               );
 
-              sessionStorage.setItem(
+              localStorage.setItem(
                 "fullname",
                 response?.data?.data?.full_name_split
               );
@@ -378,7 +377,7 @@ const Index = (props: ITypeProps) => {
             if (response?.success) {
               // window?.dataLayer?.push({
               //   event: "KYCVerification",
-              //   sellerInfo: sessionStorage.getItem("userInfo"),
+              //   sellerInfo: localStorage.getItem("userInfo"),
               // });
               // setLoading(false);
               // verifyPAN(panNumber);
@@ -387,7 +386,7 @@ const Index = (props: ITypeProps) => {
             } else {
               // window?.dataLayer?.push({
               //   event: "KYCVerification",
-              //   sellerInfo: sessionStorage.getItem("userInfo"),
+              //   sellerInfo: localStorage.getItem("userInfo"),
               // });
               setLoading(false);
               setOTPNumber("");
@@ -455,12 +454,12 @@ const Index = (props: ITypeProps) => {
       >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
           <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-            <img src={LARGE_LOGO} alt="" className="h-[25px]" />
+            <img src={CompanyLogo} alt="" className="h-[25px]" />
           </div>
 
           <WelcomeHeader
             className="!mt-[44px] md:!mt-6"
-            title={`Welcome to ${WHITE_COMPANYNAME}`}
+            title="Welcome to Shipyaari"
             content="Kindly complete your KYC"
           />
 
@@ -693,7 +692,7 @@ const Index = (props: ITypeProps) => {
                 />
               ) : (
                 <ServiceButton
-                  text="Get OTP"
+                  text="Verify Number"
                   disabled={!otpFormBtnStatus}
                   btnType="submit"
                   onClick={() => onSendOtp()}

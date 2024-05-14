@@ -25,6 +25,7 @@ import { capitalizeFirstLetter, titleCase } from "../../../../utils/utility";
 import InfoCircle from "../../../../assets/info-circle.svg";
 
 import "../../../../styles/magicAddressInput.css";
+import { LandMark } from "../../../../components/LandmarkDropdown/LandmarkDropdown";
 
 interface IAddressCardProps {
   data: {
@@ -121,6 +122,9 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       postServicablePincode(payload);
     }
   };
+  if (!pickupAddress.pickupAddress.landmark) {
+    pickupAddress.pickupAddress.landmark = LandMark;
+  }
   console.log("pickupAddress", pickupAddress);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -183,7 +187,6 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
   const handleButtonClick = () => {
     const trimmedData = pastedData.trim();
-
     if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
       setPrevPastedData(trimmedData);
