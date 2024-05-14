@@ -24,7 +24,7 @@ import {
   setLocalStorage,
   tokenKey,
 } from "./utils/utility";
-import { Integrations } from "@sentry/tracing";
+// import { Integrations } from "@sentry/tracing";
 import * as Sentry from "@sentry/react";
 import "./styles/index.css";
 
@@ -119,6 +119,7 @@ const App = () => {
 
       Sentry.init({
         dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+        debug: true,
         integrations: [
           Sentry.feedbackIntegration({
             // Additional SDK configuration goes in here, for example:
@@ -127,7 +128,12 @@ const App = () => {
             isNameRequired: true,
             isEmailRequired: true,
           }),
-
+          Sentry.captureConsoleIntegration(),
+          Sentry.contextLinesIntegration(),
+          Sentry.linkedErrorsIntegration({
+            limit: 7,
+          }),
+          Sentry.debugIntegration(),
           //   Sentry.replayIntegration({
           //     maskAllText: false,
           //     maskAllInputs: false,
@@ -268,20 +274,25 @@ const App = () => {
 
     navigate(0);
   };
+  function FallbackComponent() {
+    return <div>An error has occured</div>;
+  }
 
   return (
     <>
-      <MyRoutes />
-      <CheckIsOnline />
-      <Toaster
-        position="top-center"
-        reverseOrder={true}
-        gutter={8}
-        containerClassName=""
-        containerStyle={{}}
-      />
+      <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
+        <MyRoutes />
+        <CheckIsOnline />
+        <Toaster
+          position="top-center"
+          reverseOrder={true}
+          gutter={8}
+          containerClassName=""
+          containerStyle={{}}
+        />
+      </Sentry.ErrorBoundary>
     </>
   );
 };
-
-export default App;
+export default Sentry.withProfiler(App);
+//export default App;

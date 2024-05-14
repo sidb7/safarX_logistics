@@ -395,10 +395,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                       );
                     } else if (filterId === 1) {
                       return (
-                        <div
-                          className="w-[95%] h-[76px] my-2"
-                          key={`${data.name}_${index}`}
-                        >
+                        <div className="w-[95%]" key={`${data.name}_${index}`}>
                           <ComboProductBox
                             image={StackLogo}
                             source={data?.source}

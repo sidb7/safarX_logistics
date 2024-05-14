@@ -17,6 +17,9 @@ import WooLg from "../../assets/Catalogue/WooCommerceLg.svg";
 import ZohoIcon from "../../assets/Catalogue/ZOHO.svg.png";
 import AmazonPngIcon from "../../assets/AmazonIcon.png";
 import UniCommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
+import BlueBox from "../../assets/Catalogue/blueBox.svg";
+import RedBox from "../../assets/Catalogue/redBox.svg";
+import CustomRightModal from "../../components/CustomModal/customRightModal";
 
 interface IPackageBoxProps {
   image?: any;
@@ -72,7 +75,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
   return (
     <>
       <div
-        className={` ${className} p-2 product-box flex justify-between border-2 rounded-md h-20 relative z-0 ${
+        className={` ${className} p-2 product-box flex justify-between border-2 rounded-md h-[6rem] relative z-0 ${
           isSelected && "border-[#004EFF]"
         }`}
         onClick={() => (!selectMode ? setIsModalOpen(true) : onClick())}
@@ -85,7 +88,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
           onClick={() => (selectMode ? setIsModalOpen(true) : "")}
           className={`${
             label !== "" ? "" : "hidden"
-          } bg-[#6695FF] text-white absolute -top-4 ml-2  rounded-md w-[91px] flex justify-center `}
+          } bg-[#6695FF] text-white absolute -top-4 ml-2 pl-2  rounded-md w-[91px] flex justify-center `}
         >
           {label}
         </span>
@@ -103,24 +106,43 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
             }`}</span>
           </div>
         </div>
-        {deleteProductsData && (
-          <img
-            src={DeleteIcon}
-            alt=""
-            width={18}
-            className=" self-start z-10"
-            onClick={(e: any) => {
-              e.stopPropagation();
+        <div className="flex flex-col justify-between gap-y-2">
+          <div className="flex self-end">
+            {deleteProductsData && (
+              <img
+                src={DeleteIcon}
+                alt=""
+                width={20}
+                className=" self-start z-10"
+                onClick={(e: any) => {
+                  e.stopPropagation();
 
-              setIsDeleteModalOpen(true);
+                  setIsDeleteModalOpen(true);
 
-              setDeleteProductsData({
-                ...deleteProductsData,
-                comboProduct: productId,
-              });
-            }}
-          />
-        )}
+                  setDeleteProductsData({
+                    ...deleteProductsData,
+                    comboProduct: productId,
+                  });
+                }}
+              />
+            )}
+          </div>
+          <div
+            className={`flex cursor-pointer items-center gap-x-1 border-[1px] rounded-md px-[5px] pt-[1px] ${
+              data?.products?.length === 0
+                ? "border-[#F4684B]"
+                : "border-[#0C56FF]"
+            } `}
+          >
+            <span>
+              <img
+                width={20}
+                src={data?.products?.length === 0 ? RedBox : BlueBox}
+              />
+            </span>
+            <span className="text-[#0C56FF]">{data?.products?.length}</span>
+          </div>
+        </div>
       </div>
 
       {!isMobileView ? (
@@ -213,6 +235,10 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
           </div>
         </CenterModal>
       ) : (
+        // <CustomRightModal
+        //   isOpen={isModalOpen}
+        //   onClose={() => setIsModalOpen(false)}
+        // ></CustomRightModal>
         <BottomModal
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}

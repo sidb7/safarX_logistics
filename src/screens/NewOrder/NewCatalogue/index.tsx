@@ -281,16 +281,25 @@ const Catalogue = () => {
         return (
           <>
             {filterId === 0 && (
-              <CustomButton
-                icon={AddPlus}
-                showIcon={true}
-                text={"CREATE BOX"}
-                className="!p-4"
-                onClick={() => {
-                  if (isMobileView) navigate("/catalogues/catalogue/add-box");
-                  else BoxCataloague.current.openModal();
-                }}
-              />
+              <div className="flex ">
+                <CustomButton
+                  icon={AddPlus}
+                  showIcon={true}
+                  text={"CREATE BOX"}
+                  className="!p-4"
+                  onClick={() => {
+                    if (isMobileView) navigate("/catalogues/catalogue/add-box");
+                    else BoxCataloague.current.openModal();
+                  }}
+                />
+                <CustomButton
+                  icon={addIcon}
+                  showIcon={true}
+                  text={"ADD BULK BOXES"}
+                  className="!p-3 ml-4 !px-4"
+                  onClick={() => navigate("/catalogues/catalogue/add-bulk-box")}
+                />
+              </div>
             )}
           </>
         );

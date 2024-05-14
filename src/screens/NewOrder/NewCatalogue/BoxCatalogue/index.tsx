@@ -23,6 +23,7 @@ import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
+import PaginationComponent from "../../../../components/Pagination";
 
 const BoxCatalogue = forwardRef((props: any, ref: any) => {
   const { filterId, setFilterId } = props;
@@ -48,6 +49,39 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
 
   const [loading, setLoading] = useState(false);
   const [boxDetails, setBoxDetails] = useState<any>();
+  const [totalItemCount, setTotalItemCount] = useState(0);
+
+  //on page change index
+  const onPageIndexChange = async (pageIndex: any) => {
+    const { data } = await POST(GET_SELLER_BOX_DETAILS, {
+      skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,
+      limit: pageIndex?.itemsPerPage,
+      pageNo: pageIndex?.currentPage,
+    });
+    if (data?.success) {
+      setBoxDetails(data?.data);
+      setTotalItemCount(data?.totalBox);
+    } else {
+      setBoxDetails([]);
+      toast.error(data?.message);
+    }
+  };
+
+  // on per page item change
+  const onPerPageItemChange = async (pageperItem: any) => {
+    const { data } = await POST(GET_SELLER_BOX_DETAILS, {
+      skip: (pageperItem?.currentPage - 1) * pageperItem?.itemsPerPage,
+      limit: pageperItem?.itemsPerPage,
+      pageNo: pageperItem?.currentPage,
+    });
+    if (data?.success) {
+      setBoxDetails(data?.data);
+      setTotalItemCount(data?.totalBox);
+    } else {
+      setBoxDetails([]);
+      toast.error(data?.message);
+    }
+  };
 
   const filterComponent = (className?: string) => {
     return (
@@ -86,6 +120,7 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
     );
     if (allAddressData?.success) {
       setBoxDetails(allAddressData.data);
+      setTotalItemCount(allAddressData?.totalBox);
       setLoading(false);
     } else {
       toast.error(allAddressData?.message);
@@ -182,34 +217,45 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
             </span>
           </div>
 
-          <div className="flex customScroll">
-            <div className="flex  flex-wrap customScroll gap-x-4">
+          <div className="customScroll">
+            {/* <div className="flex  flex-wrap customScroll gap-x-4"> */}
+            <div className="flex flex-col lg:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  justify-center mt-1 gap-y-6 pt-4">
               {boxDetails?.map((data: any, index: any) => {
                 return (
                   // display package box
-                  <PackageBox
-                    key={index}
-                    boxType={data?.color}
-                    volumetricWeight={data?.volumetricWeight}
-                    packageType={data?.name || 0}
-                    breadth={data?.breadth || 0}
-                    length={data?.length || 0}
-                    height={data?.height || 0}
-                    showAction={filterId === 0 && true}
-                    // deleteSellerBox={() => deleteSellerBox(data, index)}
-                    handleAction={() => {
-                      handlUpdateSellerBox(data);
-                    }}
-                    setIsDeleteModalOpen={setIsDeleteModalOpen}
-                    setDeleteBoxIndex={setDeleteBoxIndex}
-                    index={index}
-                    data={data}
-                    setDeleteData={setDeleteData}
-                  />
+                  <div className="w-[95%]">
+                    <PackageBox
+                      key={index}
+                      boxType={data?.color}
+                      volumetricWeight={data?.volumetricWeight}
+                      packageType={data?.name || 0}
+                      breadth={data?.breadth || 0}
+                      length={data?.length || 0}
+                      height={data?.height || 0}
+                      showAction={filterId === 0 && true}
+                      // deleteSellerBox={() => deleteSellerBox(data, index)}
+                      handleAction={() => {
+                        handlUpdateSellerBox(data);
+                      }}
+                      setIsDeleteModalOpen={setIsDeleteModalOpen}
+                      setDeleteBoxIndex={setDeleteBoxIndex}
+                      index={index}
+                      data={data}
+                      setDeleteData={setDeleteData}
+                    />
+                  </div>
                 );
               })}
             </div>
           </div>
+          {totalItemCount > 0 && (
+            <PaginationComponent
+              totalItems={totalItemCount}
+              itemsPerPageOptions={[10, 20, 30, 50]}
+              onPageChange={onPageIndexChange}
+              onItemsPerPageChange={onPerPageItemChange}
+            />
+          )}
         </div>
       )}
       <CustomRightModal
