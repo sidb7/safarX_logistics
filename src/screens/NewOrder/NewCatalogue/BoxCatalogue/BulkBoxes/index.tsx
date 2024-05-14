@@ -208,8 +208,11 @@ const BulkUpload = (props: ITypeProps) => {
       pageNo: 1,
     });
 
-    let specificData = data.data.map((item: any) => {
-      return {
+    let specificData = [];
+
+    for (let item of data.data) {
+      if (item?.recommended) continue;
+      specificData.push({
         "Box Id": item?.boxId,
         Name: item?.name,
         Color: item?.color,
@@ -222,29 +225,10 @@ const BulkUpload = (props: ITypeProps) => {
         // "Box Breadth (cm)": "",
         // "Box Height (cm)": "",
         // "Box Dead Weight (Kg)": "",
-      };
-    });
+      });
+    }
 
     await generateExcelFile(specificData);
-
-    // generateExcelFile([
-    //   {
-    //     "Product Name": "",
-    //     Category: "",
-    //     SKU: "",
-    //     "Unit Price": "",
-    //     "Unit Tax": "",
-    //     "Measure Unit": "",
-    //     Length: "",
-    //     Breadth: "",
-    //     Height: "",
-    //     "Dead Weight": "",
-    //     "Weight Unit": "",
-    //     "Volumetric Weight": "",
-    //     "Applied Weight": "",
-    //     Divisor: "",
-    //   },
-    // ]);
   };
 
   const renderHeaderComponent = () => {
