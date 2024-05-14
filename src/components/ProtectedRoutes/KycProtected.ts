@@ -18,7 +18,7 @@ const KycProtectedRoute = ({ children }: Props) => {
 
   //used getLocalStorage to get the token from local storage
 
-  let sellerId = sessionStorage.getItem("sellerId");
+  let sellerId = localStorage.getItem("sellerId");
   const localUserToken = getLocalStorage(
     `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
   );
@@ -37,11 +37,11 @@ const KycProtectedRoute = ({ children }: Props) => {
           const { kyc, bank } = nextStep;
 
           if (kyc === false || bank === false) {
-            sessionStorage.setItem(
+            localStorage.setItem(
               "kycValue",
               JSON.stringify(response?.data?.data[0])
             );
-            sessionStorage.setItem(
+            localStorage.setItem(
               "walletAmt",
               response?.data?.data[0]?.walletBalance
             );

@@ -18,9 +18,11 @@ const PlanCard = (props: ITypeProps) => {
   const { planName, price, validity, description, onClick, isSelected } = props;
   const { isLgScreen } = ResponsiveState();
 
+  const descriptionArray = description.split("\n");
+
   return (
     <div className="">
-      {planName?.toUpperCase() === "PLATINUM" ? (
+      {/* {planName?.toUpperCase() === "PLATINUM" ? (
         <div className="p-3  border-[1px] rounded-t-lg  bg-[#004EFF] w-[273px] h-[44px] ">
           <p className="text-[#FFFFFF] font-Open lg:font-Lato text-sm lg:text-base font-bold leading-4 lg:leading-5 text-center  ">
             MOST POPULAR
@@ -28,16 +30,14 @@ const PlanCard = (props: ITypeProps) => {
         </div>
       ) : (
         <div></div>
-      )}
+      )} */}
 
-      {isSelected === true ? (
+      {isSelected === true && (
         <div className="p-3  border-[1px] border-[#004EFF] rounded-t-lg  bg-[#004EFF] w-[288px] lg:w-[273px] h-[40px] lg:h-[44px] ">
           <p className="text-[#FFFFFF] font-Open lg:font-Lato text-sm lg:text-base font-bold leading-4 lg:leading-5 text-center  ">
             ACTIVE
           </p>
         </div>
-      ) : (
-        <div className=" h-[40px] lg:h-[44px]"></div>
       )}
 
       <div
@@ -45,7 +45,8 @@ const PlanCard = (props: ITypeProps) => {
           planName?.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
         } ${
           isSelected && "!border-[#004EFF] rounded-t-none rounded-b-lg"
-        } py-5 px-4 shadow-sm border-[1px]   border-[#E8E8E8] bg-[#FFFFFF] h-[504px]  lg:h-[433px] w-[288px] lg:w-[273px]`}
+        } py-5 px-4 shadow-sm border-[1px]   border-[#E8E8E8] bg-[#FFFFFF] w-[288px] lg:w-[273px]`}
+        // h-[504px] relative  ---- remove css for new changes
       >
         <img
           src={CargoRatingGif}
@@ -85,8 +86,18 @@ const PlanCard = (props: ITypeProps) => {
           </div>
         )}
 
-        <p className="font-Open text-sm font-normal  h-[45px] lg:h-[35px] customScroll leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4">
-          {description}
+        <p
+          className="font-Open text-sm font-normal leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4"
+          style={{ width: "-webkit-fill-available", paddingLeft: "12px" }}
+        >
+          {/* {description} */}
+          <ul>
+            {descriptionArray.map((feature, index) => (
+              <li className="list-disc" key={index}>
+                {feature}
+              </li>
+            ))}
+          </ul>
         </p>
 
         <AddButton

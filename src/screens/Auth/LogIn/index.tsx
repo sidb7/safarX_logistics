@@ -39,7 +39,7 @@ import { getQueryJson } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isLgScreen, isMdScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const { resetPassword, source, sellerEmail } = getQueryJson();
   let companyName = source?.toUpperCase();
@@ -65,7 +65,7 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
-      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
       let signInUserReducerDetails = {
         email: loginCredentials.email,
@@ -76,9 +76,9 @@ const Index = () => {
       dispatch(signInUser(signInUserReducerDetails));
 
       if (response?.success) {
-        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        sessionStorage.setItem("userName", response?.data[0]?.name);
-        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        localStorage.setItem("userName", response?.data[0]?.name);
+        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         setLocalStorage(
           `${response?.data[0]?.sellerId}_${tokenKey}`,
           response?.data[0]?.token
@@ -103,8 +103,8 @@ const Index = () => {
           user_id: response?.data[0]?.sellerId,
         });
 
-        const token = sessionStorage.getItem("sellerId")
-          ? `${sessionStorage.getItem(
+        const token = localStorage.getItem("sellerId")
+          ? `${localStorage.getItem(
               "sellerId"
             )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
           : "";
@@ -161,14 +161,14 @@ const Index = () => {
       payload
     );
 
-    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+    localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       // setLocalStorage(tokenKey, response?.data[0]?.token);
-      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
-      sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
-      sessionStorage.setItem("userName", response?.data[0]?.name);
+      localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+      localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      localStorage.setItem("userName", response?.data[0]?.name);
 
       window?.dataLayer?.push({
         event: "login",
@@ -189,8 +189,8 @@ const Index = () => {
         response?.data[0]?.token
       );
 
-      const token = sessionStorage.getItem("sellerId")
-        ? `${sessionStorage.getItem(
+      const token = localStorage.getItem("sellerId")
+        ? `${localStorage.getItem(
             "sellerId"
           )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
         : "";
@@ -229,8 +229,8 @@ const Index = () => {
 
   useEffect(() => {
     //adding token for preventing validateTokenApi to hit while logout and refreshing login screen
-    const token = sessionStorage.getItem("sellerId")
-      ? `${sessionStorage.getItem(
+    const token = localStorage.getItem("sellerId")
+      ? `${localStorage.getItem(
           "sellerId"
         )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";
@@ -328,6 +328,16 @@ const Index = () => {
                     src={CompanyLogo}
                     alt="Company Logo"
                   />
+                  <a
+                    href="https://app.shipyaari.com/shipyaari-tracking"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`ml-auto text-[#004EFF] underline p-4 font-Lato font-bold ${
+                      isMobileScreen ? "text-xs" : "text-sm"
+                    } leading-4 tracking-wide`}
+                  >
+                    TRACK ORDER
+                  </a>
                 </div>
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">

@@ -43,7 +43,7 @@ const Catalogue = () => {
   let wooCommerceContents = getLocalStorage("wooCommerceContents");
   const [filterId, setFilterId] = useState(0);
   const [tabName, setTabName] = useState(
-    sessionStorage.getItem("catalogueTab") || "Channel Integration"
+    localStorage.getItem("catalogueTab") || "Channel Integration"
   );
   const [modalData, setModalData]: any = useState({
     isOpen: false,
@@ -362,11 +362,11 @@ const Catalogue = () => {
           storeName,
         });
 
-        let channelSessionObj: any = sessionStorage.getItem("userInfo");
+        let channelSessionObj: any = localStorage.getItem("userInfo");
         channelSessionObj = JSON.parse(channelSessionObj);
         if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
           channelSessionObj.nextStep.isChannelIntegrated = true;
-          sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+          localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
         }
 
         let newAddedChannel = [
@@ -425,7 +425,7 @@ const Catalogue = () => {
                   ${tabName === statusName && "!border-[#004EFF]"}
                   `}
                           onClick={() => {
-                            sessionStorage.setItem("catalogueTab", statusName);
+                            localStorage.setItem("catalogueTab", statusName);
                             changeUrl(statusName);
                             setTabName(statusName);
                           }}

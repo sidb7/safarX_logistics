@@ -39,7 +39,7 @@ const WalletDetails = () => {
 
   const WalletBankDetails = () => {
     //getting the sellerID
-    const sellerId = sessionStorage.getItem("sellerId");
+    const sellerId = localStorage.getItem("sellerId");
 
     const postAccountDetails = async () => {
       setLoading(true);

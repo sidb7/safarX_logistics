@@ -19,6 +19,7 @@ import ServiceButton from "../../components/Button/ServiceButton";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { Spinner } from "../../components/Spinner";
+import ToastCustom from "../toastCutom";
 
 interface ITypeProps {}
 
@@ -102,7 +103,31 @@ const Index = (props: ITypeProps) => {
 
         if (response?.success) {
           setLoading(false);
-          setAllPlans(response?.data?.reverse());
+          let tempPlan = response?.data;
+          const selectedPlans = tempPlan.filter((plan: any) => plan.isSelected);
+          const unselectedPlans = tempPlan.filter(
+            (plan: any) => !plan.isSelected
+          );
+          const reorderedPlans = selectedPlans.concat(unselectedPlans);
+          // tempPlan.push({
+          //   planId: "123445",
+          //   planName: "Enterprise",
+          //   validity: "YEARLY",
+          //   description:
+          //     "Enterprise 12sdfsdfdfsdf fsdfsdfsdf efsdfsdfsdf sfasasd sadasdasd SSDASdsad sadasdas asdasdsa sdasdsad asdasd asdas adsadsadsdsds ",
+          //   shortDescription: "Enterprise",
+          //   price: 0,
+          //   isPublic: true,
+          //   rateCards: [],
+          //   currency: "INR",
+          //   created_At: "2024-05-09T13:10:58.000Z",
+          //   updated_At: "2024-05-09T13:11:31.000Z",
+          //   isActive: true,
+          //   isDeleted: false,
+          //   variantId: "5ac217ed-d307-4d4d-a158-6efd2943d507",
+          //   isSelected: false,
+          // });
+          setAllPlans(reorderedPlans);
         }
       } catch (error) {
         setLoading(false);
@@ -114,6 +139,7 @@ const Index = (props: ITypeProps) => {
 
   return (
     <>
+      {/* {<ToastCustom message="hello i am from plan" />} */}
       {isActive ? (
         <div>
           <div className=" lg:mr-6">
@@ -162,9 +188,9 @@ const Index = (props: ITypeProps) => {
                   />
                 </div>
                 {/* Table */}
-                <div className="hidden lg:block">
+                {/* <div className="hidden lg:block">
                   <ComparePlans />
-                </div>
+                </div> */}
               </>
             )}
           </div>

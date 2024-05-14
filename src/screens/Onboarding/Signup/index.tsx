@@ -40,7 +40,7 @@ import * as Sentry from "@sentry/react";
 const Index = () => {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  const { isLgScreen, isMdScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -100,7 +100,7 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
-      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       //setting the local storage  with site signing up to show in dataslayer
       localStorage.setItem("key", "Site");
       dispatch(signUpUser(sellerData));
@@ -117,7 +117,7 @@ const Index = () => {
           isReturningUser: isReturningUser,
         });
 
-        sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
+        localStorage.setItem("userInfo", JSON.stringify(sellerData));
         setLoading(false);
         const navigationObject = constructNavigationObject(
           "/onboarding/sendotp",
@@ -158,7 +158,7 @@ const Index = () => {
         payload
       );
       if (response?.success === true) {
-        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         dispatch(signUpUser(response.data[0]));
         setLoading(false);
         const navigationObject = constructNavigationObject(
@@ -247,6 +247,17 @@ const Index = () => {
                     src={CompanyLogo}
                     alt="CompanyLogo"
                   />
+
+                  <a
+                    href="https://app.shipyaari.com/shipyaari-tracking"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`ml-auto text-[#004EFF] underline p-4 font-Lato font-bold ${
+                      isMobileScreen ? "text-xs" : "text-sm"
+                    } leading-4 tracking-wide`}
+                  >
+                    TRACK ORDER
+                  </a>
                 </div>
 
                 <div className="flex flex-col mt-12 lg:mt-2 mx-4 md:mx-[85px] gap-y-3">

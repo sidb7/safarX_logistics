@@ -28,7 +28,7 @@ const Index = () => {
   const signUpUser = useSelector((state: any) => state.signup);
 
   useEffect(() => {
-    let temp: any = sessionStorage.getItem("userInfo");
+    let temp: any = localStorage.getItem("userInfo");
     temp = JSON.parse(temp);
     setFirstName(temp?.firstName);
     setEmail(temp?.email);
@@ -130,7 +130,7 @@ const Index = () => {
             />
             <CustomButton
               onClick={(e: any) => sendOtpOnClick(body)}
-              text="GET OTP"
+              text="Verify Number"
             />
           </div>
         </div>

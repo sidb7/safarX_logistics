@@ -158,7 +158,7 @@ export const Overview = (props: IOverview) => {
   ];
 
   React.useEffect(() => {
-    let data = sessionStorage.getItem("userInfo") as any;
+    let data = localStorage.getItem("userInfo") as any;
     data = JSON.parse(data);
 
     if (data !== "" && data !== null) {

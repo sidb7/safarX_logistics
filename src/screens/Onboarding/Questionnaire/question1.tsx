@@ -27,7 +27,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   const state = location.state || {};
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   //storing the selected options
   const selectedDescribeYourself: any = [];

@@ -21,7 +21,7 @@ interface Props {
 }
 
 const ProtectedRoute = ({ children }: Props) => {
-  let sellerId = sessionStorage.getItem("sellerId");
+  let sellerId = localStorage.getItem("sellerId");
 
   let [searchParams, setSearchParams]: any = useSearchParams();
   const navigate = useNavigate();
@@ -55,11 +55,11 @@ const ProtectedRoute = ({ children }: Props) => {
             );
             navigate(navigationObject);
           } else {
-            sessionStorage.setItem(
+            localStorage.setItem(
               "kycValue",
               JSON.stringify(response?.data?.data[0])
             );
-            sessionStorage.setItem(
+            localStorage.setItem(
               "walletAmt",
               response?.data?.data[0]?.walletBalance
             );

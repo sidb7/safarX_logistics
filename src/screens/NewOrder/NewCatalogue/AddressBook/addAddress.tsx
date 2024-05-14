@@ -94,10 +94,15 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
         ...errorAddAddressMessage,
         landmark: "please enter a landmark",
       });
-    } else if (addAddress.pincode === "" || addAddress.pincode === 0) {
+    } else if (!addAddress.pincode) {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
         pincode: "please enter your pincode",
+      });
+    } else if (String(addAddress.pincode).length !== 6) {
+      return setErrorAddAddressMessage({
+        ...errorAddAddressMessage,
+        pincode: "Pincode should contain 6 digits",
       });
     } else if (addAddress.city === "") {
       return setErrorAddAddressMessage({
@@ -119,10 +124,15 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
         ...errorAddAddressMessage,
         contactName: "please enter your contactName",
       });
-    } else if (addAddress.mobileNo === "" || addAddress.mobileNo === 0) {
+    } else if (!addAddress.contact.mobileNo) {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
         mobileNo: "please enter your mobile Number",
+      });
+    } else if (String(addAddress.contact.mobileNo).length !== 10) {
+      return setErrorAddAddressMessage({
+        ...errorAddAddressMessage,
+        mobileNo: "Contact number should be 10 digits",
       });
     }
 
