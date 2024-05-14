@@ -11,12 +11,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-hot-toast";
 import { POST } from "../../../utils/webService";
-import {
-  GET_QUESTIONNAIRE,
-  REACT_APP_GTM_ID,
-  LARGE_LOGO,
-  WHITE_COMPANYNAME,
-} from "../../../utils/ApiUrls";
+import { GET_QUESTIONNAIRE, REACT_APP_GTM_ID } from "../../../utils/ApiUrls";
 import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent1: React.FunctionComponent = () => {
@@ -32,7 +27,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   const state = location.state || {};
 
   //getting the sellerID
-  const sellerId = sessionStorage.getItem("sellerId");
+  const sellerId = localStorage.getItem("sellerId");
 
   //storing the selected options
   const selectedDescribeYourself: any = [];
@@ -124,7 +119,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
       <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={LARGE_LOGO}
+          src={CompanyLogo}
           alt="Company Logo"
         />
       </div>
@@ -142,7 +137,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
         <div className="product-box flex items-center">
           <img
             className="m-4 h-[25px] object-contain"
-            src={LARGE_LOGO}
+            src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>

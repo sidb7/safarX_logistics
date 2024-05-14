@@ -57,11 +57,11 @@ const Index = (props: ITypeProps) => {
   }, []);
 
   useEffect(() => {
-    let localbtype = sessionStorage.getItem("businessType");
-    let localaadharno = sessionStorage.getItem("aadharNumber");
-    let localclient_id = sessionStorage.getItem("client_id");
-    let localpanNumber = sessionStorage.getItem("panNumber");
-    let localgstNo = sessionStorage.getItem("gstNumber");
+    let localbtype = localStorage.getItem("businessType");
+    let localaadharno = localStorage.getItem("aadharNumber");
+    let localclient_id = localStorage.getItem("client_id");
+    let localpanNumber = localStorage.getItem("panNumber");
+    let localgstNo = localStorage.getItem("gstNumber");
 
     setBusinessType(localbtype);
     setAadharNo(localaadharno);
@@ -92,7 +92,7 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         setMinutes(0);
         setSeconds(30);
-        sessionStorage.setItem("client_id", response.data.data.client_id);
+        localStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response.data.data.client_id);
 
         toast.success("Aadhar OTP Resent Successfully");
@@ -111,7 +111,7 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {
-        sessionStorage.setItem("client_id", response.data[0].data.client_id);
+        localStorage.setItem("client_id", response.data[0].data.client_id);
         setClientId(response.data[0].data.client_id);
         toast.success("GST OTP Resent Successfully");
       } else {
@@ -156,7 +156,7 @@ const Index = (props: ITypeProps) => {
       const payload = { pan_no: value };
       const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
 
-      sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
+      localStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
         setTimeout(() => {
           // toast.success(response?.message);

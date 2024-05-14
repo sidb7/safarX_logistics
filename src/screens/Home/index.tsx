@@ -88,8 +88,12 @@ export const Home = (props: IOverview) => {
   const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
 
-  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
+
+  if (!kycCheck) {
+    console.log("Unable to parse kycCheck", kycCheck);
+  }
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   // const isActive =
@@ -260,6 +264,10 @@ export const Home = (props: IOverview) => {
 
     const data = GetCurrentPath() as any;
 
+    if (!data) {
+      console.log("Unable to get current path", data);
+    }
+
     if (data[1] === "overview") {
       setRenderingComponents(0);
       setIsActive(checkPageAuthorized("Overview"));
@@ -287,7 +295,9 @@ export const Home = (props: IOverview) => {
           });
           removeLocalStorage("phonePeTransactionId");
         }
-      } catch (error) {}
+      } catch (error: any) {
+        console.log("ERROR::", error.message);
+      }
     })();
   }, []);
 
@@ -317,11 +327,11 @@ export const Home = (props: IOverview) => {
         setStateFunction(response?.data?.[0]);
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.log("ERROR::", error.message);
     }
   };
   React.useMemo(async () => {
-    let sellerId = sessionStorage.getItem("sellerId");
+    let sellerId = localStorage.getItem("sellerId");
     if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
       await Promise.all([
         getDashDetails(),
