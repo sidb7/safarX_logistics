@@ -1,0 +1,341 @@
+[
+    {
+      "data": [
+        {
+          "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+          "sellerId": 5491,
+          "privateCompanyId": 104447,
+          "tempOrderId": "1715754706016",
+          "orderType": "B2C",
+          "orderId": "122735",
+          "status": [
+            {
+              "logId": "53310bd9-d41c-4ce4-a107-6c9de92673bc",
+              "timeStamp": 1715754807004,
+              "currentStatus": "BOOKED",
+              "awb": "IosoBJXkQStd",
+              "description": "Order Placed Successfully",
+              "notes": "B2C Order Placed From Internal System"
+            }
+          ],
+          "awb": "IosoBJXkQStd",
+          "courierPartnerName": "DTDC",
+          "courierPartnerAccountId": 120,
+          "currentStatus": "DELIVERED",
+          "source": "WEBSITE",
+          "zone": "ZONE 1",
+          "branding": {
+            "id": "f9ca5e27-2754-4761-b6e3-1602007945e5",
+            "name": "",
+            "logo": "",
+            "address": "",
+            "isActive": true
+          },
+          "service": {
+            "partnerServiceId": "8a6cec14",
+            "partnerServiceName": "DTDC-B2C_AIR",
+            "companyServiceId": "f9943462",
+            "companyServiceName": "STANDARD",
+            "partnerName": "DTDC",
+            "serviceMode": "AIR",
+            "appliedWeight": 23,
+            "invoiceValue": 1,
+            "collectableAmount": 0,
+            "insurance": 0,
+            "base": 36,
+            "add": 1620,
+            "variables": 0,
+            "cod": 0,
+            "tax": 298.08,
+            "total": 1954.08
+          },
+          "codInfo": {
+            "isCod": false,
+            "collectableAmount": 0,
+            "invoiceValue": 1
+          },
+          "insurance": {
+            "isInsured": true,
+            "amount": 0
+          },
+          "podInfo": {
+            "isPod": false
+          },
+          "orderFlow": {
+            "pickupAddress": true,
+            "returnAddress": true,
+            "deliveryAddress": true,
+            "billingAddress": true,
+            "products": true,
+            "service": true,
+            "payment": true
+          },
+          "payment": {
+            "gatewayName": "WALLET",
+            "status": true,
+            "amount": 1954.08,
+            "time": 1715754807040
+          },
+          "boxInfo": [
+            {
+              "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+              "sellerId": 0,
+              "privateCompanyId": 0,
+              "boxId": "8ff33e01-01c9-41bc-aef4-41135d308tuv",
+              "name": "50 x 45 x 30",
+              "weightUnit": "kg",
+              "volumetricWeight": 13.5,
+              "deadWeight": 10,
+              "appliedWeight": 13.5,
+              "divisor": 5000,
+              "measureUnit": "cm",
+              "length": 50,
+              "breadth": 45,
+              "height": 30,
+              "color": "black",
+              "price": 999,
+              "currency": "INR",
+              "isFragile": false,
+              "eWayBillNo": 0,
+              "tracking": {
+                "awb": "IosoBJXkQStd",
+                "label": "",
+                "taxInvoice": "",
+                "manifest": "",
+                "status": [
+                  {
+                    "logId": "53310bd9-d41c-4ce4-a107-6c9de92673bc",
+                    "timeStamp": 1715754807004,
+                    "currentStatus": "BOOKED",
+                    "awb": "IosoBJXkQStd",
+                    "description": "Order Placed Successfully",
+                    "notes": "B2C Order Placed From Internal System"
+                  }
+                ],
+                "otherDetails": {
+                  "partners": []
+                }
+              },
+              "codInfo": {
+                "isCod": false,
+                "collectableAmount": 0,
+                "invoiceValue": 1
+              },
+              "podInfo": {
+                "isPod": false
+              },
+              "insurance": {
+                "isInsured": true,
+                "amount": 0
+              },
+              "service": {
+                "partnerServiceId": "8a6cec14",
+                "partnerServiceName": "DTDC-B2C_AIR",
+                "companyServiceId": "f9943462",
+                "companyServiceName": "STANDARD",
+                "partnerName": "DTDC",
+                "serviceMode": "AIR",
+                "appliedWeight": 23,
+                "invoiceValue": 1,
+                "collectableAmount": 0,
+                "insurance": 0,
+                "base": 36,
+                "add": 1620,
+                "variables": 0,
+                "cod": 0,
+                "tax": 298.08,
+                "total": 1954.08
+              },
+              "images": [],
+              "products": [
+                {
+                  "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                  "privateCompanyId": 104447,
+                  "sellerId": 5491,
+                  "productId": "35f53220-6dfa-4d8d-9b2d-787c1697523d",
+                  "name": "Product12",
+                  "category": "Arts & Entertainment",
+                  "qty": 1,
+                  "sku": "dfgfd",
+                  "hsnCode": "",
+                  "currency": "INR",
+                  "unitPrice": 1,
+                  "unitTax": 1,
+                  "measureUnit": "cm",
+                  "length": 1,
+                  "breadth": 1,
+                  "height": 1,
+                  "deadWeight": 23,
+                  "weightUnit": "kg",
+                  "volumetricWeight": 0,
+                  "appliedWeight": 23,
+                  "divisor": 5000,
+                  "images": [],
+                  "selected": true
+                }
+              ],
+              "payloads": [
+                {
+                  "test": "test"
+                },
+                {
+                  "test": "test"
+                },
+                {
+                  "test": "test"
+                },
+                {
+                  "test": "test"
+                }
+              ],
+              "_id": "664457373315c6bf89b140a0"
+            }
+          ],
+          "pickupAddress": {
+            "sellerId": 5491,
+            "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            "privateCompanyId": 104447,
+            "pickupAddressId": "4d28af38-da96-42c0-8f9c-8b93ae092cb9",
+            "flatNo": "12A 3rd Techniplex - II",
+            "locality": "Liliya Nagar",
+            "sector": "Liliya Nagar",
+            "landmark": "Veer Savarkar Flyover",
+            "pincode": 400062,
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "country": "India",
+            "fullAddress": "12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062",
+            "addressType": "warehouse",
+            "workingDays": {
+              "monday": true,
+              "tuesday": true,
+              "wednesday": true,
+              "thursday": true,
+              "friday": true,
+              "saturday": true,
+              "sunday": true
+            },
+            "workingHours": "09:00",
+            "contact": {
+              "name": "Suresh",
+              "mobileNo": 1234567890,
+              "alternateMobileNo": null,
+              "emailId": "",
+              "type": "warehouse associate"
+            },
+            "pickupDate": 1715754600000,
+            "gstNumber": "0"
+          },
+          "returnAddress": {
+            "sellerId": 5491,
+            "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            "privateCompanyId": 104447,
+            "returnAddressId": "b69d6198-ef53-48d0-aec7-cc898f0d0cb6",
+            "flatNo": "12A 3rd Techniplex - II",
+            "locality": "Liliya Nagar",
+            "sector": "Liliya Nagar",
+            "landmark": "Veer Savarkar Flyover",
+            "pincode": 400062,
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "country": "India",
+            "fullAddress": "12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062",
+            "addressType": "warehouse",
+            "workingDays": {
+              "monday": true,
+              "tuesday": true,
+              "wednesday": true,
+              "thursday": true,
+              "friday": true,
+              "saturday": true,
+              "sunday": true
+            },
+            "workingHours": "09:00",
+            "contact": {
+              "name": "Suresh",
+              "mobileNo": 1234567890,
+              "alternateMobileNo": null,
+              "emailId": "",
+              "type": "warehouse associate"
+            },
+            "gstNumber": ""
+          },
+          "createdBy": 5491,
+          "createdAt": 1715754807029,
+          "updatedBy": 0,
+          "updatedAt": 0,
+          "isActive": true,
+          "isDeleted": false,
+          "billingAddress": {
+            "sellerId": 5491,
+            "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            "privateCompanyId": 104447,
+            "billingAddressId": "67c86efc-9f7a-42db-8a7a-9f4f70891531",
+            "flatNo": "12A 3rd Techniplex - II",
+            "locality": "Liliya Nagar",
+            "sector": "Liliya Nagar",
+            "landmark": "Veer Savarkar Flyover",
+            "pincode": 400062,
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "country": "India",
+            "fullAddress": "12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062",
+            "addressType": "warehouse",
+            "workingDays": {
+              "monday": true,
+              "tuesday": true,
+              "wednesday": true,
+              "thursday": true,
+              "friday": true,
+              "saturday": true,
+              "sunday": true
+            },
+            "workingHours": "09:00",
+            "contact": {
+              "name": "Suresh",
+              "mobileNo": 1234567890,
+              "alternateMobileNo": null,
+              "emailId": "",
+              "type": "warehouse associate"
+            },
+            "gstNumber": ""
+          },
+          "deliveryAddress": {
+            "sellerId": 5491,
+            "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            "privateCompanyId": 104447,
+            "deliveryAddressId": "c89da891-7b0f-47ff-a325-f539372d8e29",
+            "flatNo": "12A 3rd Techniplex - II",
+            "locality": "Liliya Nagar",
+            "sector": "Liliya Nagar",
+            "landmark": "Veer Savarkar Flyover",
+            "pincode": 400062,
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "country": "India",
+            "fullAddress": "12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062",
+            "addressType": "warehouse",
+            "workingDays": {
+              "monday": true,
+              "tuesday": true,
+              "wednesday": true,
+              "thursday": true,
+              "friday": true,
+              "saturday": true,
+              "sunday": true
+            },
+            "workingHours": "09:00",
+            "contact": {
+              "name": "Suresh",
+              "mobileNo": 1234567890,
+              "alternateMobileNo": null,
+              "emailId": "",
+              "type": "warehouse associate"
+            },
+            "gstNumber": ""
+          }
+        }
+      ]
+    }
+  ]
+  
