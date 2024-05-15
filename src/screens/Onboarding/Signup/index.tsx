@@ -15,6 +15,8 @@ import InformativeIcon from "../../../assets/I icon.svg";
 import {
   POST_SIGN_UP_URL,
   POST_SIGN_UP_WITH_GOOGLE_URL,
+  LARGE_LOGO,
+  COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -244,7 +246,7 @@ const Index = () => {
                 <div className="product-box flex items-center ">
                   <img
                     className="m-4 h-[25px] object-contain"
-                    src={CompanyLogo}
+                    src={LARGE_LOGO}
                     alt="CompanyLogo"
                   />
 
@@ -262,7 +264,7 @@ const Index = () => {
 
                 <div className="flex flex-col mt-12 lg:mt-2 mx-4 md:mx-[85px] gap-y-3">
                   <p className="text-center	leading-7 text-2xl font-bold font-Lato">
-                    Welcome to Shipyaari
+                    Welcome to {COMPANY_NAME}
                   </p>
                   <p className="text-center text-[#494949] font-Open font-light text-base leading-[22px] mb-7 lg:mb-0">
                     Fast and Easy Shipping from your doorstep to your
