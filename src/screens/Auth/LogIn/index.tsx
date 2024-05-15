@@ -328,7 +328,7 @@ const Index = () => {
                 <div className="product-box flex items-center">
                   <img
                     className="m-4 h-[25px] object-contain"
-                    src={CompanyLogo}
+                    src={LARGE_LOGO}
                     alt="Company Logo"
                   />
                   <a
@@ -518,8 +518,8 @@ const Index = () => {
       {showBootScreen ? (
         <div className="flex items-center justify-center h-screen">
           <img
-            className="animate-bounce object-contain"
-            src={CompanyLogo}
+            className="animate-bounce object-contain w-48 h-48"
+            src={LARGE_LOGO}
             alt=""
           />
         </div>
