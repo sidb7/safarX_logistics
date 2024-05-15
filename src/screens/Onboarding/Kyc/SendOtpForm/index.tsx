@@ -14,6 +14,8 @@ import {
   POST_VERIFY_GST_OTP,
   POST_VERIFY_GST_URL,
   POST_VERIFY_PAN_URL,
+  LARGE_LOGO,
+  COMPANY_NAME,
 } from "../../../../utils/ApiUrls";
 import { aadharRegex, panRegex, gstRegex } from "../../../../utils/regexCheck";
 import { setOnOtpClientId } from "../../../../redux/reducers/onboarding";
@@ -454,12 +456,12 @@ const Index = (props: ITypeProps) => {
       >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
           <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-            <img src={CompanyLogo} alt="" className="h-[25px]" />
+            <img src={LARGE_LOGO} alt="" className="h-[25px]" />
           </div>
 
           <WelcomeHeader
             className="!mt-[44px] md:!mt-6"
-            title="Welcome to Shipyaari"
+            title={`Welcome to ${COMPANY_NAME}`}
             content="Kindly complete your KYC"
           />
 

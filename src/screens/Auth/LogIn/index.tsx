@@ -16,6 +16,9 @@ import {
   POST_SIGN_IN_WITH_GOOGLE_URL,
   VALIDATE_USER_TOKEN,
   REACT_APP_GTM_ID,
+  SMALL_LOGO,
+  LARGE_LOGO,
+  COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -258,7 +261,7 @@ const Index = () => {
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
         <img
@@ -325,7 +328,7 @@ const Index = () => {
                 <div className="product-box flex items-center">
                   <img
                     className="m-4 h-[25px] object-contain"
-                    src={CompanyLogo}
+                    src={LARGE_LOGO}
                     alt="Company Logo"
                   />
                   <a
@@ -342,7 +345,7 @@ const Index = () => {
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
                   <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
-                    Welcome to Shipyaari
+                    Welcome to {COMPANY_NAME}
                   </p>
                   <p className="text-center text-[#494949] font-Open font-light text-sm leading-[22px]">
                     Fast and Easy Shipping from your doorstep to your
@@ -515,8 +518,8 @@ const Index = () => {
       {showBootScreen ? (
         <div className="flex items-center justify-center h-screen">
           <img
-            className="animate-bounce object-contain"
-            src={CompanyLogo}
+            className="animate-bounce object-contain w-48 h-48"
+            src={LARGE_LOGO}
             alt=""
           />
         </div>

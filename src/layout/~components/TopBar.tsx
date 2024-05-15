@@ -24,7 +24,7 @@ import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
 import profileIcon from "../../assets/Contact.svg";
 import { toast } from "react-hot-toast";
-import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
+import { GET_PROFILE_URL, LOGOUT, LARGE_LOGO } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
 import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
@@ -260,7 +260,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               className="mt-1 p-1"
               onClick={() => navigate("/dashboard/overview")}
             >
-              <img src={ShipyaariLogo} alt="" />
+              <img
+                className="h-[30px] w-[100px] object-contain"
+                src={LARGE_LOGO}
+                alt=""
+              />
             </div>
           </div>
 
