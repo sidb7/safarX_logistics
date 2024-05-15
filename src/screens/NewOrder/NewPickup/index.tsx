@@ -26,6 +26,7 @@ import ModalContent from "./RightModal/ModalContent";
 import AccessDenied from "../../../components/AccessDenied";
 import { getQueryJson } from "../../../utils/utility";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import CustomRadioButton from "../../../components/RadioButton/Index";
 
 const steps = [
   {
@@ -78,6 +79,7 @@ const PickupLocation = () => {
   const [pickupDate, setPickupDate] = useState("");
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
   const [pickupDateInEpoch, setPickupDateInEpoch] = useState("");
+  const [orderType, setOrderType] = useState("FORWARD");
   const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
@@ -239,7 +241,7 @@ const PickupLocation = () => {
       }
 
       setInputError(false);
-      let payload = {};
+      let payload: any = {};
       if (isReturnAddress) {
         payload = {
           ...pickupAddress,
@@ -258,6 +260,8 @@ const PickupLocation = () => {
           },
         };
       }
+      payload["transit"] = orderType;
+
       const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
 
       if (response?.success) {
@@ -405,6 +409,39 @@ const PickupLocation = () => {
       {isActive ? (
         <div className="w-full ">
           <Breadcrum label="Add New Order" />
+          <div className="pl-5 flex gap-2">
+            <div className="flex items-center h-6 gap-x-2 ">
+              <CustomRadioButton
+                name="FORWARD"
+                value="FORWARD"
+                style={{ accentColor: "black" }}
+                inputClassName="cursor-pointer"
+                onChange={(e) => {
+                  setOrderType(e.target.value);
+                }}
+                checked={orderType === "FORWARD" ? true : false}
+              />
+              <p className="capitalize font-semibold font-Open text-base text-[#1C1C1C] leading-[22px]">
+                Forward
+              </p>
+            </div>
+            <div className="flex items-center h-6 gap-x-2 ">
+              <CustomRadioButton
+                name="REVERSE"
+                value="REVERSE"
+                style={{ accentColor: "black" }}
+                inputClassName="cursor-pointer"
+                onChange={(e) => {
+                  setOrderType(e.target.value);
+                }}
+                checked={orderType === "REVERSE" ? true : false}
+              />
+              <p className="capitalize font-semibold font-Open text-base text-[#1C1C1C] leading-[22px]">
+                Reverse
+              </p>
+            </div>
+          </div>
+
           <div className=" p-2 mb-4 lg:mb-8">
             <Stepper steps={steps} />
           </div>

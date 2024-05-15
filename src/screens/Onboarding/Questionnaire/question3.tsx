@@ -10,6 +10,7 @@ import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
+import { LARGE_LOGO, COMPANY_NAME } from "../../../utils/ApiUrls";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
       <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
         {/* <img
@@ -118,7 +119,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
         <div className="product-box flex items-center">
           <img
             className="m-4 h-[25px] object-contain"
-            src={CompanyLogo}
+            src={LARGE_LOGO}
             alt="CompanyLogo"
           />
         </div>

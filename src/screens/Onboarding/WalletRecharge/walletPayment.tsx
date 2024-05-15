@@ -15,6 +15,8 @@ import {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   SELLER_WEB_URL,
+  LARGE_LOGO,
+  COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +35,7 @@ const modalTitle = () => {
     <div className="product-box flex justify-between items-center w-full lg:w-[31.25rem] h-[60px] absolute top-0">
       <img
         className="my-auto ml-6  h-[25px] object-contain"
-        src={CompanyLogo}
+        src={LARGE_LOGO}
         alt="Company Logo"
       />
     </div>
@@ -203,7 +205,7 @@ const WalletPayment = () => {
         <div className="product-box flex justify-between items-center w-full md:w-[31.25rem] h-[60px] absolute top-0">
           <img
             className="my-auto ml-6  h-[25px] object-contain"
-            src={CompanyLogo}
+            src={LARGE_LOGO}
             alt="Company Logo"
           />
         </div>
@@ -211,7 +213,7 @@ const WalletPayment = () => {
         <div className="customScroll">
           <div className="text-center mt-20 mb-1">
             <h1 className="text-[22px] font-Lato font-bold leading-7 text-center  md:mt-0">
-              Welcome to Shipyaari
+              Welcome to {COMPANY_NAME}
             </h1>
           </div>
           <div className=" mx-5 mt-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">

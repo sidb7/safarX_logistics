@@ -9,6 +9,9 @@ let TRACKING_URL = "";
 let REACT_APP_GTM_ID = "";
 let REACT_APP_GA4_ID = "";
 let ADMIN_URL = "";
+let SMALL_LOGO = "";
+let LARGE_LOGO = "";
+let COMPANY_NAME = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -29,6 +32,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     break;
 
   case "test":
@@ -44,6 +50,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_TEST}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
 
     break;
 
@@ -58,6 +67,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_PROD}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_PROD}`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
 
     break;
 
@@ -563,4 +575,7 @@ export {
   UPDATE_EXPIRED_WC_TOKEN,
   POST_SKIP_FOR_NOW_TRACKER,
   UPLOAD_BULK_BOXES,
+  SMALL_LOGO,
+  LARGE_LOGO,
+  COMPANY_NAME,
 };

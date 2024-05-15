@@ -9,7 +9,11 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import TickLogo from "../../../assets/tick.svg";
 import { POST } from "../../../utils/webService";
-import { POST_SKIP_FOR_NOW_TRACKER } from "../../../utils/ApiUrls";
+import {
+  POST_SKIP_FOR_NOW_TRACKER,
+  LARGE_LOGO,
+  COMPANY_NAME,
+} from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
 
 const modalTitle = () => {
@@ -17,7 +21,7 @@ const modalTitle = () => {
     <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
       <img
         className=" ml-6  h-[25px] object-contain"
-        src={CompanyLogo}
+        src={LARGE_LOGO}
         alt="Company Logo"
       />
     </div>
@@ -80,7 +84,7 @@ const WalletMain = () => {
           <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
             <img
               className="my-auto h-[25px] object-contain"
-              src={CompanyLogo}
+              src={LARGE_LOGO}
               alt="Company Logo"
             />
           </div>
@@ -89,7 +93,7 @@ const WalletMain = () => {
               <div className="md:grid">
                 <div className="mx-5  mt-[44px] md:mt-[0px] ">
                   <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
-                    Welcome to Shipyaari
+                    Welcome to {COMPANY_NAME}
                   </h1>
                   {/* Temporary Comment */}
                   {/* <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
@@ -109,7 +113,7 @@ const WalletMain = () => {
                 <div className="mr-6 md:mt-0  rounded-md border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
                   <div className="md:space-y-4">
                     <h1 className="ml-2 font-Lato font-semibold text-[20px] text-[#1C1C1C] leading-[26px]">
-                      Benefits of shipyaari wallet
+                      Benefits of {COMPANY_NAME} wallet
                     </h1>
                     <div className="flex mt-[26px]">
                       <img src={TickLogo} alt="ticklogo" />
