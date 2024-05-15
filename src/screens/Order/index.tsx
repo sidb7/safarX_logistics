@@ -75,6 +75,7 @@ import ServiceButton from "../../components/Button/ServiceButton";
 import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
+let allOrdersCount: any;
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -856,7 +857,7 @@ const Index = () => {
 
       setDraftOrderCount({
         ...draftOrderCount,
-        all: orderCount,
+        all: allOrdersCount || orderCount,
         draft: draftCount || 0,
         // failed: failedCount || 0,
         error: errorCount || 0,
@@ -1261,6 +1262,7 @@ const Index = () => {
 
     try {
       const { data } = await POST(GET_STATUS_COUNT, payload);
+      allOrdersCount = data?.data?.[0]?.count;
       const { status: isStatus, data: statusList } = data;
       if (isStatus) {
         // return data?.data;
