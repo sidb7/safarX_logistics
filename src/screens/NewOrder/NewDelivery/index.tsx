@@ -177,7 +177,8 @@ const DeliveryLocation = () => {
         } else if (
           obj[key] === "" ||
           obj[key] === null ||
-          obj[key] === undefined
+          obj[key] === undefined ||
+          (key === "name" && obj[key].length < 3)
         ) {
           return true;
         }
