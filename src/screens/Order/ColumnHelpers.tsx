@@ -16,6 +16,7 @@ import {
 } from "../../utils/utility";
 import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
+import ReverseIcon from "../../assets/reverseIcon.png";
 import { SELLER_WEB_URL } from "../../utils/ApiUrls";
 import { useEffect, useRef } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
@@ -645,6 +646,7 @@ const idHelper = (
         //       : `T${rowsData.tempOrderId}`,
         // });
       };
+
       return (
         <div className="py-3">
           {
@@ -1571,6 +1573,7 @@ export const columnHelpersForRest = (
   currentStatus?: any,
   orderActions?: any,
   setInfoModalContentFunction?: any,
+  setInfoReverseModalFunction?: any,
   setOpenRightModalForTracking?: any,
   openRightModalForTracking?: any
 ) => {
@@ -1701,6 +1704,12 @@ export const columnHelpersForRest = (
           tempOrderId: tempOrderId,
           source: source,
         };
+
+        // Reverse order function
+        const reverseOrderHandleFunction = () => {
+          setInfoReverseModalFunction("hello");
+        };
+
         return (
           <div className="flex items-center">
             <CopyTooltip stringToBeCopied={copyString} />
@@ -1725,6 +1734,14 @@ export const columnHelpersForRest = (
                 lineHeight: "16px",
               }}
             /> */}
+
+            <div>
+              <img
+                src={ReverseIcon}
+                className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                onClick={reverseOrderHandleFunction}
+              />
+            </div>
 
             <CustomToolTip
               position="bottom"

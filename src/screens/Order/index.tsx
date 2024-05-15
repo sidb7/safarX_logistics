@@ -4,6 +4,7 @@ import BlukOrderIcon from "../../assets/Order/BlukOrderIcon.svg";
 import SyncIcon from "../../assets/Order/SyncIcon.svg";
 import { OrderStatus } from "./OrderStatus";
 import FilterIcon from "../../assets/Order/FilterIcon.svg";
+import Delivery_Icon from "../../assets/Delivery Icon.svg";
 import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -47,6 +48,7 @@ import Pagination from "../../components/Pagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
+import ReverseCustomAccordian from "./Reverse/index";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
@@ -284,6 +286,11 @@ const Index = () => {
     data: {},
     orderId: "",
   });
+  const [infoReverseModalContent, setInfoReverseModalContent]: any = useState({
+    isOpen: false,
+    data: {},
+    orderId: "",
+  });
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
   const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
 
@@ -370,6 +377,14 @@ const Index = () => {
 
   const setInfoModalContentFunction = async (data: any) => {
     setInfoModalContent({
+      isOpen: true,
+      data: data,
+      orderId: "",
+    });
+  };
+
+  const setInfoReverseModalFunction = async (data: any) => {
+    setInfoReverseModalContent({
       isOpen: true,
       data: data,
       orderId: "",
@@ -1122,6 +1137,7 @@ const Index = () => {
               currentStatus,
               orderActions,
               setInfoModalContentFunction,
+              setInfoReverseModalFunction,
               setOpenRightModalForTracking,
               openRightModalForTracking
             )
@@ -2055,6 +2071,34 @@ const Index = () => {
           </div>
         </div>
         <CustomTableAccordian getAllSellerData={infoModalContent} />
+      </CustomRightModal>
+
+      {/* Rverse Order Modal */}
+      <CustomRightModal
+        isOpen={infoReverseModalContent.isOpen}
+        onClose={() => setInfoReverseModalContent({ isOpen: false, data: {} })}
+        className="!justify-start !w-[434px]"
+      >
+        <div>
+          <div className="p-[20px] flex justify-between">
+            <div className="flex">
+              <img src={Delivery_Icon} className="mr-2" />
+              <span className="text-[24px] font-Lato font-normal">
+                Reverse Order
+              </span>
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() =>
+                setInfoReverseModalContent({ isOpen: false, data: {} })
+              }
+            >
+              <img src={CloseIcon} />
+            </div>
+          </div>
+        </div>
+        <ReverseCustomAccordian />
+        {/* <CustomTableAccordian getAllSellerData={infoModalContent} /> */}
       </CustomRightModal>
 
       <CustomRightModal
