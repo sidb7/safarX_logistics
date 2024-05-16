@@ -789,19 +789,31 @@ const Index = () => {
     endDate?: any,
     filterPayLoadData?: any
   ) => {
+    let payload: any;
     try {
       setIsLoading(true);
 
       let firstFilterData = [];
       let secondFilterData = [];
 
-      let payload: any = {
-        pageNo: 1, //temp
-        sort: { _id: -1 }, //temp
-        skip: 0, //temp
-        limit: limit, //temp
-        currentStatus,
-      };
+      if (filterId === 1) {
+        payload = {
+          pageNo: 1, //temp
+          sort: { _id: -1 }, //temp
+          skip: 0, //temp
+          limit: limit, //temp
+          currentStatus,
+          subStatus: "DRAFT",
+        };
+      } else {
+        payload = {
+          pageNo: 1, //temp
+          sort: { _id: -1 }, //temp
+          skip: 0, //temp
+          limit: limit, //temp
+          currentStatus,
+        };
+      }
 
       if (searchText?.length > 0) {
         payload.id = searchText;
