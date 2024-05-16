@@ -1,15 +1,40 @@
 import React, { useEffect, useState } from "react";
 import ReverDummyJson from "./reverseDummy.json";
 import CustomInputBox from "../../../components/Input";
+import AddCircleBlack from "../../../assets/add-circle_black.svg";
+import MinusCircle from "../../../assets/subtract-circle.svg";
+import { POST } from "../../../utils/webService";
+import { GET_SERVICE_LIST_ORDER } from "../../../utils/ApiUrls";
 
 const ReverseIndex = () => {
   const [actualArray, setActualArray] = useState([]);
   const [isActiveItemAccordionOpen, setIsActiveItemAccordionOpen] =
     useState(false);
-  const [activeItem, setActiveItem] = useState();
+  const [prentActiveItem, setPrentActiveItem] = useState<number>();
+  const [nestedProductAccordian, setNestedProductAccordian] =
+    useState<number>();
   let productsArray: any = [];
 
+  const getReversService = async () => {
+    try {
+      const payload = {
+        tempOrderId: "",
+        source: "",
+      };
+
+      const response = await POST(GET_SERVICE_LIST_ORDER, payload);
+      if (response?.status) {
+      } else {
+        //services
+      }
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
+    getReversService();
+
     let temp: any = ReverDummyJson?.[0]?.data?.[0];
     console.log("🚀 ~ useEffect ~ temp:", temp);
     // get all products from box object
@@ -60,38 +85,49 @@ const ReverseIndex = () => {
 
   // console.log("newDataArray", newDataArray);
 
-  const setActiveAccordian = (index: any) => {
-    // console.log("🚀 ~ setActiveAccordian ~ index:", index);
-    actualArray.forEach((element: any, i: number) => {
-      if (i === index) {
-        setActiveItem(index);
-        element.isActive = !element.isActive;
-        // setIsActiveItemAccordionOpen(true);
-      } else {
-        element.isActive = false;
-        // setIsActiveItemAccordionOpen(false);
-      }
-    });
-    // console.log("🚀 ~ actualArray.forEach ~ actualArray:", actualArray);
+  // const setActiveAccordian = (index: any) => {
+  //   // console.log("🚀 ~ setActiveAccordian ~ index:", index);
+  //   actualArray.forEach((element: any, i: number) => {
+  //     if (i === index) {
+  //       setPrentActiveItem(index);
+  //       element.isActive = !element.isActive;
+  //       // setIsActiveItemAccordionOpen(true);
+  //     } else {
+  //       element.isActive = false;
+  //       // setIsActiveItemAccordionOpen(false);
+  //     }
+  //   });
+  //   // console.log("🚀 ~ actualArray.forEach ~ actualArray:", actualArray);
 
-    setActualArray(actualArray);
-  };
+  //   setActualArray(actualArray);
+  // };
 
   // console.log("actualArray", actualArray);
 
+  const addQtyProduct = (j: any) => {
+    let qty: any = document.getElementsByClassName(`qtyProduct_${j}`);
+    qty = qty?.value;
+  };
+
+  const minusQtyProduct = (j: any) => {
+    let qty: any = document.getElementsByClassName(`qtyProduct_${j}`);
+    qty = qty?.[0]?.value - 1;
+    console.log("🚀 ~ minusQtyProduct ~ qty:", qty);
+  };
+
   return (
-    <div className=" flex flex-col gap-2">
+    <div className=" flex flex-col gap-2 px-4">
       {actualArray?.map((item: any, i: number) => {
         return (
           <div className="accordionContainerBoxStyle">
             <div
               className={`cursor-pointer px-4 py-3 flex justify-between items-center
             ${
-              activeItem === i
+              prentActiveItem === i
                 ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
                 : "bg-white"
             }`}
-              onClick={() => setActiveAccordian(i)}
+              onClick={() => setPrentActiveItem(i)}
               key={i}
             >
               <div className="flex basis-[90%] items-center gap-x-2">
@@ -101,7 +137,7 @@ const ReverseIndex = () => {
               </div>
               <svg
                 className={`w-5 h-5 transform ${
-                  activeItem === i ? "rotate-180" : ""
+                  prentActiveItem === i ? "rotate-180" : ""
                 }`}
                 fill="none"
                 viewBox="0 0 24 24"
@@ -116,7 +152,7 @@ const ReverseIndex = () => {
               </svg>
             </div>
             {/* Pickup Address Accordian */}
-            {activeItem === i && item?.title === "Pickup Address" && (
+            {prentActiveItem === i && item?.title === "Pickup Address" && (
               <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                 <div className="flex gap-2 mt-[10px] ">
                   <CustomInputBox
@@ -183,7 +219,7 @@ const ReverseIndex = () => {
               </div>
             )}
             {/* Delivery Address Accordian */}
-            {activeItem === i && item?.title === "Delivery Address" && (
+            {prentActiveItem === i && item?.title === "Delivery Address" && (
               <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                 {console.log("item", item) as any}
                 <div className="flex gap-2 mt-[10px] ">
@@ -251,11 +287,10 @@ const ReverseIndex = () => {
               </div>
             )}
             {/* Products Accordian*/}
-            {activeItem === i && item?.title === "Products" && (
+            {prentActiveItem === i && item?.title === "Products" && (
               <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
-                {console.log("item", item) as any}
                 {item?.data?.map((ele: any, j: number) => {
-                  console.log("🚀 ~ {productsArray?.map ~ ele:", ele);
+                  console.log("🚀 ~ {item?.data?.map ~ ele:", ele);
                   return (
                     <div className="accordionContainerBoxStyle">
                       <div
@@ -265,7 +300,7 @@ const ReverseIndex = () => {
                         ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
                         : "bg-white"
                     }`}
-                        onClick={() => setActiveAccordian(i)}
+                        onClick={() => setNestedProductAccordian(j)}
                         key={j}
                       >
                         <div className="flex basis-[90%] items-center gap-x-2">
@@ -275,7 +310,7 @@ const ReverseIndex = () => {
                         </div>
                         <svg
                           className={`w-5 h-5 transform ${
-                            j === 0 ? "rotate-180" : ""
+                            nestedProductAccordian === j ? "rotate-180" : ""
                           }`}
                           fill="none"
                           viewBox="0 0 24 24"
@@ -290,16 +325,77 @@ const ReverseIndex = () => {
                         </svg>
                       </div>
                       {/* nested accordian expand */}
-                      <div>
-                        <div className="flex pt-[21px]">
-                          <p className="font-Open text-[12px] font-semibold">
-                            Product Quantity:
-                          </p>
+                      {nestedProductAccordian === j && (
+                        <div className="p-[10px]">
+                          <div className="flex justify-between">
+                            <p className="font-Open text-[12px] font-semibold self-center">
+                              Product Quantity:
+                            </p>
+                            <div className="flex gap-2">
+                              <img
+                                src={MinusCircle}
+                                className="cursor-pointer"
+                                onClick={() => minusQtyProduct(j)}
+                              />
+                              <input
+                                type="text"
+                                className={`w-[12px] p-0 qtyProduct_${j}`}
+                                value={2}
+                              />
+                              <img
+                                src={AddCircleBlack}
+                                className="cursor-pointer"
+                                onClick={() => addQtyProduct(j)}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mb-[10px]">
+                            <CustomInputBox
+                              label="Dead Weight"
+                              value={ele?.deadWeight}
+                              isDisabled={true}
+                            />
+                            <CustomInputBox
+                              label="Volumentric Weight"
+                              value={ele?.volumetricWeight}
+                              isDisabled={true}
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <CustomInputBox
+                              label="Mesurement Unit"
+                              value={ele?.measureUnit}
+                              isDisabled={true}
+                            />
+                            <div className="flex gap-2">
+                              <CustomInputBox
+                                label="L"
+                                value={ele?.length}
+                                isDisabled={true}
+                              />
+                              <CustomInputBox
+                                label="B"
+                                value={ele?.breadth}
+                                isDisabled={true}
+                              />
+                              <CustomInputBox
+                                label="H"
+                                value={ele?.height}
+                                isDisabled={true}
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   );
                 })}
+              </div>
+            )}
+            {/* Delivery Address Accordian */}
+            {prentActiveItem === i && item?.title === "Reverse Service" && (
+              <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
+                {console.log("item", item) as any}
               </div>
             )}
           </div>
