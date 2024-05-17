@@ -24,6 +24,7 @@ interface IBoxdetails {
   orderType?: any;
   isOrderCOD?: any;
   setIsOrderCOD?: any;
+  transitType?: any;
 }
 
 const BoxDetails = (props: IBoxdetails) => {
@@ -40,6 +41,7 @@ const BoxDetails = (props: IBoxdetails) => {
     orderType,
     isOrderCOD,
     setIsOrderCOD,
+    transitType,
   } = props;
 
   const [allProducts, setAllProducts]: any = useState([]);
@@ -355,16 +357,23 @@ const BoxDetails = (props: IBoxdetails) => {
             )}
             <div className="py-2 ">
               <div className="flex flex-wrap lg:flex  gap-2 ">
-                <Checkbox
-                  label="COD"
-                  disabled={orderType !== "B2C"}
-                  name="cod"
-                  checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
-                  checked={isOrderCOD}
-                  inputElementClass="!h-3 !w-3 "
-                  onChange={handleCheckBox}
-                  data-cy="cod-checkbox"
-                />
+                {transitType === "REVERSE" ? (
+                  <></>
+                ) : (
+                  <>
+                    <Checkbox
+                      label="COD"
+                      disabled={orderType !== "B2C"}
+                      name="cod"
+                      checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                      checked={isOrderCOD}
+                      inputElementClass="!h-3 !w-3 "
+                      onChange={handleCheckBox}
+                      data-cy="cod-checkbox"
+                    />
+                  </>
+                )}
+
                 <Checkbox
                   label="POD"
                   name="pod"
