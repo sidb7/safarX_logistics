@@ -75,7 +75,9 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
   };
 
   const validateName = (name: string) => {
-    if (/^\D+$/.test(name) || name === "") {
+    if (name.length < 3) {
+      return "Name Must Have Atleast 3 Characters";
+    } else if (/^\D+$/.test(name) || name === "") {
       return null;
     } else {
       return "Name should not contain numbers";

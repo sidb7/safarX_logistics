@@ -153,7 +153,32 @@
                   "privateCompanyId": 104447,
                   "sellerId": 5491,
                   "productId": "35f53220-6dfa-4d8d-9b2d-787c1697523d",
-                  "name": "Product12",
+                  "name": "Product1",
+                  "category": "Arts & Entertainment",
+                  "qty": 1,
+                  "sku": "dfgfd",
+                  "hsnCode": "",
+                  "currency": "INR",
+                  "unitPrice": 1,
+                  "unitTax": 1,
+                  "measureUnit": "cm",
+                  "length": 1,
+                  "breadth": 1,
+                  "height": 1,
+                  "deadWeight": 23,
+                  "weightUnit": "kg",
+                  "volumetricWeight": 0,
+                  "appliedWeight": 23,
+                  "divisor": 5000,
+                  "images": [],
+                  "selected": true
+                },
+                {
+                  "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                  "privateCompanyId": 104447,
+                  "sellerId": 5491,
+                  "productId": "35f53220-6dfa-4d8d-9b2d-787c1697523d",
+                  "name": "Product2",
                   "category": "Arts & Entertainment",
                   "qty": 1,
                   "sku": "dfgfd",
@@ -173,6 +198,146 @@
                   "images": [],
                   "selected": true
                 }
+
+              ],
+              "payloads": [
+                {
+                  "test": "test"
+                },
+                {
+                  "test": "test"
+                },
+                {
+                  "test": "test"
+                },
+                {
+                  "test": "test"
+                }
+              ],
+              "_id": "664457373315c6bf89b140a0"
+            },
+            {
+              "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+              "sellerId": 0,
+              "privateCompanyId": 0,
+              "boxId": "8ff33e01-01c9-41bc-aef4-41135d308tuv",
+              "name": "50 x 45 x 30",
+              "weightUnit": "kg",
+              "volumetricWeight": 13.5,
+              "deadWeight": 10,
+              "appliedWeight": 13.5,
+              "divisor": 5000,
+              "measureUnit": "cm",
+              "length": 50,
+              "breadth": 45,
+              "height": 30,
+              "color": "black",
+              "price": 999,
+              "currency": "INR",
+              "isFragile": false,
+              "eWayBillNo": 0,
+              "tracking": {
+                "awb": "IosoBJXkQStd",
+                "label": "",
+                "taxInvoice": "",
+                "manifest": "",
+                "status": [
+                  {
+                    "logId": "53310bd9-d41c-4ce4-a107-6c9de92673bc",
+                    "timeStamp": 1715754807004,
+                    "currentStatus": "BOOKED",
+                    "awb": "IosoBJXkQStd",
+                    "description": "Order Placed Successfully",
+                    "notes": "B2C Order Placed From Internal System"
+                  }
+                ],
+                "otherDetails": {
+                  "partners": []
+                }
+              },
+              "codInfo": {
+                "isCod": false,
+                "collectableAmount": 0,
+                "invoiceValue": 1
+              },
+              "podInfo": {
+                "isPod": false
+              },
+              "insurance": {
+                "isInsured": true,
+                "amount": 0
+              },
+              "service": {
+                "partnerServiceId": "8a6cec14",
+                "partnerServiceName": "DTDC-B2C_AIR",
+                "companyServiceId": "f9943462",
+                "companyServiceName": "STANDARD",
+                "partnerName": "DTDC",
+                "serviceMode": "AIR",
+                "appliedWeight": 23,
+                "invoiceValue": 1,
+                "collectableAmount": 0,
+                "insurance": 0,
+                "base": 36,
+                "add": 1620,
+                "variables": 0,
+                "cod": 0,
+                "tax": 298.08,
+                "total": 1954.08
+              },
+              "images": [],
+              "products": [
+                {
+                  "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                  "privateCompanyId": 104447,
+                  "sellerId": 5491,
+                  "productId": "35f53220-6dfa-4d8d-9b2d-787c1697523d",
+                  "name": "Product1",
+                  "category": "Arts & Entertainment",
+                  "qty": 1,
+                  "sku": "dfgfd",
+                  "hsnCode": "",
+                  "currency": "INR",
+                  "unitPrice": 1,
+                  "unitTax": 1,
+                  "measureUnit": "cm",
+                  "length": 1,
+                  "breadth": 1,
+                  "height": 1,
+                  "deadWeight": 23,
+                  "weightUnit": "kg",
+                  "volumetricWeight": 0,
+                  "appliedWeight": 23,
+                  "divisor": 5000,
+                  "images": [],
+                  "selected": true
+                },
+                {
+                  "companyId": "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                  "privateCompanyId": 104447,
+                  "sellerId": 5491,
+                  "productId": "35f53220-6dfa-4d8d-9b2d-787c1697523d",
+                  "name": "Product2",
+                  "category": "Arts & Entertainment",
+                  "qty": 1,
+                  "sku": "dfgfd",
+                  "hsnCode": "",
+                  "currency": "INR",
+                  "unitPrice": 1,
+                  "unitTax": 1,
+                  "measureUnit": "cm",
+                  "length": 1,
+                  "breadth": 1,
+                  "height": 1,
+                  "deadWeight": 23,
+                  "weightUnit": "kg",
+                  "volumetricWeight": 0,
+                  "appliedWeight": 23,
+                  "divisor": 5000,
+                  "images": [],
+                  "selected": true
+                }
+
               ],
               "payloads": [
                 {
