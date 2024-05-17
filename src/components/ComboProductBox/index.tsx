@@ -193,7 +193,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
                       <ProductBox
                         image={
                           (singleProduct?.images?.length > 0 &&
-                            singleProduct?.images[0].url) ||
+                            singleProduct?.images?.[0]?.url) ||
                           ItemIcon
                         }
                         productName={singleProduct?.name}
@@ -263,7 +263,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
                       <ProductBox
                         image={
                           (singleProduct?.images?.length > 0 &&
-                            singleProduct?.images[0].url) ||
+                            singleProduct?.images?.[0]?.url) ||
                           ""
                         }
                         productName={singleProduct?.name}
