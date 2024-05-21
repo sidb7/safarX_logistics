@@ -48,7 +48,6 @@ const PlanDetails = (props: ITypeProps) => {
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
   const [pendingPlan, setPendingPlan] = useState<any>({});
-  console.log("🚀 ~ PlanDetails ~ pendingPlan:", pendingPlan);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [renderingComponents, setRenderingComponents] = useState<any>(0);
 
@@ -60,7 +59,7 @@ const PlanDetails = (props: ITypeProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
 
   const arrayData = [
     { index: 0, label: "Courier Pricing" },
@@ -931,17 +930,29 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]">
-            <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
-              Not sure which plan to choose?
-            </p>
+          <div
+            className={`${
+              isMdScreen
+                ? "flex items-center justify-between h-[60px] rounded-lg p-9 md:p-5  bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]"
+                : "flex items-center text-center px-3 py-4 rounded-lg  bg-[#E5E4FF]  mb-6 mx-5"
+            }`}
+          >
+            {isMdScreen ? (
+              <p className=" font-Open md:font-Lato font-normal md:font-semibold text-base lg:text-xl leading-3 lg:leading-[26px] text-[#494949]">
+                Not sure which plan to choose?
+              </p>
+            ) : (
+              <></>
+            )}
+
             <div className="flex gap-x-2">
               {Object.keys(pendingPlan).length !== 0 ? (
                 <>
-                  <div>
+                  <div className="">
                     <CustomButton
-                      className=" !bg-[#FFFFFF] !border-[#FABCAF] !text-[#F35838] !py-2 !px-4 !font-Open !border-2 !rounded-[4px] hover:-translate-y-1 hover:scale-100 duration-300"
+                      className=" !bg-[#FFFFFF] !border-[#FABCAF] !text-[#F35838] lg:!py-2 lg:!px-4 !font-Open !border-[1px] !rounded-sm lg:!border-2 lg:!rounded-[4px] lg:hover:-translate-y-1 lg:hover:scale-100 lg:duration-300"
                       text={"Pending Plan!"}
+                      textClassName="!font-normal !text-[12px]"
                       onClick={() => {
                         setIsModalOpen(true);
                       }}
@@ -952,9 +963,9 @@ const PlanDetails = (props: ITypeProps) => {
                 <></>
               )}
 
-              <div>
+              <div className="">
                 <ServiceButton
-                  className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
+                  className=" md:!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open text-xs md:text-sm font-normal md:font-semibold leading-4 whitespace-nowrap"
                   text="TALK TO OUR SUPPORT"
                   onClick={() => {
                     window.open(
