@@ -289,6 +289,7 @@ const Errors = (props: ErrorProps) => {
   };
 
   const fixAllHandler = async (errorName: any, data: any, index: any) => {
+    let isFetching: any = true;
     try {
       setAddressLoader(true);
       setIndexFixedAllLoader(index);
@@ -321,7 +322,7 @@ const Errors = (props: ErrorProps) => {
       );
       if (responseData?.success) {
         setAddressLoader(false);
-        getErrors();
+        getErrors(isFetching);
         toast.success(responseData?.message);
         return true;
       } else {

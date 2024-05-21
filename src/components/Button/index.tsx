@@ -12,6 +12,7 @@ interface CustomButtonProps {
   showIcon?: boolean;
   loading?: boolean;
   onlyIcon?: boolean;
+  textClassName?: string;
 }
 
 const CustomButton = (props: CustomButtonProps) => {
@@ -26,6 +27,7 @@ const CustomButton = (props: CustomButtonProps) => {
     iconClass,
     loading = false,
     onlyIcon = false,
+    textClassName,
   } = props;
 
   const excludeWords = ["B2B", "B2C", "KYC", "OTP"];
@@ -52,7 +54,9 @@ const CustomButton = (props: CustomButtonProps) => {
               alt=""
             />
           )}
-          <p className="buttonClassName md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap capitalize">
+          <p
+            className={` ${textClassName} buttonClassName md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap capitalize`}
+          >
             {capitalizeFirstLetterWithExclude(text, excludeWords)}
           </p>
         </button>
