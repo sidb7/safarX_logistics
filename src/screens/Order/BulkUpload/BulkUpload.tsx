@@ -147,7 +147,7 @@ const BulkUpload = (props: ITypeProps) => {
 
           <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
             <div className="flex flex-row  items-center   ">
-              <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-base">
+              <p className="bg-white mr-3  lg:font-semibold lg:font-Open lg:text-base">
                 Order Type:
               </p>
 
@@ -155,20 +155,22 @@ const BulkUpload = (props: ITypeProps) => {
                 checked={selectedOption === "B2C"}
                 onChange={() => handleOptionSelect("B2C")}
                 checkboxClassName="gap-2"
+                style={{ accentColor: "black" }}
               />
               <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm mr-4">
                 B2C
               </p>
 
               {/* commented as instructed */}
-              {/* <Checkbox
+              <Checkbox
                 checked={selectedOption === "B2B"}
                 onChange={() => handleOptionSelect("B2B")}
                 checkboxClassName="gap-2"
+                style={{ accentColor: "black" }}
               />
               <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
                 B2B
-              </p> */}
+              </p>
 
               {/* <div className="w-[20%] ml-[250px]">
             <AddButton

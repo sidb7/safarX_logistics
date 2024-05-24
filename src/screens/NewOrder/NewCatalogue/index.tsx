@@ -268,13 +268,22 @@ const Catalogue = () => {
           );
         } else if (productCatalogueTab === "comboProduct") {
           return (
-            <CustomButton
-              icon={addIcon}
-              showIcon={true}
-              text={"ADD COMBO"}
-              className="!p-3"
-              onClick={() => setShowCombo(true)}
-            />
+            <div className="flex">
+              <CustomButton
+                icon={addIcon}
+                showIcon={true}
+                text={"ADD COMBO"}
+                className="!p-3"
+                onClick={() => setShowCombo(true)}
+              />
+              <CustomButton
+                icon={addIcon}
+                showIcon={true}
+                text={"ADD BULK COMBO"}
+                className="!p-3 ml-4 !px-4"
+                onClick={() => navigate("/catalogues/catalogue/add-bulk-combo")}
+              />
+            </div>
           );
         }
       } else if (tabName === "Box Catalogue") {
