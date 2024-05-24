@@ -1681,6 +1681,7 @@ export const columnHelpersForRest = (
           status,
           source,
         } = info?.row?.original;
+        let individualData: any = info?.row?.original;
         const { AWB } = status[0] ?? "";
         const copyString = `
           Order Id: ${tempOrderId} 
@@ -1703,11 +1704,6 @@ export const columnHelpersForRest = (
         let draftOrderPayload = {
           tempOrderId: tempOrderId,
           source: source,
-        };
-
-        // Reverse order function
-        const reverseOrderHandleFunction = () => {
-          setInfoReverseModalFunction("hello");
         };
 
         return (
@@ -1739,7 +1735,7 @@ export const columnHelpersForRest = (
               <img
                 src={ReverseIcon}
                 className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                onClick={reverseOrderHandleFunction}
+                onClick={() => setInfoReverseModalFunction(individualData?.awb)}
               />
             </div>
 

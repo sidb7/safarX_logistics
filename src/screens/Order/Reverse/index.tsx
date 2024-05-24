@@ -4,12 +4,21 @@ import CustomInputBox from "../../../components/Input";
 import AddCircleBlack from "../../../assets/add-circle_black.svg";
 import MinusCircle from "../../../assets/subtract-circle.svg";
 import { POST } from "../../../utils/webService";
-import { GET_SERVICE_LIST_ORDER } from "../../../utils/ApiUrls";
+import {
+  GET_SELLER_ORDER_COMPLETE_DATA,
+  POST_SERVICEABILITY,
+} from "../../../utils/ApiUrls";
 import CustomDropDown from "../../../components/DropDown";
 import SelectDateModalContent from "./dateTime";
 import CustomButton from "../../../components/Button";
+import Checkbox from "../../../components/CheckBox";
 
-const ReverseIndex = () => {
+interface ReverseProps {
+  awbData?: any;
+}
+
+const ReverseIndex = (props: ReverseProps) => {
+  const { awbData } = props;
   const [actualArray, setActualArray] = useState([]);
   const [isActiveItemAccordionOpen, setIsActiveItemAccordionOpen] =
     useState(false);
@@ -24,76 +33,117 @@ const ReverseIndex = () => {
   let productsArray: any = [];
 
   useEffect(() => {
-    let temp: any = ReverDummyJson?.[0]?.data?.[0];
+    let awbNo: any = awbData?.data;
+
+    // call reverse service api
+    const callReverseServiceAPI = async () => {
+      try {
+        const payload = {
+          pickupPincode: 400018,
+          deliveryPincode: 400020,
+          invoiceValue: 1000,
+          paymentMode: "COD",
+          serviceId: "a07d01f5",
+          weight: 1.5,
+          orderType: "B2C",
+          transit: "REVERSE",
+          dimension: { length: 1, width: 1, height: 1 },
+        };
+        const response = await POST(POST_SERVICEABILITY, payload);
+        console.log("🚀 ~ callReverseServiceAPI ~ response:", response);
+        // let serviceOption: any = [];
+        // for (let j = 0; j < response?.data?.data?.length; j++) {
+        //   serviceOption.push({
+        //     // label: response?.data?.data?.[j]?.partnerServiceName,
+        //     label: `
+        //     <div className="flex flex-row justify-between p-2 w-full">
+        //       <div className="flex ">
+        //         <span className="font-Open text-[14px] mr-1 font-normal text-[#494949]">
+        //           Bluedart
+        //         </span>
+
+        //         <span className="font-Open ml-1 text-[14px] font-normal text-[#494949]">
+        //           : Reverse Surface
+        //         </span>
+        //       </div>
+        //       <div className="flex font-Open text-[14px] font-normal">
+        //         <span>₹</span>
+        //         <span>101</span>
+        //       </div>
+        //     </div>
+        //     <hr />
+        //   `,
+        //     value: response?.data?.data?.[j]?.partnerServiceId,
+        //   });
+        // }
+
+        // setServiceArray(serviceOption);
+        setServiceArray(response?.data?.data);
+      } catch (error) {}
+    };
 
     // call service api
     (async () => {
       try {
         const payload = {
-          tempOrderId: temp?.tempOrderId,
-          source: temp?.source,
+          awb: awbNo,
         };
-        const response = await POST(GET_SERVICE_LIST_ORDER, payload);
-        if (response?.data?.success) {
-          let serviceOption: any = [];
-          for (let j = 0; j < response?.data?.data?.length; j++) {
-            serviceOption.push({
-              label: response?.data?.data?.[j]?.partnerServiceName,
-              value: response?.data?.data?.[j]?.partnerServiceId,
+        const response = await POST(GET_SELLER_ORDER_COMPLETE_DATA, payload);
+        if (response?.data?.status) {
+          let responsData = response?.data?.data?.[0]?.data?.[0];
+          // get all products from box object
+          for (let i = 0; i < responsData?.boxInfo?.length; i++) {
+            productsArray.push(...responsData?.boxInfo?.[i]?.products);
+          }
+          let newDataArray: any = [];
+          if (responsData["pickupAddress"]) {
+            newDataArray.push({
+              title: "Pickup Address",
+              data: responsData["pickupAddress"],
             });
           }
+          // push Pickup Date and Time array in newDataArray[]
+          newDataArray.push({
+            title: "Pickup Date and Time",
+          });
 
-          setServiceArray(serviceOption);
+          if (responsData["deliveryAddress"]) {
+            newDataArray.push({
+              title: "Delivery Address",
+              data: responsData["deliveryAddress"],
+            });
+          }
+          if (responsData["boxInfo"]) {
+            newDataArray.push({
+              title: "Products",
+              data: productsArray,
+            });
+          }
+          if (responsData["boxInfo"]) {
+            newDataArray.push({
+              title: "Box",
+              data: responsData["boxInfo"],
+            });
+          }
+          // push in array reverse service
+          newDataArray.push({
+            title: "Reverse Service",
+            data: [],
+          });
+
+          setActualArray(newDataArray);
+
+          callReverseServiceAPI();
         } else {
           //services
         }
       } catch (error) {}
     })(); // Immediately invoke the async function
-
-    // get all products from box object
-    for (let i = 0; i < temp?.boxInfo?.length; i++) {
-      productsArray.push(...temp?.boxInfo?.[i]?.products);
-    }
-
-    let newDataArray: any = [];
-    if (temp["pickupAddress"]) {
-      newDataArray.push({
-        title: "Pickup Address",
-        data: temp["pickupAddress"],
-      });
-    }
-    // push Pickup Date and Time array in newDataArray[]
-    newDataArray.push({
-      title: "Pickup Date and Time",
-    });
-
-    if (temp["deliveryAddress"]) {
-      newDataArray.push({
-        title: "Delivery Address",
-        data: temp["deliveryAddress"],
-      });
-    }
-    if (temp["boxInfo"]) {
-      newDataArray.push({
-        title: "Products",
-        data: productsArray,
-      });
-    }
-    if (temp["boxInfo"]) {
-      newDataArray.push({
-        title: "Box",
-        data: temp["boxInfo"],
-      });
-    }
-    // push in array reverse service
-
-    newDataArray.push({
-      title: "Reverse Service",
-      data: [],
-    });
-
-    setActualArray(newDataArray);
   }, []);
+
+  const handleCheck = (ele: any) => {
+    console.log("ele", ele?.target?.name);
+  };
 
   const addQtyProduct = (j: any) => {
     let qty: any = document.getElementsByClassName(`qtyProduct_${j}`);
@@ -117,6 +167,7 @@ const ReverseIndex = () => {
     <div className="relative h-[90vh] px-4">
       <div className="flex flex-col gap-2">
         {actualArray?.map((item: any, i: number) => {
+          console.log("🚀 ~ {actualArray?.map ~ item:", item);
           return (
             <div className="accordionContainerBoxStyle">
               <div
@@ -474,8 +525,8 @@ const ReverseIndex = () => {
               )}
               {/* Delivery Address Accordian */}
               {prentActiveItem === i && item?.title === "Reverse Service" && (
-                <div className="m-5">
-                  <CustomDropDown
+                <div className="m-5 max-h-[200px] overflow-auto">
+                  {/* <CustomDropDownWithHTML
                     value={serviceOptionValue}
                     options={serviceArray}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -483,7 +534,40 @@ const ReverseIndex = () => {
                     }}
                     wrapperClass="w-full mb-4 lg:mb-0 "
                     heading="Select Reverse Service"
-                  />
+                  /> */}
+                  {serviceArray?.map((el: any, index: number) => {
+                    return (
+                      <div className="flex">
+                        <Checkbox
+                          key={index}
+                          checked={false}
+                          onChange={(element: any) => {
+                            handleCheck(element);
+                          }}
+                          name={el?.partnerServiceId}
+                          label={""}
+                          style={{ accentColor: "black" }}
+                          // checkboxClassName="gap-2 mt-1"
+                        />
+                        <div className="flex flex-row justify-between p-2 w-full">
+                          <div className="flex ">
+                            <span className="font-Open text-[14px] mr-1 font-normal text-[#494949]">
+                              {el?.partnerServiceName}
+                            </span>
+
+                            <span className="font-Open ml-1 text-[14px] font-normal text-[#494949]">
+                              : Reverse {el?.serviceMode}
+                            </span>
+                          </div>
+                          <div className="flex font-Open text-[14px] font-normal">
+                            <span>₹</span>
+                            <span className="ml-0">{el?.total}</span>
+                          </div>
+                        </div>
+                        <hr />
+                      </div>
+                    );
+                  })}
                 </div>
               )}
               {/* Pickup Date and Time Accordian */}
