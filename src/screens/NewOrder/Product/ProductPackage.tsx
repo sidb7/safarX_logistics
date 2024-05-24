@@ -861,6 +861,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                         onClick={() => {
                           setSelectedBox(newpackage);
                         }}
+                        id="box"
                       >
                         <PackageBox
                           packageType={newpackage?.name}
@@ -878,6 +879,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                           // recommended={index === 1 ? true : false}
                         />
                       </div>
+
                     );
                   })
                 ) : (
