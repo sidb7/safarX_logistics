@@ -17,6 +17,7 @@ import {
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../../redux/reducers/role";
+import OneButton from "../../../../components/Button/OneButton";
 
 function UserManagement() {
   const navigate = useNavigate();
@@ -39,17 +40,29 @@ function UserManagement() {
         }
       >
         <div className="flex">
-          <CustomButton
+          <OneButton
             className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
             text="ADD ROLE"
             onClick={() => navigate("/settings/role-management/add-role")}
+            variant="primary"
           />
+          {/* <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+            text="ADD ROLE"
+            onClick={() => navigate("/settings/role-management/add-role")}
+          /> */}
 
-          <CustomButton
+          <OneButton
             className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
             text="ADD USER"
             onClick={() => navigate("/settings/user-management/add-user")}
+            variant="primary"
           />
+          {/* <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
+            text="ADD USER"
+            onClick={() => navigate("/settings/user-management/add-user")}
+          /> */}
         </div>
       </div>
     );
@@ -162,20 +175,35 @@ function UserManagement() {
         return (
           <div className="flex justify-center items-center">
             <div>
-              <CustomButton
+              <OneButton
                 text={"UPDATE"}
                 onClick={() =>
                   navigate(`/settings/user-management/update-user`, {
                     state: { data: row?.original },
                   })
                 }
+                variant="primary"
               />
+              {/* <CustomButton
+                text={"UPDATE"}
+                onClick={() =>
+                  navigate(`/settings/user-management/update-user`, {
+                    state: { data: row?.original },
+                  })
+                }
+              /> */}
             </div>
+
             <div className="border mx-2">
-              <CustomButton
+              <OneButton
                 text={"DELETE"}
                 onClick={() => deleteRoleModal(row?.original)}
+                variant="primary"
               />
+              {/* <CustomButton
+                text={"DELETE"}
+                onClick={() => deleteRoleModal(row?.original)}
+              /> */}
             </div>
           </div>
         );

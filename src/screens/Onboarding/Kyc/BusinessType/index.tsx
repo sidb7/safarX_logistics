@@ -17,6 +17,8 @@ import { ResponsiveState } from "../../../../utils/responsiveState";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Spinner } from "../../../../components/Spinner";
+import Onboarding from "../../../../redux/reducers/onboarding";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -204,20 +206,35 @@ const BusinessType = (props: ITypeProps) => {
                   />
                 </div>
                 <div className="flex flex-col gap-y-4 mx-5 mt-[96px] md:mt-6 md:gap-y-3 md:items-center md:justify-center md:pb-0 md:mb-3">
-                  <ServiceButton
+                  <OneButton
+                    text="PROCEED FOR KYC"
+                    onClick={() => {
+                      onSubmitBusinessType();
+                    }}
+                    variant="primary"
+                    className="!w-full md:!w-[320px] "
+                  />
+                  {/* <ServiceButton
                     text="PROCEED FOR KYC"
                     className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 md:!w-[320px] "
                     onClick={() => {
                       onSubmitBusinessType();
                     }}
+                  /> */}
+
+                  <OneButton
+                    text="SKIP FOR NOW"
+                    onClick={() => handleSkipForNow()}
+                    variant="tertiary"
+                    className="!w-full md:!w-[320px] "
                   />
 
-                  <ServiceButton
+                  {/* <ServiceButton
                     text="SKIP FOR NOW"
                     className="!text-[#004EFF] !font-Open  underline !border-none"
                     // onClick={() => navigate("/dashboard/overview")}
                     onClick={() => handleSkipForNow()}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

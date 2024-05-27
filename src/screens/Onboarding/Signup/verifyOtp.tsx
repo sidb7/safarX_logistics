@@ -23,6 +23,7 @@ import {
   tokenKey,
 } from "../../../utils/utility";
 import { Spinner } from "../../../components/Spinner";
+import OneButton from "../../../components/Button/OneButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -280,10 +281,16 @@ const Index = () => {
               </div>
 
               <div className="md:mb-11">
-                <CustomButton
+                {/* <CustomButton
                   onClick={onClickVerifyOtp}
                   text="SUBMIT OTP"
                   className="mt-4"
+                /> */}
+                <OneButton
+                  variant="primary"
+                  onClick={onClickVerifyOtp}
+                  text="SUBMIT OTP"
+                  className="my-4"
                 />
               </div>
             </div>

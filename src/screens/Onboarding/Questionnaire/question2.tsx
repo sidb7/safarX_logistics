@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
 import { LARGE_LOGO, COMPANY_NAME } from "../../../utils/ApiUrls";
+import OneButton from "../../../components/Button/OneButton";
 
 export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const navigate = useNavigate();
@@ -150,7 +151,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
               </div>
             </div>
             <div className="mt-6 flex gap-x-4">
-              <CustomButton
+              {/* <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
                 onClick={() =>
@@ -160,8 +161,20 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                     },
                   })
                 }
+              /> */}
+              <OneButton
+                variant="secondary"
+                onClick={() =>
+                  navigate("/onboarding/questionnaire/question1", {
+                    state: {
+                      questionsData,
+                    },
+                  })
+                }
+                text="BACK"
+                className=" flex-1"
               />
-              <CustomButton
+              {/* <CustomButton
                 text="NEXT"
                 disabled={!nextBtnStatus}
                 onClick={() => nextHandler()}
@@ -170,6 +183,13 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                     ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
                 }`}
+              /> */}
+              <OneButton
+                variant="primary"
+                onClick={() => nextHandler()}
+                text="NEXT"
+                disabled={!nextBtnStatus}
+                className=" flex-1"
               />
             </div>
             <div className="mt-3"></div>

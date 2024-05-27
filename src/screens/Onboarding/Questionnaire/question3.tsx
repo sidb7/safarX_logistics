@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
 import { LARGE_LOGO, COMPANY_NAME } from "../../../utils/ApiUrls";
+import OneButton from "../../../components/Button/OneButton";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -157,7 +158,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6 flex gap-x-4">
-              <CustomButton
+              {/* <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
                 onClick={() =>
@@ -165,8 +166,17 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                     state: { questionsData },
                   })
                 }
+              /> */}
+              <OneButton
+                variant="secondary"
+                text="BACK"
+                onClick={() =>
+                  navigate("/onboarding/questionnaire/question2", {
+                    state: { questionsData },
+                  })
+                }
               />
-              <CustomButton
+              {/* <CustomButton
                 text="NEXT"
                 disabled={!nextBtnStatus}
                 onClick={() => nextHandler()}
@@ -175,6 +185,12 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                     ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
                 }`}
+              /> */}
+              <OneButton
+                variant="primary"
+                text="NEXT"
+                onClick={() => nextHandler()}
+                disabled={!nextBtnStatus}
               />
             </div>
           </div>

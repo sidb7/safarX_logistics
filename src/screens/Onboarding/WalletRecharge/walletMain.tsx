@@ -15,6 +15,7 @@ import {
   COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
+import OneButton from "../../../components/Button/OneButton";
 
 const modalTitle = () => {
   return (
@@ -103,7 +104,7 @@ const WalletMain = () => {
                   ₹100
                 </span>
               </p> */}
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-center items-center max-[768px]: ">
                     <img src={YaariPointsIcon} alt="" />
                   </div>
                   {isMdScreen && note("text-left")}
@@ -142,13 +143,18 @@ const WalletMain = () => {
                   </div>
                 </div>
                 <div className="mr-6 mt-[50px] md:mt-4">
-                  <CustomButton
+                  {/* <CustomButton
                     text={"RECHARGE NOW"}
                     onClick={() => navigate("/onboarding/wallet-payment")}
+                  /> */}
+                  <OneButton
+                    text={"RECHARGE NOW"}
+                    onClick={() => handleRechargeNow()}
+                    variant="primary"
                   />
                 </div>
 
-                <div
+                {/* <div
                   className="flex justify-center mt-4 cursor-pointer"
                   // onClick={() => navigate("/onboarding/cash-on-delivery")}
                   onClick={() => handleSkipForNow()}
@@ -156,7 +162,13 @@ const WalletMain = () => {
                   <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
                     SKIP FOR NOW
                   </p>
-                </div>
+                </div> */}
+                <OneButton
+                  text={"SKIP FOR NOW"}
+                  onClick={() => handleSkipForNow()}
+                  variant="tertiary"
+                  className="mt-2 mr-6"
+                />
               </div>
               {!isMdScreen && note()}
             </div>

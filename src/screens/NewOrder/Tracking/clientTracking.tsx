@@ -18,6 +18,7 @@ import CopyTooltip from "../../../components/CopyToClipboard";
 import CustomInputBox from "../../../components/Input/index";
 import "./style.css";
 import { isNumber } from "lodash";
+import OneButton from "../../../components/Button/OneButton";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
@@ -333,11 +334,17 @@ const Tracking = () => {
                       containerStyle="!mt-1"
                       onChange={(e) => setTrackingNo(e.target.value)}
                     />
-                    <CustomButton
+                    <OneButton
+                      text="Track Order"
+                      className=" ml-4 p-6 mt-1"
+                      onClick={() => handleTrackOrderClick()}
+                      variant="primary"
+                    />
+                    {/* <CustomButton
                       text="Track Order"
                       className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap mt-1"
                       onClick={() => handleTrackOrderClick()}
-                    />
+                    /> */}
                   </div>
                   <p className="text-[10px] py-2 font-Open font-bold">
                     For multiple ID, type GYSH23678119, GYSH23678119,

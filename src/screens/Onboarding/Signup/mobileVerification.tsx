@@ -13,6 +13,7 @@ import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { constructNavigationObject } from "../../../utils/utility";
+import OneButton from "../../../components/Button/OneButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -128,7 +129,12 @@ const Index = () => {
                 }
               }}
             />
-            <CustomButton
+            {/* <CustomButton
+              onClick={(e: any) => sendOtpOnClick(body)}
+              text="Verify Number"
+            /> */}
+            <OneButton
+              variant="primary"
               onClick={(e: any) => sendOtpOnClick(body)}
               text="Verify Number"
             />

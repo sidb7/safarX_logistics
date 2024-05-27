@@ -21,6 +21,7 @@ import { toast } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface IProductFilledProps {
   setProductModal?: any;
@@ -478,15 +479,34 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
             className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
             style={{ width: "-webkit-fill-available" }}
           >
-            <ServiceButton
+            <OneButton
               text={"CANCEL"}
               onClick={() => {
                 setProductModal(false);
               }}
               className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4 "
               data-cy="cancel-button"
+              variant="secondary"
             />
-            <ServiceButton
+            {/* <ServiceButton
+              text={"CANCEL"}
+              onClick={() => {
+                setProductModal(false);
+              }}
+              className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4 "
+              data-cy="cancel-button"
+            /> */}
+
+            <OneButton
+              text={"SAVE"}
+              onClick={() => {
+                addProductInfo();
+              }}
+              className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
+              data-cy="save-button"
+              variant="primary"
+            />
+            {/* <ServiceButton
               text={"SAVE"}
               // disabled={!isLoading}
               onClick={() => {
@@ -494,7 +514,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
               }}
               className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
               data-cy="save-button"
-            />
+            /> */}
           </div>
         </>
       </CustomRightModal>

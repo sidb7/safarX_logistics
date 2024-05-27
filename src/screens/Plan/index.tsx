@@ -20,6 +20,7 @@ import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { Spinner } from "../../components/Spinner";
 import ToastCustom from "../toastCutom";
+import OneButton from "../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -55,19 +56,34 @@ const Index = (props: ITypeProps) => {
               plan?
             </p>
             <div className="flex  items-center gap-x-4 mt-10">
-              <ServiceButton
+              <OneButton
+                text="Yes"
+                className=" px-4 py-2"
+                onClick={() => {
+                  assignPlan(onSelectPlan);
+                  setIsModalOpen(false);
+                }}
+                variant="secondary"
+              />
+              {/* <ServiceButton
                 text="Yes"
                 className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
                 onClick={() => {
                   assignPlan(onSelectPlan);
                   setIsModalOpen(false);
                 }}
+              /> */}
+              <OneButton
+                text="No"
+                className=" px-4 py-2"
+                onClick={() => setIsModalOpen(false)}
+                variant="primary"
               />
-              <ServiceButton
+              {/* <ServiceButton
                 text="No"
                 className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
                 onClick={() => setIsModalOpen(false)}
-              />
+              /> */}
             </div>
           </div>
         </div>

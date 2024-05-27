@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { constructNavigationObject } from "../../../utils/utility";
 import { LARGE_LOGO } from "../../../utils/ApiUrls";
+import OneButton from "../../../components/Button/OneButton";
 
 const Index = () => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
@@ -69,8 +70,19 @@ const Index = () => {
                 />
               </div>
 
-              <CustomButton
+              {/* <CustomButton
                 className=" bg-black  "
+                onClick={() => {
+                  const navigationObject = constructNavigationObject(
+                    "/onboarding/questionnaire/question1",
+                    window.location.search
+                  );
+                  navigate(navigationObject);
+                }}
+                text="SET UP MY ACCOUNT"
+              /> */}
+              <OneButton
+                variant="primary"
                 onClick={() => {
                   const navigationObject = constructNavigationObject(
                     "/onboarding/questionnaire/question1",

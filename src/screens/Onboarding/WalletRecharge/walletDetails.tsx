@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import NavBar from "../../../layout/Old_NavBar";
 import { Spinner } from "../../../components/Spinner";
+import OneButton from "../../../components/Button/OneButton";
 
 const modalTitle = () => {
   return (
@@ -161,9 +162,14 @@ const WalletDetails = () => {
             />
           </div> */}
               <div className="!w-full m-auto mt-4">
-                <CustomButton
+                {/* <CustomButton
                   text={"VERIFY BANK"}
                   onClick={() => postAccountDetails()}
+                /> */}
+                <OneButton
+                  text="VERIFY BANK"
+                  onClick={() => postAccountDetails()}
+                  variant="primary"
                 />
               </div>
             </div>

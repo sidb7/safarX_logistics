@@ -2,6 +2,7 @@ import React from "react";
 import CargoRatingGif from "../../assets/common/CargoRating.gif";
 import AddButton from "../../components/Button/addButton";
 import { ResponsiveState } from "../../utils/responsiveState";
+import OneButton from "../../components/Button/OneButton";
 
 interface ITypeProps {
   planName: string;
@@ -100,7 +101,7 @@ const PlanCard = (props: ITypeProps) => {
           </ul>
         </p>
 
-        <AddButton
+        {/* <AddButton
           text={isSelected ? "SELECTED" : "SELECT"}
           onClick={onClick}
           disabled={isSelected}
@@ -110,6 +111,17 @@ const PlanCard = (props: ITypeProps) => {
               : "!text-black !bg-transparent"
           } `}
           textClassName={`${isSelected ? "!text-white" : "!text-black"}`}
+        /> */}
+
+        <OneButton
+          text={isSelected ? "SELECTED" : "SELECT"}
+          onClick={onClick}
+          variant={isSelected ? "primary" : "secondary"}
+          // disabled={isSelected}
+          className={`!py-2 !px-4 !w-[272px] lg:!w-[209px] !font-Open !border-[1px] !border-black ${
+            isSelected &&
+            "!bg-[#1C1C1C] !text-[#FFFFFF] cursor-not-allowed pointer-events-none"
+          }`}
         />
       </div>
     </div>
