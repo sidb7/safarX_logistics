@@ -1,5 +1,6 @@
 import Checkbox from "../../../components/CheckBox";
-import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif";
+// import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif";
+import WarehouseTruckGif from "../../../assets/AccountQuestions/truck.gif";
 import CustomButton from "../../../components/Button";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -43,6 +43,7 @@ import SelectAddress from "../screens/Onboarding/Kyc/SelectAddress/index";
 import SelectAddressBilling from "../screens/Onboarding/Kyc/SelectAddress/billing";
 import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup";
 import BulkBoxes from "../screens/NewOrder/NewCatalogue/BoxCatalogue/BulkBoxes";
+import BulkCombos from "../screens/NewOrder/NewCatalogue/ProductCatalogue/BulkCombos";
 
 import TransactionLayout from "../layout/TransactionLayout";
 // import WalletRecharge from "../screens/NewOrder/WalletRecharge";
@@ -1005,6 +1006,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <BulkBoxes />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/catalogues/catalogue/add-bulk-combo/"
+            element={
+              <ProtectedRoute>
+                <BulkCombos />
               </ProtectedRoute>
             }
           />

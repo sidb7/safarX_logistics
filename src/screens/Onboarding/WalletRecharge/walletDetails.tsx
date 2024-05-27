@@ -118,7 +118,7 @@ const WalletDetails = () => {
                   label="Account Number"
                   className="!w-full "
                   maxLength={50}
-                  onChange={(e) => setAccountName(+e.target.value)}
+                  onChange={(e) => setAccountName(e.target.value)}
                   id="accountNumber"
                 />
               </div>

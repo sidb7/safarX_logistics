@@ -1,5 +1,6 @@
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-import MobileGif from "../../../assets/OrderCard/Gif.gif";
+// import MobileGif from "../../../assets/OrderCard/Gif.gif";
+import MobileGif from "../../../assets/OrderCard/MobileNumberScreen.gif";
 import CustomButton from "../../../components/Button/index";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -229,7 +230,10 @@ const Index = () => {
                   onChange={(e: any) => {
                     if (isNaN(e.target.value)) {
                     } else {
-                      setOtp({ ...otp, mobileOtp: +e.target.value });
+                      setOtp({
+                        ...otp,
+                        mobileOtp: +e.target.value,
+                      });
                     }
                   }}
                 />

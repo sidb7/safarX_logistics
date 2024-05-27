@@ -108,6 +108,10 @@ const Index = (props: ITypeProps) => {
     }
   };
 
+  const sortByPrice = (a: any, b: any) => {
+    return a.price - b.price;
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -120,11 +124,12 @@ const Index = (props: ITypeProps) => {
         if (response?.success) {
           setLoading(false);
           let tempPlan = response?.data;
-          const selectedPlans = tempPlan.filter((plan: any) => plan.isSelected);
-          const unselectedPlans = tempPlan.filter(
-            (plan: any) => !plan.isSelected
-          );
-          const reorderedPlans = selectedPlans.concat(unselectedPlans);
+          tempPlan.sort(sortByPrice);
+          // const selectedPlans = tempPlan.filter((plan: any) => plan.isSelected);
+          // const unselectedPlans = tempPlan.filter(
+          //   (plan: any) => !plan.isSelected
+          // );
+          // const reorderedPlans = selectedPlans.concat(unselectedPlans);
           // tempPlan.push({
           //   planId: "123445",
           //   planName: "Enterprise",
@@ -143,7 +148,7 @@ const Index = (props: ITypeProps) => {
           //   variantId: "5ac217ed-d307-4d4d-a158-6efd2943d507",
           //   isSelected: false,
           // });
-          setAllPlans(reorderedPlans);
+          setAllPlans(tempPlan);
         }
       } catch (error) {
         setLoading(false);

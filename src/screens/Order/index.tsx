@@ -78,6 +78,7 @@ import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
+let allOrdersCount: any;
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -873,19 +874,31 @@ const Index = () => {
     endDate?: any,
     filterPayLoadData?: any
   ) => {
+    let payload: any;
     try {
       setIsLoading(true);
 
       let firstFilterData = [];
       let secondFilterData = [];
 
-      let payload: any = {
-        pageNo: 1, //temp
-        sort: { _id: -1 }, //temp
-        skip: 0, //temp
-        limit: limit, //temp
-        currentStatus,
-      };
+      if (filterId === 1) {
+        payload = {
+          pageNo: 1, //temp
+          sort: { _id: -1 }, //temp
+          skip: 0, //temp
+          limit: limit, //temp
+          currentStatus,
+          subStatus: "DRAFT",
+        };
+      } else {
+        payload = {
+          pageNo: 1, //temp
+          sort: { _id: -1 }, //temp
+          skip: 0, //temp
+          limit: limit, //temp
+          currentStatus,
+        };
+      }
 
       if (searchText?.length > 0) {
         payload.id = searchText;
@@ -956,7 +969,7 @@ const Index = () => {
 
       setDraftOrderCount({
         ...draftOrderCount,
-        all: orderCount,
+        all: allOrdersCount || orderCount,
         draft: draftCount || 0,
         // failed: failedCount || 0,
         error: errorCount || 0,
@@ -1362,6 +1375,7 @@ const Index = () => {
 
     try {
       const { data } = await POST(GET_STATUS_COUNT, payload);
+      allOrdersCount = data?.data?.[0]?.count;
       const { status: isStatus, data: statusList } = data;
       if (isStatus) {
         // return data?.data;
@@ -1511,6 +1525,8 @@ const Index = () => {
   ) => {
     try {
       let payload: any;
+      let dates: any = {};
+      let allOrders: any;
       if (filterId === 1) {
         payload = {
           skip,
@@ -1581,12 +1597,33 @@ const Index = () => {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        dates.startDate = startEpoch;
+        dates.endDate = lastendEpoch;
+      }
+
+      const { data: count } = await POST(GET_STATUS_COUNT, dates);
+      allOrders = count?.data?.[0]?.count;
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
 
-      setDraftOrderCount({ ...draftOrderCount, all: orderCount });
+      setDraftOrderCount({ ...draftOrderCount, all: allOrders || orderCount });
 
       setSelectedRowData([]);
 
@@ -1722,66 +1759,96 @@ const Index = () => {
     setIsDeleted(false);
   }
 
-  const getErrors = async () => {
-    let payload: any = {};
+  const getErrors = async (isFetching?: any) => {
+    try {
+      let payload: any = {};
+      let index: any = 0;
+      let dateFilter: any = true;
 
-    const newArray = filterPayLoad?.filterArrOne.filter(
-      (obj) => !Object.keys(obj).includes("createdAt")
-    );
+      const newArray = filterPayLoad?.filterArrOne.filter(
+        (obj) => !Object.keys(obj).includes("createdAt")
+      );
 
-    if (newArray?.length > 0 || filterPayLoad?.filterArrTwo?.length > 0) {
-      payload.filterArrOne = newArray || [];
-      payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
-    }
-
-    if (startDate && endDate) {
-      let startEpoch = null;
-      let lastendEpoch = null;
-
-      if (startDate instanceof Date && endDate instanceof Date) {
-        startDate.setHours(0, 0, 0, 0);
-        startEpoch = startDate.getTime();
-
-        endDate.setHours(23, 59, 59, 999);
-        const endEpoch = endDate.getTime();
-
-        lastendEpoch = endEpoch;
+      if (newArray?.length > 0 || filterPayLoad?.filterArrTwo?.length > 0) {
+        payload.filterArrOne = newArray || [];
+        payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
       }
 
-      payload.startDate = startEpoch;
-      payload.endDate = lastendEpoch;
-    }
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
 
-    if (searchedText?.length > 0) {
-      payload.id = searchedText;
-    }
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
 
-    setIsErrorListLoading(true);
-    const { data } = await POST(GET_ORDER_ERRORS, payload);
-    if (data?.status) {
-      const result: any = [];
-      let errorListCount = 0;
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
 
-      for (const [key, value] of Object.entries(data?.data?.[0])) {
-        const currentObject = {
-          errorName: key,
-          value: value,
-        };
-        result.push(currentObject);
+          lastendEpoch = endEpoch;
+        }
+
+        payload.startDate = startEpoch;
+        payload.endDate = lastendEpoch;
       }
 
-      result.forEach((item: any) => {
-        if (item.value) {
-          item.value.forEach((order: any) => {
-            errorListCount += order.ordersCount || 0;
+      if (searchedText?.length > 0) {
+        payload.id = searchedText;
+      }
+
+      setIsErrorListLoading(true);
+      const { data } = await POST(GET_ORDER_ERRORS, payload);
+      if (data?.status) {
+        const result: any = [];
+        let errorListCount = 0;
+
+        for (const [key, value] of Object.entries(data?.data?.[0])) {
+          const currentObject = {
+            errorName: key,
+            value: value,
+          };
+          result.push(currentObject);
+        }
+
+        result.forEach((item: any) => {
+          if (item.value) {
+            item.value.forEach((order: any) => {
+              errorListCount += order.ordersCount || 0;
+            });
+          }
+        });
+
+        if (isFetching) {
+          const sellerOrder = await getSellerOrderByStatus(
+            statusData[index].value,
+            1,
+            { _id: -1 },
+            0,
+            itemsPerPage,
+            dateFilter,
+            searchedText,
+            startDate,
+            endDate,
+            filterPayLoad
+          );
+
+          setDraftOrderCount({
+            ...draftOrderCount,
+            all: sellerOrder.orderCount || 0,
+            draft: sellerOrder.draftCount || 0,
+            // failed: failedCount || 0,
+            error: sellerOrder.errorCount || 0,
           });
         }
-      });
 
-      setErrorData(result);
-      setIsErrorListLoading(false);
-    } else {
-      setIsErrorListLoading(false);
+        setErrorData(result);
+        setIsErrorListLoading(false);
+      } else {
+        setIsErrorListLoading(false);
+      }
+    } catch (error: any) {
+      toast.error(error);
+      return false;
     }
   };
 
