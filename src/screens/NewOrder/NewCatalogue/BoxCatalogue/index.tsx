@@ -24,6 +24,7 @@ import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import PaginationComponent from "../../../../components/Pagination";
+import OneButton from "../../../../components/Button/OneButton";
 
 const BoxCatalogue = forwardRef((props: any, ref: any) => {
   const { filterId, setFilterId } = props;
@@ -182,6 +183,14 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
             Are you sure you want to delete this box?
           </p>
           <div className="flex  items-center gap-x-4 mt-10">
+            {/* <OneButton
+              text={"Yess"}
+              onClick={() => {
+                deleteSellerBox(data, deleteBoxIndex);
+                setIsDeleteModalOpen(false);
+              }}
+              className="px-4 py-2"
+            /> */}
             <ServiceButton
               text="Yes"
               className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"

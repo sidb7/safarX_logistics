@@ -2,6 +2,7 @@ import { useState } from "react";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../Spinner";
+import OneButton from "../Button/OneButton";
 
 const BottomLayout = ({
   callApi,
@@ -19,13 +20,21 @@ const BottomLayout = ({
         {Button2Name ? (
           <div className="lg:w-[100px]" />
         ) : (
-          <ServiceButton
-            className="lg:w-[100px]"
-            text="BACK"
-            onClick={() => navigate(-1)}
-          />
+          <>
+            {/* <ServiceButton
+              className="lg:w-[100px]"
+              text="BACK"
+              onClick={() => navigate(-1)}
+            /> */}
+            <OneButton
+              text="BACK"
+              onClick={() => navigate(-1)}
+              variant="secondary"
+              className="lg:w-[100px]"
+            />
+          </>
         )}
-
+        {/* 
         <ServiceButton
           disabled={loading}
           text={
@@ -47,6 +56,30 @@ const BottomLayout = ({
             await callApi();
             setLoading(false);
           }}
+        /> */}
+        <OneButton
+          text={
+            loading ? (
+              <div className="flex">
+                <Spinner />
+              </div>
+            ) : Button2Name ? (
+              `${customButtonText ? customButtonText : "NEXT"}`
+            ) : (
+              finalButtonText
+            )
+          }
+          disabled={loading}
+          className={`${
+            loading ? "bg-white" : "bg-[#1C1C1C]"
+          } text-[#FFFFFF] lg:w-[100px] ${className}`}
+          variant={loading ? "secondary" : "primary"}
+          onClick={async () => {
+            setLoading(true);
+            await callApi();
+            setLoading(false);
+          }}
+          size="medium"
         />
       </div>
     </footer>

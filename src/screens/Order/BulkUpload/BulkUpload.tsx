@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import OneButton from "../../../components/Button/OneButton";
+import CustomDropDown from "../../../components/DropDown";
 
 interface ITypeProps {
   onClick?: any;
@@ -125,12 +127,20 @@ const BulkUpload = (props: ITypeProps) => {
         download="SY_BULK_ORDER.xlsx"
         className="flex items-center"
       >
-        <CustomButton
+        {/* <CustomButton
           icon={whiteDownloadIcon}
           showIcon={true}
           text={`Download ${selectedOption} Sample`}
           className="!p-5"
           onClick={() => {}}
+        /> */}
+        <OneButton
+          text={`Download ${selectedOption} Sample`}
+          onClick={() => {}}
+          className="!p-5"
+          variant="primary"
+          showIcon={true}
+          icon={whiteDownloadIcon}
         />
       </a>
     );

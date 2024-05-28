@@ -17,6 +17,7 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import Checkbox from "../../../../components/CheckBox";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -73,7 +74,7 @@ export const GSTComponent = (props: ITypeProps) => {
 
   const BottomButton = () => {
     return (
-      <div className="flex flex-col items-center px-5 md:px-0 pb-4  bg-white">
+      <div className="flex flex-col items-center px-0 md:px-0 pb-4  bg-white">
         {/* <div className="flex items-center  md:px-9 self-start my-1 mx-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)} 
@@ -85,7 +86,7 @@ export const GSTComponent = (props: ITypeProps) => {
         </div> */}
 
         {/* new checkbox functionality implemented */}
-        <div className="font-normal text-[12px] text-[#494949] font-Open md:px-7 self-start my-1 mx-1">
+        <div className=" px-5 font-normal text-[12px] text-[#494949] font-Open md:px-9 self-start my-1 mx-1">
           <Checkbox
             checked={false}
             onChange={(e: any) => setCheckbox(e.value)}
@@ -95,8 +96,18 @@ export const GSTComponent = (props: ITypeProps) => {
             checkboxClassName="gap-2"
           />
         </div>
-
-        <ServiceButton
+        <div className="w-[70%] pt-4">
+          <OneButton
+            text="ACCEPT AND CONTINUE"
+            disabled={!checkbox}
+            onClick={() => {
+              acceptStatus();
+            }}
+            variant="primary"
+            className="w-full  mb-1 mt-0 mx-0 font-Open"
+          />
+        </div>
+        {/* <ServiceButton
           text="ACCEPT AND CONTINUE"
           disabled={!checkbox}
           className={` w-full md:!w-[320px] mb-1 mt-0 mx-5 font-Open  ${
@@ -107,7 +118,7 @@ export const GSTComponent = (props: ITypeProps) => {
           onClick={() => {
             acceptStatus();
           }}
-        />
+        /> */}
       </div>
     );
   };

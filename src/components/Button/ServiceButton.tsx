@@ -27,11 +27,11 @@ const ServiceButton = (props: IServiceButtonProps) => {
     id,
   } = props;
 
-  const excludeWords = ["B2B", "B2C", "KYC","OTP"];
+  const excludeWords = ["B2B", "B2C", "KYC", "OTP"];
 
   return (
     <button
-      className={` flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-sm font-semibold text-[#1C1C1C] text-center ${className}`}
+      className={` flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-sm font-semibold text-[#1C1C1C] text-center hover:bg-[#606060] hover:shadow-cardShadow2a focus:bg-[#1C1C1C] focus:border focus:border-[#A4A4A4] ${className}`}
       disabled={disabled}
       onClick={onClick}
       id={id}
