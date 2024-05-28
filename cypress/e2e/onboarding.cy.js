@@ -229,7 +229,7 @@ describe("Sign up", () => {
   });
   after(() => {
     //
-    //  Perform any cleanup or logout if necessary
+    //  Perform any cleanup or logout if necessary//
     // cy.xpath("(//*[@id='profileIcon']//button)[2]").click();
     // cy.xpath("//*[text()='Sign out']").click();
     // cy.xpath("//*[text()='Logged Out Successfully.']").should("be.visible");
