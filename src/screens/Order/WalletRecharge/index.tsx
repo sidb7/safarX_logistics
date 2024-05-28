@@ -113,7 +113,7 @@ const WalletRecharge = () => {
   });
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
   const [dataFromSession, setDataFromSession] = useState<any>();
-  // console.log("🚀 ~ dataFromSession:", dataFromSession);
+  const [balanceZeroOrNegative, setBalanceZeroOrNegative] = useState(false);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -325,41 +325,6 @@ const WalletRecharge = () => {
     setDataFromSession(temp);
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        // fetchCurrentWallet();
-        const juspayOrderId = getLocalStorage("order_id");
-        if (juspayOrderId) {
-          setPaymentLoader(true);
-          const orderStatus = await POST(RECHARGE_STATUS, {
-            orderId: juspayOrderId,
-            paymentGateway: "JUSPAY",
-            transactionId: juspayOrderId,
-          });
-          if (orderStatus?.data?.success === false) {
-            toast.error("Something Went Wrong");
-          } else {
-            //gtm
-            window?.dataLayer?.push({
-              event: "seller_wallet_recharge",
-              sellerId: sellerId,
-              wallet_recharge: true,
-            });
-            toast.success("Wallet Recharge Successfully");
-
-            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
-          }
-          setPaymentLoader(false);
-          removeLocalStorage("order_id");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-    userDetailsFromSession();
-  }, []);
-
   const startPayments = async () => {
     let initialObject = {
       amount: walletValue,
@@ -377,12 +342,6 @@ const WalletRecharge = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (walletValue) {
-      setIsDisabled(false);
-    } else setIsDisabled(true);
-  }, [walletValue]);
 
   const getWalletBalance = async () => {
     // Check conditions before making the API call
@@ -424,9 +383,124 @@ const WalletRecharge = () => {
   };
 
   useEffect(() => {
-    getWalletBalance();
+    (async () => {
+      try {
+        // fetchCurrentWallet();
+        const juspayOrderId = getLocalStorage("order_id");
+        if (juspayOrderId) {
+          setPaymentLoader(true);
+          const orderStatus = await POST(RECHARGE_STATUS, {
+            orderId: juspayOrderId,
+            paymentGateway: "JUSPAY",
+            transactionId: juspayOrderId,
+          });
+          if (orderStatus?.data?.success === false) {
+            toast.error("Something Went Wrong");
+          } else {
+            //gtm
+            window?.dataLayer?.push({
+              event: "seller_wallet_recharge",
+              sellerId: sellerId,
+              wallet_recharge: true,
+            });
+            toast.success("Wallet Recharge Successfully");
+
+            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
+          }
+          setPaymentLoader(false);
+          removeLocalStorage("order_id");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
     userDetailsFromSession();
-    // calculateTheHighestAmountToDeduct();
+  }, []);
+
+  useEffect(() => {
+    if (walletValue) {
+      setIsDisabled(false);
+    } else setIsDisabled(true);
+  }, [walletValue]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "log for the before the function runs exactly the way it was intended"
+  //   );
+
+  //   const fetchData = async () => {
+  //     await userDetailsFromSession();
+  //     setUserDetailsLoaded(true);
+  //   };
+  //   fetchData();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (userDetailsLoaded) {
+  //     getWalletBalance();
+  //   }
+  // }, [userDetailsLoaded]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await userDetailsFromSession();
+  //   };
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch user details from session
+        let temp: any = localStorage.getItem("userInfo");
+        temp = JSON.parse(temp);
+        setDataFromSession(temp);
+
+        // Fetch wallet balance
+        if (
+          temp?.isMigrated &&
+          !temp?.isPostpaid &&
+          !temp?.isWalletBlackListed
+        ) {
+          setLoading(true);
+          const { data: response } = await POST(GET_WALLET_BALANCE);
+
+          if (response?.success) {
+            setMigratedUserWalletDetails(response?.data);
+            setAmountForTransaction({
+              ...amountForTransaction,
+              phpAmount:
+                response?.data?.phpBalance !== undefined
+                  ? response.data.phpBalance === 0
+                    ? 0
+                    : response.data.phpBalance
+                  : "N/A",
+              blazeAmount:
+                response?.data?.blazeBalance !== undefined
+                  ? response.data.blazeBalance === 0
+                    ? 0
+                    : response.data.blazeBalance
+                  : "N/A",
+            });
+            // Check if the current balance is 0 or negative
+            const currentBalance = response?.data?.phpBalance;
+            const isBalanceZeroOrNegative = currentBalance <= 0;
+            setBalanceZeroOrNegative(isBalanceZeroOrNegative);
+          } else {
+            toast.error(response?.message);
+          }
+        }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching data:", error);
+        toast.error("Failed to fetch data!");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -589,21 +663,21 @@ const WalletRecharge = () => {
                     !dataFromSession?.isPostpaid &&
                     !dataFromSession?.isWalletBlackListed ? (
                       <div className="flex flex-col h-full ">
-                        <div className="flex flex-col mb-7">
-                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] ">
+                        <div className="flex flex-col mb-0 xl:mb-5">
+                          <p className="font-Open lg:text-sm xl:text-base font-medium xl:font-semibold leading-3 xl:leading-[22px] ">
                             {`Old System Balance  ₹ ${
                               migratedUserWalletDetails?.phpBalance?.toLocaleString(
                                 "en-IN"
                               ) || 0.0
                             }`}{" "}
                           </p>
-                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                          <p className="font-Open lg:text-sm xl:text-base font-medium xl:font-semibold leading-3 xl:leading-[22px] mt-1">
                             Easily move funds to and from Blaze with just a tap.
                           </p>
-                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                          <p className="font-Open lg:text-sm xl:text-base font-medium xl:font-semibold leading-3 xl:leading-[22px] mt-1">
                             Experience hassle-free money transfers for a smooth
                           </p>
-                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                          <p className="font-Open lg:text-sm xl:text-base font-medium xl:font-semibold leading-3 xl:leading-[22px] mt-1">
                             transition from old dashboard to a new dashboard.
                           </p>
                         </div>
@@ -619,7 +693,12 @@ const WalletRecharge = () => {
                                     "Complete Your KYC First to avail this feature"
                                   )
                             }
-                            className="bg-[#1C1C1C] text-white py-4 px-4  font-Open text-base font-semibold leading-5"
+                            disabled={balanceZeroOrNegative}
+                            className={`${
+                              balanceZeroOrNegative
+                                ? "bg-[#E8E8E8] text-[#BBBBBB] !border-[1px] !border-[#E8E8E8] p-2 xl:py-3 xl:px-4 cursor-not-allowed  font-Open text-xs xl:text-sm font-light xl:font-semibold leading-3 xl:leading-5"
+                                : "bg-[#1C1C1C] text-white p-2 xl:py-3 xl:px-4  font-Open text-xs xl:text-sm font-light xl:font-semibold leading-3 xl:leading-5"
+                            }`}
                           />
                         </div>
                       </div>
@@ -819,6 +898,77 @@ const WalletRecharge = () => {
                 )}
                 <div className="col-end-7">
                   <img src={customerReward} alt="" className="object-contain" />
+                </div>
+              </div>
+
+              <div className="lg:hidden ">
+                <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
+                  {dataFromSession?.isMigrated &&
+                  !dataFromSession?.isPostpaid &&
+                  !dataFromSession?.isWalletBlackListed ? (
+                    <div className="flex flex-col h-full ">
+                      <div className="flex flex-col gap-y-1 mt-3 mb-5">
+                        <p className="font-Open text-xs font-normal leading-[16px] ">
+                          {`Old System Balance  ₹ ${
+                            migratedUserWalletDetails?.phpBalance?.toLocaleString(
+                              "en-IN"
+                            ) || 0.0
+                          }`}{" "}
+                        </p>
+                        <p className="font-Open text-xs font-normal leading-[16px] mt-1">
+                          Easily move funds to and from Blaze with just a tap.
+                        </p>
+                        <p className="font-Open text-xs font-normal leading-[16px] mt-1">
+                          Experience hassle-free money transfers for a smooth
+                        </p>
+                        <p className="font-Open text-xs font-normal leading-[16px] mt-1">
+                          transition from old dashboard to a new dashboard.
+                        </p>
+                      </div>
+
+                      <div>
+                        <ServiceButton
+                          text="Transfer Now"
+                          // onClick={() => setOpenRightModal(true)}
+                          onClick={() =>
+                            dataFromSession?.nextStep?.kyc
+                              ? setOpenRightModal(true)
+                              : toast.error(
+                                  "Complete Your KYC First to avail this feature"
+                                )
+                          }
+                          disabled={balanceZeroOrNegative}
+                          className={`${
+                            balanceZeroOrNegative
+                              ? "bg-[#E8E8E8] text-[#BBBBBB] !border-[1px] !border-[#E8E8E8] p-2 xl:py-3 xl:px-4 cursor-not-allowed  font-Open text-xs xl:text-sm font-light xl:font-semibold leading-3 xl:leading-5"
+                              : "bg-[#1C1C1C] text-white p-2 xl:py-3 xl:px-4  font-Open text-xs xl:text-sm font-light xl:font-semibold leading-3 xl:leading-5"
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col h-full ">
+                      <div className="flex flex-col mb-12">
+                        <p className="font-Open text-base font-semibold leading-[22px]">
+                          Yaari points are availed after first
+                        </p>
+                        <p className="font-Open text-base font-semibold leading-[22px]">
+                          order is placed
+                        </p>
+                      </div>
+                      {/* <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                        Tap to know how it works
+                      </p> */}
+                    </div>
+                  )}
+                  {/* )} */}
+                  <div>
+                    <img
+                      src={customerReward}
+                      alt=""
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
               </div>
               {/* Payment Gateway */}

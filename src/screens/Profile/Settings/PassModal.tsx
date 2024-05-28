@@ -11,6 +11,7 @@ import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import { strongpasswordRegex } from "../../../utils/regexCheck";
 import InfoCircle from "../../../assets/info-circle.svg";
+import OneButton from "../../../components/Button/OneButton";
 
 interface PassModalProps {
   isPassModalOpen: boolean;
@@ -213,20 +214,36 @@ function PassModal(props: PassModalProps) {
             }}
             className="flex justify-end shadow-lg border-[1px] border-white bg-[#FFFFFF] gap-[32px] p-[10px] rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0"
           >
-            <ServiceButton
+            <OneButton
+              onClick={() => setIsPassModalOpen(false)}
+              text="BACK"
+              className=" w-[80px] px-5"
+              variant="secondary"
+            />
+            {/* <ServiceButton
               className="w-[80px]"
               text="BACK"
               onClick={() => setIsPassModalOpen(false)}
+            /> */}
+
+            <OneButton
+              text="SAVE"
+              className="w-[80px] px-5"
+              onClick={() => {
+                updatePassword();
+                // setIsPassModalOpen(false);
+              }}
+              variant="primary"
             />
 
-            <ServiceButton
+            {/* <ServiceButton
               text="SAVE"
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[80px]"
               onClick={() => {
                 updatePassword();
                 // setIsPassModalOpen(false);
               }}
-            />
+            /> */}
           </div>
         </footer>
       </div>

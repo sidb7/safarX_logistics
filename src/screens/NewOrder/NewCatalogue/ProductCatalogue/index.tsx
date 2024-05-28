@@ -33,6 +33,7 @@ import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import ShopifyRibbon from "../../../../assets/Catalogue/shopifyRibbon.png";
 import WooCommerceRibbon from "../../../../assets/Catalogue/woocommerceRibbon.png";
 import ShipyaariRibbon from "../../../../assets/Catalogue/shipyaariRibbon.png";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
@@ -244,18 +245,33 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             Are you sure you want to delete this product?
           </p>
           <div className="flex  items-center gap-x-4 mt-10">
-            <ServiceButton
+            {/* <ServiceButton
               text="Yes"
               className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
               onClick={() => {
                 deleteAddress();
                 setIsDeleteModalOpen(false);
               }}
+            /> */}
+            <OneButton
+              text="Yes"
+              className="px-4 py-2"
+              onClick={() => {
+                deleteAddress();
+                setIsDeleteModalOpen(false);
+              }}
+              variant="secondary"
             />
-            <ServiceButton
+            {/* <ServiceButton
               text="No"
               className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
               onClick={() => setIsDeleteModalOpen(false)}
+            /> */}
+            <OneButton
+              text={"No"}
+              onClick={() => setIsDeleteModalOpen(false)}
+              variant="primary"
+              className="px-4 py-2"
             />
           </div>
         </div>

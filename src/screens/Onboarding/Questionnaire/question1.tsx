@@ -1,5 +1,6 @@
 import Checkbox from "../../../components/CheckBox";
-import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif";
+// import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif";
+import WarehouseTruckGif from "../../../assets/AccountQuestions/truck.gif";
 import CustomButton from "../../../components/Button";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import {
   LARGE_LOGO,
 } from "../../../utils/ApiUrls";
 import { constructNavigationObject } from "../../../utils/utility";
+import OneButton from "../../../components/Button/OneButton";
 
 export const QuestionComponent1: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -179,7 +181,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6">
-              <CustomButton
+              {/* <CustomButton
                 text="NEXT"
                 disabled={!nextBtnStatus}
                 onClick={() => nextHandler()}
@@ -188,6 +190,12 @@ export const QuestionComponent1: React.FunctionComponent = () => {
                     ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
                 }`}
+              /> */}
+              <OneButton
+                variant="primary"
+                onClick={() => nextHandler()}
+                text="NEXT"
+                disabled={!nextBtnStatus}
               />
             </div>
           </div>

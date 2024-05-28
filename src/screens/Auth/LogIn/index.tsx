@@ -39,6 +39,7 @@ import { Spinner } from "../../../components/Spinner";
 import { socketCallbacks } from "../../../Socket";
 import { useErrorBoundary } from "react-error-boundary";
 import { getQueryJson } from "../../../utils/utility";
+import OneButton from "../../../components/Button/OneButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -328,10 +329,23 @@ const Index = () => {
                 <div className="product-box flex items-center">
                   <img
                     className="m-4 h-[25px] object-contain"
-                    src={CompanyLogo}
+                    src={LARGE_LOGO}
                     alt="Company Logo"
                   />
-                  <a
+                  <div className=" ml-auto mr-1">
+                    <OneButton
+                      text="TRACK ORDER"
+                      onClick={() => {
+                        window.open(
+                          "https://app.shipyaari.com/shipyaari-tracking",
+                          "_blank"
+                        );
+                      }}
+                      variant="tertiary"
+                      className=" ml-auto !p-4 "
+                    />
+                  </div>
+                  {/* <a
                     href="https://app.shipyaari.com/shipyaari-tracking"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -340,7 +354,7 @@ const Index = () => {
                     } leading-4 tracking-wide`}
                   >
                     TRACK ORDER
-                  </a>
+                  </a> */}
                 </div>
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
@@ -486,11 +500,15 @@ const Index = () => {
                       Forgot Password
                     </button>
                   </div>
-
-                  <CustomButton
+                  <OneButton
+                    onClick={() => logInOnClick(loginCredentials)}
+                    text="LOG IN"
+                    variant="primary"
+                  />
+                  {/* <CustomButton
                     onClick={(e: any) => logInOnClick(loginCredentials)}
                     text="LOG IN"
-                  />
+                  /> */}
 
                   <div className="flex justify-center md:mb-[40px]">
                     <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
@@ -518,8 +536,8 @@ const Index = () => {
       {showBootScreen ? (
         <div className="flex items-center justify-center h-screen">
           <img
-            className="animate-bounce object-contain"
-            src={CompanyLogo}
+            className="animate-bounce object-contain w-48 h-48"
+            src={LARGE_LOGO}
             alt=""
           />
         </div>

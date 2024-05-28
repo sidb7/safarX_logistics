@@ -38,6 +38,7 @@ import {
 } from "../../../utils/utility";
 import { Tooltip } from "react-tooltip";
 import * as Sentry from "@sentry/react";
+import OneButton from "../../../components/Button/OneButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -243,14 +244,14 @@ const Index = () => {
 
             <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
               <div className="flex flex-col xl:gap-y-9 lg:gap-y-4">
-                <div className="product-box flex items-center ">
+                <div className="product-box flex items-center justify-between">
                   <img
                     className="m-4 h-[25px] object-contain"
                     src={LARGE_LOGO}
                     alt="CompanyLogo"
                   />
 
-                  <a
+                  {/* <a
                     href="https://app.shipyaari.com/shipyaari-tracking"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -259,7 +260,19 @@ const Index = () => {
                     } leading-4 tracking-wide`}
                   >
                     TRACK ORDER
-                  </a>
+                  </a> */}
+
+                  <OneButton
+                    text="TRACK ORDER"
+                    onClick={() => {
+                      window.open(
+                        "https://app.shipyaari.com/shipyaari-tracking",
+                        "_blank"
+                      );
+                    }}
+                    variant="tertiary"
+                    className="!p-4 "
+                  />
                 </div>
 
                 <div className="flex flex-col mt-12 lg:mt-2 mx-4 md:mx-[85px] gap-y-3">
@@ -563,8 +576,13 @@ const Index = () => {
                     )}
                   </div> */}
 
-                  <CustomButton
+                  {/* <CustomButton
                     onClick={(e: any) => signUpOnClick(sellerData)}
+                    text="SIGN UP"
+                  /> */}
+                  <OneButton
+                    onClick={(e: any) => signUpOnClick(sellerData)}
+                    variant="primary"
                     text="SIGN UP"
                   />
 

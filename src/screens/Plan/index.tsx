@@ -20,6 +20,7 @@ import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { Spinner } from "../../components/Spinner";
 import ToastCustom from "../toastCutom";
+import OneButton from "../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -55,19 +56,34 @@ const Index = (props: ITypeProps) => {
               plan?
             </p>
             <div className="flex  items-center gap-x-4 mt-10">
-              <ServiceButton
+              <OneButton
+                text="Yes"
+                className=" px-4 py-2"
+                onClick={() => {
+                  assignPlan(onSelectPlan);
+                  setIsModalOpen(false);
+                }}
+                variant="secondary"
+              />
+              {/* <ServiceButton
                 text="Yes"
                 className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
                 onClick={() => {
                   assignPlan(onSelectPlan);
                   setIsModalOpen(false);
                 }}
+              /> */}
+              <OneButton
+                text="No"
+                className=" px-4 py-2"
+                onClick={() => setIsModalOpen(false)}
+                variant="primary"
               />
-              <ServiceButton
+              {/* <ServiceButton
                 text="No"
                 className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
                 onClick={() => setIsModalOpen(false)}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -92,6 +108,10 @@ const Index = (props: ITypeProps) => {
     }
   };
 
+  const sortByPrice = (a: any, b: any) => {
+    return a.price - b.price;
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -104,11 +124,12 @@ const Index = (props: ITypeProps) => {
         if (response?.success) {
           setLoading(false);
           let tempPlan = response?.data;
-          const selectedPlans = tempPlan.filter((plan: any) => plan.isSelected);
-          const unselectedPlans = tempPlan.filter(
-            (plan: any) => !plan.isSelected
-          );
-          const reorderedPlans = selectedPlans.concat(unselectedPlans);
+          tempPlan.sort(sortByPrice);
+          // const selectedPlans = tempPlan.filter((plan: any) => plan.isSelected);
+          // const unselectedPlans = tempPlan.filter(
+          //   (plan: any) => !plan.isSelected
+          // );
+          // const reorderedPlans = selectedPlans.concat(unselectedPlans);
           // tempPlan.push({
           //   planId: "123445",
           //   planName: "Enterprise",
@@ -127,7 +148,7 @@ const Index = (props: ITypeProps) => {
           //   variantId: "5ac217ed-d307-4d4d-a158-6efd2943d507",
           //   isSelected: false,
           // });
-          setAllPlans(reorderedPlans);
+          setAllPlans(tempPlan);
         }
       } catch (error) {
         setLoading(false);

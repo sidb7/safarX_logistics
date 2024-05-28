@@ -16,6 +16,7 @@ import {
   isRequired,
 } from "../../../../utils/validationRules";
 import BoxDetails from "../../Product/BoxDetails";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ISellerBoxDetailsProps {
   editMode?: boolean;
@@ -315,20 +316,37 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
         className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
         style={{ width: "-webkit-fill-available" }}
       >
-        <ServiceButton
+        <OneButton
+          text={"CANCEL"}
+          onClick={() => {
+            setSellerBoxDetailsModal(false);
+          }}
+          className=" !py-2 !px-4"
+          data-cy="cancel-button"
+          variant="secondary"
+        />
+        {/* <ServiceButton
           text={"CANCEL"}
           onClick={() => {
             setSellerBoxDetailsModal(false);
           }}
           className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4"
           data-cy="cancel-button"
+        /> */}
+
+        <OneButton
+          text={`${isEditMode ? "UPDATE" : "SAVE"}`}
+          onClick={() => createAndUpdateSellerBoxDetails()}
+          className=" !py-2 !px-4"
+          data-cy={`${isEditMode ? "update-button" : "save-button"}`}
+          variant="primary"
         />
-        <ServiceButton
+        {/* <ServiceButton
           text={`${isEditMode ? "UPDATE" : "SAVE"}`}
           onClick={() => createAndUpdateSellerBoxDetails()}
           className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2  !px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none"
           data-cy={`${isEditMode ? "update-button" : "save-button"}`}
-        />
+        /> */}
       </div>
     </>
   );

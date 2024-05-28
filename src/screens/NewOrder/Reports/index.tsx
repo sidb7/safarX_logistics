@@ -12,6 +12,7 @@ import { toast } from "react-hot-toast";
 import { convertXMLToXLSX } from "../../../utils/helper";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import { Spinner } from "../../../components/Spinner";
+import OneButton from "../../../components/Button/OneButton";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
@@ -110,17 +111,19 @@ const Reports = () => {
             <Breadcrum label="Reports" />
           </div>
           <div className="p-4 flex flex-wrap gap-2">
-            <div className=" w-[350px] md:w-[250px]">
-              <CustomDropDown
-                heading="Select Report Type"
-                value={reportValue}
-                options={reportMenu}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setReportValue(event.target.value);
-                }}
-              />
+            <div className=" w-[350px] md:w-[250px]  ">
+              <div className=" h-14">
+                <CustomDropDown
+                  heading="Select Report Type"
+                  value={reportValue}
+                  options={reportMenu}
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    setReportValue(event.target.value);
+                  }}
+                />
+              </div>
             </div>
-            <div className="w-[350px]">
+            <div className="w-[350px] h-6">
               <DatePicker
                 selectsRange={true}
                 startDate={startDate}
@@ -131,7 +134,7 @@ const Reports = () => {
                 filterDate={isDateDisabled}
                 isClearable={true}
                 placeholderText="Select From & To Date"
-                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-6"
+                className="cursor-pointer border !w-[350px] datepickerCss border-[#AFAFAF] p-6 !h-12"
                 dateFormat="dd/MM/yyyy"
               />
             </div>
@@ -140,10 +143,16 @@ const Reports = () => {
                 <Spinner />
               </div>
             ) : (
-              <ServiceButton
-                text={"FETCH REPORT"}
-                className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
+              // <ServiceButton
+              //   text={"FETCH REPORT"}
+              //   className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
+              //   onClick={() => fetchReport()}
+              // />
+              <OneButton
                 onClick={() => fetchReport()}
+                text="FETCH REPORT"
+                className=" px-3 py-6  w-[200px]"
+                variant="primary"
               />
             )}
           </div>

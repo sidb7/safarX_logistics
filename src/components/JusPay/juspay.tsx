@@ -91,7 +91,7 @@ const JusPay = (props: IProps) => {
             //     : "!bg-opacity-50"
             // } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
           >
-            <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px]">
+            <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
               Pay Now
             </p>
           </button>

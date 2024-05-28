@@ -67,7 +67,7 @@ const DeliveryLocation = () => {
   const shipyaari_id = params?.shipyaari_id;
   let orderSource = params?.source || "";
   let orderId = params?.orderId || "";
-
+  const [transitType, setTransitType] = useState("");
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     deliveryAddress: {
@@ -135,6 +135,7 @@ const DeliveryLocation = () => {
     tempOrderId: shipyaari_id || "",
     source: orderSource || "",
   });
+
   const userType = useSelector((state: any) => state.user.isReturningUser);
 
   const [returningUserDeliveryData, setReturningUserDeliveryData] =
@@ -177,7 +178,8 @@ const DeliveryLocation = () => {
         } else if (
           obj[key] === "" ||
           obj[key] === null ||
-          obj[key] === undefined
+          obj[key] === undefined ||
+          (key === "name" && obj[key].length < 3)
         ) {
           return true;
         }
@@ -265,91 +267,88 @@ const DeliveryLocation = () => {
 
   useEffect(() => {
     (async () => {
-      {
-        const sanitizeField = (fieldValue: number) =>
-          fieldValue === 0 ? "" : fieldValue;
+      const sanitizeField = (fieldValue: number) =>
+        fieldValue === 0 ? "" : fieldValue;
 
-        const payload = { tempOrderId: +shipyaari_id, source: orderSource };
+      const payload = { tempOrderId: +shipyaari_id, source: orderSource };
 
-        const { data } = await POST(GET_LATEST_ORDER, payload);
-        if (data.success && data?.data.length > 0) {
-          const orderData = data?.data[0];
-          if (orderData?.deliveryAddress && orderData?.billingAddress) {
-            setDeliveryAddress({
-              deliveryAddress: {
-                fullAddress: orderData?.deliveryAddress?.fullAddress,
-                flatNo: orderData?.deliveryAddress?.flatNo,
-                locality: orderData?.deliveryAddress?.locality,
-                sector: orderData?.deliveryAddress?.sector,
-                landmark: orderData?.deliveryAddress?.landmark,
-                pincode: orderData?.deliveryAddress?.pincode || "",
-                city: orderData?.deliveryAddress?.city,
-                state: orderData?.deliveryAddress?.state,
-                country: orderData?.deliveryAddress?.country,
-                addressType: orderData?.deliveryAddress?.addressType,
-                workingDays: {
-                  monday: orderData?.deliveryAddress?.workingDays?.monday,
-                  tuesday: orderData?.deliveryAddress?.workingDays?.tuesday,
-                  wednesday: orderData?.deliveryAddress?.workingDays?.wednesday,
-                  thursday: orderData?.deliveryAddress?.workingDays?.thursday,
-                  friday: orderData?.deliveryAddress?.workingDays?.friday,
-                  saturday: orderData?.deliveryAddress?.workingDays?.saturday,
-                  sunday: orderData?.deliveryAddress?.workingDays?.sunday,
-                },
-                workingHours:
-                  orderData?.deliveryAddress?.workingHours || "09:00",
-                contact: {
-                  name: orderData?.deliveryAddress?.contact?.name,
-                  mobileNo: sanitizeField(
-                    orderData?.deliveryAddress?.contact?.mobileNo
-                  ),
-                  alternateMobileNo: sanitizeField(
-                    orderData?.deliveryAddress?.contact?.alternateMobileNo
-                  ),
-                  emailId: orderData?.deliveryAddress?.contact?.emailId,
-                  type: orderData?.deliveryAddress?.contact?.type,
-                },
+      const { data } = await POST(GET_LATEST_ORDER, payload);
+      if (data.success && data?.data.length > 0) {
+        const orderData = data?.data[0];
+        setTransitType(orderData?.transit || "");
+        if (orderData?.deliveryAddress && orderData?.billingAddress) {
+          setDeliveryAddress({
+            deliveryAddress: {
+              fullAddress: orderData?.deliveryAddress?.fullAddress,
+              flatNo: orderData?.deliveryAddress?.flatNo,
+              locality: orderData?.deliveryAddress?.locality,
+              sector: orderData?.deliveryAddress?.sector,
+              landmark: orderData?.deliveryAddress?.landmark,
+              pincode: orderData?.deliveryAddress?.pincode || "",
+              city: orderData?.deliveryAddress?.city,
+              state: orderData?.deliveryAddress?.state,
+              country: orderData?.deliveryAddress?.country,
+              addressType: orderData?.deliveryAddress?.addressType,
+              workingDays: {
+                monday: orderData?.deliveryAddress?.workingDays?.monday,
+                tuesday: orderData?.deliveryAddress?.workingDays?.tuesday,
+                wednesday: orderData?.deliveryAddress?.workingDays?.wednesday,
+                thursday: orderData?.deliveryAddress?.workingDays?.thursday,
+                friday: orderData?.deliveryAddress?.workingDays?.friday,
+                saturday: orderData?.deliveryAddress?.workingDays?.saturday,
+                sunday: orderData?.deliveryAddress?.workingDays?.sunday,
               },
-              billingAddress: {
-                fullAddress: orderData?.billingAddress?.fullAddress,
-                flatNo: orderData?.billingAddress?.flatNo,
-                locality: orderData?.billingAddress?.locality,
-                sector: orderData?.billingAddress?.sector,
-                landmark: orderData?.billingAddress?.landmark,
-                pincode: orderData?.billingAddress?.pincode,
-                city: orderData?.billingAddress?.city,
-                state: orderData?.billingAddress?.state,
-                country: orderData?.billingAddress?.country,
-                addressType: orderData?.billingAddress?.addressType,
-                workingDays: {
-                  monday: orderData?.billingAddress?.workingDays?.monday,
-                  tuesday: orderData?.billingAddress?.workingDays?.tuesday,
-                  wednesday: orderData?.billingAddress?.workingDays?.wednesday,
-                  thursday: orderData?.billingAddress?.workingDays?.thursday,
-                  friday: orderData?.billingAddress?.workingDays?.friday,
-                  saturday: orderData?.billingAddress?.workingDays?.saturday,
-                  sunday: orderData?.billingAddress?.workingDays?.sunday,
-                },
-                workingHours:
-                  orderData?.billingAddress?.workingHours || "09:00",
-                contact: {
-                  name: orderData?.billingAddress?.contact?.name,
-                  mobileNo: sanitizeField(
-                    orderData?.billingAddress?.contact?.mobileNo
-                  ),
-                  alternateMobileNo: sanitizeField(
-                    orderData?.billingAddress?.contact?.alternateMobileNo
-                  ),
-                  emailId: orderData?.billingAddress?.contact?.emailId,
-                  type: orderData?.billingAddress?.contact?.type,
-                },
+              workingHours: orderData?.deliveryAddress?.workingHours || "09:00",
+              contact: {
+                name: orderData?.deliveryAddress?.contact?.name,
+                mobileNo: sanitizeField(
+                  orderData?.deliveryAddress?.contact?.mobileNo
+                ),
+                alternateMobileNo: sanitizeField(
+                  orderData?.deliveryAddress?.contact?.alternateMobileNo
+                ),
+                emailId: orderData?.deliveryAddress?.contact?.emailId,
+                type: orderData?.deliveryAddress?.contact?.type,
               },
-              orderType: orderData?.orderType,
-              gstNumber: orderData?.deliveryAddress?.gstNumber,
-              tempOrderId: orderData?.tempOrderId || "",
-              source: orderData?.source || "",
-            });
-          }
+            },
+            billingAddress: {
+              fullAddress: orderData?.billingAddress?.fullAddress,
+              flatNo: orderData?.billingAddress?.flatNo,
+              locality: orderData?.billingAddress?.locality,
+              sector: orderData?.billingAddress?.sector,
+              landmark: orderData?.billingAddress?.landmark,
+              pincode: orderData?.billingAddress?.pincode,
+              city: orderData?.billingAddress?.city,
+              state: orderData?.billingAddress?.state,
+              country: orderData?.billingAddress?.country,
+              addressType: orderData?.billingAddress?.addressType,
+              workingDays: {
+                monday: orderData?.billingAddress?.workingDays?.monday,
+                tuesday: orderData?.billingAddress?.workingDays?.tuesday,
+                wednesday: orderData?.billingAddress?.workingDays?.wednesday,
+                thursday: orderData?.billingAddress?.workingDays?.thursday,
+                friday: orderData?.billingAddress?.workingDays?.friday,
+                saturday: orderData?.billingAddress?.workingDays?.saturday,
+                sunday: orderData?.billingAddress?.workingDays?.sunday,
+              },
+              workingHours: orderData?.billingAddress?.workingHours || "09:00",
+              contact: {
+                name: orderData?.billingAddress?.contact?.name,
+                mobileNo: sanitizeField(
+                  orderData?.billingAddress?.contact?.mobileNo
+                ),
+                alternateMobileNo: sanitizeField(
+                  orderData?.billingAddress?.contact?.alternateMobileNo
+                ),
+                emailId: orderData?.billingAddress?.contact?.emailId,
+                type: orderData?.billingAddress?.contact?.type,
+              },
+            },
+            orderType: orderData?.orderType,
+            gstNumber: orderData?.deliveryAddress?.gstNumber,
+            tempOrderId: orderData?.tempOrderId || "",
+            source: orderData?.source || "",
+          });
         }
       }
     })();
@@ -401,6 +400,7 @@ const DeliveryLocation = () => {
 
       <RecipientType
         data={{ deliveryAddress, setDeliveryAddress, inputError }}
+        transitType={transitType}
       />
 
       {/* DELIVERY ADDRESS */}

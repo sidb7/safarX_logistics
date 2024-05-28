@@ -262,6 +262,8 @@ const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct
 const DELETE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/deleteComboProduct`;
 //get combo
 const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`;
+const GET_COMBO_PRODUCT_SHEET = `${SELLER_BASE_URL}/comboProduct/generateExcelSheet`;
+const UPLOAD_BULK_COMBOS = `${SELLER_BASE_URL}/comboProduct/uploadComboProduct`;
 
 //Landmark endpoint
 const LANDMARK_API = `${LANDMARK_URL}/api/v1/landmark/landmark`;
@@ -578,4 +580,6 @@ export {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
+  GET_COMBO_PRODUCT_SHEET,
+  UPLOAD_BULK_COMBOS,
 };
