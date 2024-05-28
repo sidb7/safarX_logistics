@@ -150,7 +150,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                 })}
               </div>
             </div>
-            <div className="mt-6 flex gap-x-4">
+            <div className="mt-6 flex gap-x-2">
               {/* <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
@@ -162,18 +162,20 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                   })
                 }
               /> */}
-              <OneButton
-                variant="secondary"
-                onClick={() =>
-                  navigate("/onboarding/questionnaire/question1", {
-                    state: {
-                      questionsData,
-                    },
-                  })
-                }
-                text="BACK"
-                className=" flex-1"
-              />
+              <div className=" w-full">
+                <OneButton
+                  variant="secondary"
+                  onClick={() =>
+                    navigate("/onboarding/questionnaire/question1", {
+                      state: {
+                        questionsData,
+                      },
+                    })
+                  }
+                  text="BACK"
+                  className=" flex-1"
+                />
+              </div>
               {/* <CustomButton
                 text="NEXT"
                 disabled={!nextBtnStatus}
@@ -184,13 +186,15 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
                 }`}
               /> */}
-              <OneButton
-                variant="primary"
-                onClick={() => nextHandler()}
-                text="NEXT"
-                disabled={!nextBtnStatus}
-                className=" flex-1"
-              />
+              <div className=" w-full">
+                <OneButton
+                  variant="primary"
+                  onClick={() => nextHandler()}
+                  text="NEXT"
+                  disabled={!nextBtnStatus}
+                  className=" flex-1"
+                />
+              </div>
             </div>
             <div className="mt-3"></div>
           </div>

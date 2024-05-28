@@ -111,17 +111,19 @@ const Reports = () => {
             <Breadcrum label="Reports" />
           </div>
           <div className="p-4 flex flex-wrap gap-2">
-            <div className=" w-[350px] md:w-[250px] h-12 ">
-              <CustomDropDown
-                heading="Select Report Type"
-                value={reportValue}
-                options={reportMenu}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setReportValue(event.target.value);
-                }}
-              />
+            <div className=" w-[350px] md:w-[250px]  ">
+              <div className=" h-14">
+                <CustomDropDown
+                  heading="Select Report Type"
+                  value={reportValue}
+                  options={reportMenu}
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    setReportValue(event.target.value);
+                  }}
+                />
+              </div>
             </div>
-            <div className="w-[350px] h-12">
+            <div className="w-[350px] h-6">
               <DatePicker
                 selectsRange={true}
                 startDate={startDate}
@@ -149,7 +151,7 @@ const Reports = () => {
               <OneButton
                 onClick={() => fetchReport()}
                 text="FETCH REPORT"
-                className="  p-4  w-[200px]"
+                className=" px-3 py-6  w-[200px]"
                 variant="primary"
               />
             )}

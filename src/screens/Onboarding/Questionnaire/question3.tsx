@@ -157,7 +157,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                 })}
               </div>
             </div>
-            <div className="mt-6 flex gap-x-4">
+            <div className="mt-6 flex gap-x-2">
               {/* <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
@@ -167,15 +167,17 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                   })
                 }
               /> */}
-              <OneButton
-                variant="secondary"
-                text="BACK"
-                onClick={() =>
-                  navigate("/onboarding/questionnaire/question2", {
-                    state: { questionsData },
-                  })
-                }
-              />
+              <div className=" w-full">
+                <OneButton
+                  variant="secondary"
+                  text="BACK"
+                  onClick={() =>
+                    navigate("/onboarding/questionnaire/question2", {
+                      state: { questionsData },
+                    })
+                  }
+                />
+              </div>
               {/* <CustomButton
                 text="NEXT"
                 disabled={!nextBtnStatus}
@@ -186,12 +188,14 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
                 }`}
               /> */}
-              <OneButton
-                variant="primary"
-                text="NEXT"
-                onClick={() => nextHandler()}
-                disabled={!nextBtnStatus}
-              />
+              <div className=" w-full">
+                <OneButton
+                  variant="primary"
+                  text="NEXT"
+                  onClick={() => nextHandler()}
+                  disabled={!nextBtnStatus}
+                />
+              </div>
             </div>
           </div>
         </div>
