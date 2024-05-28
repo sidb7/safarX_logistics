@@ -15,6 +15,7 @@ import {
   LARGE_LOGO,
 } from "../../../utils/ApiUrls";
 import TickLogo from "../../../assets/tick.svg";
+import OneButton from "../../../components/Button/OneButton";
 
 export const WelcomeKyc: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -162,19 +163,29 @@ export const WelcomeKyc: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6">
-              <CustomButton
+              {/* <CustomButton
                 text="PROCEED FOR KYC"
                 onClick={() => navigate("/onboarding/kyc-type")}
-              />
+              /> */}
             </div>
-
-            <div
+            <OneButton
+              text="PROCEED FOR KYC"
+              onClick={() => navigate("/onboarding/kyc-type")}
+              variant="primary"
+            />
+            <OneButton
+              text="SKIP FOR NOW"
+              variant="tertiary"
+              onClick={() => handleSkipForNow()}
+              className="mt-4"
+            />
+            {/* <div
               className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4 cursor-pointer"
               // onClick={() => navigate("/dashboard/overview")}
               onClick={() => handleSkipForNow()}
             >
               SKIP FOR NOW
-            </div>
+            </div> */}
             {!isMdScreen && note()}
           </div>
         </div>

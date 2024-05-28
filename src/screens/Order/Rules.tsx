@@ -25,6 +25,7 @@ import PaymentMode from "./ruleEngine/paymentMode";
 import WeightRange from "./ruleEngine/weightRange";
 import ApplicableOrders from "./ruleEngine/applicableOrders";
 import { v4 as uuidv4 } from "uuid";
+import OneButton from "../../components/Button/OneButton";
 
 let ruleName: any = ["applicable_orders"];
 
@@ -383,13 +384,23 @@ const Rules = () => {
 
   const renderHeaderComponent = () => {
     return (
-      <CustomButton
-        icon={addIcon}
-        showIcon={true}
-        text={"ADD RULE"}
-        className="!p-3 "
-        onClick={() => setModalOpen(true)}
-      />
+      <>
+        {/* <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"ADD RULE"}
+          className="!p-3 "
+          onClick={() => setModalOpen(true)}
+        /> */}
+
+        <OneButton
+          text="ADD RULE"
+          variant="primary"
+          showIcon
+          icon={addIcon}
+          onClick={() => setModalOpen(true)}
+        />
+      </>
     );
   };
 
@@ -607,24 +618,34 @@ const Rules = () => {
           </div>
           <div className="flex mx-5 mt-[40px] gap-2">
             <div>
-              <CustomButton
+              {/* <CustomButton
                 text={"CONFIRM"}
                 className="!p-3 !w-[97px] !h-[36px] bg-transparent border-2 border-[#A4A4A4] font-Open text-[14px] font-semibold !text-[#1C1C1C]"
+                onClick={() => confirmHandler(ruleTitleValue)}
+              /> */}
+              <OneButton
+                text="CONFIRM"
+                variant="secondary"
                 onClick={() => confirmHandler(ruleTitleValue)}
               />
             </div>
             <div>
-              <CustomButton
+              {/* <CustomButton
                 text={"CANCEL"}
                 className="!p-3 !w-[97px] !h-[36px] font-Open text-[14px] font-semibold"
                 onClick={() => setModalOpen(false)}
+              /> */}
+              <OneButton
+                text="CANCEL"
+                onClick={() => setModalOpen(false)}
+                variant="primary"
               />
             </div>
           </div>
         </div>
       </CustomCenterModal>
 
-      <footer className="w-full fixed bottom-0">
+      {/* <footer className="w-full fixed bottom-0">
         <div
           className="flex items-center justify-end shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]"
           onClick={() => submitHandler()}
@@ -636,7 +657,12 @@ const Rules = () => {
             </button>
           </div>
         </div>
-      </footer>
+      </footer> */}
+      <BottomLayout
+        callApi={submitHandler}
+        Button2Name="CONTINUE"
+        customButtonText="CONTINUE"
+      />
     </>
   );
 };

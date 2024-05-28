@@ -18,6 +18,7 @@ import PaginationComponent from "../../../components/Pagination";
 import { Spinner } from "../../../components/Spinner";
 import { SearchBox } from "../../../components/SearchBox";
 import AddButton from "../../../components/Button/addButton";
+import OneButton from "../../../components/Button/OneButton";
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
   setIsSearchProductRightModalOpen: any;
@@ -468,20 +469,37 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
           style={{ width: "-webkit-fill-available" }}
           data-cy="modal-footer"
         >
-          <ServiceButton
+          <OneButton
+            text="CANCEL"
+            onClick={() => {
+              setIsSearchProductRightModalOpen(false);
+            }}
+            className="!py-2 !px-4 "
+            data-cy="cancel-button"
+            variant="secondary"
+          />
+          {/* <ServiceButton
             text={"CANCEL"}
             onClick={() => {
               setIsSearchProductRightModalOpen(false);
             }}
             className="bg-white  text-[#1C1C1C] h-[36px] !py-2 !px-4 "
             data-cy="cancel-button"
+          /> */}
+
+          <OneButton
+            text="SAVE"
+            onClick={() => productsAndComboDetailsTobeSend()}
+            className="!py-2 !px-4 "
+            data-cy="save-button"
+            variant="primary"
           />
-          <ServiceButton
+          {/* <ServiceButton
             text={"SAVE"}
             onClick={() => productsAndComboDetailsTobeSend()}
             className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
             data-cy="save-button"
-          />
+          /> */}
         </div>
       </div>
     );
