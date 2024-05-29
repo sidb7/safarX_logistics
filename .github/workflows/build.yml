@@ -24,7 +24,7 @@ jobs:
           npm install
 
       - name: Jest Coverage
-        run: npm test -- --coverage
+        run: npm run jest
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
