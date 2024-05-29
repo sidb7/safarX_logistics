@@ -37,3 +37,43 @@
 // }
 
 import "cypress-wait-until";
+
+// cypress/support/commands.js
+
+// const { MongoClient } = require("mongodb");
+
+// Cypress.Commands.add("connectToDatabase", (collectionName, query) => {
+//   const url =
+//     "mongodb+srv://shipyaari_pheonix:*****@shipyaari-pheonix-dev.7iwh5sl.mongodb.net/shipyaari_dev?retryWrites=true&w=majority"; // replace with your MongoDB URL
+//   const dbName = "sy-atlas-dev"; // replace with your database name
+
+//   return MongoClient.connect(url, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   }).then((client) => {
+//     const db = client.db(dbName);
+//     const collection = db.collection(collectionName);
+
+//     return collection
+//       .find(query)
+//       .toArray()
+//       .then((docs) => {
+//         client.close();
+//         return docs;
+//       });
+//   });
+
+// cypress/support/commands.js
+//});
+// cypress/support/commands.js
+const { setValue, getValue } = require("./redis");
+
+Cypress.Commands.add("setRedisValue", (key, value) => {
+  cy.wrap(null).then(() => setValue(key, value));
+});
+
+Cypress.Commands.add("getRedisValue", (key) => {
+  cy.wrap(null).then(() => getValue(key));
+});
+
+import "cypress-file-upload";
