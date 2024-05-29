@@ -16,6 +16,7 @@ import {
   greaterThenZero,
   isRequired,
 } from "../../../../utils/validationRules";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface IProductFilledProps {
   editAddressModal: any;
@@ -375,17 +376,31 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
             className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px] bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
             style={{ width: "-webkit-fill-available" }}
           >
-            <ServiceButton
+            {/* <ServiceButton
               text={"CANCEL"}
               onClick={() => {
                 setEditAddressModal(false);
               }}
               className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+            /> */}
+            <OneButton
+              text="CANCEL"
+              onClick={() => {
+                setEditAddressModal(false);
+              }}
+              variant="secondary"
+              className=" lg:!py-2 lg:!px-4 "
             />
-            <ServiceButton
+            {/* <ServiceButton
               text={"UPDATE"}
               onClick={() => updateProductDetails()}
               className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none"
+            /> */}
+            <OneButton
+              text="UPDATE"
+              onClick={() => updateProductDetails()}
+              variant="primary"
+              className=" lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none"
             />
           </div>
         </div>

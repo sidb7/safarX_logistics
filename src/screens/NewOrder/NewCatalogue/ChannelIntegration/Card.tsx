@@ -4,6 +4,7 @@ import {
   capitalizeFirstLetter,
 } from "../../../../utils/utility";
 import OrangeAlertIcon from "../../../../assets/info-circle-outline.svg";
+import OneButton from "../../../../components/Button/OneButton";
 
 const Card = (props: any) => {
   const {
@@ -92,7 +93,7 @@ const Card = (props: any) => {
             </p>
           )}
         </div>
-        <div
+        {/* <div
           onClick={(e: any) => !channel?.expiredToken && handleIntegration(e)}
           className={` ${
             channel.integrated ? " bg-black  " : "hover:bg-black cursor-pointer"
@@ -105,6 +106,16 @@ const Card = (props: any) => {
           >
             {channel.integrated ? "Integrated" : "Integrate"}
           </p>
+        </div> */}
+        <div className="w-[70%]">
+          <OneButton
+            text={channel.integrated ? "Integrated" : "Integrate"}
+            onClick={(e) => !channel?.expiredToken && handleIntegration(e)}
+            className={` ${channel.integrated ? "bg-black" : ""}`}
+            variant={channel.integrated ? "primary" : "secondary"}
+            disabled={channel?.expiredToken}
+            textTransform="uppercase"
+          />
         </div>
       </div>
 

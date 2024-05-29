@@ -17,6 +17,7 @@ import {
   COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
+import OneButton from "../../../components/Button/OneButton";
 
 const modalTitle = () => {
   return (
@@ -110,17 +111,27 @@ const Cashondelivery = () => {
               </div>
             </div>
             <div className="mx-5 mt-[6rem]">
-              <CustomButton
+              {/* <CustomButton
                 text={"YES"}
                 onClick={() => navigate("/onboarding/wallet-details")}
+              /> */}
+              <OneButton
+                text="YES"
+                onClick={() => navigate("/onboarding/wallet-details")}
+                variant="primary"
               />
             </div>
             <div className="mx-5 mt-[4rem] md:mt-6">
-              <CustomButton
+              {/* <CustomButton
                 text={"Skip"}
                 // onClick={() => navigate("/dashboard/overview")}
                 onClick={() => handleSkipForNow()}
                 className="!bg-white !text-black border-solid border-2 border-[#A4A4A4]"
+              /> */}
+              <OneButton
+                text="Skip"
+                onClick={() => handleSkipForNow()}
+                variant="secondary"
               />
             </div>
           </div>

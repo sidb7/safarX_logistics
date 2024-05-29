@@ -21,9 +21,7 @@ describe("Login and Order Pickup Tests", () => {
     cy.title().should("include", "Shipyaari");
 
     // Enter login credentials
-    cy.get("#email")
-      .should("be.visible")
-      .type("rachana.muneshwar@shipyaari.com");
+    cy.get("#email").should("be.visible").type("rachanam559@gmail.com");
     cy.get("#password").type("Rachana@123");
 
     // Click on the Log In button and wait for the login request to complete
@@ -78,6 +76,7 @@ describe("Login and Order Pickup Tests", () => {
         .xpath("//*[text()='Name of the contact person']//parent::div")
         .type("delivery contact person name")
     );
+
     cy.xpath("//*[text()='Mobile Number']//parent::div").type("6020553393");
     cy.xpath("//p[text()='Billing Details Is Same As Delivery']")
       .should("be.visible")
@@ -96,12 +95,14 @@ describe("Login and Order Pickup Tests", () => {
     cy.xpath("//label[text()='Product name']//preceding::input").type(
       "crop top"
     );
+    let twoDigitNo = Math.floor(Math.random() * 9) + 1;
+    cy.log("mobileNumber" + `${twoDigitNo}`);
     cy.get('input[name="category"]').click();
     cy.xpath("//*[@name='category']").type("Media").type("{enter}").click();
-    cy.get('input[name="unitPrice"]').type(100);
-    cy.get('input[name="length"]').type(14);
-    cy.get('input[name="breadth"]').type(10);
-    cy.get('input[name="height"]').type(12);
+    cy.get('input[name="unitPrice"]').type(twoDigitNo);
+    cy.get('input[name="length"]').type(twoDigitNo);
+    cy.get('input[name="breadth"]').type(twoDigitNo);
+    cy.get('input[name="height"]').type(twoDigitNo);
     cy.get('input[name="deadWeight"]').type(0.5);
     cy.get('input[name="sku"]').type("TEST01");
 
@@ -112,12 +113,12 @@ describe("Login and Order Pickup Tests", () => {
 
     cy.waitUntil(() => cy.xpath("//*[text()='Add Box To Catalogue']")).click();
     cy.wait(1000);
-    cy.waitUntil(() => cy.get('input[name="length"]')).type(14);
-    cy.get('input[name="breadth"]').type(10);
-    cy.get('input[name="height"]').type(12);
+    cy.waitUntil(() => cy.get('input[name="length"]')).type(twoDigitNo);
+    cy.get('input[name="breadth"]').type(twoDigitNo);
+    cy.get('input[name="height"]').type(twoDigitNo);
     cy.get('input[name="name"]').type("Boxname");
     cy.get('input[name="color"]').type("color");
-    cy.get('input[name="price"]').type(50);
+    cy.get('input[name="price"]').type(twoDigitNo);
     cy.get('input[name="deadWeight"]').type(0.5);
     cy.contains("p", "Save").click();
     cy.xpath("//*[text()='Seller Box Created SuccessFully']").should(
@@ -148,7 +149,7 @@ describe("Login and Order Pickup Tests", () => {
     cy.waitUntil(() =>
       cy.xpath("//*[contains(@class, 'capitalize') and text()='Next']")
     ).click();
-
+    cy.wait(2000);
     cy.waitUntil(() => cy.contains("p", "Service")).should("be.visible");
 
     cy.waitUntil(() => cy.contains("p", "Cheapest").click());
@@ -158,7 +159,7 @@ describe("Login and Order Pickup Tests", () => {
     cy.contains("p", "Place Order").click();
 
     // Cancel the shipment
-    cy.wait(5000);
+    cy.wait(6000);
     cy.waitUntil(() =>
       cy.xpath("(//*[@alt='moreIcon'])[1]/../parent::div")
     ).click();
@@ -175,10 +176,8 @@ describe("Login and Order Pickup Tests", () => {
   });
 
   after(() => {
-    // Perform any cleanup or logout if necessary
-    cy.xpath(
-      "//*[@class='flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full bg-white !w-6 !h-6 !p-0 lg:w-fit']"
-    ).click();
+    //   Perform any cleanup or logout if necessary
+    cy.xpath("(//*[@id='profileIcon']//button)[2]").click();
     cy.xpath("//*[text()='Sign out']").click();
     cy.xpath("//*[text()='Logged Out Successfully.']").should("be.visible");
   });

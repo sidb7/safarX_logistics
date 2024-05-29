@@ -285,7 +285,7 @@ const WalletPayment = () => {
                 </p>
               </div>
 
-              <div className="flex mt-1 mb-6 gap-x-[1rem] md:mb-0 ml-4 mr-5">
+              <div className="flex mt-1 mb-6 gap-x-[1rem] md:mb-0 ml-4 mr-5 ">
                 <JusPay
                   isDisabled={isDisabled}
                   amount={walletValue}
