@@ -204,8 +204,10 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex justify-center whitespace-nowrap ">
-            {isValidJSON(info?.row?.original?.remark)
+          <div className="flex justify-center whitespace-nowrap">
+            {info?.row?.original?.remark?.length === 0
+              ? "---"
+              : isValidJSON(info?.row?.original?.remark)
               ? JSON.parse(info?.row?.original?.remark)?.tempOrderId !==
                 undefined
                 ? JSON.parse(info?.row?.original?.remark)?.tempOrderId
@@ -253,7 +255,9 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap justify-center ">
-            {isValidJSON(info?.row?.original?.remark)
+            {info?.row?.original?.remark?.length === 0
+              ? "---"
+              : isValidJSON(info?.row?.original?.remark)
               ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]?.tracking
                   ?.awb !== undefined
                 ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
@@ -393,7 +397,9 @@ export const PassbookColumns = (setSortOrder: any) => {
                   info?.row?.original?.balance
                 },
                 TrackingNo:${
-                  isValidJSON(info?.row?.original?.remark)
+                  info?.row?.original?.remark?.length === 0
+                    ? "N/A"
+                    : isValidJSON(info?.row?.original?.remark)
                     ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
                         ?.tracking?.awb !== undefined
                       ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
@@ -402,7 +408,9 @@ export const PassbookColumns = (setSortOrder: any) => {
                     : "---"
                 },
                 ShipyaariId:${
-                  isValidJSON(info?.row?.original?.remark)
+                  info?.row?.original?.remark?.length === 0
+                    ? "N/A"
+                    : isValidJSON(info?.row?.original?.remark)
                     ? JSON.parse(info?.row?.original?.remark)?.tempOrderId !==
                       undefined
                       ? JSON.parse(info?.row?.original?.remark)?.tempOrderId
