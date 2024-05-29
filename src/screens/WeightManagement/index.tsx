@@ -20,6 +20,7 @@ import { GET_WRIGHT_DISPUTE } from "../../utils/ApiUrls";
 import Pagination from "../../components/Pagination";
 import { SearchBox } from "../../components/SearchBox";
 import DatePicker from "react-datepicker";
+import OneButton from "../../components/Button/OneButton";
 
 const WeightFreeze: React.FunctionComponent = () => {
   const roles = useSelector((state: any) => state?.roles);
@@ -177,10 +178,20 @@ const WeightFreeze: React.FunctionComponent = () => {
           </div>
         </div>
 
-        <CustomButton
+        {/* <CustomButton
           icon={addIcon}
           showIcon={true}
           text={"RAISE TICKET"}
+          className="!p-3"
+          onClick={() => {
+            setShowRaiseTicket(true);
+          }}
+        /> */}
+        <OneButton
+          variant="primary"
+          icon={addIcon}
+          showIcon={true}
+          text="RAISE TICKET"
           className="!p-3"
           onClick={() => {
             setShowRaiseTicket(true);

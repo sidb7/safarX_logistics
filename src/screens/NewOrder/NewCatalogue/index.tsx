@@ -28,6 +28,7 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import BottomModal from "../../../components/CustomModal/customBottomModal";
 import { Spinner } from "../../../components/Spinner";
 import { toast } from "react-hot-toast";
+import OneButton from "../../../components/Button/OneButton";
 
 const Catalogue = () => {
   const navigate = useNavigate();
@@ -210,7 +211,8 @@ const Catalogue = () => {
     if (!isMobileView || (isMobileView && isMobileChannelPage)) {
       if (tabName === "Address Book") {
         return (
-          <CustomButton
+          <>
+            {/* <CustomButton
             icon={addIcon}
             showIcon={true}
             text={"ADD ADDRESS"}
@@ -220,13 +222,38 @@ const Catalogue = () => {
                 state: { activeTab: addressTab },
               })
             }
-          />
+          /> */}
+            <OneButton
+              text="ADD ADDRESS"
+              icon={addIcon}
+              showIcon
+              className="!p-3"
+              onClick={() =>
+                navigate("/catalogues/catalogue/add-address", {
+                  state: { activeTab: addressTab },
+                })
+              }
+              variant="primary"
+            />
+          </>
         );
       } else if (tabName === "Product Catalogue") {
         if (productCatalogueTab === "singleProduct" && !isMobileView) {
           return (
             <div className="flex">
-              <CustomButton
+              <OneButton
+                text={"CREATE COMBO"}
+                icon={addIcon}
+                showIcon
+                className="!px-5"
+                onClick={async () => {
+                  setShowCombo(true);
+
+                  await getProductDetails();
+                }}
+                variant="primary"
+              />
+              {/* <CustomButton
                 icon={addIcon}
                 showIcon={true}
                 text={"CREATE COMBO"}
@@ -236,16 +263,36 @@ const Catalogue = () => {
 
                   await getProductDetails();
                 }}
+              /> */}
+              <OneButton
+                text="ADD PRODUCT"
+                icon={addIcon}
+                showIcon
+                className="!px-5 ml-4"
+                onClick={() => navigate("/catalogues/catalogue/add-product")}
+                variant="primary"
               />
 
-              <CustomButton
+              {/* <CustomButton
                 icon={addIcon}
                 showIcon={true}
                 text={"ADD PRODUCT"}
                 className="!p-3 ml-4"
                 onClick={() => navigate("/catalogues/catalogue/add-product")}
+              /> */}
+
+              <OneButton
+                text="ADD BULK PRODUCTS"
+                icon={addIcon}
+                showIcon
+                className="!px-5 ml-4"
+                onClick={() =>
+                  navigate("/catalogues/catalogue/add-bulk-product")
+                }
+                variant="primary"
               />
-              <CustomButton
+
+              {/* <CustomButton
                 icon={addIcon}
                 showIcon={true}
                 text={"ADD BULK PRODUCTS"}
@@ -253,7 +300,7 @@ const Catalogue = () => {
                 onClick={() =>
                   navigate("/catalogues/catalogue/add-bulk-product")
                 }
-              />
+              /> */}
             </div>
           );
         } else if (productCatalogueTab === "singleProduct" && isMobileView) {
@@ -268,13 +315,22 @@ const Catalogue = () => {
           );
         } else if (productCatalogueTab === "comboProduct") {
           return (
-            <CustomButton
-              icon={addIcon}
-              showIcon={true}
-              text={"ADD COMBO"}
-              className="!p-3"
-              onClick={() => setShowCombo(true)}
-            />
+            <div className="flex">
+              <CustomButton
+                icon={addIcon}
+                showIcon={true}
+                text={"ADD COMBO"}
+                className="!p-3"
+                onClick={() => setShowCombo(true)}
+              />
+              <CustomButton
+                icon={addIcon}
+                showIcon={true}
+                text={"ADD BULK COMBO"}
+                className="!p-3 ml-4 !px-4"
+                onClick={() => navigate("/catalogues/catalogue/add-bulk-combo")}
+              />
+            </div>
           );
         }
       } else if (tabName === "Box Catalogue") {
@@ -282,7 +338,18 @@ const Catalogue = () => {
           <>
             {filterId === 0 && (
               <div className="flex ">
-                <CustomButton
+                <OneButton
+                  text="CREATE BOX"
+                  icon={AddPlus}
+                  showIcon
+                  className="!px-5"
+                  onClick={() => {
+                    if (isMobileView) navigate("/catalogues/catalogue/add-box");
+                    else BoxCataloague.current.openModal();
+                  }}
+                  variant="primary"
+                />
+                {/* <CustomButton
                   icon={AddPlus}
                   showIcon={true}
                   text={"CREATE BOX"}
@@ -291,13 +358,21 @@ const Catalogue = () => {
                     if (isMobileView) navigate("/catalogues/catalogue/add-box");
                     else BoxCataloague.current.openModal();
                   }}
-                />
-                <CustomButton
+                /> */}
+                {/* <CustomButton
                   icon={addIcon}
                   showIcon={true}
                   text={"ADD BULK BOXES"}
                   className="!p-3 ml-4 !px-4"
                   onClick={() => navigate("/catalogues/catalogue/add-bulk-box")}
+                /> */}
+                <OneButton
+                  text={"ADD BULK BOXES"}
+                  icon={addIcon}
+                  showIcon
+                  className="!px-5 ml-4"
+                  onClick={() => navigate("/catalogues/catalogue/add-bulk-box")}
+                  variant="primary"
                 />
               </div>
             )}

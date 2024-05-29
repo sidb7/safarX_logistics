@@ -17,6 +17,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import FailureIcon from "../../../../assets/failure.svg";
 import SuccessIcon from "../../../../assets/success.svg";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface IAddressBookProps {
   setAddressTab: React.Dispatch<SetStateAction<string>>;
@@ -199,7 +200,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
             Are you sure you want to delete this address?
           </p>
           <div className="flex  items-center gap-x-4 mt-10">
-            <ServiceButton
+            {/* <ServiceButton
               text="Yes"
               className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
               onClick={() => {
@@ -207,12 +208,28 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
                 deleteAddress();
                 setIsModalOpen(false);
               }}
+            /> */}
+            <OneButton
+              text="Yes"
+              onClick={() => {
+                // createPlan(onSelectPlan);
+                deleteAddress();
+                setIsModalOpen(false);
+              }}
+              variant="secondary"
+              className="px-4 py-2"
             />
-            <ServiceButton
+            <OneButton
+              text="No"
+              onClick={() => setIsModalOpen(false)}
+              variant="primary"
+              className="px-4 py-2"
+            />
+            {/* <ServiceButton
               text="No"
               className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
               onClick={() => setIsModalOpen(false)}
-            />
+            /> */}
           </div>
         </div>
       </div>

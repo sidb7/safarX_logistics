@@ -65,7 +65,7 @@ export const Transaction = () => {
         });
 
         if (data?.success) {
-          setData(data.data || []);
+          setData(data?.data || []);
           setTotalItemCount(data.totalTransactions);
           // throw new Error("Some Issue");
           // setLoading(false);
