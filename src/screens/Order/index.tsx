@@ -298,7 +298,6 @@ const Index = () => {
   const [infoReverseModalContent, setInfoReverseModalContent]: any = useState({
     isOpen: false,
     data: {},
-    orderId: "",
   });
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
   const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
@@ -396,7 +395,6 @@ const Index = () => {
     setInfoReverseModalContent({
       isOpen: true,
       data: data,
-      orderId: "",
     });
   };
 
@@ -2249,7 +2247,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <ReverseCustomAccordian />
+        <ReverseCustomAccordian awbData={infoReverseModalContent} />
         {/* <CustomTableAccordian getAllSellerData={infoModalContent} /> */}
       </CustomRightModal>
 

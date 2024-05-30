@@ -132,23 +132,17 @@ describe("Login and Order Pickup Tests", () => {
       .type("crop top")
       .click();
     cy.xpath("(//*[text()='Crop Top'])[1]//parent::div").click();
-
-    cy.waitUntil(() =>
-      cy.xpath("//*[contains(@class, 'capitalize') and text()='Save']")
-    ).click();
+    cy.wait(2000);
+    cy.waitUntil(() => cy.xpath("//p[text()='Save']")).click();
 
     // Select box info
     cy.waitUntil(() =>
       cy.xpath("(//*[@class='flex text-sm']//parent::div)[1]")
     ).click();
 
-    cy.waitUntil(() =>
-      cy.xpath("//*[contains(@class, 'capitalize') and text()='Save']")
-    ).click();
+    cy.waitUntil(() => cy.xpath("//p[text()='Save']")).click();
 
-    cy.waitUntil(() =>
-      cy.xpath("//*[contains(@class, 'capitalize') and text()='Next']")
-    ).click();
+    cy.waitUntil(() => cy.xpath("//p[text()='Next']")).click();
     cy.wait(2000);
     cy.waitUntil(() => cy.contains("p", "Service")).should("be.visible");
 
