@@ -39,7 +39,8 @@ describe("Login and Order Pickup Tests", () => {
     cy.visit("https://sysellerdev.yaarilabs.com/orders/add-order/pickup");
 
     // Wait for the page to load properly
-    cy.xpath("//*[text()='Reverse']").click();
+    cy.xpath("//*[@name='REVERSE']").click();
+    cy.wait(2000);
     cy.waitUntil(() => cy.get("#address-checkbox").should("be.visible"), {
       timeout: 10000, // 10 seconds timeout
       interval: 500, // Check every 0.5 seconds
