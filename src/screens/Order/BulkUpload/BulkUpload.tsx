@@ -38,12 +38,6 @@ const BulkUpload = (props: ITypeProps) => {
   const [disabled, setDisabled]: any = useState(true);
   const [uploadFile, setUploadFile]: any = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [transitType, setTransitType] = useState("FORWARD");
-  const dropdownOptions = [
-    { value: "FORWARD", label: "Forward" },
-    { value: "REVERSE", label: "Reverse" },
-  ];
-
   const navigate = useNavigate();
 
   // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[2]?.pages?.[0]?.isActive;
@@ -51,20 +45,10 @@ const BulkUpload = (props: ITypeProps) => {
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
-    // Set default transit type to "forward" when selected option is "B2C"
-    if (option === "B2C") {
-      setTransitType("FORWARD");
-    }
   };
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     setFile(selectedFile);
-  };
-
-  const handleOrderTypeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setTransitType(event.target.value);
   };
 
   const handleFileUpload = async () => {
@@ -77,10 +61,6 @@ const BulkUpload = (props: ITypeProps) => {
     let formData = new FormData();
     formData.append("file", uploadFile);
     formData.append("orderType", selectedOption);
-    // Append transit type only if the selected option is "B2C"
-    if (selectedOption === "B2C") {
-      formData.append("transit", transitType);
-    }
 
     try {
       setIsLoading(true);
@@ -211,17 +191,6 @@ const BulkUpload = (props: ITypeProps) => {
               className=""
             />
           </div> */}
-              {/* Render dropdown only if selected option is "B2C" */}
-              {selectedOption === "B2C" && (
-                <CustomDropDown
-                  options={dropdownOptions}
-                  onChange={handleOrderTypeChange}
-                  value={transitType}
-                  name="transitType"
-                  wrapperClass="!w-60"
-                  selectClassName="!h-[36px] !cursor-pointer"
-                />
-              )}
             </div>
           </div>
 
