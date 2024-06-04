@@ -345,7 +345,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                 }
             }
         } catch (error: any) {
-            console.log(error);
+            console.log(error.message);
         }
     };
 
@@ -1835,22 +1835,106 @@ const Accordion = (props: ICustomTableAccordion) => {
         }
     };
 
-    const productLoops = (productAccordian: any, dataIndex: any) => {
+    const productLoops = (
+        deadWeight: any,
+        dataIndex: any,
+        accordionTrigger?: boolean
+    ) => {
+        console.log("ProductLoop Triggered", typeof deadWeight);
+
+        if (accordionTrigger) {
+            if (deadWeight[dataIndex].deadWeight > 0) return false;
+            else return true;
+        }
+
         if (enabled) {
             return false;
         }
+
         // for (let i = 0; i < productAccordian.length; i++) {
-        const product = productAccordian[dataIndex];
+        // const product = productAccordian[dataIndex];
+        const product = boxProductDetails?.boxInfo?.[0]?.products?.[dataIndex];
+
+        // if (deadWeight > 0) {
+        //     let productBorderError = document.getElementById(product.productId);
+        //     if (productBorderError && !enabled)
+        //         productBorderError.style.borderColor = "#E8E8E8";
+        //     let element4: any = document.getElementById(
+        //         `${orderDetails[2]?.title}`
+        //     );
+        //     if (element4 && !enabled) element4.style.borderColor = "#E8E8E8";
+        //     return false;
+        // } else {
+        //     let productBorderError = document.getElementById(product.productId);
+        //     if (productBorderError && !enabled)
+        //         productBorderError.style.borderColor = "red";
+        //     let element4: any = document.getElementById(
+        //         `${orderDetails[2]?.title}`
+        //     );
+        //     if (element4 && !enabled) element4.style.borderColor = "red";
+        //     return true;
+        // }
 
         if (
-            product?.deadWeight > 0 &&
+            deadWeight > 0
+            // product?.deadWeight > 0 &&
+            // product.deadWeight.length !== 0
+            // &&
             // product?.volumetricWeight > 0 &&
-            product?.length > 0 &&
-            product?.breadth > 0 &&
-            product?.height > 0
+            //commented as not mandatory
+            // product?.length > 0 &&
+            // product?.breadth > 0 &&
+            // product?.height > 0
         ) {
+            // for (let index = 0; index < productAccordian.length; index++) {
+            //     const product = productAccordian[index];
+            //     console.log("product", product);
+            //     let productBorderError: any = document.getElementById(
+            //         product.productId
+            //     );
+            //     console.log("productproductBorderErrorif", productBorderError);
+            //     if (productBorderError && !enabled)
+            //         productBorderError.style.borderColor = "#E8E8E8";
+            //     let element4: any = document.getElementById(
+            //         `${orderDetails[2]?.title}`
+            //     );
+            //     if (element4 && !enabled)
+            //         element4.style.borderColor = "#E8E8E8";
+            // }
+            let productBorderError: any = document.getElementById(
+                product.productId
+            );
+            if (productBorderError && !enabled)
+                productBorderError.style.borderColor = "#E8E8E8";
+            let element4: any = document.getElementById(
+                `${orderDetails[2]?.title}`
+            );
+            if (element4 && !enabled) element4.style.borderColor = "#E8E8E8";
             return false;
         } else {
+            // for (let index = 0; index < productAccordian.length; index++) {
+            //     const product = productAccordian[index];
+            //     let productBorderError: any = document.getElementById(
+            //         product.productId
+            //     );
+            //     console.log("productBorderErrorelse", productBorderError);
+            //     if (productBorderError && !enabled)
+            //         productBorderError.style.borderColor = "red";
+            //     let element4: any = document.getElementById(
+            //         `${orderDetails[2]?.title}`
+            //     );
+            //     if (element4 && !enabled) element4.style.borderColor = "red";
+            // }
+            let productBorderError: any = document.getElementById(
+                product.productId
+            );
+            if (productBorderError && !enabled)
+                productBorderError.style.borderColor = "red";
+            let element4: any = document.getElementById(
+                `${orderDetails[2]?.title}`
+            );
+            if (element4 && !enabled) element4.style.borderColor = "red";
+
             setInputError(true);
             setProdctError(
                 productError?.map((item: any, index: any) => {
@@ -1869,24 +1953,25 @@ const Accordion = (props: ICustomTableAccordion) => {
                             //     : product?.volumetricWeight === ""
                             //     ? "Field is Required"
                             //     : "",
-                            length:
-                                product?.length <= 0
-                                    ? "Should be greater than 0"
-                                    : product?.length === ""
-                                    ? "Field is Required"
-                                    : "",
-                            breadth:
-                                product?.breadth <= 0
-                                    ? "Should be greater than 0"
-                                    : product?.breadth === ""
-                                    ? "Field is Required"
-                                    : "",
-                            height:
-                                product?.height <= 0
-                                    ? "Should be greater than 0"
-                                    : product?.height === ""
-                                    ? "Field is Required"
-                                    : "",
+                            // length:
+                            //     product?.length <= 0
+                            //         ? "Should be greater than 0"
+                            //         : product?.length === ""
+                            //         ? "Field is Required"
+                            //         : "",
+                            // breadth:
+                            //     product?.breadth <= 0
+                            //         ? "Should be greater than 0"
+                            //         : product?.breadth === ""
+                            //         ? "Field is Required"
+                            //         : "",
+                            // height:
+                            //     product?.height <= 0
+                            //         ? "Should be greater than 0"
+                            //         : product?.height === ""
+                            //         ? "Field is Required"
+                            //         : "",
+                            // let productBorderError:any = document.getElementById("Delivery Address")
                         };
                     } else {
                         return item;
@@ -2062,10 +2147,12 @@ const Accordion = (props: ICustomTableAccordion) => {
             i++
         ) {
             if (
-                boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0 ||
-                boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
-                boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
-                boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
+                boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0
+                //commenting as not mandatory
+                // ||
+                // boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
+                // boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
+                // boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
             ) {
                 let element6 = document.getElementById(
                     `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
@@ -2252,24 +2339,25 @@ const Accordion = (props: ICustomTableAccordion) => {
                                     : product?.volumetricWeight === ""
                                     ? "Field is Required"
                                     : "",
-                            length:
-                                product?.length <= 0
-                                    ? "Should be greater than 0"
-                                    : product?.length === ""
-                                    ? "Field is Required"
-                                    : "",
-                            breadth:
-                                product?.breadth <= 0
-                                    ? "Should be greater than 0"
-                                    : product?.breadth === ""
-                                    ? "Field is Required"
-                                    : "",
-                            height:
-                                product?.height <= 0
-                                    ? "Should be greater than 0"
-                                    : product?.height === ""
-                                    ? "Field is Required"
-                                    : "",
+                            //commented as not mandatory
+                            // length:
+                            //     product?.length <= 0
+                            //         ? "Should be greater than 0"
+                            //         : product?.length === ""
+                            //         ? "Field is Required"
+                            //         : "",
+                            // breadth:
+                            //     product?.breadth <= 0
+                            //         ? "Should be greater than 0"
+                            //         : product?.breadth === ""
+                            //         ? "Field is Required"
+                            //         : "",
+                            // height:
+                            //     product?.height <= 0
+                            //         ? "Should be greater than 0"
+                            //         : product?.height === ""
+                            //         ? "Field is Required"
+                            //         : "",
                         };
                     }
                 )
@@ -2500,7 +2588,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                     true &&
                                                                                                                 !productLoops(
                                                                                                                     productAccordian,
-                                                                                                                    index
+                                                                                                                    index,
+                                                                                                                    true
                                                                                                                 )
                                                                                                             ) {
                                                                                                                 eachProduct.isCollapse =
@@ -2567,7 +2656,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                             eachProduct?.name
                                                                                                                         }
                                                                                                                     >
-                                                                                                                        <div className=" text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
+                                                                                                                        <div className="text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
                                                                                                                             <div className="flex gap-x-3">
                                                                                                                                 <p className="font-bold min-w-[65px]">
                                                                                                                                     Product
@@ -2659,6 +2748,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                         onChange={(
                                                                                                                             e: any
                                                                                                                         ) => {
+                                                                                                                            productLoops(
+                                                                                                                                e
+                                                                                                                                    .target
+                                                                                                                                    .value,
+                                                                                                                                index
+                                                                                                                            );
                                                                                                                             handleInputUpdation(
                                                                                                                                 index,
                                                                                                                                 e
@@ -2814,14 +2909,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                                 );
                                                                                                                             }}
                                                                                                                         />
-                                                                                                                        <p className="open-sans text-[12px] text-red-600">
+                                                                                                                        {/* <p className="open-sans text-[12px] text-red-600">
                                                                                                                             {
                                                                                                                                 productError?.[
                                                                                                                                     index
                                                                                                                                 ]
                                                                                                                                     ?.length
                                                                                                                             }
-                                                                                                                        </p>
+                                                                                                                        </p> */}
                                                                                                                     </div>
                                                                                                                     <div>
                                                                                                                         <InputBox
@@ -2890,14 +2985,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                                 );
                                                                                                                             }}
                                                                                                                         />
-                                                                                                                        <p className="open-sans text-[12px] text-red-600">
+                                                                                                                        {/* <p className="open-sans text-[12px] text-red-600">
                                                                                                                             {
                                                                                                                                 productError?.[
                                                                                                                                     index
                                                                                                                                 ]
                                                                                                                                     ?.breadth
                                                                                                                             }
-                                                                                                                        </p>
+                                                                                                                        </p> */}
                                                                                                                     </div>
                                                                                                                     <div>
                                                                                                                         <InputBox
@@ -2966,14 +3061,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                                                                 );
                                                                                                                             }}
                                                                                                                         />
-                                                                                                                        <p className="open-sans text-[12px] text-red-600">
+                                                                                                                        {/* <p className="open-sans text-[12px] text-red-600">
                                                                                                                             {
                                                                                                                                 productError?.[
                                                                                                                                     index
                                                                                                                                 ]
                                                                                                                                     ?.height
                                                                                                                             }
-                                                                                                                        </p>
+                                                                                                                        </p> */}
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>

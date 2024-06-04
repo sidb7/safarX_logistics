@@ -29,7 +29,6 @@ describe("Login and Order Pickup Tests", () => {
             // Click on the Log In button and wait for the login request to complete
             cy.contains("Log In").click();
 
-            // Wait for the login request to complete
             //cy.wait("@loginRequest").its("response.statusCode").should("eq", 200);
 
             // Verify the URL after successful login
@@ -43,6 +42,8 @@ describe("Login and Order Pickup Tests", () => {
         cy.visit("https://sysellerdev.yaarilabs.com/orders/add-order/pickup");
 
         // Wait for the page to load properly
+        cy.xpath("//*[@name='REVERSE']").click();
+        cy.wait(2000);
         cy.waitUntil(() => cy.get("#address-checkbox").should("be.visible"), {
             timeout: 10000, // 10 seconds timeout
             interval: 500, // Check every 0.5 seconds
@@ -100,14 +101,12 @@ describe("Login and Order Pickup Tests", () => {
         cy.xpath("//label[text()='Product name']//preceding::input").type(
             "crop top"
         );
-        let twoDigitNo = Math.floor(Math.random() * 9) + 1;
-        cy.log("mobileNumber" + `${twoDigitNo}`);
         cy.get('input[name="category"]').click();
         cy.xpath("//*[@name='category']").type("Media").type("{enter}").click();
-        cy.get('input[name="unitPrice"]').type(twoDigitNo);
-        cy.get('input[name="length"]').type(twoDigitNo);
-        cy.get('input[name="breadth"]').type(twoDigitNo);
-        cy.get('input[name="height"]').type(twoDigitNo);
+        cy.get('input[name="unitPrice"]').type(100);
+        cy.get('input[name="length"]').type(14);
+        cy.get('input[name="breadth"]').type(10);
+        cy.get('input[name="height"]').type(12);
         cy.get('input[name="deadWeight"]').type(0.5);
         cy.get('input[name="sku"]').type("TEST01");
 
@@ -122,12 +121,12 @@ describe("Login and Order Pickup Tests", () => {
             cy.xpath("//*[text()='Add Box To Catalogue']")
         ).click();
         cy.wait(1000);
-        cy.waitUntil(() => cy.get('input[name="length"]')).type(twoDigitNo);
-        cy.get('input[name="breadth"]').type(twoDigitNo);
-        cy.get('input[name="height"]').type(twoDigitNo);
+        cy.waitUntil(() => cy.get('input[name="length"]')).type(14);
+        cy.get('input[name="breadth"]').type(10);
+        cy.get('input[name="height"]').type(12);
         cy.get('input[name="name"]').type("Boxname");
         cy.get('input[name="color"]').type("color");
-        cy.get('input[name="price"]').type(twoDigitNo);
+        cy.get('input[name="price"]').type(50);
         cy.get('input[name="deadWeight"]').type(0.5);
         cy.contains("p", "Save").click();
         cy.xpath("//*[text()='Seller Box Created SuccessFully']").should(
@@ -141,23 +140,32 @@ describe("Login and Order Pickup Tests", () => {
             .type("crop top")
             .click();
         cy.xpath("(//*[text()='Crop Top'])[1]//parent::div").click();
-        cy.wait(2000);
-        cy.waitUntil(() => cy.xpath("//p[text()='Save']")).click();
+
+        cy.waitUntil(() => cy.xpath("//*[text()='Save']")).click();
 
         // Select box info
         cy.waitUntil(() =>
             cy.xpath("(//*[@class='flex text-sm']//parent::div)[1]")
         ).click();
 
-        cy.waitUntil(() => cy.xpath("//p[text()='Save']")).click();
+        cy.waitUntil(() => cy.xpath("//*[text()='Save']")).click();
 
-        cy.waitUntil(() => cy.xpath("//p[text()='Next']")).click();
+        cy.waitUntil(() => cy.xpath("//*[text()='Next']")).click();
         cy.wait(2000);
         cy.waitUntil(() => cy.contains("p", "Service")).should("be.visible");
 
         cy.waitUntil(() => cy.contains("p", "Cheapest").click());
-        cy.contains("p", "Next").click();
+        cy.xpath("//*[@data-cy='view-all-services']").click();
+
+        // cy.contains("p", "Next").click();
         cy.wait(5000);
+        cy.xpath("(//*[contains(text(), 'reverse')])[1]")
+            .scrollIntoView()
+            .should("be.visible");
+        cy.wait(3000);
+        cy.xpath("(//*[contains(text(), 'reverse')])[1]").click();
+        cy.wait(2000);
+        cy.contains("p", "Next").click();
         cy.waitUntil(() => cy.contains("p", "Summary").should("be.visible"));
         cy.contains("p", "Place Order").click();
 

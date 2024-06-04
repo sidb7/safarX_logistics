@@ -219,6 +219,7 @@ const DELETE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/deleteDelive
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${SELLER_BASE_URL}/pincodes/checkServiceable`;
+const GET_SERVICABLEV2_PINCODE = `${SELLER_BASE_URL}/pincodes/checkServiceablev2`;
 
 //Pincode Data for Address
 const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
@@ -390,6 +391,9 @@ const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
 // Errors Handling API
 const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
 
+// Reverse order API
+const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -458,6 +462,7 @@ export {
   VALIDATE_USER_TOKEN,
   POST_ADD_BANK_DETAILS,
   GET_SERVICABLE_PINCODE,
+  GET_SERVICABLEV2_PINCODE,
   POST_ADD_PRODUCT,
   ADD_COMBO_PRODUCT_URL,
   GET_PACKAGE_INSURANCE,
@@ -582,4 +587,5 @@ export {
   COMPANY_NAME,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
+  REVERSE_ORDER,
 };
