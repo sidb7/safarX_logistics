@@ -30,6 +30,7 @@ import { getQueryJson } from "../../../utils/utility";
 import AddProductPanel from "../NewCatalogue/ProductCatalogue/addProductNew";
 import SellerBoxDetails from "../NewCatalogue/BoxCatalogue/SellerBoxDetails";
 import { useMediaQuery } from "react-responsive";
+import OneButton from "../../../components/Button/OneButton";
 
 interface IPackageProps {}
 const steps = [
@@ -861,6 +862,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                         onClick={() => {
                           setSelectedBox(newpackage);
                         }}
+                        id="box"
                       >
                         <PackageBox
                           packageType={newpackage?.name}
@@ -878,6 +880,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                           // recommended={index === 1 ? true : false}
                         />
                       </div>
+
                     );
                   })
                 ) : (
@@ -906,20 +909,37 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
                 style={{ width: "-webkit-fill-available" }}
               >
-                <ServiceButton
+                <OneButton
+                  text={"CANCEL"}
+                  onClick={() => {
+                    setBoxTypeModal(false);
+                  }}
+                  className=" lg:!py-2 lg:!px-4 "
+                  variant="secondary"
+                />
+                {/* <ServiceButton
                   text={"CANCEL"}
                   onClick={() => {
                     setBoxTypeModal(false);
                   }}
                   className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+                /> */}
+
+                <OneButton
+                  text={"SAVE"}
+                  onClick={() => {
+                    handleBoxType();
+                  }}
+                  className=" lg:!py-2 lg:!px-4 "
+                  variant="primary"
                 />
-                <ServiceButton
+                {/* <ServiceButton
                   text={"SAVE"}
                   onClick={() => {
                     handleBoxType();
                   }}
                   className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
-                />
+                /> */}
               </div>
             </div>
 

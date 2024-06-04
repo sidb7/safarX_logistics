@@ -33,6 +33,7 @@ import { tokenKey } from "../../../utils/utility";
 import FilterScreen from "../common/FilterScreen/filterScreen";
 import { Spinner } from "../../../components/Spinner";
 import { useSelector } from "react-redux";
+import OneButton from "../../../components/Button/OneButton";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -640,11 +641,39 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
-                      <div
+                      <button
+                        key={index}
+                        className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } rounded-l-md rounded-r-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
+                        }
+                      >
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+                        <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
+                      </button>
+                      {/* <button
                         key={index}
                         className={`${
                           index < getActionsIcon().length - 1 &&
-                          "border-r border-[#A4A4A4]"
+                          "border-r border-[#A4A4A4] "
                         }
                           px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
@@ -669,7 +698,30 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         <span className="font-open-sans text-[14px] leading-20 whitespace-no-wrap">
                           {capitalizeFirstLetter(data?.buttonName)}
                         </span>
-                      </div>
+                      </button> */}
+                      {/* <OneButton
+                        text={capitalizeFirstLetter(data?.buttonName)}
+                        icon={data.icon}
+                        showIcon
+                        // className={`${
+                        //   index < getActionsIcon().length - 1 &&
+                        //   "border-r border-[#A4A4A4]"
+                        // } px-3 py-1  `}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
+                        }
+                        loading={
+                          isLoadingManifest.isLoading &&
+                          isLoadingManifest.identifier === data.identifier
+                        }
+                        variant="secondary"
+                        size="medium"
+                        iconClass="w-[16px]"
+                      /> */}
                     </>
                   );
                 })}

@@ -26,6 +26,7 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import { v4 as uuidv4 } from "uuid";
 import { ResponsiveState } from "../../../../utils/responsiveState";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -282,7 +283,7 @@ const BusinessType = (props: ITypeProps) => {
                 <div className="md:mx-[65px] flex justify-end">
                   <div className="flex gap-x-2" onClick={() => addAddress()}>
                     <img src={PlusIcon} alt="" />
-                    <p className="font-Open font-semibold text-sm cursor-pointer text-[#004EFF]  ">
+                    <p className="  font-Open font-semibold text-sm cursor-pointer text-[#004EFF] max-[768px]:pr-8 pb-2  ">
                       ADD ADDRESS
                     </p>
                   </div>
@@ -324,11 +325,18 @@ const BusinessType = (props: ITypeProps) => {
                         })}
                       </div>
                       <div className={`${!isMdScreen && "w-full"}`}>
-                        <ServiceButton
+                        {/* <ServiceButton
                           text="SUBMIT"
                           btnType="submit"
                           onClick={() => onMagicForm()}
                           className="bg-[#1C1C1C]  !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open md:!w-[320px] "
+                        /> */}
+                        <OneButton
+                          text="SUBMIT"
+                          onClick={() => onMagicForm()}
+                          disabled={false}
+                          variant="primary"
+                          className=""
                         />
                       </div>
                     </>
@@ -388,12 +396,18 @@ const BusinessType = (props: ITypeProps) => {
                           isRequired={false}
                         />
                       </div>
-                      <div className={`${!isMdScreen && ""}`}>
-                        <ServiceButton
+                      <div className={`${!isMdScreen && ""} pb-24 `}>
+                        {/* <ServiceButton
                           text="SUBMIT"
                           btnType="submit"
                           onClick={() => onSubmitForm()}
                           className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-[100px] w-[320px]  font-Open md:w-[370px]"
+                        /> */}
+                        <OneButton
+                          text="SUBMIT"
+                          onClick={() => onSubmitForm()}
+                          variant="primary"
+                          className="!w-[320px] md:!w-[370px]"
                         />
                       </div>
                     </>

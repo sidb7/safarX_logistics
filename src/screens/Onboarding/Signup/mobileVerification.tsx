@@ -2,7 +2,8 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 // import CloseIcon from "./../../../assets/CloseIcon.svg";
 import CustomButton from "../../../components/Button/index";
 // import MobileIcon from "../../../assets/PhoneVerificationOtp/mobileVerificationIcon.svg";
-import MobileGif from "../../../assets/OrderCard/Gif.gif";
+// import MobileGif from "../../../assets/OrderCard/Gif.gif";
+import MobileGif from "../../../assets/OrderCard/MobileNumberScreen.gif";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -13,6 +14,7 @@ import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { constructNavigationObject } from "../../../utils/utility";
+import OneButton from "../../../components/Button/OneButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -128,7 +130,12 @@ const Index = () => {
                 }
               }}
             />
-            <CustomButton
+            {/* <CustomButton
+              onClick={(e: any) => sendOtpOnClick(body)}
+              text="Verify Number"
+            /> */}
+            <OneButton
+              variant="primary"
               onClick={(e: any) => sendOtpOnClick(body)}
               text="Verify Number"
             />
