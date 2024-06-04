@@ -390,6 +390,9 @@ const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
 // Errors Handling API
 const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
 
+// Reverse order API
+const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -582,4 +585,5 @@ export {
   COMPANY_NAME,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
+  REVERSE_ORDER,
 };
