@@ -49,6 +49,7 @@ import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 import ReverseCustomAccordian from "./Reverse/index";
+import ReverseSummary from "./Reverse/summary";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
@@ -78,6 +79,7 @@ import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
+import DoneIcon from "../../assets/Done .svg";
 let allOrdersCount: any;
 
 const Buttons = (className?: string) => {
@@ -299,6 +301,14 @@ const Index = () => {
     isOpen: false,
     data: {},
   });
+  const [bookReverseCenterModal, setBookReverseCenterModal] = useState(false);
+  const [
+    infoReverseSummaryModalContent,
+    setInfoReverseSummaryModalContent,
+  ]: any = useState({
+    isOpen: false,
+    data: {},
+  });
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
   const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
 
@@ -393,6 +403,14 @@ const Index = () => {
 
   const setInfoReverseModalFunction = async (data: any) => {
     setInfoReverseModalContent({
+      isOpen: true,
+      data: data,
+    });
+  };
+
+  const setInfoReverseSummaryModalFunction = async (data: any) => {
+    console.log("🚀 ~ setInfoReverseSummaryModalFunction ~ data:", data);
+    setInfoReverseSummaryModalContent({
       isOpen: true,
       data: data,
     });
@@ -965,13 +983,27 @@ const Index = () => {
       }
       setTotalcount(orderCount ? orderCount : 0);
 
-      setDraftOrderCount({
-        ...draftOrderCount,
-        all: allOrdersCount || orderCount,
-        draft: draftCount || 0,
-        // failed: failedCount || 0,
-        error: errorCount || 0,
-      });
+      if (payload.filterArrOne) {
+        setDraftOrderCount({
+          ...draftOrderCount,
+          all:
+            allOrdersCount && orderCount
+              ? Math.min(allOrdersCount, orderCount)
+              : orderCount,
+          draft: draftCount || 0,
+          error: errorCount || 0,
+        });
+      } else {
+        setDraftOrderCount({
+          ...draftOrderCount,
+          all:
+            allOrdersCount && orderCount
+              ? Math.max(allOrdersCount, orderCount)
+              : orderCount,
+          draft: draftCount || 0,
+          error: errorCount || 0,
+        });
+      }
 
       setSelectedRowData([]);
       if (data?.status || data?.success) {
@@ -2223,7 +2255,7 @@ const Index = () => {
         <CustomTableAccordian getAllSellerData={infoModalContent} />
       </CustomRightModal>
 
-      {/* Rverse Order Modal */}
+      {/* Reverse Order Modal */}
       <CustomRightModal
         isOpen={infoReverseModalContent.isOpen}
         onClose={() => setInfoReverseModalContent({ isOpen: false, data: {} })}
@@ -2247,9 +2279,64 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <ReverseCustomAccordian awbData={infoReverseModalContent} />
-        {/* <CustomTableAccordian getAllSellerData={infoModalContent} /> */}
+        <ReverseCustomAccordian
+          awbData={infoReverseModalContent}
+          summaryData={setInfoReverseSummaryModalFunction}
+        />
       </CustomRightModal>
+
+      {/* Reverse Order Summary Modal */}
+      <CustomRightModal
+        isOpen={infoReverseSummaryModalContent.isOpen}
+        onClose={() =>
+          setInfoReverseSummaryModalContent({ isOpen: false, data: {} })
+        }
+        className="!justify-start !w-[434px]"
+      >
+        <div>
+          <div className="p-[20px] flex justify-between">
+            <div className="flex">
+              <img src={Delivery_Icon} className="mr-2" />
+              <span className="text-[24px] font-Lato font-normal">
+                Reverse Order
+              </span>
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() =>
+                setInfoReverseSummaryModalContent({ isOpen: false, data: {} })
+              }
+            >
+              <img src={CloseIcon} />
+            </div>
+          </div>
+        </div>
+        <ReverseSummary
+          summaryData={infoReverseSummaryModalContent?.data}
+          setState={setInfoReverseSummaryModalContent}
+          reverseModal={setInfoReverseModalContent}
+          bookOrder={setBookReverseCenterModal}
+        />
+      </CustomRightModal>
+
+      {/* center modal for book reverse order */}
+      <CenterModal
+        isOpen={bookReverseCenterModal}
+        onRequestClose={() => setBookReverseCenterModal(false)}
+        className="max-w-[500px] max-h-[300px]"
+      >
+        <div className="flex flex-col text-center text-[18px] text-[#1C1C1C] font-Lato font-normal">
+          <img src={DoneIcon} className="h-[124px] w-[124px] self-center" />
+          <span>Thank You</span>
+          <span>Your Reverse order has been placed.</span>
+          <span>You can find your orders in Reverse section</span>
+          <CustomButton
+            className="mt-[24px] w-[127px] h-[20px] p-4 self-center"
+            text={"GO TO ORDER"}
+            onClick={() => setBookReverseCenterModal(false)}
+          />
+        </div>
+      </CenterModal>
 
       <CustomRightModal
         isOpen={isErrorModalOpen}
