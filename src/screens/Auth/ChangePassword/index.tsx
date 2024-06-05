@@ -129,23 +129,23 @@ function ChangePasswordv2() {
 
         // redirect based on qna and kyc done or not
         if (response?.data?.[0]?.nextStep?.qna === false) {
-          const navigationObject = constructNavigationObject(
-            "/onboarding/questionnaire/question1",
-            window.location.search
-          );
-          navigate(navigationObject);
+          //   const navigationObject = constructNavigationObject(
+          //     "/onboarding/questionnaire/question1",
+          //     window.location.search
+          //   );
+          navigate("/onboarding/questionnaire/question1");
         } else if (response?.data?.[0]?.nextStep?.kyc === false) {
-          const navigationObject = constructNavigationObject(
-            "/onboarding/kyc-type",
-            window.location.search
-          );
-          navigate(navigationObject);
+          //   const navigationObject = constructNavigationObject(
+          //     "/onboarding/kyc-type",
+          //     window.location.search
+          //   );
+          navigate("/onboarding/kyc-type");
         } else {
-          const navigationObject = constructNavigationObject(
-            "/dashboard/overview",
-            window.location.search
-          );
-          navigate(navigationObject);
+          //   const navigationObject = constructNavigationObject(
+          //     "/dashboard/overview",
+          //     window.location.search
+          //   );
+          navigate("/dashboard/overview");
         }
       } else {
         toast.error(response?.message);
@@ -206,23 +206,23 @@ function ChangePasswordv2() {
 
     if (localUserToken) {
       if (userData?.nextStep?.qna === false) {
-        const navigationObject = constructNavigationObject(
-          "/onboarding/questionnaire/question1",
-          window.location.search
-        );
-        navigate(navigationObject);
+        // const navigationObject = constructNavigationObject(
+        //   "/onboarding/questionnaire/question1",
+        //   window.location.search
+        // );
+        navigate("/onboarding/questionnaire/question1");
       } else if (userData?.nextStep?.kyc === false) {
-        const navigationObject = constructNavigationObject(
-          "/onboarding/kyc-type",
-          window.location.search
-        );
-        navigate(navigationObject);
+        // const navigationObject = constructNavigationObject(
+        //   "/onboarding/kyc-type",
+        //   window.location.search
+        // );
+        navigate("/onboarding/kyc-type");
       } else {
-        const navigationObject = constructNavigationObject(
-          "/dashboard/overview",
-          window.location.search
-        );
-        navigate(navigationObject);
+        // const navigationObject = constructNavigationObject(
+        //   "/dashboard/overview",
+        //   window.location.search
+        // );
+        navigate("/dashboard/overview");
       }
     }
 
