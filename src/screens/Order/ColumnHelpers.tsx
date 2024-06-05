@@ -55,7 +55,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
   } else if (
     currentStatus === "BOOKED" ||
     "CANCELLED" ||
-    "READY TO PICK" ||
+    "PICKED UP" ||
     "IN TRANSIT" ||
     "OUT OF DELIVERY" ||
     "DELIVERED" ||
@@ -85,7 +85,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
       { title: "Cancel Order", actionType: "cancel_order" },
     ],
     CANCELLED: [{ title: "Track Order", actionType: "track_order" }],
-    "READY TO PICK": [
+    "PICKED UP": [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
