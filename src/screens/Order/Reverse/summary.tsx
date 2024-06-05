@@ -82,7 +82,7 @@ const ReverseSummary = (props: Iprops) => {
         ],
         orderType: "B2C",
         transit: "REVERSE",
-        courierPartner: summaryData?.reverseSeviceArray?.[0],
+        courierPartner: summaryData?.reverseSeviceArray?.[0]?.partnerName,
         pickupDate: summaryData?.pickupTime,
         gstNumber: "",
         orderId: "",
