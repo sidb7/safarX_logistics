@@ -68,8 +68,8 @@ const ReverseIndex = (props: ReverseProps) => {
     // console.log("🚀 ~ callReverseServiceAPI ~ responsData:", responsData);
     try {
       const payload = {
-        pickupPincode: responsData["pickupAddress"]?.pincode,
-        deliveryPincode: responsData["deliveryAddress"]?.pincode,
+        pickupPincode: responsData["deliveryAddress"]?.pincode,
+        deliveryPincode: responsData["pickupAddress"]?.pincode,
         invoiceValue: responsData?.boxInfo?.[0]?.codInfo?.invoiceValue,
         paymentMode: responsData?.boxInfo?.[0]?.codInfo?.isCod
           ? "COD"
@@ -107,34 +107,11 @@ const ReverseIndex = (props: ReverseProps) => {
             productsArray.push(...responsData?.boxInfo?.[i]?.products);
           }
           let newDataArray: any = [];
-          if (responsData["pickupAddress"]) {
+          if (responsData["deliveryAddress"]) {
             newDataArray.push({
               title: "Pickup Address",
             });
             setPickupAddress((prevState) => ({
-              ...prevState,
-              contactPerson: responsData["pickupAddress"]?.contact?.name,
-              contactNo: responsData["pickupAddress"]?.contact?.mobileNo,
-              emailId: responsData["pickupAddress"]?.contact?.emailId,
-              buildingName: responsData["pickupAddress"]?.fullAddress,
-              locality: responsData["pickupAddress"]?.locality,
-              landmark: responsData["pickupAddress"]?.landmark,
-              pincode: responsData["pickupAddress"]?.pincode,
-              city: responsData["pickupAddress"]?.city,
-              state: responsData["pickupAddress"]?.state,
-              country: responsData["pickupAddress"]?.country,
-            }));
-          }
-          // push Pickup Date and Time array in newDataArray[]
-          newDataArray.push({
-            title: "Pickup Date and Time",
-          });
-
-          if (responsData["deliveryAddress"]) {
-            newDataArray.push({
-              title: "Delivery Address",
-            });
-            setDeliveryAddress((prevState) => ({
               ...prevState,
               contactPerson: responsData["deliveryAddress"]?.contact?.name,
               contactNo: responsData["deliveryAddress"]?.contact?.mobileNo,
@@ -146,6 +123,29 @@ const ReverseIndex = (props: ReverseProps) => {
               city: responsData["deliveryAddress"]?.city,
               state: responsData["deliveryAddress"]?.state,
               country: responsData["deliveryAddress"]?.country,
+            }));
+          }
+          // push Pickup Date and Time array in newDataArray[]
+          newDataArray.push({
+            title: "Pickup Date and Time",
+          });
+
+          if (responsData["pickupAddress"]) {
+            newDataArray.push({
+              title: "Delivery Address",
+            });
+            setDeliveryAddress((prevState) => ({
+              ...prevState,
+              contactPerson: responsData["pickupAddress"]?.contact?.name,
+              contactNo: responsData["pickupAddress"]?.contact?.mobileNo,
+              emailId: responsData["pickupAddress"]?.contact?.emailId,
+              buildingName: responsData["pickupAddress"]?.fullAddress,
+              locality: responsData["pickupAddress"]?.locality,
+              landmark: responsData["pickupAddress"]?.landmark,
+              pincode: responsData["pickupAddress"]?.pincode,
+              city: responsData["pickupAddress"]?.city,
+              state: responsData["pickupAddress"]?.state,
+              country: responsData["pickupAddress"]?.country,
             }));
           }
           if (responsData["boxInfo"]) {
