@@ -92,7 +92,20 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const generateExcelFile = async (data: any) => {
-    const ws = XLSX.utils.json_to_sheet(data);
+    let headers = [
+      "Source",
+      "Product Id",
+      "Name",
+      "Category",
+      "SKU",
+      "Length (cm)",
+      "Breadth (cm)",
+      "Height (cm)",
+      "Dead Weight (Kg)",
+      "Unit Price (Rs)",
+      "Unit Tax (Rs)",
+    ];
+    const ws = XLSX.utils.json_to_sheet(data, { header: headers });
     const wb = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");

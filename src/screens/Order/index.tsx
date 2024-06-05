@@ -983,13 +983,27 @@ const Index = () => {
       }
       setTotalcount(orderCount ? orderCount : 0);
 
-      setDraftOrderCount({
-        ...draftOrderCount,
-        all: allOrdersCount || orderCount,
-        draft: draftCount || 0,
-        // failed: failedCount || 0,
-        error: errorCount || 0,
-      });
+      if (payload.filterArrOne) {
+        setDraftOrderCount({
+          ...draftOrderCount,
+          all:
+            allOrdersCount && orderCount
+              ? Math.min(allOrdersCount, orderCount)
+              : orderCount,
+          draft: draftCount || 0,
+          error: errorCount || 0,
+        });
+      } else {
+        setDraftOrderCount({
+          ...draftOrderCount,
+          all:
+            allOrdersCount && orderCount
+              ? Math.max(allOrdersCount, orderCount)
+              : orderCount,
+          draft: draftCount || 0,
+          error: errorCount || 0,
+        });
+      }
 
       setSelectedRowData([]);
       if (data?.status || data?.success) {
