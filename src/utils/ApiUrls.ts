@@ -277,6 +277,7 @@ const DOWNLOAD_SAMPLE_PRODUCT = `${SELLER_BASE_URL}/product/downloadSampleProduc
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
 const LOGOUT = `${SELLER_BASE_URL}/seller/logout`;
+const CHANGE_PASSWORD = `${SELLER_BASE_URL}/seller/changePasswordv2`;
 
 // System Logs
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
@@ -578,4 +579,5 @@ export {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
+  CHANGE_PASSWORD,
 };
