@@ -34,16 +34,14 @@ export const CommonLayout = (props: Props) => {
       const { data } = await POST(LOGOUT);
       if (data?.success) {
         // socketCallbacks.disconnectSocket();
-
         toast.success(data?.message);
         navigate("/auth/login");
       } else {
-        toast.error(data?.message);
+        navigate("/auth/login");
       }
     } catch (error) {
       console.error(error);
     }
-
     clearLocalStorage();
     localStorage.clear();
   };
