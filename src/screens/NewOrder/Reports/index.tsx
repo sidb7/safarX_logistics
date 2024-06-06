@@ -13,9 +13,13 @@ import { convertXMLToXLSX } from "../../../utils/helper";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import { Spinner } from "../../../components/Spinner";
 import OneButton from "../../../components/Button/OneButton";
+import DateButton from "../../../components/Button/DateButton";
 
 const Reports = () => {
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]); // Explicitly type dateRange
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
@@ -103,6 +107,10 @@ const Reports = () => {
     setIsActive(checkPageAuthorized("Reports"));
   }, [isActive]);
 
+  const handleClear = () => {
+    setDateRange([null, null]); // Clear the date range
+  };
+
   return (
     <>
       {isActive === undefined || isActive ? (
@@ -123,8 +131,32 @@ const Reports = () => {
                 />
               </div>
             </div>
-            <div className="w-[350px] h-6">
+            <div className="">
               <DatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update: any) => {
+                  setDateRange(update);
+                }}
+                filterDate={isDateDisabled}
+                // isClearable={true}
+                customInput={
+                  <DateButton
+                    text="Select From & To Date" // Text for the button
+                    onClick={() => {}} // onClick is managed by DatePicker
+                    value={
+                      startDate && endDate
+                        ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                        : ""
+                    } // Display date range
+                    onClear={handleClear} // Handle clear action
+                  />
+                } // Use DateButton as custom input
+                dateFormat="dd/MM/yyyy"
+              />
+
+              {/* <DatePicker
                 selectsRange={true}
                 startDate={startDate}
                 endDate={endDate}
@@ -134,9 +166,9 @@ const Reports = () => {
                 filterDate={isDateDisabled}
                 isClearable={true}
                 placeholderText="Select From & To Date"
-                className="cursor-pointer border !w-[350px] datepickerCss border-[#AFAFAF] p-6 !h-12"
+                className="cursor-pointer border !w-[350px] datepickerCss border-[#AFAFAF] p-6 !h-[48px]"
                 dateFormat="dd/MM/yyyy"
-              />
+              /> */}
             </div>
             {isLoading ? (
               <div className="border py-2 w-[200px] flex items-center justify-center ">

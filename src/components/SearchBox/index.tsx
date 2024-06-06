@@ -20,24 +20,39 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   customPlaceholder,
 }) => {
   const resetRef: any = useRef<HTMLInputElement | null>(null);
-  const resetValue = () => {
-    if (resetRef.current.value) getFullContent();
+  // const resetValue = () => {
+  //   if (resetRef.current.value) getFullContent();
+  //   resetRef.current.value = "";
+  // };
+  const handleReset = () => {
+    // Check for null before accessing value to avoid errors
+    if (resetRef.current?.value) {
+      getFullContent?.(); // Call getFullContent if it exists (optional chaining)
+    }
     resetRef.current.value = "";
   };
-
   return (
     <div className="relative ">
       {/* <div className="absolute flex h-full justify-between "> */}
-      <img
+      {/* <img
         src={CrossIcon}
         alt=""
-        className="absolute right-0 h-full cursor-pointer p-2 z-10"
+        className="absolute right-0 h-full cursor-pointer p-2 z-0"
         onClick={resetValue}
+      /> */}
+
+      <img
+        src={CrossIcon}
+        alt="Clear Search" // Provide descriptive alt text for accessibility
+        className={`absolute right-0 h-full cursor-pointer p-2 z-0 ${
+          value ? "" : "hidden"
+        }`} // Toggle visibility based on value
+        onClick={handleReset}
       />
       <img
         src={SearchBoxIcon}
         alt=""
-        className="absolute left-0 h-full p-2 z-10"
+        className="absolute left-0 h-full p-2 z-0"
       />
       {/* </div> */}
       {/* <CustomInputBox
@@ -53,7 +68,7 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
         ref={resetRef}
         placeholder={customPlaceholder}
         type="text"
-        className={`${className}  focus:border-[#004eff] transition-all duration-300 transactionSearhBox rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[5px] !pl-[36px] h-[36px] font-normal text-[12px] `}
+        className={`${className}  focus:border-[#004eff] transition-all duration-300 transactionSearhBox rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[5px] !pl-[30px] h-[36px] font-normal text-[12px] `}
         // value={value}
         onChange={onChange}
         title="Search Box"
