@@ -119,7 +119,7 @@ const ReverseSummary = (props: Iprops) => {
 
   return (
     <div className="relative h-[90vh] px-4">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 h-[80%] overflow-auto">
         <div className="accordionContainerBoxStyle">
           <div
             className={`cursor-pointer px-4 py-3 flex justify-between items-center
