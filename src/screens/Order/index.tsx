@@ -78,6 +78,7 @@ import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
+import DateButton from "../../components/Button/DateButton";
 let allOrdersCount: any;
 
 const Buttons = (className?: string) => {
@@ -509,12 +510,18 @@ const Index = () => {
     }
   };
 
+  const handleClear = () => {
+    setDateRange([null, null]);
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   const Buttons = (className?: string) => {
     return (
       <div>
         <div className="flex justify-end mb-4">
-          <div className="border border-[#AFAFAF] w-[230px]  !h-[36px] rounded-md">
-            <DatePicker
+          <div className="">
+            {/* <DatePicker
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
@@ -535,6 +542,39 @@ const Index = () => {
               placeholderText="Select From & To Date"
               className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
               dateFormat="dd/MM/yyyy"
+            /> */}
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update: any) => {
+                setDateRange(update);
+                if (update[0] === null && update[1] === null) {
+                  // Explicitly set startDate and endDate to null when cleared
+                  setStartDate(null);
+                  setEndDate(null);
+                  // fetchCodRemittanceData();
+                } else {
+                  // Update startDate and endDate based on the selected range
+                  setStartDate(update[0]);
+                  setEndDate(update[1]);
+                }
+              }}
+              // isClearable={true}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <DateButton
+                  text="Select From & To Date" // Text for the button
+                  onClick={() => {}} // onClick is managed by DatePicker
+                  className="h-[36px]"
+                  value={
+                    startDate && endDate
+                      ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                      : ""
+                  } // Display date range
+                  onClear={handleClear} // Handle clear action
+                />
+              } // Include placeholder onClick function
             />
           </div>
           <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border w-[250px]">

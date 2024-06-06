@@ -2,6 +2,7 @@ import "./dropDown.css";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { updateDropdownValue } from "../../redux/reducers/paginationReducer";
+import InfoCircle from "../../assets/info-circle.svg";
 
 interface IDropDownProps {
   options?: any;
@@ -100,12 +101,20 @@ const CustomDropDown = (props: IDropDownProps) => {
           {label}
         </label>
       </div>
-      {inputError && !value && (
+      {/* {inputError && !value && (
         <span
           className={`text-[red] transition-all ease-out h-0  h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
         >
           Field is required
         </span>
+      )} */}
+      {inputError && !value && (
+        <div className="flex items-center gap-x-1 mt-1">
+          <img src={InfoCircle} alt="" width={16} height={16} />
+          <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
+            Field is required
+          </span>
+        </div>
       )}
     </>
   );

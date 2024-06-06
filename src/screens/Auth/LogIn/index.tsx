@@ -40,6 +40,7 @@ import { socketCallbacks } from "../../../Socket";
 import { useErrorBoundary } from "react-error-boundary";
 import { getQueryJson } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
+import { login } from "../../../redux/reducers/userReducer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -384,7 +385,9 @@ const Index = () => {
                   </div>
                   <div>
                     <CustomInputBox
-                      containerStyle="mt-[17px]"
+                      containerStyle={`mt-[17px] ${
+                        loginError.email ? "border-red-500" : ""
+                      }`}
                       label="Email"
                       id="email"
                       //commented as by default placeholder text is getting top of the input box
@@ -420,16 +423,60 @@ const Index = () => {
                           });
                         }
                       }}
+                      errorCondition={{
+                        // regex: "email",
+                        message: loginError?.email,
+                        // onBlur: true, // Trigger error condition check on blur
+                      }}
+                      // inputError={loginError.email !== ""}
                     />
-                    {loginError.email !== "" && (
+                    {/* {loginError.email !== "" && (
                       <div className="flex items-center gap-x-1 mt-1">
                         <img src={InfoCircle} alt="" width={10} height={10} />
                         <span className="font-normal text-[#F35838] text-xs leading-3">
                           {loginError.email}
                         </span>
                       </div>
-                    )}
+                    )} */}
                   </div>
+
+                  {/* <div>
+                    <CustomInputBox
+                      containerStyle={`mt-[17px] ${
+                        loginError.email ? "border-red-500" : ""
+                      }`}
+                      label="Email"
+                      id="email"
+                      inputType="email"
+                      value={loginCredentials.email}
+                      onChange={(e) => {
+                        setLoginCredentials({
+                          ...loginCredentials,
+                          email: e.target.value,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (!loginCredentials?.email) {
+                          setLoginError({
+                            ...loginError,
+                            email: "Please Enter Your Email ID",
+                          });
+                        } else if (!emailRegex.test(e.target.value)) {
+                          setLoginError({
+                            ...loginError,
+                            email: "Incorrect Email ID",
+                          });
+                        } else {
+                          setLoginError({ ...loginError, email: "" });
+                        }
+                      }}
+                      errorCondition={{
+                        // regex: "email",
+                        message: loginError.email,
+                        // onBlur: true, // Trigger error condition check on blur
+                      }}
+                    />
+                  </div> */}
 
                   <div>
                     <CustomInputBox
@@ -480,15 +527,20 @@ const Index = () => {
                           });
                         }
                       }}
+                      errorCondition={{
+                        // regex: "email",
+                        message: loginError?.password,
+                        // onBlur: true, // Trigger error condition check on blur
+                      }}
                     />
-                    {loginError.password !== "" && (
+                    {/* {loginError.password !== "" && (
                       <div className="flex items-center gap-x-1 mt-1">
                         <img src={InfoCircle} alt="" width={10} height={10} />
                         <span className="font-normal text-[#F35838] text-xs leading-3">
                           {loginError.password}
                         </span>
                       </div>
-                    )}
+                    )} */}
                   </div>
                   <div className="mt-[-15px]">
                     {" "}
