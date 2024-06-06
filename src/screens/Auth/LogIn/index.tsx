@@ -5,7 +5,7 @@ import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import CustomButton from "../../../components/Button/index";
 import CustomInputBox from "../../../components/Input";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
@@ -89,10 +89,20 @@ const Index = () => {
           response?.data[0]?.token
         );
 
-        // console.log(
-        //   "🚀 ~ file: index.tsx:87 ~ logInOnClick ~ response?.data[0]?.sellerId:",
-        //   response?.data[0]
-        // );
+        //for hubspot sso
+        const params = getQueryJson();
+
+        const supportedUrl =
+          "https://support.shipyaari.com/_hcms/mem/jwt/verify";
+
+        if (params?.hasOwnProperty("redirect_url")) {
+          if (params?.redirect_url === supportedUrl) {
+            window.location.replace(
+              `${params?.redirect_url}?jwt=${response?.data[0]?.token}`
+            );
+          }
+          return;
+        }
 
         window?.dataLayer?.push({
           event: "login",
