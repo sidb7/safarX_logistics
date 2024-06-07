@@ -72,7 +72,7 @@ const CustomDropDown = (props: IDropDownProps) => {
             inputError && !value
               ? "!border-red-500"
               : "border-[1px] border-[#A4A4A4]"
-          } p-[10px] gap-[10px] h-[48px] font-sans text-[12px] text-[#1C1C1C] outline-none`}
+          } p-[10px] gap-[10px] h-[48px] font-Open text-[14px] text-[#1C1C1C] outline-none`}
         >
           {heading && (
             <option
