@@ -328,7 +328,7 @@ const ReverseIndex = (props: ReverseProps) => {
   };
   return (
     <div className="relative h-[90vh] px-4">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 h-[80%] overflow-auto">
         {actualArray?.map((item: any, i: number) => {
           // console.log("🚀 ~ {actualArray?.map ~ item:", item);
           return (
