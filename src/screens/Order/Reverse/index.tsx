@@ -23,6 +23,7 @@ let reverseServiceArrayTemp: any = [];
 
 const ReverseIndex = (props: ReverseProps) => {
   const { awbData, summaryData } = props;
+  console.log("🚀 ~ awbData:", awbData);
   const [actualArray, setActualArray] = useState([]);
   const [prentActiveItem, setPrentActiveItem] = useState<number>();
   const [nestedProductAccordian, setNestedProductAccordian] =
@@ -152,9 +153,87 @@ const ReverseIndex = (props: ReverseProps) => {
             newDataArray.push({
               title: "Products",
             });
-            setProductArray(productsArray);
+
+            let tempArray = [
+              {
+                companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                privateCompanyId: 104486,
+                sellerId: 5530,
+                productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+                name: "Suresh Pros 1",
+                category: "Toys & Games",
+                qty: 5,
+                sku: "DSFS",
+                hsnCode: "",
+                currency: "INR",
+                unitPrice: 123,
+                unitTax: 12,
+                measureUnit: "cm",
+                length: 1,
+                breadth: 1,
+                height: 1,
+                deadWeight: 4,
+                weightUnit: "kg",
+                volumetricWeight: 0,
+                appliedWeight: 4,
+                divisor: 5000,
+                images: [],
+                selected: true,
+              },
+              {
+                companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                privateCompanyId: 104486,
+                sellerId: 5530,
+                productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+                name: "Suresh Pros 2",
+                category: "Toys & Games",
+                qty: 4,
+                sku: "DSFS",
+                hsnCode: "",
+                currency: "INR",
+                unitPrice: 123,
+                unitTax: 12,
+                measureUnit: "cm",
+                length: 1,
+                breadth: 1,
+                height: 1,
+                deadWeight: 4,
+                weightUnit: "kg",
+                volumetricWeight: 0,
+                appliedWeight: 4,
+                divisor: 5000,
+                images: [],
+                selected: true,
+              },
+              {
+                companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+                privateCompanyId: 104486,
+                sellerId: 5530,
+                productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+                name: "Suresh Pros 3",
+                category: "Toys & Games",
+                qty: 3,
+                sku: "DSFS",
+                hsnCode: "",
+                currency: "INR",
+                unitPrice: 123,
+                unitTax: 12,
+                measureUnit: "cm",
+                length: 1,
+                breadth: 1,
+                height: 1,
+                deadWeight: 4,
+                weightUnit: "kg",
+                volumetricWeight: 0,
+                appliedWeight: 4,
+                divisor: 5000,
+                images: [],
+                selected: true,
+              },
+            ];
+            setProductArray(tempArray);
             // copy product array in new state
-            setProductCopyArray(productsArray);
+            setProductCopyArray(tempArray);
           }
           if (responsData["boxInfo"]) {
             newDataArray.push({
@@ -317,16 +396,28 @@ const ReverseIndex = (props: ReverseProps) => {
   };
 
   const handlerSubmit = () => {
-    let summaryTemp: any = {
-      pickupAddress: pickupAddress,
-      pickupTime: pickupDate,
-      deliveryAddress: deliveryAddress,
-      productArray: productArray,
-      boxArray: boxArray,
-      reverseSeviceArray: serviceArray,
-      restInfo: restInfo,
-    };
-    summaryData(summaryTemp);
+    // to check atleast one product are have one qty in product array
+    const hasProductWithQtyGreaterThanZero = productArray.some(
+      (product: any) => product.qty > 0
+    );
+
+    // hasProductWithQtyGreaterThanZero it give true or false
+    if (!hasProductWithQtyGreaterThanZero) {
+      toast.error("Atleast One Product Are Required");
+    } else {
+      console.log("elseeeeee");
+    }
+
+    // let summaryTemp: any = {
+    //   pickupAddress: pickupAddress,
+    //   pickupTime: pickupDate,
+    //   deliveryAddress: deliveryAddress,
+    //   productArray: productArray,
+    //   boxArray: boxArray,
+    //   reverseSeviceArray: serviceArray,
+    //   restInfo: restInfo,
+    // };
+    // summaryData(summaryTemp);
   };
   return (
     <div className="relative h-[90vh] px-4">
