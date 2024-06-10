@@ -277,6 +277,8 @@ const ReverseIndex = (props: ReverseProps) => {
     }
   };
 
+  // console.log("🚀 ~ minusQtyProduct ~ productArray:", productArray);
+
   function convertToEpoch(dateTimeString: any) {
     const parsedDateTime = parse(
       dateTimeString,
