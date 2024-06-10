@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import Checkbox from "../../../../components/CheckBox";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -70,7 +71,7 @@ export const ServiceComponent = (props: ITypeProps) => {
         </div> */}
 
         {/* new checkbox functionality implemented */}
-        <div className="font-normal text-[12px] text-[#494949] font-Open md:px-7 self-start my-1 mx-1">
+        <div className="font-normal pb-3   text-[12px] text-[#494949] font-Open md:px-9 self-start my-1 mx-1">
           <Checkbox
             checked={false}
             onChange={(e: any) => setCheckbox(e.value)}
@@ -81,7 +82,18 @@ export const ServiceComponent = (props: ITypeProps) => {
           />
         </div>
 
-        <ServiceButton
+        <div className="w-[100%] md:w-[320px] md:pb-5">
+          <OneButton
+            text="ACCEPT AND CONTINUE"
+            onClick={() => {
+              acceptService();
+            }}
+            disabled={!checkbox}
+            variant="primary"
+          />
+        </div>
+
+        {/* <ServiceButton
           text="ACCEPT AND CONTINUE"
           className={`w-full md:!w-[320px] font-Open  mb-0 ${
             checkbox === true
@@ -92,7 +104,7 @@ export const ServiceComponent = (props: ITypeProps) => {
           onClick={() => {
             acceptService();
           }}
-        />
+        /> */}
       </div>
     );
   };

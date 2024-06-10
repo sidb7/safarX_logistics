@@ -24,6 +24,7 @@ import ErrorIcon from "../../../../assets/common/info-circle.svg";
 import { Spinner } from "../../../../components/Spinner";
 import TimerCounter from "../../../../components/TimerCountdown";
 import { ResponsiveState } from "../../../../utils/responsiveState";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -681,29 +682,48 @@ const Index = (props: ITypeProps) => {
             </div>
             <div className="flex  md:justify-center md:items-center px-5 pb-12">
               {verifyOTP ? (
-                <ServiceButton
-                  text="VERIFY OTP"
-                  btnType="submit"
-                  onClick={() => onVerifyOtp()}
-                  disabled={!verifyBtnStatus}
-                  className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px] !font-Open ${
-                    verifyBtnStatus === true
-                      ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
-                      : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
-                  }`}
-                />
+                // <ServiceButton
+                //   text="VERIFY OTP"
+                //   btnType="submit"
+                //   onClick={() => onVerifyOtp()}
+                //   disabled={!verifyBtnStatus}
+                //   className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px] !font-Open ${
+                //     verifyBtnStatus === true
+                //       ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                //       : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                //   }`}
+                // />
+                <div className="w-[100%]">
+                  <OneButton
+                    text="Verify OTP"
+                    onClick={() => onVerifyOtp()}
+                    disabled={!verifyBtnStatus}
+                    variant="primary"
+                    className="w-full md:!w-[320px]  mb-5"
+                  />
+                </div>
               ) : (
-                <ServiceButton
-                  text="Verify Number"
-                  disabled={!otpFormBtnStatus}
-                  btnType="submit"
-                  onClick={() => onSendOtp()}
-                  className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-[180px] md:!w-[320px] !font-Open ${
-                    otpFormBtnStatus === true
-                      ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
-                      : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
-                  }`}
-                />
+                <div className="w-[100%]">
+                  <OneButton
+                    text="Verify Number"
+                    onClick={() => onSendOtp()}
+                    disabled={!otpFormBtnStatus}
+                    variant="primary"
+                    className="w-full md:!w-[320px]  mb-5"
+                  />
+
+                  {/* <ServiceButton
+                    text="Verify Number"
+                    disabled={!otpFormBtnStatus}
+                    btnType="submit"
+                    onClick={() => onSendOtp()}
+                    className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-[180px] md:!w-[320px] !font-Open ${
+                      otpFormBtnStatus === true
+                        ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                        : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                    }`}
+                  /> */}
+                </div>
               )}
             </div>
           </div>

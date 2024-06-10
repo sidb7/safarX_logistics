@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
 import CustomDropDown from "../../../components/DropDown";
+import OneButton from "../../../components/Button/OneButton";
 
 export const QuestionComponent6: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -226,8 +227,8 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                     />
                   </div>
                 </div>
-                <div className="mt-6 flex gap-x-4">
-                  <CustomButton
+                <div className="mt-6 flex gap-x-2">
+                  {/* <CustomButton
                     className="!bg-[#E8E8E8] !text-black"
                     text="BACK"
                     onClick={() =>
@@ -237,8 +238,21 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                         },
                       })
                     }
-                  />
-                  <CustomButton
+                  /> */}
+                  <div className=" w-full">
+                    <OneButton
+                      variant="secondary"
+                      text="BACK"
+                      onClick={() =>
+                        navigate("/onboarding/questionnaire/question4", {
+                          state: {
+                            questionsData,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                  {/* <CustomButton
                     text="NEXT"
                     disabled={!nextBtnStatus}
                     onClick={() => nextHandler()}
@@ -247,7 +261,15 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                         ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
                         : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
                     }`}
-                  />
+                  /> */}
+                  <div className=" w-full">
+                    <OneButton
+                      variant="primary"
+                      onClick={() => nextHandler()}
+                      text="NEXT"
+                      disabled={!nextBtnStatus}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

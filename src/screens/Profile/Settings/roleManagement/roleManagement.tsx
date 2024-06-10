@@ -17,6 +17,7 @@ import {
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../../redux/reducers/role";
+import OneButton from "../../../../components/Button/OneButton";
 
 // const
 
@@ -100,7 +101,17 @@ function RoleManagement() {
         return (
           <div className="flex justify-center items-center">
             <div>
-              <CustomButton
+              <OneButton
+                text="UPDATE"
+                onClick={() =>
+                  navigate(
+                    `/settings/role-management/update-role?roleId=${data?.roleId}&roleName=${data?.roleName}`
+                  )
+                }
+                variant="primary"
+                className="mr-4"
+              />
+              {/* <CustomButton
                 className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
                 text="UPDATE"
                 onClick={() =>
@@ -109,15 +120,21 @@ function RoleManagement() {
                   )
                 }
                 // showIcon={true}
-              />
+              /> */}
             </div>
-            <div className="ml-4">
+            <OneButton
+              text="DELETE"
+              onClick={() => deleteRoleModal(row?.original)}
+              variant="primary"
+              className="mr-4"
+            />
+            {/* <div className="ml-4">
               <CustomButton
                 className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
                 text="DELETE"
                 onClick={() => deleteRoleModal(row?.original)}
               />
-            </div>
+            </div> */}
           </div>
         );
       },
@@ -183,18 +200,30 @@ function RoleManagement() {
         }
       >
         <div className="flex ">
-          <CustomButton
+          <OneButton
+            text="ADD USER"
+            onClick={() => navigate(`/settings/user-management/add-user`)}
+            variant="primary"
+            className="mr-4"
+          />
+
+          {/* <CustomButton
             className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
             text="ADD USER"
             onClick={() => navigate(`/settings/user-management/add-user`)}
-          />
+          /> */}
 
-          <CustomButton
+          <OneButton
+            text="ADD ROLE"
+            onClick={() => navigate("/settings/role-management/add-role")}
+            variant="primary"
+          />
+          {/* <CustomButton
             className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
             text="ADD ROLE"
             onClick={() => navigate("/settings/role-management/add-role")}
             showIcon={false}
-          />
+          /> */}
         </div>
       </div>
     );

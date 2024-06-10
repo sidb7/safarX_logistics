@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import OneButton from "../../../components/Button/OneButton";
+import CustomDropDown from "../../../components/DropDown";
 
 interface ITypeProps {
   onClick?: any;
@@ -36,6 +38,12 @@ const BulkUpload = (props: ITypeProps) => {
   const [disabled, setDisabled]: any = useState(true);
   const [uploadFile, setUploadFile]: any = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [transitType, setTransitType] = useState("FORWARD");
+  const dropdownOptions = [
+    { value: "FORWARD", label: "Forward" },
+    { value: "REVERSE", label: "Reverse" },
+  ];
+
   const navigate = useNavigate();
 
   // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[2]?.pages?.[0]?.isActive;
@@ -43,10 +51,20 @@ const BulkUpload = (props: ITypeProps) => {
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
+    // Set default transit type to "forward" when selected option is "B2C"
+    if (option === "B2C") {
+      setTransitType("FORWARD");
+    }
   };
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     setFile(selectedFile);
+  };
+
+  const handleOrderTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setTransitType(event.target.value);
   };
 
   const handleFileUpload = async () => {
@@ -59,6 +77,10 @@ const BulkUpload = (props: ITypeProps) => {
     let formData = new FormData();
     formData.append("file", uploadFile);
     formData.append("orderType", selectedOption);
+    // Append transit type only if the selected option is "B2C"
+    if (selectedOption === "B2C") {
+      formData.append("transit", transitType);
+    }
 
     try {
       setIsLoading(true);
@@ -125,12 +147,20 @@ const BulkUpload = (props: ITypeProps) => {
         download="SY_BULK_ORDER.xlsx"
         className="flex items-center"
       >
-        <CustomButton
+        {/* <CustomButton
           icon={whiteDownloadIcon}
           showIcon={true}
           text={`Download ${selectedOption} Sample`}
           className="!p-5"
           onClick={() => {}}
+        /> */}
+        <OneButton
+          text={`Download ${selectedOption} Sample`}
+          onClick={() => {}}
+          className="!p-5"
+          variant="primary"
+          showIcon={true}
+          icon={whiteDownloadIcon}
         />
       </a>
     );
@@ -147,7 +177,7 @@ const BulkUpload = (props: ITypeProps) => {
 
           <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
             <div className="flex flex-row  items-center   ">
-              <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-base">
+              <p className="bg-white mr-3  lg:font-semibold lg:font-Open lg:text-base">
                 Order Type:
               </p>
 
@@ -155,20 +185,22 @@ const BulkUpload = (props: ITypeProps) => {
                 checked={selectedOption === "B2C"}
                 onChange={() => handleOptionSelect("B2C")}
                 checkboxClassName="gap-2"
+                style={{ accentColor: "black" }}
               />
               <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm mr-4">
                 B2C
               </p>
 
               {/* commented as instructed */}
-              {/* <Checkbox
+              <Checkbox
                 checked={selectedOption === "B2B"}
                 onChange={() => handleOptionSelect("B2B")}
                 checkboxClassName="gap-2"
+                style={{ accentColor: "black" }}
               />
               <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
                 B2B
-              </p> */}
+              </p>
 
               {/* <div className="w-[20%] ml-[250px]">
             <AddButton
@@ -179,6 +211,17 @@ const BulkUpload = (props: ITypeProps) => {
               className=""
             />
           </div> */}
+              {/* Render dropdown only if selected option is "B2C" */}
+              {selectedOption === "B2C" && (
+                <CustomDropDown
+                  options={dropdownOptions}
+                  onChange={handleOrderTypeChange}
+                  value={transitType}
+                  name="transitType"
+                  wrapperClass="!w-60"
+                  selectClassName="!h-[36px] !cursor-pointer"
+                />
+              )}
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 import DownloadIconWhite from "../../assets/downloadIconWhite.svg";
+import OneButton from "../Button/OneButton";
 
 interface ICustomuploadButtomProps {
   className?: string;
@@ -57,7 +58,7 @@ const CustomBulkOrderUploadButton = (props: ICustomuploadButtomProps) => {
         onChange={handleFileChange}
       />
 
-      <button
+      {/* <button
         onClick={() => fileInputRef?.current?.click()}
         className={`${className}text-[#FFF] text-[14px] flex gap-2 items-center  bg-black cursor-pointer rounded px-4 py-2 border-black border-2 text-sm font-semibold `}
       >
@@ -65,7 +66,16 @@ const CustomBulkOrderUploadButton = (props: ICustomuploadButtomProps) => {
           <img src={DownloadIconWhite} alt="" />
         </span>
         <span className="text-white font-semibold text-sm">Upload</span>
-      </button>
+      </button> */}
+
+      <OneButton
+        text="Upload"
+        showIcon
+        variant="primary"
+        icon={DownloadIconWhite}
+        className={`${className}text-[#FFF] text-[14px] flex gap-2 items-center  bg-black cursor-pointer rounded px-4 py-2 border-black border-2 text-sm font-semibold `}
+        onClick={() => fileInputRef?.current?.click()}
+      />
     </>
   );
 };

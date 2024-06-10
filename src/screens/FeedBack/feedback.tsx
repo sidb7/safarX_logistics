@@ -11,6 +11,7 @@ import FeedbackTable from "./feedbackTable";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import AccessDenied from "../../components/AccessDenied";
+import OneButton from "../../components/Button/OneButton";
 
 function Feedback() {
   const [feedbackTabs, setFeedBackTabs] = useState(tabs);
@@ -43,13 +44,23 @@ function Feedback() {
 
   const renderHeaderComponent = () => {
     return (
-      <CustomButton
-        icon={addIcon}
-        showIcon={true}
-        text={"ADD FEEDBACK"}
-        className="!p-3"
-        onClick={() => navigate(`/feedback/add-feedback`)}
-      />
+      <>
+        <OneButton
+          text="Add Feedback"
+          onClick={() => navigate(`/feedback/add-feedback`)}
+          className=" px-3"
+          icon={addIcon}
+          showIcon={true}
+          variant="primary"
+        />
+        {/* <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"ADD FEEDBACK"}
+          className="!p-3"
+          onClick={() => navigate(`/feedback/add-feedback`)}
+        /> */}
+      </>
     );
   };
 
@@ -59,6 +70,11 @@ function Feedback() {
 
   useEffect(() => {
     setIsActive(checkPageAuthorized("Feedback"));
+  }, []);
+  useEffect(() => {
+    window?.dataLayer?.push({
+      event: "Click_Feedback",
+    });
   }, []);
 
   return (

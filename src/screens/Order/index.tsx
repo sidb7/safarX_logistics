@@ -77,6 +77,7 @@ import ServiceButton from "../../components/Button/ServiceButton";
 import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
+import OneButton from "../../components/Button/OneButton";
 let allOrdersCount: any;
 
 const Buttons = (className?: string) => {
@@ -92,10 +93,17 @@ const Buttons = (className?: string) => {
       }
     >
       <div className="grid col-span-2">
-        <CustomButton
+        {/* <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
           text="ADD ORDER"
           onClick={() => navigate("/orders/add-order/pickup")}
+          showIcon={true}
+          icon={AddOrderIcon}
+        /> */}
+        <OneButton
+          text="ADD ORDER"
+          onClick={() => navigate("/orders/add-order/pickup")}
+          variant="primary"
           showIcon={true}
           icon={AddOrderIcon}
         />
@@ -290,7 +298,6 @@ const Index = () => {
   const [infoReverseModalContent, setInfoReverseModalContent]: any = useState({
     isOpen: false,
     data: {},
-    orderId: "",
   });
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
   const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
@@ -388,7 +395,6 @@ const Index = () => {
     setInfoReverseModalContent({
       isOpen: true,
       data: data,
-      orderId: "",
     });
   };
 
@@ -542,7 +548,7 @@ const Index = () => {
               customPlaceholder="Search By Order Id, AWB"
             />
           </div>
-          <div
+          {/* <div
             className="flex ml-2 rounded-md py-2 px-4 bg-[#E5EDFF] justify-between cursor-pointer items-center  gap-x-2"
             onClick={() => setFilterModal(true)}
           >
@@ -550,7 +556,15 @@ const Index = () => {
             <span className="text-[#004EFF] text-[14px] font-semibold">
               FILTER
             </span>
-          </div>
+          </div> */}
+          <OneButton
+            text="FILTER"
+            onClick={() => setFilterModal(true)}
+            variant="quad"
+            showIcon={true}
+            icon={FilterIcon}
+            className="ml-2 !uppercase"
+          />
         </div>
         <div
           className={
@@ -560,16 +574,23 @@ const Index = () => {
           }
         >
           <div className="grid col-span-2">
-            <CustomButton
+            {/* <CustomButton
               className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
               text="ADD ORDER"
               onClick={() => navigate("/orders/add-order/pickup")}
               showIcon={true}
               icon={AddOrderIcon}
+            /> */}
+            <OneButton
+              text=" ADD ORDER"
+              onClick={() => navigate("/orders/add-order/pickup")}
+              variant="primary"
+              showIcon={true}
+              icon={AddOrderIcon}
             />
           </div>
 
-          <div
+          {/* <div
             ref={syncRef}
             onClick={handleSyncOrder}
             className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
@@ -578,9 +599,18 @@ const Index = () => {
             <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
               {syncChannelText}
             </span>
-          </div>
+          </div> */}
 
-          <div
+          <OneButton
+            ref={syncRef}
+            text={syncChannelText}
+            onClick={handleSyncOrder}
+            variant="secondary"
+            showIcon={true}
+            icon={SyncIcon}
+          />
+
+          {/* <div
             className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
             // onClick={() => setIsModalOpen(true)}
             onClick={() => navigate("/orders/add-bulk")}
@@ -589,7 +619,16 @@ const Index = () => {
             <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C] capitalize">
               Bulk Upload
             </span>
-          </div>
+          </div> */}
+
+          <OneButton
+            text="Bulk Upload"
+            onClick={() => navigate("/orders/add-bulk")}
+            variant="secondary"
+            showIcon={true}
+            icon={BlukOrderIcon}
+          />
+
           {isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
@@ -609,12 +648,39 @@ const Index = () => {
 
   const handleSyncOrder = async () => {
     try {
+      // if (syncChannelText.includes("Sync Channel")) {
+      //   setIsSyncModalOpen(true);
+      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+      //   syncRef.current.style.backgroundColor = "#F8F8F8";
+      //   syncRef.current.style.pointerEvents = "none";
+      //   syncRef.current.childNodes[0].classList.add("infinite-rotate");
+      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+      // }
+
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
-        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-        syncRef.current.style.backgroundColor = "#F8F8F8";
-        syncRef.current.style.pointerEvents = "none";
-        syncRef.current.childNodes[0].classList.add("infinite-rotate");
+
+        // Check if syncRef.current is not null
+        if (syncRef.current) {
+          // Access the child nodes and properties only if syncRef.current is not null
+          const buttonTextNode = syncRef.current.childNodes[1];
+          const buttonIconNode = syncRef.current.childNodes[0];
+
+          if (buttonTextNode) {
+            buttonTextNode.textContent = "Sync In Progress...";
+          }
+
+          syncRef.current.style.backgroundColor = "#F8F8F8";
+          syncRef.current.style.pointerEvents = "none";
+
+          if (buttonIconNode) {
+            buttonIconNode.classList.add("infinite-rotate");
+          }
+
+          if (buttonTextNode) {
+            buttonTextNode.textContent = "Sync In Progress...";
+          }
+        }
       }
 
       // const { data: response } = await POST(GET_ALL_STORES, {});
@@ -674,6 +740,15 @@ const Index = () => {
       syncRef.current.style.pointerEvents = "auto";
       syncRef.current.childNodes[0].classList.remove("infinite-rotate");
     }
+    // if (syncRef.current) {
+    //   syncRef.current.childNodes[0].childNodes[0].childNodes[1].childNodes[0].textContent =
+    //     "Sync Channel";
+    //   syncRef.current.childNodes[0].style.backgroundColor = "white";
+    //   syncRef.current.childNodes[0].style.pointerEvents = "auto";
+    //   syncRef.current.childNodes[0].childNodes[0].childNodes[0].classList.remove(
+    //     "infinite-rotate"
+    //   );
+    // }
   };
 
   const warningMessageForDelete = (data?: any) => {
@@ -721,12 +796,20 @@ const Index = () => {
         }
       >
         <div>
-          <CustomButton
+          {/* <CustomButton
             className="text-[12px] lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
             text="ADD ORDER"
             onClick={() => navigate("/orders/add-order/pickup")}
             showIcon={true}
             icon={AddOrderIcon}
+          /> */}
+          <OneButton
+            text=" TEST ORDER"
+            onClick={() => navigate("/orders/add-order/pickup")}
+            variant="primary"
+            showIcon={true}
+            icon={AddOrderIcon}
+            className="text-[14px] font-semibold"
           />
         </div>
 
@@ -1440,6 +1523,8 @@ const Index = () => {
   ) => {
     try {
       let payload: any;
+      let dates: any = {};
+      let allOrders: any;
       if (filterId === 1) {
         payload = {
           skip,
@@ -1510,12 +1595,33 @@ const Index = () => {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        dates.startDate = startEpoch;
+        dates.endDate = lastendEpoch;
+      }
+
+      const { data: count } = await POST(GET_STATUS_COUNT, dates);
+      allOrders = count?.data?.[0]?.count;
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
 
-      setDraftOrderCount({ ...draftOrderCount, all: orderCount });
+      setDraftOrderCount({ ...draftOrderCount, all: allOrders || orderCount });
 
       setSelectedRowData([]);
 
@@ -1651,66 +1757,96 @@ const Index = () => {
     setIsDeleted(false);
   }
 
-  const getErrors = async () => {
-    let payload: any = {};
+  const getErrors = async (isFetching?: any) => {
+    try {
+      let payload: any = {};
+      let index: any = 0;
+      let dateFilter: any = true;
 
-    const newArray = filterPayLoad?.filterArrOne.filter(
-      (obj) => !Object.keys(obj).includes("createdAt")
-    );
+      const newArray = filterPayLoad?.filterArrOne.filter(
+        (obj) => !Object.keys(obj).includes("createdAt")
+      );
 
-    if (newArray?.length > 0 || filterPayLoad?.filterArrTwo?.length > 0) {
-      payload.filterArrOne = newArray || [];
-      payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
-    }
-
-    if (startDate && endDate) {
-      let startEpoch = null;
-      let lastendEpoch = null;
-
-      if (startDate instanceof Date && endDate instanceof Date) {
-        startDate.setHours(0, 0, 0, 0);
-        startEpoch = startDate.getTime();
-
-        endDate.setHours(23, 59, 59, 999);
-        const endEpoch = endDate.getTime();
-
-        lastendEpoch = endEpoch;
+      if (newArray?.length > 0 || filterPayLoad?.filterArrTwo?.length > 0) {
+        payload.filterArrOne = newArray || [];
+        payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
       }
 
-      payload.startDate = startEpoch;
-      payload.endDate = lastendEpoch;
-    }
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
 
-    if (searchedText?.length > 0) {
-      payload.id = searchedText;
-    }
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
 
-    setIsErrorListLoading(true);
-    const { data } = await POST(GET_ORDER_ERRORS, payload);
-    if (data?.status) {
-      const result: any = [];
-      let errorListCount = 0;
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
 
-      for (const [key, value] of Object.entries(data?.data?.[0])) {
-        const currentObject = {
-          errorName: key,
-          value: value,
-        };
-        result.push(currentObject);
+          lastendEpoch = endEpoch;
+        }
+
+        payload.startDate = startEpoch;
+        payload.endDate = lastendEpoch;
       }
 
-      result.forEach((item: any) => {
-        if (item.value) {
-          item.value.forEach((order: any) => {
-            errorListCount += order.ordersCount || 0;
+      if (searchedText?.length > 0) {
+        payload.id = searchedText;
+      }
+
+      setIsErrorListLoading(true);
+      const { data } = await POST(GET_ORDER_ERRORS, payload);
+      if (data?.status) {
+        const result: any = [];
+        let errorListCount = 0;
+
+        for (const [key, value] of Object.entries(data?.data?.[0])) {
+          const currentObject = {
+            errorName: key,
+            value: value,
+          };
+          result.push(currentObject);
+        }
+
+        result.forEach((item: any) => {
+          if (item.value) {
+            item.value.forEach((order: any) => {
+              errorListCount += order.ordersCount || 0;
+            });
+          }
+        });
+
+        if (isFetching) {
+          const sellerOrder = await getSellerOrderByStatus(
+            statusData[index].value,
+            1,
+            { _id: -1 },
+            0,
+            itemsPerPage,
+            dateFilter,
+            searchedText,
+            startDate,
+            endDate,
+            filterPayLoad
+          );
+
+          setDraftOrderCount({
+            ...draftOrderCount,
+            all: sellerOrder.orderCount || 0,
+            draft: sellerOrder.draftCount || 0,
+            // failed: failedCount || 0,
+            error: sellerOrder.errorCount || 0,
           });
         }
-      });
 
-      setErrorData(result);
-      setIsErrorListLoading(false);
-    } else {
-      setIsErrorListLoading(false);
+        setErrorData(result);
+        setIsErrorListLoading(false);
+      } else {
+        setIsErrorListLoading(false);
+      }
+    } catch (error: any) {
+      toast.error(error);
+      return false;
     }
   };
 
@@ -2111,7 +2247,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <ReverseCustomAccordian />
+        <ReverseCustomAccordian awbData={infoReverseModalContent} />
         {/* <CustomTableAccordian getAllSellerData={infoModalContent} /> */}
       </CustomRightModal>
 
@@ -2175,24 +2311,40 @@ const Index = () => {
               className="hidden lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
               style={{ width: "-webkit-fill-available" }}
             >
-              <ServiceButton
+              <OneButton
+                text="RESET ALL"
+                onClick={() => {
+                  window.location.reload();
+                  setFilterModal(false);
+                }}
+                className=" px-5  "
+                variant="secondary"
+              />
+              {/* <ServiceButton
                 text="RESET ALL"
                 onClick={() => {
                   window.location.reload();
                   setFilterModal(false);
                 }}
                 className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-              />
+              /> */}
               {isFilterLoading ? (
                 <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
                   <Spinner />
                 </div>
               ) : (
-                <ServiceButton
+                <OneButton
                   text="APPLY"
                   onClick={applyFilterforOrders}
-                  className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+                  className=" px-5  "
+                  variant="primary"
                 />
+
+                // <ServiceButton
+                //   text="APPLY"
+                //   onClick={applyFilterforOrders}
+                //   className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+                // />
               )}
             </div>
           </div>
