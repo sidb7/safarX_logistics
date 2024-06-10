@@ -168,6 +168,7 @@ import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
 import Label from "../screens/Profile/Settings/labelSetting";
 import CouponScreen from "../components/Coupons/index";
 import Rules from "../screens/Order/Rules";
+import ChangePasswordv2 from "../screens/Auth/ChangePassword";
 import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
 
 const MyRoutes: React.FC = () => {
@@ -175,6 +176,7 @@ const MyRoutes: React.FC = () => {
     <Routes>
       <Route path="/ai-address" element={<AiAddress />} />
       <Route path="/ai-listen" element={<AiListen />} />
+      <Route path="/change-password" element={<ChangePasswordv2 />} />
       <Route
         path="/auth/login"
         element={
