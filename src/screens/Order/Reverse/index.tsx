@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import AddCircleBlack from "../../../assets/add-circle_black.svg";
 import MinusCircle from "../../../assets/subtract-circle.svg";
@@ -32,8 +32,8 @@ const ReverseIndex = (props: ReverseProps) => {
   const [serviceArray, setServiceArray] = useState<any>();
   const [pickupDate, setPickupDate] = useState("");
   const [productArray, setProductArray]: any = useState();
-  const [productCopyArray, setProductCopyArray]: any = useState();
-
+  // const [productCopyArray, setProductCopyArray]: any = useState();
+  let productCopyArray: any = useRef();
   const [boxArray, setBoxArray]: any = useState();
   const [pickupAddress, setPickupAddress] = useState({
     contactPerson: "",
@@ -154,86 +154,89 @@ const ReverseIndex = (props: ReverseProps) => {
               title: "Products",
             });
 
-            let tempArray = [
-              {
-                companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
-                privateCompanyId: 104486,
-                sellerId: 5530,
-                productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
-                name: "Suresh Pros 1",
-                category: "Toys & Games",
-                qty: 5,
-                sku: "DSFS",
-                hsnCode: "",
-                currency: "INR",
-                unitPrice: 123,
-                unitTax: 12,
-                measureUnit: "cm",
-                length: 1,
-                breadth: 1,
-                height: 1,
-                deadWeight: 4,
-                weightUnit: "kg",
-                volumetricWeight: 0,
-                appliedWeight: 4,
-                divisor: 5000,
-                images: [],
-                selected: true,
-              },
-              {
-                companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
-                privateCompanyId: 104486,
-                sellerId: 5530,
-                productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
-                name: "Suresh Pros 2",
-                category: "Toys & Games",
-                qty: 4,
-                sku: "DSFS",
-                hsnCode: "",
-                currency: "INR",
-                unitPrice: 123,
-                unitTax: 12,
-                measureUnit: "cm",
-                length: 1,
-                breadth: 1,
-                height: 1,
-                deadWeight: 4,
-                weightUnit: "kg",
-                volumetricWeight: 0,
-                appliedWeight: 4,
-                divisor: 5000,
-                images: [],
-                selected: true,
-              },
-              {
-                companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
-                privateCompanyId: 104486,
-                sellerId: 5530,
-                productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
-                name: "Suresh Pros 3",
-                category: "Toys & Games",
-                qty: 3,
-                sku: "DSFS",
-                hsnCode: "",
-                currency: "INR",
-                unitPrice: 123,
-                unitTax: 12,
-                measureUnit: "cm",
-                length: 1,
-                breadth: 1,
-                height: 1,
-                deadWeight: 4,
-                weightUnit: "kg",
-                volumetricWeight: 0,
-                appliedWeight: 4,
-                divisor: 5000,
-                images: [],
-                selected: true,
-              },
-            ];
-            setProductArray(tempArray);
+            // let tempArray = [
+            //   {
+            //     companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            //     privateCompanyId: 104486,
+            //     sellerId: 5530,
+            //     productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+            //     name: "Suresh Pros 1",
+            //     category: "Toys & Games",
+            //     qty: 5,
+            //     sku: "DSFS",
+            //     hsnCode: "",
+            //     currency: "INR",
+            //     unitPrice: 123,
+            //     unitTax: 12,
+            //     measureUnit: "cm",
+            //     length: 1,
+            //     breadth: 1,
+            //     height: 1,
+            //     deadWeight: 4,
+            //     weightUnit: "kg",
+            //     volumetricWeight: 0,
+            //     appliedWeight: 4,
+            //     divisor: 5000,
+            //     images: [],
+            //     selected: true,
+            //   },
+            //   {
+            //     companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            //     privateCompanyId: 104486,
+            //     sellerId: 5530,
+            //     productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+            //     name: "Suresh Pros 2",
+            //     category: "Toys & Games",
+            //     qty: 4,
+            //     sku: "DSFS",
+            //     hsnCode: "",
+            //     currency: "INR",
+            //     unitPrice: 123,
+            //     unitTax: 12,
+            //     measureUnit: "cm",
+            //     length: 1,
+            //     breadth: 1,
+            //     height: 1,
+            //     deadWeight: 4,
+            //     weightUnit: "kg",
+            //     volumetricWeight: 0,
+            //     appliedWeight: 4,
+            //     divisor: 5000,
+            //     images: [],
+            //     selected: true,
+            //   },
+            //   {
+            //     companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            //     privateCompanyId: 104486,
+            //     sellerId: 5530,
+            //     productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+            //     name: "Suresh Pros 3",
+            //     category: "Toys & Games",
+            //     qty: 3,
+            //     sku: "DSFS",
+            //     hsnCode: "",
+            //     currency: "INR",
+            //     unitPrice: 123,
+            //     unitTax: 12,
+            //     measureUnit: "cm",
+            //     length: 1,
+            //     breadth: 1,
+            //     height: 1,
+            //     deadWeight: 4,
+            //     weightUnit: "kg",
+            //     volumetricWeight: 0,
+            //     appliedWeight: 4,
+            //     divisor: 5000,
+            //     images: [],
+            //     selected: true,
+            //   },
+            // ];
+            setProductArray(productsArray);
+            productCopyArray = [...productsArray];
+
+            // productsArray
             // copy product array in new state
-            setProductCopyArray(tempArray);
+            // setProductCopyArray(tempArray);
           }
           if (responsData["boxInfo"]) {
             newDataArray.push({
@@ -298,11 +301,13 @@ const ReverseIndex = (props: ReverseProps) => {
 
         // Subtract 1 from the current value
         let newQty = currentQty + 1;
+        let tempProductCopyArray = productCopyArray?.current;
 
-        for (let i = 0; i < productCopyArray?.length; i++) {
+        for (let i = 0; i < tempProductCopyArray?.length; i++) {
           if (i === j) {
-            // here we check from productCopyArray object is qty is not greaterthan newQty value
-            if (productCopyArray[j].qty >= newQty) {
+            // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
+
+            if (tempProductCopyArray[j].qty >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
             } else {
@@ -332,11 +337,12 @@ const ReverseIndex = (props: ReverseProps) => {
 
         // Subtract 1 from the current value
         let newQty = currentQty - 1;
+        let tempProductCopyArray = productCopyArray?.current;
 
-        for (let i = 0; i < productCopyArray?.length; i++) {
+        for (let i = 0; i < tempProductCopyArray?.length; i++) {
           if (newQty >= 0) {
-            // here we check from productCopyArray object is qty is not greaterthan newQty value
-            if (productCopyArray[j].qty >= newQty) {
+            // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
+            if (tempProductCopyArray[j].qty >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
             } else {
@@ -396,6 +402,12 @@ const ReverseIndex = (props: ReverseProps) => {
   };
 
   const handlerSubmit = () => {
+    // to check pickupDate is empty or not
+    if (pickupDate === "" || pickupDate === null || pickupDate === undefined) {
+      toast.error("Pickup Date And Time Is Missing");
+      return;
+    }
+
     // to check atleast one product are have one qty in product array
     const hasProductWithQtyGreaterThanZero = productArray.some(
       (product: any) => product.qty > 0
@@ -405,19 +417,21 @@ const ReverseIndex = (props: ReverseProps) => {
     if (!hasProductWithQtyGreaterThanZero) {
       toast.error("Atleast One Product Are Required");
     } else {
-      console.log("elseeeeee");
-    }
+      let filterProductQtyZero: any = productArray?.filter(
+        (el: any, i: number) => el?.qty != 0
+      );
 
-    // let summaryTemp: any = {
-    //   pickupAddress: pickupAddress,
-    //   pickupTime: pickupDate,
-    //   deliveryAddress: deliveryAddress,
-    //   productArray: productArray,
-    //   boxArray: boxArray,
-    //   reverseSeviceArray: serviceArray,
-    //   restInfo: restInfo,
-    // };
-    // summaryData(summaryTemp);
+      let summaryTemp: any = {
+        pickupAddress: pickupAddress,
+        pickupTime: pickupDate,
+        deliveryAddress: deliveryAddress,
+        productArray: filterProductQtyZero,
+        boxArray: boxArray,
+        reverseSeviceArray: serviceArray,
+        restInfo: restInfo,
+      };
+      summaryData(summaryTemp);
+    }
   };
   return (
     <div className="relative h-[90vh] px-4">
