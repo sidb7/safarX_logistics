@@ -104,58 +104,62 @@ const App = () => {
     let script: any = "";
     let scriptElement: any = "";
 
-    if (
-      Environment === "production" &&
-      userInfo !== undefined &&
-      userInfo !== null
-    ) {
-      setUserInfo(userInfo);
+    // if (
+    //   Environment === "production" &&
+    //   userInfo !== undefined &&
+    //   userInfo !== null
+    // ) {
+    setUserInfo(userInfo);
 
-      Sentry.setUser({
-        id: `Seller ID: ${userInfo?.sellerId}`,
-        email: userInfo?.email,
-        username: `${userInfo?.name} (${userInfo?.sellerId})`,
-      });
+    Sentry.setUser({
+      id: `Seller ID: ${userInfo?.sellerId}`,
+      email: userInfo?.email,
+      username: `${userInfo?.name} (${userInfo?.sellerId})`,
+    });
 
-      Sentry.init({
-        dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
-        debug: true,
-        integrations: [
-          Sentry.feedbackIntegration({
-            // Additional SDK configuration goes in here, for example:
+    Sentry.setExtra("extra_info", {
+      privateCompanyId: userInfo?.privateCompanyId,
+    });
 
-            colorScheme: "light",
-            isNameRequired: true,
-            isEmailRequired: true,
-          }),
-          // Sentry.captureConsoleIntegration(),
-          // Sentry.contextLinesIntegration(),
-          // Sentry.linkedErrorsIntegration({
-          //   limit: 7,
-          // }),
-          // Sentry.debugIntegration(),
-          //   Sentry.replayIntegration({
-          //     maskAllText: false,
-          //     maskAllInputs: false,
-          //     blockAllMedia: false,
-          //     unblock: [".sentry-unblock, [data-sentry-unblock]"],
-          //     unmask: [".sentry-unmask, [data-sentry-unmask]"],
-          //     //    networkDetailAllowUrls: [window.location.origin],
-          //     networkDetailAllowUrls: [
-          //       "api-seller.shipyaari.com",
-          //       "api-admin.shipyaari.com",
-          //     ],
-          //     networkRequestHeaders: ["Cache-Control"],
-          //     networkResponseHeaders: ["Referrer-Policy"],
-          //   }),
-          //   new Integrations.BrowserTracing(),
-        ],
-        // tracePropagationTargets: ["*"],
+    Sentry.init({
+      dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+      debug: true,
+      integrations: [
+        Sentry.feedbackIntegration({
+          // Additional SDK configuration goes in here, for example:
 
-        tracesSampleRate: 1.0,
-        release: `blaze-react-seller@${formattedDate}`,
-      });
-    }
+          colorScheme: "light",
+          isNameRequired: true,
+          isEmailRequired: true,
+        }),
+        // Sentry.captureConsoleIntegration(),
+        // Sentry.contextLinesIntegration(),
+        // Sentry.linkedErrorsIntegration({
+        //   limit: 7,
+        // }),
+        // Sentry.debugIntegration(),
+        //   Sentry.replayIntegration({
+        //     maskAllText: false,
+        //     maskAllInputs: false,
+        //     blockAllMedia: false,
+        //     unblock: [".sentry-unblock, [data-sentry-unblock]"],
+        //     unmask: [".sentry-unmask, [data-sentry-unmask]"],
+        //     //    networkDetailAllowUrls: [window.location.origin],
+        //     networkDetailAllowUrls: [
+        //       "api-seller.shipyaari.com",
+        //       "api-admin.shipyaari.com",
+        //     ],
+        //     networkRequestHeaders: ["Cache-Control"],
+        //     networkResponseHeaders: ["Referrer-Policy"],
+        //   }),
+        //   new Integrations.BrowserTracing(),
+      ],
+      // tracePropagationTargets: ["*"],
+
+      tracesSampleRate: 1.0,
+      release: `blaze-react-seller@${formattedDate}`,
+    });
+    // }
 
     if (
       Environment === "production" &&
