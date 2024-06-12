@@ -165,6 +165,7 @@ const RuleEngine: React.FC = () => {
               }}
               className="lg:w-[150px]"
               Button2Name={true}
+              disabled={selectedPartners.length === 0}
             />
           </div>
         )}
