@@ -12,6 +12,7 @@ import {
   POST_GET_ALL_ROLES_DATA,
   POST_UPDATE_USER_DATA,
 } from "../../../../utils/ApiUrls";
+import OneButton from "../../../../components/Button/OneButton";
 
 const Buttons = (
   className?: string,
@@ -29,10 +30,17 @@ const Buttons = (
       }
     >
       <div className="grid col-span-2">
-        <CustomButton
+        {/* <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
           text="UPDATE USER"
           onClick={updateUserHandler}
+          disabled={disabled}
+        /> */}
+        <OneButton
+          className=""
+          text="UPDATE USER"
+          onClick={updateUserHandler}
+          variant="primary"
           disabled={disabled}
         />
       </div>
