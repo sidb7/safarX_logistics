@@ -35,6 +35,7 @@ import CenterModal from "../../components/CustomModal/customCenterModal";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { toast } from "react-hot-toast";
 import CodPricing from "./CodPricing";
+import OneButton from "../../components/Button/OneButton";
 
 interface ITypeProps {}
 
@@ -964,7 +965,7 @@ const PlanDetails = (props: ITypeProps) => {
               )}
 
               <div className="">
-                <ServiceButton
+                {/* <ServiceButton
                   className=" md:!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open text-xs md:text-sm font-normal md:font-semibold leading-4 whitespace-nowrap"
                   text="TALK TO OUR SUPPORT"
                   onClick={() => {
@@ -973,6 +974,16 @@ const PlanDetails = (props: ITypeProps) => {
                       "_blank"
                     );
                   }}
+                /> */}
+                <OneButton
+                  text={"TALK TO OUR SUPPORT"}
+                  onClick={() => {
+                    window.open(
+                      "https://support.shipyaari.com/tickets",
+                      "_blank"
+                    );
+                  }}
+                  variant="primary"
                 />
               </div>
             </div>

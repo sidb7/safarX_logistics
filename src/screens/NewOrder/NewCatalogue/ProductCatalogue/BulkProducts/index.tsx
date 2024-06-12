@@ -15,6 +15,7 @@ import {
 import { Spinner } from "../../../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import Close from "../../../../../assets/CloseIcon.svg";
+import OneButton from "../../../../../components/Button/OneButton";
 
 interface ITypeProps {
   onClick?: any;
@@ -248,14 +249,23 @@ const BulkUpload = (props: ITypeProps) => {
 
   const renderHeaderComponent = () => {
     return (
-      <CustomButton
-        icon={whiteDownloadIcon}
-        showIcon={true}
-        text={`Download Sample`}
-        className="!p-5"
+      // <CustomButton
+      //   icon={whiteDownloadIcon}
+      //   showIcon={true}
+      //   text={`Download Sample`}
+      //   className="!p-5"
+      //   onClick={() => {
+      //     downloadSampleProducts();
+      //   }}
+      // />
+      <OneButton
+        text="Download Sample"
         onClick={() => {
           downloadSampleProducts();
         }}
+        variant="primary"
+        className=" px-4"
+        icon={whiteDownloadIcon}
       />
     );
   };
