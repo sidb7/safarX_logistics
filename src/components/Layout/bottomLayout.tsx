@@ -10,6 +10,7 @@ const BottomLayout = ({
   customButtonText,
   finalButtonText = "SAVE",
   className = "",
+  disabled = false, // Add this line
 }: any) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ const BottomLayout = ({
             setLoading(false);
           }}
         /> */}
-        <OneButton
+        {/* <OneButton
           text={
             loading ? (
               <div className="flex">
@@ -78,6 +79,34 @@ const BottomLayout = ({
             setLoading(true);
             await callApi();
             setLoading(false);
+          }}
+          size="medium"
+        /> */}
+        <OneButton
+          text={
+            loading ? (
+              <div className="flex">
+                <Spinner />
+              </div>
+            ) : Button2Name ? (
+              `${customButtonText ? customButtonText : "NEXT"}`
+            ) : (
+              finalButtonText
+            )
+          }
+          disabled={disabled || loading} // Disable the button if disabled prop is true or if loading is true
+          className={`${
+            loading ? "bg-white" : "bg-[#1C1C1C]"
+          } text-[#FFFFFF] lg:w-[100px] ${className} ${
+            disabled || loading ? "cursor-not-allowed" : ""
+          } ${disabled ? "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0" : ""}`}
+          variant={loading || disabled ? "secondary" : "primary"}
+          onClick={async () => {
+            if (!disabled && !loading) {
+              setLoading(true);
+              await callApi();
+              setLoading(false);
+            }
           }}
           size="medium"
         />

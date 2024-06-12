@@ -77,62 +77,62 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
     if (addAddress.addressType === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        addressType: "Please enter Address Name",
+        addressType: "Please Enter Address Name",
       });
     } else if (addAddress.flatNo === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        flatNo: "please Enter your address",
+        flatNo: "Please Enter Your Address",
       });
     } else if (addAddress.sector === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        sector: "please Enter your locality",
+        sector: "Please Enter Your Locality",
       });
     } else if (addAddress.landmark === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        landmark: "please enter a landmark",
+        landmark: "Please Enter A Landmark",
       });
     } else if (!addAddress.pincode) {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        pincode: "please enter your pincode",
+        pincode: "Please Enter Your Pincode",
       });
     } else if (String(addAddress.pincode).length !== 6) {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        pincode: "Pincode should contain 6 digits",
+        pincode: "Pincode Should Contain 6 Digits",
       });
     } else if (addAddress.city === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        city: "please enter your city",
+        city: "Please Enter Your City",
       });
     } else if (addAddress.state === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        state: "please enter your state",
+        state: "Please Enter Your State",
       });
     } else if (addAddress.country === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        country: "please enter your country",
+        country: "Please Enter Your Country",
       });
     } else if (addAddress.contactName === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        contactName: "please enter your contactName",
+        contactName: "Please Enter Your Contact Name",
       });
     } else if (!addAddress.contact.mobileNo) {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        mobileNo: "please enter your mobile Number",
+        mobileNo: "Please Enter Your Mobile Number",
       });
     } else if (String(addAddress.contact.mobileNo).length !== 10) {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
-        mobileNo: "Contact number should be 10 digits",
+        mobileNo: "Contact Number Should Be 10 Digits",
       });
     }
 
@@ -235,8 +235,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.addressType !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.addressType}
                 </span>
               </div>
@@ -248,8 +248,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               label="Plot no, Building Name"
               name="flatNo"
               value={addAddress.flatNo}
-              inputClassName={` ${
-                errorAddAddressMessage.flatNo !== "" && "!border-[#F35838]"
+              className={` ${
+                errorAddAddressMessage.flatNo && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 setAddAddress({ ...addAddress, flatNo: e.target.value });
@@ -263,8 +263,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.flatNo !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.flatNo}
                 </span>
               </div>
@@ -275,8 +275,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               label="Locality"
               name="sector"
               value={addAddress.sector}
-              inputClassName={` ${
-                errorAddAddressMessage.sector !== "" && "!border-[#F35838]"
+              className={` ${
+                errorAddAddressMessage.sector && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 const value = e.target.value;
@@ -295,8 +295,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.sector !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.sector}
                 </span>
               </div>
@@ -307,8 +307,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               label="Landmark"
               name="landmark"
               value={addAddress.landmark}
-              inputClassName={` ${
-                errorAddAddressMessage.landmark !== "" && "!border-[#F35838]"
+              className={` ${
+                errorAddAddressMessage.landmark && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 setAddAddress({ ...addAddress, landmark: e.target.value });
@@ -322,8 +322,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.landmark !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.landmark}
                 </span>
               </div>
@@ -336,8 +336,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               value={addAddress?.pincode || ""}
               name="pincode"
               maxLength={6}
-              inputClassName={` ${
-                errorAddAddressMessage.pincode !== "" && "!border-[#F35838]"
+              className={` ${
+                errorAddAddressMessage.pincode && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 handlePincode(e.target.value);
@@ -352,8 +352,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.pincode !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.pincode}
                 </span>
               </div>
@@ -365,8 +365,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               isDisabled={isDisabled}
               name="city"
               value={addAddress.city}
-              inputClassName={` ${
-                errorAddAddressMessage.city !== "" && "!border-[#F35838]"
+              className={` ${
+                errorAddAddressMessage.city && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 setAddAddress({ ...addAddress, city: e.target.value });
@@ -380,8 +380,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.city !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.city}
                 </span>
               </div>
@@ -393,8 +393,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               isDisabled={isDisabled}
               name="state"
               value={addAddress.state}
-              inputClassName={` ${
-                errorAddAddressMessage.state !== "" && "!border-[#F35838]"
+              className={` ${
+                errorAddAddressMessage.state && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 setAddAddress({ ...addAddress, state: e.target.value });
@@ -408,8 +408,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.state !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.state}
                 </span>
               </div>
@@ -421,7 +421,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               isDisabled={isDisabled}
               name="country"
               value={addAddress.country}
-              inputClassName={` ${
+              className={` ${
                 errorAddAddressMessage.country !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
@@ -436,8 +436,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.country !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.country}
                 </span>
               </div>
@@ -448,7 +448,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               label="Contact Name"
               name="contactName"
               value={addAddress?.contact?.name}
-              inputClassName={` ${
+              className={` ${
                 errorAddAddressMessage.contactName !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
@@ -469,8 +469,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.contactName !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.contactName}
                 </span>
               </div>
@@ -484,7 +484,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               inputMode="numeric"
               maxLength={10}
               value={addAddress?.contact?.mobileNo || ""}
-              inputClassName={` ${
+              className={` ${
                 errorAddAddressMessage.mobileNo !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
@@ -505,8 +505,8 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             />
             {errorAddAddressMessage.mobileNo !== "" && (
               <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
+                <img src={InfoCircle} alt="" width={16} height={16} />
+                <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
                   {errorAddAddressMessage.mobileNo}
                 </span>
               </div>
