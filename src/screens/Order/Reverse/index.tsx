@@ -7,33 +7,25 @@ import {
   GET_SELLER_ORDER_COMPLETE_DATA,
   POST_SERVICEABILITY,
 } from "../../../utils/ApiUrls";
-import CustomDropDown from "../../../components/DropDown";
 import SelectDateModalContent from "./dateTime";
 import CustomButton from "../../../components/Button";
 import Checkbox from "../../../components/CheckBox";
 import toast from "react-hot-toast";
 import { parse } from "date-fns";
+import accordianDownIcon from "../../../assets/downwardArrow.svg";
+import accordianUpIcon from "../../../assets/AccordionUp.svg";
 
 interface ReverseProps {
   awbData?: any;
   summaryData?: any;
 }
 
-let reverseServiceArrayTemp: any = [];
-
 const ReverseIndex = (props: ReverseProps) => {
   const { awbData, summaryData } = props;
-  console.log("🚀 ~ awbData:", awbData);
   const [actualArray, setActualArray] = useState([]);
-  const [prentActiveItem, setPrentActiveItem] = useState<number>();
-  const [nestedProductAccordian, setNestedProductAccordian] =
-    useState<number>();
-  const [nestedBoxAccordian, setNestedBoxAccordian] = useState<number>();
   const [serviceArray, setServiceArray] = useState<any>();
   const [pickupDate, setPickupDate] = useState("");
   const [productArray, setProductArray]: any = useState();
-  // const [productCopyArray, setProductCopyArray]: any = useState();
-  let productCopyArray: any = useRef();
   const [boxArray, setBoxArray]: any = useState();
   const [pickupAddress, setPickupAddress] = useState({
     contactPerson: "",
@@ -59,7 +51,6 @@ const ReverseIndex = (props: ReverseProps) => {
     state: "",
     country: "",
   });
-  const [reverseSeviceArray, setReverseSeviceArray]: any = useState([]);
   const [restInfo, setRestInfo]: any = useState(); // it only store info and use in reverse order time in payload
 
   let productsArray: any = [];
@@ -231,12 +222,8 @@ const ReverseIndex = (props: ReverseProps) => {
             //     selected: true,
             //   },
             // ];
-            setProductArray(productsArray);
-            productCopyArray = [...productsArray];
 
-            // productsArray
-            // copy product array in new state
-            // setProductCopyArray(tempArray);
+            setProductArray(productsArray);
           }
           if (responsData["boxInfo"]) {
             newDataArray.push({
@@ -299,15 +286,17 @@ const ReverseIndex = (props: ReverseProps) => {
         // Parse the current value as an integer
         let currentQty = parseInt(qtyElement.value, 10);
 
+        //get actual product qty with help data-actualQty
+        let getActualQtyElements: any =
+          qtyElement.getAttribute(`data-actualQty`);
+
         // Subtract 1 from the current value
         let newQty = currentQty + 1;
-        let tempProductCopyArray = productCopyArray?.current;
 
-        for (let i = 0; i < tempProductCopyArray?.length; i++) {
+        for (let i = 0; i < productArray?.length; i++) {
           if (i === j) {
             // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
-
-            if (tempProductCopyArray[j].qty >= newQty) {
+            if (getActualQtyElements >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
             } else {
@@ -326,6 +315,7 @@ const ReverseIndex = (props: ReverseProps) => {
 
   const minusQtyProduct = (j: any) => {
     let qtyElements: any = document.getElementsByClassName(`qtyProduct_${j}`);
+
     if (qtyElements.length > 0) {
       // Access the first element in the collection
       let qtyElement = qtyElements[0];
@@ -335,14 +325,20 @@ const ReverseIndex = (props: ReverseProps) => {
         // Parse the current value as an integer
         let currentQty = parseInt(qtyElement.value, 10);
 
+        //get actual product qty with help data-actualQty
+        let getActualQtyElements: any =
+          qtyElement.getAttribute(`data-actualQty`);
+
         // Subtract 1 from the current value
         let newQty = currentQty - 1;
-        let tempProductCopyArray = productCopyArray?.current;
 
-        for (let i = 0; i < tempProductCopyArray?.length; i++) {
+        // let tempProductCopyArray = productCopyArray;
+
+        for (let i = 0; i < productArray?.length; i++) {
           if (newQty >= 0) {
             // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
-            if (tempProductCopyArray[j].qty >= newQty) {
+            // if (tempProductCopyArray[j].qty >= newQty) {
+            if (getActualQtyElements >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
             } else {
@@ -350,7 +346,7 @@ const ReverseIndex = (props: ReverseProps) => {
             }
             break;
           } else {
-            toast.error(`Qty is not less than zero ${i}`);
+            toast.error(`Qty is not less than zero`);
             break;
           }
         }
@@ -378,11 +374,6 @@ const ReverseIndex = (props: ReverseProps) => {
     let editedPickupDateForEpoch: any = pickupTime?.substring(0, 19);
     editedPickupDateForEpoch = convertToEpoch(editedPickupDateForEpoch);
     setPickupDate(editedPickupDateForEpoch);
-
-    // console.log(
-    //   "🚀 ~ handlePickupTimeSelected ~ editedPickupDateForEpoch:",
-    //   editedPickupDateForEpoch
-    // );
   };
 
   const handlePickupInputChange = (event: any) => {
@@ -437,17 +428,26 @@ const ReverseIndex = (props: ReverseProps) => {
     <div className="relative h-[90vh] px-4">
       <div className="flex flex-col gap-2 h-[80%] overflow-auto">
         {actualArray?.map((item: any, i: number) => {
-          // console.log("🚀 ~ {actualArray?.map ~ item:", item);
           return (
             <div className="accordionContainerBoxStyle">
               <div
                 className={`cursor-pointer px-4 py-3 flex justify-between items-center
-            ${
-              prentActiveItem === i
-                ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
-                : "bg-white"
-            }`}
-                onClick={() => setPrentActiveItem(i)}
+                                   ${
+                                     item?.isCollapse
+                                       ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                                       : "shadow-md rounded "
+                                   }`}
+                onClick={() => {
+                  let temp = [...actualArray];
+
+                  if (item.isCollapse === true) {
+                    item.isCollapse = false;
+                    setActualArray(temp);
+                  } else {
+                    item.isCollapse = true;
+                    setActualArray(temp);
+                  }
+                }}
                 key={i}
               >
                 <div className="flex basis-[90%] items-center gap-x-2">
@@ -455,24 +455,21 @@ const ReverseIndex = (props: ReverseProps) => {
                     {item?.title}
                   </div>
                 </div>
-                <svg
-                  className={`w-5 h-5 transform ${
-                    prentActiveItem === i ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                <div className="flex justify-end items-center gap-x-1">
+                  <img
+                    src={
+                      item.isCollapse === true
+                        ? accordianUpIcon
+                        : accordianDownIcon
+                    }
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => {}}
                   />
-                </svg>
+                </div>
               </div>
               {/* Pickup Address Accordian */}
-              {prentActiveItem === i && item?.title === "Pickup Address" && (
+              {item?.isCollapse && item?.title === "Pickup Address" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   <div className="flex gap-2 mt-[10px] ">
                     <CustomInputBox
@@ -549,7 +546,7 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Delivery Address Accordian */}
-              {prentActiveItem === i && item?.title === "Delivery Address" && (
+              {item?.isCollapse && item?.title === "Delivery Address" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   <div className="flex gap-2 mt-[10px] ">
                     <CustomInputBox
@@ -626,20 +623,29 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Products Accordian*/}
-              {prentActiveItem === i && item?.title === "Products" && (
+              {item?.isCollapse && item?.title === "Products" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   {productArray?.map((ele: any, j: number) => {
-                    console.log("🚀 ~ {item?.data?.map ~ ele:", ele);
                     return (
                       <div className="accordionContainerBoxStyle">
                         <div
                           className={`cursor-pointer px-4 py-3 flex justify-between items-center
-                    ${
-                      j === 0
-                        ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
-                        : "bg-white"
-                    }`}
-                          onClick={() => setNestedProductAccordian(j)}
+                            ${
+                              ele?.isCollapse
+                                ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                                : "shadow-md rounded "
+                            }`}
+                          onClick={() => {
+                            let temp = [...productArray];
+
+                            if (ele.isCollapse === true) {
+                              ele.isCollapse = false;
+                              setProductArray(temp);
+                            } else {
+                              ele.isCollapse = true;
+                              setProductArray(temp);
+                            }
+                          }}
                           key={j}
                         >
                           <div className="flex basis-[90%] items-center gap-x-2">
@@ -647,24 +653,21 @@ const ReverseIndex = (props: ReverseProps) => {
                               {ele?.name}
                             </div>
                           </div>
-                          <svg
-                            className={`w-5 h-5 transform ${
-                              nestedProductAccordian === j ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
+                          <div className="flex justify-end items-center gap-x-1">
+                            <img
+                              src={
+                                ele.isCollapse === true
+                                  ? accordianUpIcon
+                                  : accordianDownIcon
+                              }
+                              alt=""
+                              className="cursor-pointer"
+                              onClick={() => {}}
                             />
-                          </svg>
+                          </div>
                         </div>
                         {/* nested accordian expand */}
-                        {nestedProductAccordian === j && (
+                        {ele?.isCollapse && (
                           <div className="p-[10px]">
                             <div className="flex justify-between">
                               <p className="font-Open text-[12px] font-semibold self-center">
@@ -680,6 +683,7 @@ const ReverseIndex = (props: ReverseProps) => {
                                   type="text"
                                   className={`w-[12px] p-0 qtyProduct_${j}`}
                                   value={ele?.qty}
+                                  data-actualQty={ele?.qty}
                                 />
                                 <img
                                   src={AddCircleBlack}
@@ -732,19 +736,29 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Box Accordian*/}
-              {prentActiveItem === i && item?.title === "Box" && (
+              {item?.isCollapse && item?.title === "Box" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   {boxArray?.map((ele: any, j: number) => {
                     return (
                       <div className="accordionContainerBoxStyle">
                         <div
                           className={`cursor-pointer px-4 py-3 flex justify-between items-center
-                          ${
-                            j === 0
-                              ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
-                              : "bg-white"
-                          }`}
-                          onClick={() => setNestedBoxAccordian(j)}
+                            ${
+                              ele?.isCollapse
+                                ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                                : "shadow-md rounded "
+                            }`}
+                          onClick={() => {
+                            let temp = [...boxArray];
+
+                            if (ele.isCollapse === true) {
+                              ele.isCollapse = false;
+                              setBoxArray(temp);
+                            } else {
+                              ele.isCollapse = true;
+                              setBoxArray(temp);
+                            }
+                          }}
                           key={j}
                         >
                           <div className="flex basis-[90%] items-center gap-x-2">
@@ -752,24 +766,21 @@ const ReverseIndex = (props: ReverseProps) => {
                               {ele?.name}
                             </div>
                           </div>
-                          <svg
-                            className={`w-5 h-5 transform ${
-                              nestedBoxAccordian === j ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
+                          <div className="flex justify-end items-center gap-x-1">
+                            <img
+                              src={
+                                ele.isCollapse === true
+                                  ? accordianUpIcon
+                                  : accordianDownIcon
+                              }
+                              alt=""
+                              className="cursor-pointer"
+                              onClick={() => {}}
                             />
-                          </svg>
+                          </div>
                         </div>
                         {/* nested accordian expand */}
-                        {nestedBoxAccordian === j && (
+                        {ele?.isCollapse && (
                           <div className="p-[10px]">
                             <div className="flex gap-2 mb-[10px]">
                               <CustomInputBox
@@ -815,8 +826,7 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Delivery Address Accordian */}
-              {/* {console.log("serviceArray", serviceArray)} */}
-              {prentActiveItem === i && item?.title === "Reverse Service" && (
+              {item?.isCollapse && item?.title === "Reverse Service" && (
                 <div className="m-5 max-h-[200px] overflow-auto">
                   {serviceArray?.map((el: any, index: number) => {
                     // console.log("🚀 ~ {serviceArray?.map ~ el:", el);
@@ -857,12 +867,11 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Pickup Date and Time Accordian */}
-              {prentActiveItem === i &&
-                item?.title === "Pickup Date and Time" && (
-                  <SelectDateModalContent
-                    onPickupTimeSelected={handlePickupTimeSelected}
-                  />
-                )}
+              {item?.isCollapse && item?.title === "Pickup Date and Time" && (
+                <SelectDateModalContent
+                  onPickupTimeSelected={handlePickupTimeSelected}
+                />
+              )}
             </div>
           );
         })}
