@@ -243,8 +243,10 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   };
 
   const validateGST = (gstNumber: string): boolean => {
-    const gstRegex =
-      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
+    // const gstRegex =
+    //   /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
+    const gstRegex = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}Z\d{1}$/;
+
     return gstRegex.test(gstNumber);
   };
 
@@ -453,12 +455,12 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                   setDeliveryAddress((prevData: any) => {
                     let updatedGSTValue = gstValue;
 
-                    if (
-                      validGstStateCode.length > 0 &&
-                      !deliveryAddress.gstNumber.includes(validGstStateCode)
-                    ) {
-                      updatedGSTValue = "";
-                    }
+                    // if (
+                    //   validGstStateCode.length > 0 &&
+                    //   !deliveryAddress.gstNumber.includes(validGstStateCode)
+                    // ) {
+                    //   updatedGSTValue = "";
+                    // }
 
                     return {
                       ...prevData,
