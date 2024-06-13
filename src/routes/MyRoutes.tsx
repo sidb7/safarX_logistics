@@ -27,6 +27,7 @@ import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
 import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
 import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
 import Order from "../screens/Order/index";
+
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/Onboarding/Kyc/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -170,6 +171,7 @@ import CouponScreen from "../components/Coupons/index";
 import Rules from "../screens/Order/Rules";
 import ChangePasswordv2 from "../screens/Auth/ChangePassword";
 import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
+import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -587,6 +589,14 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Rules />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/rule-engine"
+            element={
+              <ProtectedRoute>
+                <RuleEngine />
               </ProtectedRoute>
             }
           />

@@ -379,6 +379,8 @@ const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPart
 const FETCH_ALL_CATEGOROIES = `${SELLER_BASE_URL}/categories/getOnlyCategories`;
 const CREATE_RULE_SERVICE = `${SELLER_BASE_URL}/ruleEngine/createRuleEngine`;
 const FETCH_RULE = `${SELLER_BASE_URL}/ruleEngine/fetchRuleEngine`;
+const GET_ALLPARTNER_OFSELLER = `${SELLER_BASE_URL}/partners/getAllPartnersOfSeller`;
+const UPDATE_ALLPARTNER_OF_SELLER = `${SELLER_BASE_URL}/partners/updataAllPartnersOfSeller`;
 
 // weight Management
 const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
@@ -584,4 +586,6 @@ export {
   CHANGE_PASSWORD,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
+  GET_ALLPARTNER_OFSELLER,
+  UPDATE_ALLPARTNER_OF_SELLER,
 };
