@@ -6,7 +6,7 @@ import locationIcon from "../../../assets/serv/location.svg";
 import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
-import SummaryIcon from "../../../assets/serv/Summary.svg";
+import SummaryIcon from "../../../assets/serv/summary.svg";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 const steps = [
