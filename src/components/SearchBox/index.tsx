@@ -11,6 +11,7 @@ interface ISearchBoxProps {
   getFullContent?: any;
   customPlaceholder?: string;
 }
+
 export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   className = "",
   label,
@@ -20,33 +21,22 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   customPlaceholder,
 }) => {
   const resetRef: any = useRef<HTMLInputElement | null>(null);
-  // const resetValue = () => {
-  //   if (resetRef.current.value) getFullContent();
-  //   resetRef.current.value = "";
-  // };
+
   const handleReset = () => {
-    // Check for null before accessing value to avoid errors
     if (resetRef.current?.value) {
-      getFullContent?.(); // Call getFullContent if it exists (optional chaining)
+      getFullContent?.();
     }
     resetRef.current.value = "";
   };
-  return (
-    <div className="relative ">
-      {/* <div className="absolute flex h-full justify-between "> */}
-      {/* <img
-        src={CrossIcon}
-        alt=""
-        className="absolute right-0 h-full cursor-pointer p-2 z-0"
-        onClick={resetValue}
-      /> */}
 
+  return (
+    <div className="relative">
       <img
         src={CrossIcon}
-        alt="Clear Search" // Provide descriptive alt text for accessibility
+        alt="Clear Search"
         className={`absolute right-0 h-full cursor-pointer p-2 z-0 ${
           value ? "" : "hidden"
-        }`} // Toggle visibility based on value
+        }`}
         onClick={handleReset}
       />
       <img
@@ -54,25 +44,94 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
         alt=""
         className="absolute left-0 h-full p-2 z-0"
       />
-      {/* </div> */}
-      {/* <CustomInputBox
-        ref={resetRef}
-        placeholder={customPlaceholder}
-        inputType="text"
-        className={`${className}   transactionSearhBox rounded border-[1px] border-[#A4A4A4]  !pr-[10px]  h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
-        // value={value}
-        onChange={onChange}
-        // label="Search Products"
-      /> */}
       <input
         ref={resetRef}
         placeholder={customPlaceholder}
         type="text"
-        className={`${className}  focus:border-[#004eff] transition-all duration-300 transactionSearhBox rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[5px] !pl-[30px] h-[36px] font-normal text-[12px] `}
-        // value={value}
+        className={`${className} focus:border-[#004eff] transition-all duration-300 transactionSearhBox rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[30px] !pl-[30px] h-[36px] font-normal text-[12px] overflow-ellipsis overflow-hidden whitespace-nowrap`}
+        value={value}
         onChange={onChange}
         title="Search Box"
       />
     </div>
   );
 };
+
+// import { useRef } from "react";
+// import SearchBoxIcon from "../../assets/SearchBox/SearchIcon.svg";
+// import CrossIcon from "../../assets/cross.svg";
+// import "../../styles/placeHolderPadding.css";
+
+// interface ISearchBoxProps {
+//   className?: string;
+//   label: string;
+//   value: string;
+//   onChange: any;
+//   getFullContent?: any;
+//   customPlaceholder?: string;
+// }
+// export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
+//   className = "",
+//   label,
+//   value,
+//   onChange,
+//   getFullContent,
+//   customPlaceholder,
+// }) => {
+//   const resetRef: any = useRef<HTMLInputElement | null>(null);
+//   // const resetValue = () => {
+//   //   if (resetRef.current.value) getFullContent();
+//   //   resetRef.current.value = "";
+//   // };
+//   const handleReset = () => {
+//     // Check for null before accessing value to avoid errors
+//     if (resetRef.current?.value) {
+//       getFullContent?.(); // Call getFullContent if it exists (optional chaining)
+//     }
+//     resetRef.current.value = "";
+//   };
+//   return (
+//     <div className="relative ">
+//       {/* <div className="absolute flex h-full justify-between "> */}
+//       {/* <img
+//         src={CrossIcon}
+//         alt=""
+//         className="absolute right-0 h-full cursor-pointer p-2 z-0"
+//         onClick={resetValue}
+//       /> */}
+
+//       <img
+//         src={CrossIcon}
+//         alt="Clear Search" // Provide descriptive alt text for accessibility
+//         className={`absolute right-0 h-full cursor-pointer p-2 z-0 ${
+//           value ? "" : "hidden"
+//         }`} // Toggle visibility based on value
+//         onClick={handleReset}
+//       />
+//       <img
+//         src={SearchBoxIcon}
+//         alt=""
+//         className="absolute left-0 h-full p-2 z-0"
+//       />
+//       {/* </div> */}
+//       {/* <CustomInputBox
+//         ref={resetRef}
+//         placeholder={customPlaceholder}
+//         inputType="text"
+//         className={`${className}   transactionSearhBox rounded border-[1px] border-[#A4A4A4]  !pr-[10px]  h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
+//         // value={value}
+//         onChange={onChange}
+//         // label="Search Products"
+//       /> */}
+//       <input
+//         ref={resetRef}
+//         placeholder={customPlaceholder}
+//         type="text"
+//         className={`${className}  focus:border-[#004eff] transition-all duration-300 transactionSearhBox rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[5px] !pl-[30px] h-[36px] font-normal text-[12px] `}
+//         // value={value}
+//         onChange={onChange}
+//         title="Search Box"
+//       />
+//     </div>
+//   );
+// };

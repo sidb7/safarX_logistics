@@ -27,6 +27,7 @@ import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
 import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
 import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
 import Order from "../screens/Order/index";
+import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/Onboarding/Kyc/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -597,6 +598,14 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Rules />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/rule-engine"
+            element={
+              <ProtectedRoute>
+                <RuleEngine />
               </ProtectedRoute>
             }
           />

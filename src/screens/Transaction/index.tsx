@@ -115,7 +115,16 @@ export const Transaction = () => {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <TransactionSearchBox
+            {/* <TransactionSearchBox
+              label="Search"
+              value={debouncedSearchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleSearch(e.target.value);
+              }}
+              customPlaceholder="Search By Transaction Id"
+              getFullContent={clearSearchValue}
+            /> */}
+            <SearchBox
               label="Search"
               value={debouncedSearchValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -61,7 +61,7 @@ const DateButton = forwardRef<HTMLButtonElement, DateButtonProps>(
                 />
               )}
               <p
-                className={`${textClassName} text-center text-primary-100 font-openSans text-[14px] font-normal leading-5`}
+                className={`${textClassName} text-center text-primary-100 font-openSans text-[12px] font-normal leading-5`}
               >
                 {value || capitalizeFirstLetterWithExclude(text, excludeWords)}
               </p>
