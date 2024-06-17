@@ -381,6 +381,7 @@ const CREATE_RULE_SERVICE = `${SELLER_BASE_URL}/ruleEngine/createRuleEngine`;
 const FETCH_RULE = `${SELLER_BASE_URL}/ruleEngine/fetchRuleEngine`;
 const GET_ALLPARTNER_OFSELLER = `${SELLER_BASE_URL}/partners/getAllPartnersOfSeller`;
 const UPDATE_ALLPARTNER_OF_SELLER = `${SELLER_BASE_URL}/partners/updataAllPartnersOfSeller`;
+const GET_ALLPARTNERS_OF_RULEENGINE = `${SELLER_BASE_URL}/partners/getPartnersFromRuleEngine`;
 
 // weight Management
 const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
@@ -588,4 +589,5 @@ export {
   UPLOAD_BULK_COMBOS,
   GET_ALLPARTNER_OFSELLER,
   UPDATE_ALLPARTNER_OF_SELLER,
+  GET_ALLPARTNERS_OF_RULEENGINE,
 };
