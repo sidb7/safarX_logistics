@@ -9,7 +9,6 @@ import {
   GET_ALLPARTNERS_OF_RULEENGINE,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 interface Partner {
   id: string;
