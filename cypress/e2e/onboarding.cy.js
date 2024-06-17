@@ -1,4 +1,18 @@
 import { getValue } from "../support/redis";
+import {
+  cancelOrder,
+  createOrderWithPickupDetails,
+} from "../support/ orderCreationUtils";
+import { Login } from "../support/ orderCreationUtils";
+import { addDeliveryAddress } from "../support/ orderCreationUtils";
+import { addProductDetails } from "../support/ orderCreationUtils";
+import { addBoxInfo } from "../support/ orderCreationUtils";
+import { addProducttoBox } from "../support/ orderCreationUtils";
+import { SelectBoxInfo } from "../support/ orderCreationUtils";
+import { selectforwordservices } from "../support/ orderCreationUtils";
+import { selectReverseServiceOption } from "../support/ orderCreationUtils";
+import { selectReverseOption } from "../support/ orderCreationUtils";
+import { AddPickupAddress } from "../support/ orderCreationUtils";
 
 describe("Sign up", () => {
   beforeEach("Seller Can SignUp Successfully", () => {
@@ -6,7 +20,6 @@ describe("Sign up", () => {
     Cypress.on("uncaught:exception", (err, runnable) => {
       return false;
     });
-
     // Intercept login request
     cy.intercept("POST", "/auth/login").as("loginRequest");
 
@@ -75,6 +88,7 @@ describe("Sign up", () => {
       cy.xpath("//*[text()='Get Started']").should("be.visible");
       cy.xpath("(//*[text()='Set Up My Account'])[1]").click();
       cy.xpath("//span[text()='Describe yourself']").should("be.visible");
+      cy.wait(2000);
       cy.xpath("//input[@title='Checkbox']").then(($checkboxes) => {
         // Get the first two checkboxes from the matched elements
         const checkbox1 = $checkboxes[0];
@@ -142,7 +156,7 @@ describe("Sign up", () => {
         // Select the random option by visible text using cy.select()
         cy.get("#selectDropdown").select(randomOption);
       });
-
+      cy.wait(2000);
       cy.xpath("//*[text()='Next']").click();
       cy.wait(2000);
       cy.xpath("(//*[text()='Benefits of doing KYC'])[1]").should("be.visible");
@@ -185,10 +199,11 @@ describe("Sign up", () => {
       cy.xpath("//*[text()='Next']").click();
       cy.xpath("//*[text()='Pickup']").should("be.visible");
       cy.xpath("(//*[@alt='edit'])[1]").click();
-      // cy.xpath("//*[text() = 'AADHAAR']/../p[2]//input").clear();
-      cy.wait(1000);
+      // cy.xpath("//*[text() = 'AADHAAR']/../p[2]//input").invoke("val", " ");
+      // cy.wait(1000);
+
       cy.xpath("//*[text() = 'AADHAAR']/../p[2]").type(
-        "Neel kamal society , 2nd floor  202 flat number, H Wings , chincholi patak  malad west 400064 mumbai , maharashtra "
+        "Neel kamal society , 2nd floor  202 flat number, H Wings , chincholi patak, witty school , 400064 mumbai "
       );
       cy.xpath("//*[text()='Brand Name']//parent::div").type("Rich");
 
@@ -214,8 +229,40 @@ describe("Sign up", () => {
         "be.visible"
       );
       cy.log("OnBoarding process successfully Done");
-    }); //p[text()='SKIP FOR NOW']
-    cy.wait(5000);
+    });
+  });
+  it("forword order creation", () => {
+    cy.wait(2000);
+    Login();
+    AddPickupAddress();
+    createOrderWithPickupDetails();
+    addDeliveryAddress();
+    addProductDetails();
+    addBoxInfo();
+    addProducttoBox();
+    SelectBoxInfo();
+    selectforwordservices();
+    cancelOrder();
+
+    // p[text()='SKIP FOR NOW']
+    // cy.wait(5000);
+  });
+
+  it("reverse ordercreation", () => {
+    cy.wait(2000);
+    Login();
+    AddPickupAddress();
+    selectReverseOption();
+    addDeliveryAddress();
+    addProductDetails();
+    addBoxInfo();
+    addProducttoBox();
+    SelectBoxInfo();
+    selectReverseServiceOption();
+    cancelOrder();
+  });
+
+  after(() => {
     cy.request({
       method: "POST",
       url: "https://sysellerconsoledev.yaarilabs.com/api/v1/seller/deleteSingleSellerForTest",
@@ -226,12 +273,5 @@ describe("Sign up", () => {
       // Ensure the response status is 200
       expect(response.status).to.eq(200);
     });
-  });
-  after(() => {
-    // //
-    //  Perform any cleanup or logout if necessary//
-    // cy.xpath("(//*[@id='profileIcon']//button)[2]").click();
-    // cy.xpath("//*[text()='Sign out']").click();
-    // cy.xpath("//*[text()='Logged Out Successfully.']").should("be.visible");
   });
 });
