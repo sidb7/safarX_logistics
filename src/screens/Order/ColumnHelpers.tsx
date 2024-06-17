@@ -55,7 +55,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
   } else if (
     currentStatus === "BOOKED" ||
     "CANCELLED" ||
-    "READY TO PICK" ||
+    "PICKED UP" ||
     "IN TRANSIT" ||
     "OUT OF DELIVERY" ||
     "DELIVERED" ||
@@ -85,7 +85,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
       { title: "Cancel Order", actionType: "cancel_order" },
     ],
     CANCELLED: [{ title: "Track Order", actionType: "track_order" }],
-    "READY TO PICK": [
+    "PICKED UP": [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
@@ -1731,13 +1731,17 @@ export const columnHelpersForRest = (
               }}
             /> */}
 
-            <div>
-              <img
-                src={ReverseIcon}
-                className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                onClick={() => setInfoReverseModalFunction(individualData?.awb)}
-              />
-            </div>
+            {currentStatus === "DELIVERED" && (
+              <div>
+                <img
+                  src={ReverseIcon}
+                  className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                  onClick={() =>
+                    setInfoReverseModalFunction(individualData?.awb)
+                  }
+                />
+              </div>
+            )}
 
             <CustomToolTip
               position="bottom"

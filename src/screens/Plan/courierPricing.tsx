@@ -28,7 +28,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
   const arrayData = [
     { index: 0, label: "B2C" },
-    // { index: 1, label: "B2B" },
+    { index: 1, label: "B2B" },
   ];
 
   let variableData: any;
@@ -828,9 +828,102 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
     }),
   ];
 
-  const RatesForpartners: any = () => {
-    return logisticsData?.map((logisticsInfo: any, index: number) => {
-      if (logisticsData.length > 0) {
+  const RatesB2CForpartners: any = () => {
+    let logisticsB2CData: any = logisticsData?.filter(
+      (el: any) => el?.accountType === "B2C"
+    );
+    return logisticsB2CData?.map((logisticsInfo: any, index: number) => {
+      if (logisticsB2CData.length > 0) {
+        variableData = logisticsInfo?.variables;
+        filterVariableData = variableData?.filter(
+          (obj: any) => obj?.isActive === true
+        );
+      }
+      return (
+        <>
+          <div className="mt-5">
+            {logisticsInfo?.rates.map((rateCard: any, index: number) => {
+              if (rateCard?.isActive === true) {
+                return (
+                  <>
+                    <div className="flex flex-col mb-2 " key={index}>
+                      <div
+                        className={`grid grid-cols-2 px-4  h-[50px] gap-y-6 cursor-pointer
+                        ${
+                          rateCard?.isCollapse
+                            ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                            : "shadow-md rounded "
+                        }
+                        `}
+                        onClick={() => {
+                          let temp = [...logisticsData];
+
+                          if (rateCard.isCollapse === true) {
+                            rateCard.isCollapse = false;
+                            setLogisticsData(temp);
+                          } else {
+                            rateCard.isCollapse = true;
+                            setLogisticsData(temp);
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <h1 className="self-center justify-start text-[16px] font-semibold font-Lato text-[#1C1C1C] whitespace-nowrap ">
+                            {capitalizeFirstLetter(rateCard.partnerName)}
+                          </h1>
+                        </div>
+                        <div className="flex justify-end items-center gap-x-1">
+                          <img
+                            src={
+                              rateCard.isCollapse === true
+                                ? UpArrowIcon
+                                : DownArrowIcon
+                            }
+                            alt=""
+                            className="cursor-pointer"
+                            onClick={() => {}}
+                          />
+                        </div>
+                      </div>
+                      {rateCard.isCollapse && (
+                        <>
+                          <div className="overflow-auto ">
+                            <RateCardTable serviceData={rateCard?.service} />
+                          </div>
+
+                          {/* variable charges code commented for now as no requirement for now */}
+
+                          {/* <div className="ml-4 mt-6">
+                            {" "}
+                            <h4 className="text-[22px] font-Lato font-semibold">
+                              Variable Charges{" "}
+                            </h4>{" "}
+                            <div className="mt-7">
+                              <CustomTable
+                                data={filterVariableData || []}
+                                columns={variableColumns}
+                              />
+                            </div>
+                          </div> */}
+                        </>
+                      )}
+                    </div>
+                  </>
+                );
+              }
+            })}
+          </div>
+        </>
+      );
+    });
+  };
+
+  const RatesB2BForpartners: any = () => {
+    let logisticsB2CData: any = logisticsData?.filter(
+      (el: any) => el?.accountType === "B2B"
+    );
+    return logisticsB2CData?.map((logisticsInfo: any, index: number) => {
+      if (logisticsB2CData.length > 0) {
         variableData = logisticsInfo?.variables;
         filterVariableData = variableData?.filter(
           (obj: any) => obj?.isActive === true
@@ -919,11 +1012,12 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
     (async () => {
       const { data } = await POST(COURIER_PRICING);
       if (data?.success) {
-        if (data.data[0].accountType === "B2C") {
-          setData({ ...data, b2cData: data.data[0].rates });
-        } else {
-          setData({ ...data, b2bData: data.data[0].rates });
-        }
+        // if (data.data[0].accountType === "B2C") {
+        //   setData(data?.data);
+        // } else {
+        //   setData({ ...data, b2bData: data.data[0].rates });
+        // }
+        setData(data?.data);
       } else {
         toast.error(data.message);
       }
@@ -943,18 +1037,24 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
       <div className="mx-5 lg:ml-[20px] mb-[68px] customScroll ">
         {/* {data[0].accountType==="B2C"} */}
 
-        {renderingComponents === 0 ? (
+        {renderingComponents === 0 &&
           // <CustomTable columns={columns} data={data.b2cData || []} />
-          isLoading ? (
+          (isLoading ? (
             <div className="flex justify-center w-[100%] h-[40vh] items-center">
               <Spinner />
             </div>
           ) : (
-            <RatesForpartners />
-          )
-        ) : (
-          <CustomTable columns={columns} data={data.b2bData || []} />
-        )}
+            <RatesB2CForpartners />
+          ))}
+        {renderingComponents === 1 &&
+          // <CustomTable columns={columns} data={data.b2cData || []} />
+          (isLoading ? (
+            <div className="flex justify-center w-[100%] h-[40vh] items-center">
+              <Spinner />
+            </div>
+          ) : (
+            <RatesB2BForpartners />
+          ))}
       </div>
     </div>
   );

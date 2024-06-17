@@ -280,6 +280,7 @@ const DOWNLOAD_SAMPLE_PRODUCT = `${SELLER_BASE_URL}/product/downloadSampleProduc
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
 const LOGOUT = `${SELLER_BASE_URL}/seller/logout`;
+const CHANGE_PASSWORD = `${SELLER_BASE_URL}/seller/changePasswordv2`;
 
 // System Logs
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
@@ -379,6 +380,8 @@ const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPart
 const FETCH_ALL_CATEGOROIES = `${SELLER_BASE_URL}/categories/getOnlyCategories`;
 const CREATE_RULE_SERVICE = `${SELLER_BASE_URL}/ruleEngine/createRuleEngine`;
 const FETCH_RULE = `${SELLER_BASE_URL}/ruleEngine/fetchRuleEngine`;
+const GET_ALLPARTNER_OFSELLER = `${SELLER_BASE_URL}/partners/getAllPartnersOfSeller`;
+const UPDATE_ALLPARTNER_OF_SELLER = `${SELLER_BASE_URL}/partners/updataAllPartnersOfSeller`;
 
 // weight Management
 const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
@@ -390,6 +393,9 @@ const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
 
 // Errors Handling API
 const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
+
+// Reverse order API
+const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
 
 export {
   ADMIN_URL,
@@ -584,4 +590,8 @@ export {
   COMPANY_NAME,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
+  CHANGE_PASSWORD,
+  REVERSE_ORDER,
+  GET_ALLPARTNER_OFSELLER,
+  UPDATE_ALLPARTNER_OF_SELLER,
 };

@@ -11,6 +11,7 @@ import {
   POST_GET_ALL_INITIAL_MENU,
   POST_CREATE_NEW_ROLL,
 } from "../../../../../utils/ApiUrls";
+import OneButton from "../../../../../components/Button/OneButton";
 
 const Buttons = (
   className?: string,
@@ -28,11 +29,17 @@ const Buttons = (
       }
     >
       <div className="grid col-span-2">
-        <CustomButton
+        {/* <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
           text="ADD ROLE"
           onClick={createRoleApiCall}
           disabled={disabled}
+        /> */}
+        <OneButton
+          text="ADD ROLE"
+          onClick={createRoleApiCall}
+          disabled={disabled}
+          variant="primary"
         />
       </div>
     </div>

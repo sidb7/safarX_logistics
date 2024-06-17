@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ReverDummyJson from "./reverseDummy.json";
+import React, { useEffect, useRef, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import AddCircleBlack from "../../../assets/add-circle_black.svg";
 import MinusCircle from "../../../assets/subtract-circle.svg";
@@ -8,79 +7,82 @@ import {
   GET_SELLER_ORDER_COMPLETE_DATA,
   POST_SERVICEABILITY,
 } from "../../../utils/ApiUrls";
-import CustomDropDown from "../../../components/DropDown";
 import SelectDateModalContent from "./dateTime";
 import CustomButton from "../../../components/Button";
 import Checkbox from "../../../components/CheckBox";
+import toast from "react-hot-toast";
+import { parse } from "date-fns";
+import accordianDownIcon from "../../../assets/downwardArrow.svg";
+import accordianUpIcon from "../../../assets/AccordionUp.svg";
 
 interface ReverseProps {
   awbData?: any;
+  summaryData?: any;
 }
 
 const ReverseIndex = (props: ReverseProps) => {
-  const { awbData } = props;
+  const { awbData, summaryData } = props;
   const [actualArray, setActualArray] = useState([]);
-  const [isActiveItemAccordionOpen, setIsActiveItemAccordionOpen] =
-    useState(false);
-  const [prentActiveItem, setPrentActiveItem] = useState<number>();
-  const [nestedProductAccordian, setNestedProductAccordian] =
-    useState<number>();
-  const [nestedBoxAccordian, setNestedBoxAccordian] = useState<number>();
   const [serviceArray, setServiceArray] = useState<any>();
-  const [serviceOptionValue, setServiceOptionValue] = useState<any>("");
   const [pickupDate, setPickupDate] = useState("");
+  const [productArray, setProductArray]: any = useState();
+  const [boxArray, setBoxArray]: any = useState();
+  const [pickupAddress, setPickupAddress] = useState({
+    contactPerson: "",
+    contactNo: "",
+    emailId: "",
+    buildingName: "",
+    locality: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+  });
+  const [deliveryAddress, setDeliveryAddress] = useState({
+    contactPerson: "",
+    contactNo: "",
+    emailId: "",
+    buildingName: "",
+    locality: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+  });
+  const [restInfo, setRestInfo]: any = useState(); // it only store info and use in reverse order time in payload
 
   let productsArray: any = [];
 
+  // call reverse service api
+  const callReverseServiceAPI = async (responsData: any) => {
+    // console.log("🚀 ~ callReverseServiceAPI ~ responsData:", responsData);
+    try {
+      const payload = {
+        pickupPincode: responsData["deliveryAddress"]?.pincode,
+        deliveryPincode: responsData["pickupAddress"]?.pincode,
+        invoiceValue: responsData?.boxInfo?.[0]?.codInfo?.invoiceValue,
+        paymentMode: responsData?.boxInfo?.[0]?.codInfo?.isCod
+          ? "COD"
+          : "PREPAID",
+        // serviceId: "a07d01f5",
+        weight: responsData?.boxInfo?.[0]?.appliedWeight,
+        orderType: "B2C",
+        transit: "REVERSE",
+        dimension: {
+          length: responsData?.boxInfo?.[0]?.length,
+          width: responsData?.boxInfo?.[0]?.breadth,
+          height: responsData?.boxInfo?.[0]?.height,
+        },
+      };
+      const response = await POST(POST_SERVICEABILITY, payload);
+      setServiceArray(response?.data?.data);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     let awbNo: any = awbData?.data;
-
-    // call reverse service api
-    const callReverseServiceAPI = async () => {
-      try {
-        const payload = {
-          pickupPincode: 400018,
-          deliveryPincode: 400020,
-          invoiceValue: 1000,
-          paymentMode: "COD",
-          serviceId: "a07d01f5",
-          weight: 1.5,
-          orderType: "B2C",
-          transit: "REVERSE",
-          dimension: { length: 1, width: 1, height: 1 },
-        };
-        const response = await POST(POST_SERVICEABILITY, payload);
-        console.log("🚀 ~ callReverseServiceAPI ~ response:", response);
-        // let serviceOption: any = [];
-        // for (let j = 0; j < response?.data?.data?.length; j++) {
-        //   serviceOption.push({
-        //     // label: response?.data?.data?.[j]?.partnerServiceName,
-        //     label: `
-        //     <div className="flex flex-row justify-between p-2 w-full">
-        //       <div className="flex ">
-        //         <span className="font-Open text-[14px] mr-1 font-normal text-[#494949]">
-        //           Bluedart
-        //         </span>
-
-        //         <span className="font-Open ml-1 text-[14px] font-normal text-[#494949]">
-        //           : Reverse Surface
-        //         </span>
-        //       </div>
-        //       <div className="flex font-Open text-[14px] font-normal">
-        //         <span>₹</span>
-        //         <span>101</span>
-        //       </div>
-        //     </div>
-        //     <hr />
-        //   `,
-        //     value: response?.data?.data?.[j]?.partnerServiceId,
-        //   });
-        // }
-
-        // setServiceArray(serviceOption);
-        setServiceArray(response?.data?.data);
-      } catch (error) {}
-    };
 
     // call service api
     (async () => {
@@ -91,49 +93,152 @@ const ReverseIndex = (props: ReverseProps) => {
         const response = await POST(GET_SELLER_ORDER_COMPLETE_DATA, payload);
         if (response?.data?.status) {
           let responsData = response?.data?.data?.[0]?.data?.[0];
+          setRestInfo(responsData);
           // get all products from box object
           for (let i = 0; i < responsData?.boxInfo?.length; i++) {
             productsArray.push(...responsData?.boxInfo?.[i]?.products);
           }
           let newDataArray: any = [];
-          if (responsData["pickupAddress"]) {
+          if (responsData["deliveryAddress"]) {
             newDataArray.push({
               title: "Pickup Address",
-              data: responsData["pickupAddress"],
             });
+            setPickupAddress((prevState) => ({
+              ...prevState,
+              contactPerson: responsData["deliveryAddress"]?.contact?.name,
+              contactNo: responsData["deliveryAddress"]?.contact?.mobileNo,
+              emailId: responsData["deliveryAddress"]?.contact?.emailId,
+              buildingName: responsData["deliveryAddress"]?.fullAddress,
+              locality: responsData["deliveryAddress"]?.locality,
+              landmark: responsData["deliveryAddress"]?.landmark,
+              pincode: responsData["deliveryAddress"]?.pincode,
+              city: responsData["deliveryAddress"]?.city,
+              state: responsData["deliveryAddress"]?.state,
+              country: responsData["deliveryAddress"]?.country,
+            }));
           }
           // push Pickup Date and Time array in newDataArray[]
           newDataArray.push({
             title: "Pickup Date and Time",
           });
 
-          if (responsData["deliveryAddress"]) {
+          if (responsData["pickupAddress"]) {
             newDataArray.push({
               title: "Delivery Address",
-              data: responsData["deliveryAddress"],
             });
+            setDeliveryAddress((prevState) => ({
+              ...prevState,
+              contactPerson: responsData["pickupAddress"]?.contact?.name,
+              contactNo: responsData["pickupAddress"]?.contact?.mobileNo,
+              emailId: responsData["pickupAddress"]?.contact?.emailId,
+              buildingName: responsData["pickupAddress"]?.fullAddress,
+              locality: responsData["pickupAddress"]?.locality,
+              landmark: responsData["pickupAddress"]?.landmark,
+              pincode: responsData["pickupAddress"]?.pincode,
+              city: responsData["pickupAddress"]?.city,
+              state: responsData["pickupAddress"]?.state,
+              country: responsData["pickupAddress"]?.country,
+            }));
           }
           if (responsData["boxInfo"]) {
             newDataArray.push({
               title: "Products",
-              data: productsArray,
             });
+
+            // let tempArray = [
+            //   {
+            //     companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            //     privateCompanyId: 104486,
+            //     sellerId: 5530,
+            //     productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+            //     name: "Suresh Pros 1",
+            //     category: "Toys & Games",
+            //     qty: 5,
+            //     sku: "DSFS",
+            //     hsnCode: "",
+            //     currency: "INR",
+            //     unitPrice: 123,
+            //     unitTax: 12,
+            //     measureUnit: "cm",
+            //     length: 1,
+            //     breadth: 1,
+            //     height: 1,
+            //     deadWeight: 4,
+            //     weightUnit: "kg",
+            //     volumetricWeight: 0,
+            //     appliedWeight: 4,
+            //     divisor: 5000,
+            //     images: [],
+            //     selected: true,
+            //   },
+            //   {
+            //     companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            //     privateCompanyId: 104486,
+            //     sellerId: 5530,
+            //     productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+            //     name: "Suresh Pros 2",
+            //     category: "Toys & Games",
+            //     qty: 4,
+            //     sku: "DSFS",
+            //     hsnCode: "",
+            //     currency: "INR",
+            //     unitPrice: 123,
+            //     unitTax: 12,
+            //     measureUnit: "cm",
+            //     length: 1,
+            //     breadth: 1,
+            //     height: 1,
+            //     deadWeight: 4,
+            //     weightUnit: "kg",
+            //     volumetricWeight: 0,
+            //     appliedWeight: 4,
+            //     divisor: 5000,
+            //     images: [],
+            //     selected: true,
+            //   },
+            //   {
+            //     companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+            //     privateCompanyId: 104486,
+            //     sellerId: 5530,
+            //     productId: "6b12093e-2d4b-4365-bf22-866cd672537e",
+            //     name: "Suresh Pros 3",
+            //     category: "Toys & Games",
+            //     qty: 3,
+            //     sku: "DSFS",
+            //     hsnCode: "",
+            //     currency: "INR",
+            //     unitPrice: 123,
+            //     unitTax: 12,
+            //     measureUnit: "cm",
+            //     length: 1,
+            //     breadth: 1,
+            //     height: 1,
+            //     deadWeight: 4,
+            //     weightUnit: "kg",
+            //     volumetricWeight: 0,
+            //     appliedWeight: 4,
+            //     divisor: 5000,
+            //     images: [],
+            //     selected: true,
+            //   },
+            // ];
+
+            setProductArray(productsArray);
           }
           if (responsData["boxInfo"]) {
             newDataArray.push({
               title: "Box",
-              data: responsData["boxInfo"],
             });
+            setBoxArray(responsData["boxInfo"]);
           }
           // push in array reverse service
           newDataArray.push({
             title: "Reverse Service",
-            data: [],
           });
 
           setActualArray(newDataArray);
 
-          callReverseServiceAPI();
+          callReverseServiceAPI(responsData);
         } else {
           //services
         }
@@ -141,43 +246,208 @@ const ReverseIndex = (props: ReverseProps) => {
     })(); // Immediately invoke the async function
   }, []);
 
-  const handleCheck = (ele: any) => {
-    console.log("ele", ele?.target?.name);
+  const handleCheck = (ele: any, index: number) => {
+    let tempArr = serviceArray;
+    tempArr?.forEach((element: any) => {
+      element.isChecked = false;
+    });
+    tempArr[index].isChecked = true;
+    setServiceArray([...tempArr]);
+
+    // if (ele?.target?.checked) {
+    //   reverseServiceArrayTemp.push(ele.target.name);
+    //   // this function are used to get unique value from array
+    //   const uniqueArray = reverseServiceArrayTemp.reduce(
+    //     (accumulator: any, currentValue: any) => {
+    //       if (!accumulator.includes(currentValue)) {
+    //         accumulator.push(currentValue);
+    //       }
+    //       return accumulator;
+    //     },
+    //     []
+    //   );
+    //   setReverseSeviceArray(uniqueArray);
+    // } else {
+    //   let filterValue = reverseSeviceArray.filter(
+    //     (item: any) => item !== ele?.target?.name
+    //   );
+    //   setReverseSeviceArray(filterValue);
+    // }
   };
 
   const addQtyProduct = (j: any) => {
-    let qty: any = document.getElementsByClassName(`qtyProduct_${j}`);
-    qty = qty?.value;
+    let qtyElements: any = document.getElementsByClassName(`qtyProduct_${j}`);
+    if (qtyElements.length > 0) {
+      // Access the first element in the collection
+      let qtyElement = qtyElements[0];
+
+      // Ensure the element has a value and it's a number
+      if (qtyElement.value && !isNaN(qtyElement.value)) {
+        // Parse the current value as an integer
+        let currentQty = parseInt(qtyElement.value, 10);
+
+        //get actual product qty with help data-actualQty
+        let getActualQtyElements: any =
+          qtyElement.getAttribute(`data-actualQty`);
+
+        // Subtract 1 from the current value
+        let newQty = currentQty + 1;
+
+        for (let i = 0; i < productArray?.length; i++) {
+          if (i === j) {
+            // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
+            if (getActualQtyElements >= newQty) {
+              qtyElement.value = newQty;
+              productArray[j].qty = newQty;
+            } else {
+              toast.error("Qty is not update");
+            }
+            break;
+          }
+        }
+      } else {
+        console.error("The value of the element is not a number.");
+      }
+    } else {
+      console.error(`No elements found with the class name qtyProduct_${j}`);
+    }
   };
 
   const minusQtyProduct = (j: any) => {
-    let qty: any = document.getElementsByClassName(`qtyProduct_${j}`);
-    qty = qty?.[0]?.value - 1;
-    console.log("🚀 ~ minusQtyProduct ~ qty:", qty);
+    let qtyElements: any = document.getElementsByClassName(`qtyProduct_${j}`);
+
+    if (qtyElements.length > 0) {
+      // Access the first element in the collection
+      let qtyElement = qtyElements[0];
+
+      // Ensure the element has a value and it's a number
+      if (qtyElement.value && !isNaN(qtyElement.value)) {
+        // Parse the current value as an integer
+        let currentQty = parseInt(qtyElement.value, 10);
+
+        //get actual product qty with help data-actualQty
+        let getActualQtyElements: any =
+          qtyElement.getAttribute(`data-actualQty`);
+
+        // Subtract 1 from the current value
+        let newQty = currentQty - 1;
+
+        // let tempProductCopyArray = productCopyArray;
+
+        for (let i = 0; i < productArray?.length; i++) {
+          if (newQty >= 0) {
+            // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
+            // if (tempProductCopyArray[j].qty >= newQty) {
+            if (getActualQtyElements >= newQty) {
+              qtyElement.value = newQty;
+              productArray[j].qty = newQty;
+            } else {
+              toast.error("Qty is not less than 0");
+            }
+            break;
+          } else {
+            toast.error(`Qty is not less than zero`);
+            break;
+          }
+        }
+      } else {
+        console.error("The value of the element is not a number.");
+      }
+    } else {
+      console.error(`No elements found with the class name qtyProduct_${j}`);
+    }
   };
+
+  // console.log("🚀 ~ minusQtyProduct ~ productArray:", productArray);
+
+  function convertToEpoch(dateTimeString: any) {
+    const parsedDateTime = parse(
+      dateTimeString,
+      "dd/MM/yyyy hh:mm a",
+      new Date()
+    );
+    return Math.floor(parsedDateTime.getTime());
+  }
 
   const handlePickupTimeSelected = (pickupTime: string) => {
-    console.log("🚀 ~ handlePickupTimeSelected ~ pickupTime:", pickupTime);
-    // setPickupDate(pickupTime);
-    // const editedPickupDateForEpoch = pickupTime?.substring(0, 19);
-    // epochPickupDate(convertToEpoch(editedPickupDateForEpoch));
+    // console.log("🚀 ~ handlePickupTimeSelected ~ pickupTime:", pickupTime);
+    let editedPickupDateForEpoch: any = pickupTime?.substring(0, 19);
+    editedPickupDateForEpoch = convertToEpoch(editedPickupDateForEpoch);
+    setPickupDate(editedPickupDateForEpoch);
   };
 
+  const handlePickupInputChange = (event: any) => {
+    const { name, value } = event.target;
+    setPickupAddress((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleDeliveryInputChange = (event: any) => {
+    const { name, value } = event.target;
+    setDeliveryAddress((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handlerSubmit = () => {
+    // to check pickupDate is empty or not
+    if (pickupDate === "" || pickupDate === null || pickupDate === undefined) {
+      toast.error("Pickup Date And Time Is Missing");
+      return;
+    }
+
+    // to check atleast one product are have one qty in product array
+    const hasProductWithQtyGreaterThanZero = productArray.some(
+      (product: any) => product.qty > 0
+    );
+
+    // hasProductWithQtyGreaterThanZero it give true or false
+    if (!hasProductWithQtyGreaterThanZero) {
+      toast.error("Atleast One Product Are Required");
+    } else {
+      let filterProductQtyZero: any = productArray?.filter(
+        (el: any, i: number) => el?.qty != 0
+      );
+
+      let summaryTemp: any = {
+        pickupAddress: pickupAddress,
+        pickupTime: pickupDate,
+        deliveryAddress: deliveryAddress,
+        productArray: filterProductQtyZero,
+        boxArray: boxArray,
+        reverseSeviceArray: serviceArray,
+        restInfo: restInfo,
+      };
+      summaryData(summaryTemp);
+    }
+  };
   return (
     <div className="relative h-[90vh] px-4">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 h-[80%] overflow-auto">
         {actualArray?.map((item: any, i: number) => {
-          console.log("🚀 ~ {actualArray?.map ~ item:", item);
           return (
             <div className="accordionContainerBoxStyle">
               <div
                 className={`cursor-pointer px-4 py-3 flex justify-between items-center
-            ${
-              prentActiveItem === i
-                ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
-                : "bg-white"
-            }`}
-                onClick={() => setPrentActiveItem(i)}
+                                   ${
+                                     item?.isCollapse
+                                       ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                                       : "shadow-md rounded "
+                                   }`}
+                onClick={() => {
+                  let temp = [...actualArray];
+
+                  if (item.isCollapse === true) {
+                    item.isCollapse = false;
+                    setActualArray(temp);
+                  } else {
+                    item.isCollapse = true;
+                    setActualArray(temp);
+                  }
+                }}
                 key={i}
               >
                 <div className="flex basis-[90%] items-center gap-x-2">
@@ -185,170 +455,197 @@ const ReverseIndex = (props: ReverseProps) => {
                     {item?.title}
                   </div>
                 </div>
-                <svg
-                  className={`w-5 h-5 transform ${
-                    prentActiveItem === i ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                <div className="flex justify-end items-center gap-x-1">
+                  <img
+                    src={
+                      item.isCollapse === true
+                        ? accordianUpIcon
+                        : accordianDownIcon
+                    }
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => {}}
                   />
-                </svg>
+                </div>
               </div>
               {/* Pickup Address Accordian */}
-              {prentActiveItem === i && item?.title === "Pickup Address" && (
+              {item?.isCollapse && item?.title === "Pickup Address" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   <div className="flex gap-2 mt-[10px] ">
                     <CustomInputBox
                       label="Contact Person"
-                      value={item?.data?.contact?.name}
-                      isDisabled={true}
+                      value={pickupAddress?.contactPerson}
+                      name="contactPerson"
+                      onChange={handlePickupInputChange}
                     />
                     <CustomInputBox
                       label="Contact No"
-                      value={item?.data?.contact?.mobileNo}
-                      isDisabled={true}
+                      value={pickupAddress?.contactNo}
+                      name="contactNo"
+                      onChange={handlePickupInputChange}
                     />
                   </div>
                   <div className="">
                     <CustomInputBox
                       label="Email Id"
-                      value={item?.data?.contact?.emailId}
-                      isDisabled={true}
+                      value={pickupAddress?.emailId}
+                      name="emailId"
+                      onChange={handlePickupInputChange}
                     />
                   </div>
                   <div className="">
                     <CustomInputBox
                       label="Plot no., floor, building name "
-                      value={item?.data?.fullAddress}
-                      isDisabled={true}
+                      value={pickupAddress?.buildingName}
+                      name="buildingName"
+                      onChange={handlePickupInputChange}
                     />
                   </div>
                   <div className="flex gap-2 ">
                     <CustomInputBox
                       label="Locality"
-                      value={item?.data?.locality}
-                      isDisabled={true}
+                      value={pickupAddress?.locality}
+                      name="locality"
+                      onChange={handlePickupInputChange}
                     />
                     <CustomInputBox
                       label="Landmark"
-                      value={item?.data?.landmark}
-                      isDisabled={true}
+                      value={pickupAddress?.landmark}
+                      name="landmark"
+                      onChange={handlePickupInputChange}
                     />
                   </div>
                   <div className="flex gap-2 ">
                     <CustomInputBox
                       label="Pincode"
-                      value={item?.data?.pincode}
-                      isDisabled={true}
+                      value={pickupAddress?.pincode}
+                      name="pincode"
+                      onChange={handlePickupInputChange}
                     />
                     <CustomInputBox
                       label="City"
-                      value={item?.data?.city}
-                      isDisabled={true}
+                      value={pickupAddress?.city}
+                      name="city"
+                      onChange={handlePickupInputChange}
                     />
                   </div>
                   <div className="flex gap-2 ">
                     <CustomInputBox
                       label="State"
-                      value={item?.data?.state}
-                      isDisabled={true}
+                      value={pickupAddress?.state}
+                      name="state"
+                      onChange={handlePickupInputChange}
                     />
                     <CustomInputBox
                       label="Country"
-                      value={item?.data?.country}
-                      isDisabled={true}
+                      value={pickupAddress?.country}
+                      name="country"
+                      onChange={handlePickupInputChange}
                     />
                   </div>
                 </div>
               )}
               {/* Delivery Address Accordian */}
-              {prentActiveItem === i && item?.title === "Delivery Address" && (
+              {item?.isCollapse && item?.title === "Delivery Address" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   <div className="flex gap-2 mt-[10px] ">
                     <CustomInputBox
                       label="Contact Person"
-                      value={item?.data?.contact?.name}
-                      isDisabled={true}
+                      value={deliveryAddress?.contactPerson}
+                      name="contactPerson"
+                      onChange={handleDeliveryInputChange}
                     />
                     <CustomInputBox
                       label="Contact No"
-                      value={item?.data?.contact?.mobileNo}
-                      isDisabled={true}
+                      value={deliveryAddress?.contactNo}
+                      name="contactNo"
+                      onChange={handleDeliveryInputChange}
                     />
                   </div>
                   <div className="">
                     <CustomInputBox
                       label="Email Id"
-                      value={item?.data?.contact?.emailId}
-                      isDisabled={true}
+                      value={deliveryAddress?.emailId}
+                      name="emailId"
+                      onChange={handleDeliveryInputChange}
                     />
                   </div>
                   <div className="">
                     <CustomInputBox
                       label="Plot no., floor, building name "
-                      value={item?.data?.fullAddress}
-                      isDisabled={true}
+                      value={deliveryAddress?.buildingName}
+                      name="buildingName"
+                      onChange={handleDeliveryInputChange}
                     />
                   </div>
                   <div className="flex gap-2 ">
                     <CustomInputBox
                       label="Locality"
-                      value={item?.data?.locality}
-                      isDisabled={true}
+                      value={deliveryAddress?.locality}
+                      name="locality"
+                      onChange={handleDeliveryInputChange}
                     />
                     <CustomInputBox
                       label="Landmark"
-                      value={item?.data?.landmark}
-                      isDisabled={true}
+                      value={deliveryAddress?.landmark}
+                      name="landmark"
+                      onChange={handleDeliveryInputChange}
                     />
                   </div>
                   <div className="flex gap-2 ">
                     <CustomInputBox
                       label="Pincode"
-                      value={item?.data?.pincode}
-                      isDisabled={true}
+                      value={deliveryAddress?.pincode}
+                      name="pincode"
+                      onChange={handleDeliveryInputChange}
                     />
                     <CustomInputBox
                       label="City"
-                      value={item?.data?.city}
-                      isDisabled={true}
+                      value={deliveryAddress?.city}
+                      name="city"
+                      onChange={handleDeliveryInputChange}
                     />
                   </div>
                   <div className="flex gap-2 ">
                     <CustomInputBox
                       label="State"
-                      value={item?.data?.state}
-                      isDisabled={true}
+                      value={deliveryAddress?.state}
+                      name="state"
+                      onChange={handleDeliveryInputChange}
                     />
                     <CustomInputBox
                       label="Country"
-                      value={item?.data?.country}
-                      isDisabled={true}
+                      value={deliveryAddress?.country}
+                      name="country"
+                      onChange={handleDeliveryInputChange}
                     />
                   </div>
                 </div>
               )}
               {/* Products Accordian*/}
-              {prentActiveItem === i && item?.title === "Products" && (
+              {item?.isCollapse && item?.title === "Products" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
-                  {item?.data?.map((ele: any, j: number) => {
+                  {productArray?.map((ele: any, j: number) => {
                     return (
                       <div className="accordionContainerBoxStyle">
                         <div
                           className={`cursor-pointer px-4 py-3 flex justify-between items-center
-                    ${
-                      j === 0
-                        ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
-                        : "bg-white"
-                    }`}
-                          onClick={() => setNestedProductAccordian(j)}
+                            ${
+                              ele?.isCollapse
+                                ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                                : "shadow-md rounded "
+                            }`}
+                          onClick={() => {
+                            let temp = [...productArray];
+
+                            if (ele.isCollapse === true) {
+                              ele.isCollapse = false;
+                              setProductArray(temp);
+                            } else {
+                              ele.isCollapse = true;
+                              setProductArray(temp);
+                            }
+                          }}
                           key={j}
                         >
                           <div className="flex basis-[90%] items-center gap-x-2">
@@ -356,28 +653,25 @@ const ReverseIndex = (props: ReverseProps) => {
                               {ele?.name}
                             </div>
                           </div>
-                          <svg
-                            className={`w-5 h-5 transform ${
-                              nestedProductAccordian === j ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
+                          <div className="flex justify-end items-center gap-x-1">
+                            <img
+                              src={
+                                ele.isCollapse === true
+                                  ? accordianUpIcon
+                                  : accordianDownIcon
+                              }
+                              alt=""
+                              className="cursor-pointer"
+                              onClick={() => {}}
                             />
-                          </svg>
+                          </div>
                         </div>
                         {/* nested accordian expand */}
-                        {nestedProductAccordian === j && (
+                        {ele?.isCollapse && (
                           <div className="p-[10px]">
                             <div className="flex justify-between">
                               <p className="font-Open text-[12px] font-semibold self-center">
-                                Box Quantity:
+                                Product Quantity:
                               </p>
                               <div className="flex gap-2">
                                 <img
@@ -388,7 +682,8 @@ const ReverseIndex = (props: ReverseProps) => {
                                 <input
                                   type="text"
                                   className={`w-[12px] p-0 qtyProduct_${j}`}
-                                  value={2}
+                                  value={ele?.qty}
+                                  data-actualQty={ele?.qty}
                                 />
                                 <img
                                   src={AddCircleBlack}
@@ -441,19 +736,29 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Box Accordian*/}
-              {prentActiveItem === i && item?.title === "Box" && (
+              {item?.isCollapse && item?.title === "Box" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
-                  {item?.data?.map((ele: any, j: number) => {
+                  {boxArray?.map((ele: any, j: number) => {
                     return (
                       <div className="accordionContainerBoxStyle">
                         <div
                           className={`cursor-pointer px-4 py-3 flex justify-between items-center
-                          ${
-                            j === 0
-                              ? "bg-[#F6F6F6] rounded-none rounded-t-lg"
-                              : "bg-white"
-                          }`}
-                          onClick={() => setNestedBoxAccordian(j)}
+                            ${
+                              ele?.isCollapse
+                                ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                                : "shadow-md rounded "
+                            }`}
+                          onClick={() => {
+                            let temp = [...boxArray];
+
+                            if (ele.isCollapse === true) {
+                              ele.isCollapse = false;
+                              setBoxArray(temp);
+                            } else {
+                              ele.isCollapse = true;
+                              setBoxArray(temp);
+                            }
+                          }}
                           key={j}
                         >
                           <div className="flex basis-[90%] items-center gap-x-2">
@@ -461,24 +766,21 @@ const ReverseIndex = (props: ReverseProps) => {
                               {ele?.name}
                             </div>
                           </div>
-                          <svg
-                            className={`w-5 h-5 transform ${
-                              nestedBoxAccordian === j ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
+                          <div className="flex justify-end items-center gap-x-1">
+                            <img
+                              src={
+                                ele.isCollapse === true
+                                  ? accordianUpIcon
+                                  : accordianDownIcon
+                              }
+                              alt=""
+                              className="cursor-pointer"
+                              onClick={() => {}}
                             />
-                          </svg>
+                          </div>
                         </div>
                         {/* nested accordian expand */}
-                        {nestedBoxAccordian === j && (
+                        {ele?.isCollapse && (
                           <div className="p-[10px]">
                             <div className="flex gap-2 mb-[10px]">
                               <CustomInputBox
@@ -524,29 +826,23 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Delivery Address Accordian */}
-              {prentActiveItem === i && item?.title === "Reverse Service" && (
+              {item?.isCollapse && item?.title === "Reverse Service" && (
                 <div className="m-5 max-h-[200px] overflow-auto">
-                  {/* <CustomDropDownWithHTML
-                    value={serviceOptionValue}
-                    options={serviceArray}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setServiceOptionValue(event.target.value);
-                    }}
-                    wrapperClass="w-full mb-4 lg:mb-0 "
-                    heading="Select Reverse Service"
-                  /> */}
                   {serviceArray?.map((el: any, index: number) => {
+                    // console.log("🚀 ~ {serviceArray?.map ~ el:", el);
                     return (
-                      <div className="flex">
+                      <div className="flex" key={index}>
                         <Checkbox
                           key={index}
-                          checked={false}
-                          onChange={(element: any) => {
-                            handleCheck(element);
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            handleCheck(event, index);
                           }}
-                          name={el?.partnerServiceId}
+                          name={el?.partnerServiceName}
                           label={""}
                           style={{ accentColor: "black" }}
+                          checked={el.isChecked}
                           // checkboxClassName="gap-2 mt-1"
                         />
                         <div className="flex flex-row justify-between p-2 w-full">
@@ -571,17 +867,16 @@ const ReverseIndex = (props: ReverseProps) => {
                 </div>
               )}
               {/* Pickup Date and Time Accordian */}
-              {prentActiveItem === i &&
-                item?.title === "Pickup Date and Time" && (
-                  <SelectDateModalContent
-                    onPickupTimeSelected={handlePickupTimeSelected}
-                  />
-                )}
+              {item?.isCollapse && item?.title === "Pickup Date and Time" && (
+                <SelectDateModalContent
+                  onPickupTimeSelected={handlePickupTimeSelected}
+                />
+              )}
             </div>
           );
         })}
         <div className="absolute w-[93%] bottom-6">
-          <CustomButton text={"Next"} onClick={() => {}} />
+          <CustomButton text={"Next"} onClick={() => handlerSubmit()} />
         </div>
       </div>
     </div>

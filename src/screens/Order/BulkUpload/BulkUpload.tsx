@@ -192,7 +192,7 @@ const BulkUpload = (props: ITypeProps) => {
               </p>
 
               {/* commented as instructed */}
-              {/* <Checkbox
+              <Checkbox
                 checked={selectedOption === "B2B"}
                 onChange={() => handleOptionSelect("B2B")}
                 checkboxClassName="gap-2"
@@ -200,7 +200,7 @@ const BulkUpload = (props: ITypeProps) => {
               />
               <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
                 B2B
-              </p> */}
+              </p>
 
               {/* <div className="w-[20%] ml-[250px]">
             <AddButton

@@ -41,6 +41,8 @@ import { toast } from "react-hot-toast";
 import { dummyStateDropdownData } from "../../utils/dummyData";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 import DropDown from "../../components/DropDown/index";
+import { useDispatch } from "react-redux";
+import { updateButtonFlag } from "../../redux/reducers/updateButtonReducer";
 
 interface ErrorModalProps {
   errorModalData: any;
@@ -113,6 +115,8 @@ const ErrorModal = (props: ErrorModalProps) => {
     height: 1,
     appliedWeight: 1,
   });
+
+  const dispatch = useDispatch();
 
   const businessTypeDropDown: any = [
     {
@@ -1802,14 +1806,17 @@ const ErrorModal = (props: ErrorModalProps) => {
         break;
       }
       case orderErrorCategoryENUMs["Service"]: {
-        return updateOrderDetails(isProcessOrder);
+        result = await updateOrderDetails(isProcessOrder);
+        return result;
       }
       case orderErrorCategoryENUMs["Delivery Address"]:
       case orderErrorCategoryENUMs["Pickup Address"]: {
-        return updateAddress(isProcessOrder);
+        result = await updateAddress(isProcessOrder);
+        return result;
       }
       case orderErrorCategoryENUMs["Others"]: {
-        return UpdateOrderIdAndEWayBillInfo(isProcessOrder);
+        result = await UpdateOrderIdAndEWayBillInfo(isProcessOrder);
+        return result;
       }
     }
     return result;
@@ -2043,8 +2050,13 @@ const ErrorModal = (props: ErrorModalProps) => {
             className={`flex w-[50%] items-center justify-center border-2 rounded-md  text-white
           ${switchForValidation() ? "bg-black cursor-pointer" : "bg-[#D2D2D2]"}
             py-2`}
-            onClick={() => {
-              if (switchForValidation()) switchForUpdateActions(false);
+            onClick={async () => {
+              if (switchForValidation()) {
+                let result = await switchForUpdateActions(false);
+                if (result) {
+                  dispatch(updateButtonFlag(true));
+                }
+              }
             }}
           >
             {switchForUpdateActionsName()}
