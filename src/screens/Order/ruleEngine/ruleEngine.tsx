@@ -143,7 +143,7 @@ const RuleEngine: React.FC = () => {
                   <h2 className=" text-base !font-semibold">Partners</h2>
                 </div>
                 <div className="p-4">
-                  <div className="flex flex-col  justify-between items-start gap-y-3 overflow-y-auto ">
+                  <div className="flex flex-col justify-start items-start space-y-2 overflow-y-auto h-96">
                     {partners
                       .filter(
                         (partner) =>
