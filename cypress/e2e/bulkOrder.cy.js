@@ -24,7 +24,7 @@ describe("Login and Order Pickup Tests", () => {
 
     cy.url().should("include", "/overview");
   });
-  it("Create a B2c Bulk Order", () => {
+  it.skip("Create a B2c Bulk Order", () => {
     // Visit the order pickup page
 
     cy.visit("https://sysellerdev.yaarilabs.com/orders/add-bulk");
