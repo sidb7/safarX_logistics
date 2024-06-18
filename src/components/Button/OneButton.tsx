@@ -32,7 +32,7 @@ const OneButton = (props: OneButtonProps) => {
     onlyIcon = false,
     variant = "default",
     size = "medium",
-    // ref, // Added this line
+    ref, // Added this line
     textTransform = "none",
   } = props;
 
@@ -109,7 +109,7 @@ const OneButton = (props: OneButtonProps) => {
             className={buttonClasses}
             onClick={onClick}
             disabled={disabled}
-            // ref={ref} // Added this line
+            ref={ref} // Added this line
           >
             {showIcon && (
               <img
