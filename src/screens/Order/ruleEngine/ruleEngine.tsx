@@ -81,7 +81,7 @@ const RuleEngine: React.FC = () => {
         partners: partnerNames,
       });
 
-      if (response?.data?.succes) {
+      if (response?.data?.success) {
         toast.success("Partners updated successfully");
       } else {
         toast.error("Failed to update partners");
