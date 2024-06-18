@@ -21,6 +21,7 @@ import { SELLER_WEB_URL } from "../../utils/ApiUrls";
 import { useEffect, useRef } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
+import tickcircle from "../../assets/Order/tickcircle.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
 const excludeWords = ["B2B", "B2C"];
@@ -196,19 +197,19 @@ const MainCommonHelper = (navigate: any = "") => {
     ColumnsHelper.accessor("Pickup Adreess", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Pickup Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3">
+          <div className="font-Open font-normal leading-5 text-sm py-3">
             {capitalizeFirstLetter(
               info?.row?.original?.pickupAddress?.fullAddress
             ) ? (
               <>
-                <div className="text-base">
+                <div className=" font-Open font-normal leading-5 text-sm">
                   {capitalizeFirstLetter(
                     info?.row?.original?.pickupAddress?.contact?.name
                   )}
@@ -218,7 +219,7 @@ const MainCommonHelper = (navigate: any = "") => {
                     info?.row?.original?.pickupAddress?.fullAddress
                   )}
                 </span>
-                <div className="text-base">
+                <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.pickupAddress?.contact?.mobileNo}
                 </div>
               </>
@@ -237,17 +238,17 @@ const MainCommonHelper = (navigate: any = "") => {
     ColumnsHelper.accessor("Delivery Adreess", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Delivery Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3">
+          <div className="font-Open font-normal leading-5 text-sm py-3">
             {info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
-                <div className="text-base ">
+                <div className="font-Open font-normal leading-5 text-sm">
                   {capitalizeFirstLetter(
                     info?.row?.original?.deliveryAddress?.contact?.name
                   )}
@@ -258,7 +259,7 @@ const MainCommonHelper = (navigate: any = "") => {
                   )}
                 </span>
 
-                <div className="text-base">
+                <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
                 </div>
               </>
@@ -277,7 +278,7 @@ const MainCommonHelper = (navigate: any = "") => {
     ColumnsHelper.accessor("Payment", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Payment Mode</h1>
           </div>
         );
@@ -286,7 +287,7 @@ const MainCommonHelper = (navigate: any = "") => {
         const { service, codInfo } = info?.row?.original;
         return (
           <>
-            <div className="flex flex-col gap-y-1 text-base py-3">
+            <div className="flex flex-col gap-y-1 font-Open font-normal leading-5 text-sm py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
                 {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
@@ -347,7 +348,7 @@ const idHelper = (
   ColumnsHelper.accessor("IDs", {
     header: () => {
       return (
-        <div className="flex justify-between">
+        <div className="flex justify-between font-Open font-semibold leading-5 text-sm ">
           <h1>IDs</h1>
         </div>
       );
@@ -368,8 +369,10 @@ const idHelper = (
         <div className="py-3">
           {tempOrderId && (
             <div className="">
-              <span className="text-sm font-light">Shipyaari ID :</span>
-              <div className="flex text-base items-center font-medium">
+              <span className="font-Open font-normal leading-4 text-xs">
+                Shipyaari ID :
+              </span>
+              <div className="flex  items-center font-Open font-semibold leading-5 text-sm">
                 <span
                   className=""
                   data-tooltip-id="my-tooltip-inline"
@@ -384,8 +387,10 @@ const idHelper = (
           )}
           {orderId && (
             <div className="">
-              <span className=" text-sm font-light">Order ID :</span>
-              <div className=" flex text-base items-center font-medium">
+              <span className=" font-Open font-normal leading-4 text-xs ">
+                Order ID :
+              </span>
+              <div className=" flex items-center font-Open font-semibold leading-5 text-sm">
                 <span className="">
                   {source === "SHOPIFY" ||
                   source === "ZOHO" ||
@@ -411,8 +416,10 @@ const idHelper = (
           )}
           {awb && (
             <div className="">
-              <span className=" text-sm font-light">Tracking :</span>
-              <div className="flex text-base items-center font-medium">
+              <span className=" font-Open font-normal leading-4 text-xs ">
+                Tracking :
+              </span>
+              <div className="flex  items-center font-Open font-semibold leading-5 text-sm ">
                 {/* console.log("log 1 where it is commented") */}
                 <span
                   onClick={
@@ -453,16 +460,20 @@ const idHelper = (
             </div>
           )}
           <div className="flex items-center mt-[0.5rem]">
-            <span className=" text-sm font-light">Source :</span>
-            <div className=" pl-2 text-base items-center font-medium capitalize">
+            <span className="font-Open font-normal leading-4 text-xs">
+              Source :
+            </span>
+            <div className=" pl-2 items-center font-Open font-semibold leading-5 text-sm">
               <span className="">
                 {capitalizeFirstLetterWithExclude(source, excludeWords)}
               </span>
             </div>
           </div>
           <div className="flex items-center">
-            <span className=" text-sm font-light">Order Type :</span>
-            <div className=" pl-2 flex text-base items-center font-medium">
+            <span className=" font-Open font-normal leading-4 text-xs">
+              Order Type :
+            </span>
+            <div className=" pl-2 flex  items-center font-Open font-semibold leading-5 text-sm">
               <span className="">{orderType}</span>
             </div>
           </div>
@@ -474,7 +485,7 @@ const idHelper = (
   ColumnsHelper.accessor("Status", {
     header: () => {
       return (
-        <div className="flex justify-between">
+        <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
           <h1>Status</h1>
         </div>
       );
@@ -657,7 +668,7 @@ const idHelper = (
                   onClick={handleInformativeModal}
                 >
                   <div>
-                    <p className="text-lg font-semibold ">
+                    <p className="font-Open font-semibold leading-5 text-sm ">
                       {capitalizeFirstLetter(renderStatus)}
                     </p>
                   </div>
@@ -671,8 +682,36 @@ const idHelper = (
                   )}
                 </div>
               </div>
-              <div>{time}</div>
+              <div className="font-Open font-normal leading-5 text-sm ">
+                {time}
+              </div>
             </div>
+            // <div className="flex flex-col gap-y-1">
+            //   <div className="flex">
+            //     {/* <img src={forwardShareIcon} alt="" /> <img src={downloadIcon} alt="" /> */}
+            //     <div className="flex justify-between items-center">
+            //       <div className="flex gap-x-2 items-center border border-[#F0A22E] py-2 px-4 bg-[#FDF6EA]">
+            //         <img src={tickcircle} alt="box" className="h-4 w-4" />
+            //         <p className="font-Open font-semibold leading-5 text-sm  ">
+            //           {capitalizeFirstLetter(renderStatus)}
+            //         </p>
+            //         {setInfoModalContent && (
+            //           <div
+            //             className="cursor-pointer text-[#004EFF] hover:text-blue-700 transition duration-300"
+            //             onClick={handleInformativeModal}
+            //           >
+            //             <img
+            //               src={InformativeIcon}
+            //               alt="Info Icon"
+            //               width="28px"
+            //             />
+            //           </div>
+            //         )}
+            //       </div>
+            //     </div>
+            //   </div>
+            //   <div>{time}</div>
+            // </div>
           }
         </div>
       );
@@ -699,7 +738,7 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("IDs", {
       header: (props) => {
         return (
-          <div className="flex items-center">
+          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -743,10 +782,10 @@ export const columnHelperForNewOrder = (
             <div>
               {tempOrderId && (
                 <div className="">
-                  <span className="text-sm font-light mr-1">
+                  <span className="text-xs font-normal mr-1 leading-4 font-Open">
                     Shipyaari ID :
                   </span>
-                  <div className="flex text-base items-center font-medium">
+                  <div className="flex  text-sm items-center font-semibold leading-5 font-Open">
                     {source == "SHOPIFY" ||
                     source == "WOOCOMMERCE" ||
                     source == "AMAZON" ||
@@ -781,8 +820,10 @@ export const columnHelperForNewOrder = (
               )}
               {orderId && (
                 <div className="">
-                  <span className=" text-sm font-light">Order ID :</span>
-                  <div className=" flex text-base items-center font-medium">
+                  <span className=" text-xs font-normal font-Open leading-4 ">
+                    Order ID :
+                  </span>
+                  <div className=" flex text-sm font-Open items-center font-semibold leading-5">
                     <span className="">
                       {source === "SHOPIFY" ||
                       source === "ZOHO" ||
@@ -840,11 +881,11 @@ export const columnHelperForNewOrder = (
                 </div>
               )}
               <div className="  mt-1">
-                <span className="text-sm font-light mr-1">
+                <span className=" font-Open text-xs font-normal leading-4 mr-1">
                   Order Updated At :
                 </span>
                 <div className=" ">
-                  <p className="text-sm font-medium">
+                  <p className=" font-Open text-sm font-semibold leading-5">
                     {date_DD_MMM_YYYY_HH_MM_SS(
                       source === "SHOPIFY" ||
                         source === "WOOCOMMERCE" ||
@@ -857,16 +898,20 @@ export const columnHelperForNewOrder = (
               </div>
 
               <div className="flex items-center mt-1">
-                <span className=" text-sm font-light">Source :</span>
-                <div className=" pl-2 text-base items-center font-medium">
+                <span className=" font-Open  text-xs leading-4 font-normal">
+                  Source :
+                </span>
+                <div className=" pl-2 font-Open text-sm items-center font-semibold leading-5">
                   <span className="">
                     {capitalizeFirstLetterWithExclude(source, excludeWords)}
                   </span>
                 </div>
               </div>
               <div className="flex items-center">
-                <span className=" text-sm font-light">Order Type :</span>
-                <div className=" pl-2 flex text-base items-center font-medium">
+                <span className=" font-Open  text-xs leading-4 font-normal">
+                  Order Type :
+                </span>
+                <div className="pl-2 font-Open text-sm items-center font-semibold leading-5 ">
                   <span className="">{orderType}</span>
                 </div>
               </div>
@@ -879,8 +924,8 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("Status", {
       header: () => {
         return (
-          <div className="flex justify-between">
-            <h1>Status</h1>
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
+            <h1>Status </h1>
           </div>
         );
       },
@@ -1054,10 +1099,10 @@ export const columnHelperForNewOrder = (
                     onClick={handleInformativeModal}
                   >
                     <div>
-                      <p className="text-lg font-semibold ">
+                      <p className=" font-Open font-semibold leading-5 text-sm">
                         {latestStatus
                           ? capitalizeFirstLetter(latestStatus)
-                          : "Draft"}
+                          : "Draft"}{" "}
                       </p>
                     </div>
                     {setInfoModalContent && (
@@ -1068,7 +1113,7 @@ export const columnHelperForNewOrder = (
                         <img
                           src={InformativeIcon}
                           alt="Info Icon"
-                          width="28px"
+                          width="14px"
                         />
                       </div>
                     )}
@@ -1095,7 +1140,7 @@ export const columnHelperForNewOrder = (
                       </div>
                     ))}
                 </div>
-                <div>
+                <div className="font-Open font-semibold leading-5 text-sm">
                   {source === "SHOPIFY" ||
                   source === "WOOCOMMERCE" ||
                   source === "ZOHO"
@@ -1141,19 +1186,19 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("Pickup Adreess", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between marker: font-Open font-semibold leading-5 text-sm">
             <h1>Pickup Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3">
+          <div className=" font-Open font-normal leading-5 text-sm  py-3">
             {capitalizeFirstLetter(
               info?.row?.original?.pickupAddress?.fullAddress
             ) ? (
               <>
-                <div className="text-base">
+                <div className="font-Open font-normal leading-5 text-sm ">
                   {capitalizeFirstLetter(
                     info?.row?.original?.pickupAddress?.contact?.name
                   )}
@@ -1163,14 +1208,14 @@ export const columnHelperForNewOrder = (
                     info?.row?.original?.pickupAddress?.fullAddress
                   )}
                 </span>
-                <div className="text-base">
+                <div className="font-Open font-normal leading-5 text-sm ">
                   {info?.row?.original?.pickupAddress?.contact?.mobileNo}
                 </div>
               </>
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="decoration-2 text-[black]"
+                className="decoration-2 font-Open font-normal leading-5 text-sm  text-[black]"
               >
                 No Pickup Address Found
               </div>
@@ -1182,17 +1227,17 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("Delivery Adreess", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Delivery Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3">
+          <div className="font-Open font-normal leading-5 text-sm py-3">
             {info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
-                <div className="text-base">
+                <div className=" font-Open font-normal leading-5 text-sm ">
                   {capitalizeFirstLetter(
                     info?.row?.original?.deliveryAddress?.contact?.name
                   )}
@@ -1203,14 +1248,14 @@ export const columnHelperForNewOrder = (
                   )}
                 </span>
 
-                <div className="text-base">
+                <div className=" font-Open font-normal leading-5 text-sm ">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
                 </div>
               </>
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="decoration-2 text-[black]"
+                className=" font-Open font-normal leading-5 text-sm  text-[black]"
               >
                 No Delivery Address Found
               </div>
@@ -1241,7 +1286,7 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("Payment", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Payment Mode</h1>
           </div>
         );
@@ -1250,7 +1295,7 @@ export const columnHelperForNewOrder = (
         const { service, codInfo } = info?.row?.original;
         return (
           <>
-            <div className="flex flex-col gap-y-1 text-base py-3">
+            <div className="flex flex-col gap-y-1 font-Open font-normal leading-5 text-sm  py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
                 {Number(codInfo?.invoiceValue?.toFixed(2))?.toLocaleString(
@@ -1281,7 +1326,7 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("asda", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Actions</h1>
           </div>
         );
@@ -1388,14 +1433,16 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       header: (props) => {
         return (
           <div className="flex items-center">
-            <div className="flex justify-between mr-3 !my-[-10px] cursor-pointer">
+            <div className="flex justify-between mr-3 !my-[-10px] cursor-pointer ">
               <PartialChecked
                 checked={props.table?.getIsAllRowsSelected()}
                 onChange={props?.table?.getToggleAllRowsSelectedHandler()}
                 intermediate={props?.table?.getIsSomeRowsSelected()}
               />
             </div>
-            <h1>Pickup Expected</h1>
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Pickup Expected
+            </h1>
           </div>
         );
       },
@@ -1403,7 +1450,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         const { pickupAddress, service } = info?.row?.original;
         return (
           <div className="flex">
-            <div className="flex justify-center mr-4 !my-[-12px] cursor-pointer">
+            <div className="flex justify-center mr-4 !my-[-12px] cursor-pointer pt-1">
               <input
                 type="checkbox"
                 checked={info?.row?.getIsSelected()}
@@ -1418,8 +1465,10 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                   : null}
               </p>
               <div className="py-2 flex flex-col">
-                <span className="text-sm font-light">Delivery Partner</span>
-                <div className="font-semibold">
+                <span className=" font-Open font-normal leading-4 text-xs">
+                  Delivery Partner
+                </span>
+                <div className=" font-Open font-semibold leading-5 text-sm">
                   {capitalizeFirstLetter(service?.partnerName)}
                 </div>
               </div>
@@ -1439,7 +1488,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
     ColumnsHelper.accessor("asd", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex justify-between font-Open font-semibold leading-5 text-sm">
             <h1>Actions</h1>
           </div>
         );
@@ -1582,7 +1631,7 @@ export const columnHelpersForRest = (
     ColumnsHelper.accessor("packageType", {
       header: (props) => {
         return (
-          <div className="flex items-center">
+          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -1605,8 +1654,10 @@ export const columnHelpersForRest = (
               />
             </div>
             <div className="py-2 flex flex-col">
-              <span className="text-sm font-light">Delivery Partner</span>
-              <div className="font-semibold">
+              <span className="font-Open font-normal leading-4 text-xs ">
+                Delivery Partner
+              </span>
+              <div className="font-Open font-semibold leading-5 text-sm">
                 {capitalizeFirstLetter(service?.partnerName)}
               </div>
             </div>

@@ -170,8 +170,10 @@ export const PassbookColumns = (setSortOrder: any) => {
     columnsHelper.accessor("transactionId", {
       header: () => {
         return (
-          <div className="flex whitespace-nowrap justify-between items-center w-[90px]">
-            <h1 className="text-sm font-semibold leading-5 ">Transaction ID</h1>
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px] ">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Transaction ID
+            </h1>
             {/* <img src={sortIconTable} alt="" /> */}
           </div>
         );
