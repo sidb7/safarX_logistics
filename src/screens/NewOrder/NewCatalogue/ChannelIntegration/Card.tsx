@@ -23,7 +23,14 @@ const Card = (props: any) => {
   const handleIntegration = (e: any) => {
     if (setModalData) {
       if (e.target.textContent === "Integrate" || channel.expiredToken)
-        setModalData({ isOpen: true, modalData: channel });
+        if (channel.channel === 'AMAZON') {
+          const sellerId:any = localStorage.getItem("sellerId");
+          const encodedSellerId = btoa(sellerId);
+          const url = `https://sellercentral.amazon.in/apps/authorize/consent?application_id=amzn1.sp.solution.2539213c-5953-4a94-afc9-5008a8688ca7&version=beta&state=${encodedSellerId}`;
+          window.open(url, '_blank');
+        } else {
+          setModalData({ isOpen: true, modalData: channel });
+        }
     }
     if (setIndexNum) setIndexNum(index);
     setIntegrate(false);
