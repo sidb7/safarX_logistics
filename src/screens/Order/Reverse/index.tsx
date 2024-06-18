@@ -299,6 +299,7 @@ const ReverseIndex = (props: ReverseProps) => {
             if (getActualQtyElements >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
+              qtyElement.setAttribute("data-actualQty", currentQty); // set attribute and there value
             } else {
               toast.error("Qty is not update");
             }
@@ -341,6 +342,7 @@ const ReverseIndex = (props: ReverseProps) => {
             if (getActualQtyElements >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
+              qtyElement.setAttribute("data-actualQty", currentQty); // set attribute and there value
             } else {
               toast.error("Qty is not less than 0");
             }
@@ -683,7 +685,6 @@ const ReverseIndex = (props: ReverseProps) => {
                                   type="text"
                                   className={`w-[12px] p-0 qtyProduct_${j}`}
                                   value={ele?.qty}
-                                  data-actualQty={ele?.qty}
                                 />
                                 <img
                                   src={AddCircleBlack}
