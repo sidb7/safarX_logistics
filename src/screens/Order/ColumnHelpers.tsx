@@ -426,8 +426,6 @@ const idHelper = (
       const timeStamp = statusOnlyForBooked?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
 
-      console.log("rowData", info?.row?.original);
-
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -473,12 +471,14 @@ const idHelper = (
               </div>
             </div>
           )} */}
-          <div className="">
-            <span className=" text-sm font-light">Booked Time :</span>
-            <div className=" flex text-base items-center font-medium">
-              {time}
+          {time && (
+            <div className="">
+              <span className=" text-sm font-light">Booked Time :</span>
+              <div className=" flex text-base items-center font-medium">
+                {time}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex items-center mt-[0.5rem]">
             <span className=" text-sm font-light">Source :</span>
@@ -1704,7 +1704,8 @@ export const columnHelpersForRest = (
         );
       },
       cell: (info: any) => {
-        const { service } = info?.row?.original;
+        const { pickupAddress, service, source, orderId, otherDetails, awb } =
+          info?.row?.original;
         return (
           <div className="flex">
             <div className="flex justify-center mr-4 !my-[-6px] cursor-pointer">
@@ -1715,11 +1716,94 @@ export const columnHelpersForRest = (
                 className="!w-[16px]"
               />
             </div>
-            <div className="py-2 flex flex-col">
-              <span className="text-sm font-light">Delivery Partner</span>
-              <div className="font-semibold">
-                {capitalizeFirstLetter(service?.partnerName)}
+            <div>
+              {orderId && (
+                <div className="">
+                  <span className=" text-sm font-light">Order ID :</span>
+                  <div className=" flex text-base items-center font-medium">
+                    <span className="">
+                      {source === "SHOPIFY" ||
+                      source === "ZOHO" ||
+                      source === "WOOCOMMERCE"
+                        ? otherDetails?.orderNumber
+                          ? `${otherDetails?.orderNumber}`
+                          : orderId
+                        : orderId}
+                    </span>
+                    <CopyTooltip
+                      stringToBeCopied={
+                        source === "SHOPIFY" ||
+                        source === "ZOHO" ||
+                        source === "WOOCOMMERCE"
+                          ? otherDetails?.orderNumber
+                            ? `${otherDetails?.orderNumber}`
+                            : orderId
+                          : orderId
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {source === "UNICOMMERCE" && (
+                <div className="">
+                  <span className=" text-sm font-light">Order Number :</span>
+                  <div className=" flex text-base items-center font-medium">
+                    {otherDetails?.orderNumber}
+                  </div>
+                </div>
+              )}
+
+              <div className="py-2 flex flex-col">
+                <span className="text-sm font-light">Delivery Partner</span>
+                <div className="font-semibold">
+                  {capitalizeFirstLetter(service?.partnerName)}
+                </div>
               </div>
+
+              {awb && (
+                <div className="">
+                  <span className=" text-sm font-light">Tracking :</span>
+                  <div className="flex text-base items-center font-medium">
+                    {/* console.log("log 1 where it is commented") */}
+                    <span
+                      onClick={
+                        // on going work temporary currently commented
+
+                        () => {
+                          setOpenRightModalForTracking({
+                            ...openRightModalForTracking,
+                            isOpen: true,
+                            awbNo: awb,
+                          });
+                        }
+
+                        // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                        // navigate({
+                        //   pathname: "/tracking",
+                        //   search: `?trackingNo=${awb}`,
+                        // })
+                      }
+                      className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Track"
+                    >
+                      {awb}
+                    </span>
+                    <Tooltip
+                      id="my-tooltip-inline"
+                      style={{
+                        backgroundColor: "bg-neutral-900",
+                        color: "#FFFFFF",
+                        width: "fit-content",
+                        fontSize: "14px",
+                        lineHeight: "16px",
+                      }}
+                    />
+                    <CopyTooltip stringToBeCopied={awb} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
