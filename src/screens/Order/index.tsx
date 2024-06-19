@@ -872,7 +872,7 @@ const Index = () => {
         </div>
 
         <div
-          ref={syncRef}
+          // ref={syncRef}
           onClick={handleSyncOrder} // Function Added
           className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
         >
@@ -1350,7 +1350,7 @@ const Index = () => {
       case "Payment Type":
         const tempArr = [...data];
 
-        for (let i = 0; i < tempArr.length; i++) {
+        for (let i = 0; i < tempArr?.length; i++) {
           if (tempArr[i] === "Prepaid") {
             tempArr[i] = false;
           } else if (tempArr[i] === "Cod") {
@@ -1490,7 +1490,7 @@ const Index = () => {
       ? getIndexFromActiveTab(statusData, activeTab)
       : 0;
 
-    if (searchedText.length > 0) {
+    if (searchedText?.length > 0) {
       searchDebounce(
         tabIndex,
         true,
@@ -1624,8 +1624,8 @@ const Index = () => {
       }
 
       if (
-        filterPayLoadData?.filterArrOne.length > 0 ||
-        filterPayLoadData?.filterArrTwo.length > 0
+        filterPayLoadData?.filterArrOne?.length > 0 ||
+        filterPayLoadData?.filterArrTwo?.length > 0
       ) {
         const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
           (obj: any) => !Object.keys(obj).includes("createdAt")
@@ -1663,7 +1663,7 @@ const Index = () => {
         );
       }
 
-      if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+      if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
@@ -1711,7 +1711,7 @@ const Index = () => {
     arrLebels: string[],
     setIsLoadingManifest: any
   ) => {
-    if (!arrLebels.length) {
+    if (!arrLebels?.length) {
       toast.error("Please Select One Orders For label");
       return;
     }
@@ -1770,7 +1770,7 @@ const Index = () => {
     arrLebels: string[],
     setIsLoadingManifest: any
   ) => {
-    if (!arrLebels.length) {
+    if (!arrLebels?.length) {
       toast.error("Please Select One Orders For Tax Invoice");
       return;
     }
@@ -2038,7 +2038,7 @@ const Index = () => {
   }, [filterState]);
 
   useEffect(() => {
-    if (channelReduxData.length > 0) {
+    if (channelReduxData?.length > 0) {
       setIsSyncModalLoading(false);
     }
   }, [channelReduxData]);
@@ -2217,7 +2217,7 @@ const Index = () => {
                     )
                   ) : (
                     <div className="border border-white my-5">
-                      {orders.length > 0 ? (
+                      {orders?.length > 0 ? (
                         <>
                           {orders?.map((data: any, i: any) => (
                             <OrderCard
