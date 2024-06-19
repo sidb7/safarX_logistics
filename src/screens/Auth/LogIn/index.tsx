@@ -313,6 +313,10 @@ const Index = () => {
     const state = amazonsellerId;
     // const redirectUrl = 'http://loc/alhost:8010/amazonCheckParams';
 
+    // Set a timeout to hide the boot screen
+    setTimeout(() => {
+      setShowBootScreen(false);
+    }, 2000);
     (async () => {
       // Check if the necessary Amazon parameters are present
       if (selling_partner_id && amazon_callback_uri && amazon_state) {
@@ -347,11 +351,6 @@ const Index = () => {
           navigate("/dashboard/overview");
         }
       }
-    
-      // Set a timeout to hide the boot screen
-      setTimeout(() => {
-        setShowBootScreen(false);
-      }, 2000);
     })();
     
 
