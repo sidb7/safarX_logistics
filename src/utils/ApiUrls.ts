@@ -397,6 +397,8 @@ const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
 // Reverse order API
 const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
 
+// Amazon Redirect Url
+const AMAZON_REDIRECT_URL = `${SELLER_URL}/amazonCheckParams`;
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -594,4 +596,5 @@ export {
   REVERSE_ORDER,
   GET_ALLPARTNER_OFSELLER,
   UPDATE_ALLPARTNER_OF_SELLER,
+  AMAZON_REDIRECT_URL,
 };
