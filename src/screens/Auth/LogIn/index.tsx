@@ -308,82 +308,37 @@ const Index = () => {
 
     const [selling_partner_id, amazon_callback_uri, amazon_state, spapi_oauth_code] = 
     ["selling_partner_id", "amazon_callback_uri", "amazon_state", "spapi_oauth_code"].map((key) => localStorage.getItem(key));
-
-    const amazonsellerId:any = localStorage.getItem("sellerId")
-    const state = amazonsellerId;
     // const redirectUrl = 'http://loc/alhost:8010/amazonCheckParams';
 
     // Set a timeout to hide the boot screen
     setTimeout(() => {
       setShowBootScreen(false);
     }, 2000);
-    (async () => {
-      // Check if the necessary Amazon parameters are present
-      if (selling_partner_id && amazon_callback_uri && amazon_state) {
-        // Remove the items from local storage
-        ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
-          localStorage.removeItem(key)
-        );
-        
-        // Make the POST request and get the amazonResponse
-        const amazonResponse = await POST(AMAZON_REDIRECT_URL, {
-          selling_partner_id: JSON.parse(selling_partner_id),
-          amazon_callback_uri: JSON.parse(amazon_callback_uri),
-          amazon_state: JSON.parse(amazon_state),
-          state: state,
-          spapi_oauth_code: spapi_oauth_code
-        });
-    
-        // Navigate to the URL from the amazonResponse
-        if (amazonResponse?.data?.success) {
-          navigate(amazonResponse.redirectUrl);
-        }
-        // Return amazonResponse if needed elsewhere
-        // return amazonResponse;
-      }
-    
-      // Check if token is present
-      if (token) {
+    token &&
+      (async () => {
         const response = await POST(VALIDATE_USER_TOKEN);
-    
-        // Navigate to the dashboard if the token is valid
+        const amazonsellerId:any = localStorage.getItem("sellerId")
+        const state = amazonsellerId;
         if (response?.data?.success) {
-          navigate("/dashboard/overview");
+          if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
+            ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
+              localStorage.removeItem(key)
+            );
+            const amazonResponse = await POST(AMAZON_REDIRECT_URL, {
+              selling_partner_id: JSON.parse(selling_partner_id),
+              amazon_callback_uri: JSON.parse(amazon_callback_uri),
+              amazon_state: JSON.parse(amazon_state),
+              state: state,
+              spapi_oauth_code: spapi_oauth_code
+            });
+            if (amazonResponse?.data?.success) {
+              navigate(amazonResponse.redirectUrl);
+            }
+          } else {
+            navigate("/dashboard/overview");
+          }
         }
-      }
-    })();
-    
-
-    // selling_partner_id && amazon_callback_uri && amazon_state &&
-    //   (async () => {
-    //     if (selling_partner_id && amazon_callback_uri && amazon_state) {
-    //       ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
-    //         localStorage.removeItem(key)
-    //       );
-    //       //window.location.href = `${amazon_callback_uri}?redirect_uri=${redirectUrl}&amazon_state=${amazon_state}&state=${state}`;
-    //       const amazonResponse = await POST(AMAZON_REDIRECT_URL, {
-    //         selling_partner_id: JSON.parse(selling_partner_id),
-    //         amazon_callback_uri: JSON.parse(amazon_callback_uri),
-    //         amazon_state: JSON.parse(amazon_state),
-    //         state: state,
-    //         spapi_oauth_code: spapi_oauth_code
-    //       });
-    //       navigate(amazonResponse.redirectUrl);
-    //     }
-    //   })();
-
-    // setTimeout(() => {
-    //   setShowBootScreen(false);
-    // }, 2000);
-    // token &&
-    //   (async () => {
-    //     const response = await POST(VALIDATE_USER_TOKEN);
-    //     if (response?.data?.success) {
-          
-    //         navigate("/dashboard/overview");
-          
-    //     }
-    //   })();
+      })();
   }, []);
 
   useEffect(() => {
