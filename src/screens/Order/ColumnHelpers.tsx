@@ -677,7 +677,7 @@ const idHelper = (
                       className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
                       onClick={handleInformativeModal}
                     >
-                      <img src={InformativeIcon} alt="Info Icon" width="28px" />
+                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
                     </div>
                   )}
                 </div>
@@ -1113,7 +1113,7 @@ export const columnHelperForNewOrder = (
                         <img
                           src={InformativeIcon}
                           alt="Info Icon"
-                          width="14px"
+                          width="18px"
                         />
                       </div>
                     )}
