@@ -420,7 +420,7 @@ const idHelper = (
       // const AWB = otherDetails?.awbNo;
 
       const statusOnlyForBooked = status?.find(
-        (item: any) => item.currentStatus === "BOOKED"
+        (item: any) => item?.currentStatus === "BOOKED"
       );
 
       const timeStamp = statusOnlyForBooked?.timeStamp;
