@@ -423,7 +423,7 @@ const idHelper = (
         (item: any) => item.currentStatus === "BOOKED"
       );
 
-      const timeStamp = statusOnlyForBooked.timeStamp;
+      const timeStamp = statusOnlyForBooked?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
 
       return (
