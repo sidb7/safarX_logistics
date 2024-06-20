@@ -139,21 +139,9 @@ const Index = () => {
             localStorage.removeItem(key)
           );
           // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
-          
-          const amazonResponse = await POST(AMAZON_REDIRECT_URL, {
-            selling_partner_id: JSON.parse(selling_partner_id),
-            amazon_callback_uri: JSON.parse(amazon_callback_uri),
-            amazon_state: JSON.parse(amazon_state),
-            state: state,
-            spapi_oauth_code: spapi_oauth_code
-          });
-          console.log('ares',amazonResponse);
-          if (amazonResponse?.data?.success) {
-            navigate(amazonResponse.redirectUrl);
-            return;
+          const redirectUrl = AMAZON_REDIRECT_URL;
+          window.location.href = amazon_callback_uri+'?redirect_uri=' +redirectUrl+ '&amazon_state=' +amazon_state+ '&state=' +state;
           }
-          // window.location.href = `${amazon_callback_uri}?redirect_uri=${redirectUrl}&amazon_state=${amazon_state}&state=${state}`;
-        }
 
         // redirect based on qna and kyc done or not
         if (response?.data?.[0]?.nextStep?.qna === false) {
@@ -244,23 +232,15 @@ const Index = () => {
       const [selling_partner_id, amazon_callback_uri, amazon_state, spapi_oauth_code] = 
         ["selling_partner_id", "amazon_callback_uri", "amazon_state", "spapi_oauth_code"].map((key) => localStorage.getItem(key));
         const state = response?.data[0]?.sellerId;
+        // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+        const redirectUrl = AMAZON_REDIRECT_URL;
 
         if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
           ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
             localStorage.removeItem(key)
           );
           
-          const amazonResponse = await POST(AMAZON_REDIRECT_URL, {
-            selling_partner_id: JSON.parse(selling_partner_id),
-            amazon_callback_uri: JSON.parse(amazon_callback_uri),
-            amazon_state: JSON.parse(amazon_state),
-            state: state,
-            spapi_oauth_code: spapi_oauth_code
-          });
-          console.log('ares',amazonResponse);
-          if (amazonResponse?.data?.success) {
-            navigate(amazonResponse.redirectUrl);
-          }
+          window.location.href = amazon_callback_uri+'?redirect_uri=' +redirectUrl+ '&amazon_state=' +amazon_state+ '&state=' +state;
         }
 
       setLoading(false);
@@ -319,22 +299,15 @@ const Index = () => {
         const response = await POST(VALIDATE_USER_TOKEN);
         const amazonsellerId:any = localStorage.getItem("sellerId")
         const state = amazonsellerId;
+        // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+        const redirectUrl = AMAZON_REDIRECT_URL;
         if (response?.data?.success) {
           if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
             ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
               localStorage.removeItem(key)
             );
-            const amazonResponse = await POST(AMAZON_REDIRECT_URL, {
-              selling_partner_id: JSON.parse(selling_partner_id),
-              amazon_callback_uri: JSON.parse(amazon_callback_uri),
-              amazon_state: JSON.parse(amazon_state),
-              state: state,
-              spapi_oauth_code: spapi_oauth_code
-            });
-            if (amazonResponse?.data?.success) {
-              navigate(amazonResponse.redirectUrl);
-            }
-          } else {
+            window.location.href = amazon_callback_uri+'?redirect_uri=' +redirectUrl+ '&amazon_state=' +amazon_state+ '&state=' +state;
+            } else {
             navigate("/dashboard/overview");
           }
         }
