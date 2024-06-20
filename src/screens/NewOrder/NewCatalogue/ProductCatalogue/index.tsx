@@ -34,6 +34,7 @@ import ShopifyRibbon from "../../../../assets/Catalogue/shopifyRibbon.png";
 import WooCommerceRibbon from "../../../../assets/Catalogue/woocommerceRibbon.png";
 import ShipyaariRibbon from "../../../../assets/Catalogue/shipyaariRibbon.png";
 import OneButton from "../../../../components/Button/OneButton";
+import UniCommerceRibbon from "../../../../assets/Catalogue/uniCommerceRibbon.png";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
@@ -373,6 +374,8 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                                   ? ShopifyRibbon
                                   : data?.source === "WOOCOMMERCE"
                                   ? WooCommerceRibbon
+                                  : data?.source === "UNICOMMERCE"
+                                  ? UniCommerceRibbon
                                   : ShipyaariRibbon
                               }
                             />
