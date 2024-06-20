@@ -411,6 +411,7 @@ const idHelper = (
         tempOrderId,
         status = [],
         updatedAt,
+        createdAt,
         orderType,
         orderId,
         source,
@@ -419,12 +420,12 @@ const idHelper = (
       } = info?.row?.original;
       // const AWB = otherDetails?.awbNo;
 
-      const statusOnlyForBooked = status?.find(
-        (item: any) => item?.currentStatus === "BOOKED"
-      );
+      // const statusOnlyForBooked = status?.find(
+      //   (item: any) => item?.currentStatus === "BOOKED"
+      // );
 
-      const timeStamp = statusOnlyForBooked?.timeStamp;
-      const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
+      // const timeStamp = statusOnlyForBooked?.timeStamp;
+      const time = createdAt && date_DD_MMM_YYYY_HH_MM_SS(createdAt);
 
       return (
         <div className="py-3">
