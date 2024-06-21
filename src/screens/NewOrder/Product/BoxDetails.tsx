@@ -70,23 +70,33 @@ const BoxDetails = (props: IBoxdetails) => {
     setCheckBoxValuePerBox(value, name, boxIndex);
   };
 
-  const handleCollectableAmmount = (event: any) => {
+  const handleCollectableAmmount = (event: any, target?: string) => {
     const { name, value } = event.target;
-    if (value > selectedBox?.codInfo?.invoiceValue) {
-      setCheckBoxValuePerBox(
-        selectedBox?.codInfo?.invoiceValue,
-        "codAmount",
-        boxIndex
-      );
-      return;
-    }
+    if (target === "collectableAmount") {
+      if (value > selectedBox?.codInfo?.invoiceValue) {
+        setCheckBoxValuePerBox(
+          selectedBox?.codInfo?.invoiceValue,
+          "codAmount",
+          boxIndex
+        );
+        return;
+      }
 
-    if (!isNaN(value)) {
-      setCheckBoxValuePerBox(
-        value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
-        "codAmount",
-        boxIndex
-      );
+      if (!isNaN(value)) {
+        setCheckBoxValuePerBox(
+          value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+          "codAmount",
+          boxIndex
+        );
+      }
+    } else if (target === "invoiceValue") {
+      if (!isNaN(value)) {
+        setCheckBoxValuePerBox(
+          value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+          "invoiceValue",
+          boxIndex
+        );
+      }
     }
   };
 
@@ -413,8 +423,14 @@ const BoxDetails = (props: IBoxdetails) => {
                 <div className="!w-full">
                   <CustomInputBox
                     label="Invoice Value"
-                    isDisabled={true}
-                    value={selectedBox?.codInfo?.invoiceValue}
+                    // isDisabled={true}
+                    onChange={(e: any) =>
+                      handleCollectableAmmount(e, "invoiceValue")
+                    }
+                    value={
+                      selectedBox?.codInfo?.invoiceValue &&
+                      selectedBox?.codInfo?.invoiceValue
+                    }
                     data-cy="invoice-value-input"
                   />
                 </div>
@@ -428,8 +444,13 @@ const BoxDetails = (props: IBoxdetails) => {
                   <CustomInputBox
                     label={"COD Amount"}
                     isDisabled={!selectedBox?.codInfo?.isCod}
-                    value={selectedBox?.codInfo?.collectableAmount}
-                    onChange={handleCollectableAmmount}
+                    value={
+                      selectedBox?.codInfo?.collectableAmount &&
+                      selectedBox?.codInfo?.collectableAmount
+                    }
+                    onChange={(e: any) =>
+                      handleCollectableAmmount(e, "collectableAmount")
+                    }
                     data-cy="cod-amount-input"
                   />
                 </div>

@@ -121,7 +121,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [isOrderCOD, setIsOrderCOD] = useState<any>(false);
   const [transitType, setTransitType] = useState<any>("");
   const [isLoading, setIsLoading]: any = useState(false);
-
+  const [invoiceUpdateDetails, setInvoiceUpdateDetails] = useState<
+    object | any
+  >({
+    isInvoiceUpdated: false,
+    boxIndex: 0,
+  });
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
@@ -154,7 +159,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
     let codInfo: any = {
       ...codData,
-      invoiceValue: totalInvoiceValue,
+      invoiceValue: invoiceUpdateDetails?.isInvoiceUpdated
+        ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
+        : totalInvoiceValue,
       isCod: false,
       collectableAmount: 0,
     };
@@ -299,10 +306,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         };
         break;
       case "invoiceValue":
-        tempArr[boxIndex] = {
+        tempArr[boxIndex].codInfo = {
           ...tempArr[boxIndex].codInfo,
           invoiceValue: value && +value,
         };
+        setInvoiceUpdateDetails({
+          isInvoiceUpdated: true,
+          boxIndex,
+        });
         break;
       case "insurance":
         tempArr[boxIndex] = {
@@ -880,7 +891,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                           // recommended={index === 1 ? true : false}
                         />
                       </div>
-
                     );
                   })
                 ) : (
