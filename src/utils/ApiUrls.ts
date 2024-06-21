@@ -137,6 +137,10 @@ const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
 
+//Update Seller Profile
+const UPDATE_SINGLE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
+const UPDATE_SELLER_NAME = `${SELLER_BASE_URL}/seller/updateSellerName`;
+
 // Order URLs
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 const GET_STATUS_COUNT = `${SELLER_BASE_URL}/order/getOrderCountIn`;
@@ -597,4 +601,6 @@ export {
   GET_ALLPARTNER_OFSELLER,
   UPDATE_ALLPARTNER_OF_SELLER,
   AMAZON_REDIRECT_URL,
+  UPDATE_SINGLE_SELLER,
+  UPDATE_SELLER_NAME,
 };
