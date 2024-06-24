@@ -7,6 +7,8 @@ import ContactDetails from "../ContactDetails/contactDetails";
 
 interface IDeliveryAddress {
   data: {
+    orderType: any;
+    setOrderType: any;
     deliveryAddress: any;
     setDeliveryAddress: any;
     label?: string;
@@ -17,6 +19,8 @@ interface IDeliveryAddress {
 
 const DeliveryAddress: React.FunctionComponent<IDeliveryAddress> = ({
   data: {
+    orderType,
+    setOrderType,
     deliveryAddress,
     setDeliveryAddress,
     label,
@@ -25,6 +29,8 @@ const DeliveryAddress: React.FunctionComponent<IDeliveryAddress> = ({
   },
 }) => {
   const data = {
+    orderType,
+    setOrderType,
     deliveryAddress,
     setDeliveryAddress,
     addressLabel: label === "billing" ? "Billing Address" : "Delivery Address",
