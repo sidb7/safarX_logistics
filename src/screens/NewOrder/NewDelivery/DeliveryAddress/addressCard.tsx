@@ -29,6 +29,8 @@ import gstJsonData from "../../../../data/gstStateCode.json";
 
 interface IAddressCardProps {
   data: {
+    orderType: any;
+    setOrderType: any;
     deliveryAddress: any;
     setDeliveryAddress: any;
     addressLabel: string;
@@ -39,6 +41,8 @@ interface IAddressCardProps {
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   data: {
+    orderType,
+    setOrderType,
     deliveryAddress,
     setDeliveryAddress,
     addressLabel,
@@ -249,6 +253,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   };
 
   console.log("deliveryAddress", deliveryAddress);
+  console.log("orderType>>>", orderType);
 
   console.log("inputError", inputError);
   return (
@@ -433,54 +438,51 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           />
         </div>
 
-        {deliveryAddress.orderType === "B2B" &&
-          addressLabel === "Delivery Address" && (
-            <div className="mb-4 lg:mb-6 lg:mr-6">
-              <CustomInputBox
-                label="GST No."
-                maxLength={15}
-                inputError={inputError}
-                value={deliveryAddress.gstNumber}
-                onChange={(e) => {
-                  const gstValue = e.target.value;
+        {orderType === "B2B" && addressLabel === "Delivery Address" && (
+          <div className="mb-4 lg:mb-6 lg:mr-6">
+            <CustomInputBox
+              label="GST No."
+              maxLength={15}
+              inputError={inputError}
+              value={deliveryAddress.gstNumber}
+              onChange={(e) => {
+                const gstValue = e.target.value;
 
-                  const isValidGST = validateGST(gstValue);
-                  console.log("isvalid", isValidGST);
-                  setValidationErrorGST(
-                    isValidGST ? null : "Invalid GST number"
-                  );
+                const isValidGST = validateGST(gstValue);
+                console.log("isvalid", isValidGST);
+                setValidationErrorGST(isValidGST ? null : "Invalid GST number");
 
-                  setDeliveryAddress((prevData: any) => {
-                    let updatedGSTValue = gstValue;
+                setDeliveryAddress((prevData: any) => {
+                  let updatedGSTValue = gstValue;
 
-                    if (
-                      validGstStateCode.length > 0 &&
-                      !deliveryAddress.gstNumber.includes(validGstStateCode)
-                    ) {
-                      updatedGSTValue = "";
-                    }
-
-                    return {
-                      ...prevData,
-                      gstNumber: updatedGSTValue,
-                    };
-                  });
-
-                  if (setInputError) {
-                    setInputError(false);
+                  if (
+                    validGstStateCode.length > 0 &&
+                    !deliveryAddress.gstNumber.includes(validGstStateCode)
+                  ) {
+                    updatedGSTValue = "";
                   }
-                }}
-              />
-              {(inputError || validationErrorGST) && (
-                <div className="flex items-center gap-x-1 mt-1">
-                  <img src={InfoCircle} alt="" width={10} height={10} />
-                  <span className="font-normal text-[#F35838] text-xs leading-3">
-                    {validationErrorGST || "Invalid GST number"}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
+
+                  return {
+                    ...prevData,
+                    gstNumber: updatedGSTValue,
+                  };
+                });
+
+                if (setInputError) {
+                  setInputError(false);
+                }
+              }}
+            />
+            {(inputError || validationErrorGST) && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {validationErrorGST || "Invalid GST number"}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <CommonBottomModal
         icon={MapIcon}
