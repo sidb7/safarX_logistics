@@ -34,6 +34,7 @@ import {
   GET_ORDER_ERRORS,
   RECHARGE_STATUS,
   PAYMENT_ERRORS,
+  DUPLICATE_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -82,6 +83,7 @@ import ShopifyIcon from "../../assets/Catalogue/shopifyLg.svg";
 import WoocommerceIcon from "../../assets/Catalogue/WooCommerceLg.svg";
 import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
 import CustomSwitchToggle from "../../components/CustomSwitchToggle";
+import { DuplicateModel } from "../../components/Duplicate";
 
 let allOrdersCount: any;
 
@@ -275,6 +277,10 @@ const Index = () => {
     isOpen: false,
     data: [],
   });
+  const [duplicateOrderModalData, setDuplicateOrderModalData]: any = useState({
+    isOpen: true,
+    data: [],
+  });
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -444,6 +450,7 @@ const Index = () => {
   };
 
   const getAllOrders = async (subStatus?: any) => {
+    console.log("222222");
     let currentStatus = tabs[globalIndex]?.value;
 
     let payload: any = {
@@ -767,6 +774,18 @@ const Index = () => {
     // }
   };
 
+  const warningMessageForDuplicate = (data: any) => {
+    return (
+      <div>
+        <div>
+          <span>
+            Are You Sure You Want To Duplicate this Order - {data?.tempOrderId}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   const warningMessageForDelete = (data?: any) => {
     const tempOrderIdArray = data?.tempOrderIdArray?.map(
       (tempOrderIdObj?: any) => tempOrderIdObj
@@ -888,6 +907,8 @@ const Index = () => {
     endDate?: any,
     filterPayLoadData?: any
   ) => {
+    console.log("333333");
+
     let payload: any;
     try {
       setIsLoading(true);
@@ -1060,7 +1081,12 @@ const Index = () => {
     }
   };
 
-  const orderActions = (payLoad: any, actionType: any, currentStatus?: any) => {
+  const orderActions = (
+    payLoad: any,
+    actionType: any,
+    currentStatus?: any,
+    data?: any
+  ) => {
     switch (currentStatus) {
       case "DRAFT":
         if (actionType === "edit") {
@@ -1072,6 +1098,14 @@ const Index = () => {
             },
           });
           // setIsPartnerModal(true);
+        } else if (actionType === "duplicate_order") {
+          setDuplicateOrderModalData({
+            isOpen: true,
+            data: {
+              tempOrderId: data?.tempOrderId,
+              payLoad: data,
+            },
+          });
         } else {
           setDeleteModalDraftOrder({
             isOpen: true,
@@ -1095,6 +1129,14 @@ const Index = () => {
           getSingleFile(payLoad, actionType);
         } else if (actionType === "download_invoice") {
           getSingleFile(payLoad, actionType);
+        } else if (actionType === "duplicate_order") {
+          setDuplicateOrderModalData({
+            isOpen: true,
+            data: {
+              tempOrderId: data?.tempOrderId,
+              payLoad: data,
+            },
+          });
         }
         break;
       default:
@@ -1538,6 +1580,7 @@ const Index = () => {
     filterPayLoadData?: any
   ) => {
     try {
+      console.log("1111111");
       let payload: any;
       let dates: any = {};
       let allOrders: any;
@@ -1959,6 +2002,7 @@ const Index = () => {
   useEffect(() => {
     (async () => {
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
+        console.log("activeTab", activeTab);
         const data: any = await getSellerOrderByStatus(
           activeTab,
           1,
@@ -2213,6 +2257,20 @@ const Index = () => {
           });
         }}
         title={warningMessageForDelete(deleteModalDraftOrder?.payload)}
+      />
+
+      <DuplicateModel
+        url={DUPLICATE_ORDER}
+        postData={duplicateOrderModalData?.data?.payLoad}
+        isOpen={duplicateOrderModalData?.isOpen}
+        reloadData={handleTabChanges}
+        closeModal={() => {
+          setDuplicateOrderModalData({
+            ...duplicateOrderModalData,
+            isOpen: false,
+          });
+        }}
+        title={warningMessageForDuplicate(duplicateOrderModalData?.data)}
       />
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
