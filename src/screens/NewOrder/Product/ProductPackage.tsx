@@ -442,12 +442,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   // };
 
   const setBoxAndCODInfo = async () => {
-    let codDataInfo = {
-      ...codData,
-      isCod: orderType === "B2B" || paymentMode !== "cod" ? false : true,
-    };
-    if (codDataInfo.isCod && !codDataInfo.collectableAmount) {
-      toast.error("COD Amount Must Be Required");
+    for (let item of packages) {
+      if (item.codInfo.isCod && item.codInfo.collectableAmount <= 0) {
+        toast.error("COD Amount Must Be Required");
+        return;
+      }
+    }
+
+    if (codData?.invoiceValue <= 0) {
+      toast.error("Invoice must be greater than zero");
       return;
     }
 
