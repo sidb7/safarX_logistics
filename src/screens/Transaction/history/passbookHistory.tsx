@@ -205,14 +205,15 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex justify-center whitespace-nowrap">
-            {info?.row?.original?.remark?.length === 0
+            {/* {info?.row?.original?.remark?.length === 0
               ? "---"
               : isValidJSON(info?.row?.original?.remark)
               ? JSON.parse(info?.row?.original?.remark)?.tempOrderId !==
                 undefined
                 ? JSON.parse(info?.row?.original?.remark)?.tempOrderId
                 : "---"
-              : "---"}
+              : "---"} */}
+            {info?.row?.original?.tempOrderId}
           </div>
         );
       },
@@ -255,7 +256,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap justify-center ">
-            {info?.row?.original?.remark?.length === 0
+            {/* {info?.row?.original?.remark?.length === 0
               ? "---"
               : isValidJSON(info?.row?.original?.remark)
               ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]?.tracking
@@ -263,7 +264,8 @@ export const PassbookColumns = (setSortOrder: any) => {
                 ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
                     ?.tracking?.awb
                 : "---"
-              : "---"}
+              : "---"} */}
+            {info?.row?.original?.awb}
           </div>
         );
       },
