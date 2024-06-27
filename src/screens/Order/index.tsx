@@ -278,7 +278,7 @@ const Index = () => {
     data: [],
   });
   const [duplicateOrderModalData, setDuplicateOrderModalData]: any = useState({
-    isOpen: true,
+    isOpen: false,
     data: [],
   });
   const [sellerOverview, setSellerOverview]: any = useState([
@@ -907,8 +907,6 @@ const Index = () => {
     endDate?: any,
     filterPayLoadData?: any
   ) => {
-    console.log("333333");
-
     let payload: any;
     try {
       setIsLoading(true);
@@ -1013,6 +1011,7 @@ const Index = () => {
       setSelectedRowData([]);
       if (data?.status || data?.success) {
         setIsLoading(false);
+
         return data?.data[0];
       } else {
         setIsLoading(false);
@@ -1087,6 +1086,7 @@ const Index = () => {
     currentStatus?: any,
     data?: any
   ) => {
+    console.log("---", currentStatus, actionType);
     switch (currentStatus) {
       case "DRAFT":
         if (actionType === "edit") {
@@ -2002,7 +2002,6 @@ const Index = () => {
   useEffect(() => {
     (async () => {
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
-        console.log("activeTab", activeTab);
         const data: any = await getSellerOrderByStatus(
           activeTab,
           1,

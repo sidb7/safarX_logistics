@@ -6,6 +6,8 @@ import { useState } from "react";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../Spinner";
+import { useNavigate } from "react-router-dom";
+
 interface IDeleteModal {
   url: string;
   postData: any;
@@ -24,6 +26,8 @@ export const DuplicateModel: React.FunctionComponent<IDeleteModal> = ({
   reloadData,
 }) => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const duplicateApi = async () => {
     setLoading(true);
     let currentTimestamp = new Date().getTime();
@@ -37,6 +41,7 @@ export const DuplicateModel: React.FunctionComponent<IDeleteModal> = ({
       const { data: duplicateData } = await POST(url, postData);
       if (duplicateData?.success) {
         toast.success(duplicateData?.message);
+        navigate("?activaTab=Draft");
         reloadData(0);
       } else {
         toast.error(duplicateData?.message);
