@@ -450,7 +450,6 @@ const Index = () => {
   };
 
   const getAllOrders = async (subStatus?: any) => {
-    console.log("222222");
     let currentStatus = tabs[globalIndex]?.value;
 
     let payload: any = {
@@ -1086,7 +1085,6 @@ const Index = () => {
     currentStatus?: any,
     data?: any
   ) => {
-    console.log("---", currentStatus, actionType);
     switch (currentStatus) {
       case "DRAFT":
         if (actionType === "edit") {
@@ -1580,7 +1578,6 @@ const Index = () => {
     filterPayLoadData?: any
   ) => {
     try {
-      console.log("1111111");
       let payload: any;
       let dates: any = {};
       let allOrders: any;
