@@ -6,10 +6,22 @@ import CustomDropDown from "../../../../components/DropDown";
 import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import CustomInputBox from "../../../../components/Input";
+import OneButton from "../../../../components/Button/OneButton";
+import { UPDATE_TEMP_ORDER_INFO } from "../../../../utils/ApiUrls";
+import { v4 as uuidv4 } from "uuid";
 
-const Box = ({ completeData, index, onChildClick }: any) => {
-  const boxData = completeData?.completeData?.boxInfo?.[index];
-  const boxDataArray = completeData?.completeData?.boxInfo;
+const Box = ({
+  completeData,
+  index,
+  onChildClick,
+  updatedData,
+  setUpdatedData,
+  setPlaceOrderButton,
+  enabled,
+}: any) => {
+  const boxData = completeData?.boxInfo?.[index];
+  const packageIndex = index;
+  const boxDataArray = completeData?.boxInfo;
 
   const [boxAccordian, setBoxAccordian] = useState<any>(false);
   const [sellerList, setSellerList] = useState<any>([]);
@@ -21,6 +33,7 @@ const Box = ({ completeData, index, onChildClick }: any) => {
     breadth: 0,
     height: 0,
   });
+  const [borderError, setBorderError] = useState<any>(false);
 
   const [customBox, setCustomBox] = useState<any>({
     name: "",
@@ -40,13 +53,29 @@ const Box = ({ completeData, index, onChildClick }: any) => {
 
   const options = [
     { label: "Customize a Box", value: "custom" },
-    ...sellerList.map((option: any) => ({
+    ...sellerList?.map((option: any) => ({
       label: option?.name,
       value: option?.boxId,
     })),
   ];
 
+  console.log("updatedBox", updatedData);
+
+  const handleAddBox = async () => {
+    try {
+      const { data: response } = await POST(
+        UPDATE_TEMP_ORDER_INFO,
+        updatedData
+      );
+      console.log("response", response);
+      // if(response)
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
   const handleDropDown = (e: any) => {
+    setPlaceOrderButton(false);
     const selectedValue = e.target.value;
     setDropDownValue(selectedValue);
 
@@ -54,17 +83,36 @@ const Box = ({ completeData, index, onChildClick }: any) => {
       setBoxDetails(customBox);
     } else {
       const filterBox = sellerList.filter(
-        (box: any) => box.boxId === selectedValue
+        (box: any) => box?.boxId === selectedValue
       );
 
       if (filterBox.length > 0) {
         const selectedBox = filterBox[0];
+
+        setUpdatedData((prevState: any) => ({
+          ...prevState,
+          boxInfo: prevState.boxInfo.map((item: any, index: number) =>
+            index === packageIndex
+              ? {
+                  ...item,
+                  name: selectedBox?.name,
+                  boxId: selectedBox?.boxId,
+                  length: selectedBox?.length,
+                  breadth: selectedBox?.breadth,
+                  height: selectedBox?.height,
+                  appliedWeight: selectedBox?.appliedWeight,
+                  deadWeight: selectedBox?.deadWeight,
+                  volumetricWeight: selectedBox?.volumetricWeight,
+                }
+              : item
+          ),
+        }));
         setBoxDetails({
-          name: selectedBox.name,
-          deadWeight: selectedBox.deadWeight,
-          length: selectedBox.length,
-          breadth: selectedBox.breadth,
-          height: selectedBox.height,
+          name: selectedBox?.name,
+          deadWeight: selectedBox?.deadWeight,
+          length: selectedBox?.length,
+          breadth: selectedBox?.breadth,
+          height: selectedBox?.height,
         });
       } else {
         setBoxDetails({});
@@ -79,10 +127,58 @@ const Box = ({ completeData, index, onChildClick }: any) => {
       [field]: value,
     }));
 
+    // if (selectDropDownValue === "custom") {
+    //   setCustomBox((prevCustomBox: any) => ({
+    //     ...prevCustomBox,
+    //     [field]: value,
+    //   }));
+    //   setUpdatedData((prevState: any) => ({
+    //     ...prevState,
+    //     boxInfo: prevState.boxInfo.map((item: any, index: number) =>
+    //       index === packageIndex
+    //         ? {
+    //             ...item,
+    //             name: customBox?.name,
+    //             boxId: customBox?.boxId,
+    //             length: customBox?.length,
+    //             breadth: customBox?.breadth,
+    //             height: customBox?.height,
+    //             appliedWeight: customBox?.appliedWeight,
+    //             deadWeight: customBox?.deadWeight,
+    //             volumetricWeight: customBox?.volumetricWeight,
+    //           }
+    //         : item
+    //     ),
+    //   }));
+    // }
+
     if (selectDropDownValue === "custom") {
-      setCustomBox((prevCustomBox: any) => ({
-        ...prevCustomBox,
+      // Update the customBox state
+      const newCustomBox = {
+        ...customBox,
         [field]: value,
+      };
+
+      setCustomBox(newCustomBox);
+
+      // Update the updatedData state
+      setUpdatedData((prevState: any) => ({
+        ...prevState,
+        boxInfo: prevState.boxInfo.map((item: any, index: number) =>
+          index === packageIndex
+            ? {
+                ...item,
+                name: newCustomBox.name,
+                boxId: uuidv4(),
+                length: newCustomBox.length,
+                breadth: newCustomBox.breadth,
+                height: newCustomBox.height,
+                appliedWeight: newCustomBox.appliedWeight,
+                deadWeight: newCustomBox.deadWeight,
+                volumetricWeight: newCustomBox.volumetricWeight,
+              }
+            : item
+        ),
       }));
     }
 
@@ -112,9 +208,25 @@ const Box = ({ completeData, index, onChildClick }: any) => {
   //for getting the list of seller box list
   useEffect(() => {
     (async () => {
+      boxDataArray?.map((box: any, index: any) => {
+        if (
+          !box?.name ||
+          !box?.deadWeight ||
+          box?.deadWeight == 0 ||
+          !box?.breadth ||
+          box?.breadth == 0 ||
+          !box?.length ||
+          box?.length == 0 ||
+          !box?.height ||
+          box?.height == 0
+        ) {
+          setBorderError(true);
+        }
+      });
       try {
         const { data: response } = await POST(GET_SELLER_BOX);
         setSellerList(response?.data);
+
         setBoxDetails({
           ...boxDetails,
           name: boxData?.name,
@@ -127,14 +239,13 @@ const Box = ({ completeData, index, onChildClick }: any) => {
         console.log(error.message);
       }
     })();
-    boxDataArray.map((box: any, index: any) => {});
   }, []);
 
   return (
     <div>
       <div
         className={`border ${
-          Object.values(errors).some((error) => error)
+          borderError || Object.values(errors).some((error) => error)
             ? "border-[red]"
             : "border-[#E8E8E8]"
         }  rounded-lg bg-gray-50`}
@@ -153,11 +264,13 @@ const Box = ({ completeData, index, onChildClick }: any) => {
       </div>
       {boxAccordian && (
         <div className="p-4 border-b border-l border-r border-[#E8E8E8]">
-          <CustomDropDown
-            heading="Select A Box"
-            options={options}
-            onChange={(e: any) => handleDropDown(e)}
-          />
+          {enabled && (
+            <CustomDropDown
+              heading="Select A Box"
+              options={options}
+              onChange={(e: any) => handleDropDown(e)}
+            />
+          )}
 
           <div className="flex flex-col gap-y-2 border border-[#E8E8E8] py-4 rounded-md mt-4">
             <div className="px-4">
@@ -174,8 +287,9 @@ const Box = ({ completeData, index, onChildClick }: any) => {
                 <CustomInputBox
                   label="Dead weight"
                   value={boxDetails?.deadWeight}
+                  inputType={"number"}
                   onChange={(e: any) =>
-                    handleInputChange("deadWeight", e.target.value)
+                    handleInputChange("deadWeight", +e.target.value)
                   }
                   isDisabled={selectDropDownValue !== "custom"}
                 />
@@ -241,6 +355,16 @@ const Box = ({ completeData, index, onChildClick }: any) => {
                   <p className="text-red-500 text-sm">{errors?.height}</p>
                 </div>
               </div>
+            </div>
+            <div className="py-4 flex justify-end mr-4">
+              {selectDropDownValue === "custom" && (
+                <OneButton
+                  text={"Add Box"}
+                  variant="primary"
+                  onClick={() => handleAddBox()}
+                  className="!w-[160px]"
+                />
+              )}
             </div>
           </div>
         </div>

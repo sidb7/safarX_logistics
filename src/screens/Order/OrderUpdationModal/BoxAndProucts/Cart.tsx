@@ -9,6 +9,10 @@ interface IPROPS {
   setBoxAndProductAccordian: any;
   boxAndProductAccordian: any;
   boxBorderError: any;
+  setUpdatedData: any;
+  updatedData: any;
+  setPlaceOrderButton: () => void;
+  enabled: any;
 }
 
 const Cart = (props: IPROPS) => {
@@ -17,6 +21,10 @@ const Cart = (props: IPROPS) => {
     setBoxAndProductAccordian,
     boxAndProductAccordian,
     boxBorderError,
+    setUpdatedData,
+    updatedData,
+    setPlaceOrderButton,
+    enabled,
   } = props;
 
   const [productErrors, setProductErrors] = useState<{
@@ -27,8 +35,10 @@ const Cart = (props: IPROPS) => {
     [key: number]: boolean;
   }>({});
 
+  console.log("🚀 ~ Cart ~ packageErrorBorders:", packageErrorBorders);
+
   // Data came from previous file
-  const boxInfo = completeData?.completeData?.boxInfo;
+  const boxInfo = completeData?.boxInfo;
 
   // State for opening only particular on clicked accordion
   const [openCartIndex, setOpenCartIndex] = useState<number | null>(null);
@@ -84,31 +94,29 @@ const Cart = (props: IPROPS) => {
   };
 
   useEffect(() => {
-    completeData?.completeData?.boxInfo?.forEach(
-      (box: any, boxIndex: number) => {
-        let boxHasError = false;
-        if (
-          box?.name === "" ||
-          box?.deadWeight === 0 ||
-          box?.length === 0 ||
-          box?.breadth === 0 ||
-          box?.height === 0
-        ) {
+    updatedData?.boxInfo?.forEach((box: any, boxIndex: number) => {
+      let boxHasError = false;
+      if (
+        box?.name === "" ||
+        box?.deadWeight === 0 ||
+        box?.length === 0 ||
+        box?.breadth === 0 ||
+        box?.height === 0
+      ) {
+        boxHasError = true;
+      }
+      box?.products.forEach((product: any) => {
+        if (product?.name === "" || product?.deadWeight === 0) {
           boxHasError = true;
         }
-        box?.products.forEach((product: any) => {
-          if (product?.name === "" || product?.deadWeight === 0) {
-            boxHasError = true;
-          }
-        });
-        if (boxHasError) {
-          setPackageErrorBorders((prevBorders) => ({
-            ...prevBorders,
-            [boxIndex]: true,
-          }));
-        }
+      });
+      if (boxHasError) {
+        setPackageErrorBorders((prevBorders) => ({
+          ...prevBorders,
+          [boxIndex]: true,
+        }));
       }
-    );
+    });
   }, [completeData]);
 
   return (
@@ -146,11 +154,19 @@ const Cart = (props: IPROPS) => {
                       completeData={completeData}
                       index={index}
                       onChildClick={handleProductCallback}
+                      setUpdatedData={setUpdatedData}
+                      updatedData={updatedData}
+                      setPlaceOrderButton={setPlaceOrderButton}
+                      enabled={enabled}
                     />
                     <Box
                       completeData={completeData}
                       index={index}
                       onChildClick={handleBoxCallback}
+                      setUpdatedData={setUpdatedData}
+                      updatedData={updatedData}
+                      setPlaceOrderButton={setPlaceOrderButton}
+                      enabled={enabled}
                     />
                   </div>
                 )}
