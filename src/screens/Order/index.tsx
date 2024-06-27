@@ -79,6 +79,8 @@ import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
+import OrderUpdationModal from "../Order/OrderUpdationModal";
+
 import ShopifyIcon from "../../assets/Catalogue/shopifyLg.svg";
 import WoocommerceIcon from "../../assets/Catalogue/WooCommerceLg.svg";
 import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
@@ -2273,7 +2275,7 @@ const Index = () => {
         onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
         className="!justify-start !w-[400px] xl:!w-[650px]"
       >
-        <div className="flex justify-between mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[16px]  py-8 ">
+        {/* <div className="flex justify-between mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[16px]  py-8 ">
           <div className="">
             {infoModalContent?.data?.orderNumber && (
               <p>
@@ -2289,8 +2291,12 @@ const Index = () => {
                 ""}
             </p>
           </div>
-        </div>
-        <CustomTableAccordian getAllSellerData={infoModalContent} />
+        </div> */}
+        {/* <CustomTableAccordian getAllSellerData={infoModalContent} /> */}
+        <OrderUpdationModal
+          getIdData={infoModalContent}
+          setInfoModalContent={setInfoModalContent}
+        />
       </CustomRightModal>
 
       {/* Rverse Order Modal */}

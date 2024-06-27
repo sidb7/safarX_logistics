@@ -42,7 +42,8 @@ describe("Login and Order Pickup Tests", () => {
         cy.visit("https://sysellerdev.yaarilabs.com/orders/add-order/pickup");
 
         // Wait for the page to load properly
-        cy.xpath("//*[text()='Reverse']").click();
+        cy.xpath("//*[@name='REVERSE']").click();
+        cy.wait(2000);
         cy.waitUntil(() => cy.get("#address-checkbox").should("be.visible"), {
             timeout: 10000, // 10 seconds timeout
             interval: 500, // Check every 0.5 seconds
@@ -140,22 +141,16 @@ describe("Login and Order Pickup Tests", () => {
             .click();
         cy.xpath("(//*[text()='Crop Top'])[1]//parent::div").click();
 
-        cy.waitUntil(() =>
-            cy.xpath("//*[contains(@class, 'capitalize') and text()='Save']")
-        ).click();
+        cy.waitUntil(() => cy.xpath("//*[text()='Save']")).click();
 
         // Select box info
         cy.waitUntil(() =>
             cy.xpath("(//*[@class='flex text-sm']//parent::div)[1]")
         ).click();
 
-        cy.waitUntil(() =>
-            cy.xpath("//*[contains(@class, 'capitalize') and text()='Save']")
-        ).click();
+        cy.waitUntil(() => cy.xpath("//*[text()='Save']")).click();
 
-        cy.waitUntil(() =>
-            cy.xpath("//*[contains(@class, 'capitalize') and text()='Next']")
-        ).click();
+        cy.waitUntil(() => cy.xpath("//*[text()='Next']")).click();
         cy.wait(2000);
         cy.waitUntil(() => cy.contains("p", "Service")).should("be.visible");
 
@@ -164,8 +159,10 @@ describe("Login and Order Pickup Tests", () => {
 
         // cy.contains("p", "Next").click();
         cy.wait(5000);
-        cy.xpath("(//*[contains(text(), 'reverse')])[1]").should("be.visible");
-        cy.wait(2000);
+        cy.xpath("(//*[contains(text(), 'reverse')])[1]")
+            .scrollIntoView()
+            .should("be.visible");
+        cy.wait(3000);
         cy.xpath("(//*[contains(text(), 'reverse')])[1]").click();
         cy.wait(2000);
         cy.contains("p", "Next").click();

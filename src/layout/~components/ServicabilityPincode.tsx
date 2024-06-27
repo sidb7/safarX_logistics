@@ -3,7 +3,10 @@ import CancelIcon from "../../assets/common/cancel.svg";
 import AddButton from "../../components/Button";
 import CustomInputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
-import { GET_SERVICABLE_PINCODE } from "../../utils/ApiUrls";
+import {
+  GET_SERVICABLEV2_PINCODE,
+  GET_SERVICABLE_PINCODE,
+} from "../../utils/ApiUrls";
 import "../../styles/scrollablePincodeServiceTale.css";
 import { toast } from "react-hot-toast";
 import { CustomTable } from "../../components/Table";
@@ -27,15 +30,40 @@ const ServicabilityPincode = (props: ITypeProps) => {
   };
 
   const payload = {
-    pincode: pincode,
+    pincode: +pincode,
   };
 
   const postServicablePincode = async (payload: any) => {
     try {
-      const { data: response } = await POST(GET_SERVICABLE_PINCODE, payload);
+      const { data: response } = await POST(GET_SERVICABLEV2_PINCODE, payload);
 
       if (response?.success) {
-        setResponse(response);
+        const tempArray = response.data?.[0].partnerServices.map(
+          (perData: any) => {
+            return {
+              partnerServiceId: perData.partnerServiceId,
+              partnerServiceName: perData.partnerServiceName,
+              zoneMapping: perData.zoneMapping,
+              partnerId: perData.partnerId,
+              partnerName: perData.partnerName,
+              isCod: perData.isCod,
+              isInsured: perData.isInsured,
+              pincode: response.data?.[0].pincode,
+              city: response.data?.[0].city,
+              country: response.data?.[0].country,
+              state: response.data?.[0].state,
+              isPickup: perData.isPickup,
+              isDelivery: perData.isDelivery,
+              maxInvoiceValue: perData.maxInvoiceValue,
+              dutyTax: perData.dutyTax,
+              additionalCharged: perData.additionalCharged,
+              stateBlock: perData.stateBlock,
+              isActive: perData.isActive,
+            };
+          }
+        );
+
+        setResponse(tempArray);
       } else {
         toast.error(response?.message);
       }
@@ -73,7 +101,10 @@ const ServicabilityPincode = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex flex-col">
-            {displayTableField("Name", info.row.original.accountName)}
+            {displayTableField(
+              "Name",
+              info.row.original.partnerServiceName.replace(/_/g, " ")
+            )}
           </div>
         );
       },
@@ -130,20 +161,21 @@ const ServicabilityPincode = (props: ITypeProps) => {
       },
 
       cell: (info: any) => {
+        console.log();
         return (
           <div className="flex flex-col">
-            {displayTableField("COD", info.row.original.cod ? "Yes" : "No")}
+            {displayTableField("COD", info.row.original.isCod ? "Yes" : "No")}
             {displayTableField(
               "Insurance",
-              info.row.original.insurance ? "Yes" : "No"
+              info.row.original.isInsured ? "Yes" : "No"
             )}
             {displayTableField(
               "Pickup",
-              info.row.original.pickup ? "Yes" : "No"
+              info.row.original.isPickup ? "Yes" : "No"
             )}
             {displayTableField(
               "Delivery",
-              info.row.original.delivery ? "Yes" : "No"
+              info.row.original.isDelivery ? "Yes" : "No"
             )}
           </div>
         );
@@ -186,9 +218,9 @@ const ServicabilityPincode = (props: ITypeProps) => {
         />
       </div>
 
-      {response && response?.data && response?.data?.length > 0 && (
-        <div className="ml-10 mr-5  customScroll">
-          <CustomTable columns={columns} data={response?.data} />
+      {response && response.length > 0 && (
+        <div className="ml-10 mr-5 max-h-[550px] customScroll">
+          <CustomTable columns={columns} data={response || []} />
         </div>
       )}
     </div>
