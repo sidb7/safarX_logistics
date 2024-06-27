@@ -117,6 +117,13 @@ const App = () => {
         username: `${userInfo?.name} (${userInfo?.sellerId})`,
       });
 
+      let privateCompanyInfo: any = {
+        blaze_privateCompanyId: userInfo?.privateCompanyId || "N/A",
+        blaze_privateCompanyName: userInfo?.privateCompanyName || "N/A",
+      };
+
+      Sentry.setTags(privateCompanyInfo);
+
       Sentry.init({
         dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
         debug: true,

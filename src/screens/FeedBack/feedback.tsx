@@ -71,6 +71,11 @@ function Feedback() {
   useEffect(() => {
     setIsActive(checkPageAuthorized("Feedback"));
   }, []);
+  useEffect(() => {
+    window?.dataLayer?.push({
+      event: "Click_Feedback",
+    });
+  }, []);
 
   return (
     <>
