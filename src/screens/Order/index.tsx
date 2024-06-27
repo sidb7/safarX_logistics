@@ -366,6 +366,14 @@ const Index = () => {
 
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
+  const [isMasked, setIsMasked] = useState(false);
+
+  useEffect(() => {
+    let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+    if (temp) {
+      setIsMasked(temp?.isMaskedUser);
+    }
+  }, []);
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
@@ -2292,7 +2300,10 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <CustomTableAccordian getAllSellerData={infoModalContent} />
+        <CustomTableAccordian
+          getAllSellerData={infoModalContent}
+          isMasked={isMasked}
+        />
       </CustomRightModal>
 
       {/* Reverse Order Modal */}

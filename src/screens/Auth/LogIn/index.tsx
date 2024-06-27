@@ -130,18 +130,39 @@ const Index = () => {
           socketCallbacks.connectSocket(dispatch);
         }
 
-        const [selling_partner_id, amazon_callback_uri, amazon_state, spapi_oauth_code] = 
-        ["selling_partner_id", "amazon_callback_uri", "amazon_state", "spapi_oauth_code"].map((key) => localStorage.getItem(key));
+        const [
+          selling_partner_id,
+          amazon_callback_uri,
+          amazon_state,
+          spapi_oauth_code,
+        ] = [
+          "selling_partner_id",
+          "amazon_callback_uri",
+          "amazon_state",
+          "spapi_oauth_code",
+        ].map((key) => localStorage.getItem(key));
         const state = response?.data[0]?.sellerId;
 
-        if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
-          ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
-            localStorage.removeItem(key)
+        if (
+          selling_partner_id &&
+          amazon_callback_uri &&
+          amazon_state &&
+          state
+        ) {
+          ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach(
+            (key) => localStorage.removeItem(key)
           );
           // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
           const redirectUrl = AMAZON_REDIRECT_URL;
-          window.location.href = amazon_callback_uri+'?redirect_uri=' +redirectUrl+ '&amazon_state=' +amazon_state+ '&state=' +state;
-          }
+          window.location.href =
+            amazon_callback_uri +
+            "?redirect_uri=" +
+            redirectUrl +
+            "&amazon_state=" +
+            amazon_state +
+            "&state=" +
+            state;
+        }
 
         // redirect based on qna and kyc done or not
         if (response?.data?.[0]?.nextStep?.qna === false) {
@@ -229,19 +250,35 @@ const Index = () => {
         socketCallbacks.connectSocket(dispatch);
       }
 
-      const [selling_partner_id, amazon_callback_uri, amazon_state, spapi_oauth_code] = 
-        ["selling_partner_id", "amazon_callback_uri", "amazon_state", "spapi_oauth_code"].map((key) => localStorage.getItem(key));
-        const state = response?.data[0]?.sellerId;
-        // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
-        const redirectUrl = AMAZON_REDIRECT_URL;
+      const [
+        selling_partner_id,
+        amazon_callback_uri,
+        amazon_state,
+        spapi_oauth_code,
+      ] = [
+        "selling_partner_id",
+        "amazon_callback_uri",
+        "amazon_state",
+        "spapi_oauth_code",
+      ].map((key) => localStorage.getItem(key));
+      const state = response?.data[0]?.sellerId;
+      // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+      const redirectUrl = AMAZON_REDIRECT_URL;
 
-        if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
-          ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
-            localStorage.removeItem(key)
-          );
-          
-          window.location.href = amazon_callback_uri+'?redirect_uri=' +redirectUrl+ '&amazon_state=' +amazon_state+ '&state=' +state;
-        }
+      if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
+        ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach(
+          (key) => localStorage.removeItem(key)
+        );
+
+        window.location.href =
+          amazon_callback_uri +
+          "?redirect_uri=" +
+          redirectUrl +
+          "&amazon_state=" +
+          amazon_state +
+          "&state=" +
+          state;
+      }
 
       setLoading(false);
       // redirect based on qna and kyc done or not
@@ -279,15 +316,29 @@ const Index = () => {
       : "";
 
     const params = getQueryJson();
-    const keys = ["selling_partner_id", "amazon_callback_uri", "amazon_state", "spapi_oauth_code"];
-    keys.forEach(key => {
+    const keys = [
+      "selling_partner_id",
+      "amazon_callback_uri",
+      "amazon_state",
+      "spapi_oauth_code",
+    ];
+    keys.forEach((key) => {
       if (params?.hasOwnProperty(key)) {
         localStorage.setItem(key, params[key]);
       }
     });
 
-    const [selling_partner_id, amazon_callback_uri, amazon_state, spapi_oauth_code] = 
-    ["selling_partner_id", "amazon_callback_uri", "amazon_state", "spapi_oauth_code"].map((key) => localStorage.getItem(key));
+    const [
+      selling_partner_id,
+      amazon_callback_uri,
+      amazon_state,
+      spapi_oauth_code,
+    ] = [
+      "selling_partner_id",
+      "amazon_callback_uri",
+      "amazon_state",
+      "spapi_oauth_code",
+    ].map((key) => localStorage.getItem(key));
     // const redirectUrl = 'http://loc/alhost:8010/amazonCheckParams';
 
     // Set a timeout to hide the boot screen
@@ -297,17 +348,31 @@ const Index = () => {
     token &&
       (async () => {
         const response = await POST(VALIDATE_USER_TOKEN);
-        const amazonsellerId:any = localStorage.getItem("sellerId")
+        const amazonsellerId: any = localStorage.getItem("sellerId");
         const state = amazonsellerId;
         // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
         const redirectUrl = AMAZON_REDIRECT_URL;
         if (response?.data?.success) {
-          if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
-            ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach((key) =>
-              localStorage.removeItem(key)
-            );
-            window.location.href = amazon_callback_uri+'?redirect_uri=' +redirectUrl+ '&amazon_state=' +amazon_state+ '&state=' +state;
-            } else {
+          if (
+            selling_partner_id &&
+            amazon_callback_uri &&
+            amazon_state &&
+            state
+          ) {
+            [
+              "selling_partner_id",
+              "amazon_callback_uri",
+              "amazon_state",
+            ].forEach((key) => localStorage.removeItem(key));
+            window.location.href =
+              amazon_callback_uri +
+              "?redirect_uri=" +
+              redirectUrl +
+              "&amazon_state=" +
+              amazon_state +
+              "&state=" +
+              state;
+          } else {
             navigate("/dashboard/overview");
           }
         }
