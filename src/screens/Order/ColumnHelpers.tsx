@@ -1,5 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
+import Copy from "../../assets/copy.svg";
 import {
   date_DD_MMM_YYYY_HH_MM,
   date_DD_MMM_YYYY_HH_MM_SS,
@@ -80,6 +81,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
       //commneted as it is not needed at this time
       // { title: "Edit Order", actionType: "edit" },
       { title: "Delete Order", actionType: "delete", icon: CrossIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     BOOKED: [
       {
@@ -94,9 +96,11 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
       },
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
       { title: "Cancel Order", actionType: "cancel_order", icon: CrossIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     CANCELLED: [
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     "READY TO PICK": [
       {
@@ -110,6 +114,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         icon: frameIcon,
       },
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     "IN TRANSIT": [
       // { title: "Download Label", actionType: "download_label" },
@@ -119,6 +124,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         icon: frameIcon,
       },
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     EXCEPTION: [
       // { title: "Download Label", actionType: "download_label" },
@@ -132,6 +138,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         actionType: "track_order",
         icon: trackingIcon,
       },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     "OUT OF DELIVERY": [
       // { title: "Download Label", actionType: "download_label" },
@@ -141,6 +148,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         icon: frameIcon,
       },
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     DELIVERED: [
       // { title: "Download Label", actionType: "download_label" },
@@ -150,6 +158,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         icon: frameIcon,
       },
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     RETURN: [
       // { title: "Download Label", actionType: "download_label" },
@@ -159,6 +168,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         icon: frameIcon,
       },
       { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
   };
 
@@ -174,7 +184,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         "_blank"
       );
     } else {
-      orderActions(payLoad, actionType, currentStatus);
+      orderActions(payLoad, actionType, currentStatus, data);
     }
   };
 
