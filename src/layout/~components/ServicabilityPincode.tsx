@@ -14,6 +14,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import CustomTableWithScroll from "../../components/CustomTableWithScroll";
 import OneButton from "../../components/Button/OneButton";
+import { useSelector } from "react-redux";
 
 interface ITypeProps {
   onClick?: any;
@@ -21,6 +22,7 @@ interface ITypeProps {
 
 const ServicabilityPincode = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const { onClick } = props;
   const [pincode, setPincode] = useState("");
@@ -64,7 +66,15 @@ const ServicabilityPincode = (props: ITypeProps) => {
           }
         );
 
-        setResponse(tempArray);
+        if (isMasked) {
+          let slice = tempArray?.slice(0, 1);
+          slice.forEach((element: any, i: number) => {
+            element.partnerServiceName = "Shipyaari";
+          });
+          setResponse(slice);
+        } else {
+          setResponse(tempArray);
+        }
       } else {
         toast.error(response?.message);
       }

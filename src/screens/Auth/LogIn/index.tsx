@@ -41,7 +41,7 @@ import { socketCallbacks } from "../../../Socket";
 import { useErrorBoundary } from "react-error-boundary";
 import { getQueryJson } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
-import { login } from "../../../redux/reducers/userReducer";
+import { isMasked, login } from "../../../redux/reducers/userReducer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -85,6 +85,7 @@ const Index = () => {
         localStorage.setItem("sellerId", response?.data[0]?.sellerId);
         localStorage.setItem("userName", response?.data[0]?.name);
         localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        dispatch(isMasked({ isMasked: response.data[0]?.isMaskedUser }));
         setLocalStorage(
           `${response?.data[0]?.sellerId}_${tokenKey}`,
           response?.data[0]?.token

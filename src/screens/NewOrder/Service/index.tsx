@@ -28,6 +28,7 @@ import RecommendatedServiceCard from "./RecommendatedServiceCard";
 import ServiceBox from "./ServiceBox";
 import FilterItems from "../../../components/FilterItemsScroll";
 import FilterIcon from "../../../assets/serv/filter.svg";
+import { useDispatch, useSelector } from "react-redux";
 
 // export const RecommendedServiceData = [
 //   {
@@ -164,6 +165,8 @@ const Index: React.FC = () => {
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
 
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
+
   const getCourierPartnerService = async () => {
     const payload = {
       tempOrderId: +shipyaari_id,
@@ -188,7 +191,15 @@ const Index: React.FC = () => {
           };
         });
 
-        setServiceOptions(options);
+        console.log("🚀 ~ getCourierPartnerService ~ isMasked:", isMasked);
+        if (isMasked) {
+          let slice = options?.slice(0, 2);
+          console.log("slice", slice);
+
+          setServiceOptions(slice);
+        } else {
+          setServiceOptions(options);
+        }
 
         // console.log("options", options);
         const cheapestService = options.reduce(
@@ -517,6 +528,7 @@ const Index: React.FC = () => {
                     selectedOption={selectedOption}
                     setSelectedOption={setSelectedOption}
                     ignoreRecommended={true}
+                    isMasked={isMasked}
                     data-cy="service-box"
                   />
                 )}
