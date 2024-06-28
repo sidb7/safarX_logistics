@@ -49,6 +49,8 @@ interface ITopBarProps {
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const navigate = useNavigate();
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
+
   const dispatch = useDispatch();
   const { openMobileSideBar, setMobileSideBar } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -148,7 +150,20 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
           }
         );
         setShowTable(true);
-        setServiceabilityTableData(filterData);
+        if (isMasked) {
+          let slice = filterData?.slice(0, 2);
+          slice.forEach((element: any, i: number) => {
+            element.partnerName = "Shipyaari";
+            if (i === 0) {
+              element.companyServiceName = "Air";
+            } else {
+              element.companyServiceName = "Surface";
+            }
+          });
+          setServiceabilityTableData(slice);
+        } else {
+          setServiceabilityTableData(filterData);
+        }
         setServiceabilityTableLoader(false);
       } else {
         toast.error(response?.message);

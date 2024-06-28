@@ -821,7 +821,16 @@ const Accordion = (props: ICustomTableAccordion) => {
         const response = await POST(GET_SERVICE_LIST_ORDER, payload);
         if (response?.status) {
           setServiceLoading(false);
-          setServiceList(response?.data?.data);
+          if (isMasked) {
+            let slice: any = response?.data?.data.slice(0, 2);
+            slice.forEach((element: any) => {
+              element.partnerName = "Shipyaari";
+            });
+            console.log("🚀 ~ getServiceList ~ slice:", slice);
+            setServiceList(slice);
+          } else {
+            setServiceList(response?.data?.data);
+          }
           setServiceRefresh(false);
           setAddressOpenModal(true);
         } else {

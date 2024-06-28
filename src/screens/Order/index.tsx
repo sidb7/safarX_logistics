@@ -315,6 +315,7 @@ const Index = () => {
 
   const roles = useSelector((state: any) => state?.roles);
   const channelReduxData = useSelector((state: any) => state?.channel?.channel);
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
@@ -366,14 +367,14 @@ const Index = () => {
 
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
-  const [isMasked, setIsMasked] = useState(false);
+  // const [isMasked, setIsMasked] = useState(false);
 
-  useEffect(() => {
-    let temp = JSON.parse(localStorage.getItem("userInfo") as any);
-    if (temp) {
-      setIsMasked(temp?.isMaskedUser);
-    }
-  }, []);
+  // useEffect(() => {
+  //   let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+  //   if (temp) {
+  //     setIsMasked(temp?.isMaskedUser);
+  //   }
+  // }, []);
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();

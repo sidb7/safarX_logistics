@@ -32,7 +32,7 @@ import SummaryIcon from "../../../assets/serv/summary.svg";
 import { Spinner } from "flowbite-react";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { socketCallbacks } from "../../../Socket";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 type Props = {};
 
@@ -43,6 +43,7 @@ const Summary = (props: Props) => {
   // console.log("latestOrder", latestOrder?.data?.[0]);
   const [ewaybillNumber, setEwaybillNumber] = useState("");
   const dispatch = useDispatch();
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -458,6 +459,7 @@ const Summary = (props: Props) => {
                 shipyaari_id={shipyaari_id}
                 orderSource={orderSource}
                 orderId={orderId}
+                isMasked={isMasked}
               />
             </div>
           </div>

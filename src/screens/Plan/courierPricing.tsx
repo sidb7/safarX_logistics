@@ -11,6 +11,7 @@ import RateCardTable from "./rateCardTable";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../components/Spinner";
+import { useSelector } from "react-redux";
 interface ICourierPricingPropTypes {
   logisticsData?: any;
   setLogisticsData?: any;
@@ -25,19 +26,13 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
   const [data, setData] = useState<any>({ b2bData: [], b2cData: [] });
 
   const [renderingComponents, setRenderingComponents] = useState(0);
-  const [isMasked, setIsMasked] = useState(false);
+  // const [isMasked, setIsMasked] = useState(false);
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const arrayData = [
     { index: 0, label: "B2C" },
     { index: 1, label: "B2B" },
   ];
-
-  useEffect(() => {
-    let temp = JSON.parse(localStorage.getItem("userInfo") as any);
-    if (temp) {
-      setIsMasked(temp?.isMaskedUser);
-    }
-  }, []);
 
   let variableData: any;
   let filterVariableData: any;
