@@ -1289,7 +1289,8 @@ const Index = () => {
               currentStatus,
               orderActions,
               setOpenRightModalForTracking,
-              openRightModalForTracking
+              openRightModalForTracking,
+              isMasked
             )
           );
           break;
@@ -1302,7 +1303,8 @@ const Index = () => {
               currentStatus,
               orderActions,
               setOpenRightModalForTracking,
-              openRightModalForTracking
+              openRightModalForTracking,
+              isMasked
             )
           );
           break;
@@ -1316,7 +1318,8 @@ const Index = () => {
               setInfoModalContentFunction,
               setInfoReverseModalFunction,
               setOpenRightModalForTracking,
-              openRightModalForTracking
+              openRightModalForTracking,
+              isMasked
             )
           );
           break;

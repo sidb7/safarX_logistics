@@ -1422,7 +1422,8 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   currentStatus?: any,
   orderActions?: any,
   setOpenRightModalForTracking?: any,
-  openRightModalForTracking?: any
+  openRightModalForTracking?: any,
+  isMasked?: boolean
 ) => {
   // const handleCancellationModal = (awbNo: any, orderId: any) => {
   //   setCancellationModal({ isOpen: true, awbNo, orderId });
@@ -1469,7 +1470,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                   Delivery Partner
                 </span>
                 <div className=" font-Open font-semibold leading-5 text-sm">
-                  {capitalizeFirstLetter(service?.partnerName)}
+                  {isMasked
+                    ? "Shipyaari"
+                    : capitalizeFirstLetter(service?.partnerName)}
                 </div>
               </div>
             </div>
@@ -1624,7 +1627,8 @@ export const columnHelpersForRest = (
   setInfoModalContentFunction?: any,
   setInfoReverseModalFunction?: any,
   setOpenRightModalForTracking?: any,
-  openRightModalForTracking?: any
+  openRightModalForTracking?: any,
+  isMasked?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -1658,7 +1662,9 @@ export const columnHelpersForRest = (
                 Delivery Partner
               </span>
               <div className="font-Open font-semibold leading-5 text-sm">
-                {capitalizeFirstLetter(service?.partnerName)}
+                {isMasked
+                  ? "Shipyaari"
+                  : capitalizeFirstLetter(service?.partnerName)}
               </div>
             </div>
           </div>
