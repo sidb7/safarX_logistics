@@ -296,12 +296,12 @@ const ReverseIndex = (props: ReverseProps) => {
         for (let i = 0; i < productArray?.length; i++) {
           if (i === j) {
             // here we check from tempProductCopyArray object is qty is not greaterthan newQty value
-            if (getActualQtyElements >= newQty) {
+            if (getActualQtyElements < newQty) {
+              toast.error("Qty is not update");
+            } else {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
-              qtyElement.setAttribute("data-actualQty", currentQty); // set attribute and there value
-            } else {
-              toast.error("Qty is not update");
+              qtyElement.setAttribute("data-actualQty", getActualQtyElements); // set attribute and there value
             }
             break;
           }
@@ -342,7 +342,7 @@ const ReverseIndex = (props: ReverseProps) => {
             if (getActualQtyElements >= newQty) {
               qtyElement.value = newQty;
               productArray[j].qty = newQty;
-              qtyElement.setAttribute("data-actualQty", currentQty); // set attribute and there value
+              qtyElement.setAttribute("data-actualQty", getActualQtyElements); // set attribute and there value
             } else {
               toast.error("Qty is not less than 0");
             }
@@ -684,6 +684,7 @@ const ReverseIndex = (props: ReverseProps) => {
                                 <input
                                   type="text"
                                   className={`w-[12px] p-0 qtyProduct_${j}`}
+                                  data-actualQty={ele?.qty}
                                   value={ele?.qty}
                                 />
                                 <img
