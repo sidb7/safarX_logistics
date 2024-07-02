@@ -159,7 +159,11 @@ const Product = ({
                   <div>
                     <CustomInputBox
                       label="Volumetric weight"
-                      value={item.volumetricWeight}
+                      // value={item.volumetricWeight}
+                      value={(
+                        (item?.length * item?.breadth * item?.height) /
+                        5000
+                      ).toFixed(2)}
                       isDisabled={!enabled ? true : false}
                       onChange={(e) =>
                         handleInputChange(
@@ -185,6 +189,7 @@ const Product = ({
                     <div>
                       <CustomInputBox
                         label="l"
+                        inputType="number"
                         value={item.length}
                         isDisabled={!enabled ? true : false}
                         onChange={(e) =>
@@ -200,6 +205,7 @@ const Product = ({
                     <div>
                       <CustomInputBox
                         label="b"
+                        inputType="number"
                         value={item.breadth}
                         isDisabled={!enabled ? true : false}
                         onChange={(e) =>
@@ -215,6 +221,7 @@ const Product = ({
                     <div>
                       <CustomInputBox
                         label="h"
+                        inputType="number"
                         value={item.height}
                         isDisabled={!enabled ? true : false}
                         onChange={(e) =>

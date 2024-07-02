@@ -12,6 +12,7 @@ import {
   GET_SELLER_ORDER_COMPLETE_DATA,
   GET_SERVICE_LIST_ORDER,
   POST_PLACE_ALL_ORDERS,
+  SET_SERVICE_INFO,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import OneButton from "../../../components/Button/OneButton";
@@ -28,6 +29,7 @@ const OrderUpdationModal = (props: getIdData) => {
   const [updatedData, setUpdatedData] = useState<any>([]);
   const [completeData, setCompleted] = useState<any>([]);
   const [serviceList, setServiceList] = useState<any>([-1]);
+  const [serviceIndex, setServiceIndex] = useState(0);
 
   const [enableShowServicesOption, setEnableShowServicesOption] =
     useState<any>(false);
@@ -58,91 +60,394 @@ const OrderUpdationModal = (props: getIdData) => {
   };
 
   const handleServices = async (isPlaceOrder: boolean) => {
-    try {
-      const { data: response } = await POST(
-        UPDATE_TEMP_ORDER_INFO,
-        updatedData
-      );
-      if (response?.status) {
-        toast.success("Order Updated Successfully");
-
-        const payload = {
-          tempOrderId: tempOrderId,
-          source: source,
-        };
-
-        const { data: response } = await POST(GET_SERVICE_LIST_ORDER, payload);
-        if (response.success) {
-          setServiceList(response?.data);
-        } else {
-          setServiceList([]);
-        }
-
-        setPlaceOrderButton(true);
+    if (isPlaceOrder) {
+      try {
         if (isPlaceOrder) {
           try {
-            const payload: any = {
-              orders: [
-                {
-                  orderId: completeData?.orderId,
-                  source: completeData?.source,
-                  tempOrderId: completeData?.tempOrderId,
-                },
-              ],
+            //calling the services api
+
+            const servicePayload: any = {
+              partnerServiceId: serviceList[serviceIndex - 1]?.partnerServiceId,
+              partnerServiceName:
+                serviceList[serviceIndex - 1]?.partnerServiceName,
+              companyServiceId: serviceList[serviceIndex - 1]?.companyServiceId,
+              companyServiceName:
+                serviceList[serviceIndex - 1]?.companyServiceName,
+              tempOrderId: updatedData?.tempOrderId,
+              source: updatedData?.source,
+              category: "Service",
             };
-            const { data: response } = await POST(
-              POST_PLACE_ALL_ORDERS,
-              payload
-            );
-            if (response?.status) {
-              toast.success("Order Updated Successfully");
+            let servicePayloadData;
+            if (
+              servicePayload?.partnerServiceId === undefined ||
+              servicePayload?.partnerServiceName === undefined ||
+              servicePayload?.companyServiceId === undefined ||
+              servicePayload?.companyServiceName === undefined
+            ) {
+              servicePayloadData = {
+                partnerServiceId: "",
+                partnerServiceName: "",
+                companyServiceId: "",
+                companyServiceName: "",
+                tempOrderId: updatedData?.tempOrderId,
+                source: updatedData?.source,
+                category: "Service",
+              };
             } else {
-              toast.error(response.message);
+              servicePayloadData = servicePayload;
+            }
+            const { data }: any = await POST(
+              SET_SERVICE_INFO,
+              servicePayloadData
+            );
+            if (data?.success) {
+              try {
+                const payload: any = {
+                  orders: [
+                    {
+                      orderId: completeData?.orderId,
+                      source: completeData?.source,
+                      tempOrderId: completeData?.tempOrderId,
+                    },
+                  ],
+                };
+                const { data: response } = await POST(
+                  POST_PLACE_ALL_ORDERS,
+                  payload
+                );
+                if (response?.status) {
+                  toast.success("Order Placed Successfully");
+                } else {
+                  toast.error(response.message);
+                }
+              } catch (error: any) {
+                toast.error("Something went wrong");
+                console.log(error.message);
+              }
             }
           } catch (error: any) {
-            toast.error("Something went wrong");
             console.log(error.message);
           }
         }
-      } else {
-        toast.error(response.message);
+      } catch (error: any) {
+        console.log(error.message);
       }
-    } catch (error: any) {
-      console.log(error.message);
+    } else {
+      try {
+        if (
+          updatedData?.pickupAddress?.contact?.name === "" ||
+          !updatedData?.pickupAddress?.contact?.name ||
+          updatedData?.pickupAddress?.contact?.mobileNo == 0 ||
+          !updatedData?.pickupAddress?.contact?.mobileNo ||
+          updatedData?.pickupAddress?.flatNo == "" ||
+          !updatedData?.pickupAddress?.flatNo ||
+          updatedData?.pickupAddress?.locality === "" ||
+          updatedData?.pickupAddress?.pincode == 0 ||
+          !updatedData?.pickupAddress?.pincode ||
+          updatedData?.pickupAddress?.pincode.toString().length < 6
+        ) {
+          console.log("pickup");
+          toast.error("Error found in Pickup Address");
+        } else if (
+          updatedData?.deliveryAddress?.contact?.name === "" ||
+          !updatedData?.deliveryAddress?.contact?.name ||
+          updatedData?.deliveryAddress?.flatNo == "" ||
+          !updatedData?.deliveryAddress?.flatNo ||
+          updatedData?.deliveryAddress?.contact?.mobileNo == 0 ||
+          !updatedData?.deliveryAddress?.contact?.mobileNo ||
+          updatedData?.deliveryAddress?.locality === "" ||
+          updatedData?.deliveryAddress?.pincode == 0 ||
+          !updatedData?.deliveryAddress?.pincode ||
+          updatedData?.deliveryAddress?.pincode.toString().length < 6
+        ) {
+          console.log("delivery");
+          toast.error("Error found in Delivery Address");
+        } else if (updatedData?.boxInfo) {
+          let hasError = false;
+
+          for (let i = 0; i < updatedData?.boxInfo?.length; i++) {
+            const box = updatedData?.boxInfo[i];
+
+            if (
+              !box?.name ||
+              box?.name === "" ||
+              box?.name?.length == 0 ||
+              !box?.deadWeight ||
+              box?.deadWeight == 0 ||
+              box?.breadth == 0 ||
+              box?.length == 0 ||
+              box?.height == 0
+            ) {
+              toast.error("Error found in box");
+              hasError = true;
+            }
+
+            for (let j = 0; j < box?.products?.length; j++) {
+              const product = box.products[j];
+
+              if (
+                !product?.name ||
+                product?.name === "" ||
+                !product?.deadWeight ||
+                product?.deadWeight == 0 ||
+                product?.deadWeight.toString().length == 0
+              ) {
+                console.log("product");
+                toast.error("Error found in product");
+                hasError = true;
+              }
+            }
+          }
+
+          if (!hasError) {
+            try {
+              console.log("this is running box and product");
+              const payload = updatedData;
+              const { data: response } = await POST(
+                UPDATE_TEMP_ORDER_INFO,
+                payload
+              );
+
+              if (response?.status) {
+                toast.success("Order Updated Successfully");
+                setPlaceOrderButton(true);
+                // setInfoModalContent({ isOpen: false });
+                const payload = {
+                  tempOrderId: tempOrderId,
+                  source: source,
+                };
+
+                const { data: response } = await POST(
+                  GET_SERVICE_LIST_ORDER,
+                  payload
+                );
+                if (response.success) {
+                  setServiceList(response?.data);
+                } else {
+                  setServiceList([]);
+                }
+
+                setPlaceOrderButton(true);
+                // remove this from here
+                //   if (isPlaceOrder) {
+                //     try {
+                //       //calling the services api
+
+                //       const servicePayload: any = {
+                //         partnerServiceId:
+                //           serviceList[serviceIndex - 1]?.partnerServiceId,
+                //         partnerServiceName:
+                //           serviceList[serviceIndex - 1]?.partnerServiceName,
+                //         companyServiceId:
+                //           serviceList[serviceIndex - 1]?.companyServiceId,
+                //         companyServiceName:
+                //           serviceList[serviceIndex - 1]?.companyServiceName,
+                //         tempOrderId: updatedData?.tempOrderId,
+                //         source: updatedData?.source,
+                //         category: "Service",
+                //       };
+                //       let servicePayloadData;
+                //       if (
+                //         servicePayload?.partnerServiceId === undefined ||
+                //         servicePayload?.partnerServiceName === undefined ||
+                //         servicePayload?.companyServiceId === undefined ||
+                //         servicePayload?.companyServiceName === undefined
+                //       ) {
+                //         servicePayloadData = {
+                //           partnerServiceId: "",
+                //           partnerServiceName: "",
+                //           companyServiceId: "",
+                //           companyServiceName: "",
+                //           tempOrderId: updatedData?.tempOrderId,
+                //           source: updatedData?.source,
+                //           category: "Service",
+                //         };
+                //       } else {
+                //         servicePayloadData = servicePayload;
+                //       }
+                //       const { data }: any = await POST(
+                //         SET_SERVICE_INFO,
+                //         servicePayloadData
+                //       );
+                //       if (data?.success) {
+                //         try {
+                //           const payload: any = {
+                //             orders: [
+                //               {
+                //                 orderId: completeData?.orderId,
+                //                 source: completeData?.source,
+                //                 tempOrderId: completeData?.tempOrderId,
+                //               },
+                //             ],
+                //           };
+                //           const { data: response } = await POST(
+                //             POST_PLACE_ALL_ORDERS,
+                //             payload
+                //           );
+                //           if (response?.status) {
+                //             toast.success("Order Placed Successfully");
+                //           } else {
+                //             toast.error(response.message);
+                //           }
+                //         } catch (error: any) {
+                //           toast.error("Something went wrong");
+                //           console.log(error.message);
+                //         }
+                //       }
+                //     } catch (error: any) {
+                //       console.log(error.message);
+                //     }
+                //   }
+                // } else {
+                //   toast.error(response.message);
+              }
+            } catch (error: any) {
+              console.log(error.message);
+            }
+          }
+        } else {
+          console.log("else part for the place order api");
+          const { data: response } = await POST(
+            UPDATE_TEMP_ORDER_INFO,
+            updatedData
+          );
+          if (response?.status) {
+            console.log("this is running in else final part");
+            toast.success("Order Updated Successfully");
+
+            const payload = {
+              tempOrderId: tempOrderId,
+              source: source,
+            };
+
+            const { data: response } = await POST(
+              GET_SERVICE_LIST_ORDER,
+              payload
+            );
+            if (response.success) {
+              setServiceList(response?.data);
+            } else {
+              setServiceList([]);
+            }
+
+            setPlaceOrderButton(true);
+            if (isPlaceOrder) {
+              try {
+                const payload: any = {
+                  orders: [
+                    {
+                      orderId: completeData?.orderId,
+                      source: completeData?.source,
+                      tempOrderId: completeData?.tempOrderId,
+                    },
+                  ],
+                };
+                const { data: response } = await POST(
+                  POST_PLACE_ALL_ORDERS,
+                  payload
+                );
+                if (response?.status) {
+                  toast.success("Order Updated Successfully");
+                } else {
+                  toast.error(response.message);
+                }
+              } catch (error: any) {
+                toast.error("Something went wrong");
+                console.log(error.message);
+              }
+            }
+          } else {
+            toast.error(response.message);
+          }
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
     }
   };
 
   const updateOrder = async () => {
     try {
-      // console.log(
-      //   "updatedData123",
-      //   updatedData?.deliveryAddress?.pincode?.toString().length
-      // );
-      // console.log("deliveryAddresssssssssss", updatedData?.deliveryAddress);
       if (
         updatedData?.pickupAddress?.contact?.name === "" ||
-        updatedData?.pickupAddress?.contact?.name === undefined ||
+        !updatedData?.pickupAddress?.contact?.name ||
         updatedData?.pickupAddress?.contact?.mobileNo == 0 ||
+        !updatedData?.pickupAddress?.contact?.mobileNo ||
+        updatedData?.pickupAddress?.flatNo == "" ||
+        !updatedData?.pickupAddress?.flatNo ||
         updatedData?.pickupAddress?.locality === "" ||
         updatedData?.pickupAddress?.pincode == 0 ||
-        updatedData?.pickupAddress?.pincode === undefined ||
-        updatedData?.pickupAddress?.pincode?.toString().length < 6
+        !updatedData?.pickupAddress?.pincode ||
+        updatedData?.pickupAddress?.pincode.toString().length < 6
       ) {
         toast.error("Error found in Pickup Address");
-      }
-      if (
-        updatedData?.pickupAddress?.contact?.name === "" ||
-        updatedData?.pickupAddress?.contact?.name === undefined ||
-        updatedData?.pickupAddress?.contact?.mobileNo == 0 ||
-        updatedData?.pickupAddress?.locality === "" ||
-        updatedData?.pickupAddress?.pincode == 0 ||
-        updatedData?.pickupAddress?.pincode === undefined ||
-        updatedData?.pickupAddress?.pincode?.toString().length < 6
+      } else if (
+        updatedData?.deliveryAddress?.contact?.name === "" ||
+        !updatedData?.deliveryAddress?.contact?.name ||
+        updatedData?.deliveryAddress?.flatNo == "" ||
+        !updatedData?.deliveryAddress?.flatNo ||
+        updatedData?.deliveryAddress?.contact?.mobileNo == 0 ||
+        !updatedData?.deliveryAddress?.contact?.mobileNo ||
+        updatedData?.deliveryAddress?.locality === "" ||
+        updatedData?.deliveryAddress?.pincode == 0 ||
+        !updatedData?.deliveryAddress?.pincode ||
+        updatedData?.deliveryAddress?.pincode.toString().length < 6
       ) {
         toast.error("Error found in Delivery Address");
+      } else if (updatedData?.boxInfo) {
+        let hasError = false;
+
+        for (let i = 0; i < updatedData?.boxInfo?.length; i++) {
+          const box = updatedData?.boxInfo[i];
+
+          if (
+            !box?.name ||
+            box?.name === "" ||
+            box?.name?.length == 0 ||
+            !box?.deadWeight ||
+            box?.deadWeight == 0 ||
+            box?.breadth == 0 ||
+            box?.length == 0 ||
+            box?.height == 0
+          ) {
+            toast.error("Error found in box");
+            hasError = true; // Set flag to true if any error is found in boxInfo
+          }
+
+          for (let j = 0; j < box?.products?.length; j++) {
+            const product = box.products[j];
+
+            if (
+              !product?.name ||
+              product?.name === "" ||
+              !product?.deadWeight ||
+              product?.deadWeight == 0 ||
+              product?.deadWeight.toString().length == 0
+            ) {
+              toast.error("Error found in product");
+              hasError = true; // Set flag to true if any error is found in products
+            }
+          }
+        }
+
+        if (!hasError) {
+          const payload = updatedData;
+          const { data: response } = await POST(
+            UPDATE_TEMP_ORDER_INFO,
+            payload
+          );
+
+          if (response?.status) {
+            toast.success("Order Updated Successfully");
+            setInfoModalContent({ isOpen: false });
+          } else {
+            toast.error(response.message);
+          }
+        }
       } else {
         const payload = updatedData;
         const { data: response } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+
         if (response?.status) {
           toast.success("Order Updated Successfully");
           setInfoModalContent({ isOpen: false });
@@ -151,7 +456,7 @@ const OrderUpdationModal = (props: getIdData) => {
         }
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.log("Error in updateOrder:", error.message);
     }
   };
 
@@ -218,6 +523,8 @@ const OrderUpdationModal = (props: getIdData) => {
           setUpdatedData={setUpdatedData}
           updatedData={updatedData}
           placeOrderButton={placeOrderButton}
+          setServiceIndex={setServiceIndex}
+          serviceIndex={serviceIndex}
         />
         <PaymentDetails completeData={completeData} />
         <EventLogs completeData={completeData} />

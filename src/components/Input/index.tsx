@@ -35,6 +35,7 @@ interface propTypes {
   ref?: any;
   title?: any;
   id?: any;
+  borderColor?: any;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -75,6 +76,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     title = "",
     ref = {},
     id,
+    borderColor,
   } = props;
 
   return (

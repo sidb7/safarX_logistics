@@ -45,6 +45,7 @@ const DeliveryAddress = ({
     pincode: "",
     flatNo: "",
   });
+
   const [borderColor, setBorderColor] = useState<string>("#E8E8E8");
 
   //onChange function for input field
@@ -266,7 +267,7 @@ const DeliveryAddress = ({
           ...validationError,
           mobileNo: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "flatNo") {
@@ -282,7 +283,7 @@ const DeliveryAddress = ({
           ...validationError,
           flatNo: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "locality") {
@@ -298,7 +299,7 @@ const DeliveryAddress = ({
           ...validationError,
           locality: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "pincode") {
@@ -314,7 +315,7 @@ const DeliveryAddress = ({
           ...validationError,
           pincode: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (hasError) {
@@ -324,21 +325,53 @@ const DeliveryAddress = ({
     }
   };
 
-  //Prior useeffect validations
   const priorValidations = (deliveryData: any) => {
     let hasError = false;
+    let errors = { ...validationError };
+
+    if (deliveryData?.contact?.name?.length === 0) {
+      hasError = true;
+      errors.contactName = "Please enter name";
+    } else {
+      errors.contactName = "";
+    }
 
     if (
-      deliveryData?.contact?.name?.length === 0 ||
       deliveryData?.contact?.mobileNo?.length === 0 ||
       deliveryData?.contact?.mobileNo == 0 ||
-      deliveryData?.flatNo?.length === 0 ||
-      deliveryData?.pincode?.toString()?.length === 0 ||
-      deliveryData?.pincode === 0 ||
-      deliveryData?.locality === ""
+      deliveryData?.contact?.mobileNo?.length <= 9
     ) {
       hasError = true;
+      errors.mobileNo = "Please enter mobile number";
+    } else {
+      errors.mobileNo = "";
     }
+
+    if (deliveryData?.flatNo?.length === 0 || deliveryData?.flatNo === "") {
+      hasError = true;
+      errors.flatNo = "Please enter Flat No";
+    } else {
+      errors.flatNo = "";
+    }
+
+    if (deliveryData?.locality?.length === 0 || deliveryData?.locality === "") {
+      hasError = true;
+      errors.locality = "Please enter Locality";
+    } else {
+      errors.locality = "";
+    }
+
+    if (
+      deliveryData?.pincode?.toString()?.length === 0 ||
+      deliveryData?.pincode === 0
+    ) {
+      hasError = true;
+      errors.pincode = "Please enter Pincode";
+    } else {
+      errors.pincode = "";
+    }
+
+    setValidationError(errors);
 
     if (hasError) {
       setBorderColor("red");
@@ -370,7 +403,6 @@ const DeliveryAddress = ({
     priorValidations(deliveryData);
   }, [completeData]);
 
-  // This useEffect Added For State Lag Issue --> state is lagging by one event
   useEffect(() => {
     setUpdatedData((prevState: any) => ({
       ...prevState,
@@ -390,6 +422,16 @@ const DeliveryAddress = ({
           deliveryAddress?.pincode,
       },
     }));
+
+    if (
+      deliveryAddress?.contact?.name === "" ||
+      deliveryAddress?.contact?.mobileNo?.toString()?.length <= 9 ||
+      deliveryAddress?.flatNo === "" ||
+      deliveryAddress?.locality === "" ||
+      deliveryAddress?.pincode?.toString()?.length <= 5
+    )
+      setBorderColor("red");
+    else setBorderColor("#E8E8E8");
   }, [deliveryAddress]);
 
   return (
