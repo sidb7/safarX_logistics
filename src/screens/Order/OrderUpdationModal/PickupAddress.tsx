@@ -115,7 +115,7 @@ const PickupAddress = ({
           });
         }
       }
-
+      // This will only trigger if pincode is empty or incomplete
       if (hasError) {
         setBorderColor("red");
       } else {
@@ -204,7 +204,7 @@ const PickupAddress = ({
 
   //Input validation
   const validation = (fieldName: any, value: any) => {
-    let hasError = false;
+    let hasError = true;
     if (fieldName === "contactName") {
       if (value.length === 0) {
         setValidationError({
@@ -218,7 +218,7 @@ const PickupAddress = ({
           ...validationError,
           contactName: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "mobileNo") {
@@ -240,7 +240,7 @@ const PickupAddress = ({
           ...validationError,
           mobileNo: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "flatNo") {
@@ -256,7 +256,7 @@ const PickupAddress = ({
           ...validationError,
           flatNo: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "locality") {
@@ -272,7 +272,7 @@ const PickupAddress = ({
           ...validationError,
           locality: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
     if (fieldName === "pincode") {
@@ -288,9 +288,20 @@ const PickupAddress = ({
           ...validationError,
           pincode: "",
         });
-        hasError = false;
+        // hasError = false;
       }
     }
+
+    if (
+      pickupAddress?.contact?.name === "" ||
+      pickupAddress?.contact?.mobileNo?.toString()?.length <= 9 ||
+      pickupAddress?.flatNo === "" ||
+      pickupAddress?.locality === "" ||
+      pickupAddress?.pincode?.toString()?.length <= 5
+    )
+      hasError = true;
+    else hasError = false;
+
     if (hasError) {
       setBorderColor("red");
     } else {
@@ -298,26 +309,66 @@ const PickupAddress = ({
     }
   };
 
-  //Prior useeffect validations
   const priorValidations = (pickUpData: any) => {
     let hasError = false;
+
+    if (pickUpData?.contact?.name?.length === 0) {
+      hasError = true;
+      setValidationError((prevState: any) => {
+        return {
+          ...prevState,
+          contactName: "Please enter name",
+        };
+      });
+    }
     if (
-      !pickUpData?.contact ||
-      pickUpData?.contact?.name?.length === 0 ||
       pickUpData?.contact?.mobileNo?.length == 0 ||
-      pickUpData?.contact?.mobileNo == 0 ||
-      pickUpData?.flatNo?.length === 0 ||
-      pickUpData?.flatNo === "" ||
-      pickUpData?.pincode?.toString()?.length === 0 ||
-      pickUpData?.pincode === 0 ||
-      pickUpData?.locality === ""
+      pickUpData?.contact?.mobileNo == 0
     ) {
       hasError = true;
+
+      setValidationError((prevState: any) => {
+        return {
+          ...prevState,
+          mobileNo: "Please enter Mobile No",
+        };
+      });
     }
 
-    console.log("hasError", hasError);
+    if (pickUpData?.flatNo?.length === 0 || pickUpData?.flatNo === "") {
+      hasError = true;
+      setValidationError((prevState: any) => {
+        return {
+          ...prevState,
+          flatNo: "Please enter Flat No",
+        };
+      });
+    }
+
+    if (pickUpData?.locality?.length === 0 || pickUpData?.locality === "") {
+      hasError = true;
+      setValidationError((prevState: any) => {
+        return {
+          ...prevState,
+          locality: "Please enter EmailId",
+        };
+      });
+    }
+
+    if (
+      pickUpData?.pincode?.toString()?.length === 0 ||
+      pickUpData?.pincode === 0
+    ) {
+      hasError = true;
+      setValidationError((prevState: any) => {
+        return {
+          ...prevState,
+          pincode: "Please enter Pincode",
+        };
+      });
+    }
+
     if (hasError) {
-      console.log("red", hasError);
       setBorderColor("red");
     } else {
       setBorderColor("#E8E8E8");
@@ -381,6 +432,16 @@ const PickupAddress = ({
           pickupAddress?.pincode,
       },
     }));
+
+    if (
+      pickupAddress?.contact?.name === "" ||
+      pickupAddress?.contact?.mobileNo?.toString()?.length <= 9 ||
+      pickupAddress?.flatNo === "" ||
+      pickupAddress?.locality === "" ||
+      pickupAddress?.pincode?.toString()?.length <= 5
+    )
+      setBorderColor("red");
+    else setBorderColor("#E8E8E8");
   }, [pickupAddress]);
 
   return (
@@ -544,6 +605,7 @@ const PickupAddress = ({
                 {/* pincode */}
                 <CustomInputBox
                   label="Pincode"
+                  // inputType="number"
                   value={pickupAddress.pincode}
                   isDisabled={!enabled ? true : false}
                   maxLength={6}

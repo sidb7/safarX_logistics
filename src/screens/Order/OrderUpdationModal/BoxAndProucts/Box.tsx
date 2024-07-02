@@ -9,6 +9,8 @@ import CustomInputBox from "../../../../components/Input";
 import OneButton from "../../../../components/Button/OneButton";
 import { UPDATE_TEMP_ORDER_INFO } from "../../../../utils/ApiUrls";
 import { v4 as uuidv4 } from "uuid";
+import toast from "react-hot-toast";
+import { error } from "console";
 
 const Box = ({
   completeData,
@@ -59,16 +61,15 @@ const Box = ({
     })),
   ];
 
-  console.log("updatedBox", updatedData);
-
   const handleAddBox = async () => {
     try {
       const { data: response } = await POST(
         UPDATE_TEMP_ORDER_INFO,
         updatedData
       );
-      console.log("response", response);
-      // if(response)
+      if (response.status) {
+        toast.success("Box Added Successfully");
+      }
     } catch (error: any) {
       console.log(error.message);
     }
@@ -289,7 +290,7 @@ const Box = ({
                   value={boxDetails?.deadWeight}
                   inputType={"number"}
                   onChange={(e: any) =>
-                    handleInputChange("deadWeight", +e.target.value)
+                    handleInputChange("deadWeight", e.target.value)
                   }
                   isDisabled={selectDropDownValue !== "custom"}
                 />
@@ -299,12 +300,12 @@ const Box = ({
               <div>
                 <CustomInputBox
                   label="Volumetric weight"
-                  value={
+                  value={(
                     (boxDetails?.length *
                       boxDetails?.breadth *
                       boxDetails?.height) /
                     5000
-                  }
+                  ).toFixed(2)}
                   isDisabled={true}
                 />
               </div>
@@ -325,6 +326,7 @@ const Box = ({
                   <CustomInputBox
                     label="l"
                     value={boxDetails?.length}
+                    inputType={"number"}
                     onChange={(e) =>
                       handleInputChange("length", e.target.value)
                     }
@@ -336,6 +338,7 @@ const Box = ({
                   <CustomInputBox
                     label="b"
                     value={boxDetails?.breadth}
+                    inputType={"number"}
                     onChange={(e) =>
                       handleInputChange("breadth", e.target.value)
                     }
@@ -347,6 +350,7 @@ const Box = ({
                   <CustomInputBox
                     label="h"
                     value={boxDetails?.height}
+                    inputType={"number"}
                     onChange={(e) =>
                       handleInputChange("height", e.target.value)
                     }
