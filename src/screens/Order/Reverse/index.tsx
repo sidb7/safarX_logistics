@@ -223,6 +223,11 @@ const ReverseIndex = (props: ReverseProps) => {
             //   },
             // ];
 
+            sessionStorage.setItem(
+              "reverseProductArray",
+              JSON.stringify(productsArray)
+            ); // this are used to store productArray in sessionStorage after state changes useEffect are run agian and set qty value
+
             setProductArray(productsArray);
           }
           if (responsData["boxInfo"]) {
@@ -245,6 +250,23 @@ const ReverseIndex = (props: ReverseProps) => {
       } catch (error) {}
     })(); // Immediately invoke the async function
   }, []);
+
+  // this useEffect are used to get from sessionStorage reverseProductArray and accordingly set the default qty value
+  useEffect(() => {
+    let sessionTemp = JSON.parse(
+      sessionStorage.getItem("reverseProductArray") as any
+    );
+
+    if (sessionTemp) {
+      sessionTemp.forEach((el: any, i: number) => {
+        let qtyElements = document.getElementsByClassName(`qtyProduct_${i}`);
+        if (qtyElements.length > 0) {
+          let qtyElement = qtyElements[0];
+          qtyElement.setAttribute("data-actualQty", el.qty); // set attribute and there value
+        }
+      });
+    }
+  }, [productArray, actualArray]);
 
   const handleCheck = (ele: any, index: number) => {
     let tempArr = serviceArray;

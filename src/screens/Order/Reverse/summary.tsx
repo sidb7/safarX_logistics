@@ -15,14 +15,14 @@ interface Iprops {
 const ReverseSummary = (props: Iprops) => {
   const { summaryData, setState, bookOrder, reverseModal } = props;
   const [isSummayOpen, setIsSummaryOpen] = useState(false);
+  const [isLoading, setIsloading] = useState(false);
 
   const backHandler = () => {
     setState({ isOpen: false, data: {} }); // close the current reverse summary modal
   };
 
   const bookReverseOrder = async () => {
-    console.log("rever", summaryData);
-
+    setIsloading(true);
     let productTemp = [];
     for (let i = 0; i < summaryData?.boxArray?.[0]?.products?.length; i++) {
       if (summaryData?.boxArray?.[0]?.products?.[i]?.qty !== 0) {
@@ -97,6 +97,11 @@ const ReverseSummary = (props: Iprops) => {
         setState({ isOpen: false, data: {} }); // close the current reverse summary modal
         reverseModal({ isOpen: false, data: {} }); // close the reverse first modal
         toast.success(response?.data?.message);
+        setIsloading(false);
+        sessionStorage.removeItem("reverseProductArray");
+      } else {
+        toast.error(response?.data?.message);
+        setIsloading(false);
       }
     } catch (error) {}
   };
@@ -328,6 +333,8 @@ const ReverseSummary = (props: Iprops) => {
           <CustomButton
             text={"Book Reverse Order"}
             onClick={() => bookReverseOrder()}
+            loading={isLoading}
+            className={`${isLoading ? "!bg-white" : "!bg-black"}`}
           />
         </div>
       </div>
