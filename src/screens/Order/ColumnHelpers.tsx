@@ -1927,13 +1927,13 @@ export const columnHelpersForRest = (
               }}
             /> */}
 
-            <div>
+            {/* <div>
               <img
                 src={ReverseIcon}
                 className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
                 onClick={() => setInfoReverseModalFunction(individualData?.awb)}
               />
-            </div>
+            </div> */}
 
             <CustomToolTip
               position="bottom"
