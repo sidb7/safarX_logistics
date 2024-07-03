@@ -23,6 +23,7 @@ const ReverseSummary = (props: Iprops) => {
 
   const bookReverseOrder = async () => {
     setIsloading(true);
+    // console.log("summaryData", summaryData);
     let productTemp = [];
     for (let i = 0; i < summaryData?.boxArray?.[0]?.products?.length; i++) {
       if (summaryData?.boxArray?.[0]?.products?.[i]?.qty !== 0) {
