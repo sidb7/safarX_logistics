@@ -10,6 +10,7 @@ import ButtonIcon from "../../../assets/Product/Button.svg";
 import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
 import Checkbox from "../../../components/CheckBox";
 import CustomInputBox from "../../../components/Input";
+import { Environment } from "../../../utils/ApiUrls";
 interface IBoxdetails {
   products?: any;
   selectedBox?: any;
@@ -25,6 +26,8 @@ interface IBoxdetails {
   isOrderCOD?: any;
   setIsOrderCOD?: any;
   transitType?: any;
+  source?: string;
+  sellerId?: number;
 }
 
 const BoxDetails = (props: IBoxdetails) => {
@@ -42,6 +45,8 @@ const BoxDetails = (props: IBoxdetails) => {
     isOrderCOD,
     setIsOrderCOD,
     transitType,
+    source,
+    sellerId,
   } = props;
 
   const [allProducts, setAllProducts]: any = useState([]);
@@ -50,11 +55,17 @@ const BoxDetails = (props: IBoxdetails) => {
   }, [products]);
 
   useEffect(() => {
-    if (selectedBox?.codInfo?.isCod) {
+    if (
+      selectedBox?.codInfo?.isCod &&
+      sellerId !== 131620 &&
+      Environment === "production"
+    ) {
       selectedBox.codInfo.collectableAmount =
         selectedBox?.codInfo?.invoiceValue;
     }
   }, [selectedBox?.codInfo?.isCod]);
+
+  console.log("Envirment + SellerId : ", { Environment, sellerId });
 
   const calculateVolumeWeight = (
     length: number,
@@ -73,14 +84,15 @@ const BoxDetails = (props: IBoxdetails) => {
   const handleCollectableAmmount = (event: any, target?: string) => {
     const { name, value } = event.target;
     if (target === "collectableAmount") {
-      if (value > selectedBox?.codInfo?.invoiceValue) {
-        setCheckBoxValuePerBox(
-          selectedBox?.codInfo?.invoiceValue,
-          "codAmount",
-          boxIndex
-        );
-        return;
-      }
+      // COMMENTED this because of discussion with Pallav sir that collectable amount can be greater than invoice
+      // if (value > selectedBox?.codInfo?.invoiceValue) {
+      //   setCheckBoxValuePerBox(
+      //     selectedBox?.codInfo?.invoiceValue,
+      //     "codAmount",
+      //     boxIndex
+      //   );
+      //   return;
+      // }
 
       if (!isNaN(value)) {
         setCheckBoxValuePerBox(
@@ -423,7 +435,13 @@ const BoxDetails = (props: IBoxdetails) => {
                 <div className="!w-full">
                   <CustomInputBox
                     label="Invoice Value"
-                    // isDisabled={true}
+                    isDisabled={
+                      source === "WEBSITE" &&
+                      sellerId == 131620 &&
+                      Environment === "production"
+                        ? false
+                        : true
+                    }
                     onChange={(e: any) =>
                       handleCollectableAmmount(e, "invoiceValue")
                     }
