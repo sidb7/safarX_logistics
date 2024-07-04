@@ -8634,7 +8634,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
       !getDeliveryAddressData?.deliveryAddress?.city ||
       !getDeliveryAddressData?.deliveryAddress?.contact?.contactName ||
-      // getDeliveryAddressData?.deliveryAddress?.locality?.trim()
+      getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
       //     ?.length === 0 ||
       // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
       //     ?.length === 0 ||
@@ -8666,7 +8666,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
       getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-      // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
       getPickAddressData?.pickUpAddress?.city?.length === 0 ||
       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
@@ -8788,8 +8788,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-        // getPickAddressData?.pickUpAddress?.locality?.trim()?.length ===
-        //     0 ||
+        getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.landmark?.trim().length ===
         //     0 ||
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
@@ -8835,8 +8834,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         // getDeliveryAddressData?.deliveryAddress?.contact?.contactType
         //   ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
-        // getDeliveryAddressData?.deliveryAddress?.locality?.trim()
-        //     ?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
+          0 ||
         // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
         //     ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
@@ -9725,44 +9724,133 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         </>
                                                       ) : (
                                                         <>
-                                                          <div className="mt-4">
-                                                            <CustomDropDown
-                                                              heading="Select A Box"
-                                                              options={boxDetailsData?.map(
-                                                                (
-                                                                  option: any,
-                                                                  index: any
+                                                          {enabled && (
+                                                            <div>
+                                                              <div className="my-4">
+                                                                <CustomInputBox
+                                                                  label="Box Name"
+                                                                  onChange={(
+                                                                    e
+                                                                  ) => {}}
+                                                                  value={
+                                                                    eachBox?.name
+                                                                  }
+                                                                />
+                                                              </div>
+
+                                                              <div className="grid grid-cols-2 gap-x-2">
+                                                                <div>
+                                                                  <CustomInputBox
+                                                                    label="Dead Weight"
+                                                                    onChange={(
+                                                                      e
+                                                                    ) => {}}
+                                                                    value={
+                                                                      eachBox?.deadWeight
+                                                                    }
+                                                                  />
+                                                                </div>
+                                                                <div>
+                                                                  <CustomInputBox
+                                                                    label="Volumetric Weight"
+                                                                    onChange={(
+                                                                      e
+                                                                    ) => {}}
+                                                                    value={
+                                                                      eachBox?.volumetricWeight
+                                                                    }
+                                                                  />
+                                                                </div>
+                                                              </div>
+                                                              <div className="grid grid-cols-2 gap-x-2 mt-3">
+                                                                <div>
+                                                                  <CustomDropDown
+                                                                    onChange={() => {}}
+                                                                    options={
+                                                                      measureUnits
+                                                                    }
+                                                                  />
+                                                                </div>
+                                                                <div className="grid  grid-cols-3 gap-x-2">
+                                                                  <div>
+                                                                    <CustomInputBox
+                                                                      label="Length"
+                                                                      onChange={(
+                                                                        e
+                                                                      ) => {}}
+                                                                      value={
+                                                                        eachBox?.length
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                  <div>
+                                                                    <CustomInputBox
+                                                                      label="Breadth"
+                                                                      onChange={(
+                                                                        e
+                                                                      ) => {}}
+                                                                      value={
+                                                                        eachBox?.breadth
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                  <div>
+                                                                    <CustomInputBox
+                                                                      label="Height"
+                                                                      onChange={(
+                                                                        e
+                                                                      ) => {}}
+                                                                      value={
+                                                                        eachBox?.height
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          )}
+                                                          {!enabled && (
+                                                            <div className="mt-4">
+                                                              <CustomDropDown
+                                                                heading="Select A Box"
+                                                                options={boxDetailsData?.map(
+                                                                  (
+                                                                    option: any,
+                                                                    index: any
+                                                                  ) => {
+                                                                    return {
+                                                                      label:
+                                                                        option?.name,
+                                                                      value:
+                                                                        option?.boxId,
+                                                                    };
+                                                                  }
+                                                                )}
+                                                                onChange={(
+                                                                  e: any
                                                                 ) => {
-                                                                  return {
-                                                                    label:
-                                                                      option?.name,
-                                                                    value:
-                                                                      option?.boxId,
-                                                                  };
-                                                                }
-                                                              )}
-                                                              onChange={(
-                                                                e: any
-                                                              ) => {
-                                                                clickedOption(
-                                                                  e.target.value
-                                                                );
-                                                                setSelectBoxIndex(
-                                                                  e.target.value
-                                                                );
-                                                                setDropDownContent(
-                                                                  true
-                                                                );
-                                                                setExistingBox(
-                                                                  true
-                                                                );
-                                                                setCustomInputBox(
-                                                                  false
-                                                                );
-                                                              }}
-                                                            />
-                                                            <></>
-                                                          </div>
+                                                                  clickedOption(
+                                                                    e.target
+                                                                      .value
+                                                                  );
+                                                                  setSelectBoxIndex(
+                                                                    e.target
+                                                                      .value
+                                                                  );
+                                                                  setDropDownContent(
+                                                                    true
+                                                                  );
+                                                                  setExistingBox(
+                                                                    true
+                                                                  );
+                                                                  setCustomInputBox(
+                                                                    false
+                                                                  );
+                                                                }}
+                                                              />
+                                                              <></>
+                                                            </div>
+                                                          )}
                                                         </>
                                                       )}
                                                       <div className="mt-4">
@@ -11187,9 +11275,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       });
                                                     }
                                                   }}
-                                                  // inputError={
-                                                  //     inputError
-                                                  // }
+                                                  inputError={inputError}
                                                 />
                                               </div>
                                               <div className="xl:w-[274px]">
@@ -12502,7 +12588,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                               </div> */}
                                             </div>
                                           )}
-                                        {item.title === "Delivery Address" &&
+                                        {/* {item.title === "Delivery Address" &&
                                           index === 13 && (
                                             <div className="grid grid-cols-2  mt-0">
                                               <div className="xl:w-[360px] col-span-1   2xl:pr-[80px] pr-[10px] xl:pr-[80px] 2xl:w-[360px]">
@@ -12555,7 +12641,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 </p>
                                               </div>
                                             </div>
-                                          )}
+                                          )} */}
 
                                         {item?.title === "Status" &&
                                           (index === 7 ||
@@ -12576,19 +12662,21 @@ const Accordion = (props: ICustomTableAccordion) => {
               })}
           </div>
 
-          <div
-            className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
-            style={{ width: "-webkit-fill-available" }}
-          >
-            <OneButton
-              text={"Place Order"}
-              disabled={errorsArray.length > 0 ? true : false}
-              variant="primary"
-              onClick={placeOrder}
-              //   onClick={() => handleServices(placeOrderButton)}
-              className="!w-[160px]"
-            />
-          </div>
+          {!enabled && (
+            <div
+              className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
+              style={{ width: "-webkit-fill-available" }}
+            >
+              <OneButton
+                text={"Place Order"}
+                disabled={errorsArray.length > 0 ? true : false}
+                variant="primary"
+                onClick={placeOrder}
+                //   onClick={() => handleServices(placeOrderButton)}
+                className="!w-[160px]"
+              />
+            </div>
+          )}
         </>
       )}
     </div>
