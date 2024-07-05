@@ -8655,7 +8655,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
       !getDeliveryAddressData?.deliveryAddress?.city ||
       !getDeliveryAddressData?.deliveryAddress?.contact?.contactName ||
-      getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
+      // getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
       //     ?.length === 0 ||
       // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
       //     ?.length === 0 ||
@@ -8687,7 +8687,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
       getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-      getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+      // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
       getPickAddressData?.pickUpAddress?.city?.length === 0 ||
       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
@@ -8736,76 +8736,81 @@ const Accordion = (props: ICustomTableAccordion) => {
       if (element5 && !enabled) element5.style.borderColor = "red";
     }
 
-    if (
-      boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
-      // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.name === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.length === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.height === 0 ||
-      isBoxError ||
-      (selectBoxIndex === 0 && source != "UNICOMMERCE")
-    ) {
-      // let element4: any = document.getElementById("Box Info  Product(s) x 5");
-      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-
-      // let element5: any = document.getElementById("Box 1");
-      let element5: any = document.getElementById(
-        // `${boxProductDetails?.boxInfo?.[0]?.name}`
-        "Box 1"
-      );
-
-      if (element4 && !enabled) element4.classList.add("!border-red-500");
-      if (element5 && !enabled) element5.style.borderColor = "red";
-      // if (element5) element5.classList.add("!border-red-500");
-    } else {
-      // let element4: any = document.getElementById("Box Info  Product(s) x 5");
-      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-      // let element5: any = document.getElementById("Box 1");
-      // let element5: any = document.getElementById(
-      //     `${boxProductDetails?.boxInfo?.[0]?.name}`
-      // );
-      let element5: any = document.getElementById(
-        // `${boxProductDetails?.boxInfo?.[0]?.name}`
-        "Box 1"
-      );
-
-      if (element4) element4.style.borderColor = "#E8E8E8";
-      if (element5 && !enabled) element5.style.borderColor = "#E8E8E8";
-    }
-
-    for (
-      let i = 0;
-      i < boxProductDetails?.boxInfo?.[0]?.products?.length;
-      i++
-    ) {
+    if (source !== "UNICOMMERCE") {
       if (
-        boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0
-        //commenting as not mandatory
-        // ||
-        // boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
-        // boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
-        // boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
+        boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
+        // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.name === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.length === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.height === 0 ||
+        isBoxError
       ) {
-        let element6 = document.getElementById(
-          `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+        // let element4: any = document.getElementById("Box Info  Product(s) x 5");
+        let element4: any = document.getElementById(
+          `${orderDetails[2]?.title}`
         );
 
-        let element4: any = document.getElementById(
-          `${orderDetails[2]?.title}`
+        // let element5: any = document.getElementById("Box 1");
+        let element5: any = document.getElementById(
+          // `${boxProductDetails?.boxInfo?.[0]?.name}`
+          "Box 1"
         );
-        if (element6) element6.style.borderColor = "red";
-        if (element4 && !enabled) element4.style.borderColor = "red";
-        // break;
+
+        if (element4 && !enabled) element4.classList.add("!border-red-500");
+        if (element5 && !enabled) element5.style.borderColor = "red";
+        // if (element5) element5.classList.add("!border-red-500");
       } else {
+        // let element4: any = document.getElementById("Box Info  Product(s) x 5");
         let element4: any = document.getElementById(
           `${orderDetails[2]?.title}`
         );
-        let element6 = document.getElementById(
-          `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+        // let element5: any = document.getElementById("Box 1");
+        // let element5: any = document.getElementById(
+        //     `${boxProductDetails?.boxInfo?.[0]?.name}`
+        // );
+        let element5: any = document.getElementById(
+          // `${boxProductDetails?.boxInfo?.[0]?.name}`
+          "Box 1"
         );
-        if (element6) element6.style.borderColor = "#E8E8E8";
+
         if (element4) element4.style.borderColor = "#E8E8E8";
+        if (element5 && !enabled) element5.style.borderColor = "#E8E8E8";
+      }
+
+      for (
+        let i = 0;
+        i < boxProductDetails?.boxInfo?.[0]?.products?.length;
+        i++
+      ) {
+        if (
+          boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0
+          //commenting as not mandatory
+          // ||
+          // boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
+          // boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
+          // boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
+        ) {
+          let element6 = document.getElementById(
+            `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+          );
+
+          let element4: any = document.getElementById(
+            `${orderDetails[2]?.title}`
+          );
+          if (element6) element6.style.borderColor = "red";
+          if (element4 && !enabled) element4.style.borderColor = "red";
+          // break;
+        } else {
+          let element4: any = document.getElementById(
+            `${orderDetails[2]?.title}`
+          );
+          let element6 = document.getElementById(
+            `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+          );
+          if (element6) element6.style.borderColor = "#E8E8E8";
+          if (element4) element4.style.borderColor = "#E8E8E8";
+        }
       }
     }
   };
@@ -8821,7 +8826,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+        // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.landmark?.trim().length ===
         //     0 ||
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
@@ -8867,8 +8872,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         // getDeliveryAddressData?.deliveryAddress?.contact?.contactType
         //   ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
-          0 ||
+        // getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
+        //   0 ||
         // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
         //     ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
