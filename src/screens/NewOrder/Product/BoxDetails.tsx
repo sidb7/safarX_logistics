@@ -10,6 +10,7 @@ import ButtonIcon from "../../../assets/Product/Button.svg";
 import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
 import Checkbox from "../../../components/CheckBox";
 import CustomInputBox from "../../../components/Input";
+import { Environment } from "../../../utils/ApiUrls";
 interface IBoxdetails {
   products?: any;
   selectedBox?: any;
@@ -25,6 +26,8 @@ interface IBoxdetails {
   isOrderCOD?: any;
   setIsOrderCOD?: any;
   transitType?: any;
+  source?: string;
+  sellerId?: number;
 }
 
 const BoxDetails = (props: IBoxdetails) => {
@@ -42,6 +45,8 @@ const BoxDetails = (props: IBoxdetails) => {
     isOrderCOD,
     setIsOrderCOD,
     transitType,
+    source,
+    sellerId,
   } = props;
 
   const [allProducts, setAllProducts]: any = useState([]);
@@ -50,7 +55,11 @@ const BoxDetails = (props: IBoxdetails) => {
   }, [products]);
 
   useEffect(() => {
-    if (selectedBox?.codInfo?.isCod) {
+    if (
+      selectedBox?.codInfo?.isCod &&
+      (sellerId == 103529 || sellerId == 129176) &&
+      Environment === "production"
+    ) {
       selectedBox.codInfo.collectableAmount =
         selectedBox?.codInfo?.invoiceValue;
     }
@@ -70,23 +79,34 @@ const BoxDetails = (props: IBoxdetails) => {
     setCheckBoxValuePerBox(value, name, boxIndex);
   };
 
-  const handleCollectableAmmount = (event: any) => {
+  const handleCollectableAmmount = (event: any, target?: string) => {
     const { name, value } = event.target;
-    if (value > selectedBox?.codInfo?.invoiceValue) {
-      setCheckBoxValuePerBox(
-        selectedBox?.codInfo?.invoiceValue,
-        "codAmount",
-        boxIndex
-      );
-      return;
-    }
+    if (target === "collectableAmount") {
+      // COMMENTED this because of discussion with Pallav sir that collectable amount can be greater than invoice
+      // if (value > selectedBox?.codInfo?.invoiceValue) {
+      //   setCheckBoxValuePerBox(
+      //     selectedBox?.codInfo?.invoiceValue,
+      //     "codAmount",
+      //     boxIndex
+      //   );
+      //   return;
+      // }
 
-    if (!isNaN(value)) {
-      setCheckBoxValuePerBox(
-        value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
-        "codAmount",
-        boxIndex
-      );
+      if (!isNaN(value)) {
+        setCheckBoxValuePerBox(
+          value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+          "codAmount",
+          boxIndex
+        );
+      }
+    } else if (target === "invoiceValue") {
+      if (!isNaN(value)) {
+        setCheckBoxValuePerBox(
+          value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+          "invoiceValue",
+          boxIndex
+        );
+      }
     }
   };
 
@@ -413,8 +433,20 @@ const BoxDetails = (props: IBoxdetails) => {
                 <div className="!w-full">
                   <CustomInputBox
                     label="Invoice Value"
-                    isDisabled={true}
-                    value={selectedBox?.codInfo?.invoiceValue}
+                    isDisabled={
+                      source === "WEBSITE" &&
+                      (sellerId == 103529 || sellerId == 129176) &&
+                      Environment === "production"
+                        ? false
+                        : true
+                    }
+                    onChange={(e: any) =>
+                      handleCollectableAmmount(e, "invoiceValue")
+                    }
+                    value={
+                      selectedBox?.codInfo?.invoiceValue &&
+                      selectedBox?.codInfo?.invoiceValue
+                    }
                     data-cy="invoice-value-input"
                   />
                 </div>
@@ -428,8 +460,13 @@ const BoxDetails = (props: IBoxdetails) => {
                   <CustomInputBox
                     label={"COD Amount"}
                     isDisabled={!selectedBox?.codInfo?.isCod}
-                    value={selectedBox?.codInfo?.collectableAmount}
-                    onChange={handleCollectableAmmount}
+                    value={
+                      selectedBox?.codInfo?.collectableAmount &&
+                      selectedBox?.codInfo?.collectableAmount
+                    }
+                    onChange={(e: any) =>
+                      handleCollectableAmmount(e, "collectableAmount")
+                    }
                     data-cy="cod-amount-input"
                   />
                 </div>

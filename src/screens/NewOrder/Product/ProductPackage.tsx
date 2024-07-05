@@ -17,6 +17,7 @@ import {
   GET_LATEST_ORDER,
   GET_SELLER_BOX,
   GET_PRODUCTS,
+  Environment,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PackageBox from "./PackageBox";
@@ -121,11 +122,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [isOrderCOD, setIsOrderCOD] = useState<any>(false);
   const [transitType, setTransitType] = useState<any>("");
   const [isLoading, setIsLoading]: any = useState(false);
-
+  const [invoiceUpdateDetails, setInvoiceUpdateDetails] = useState<
+    object | any
+  >({
+    isInvoiceUpdated: false,
+    boxIndex: 0,
+  });
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
   let orderId = params?.orderId || "";
+  const [source, setSource]: any = useState("");
+  const [sellerId, setSellerId]: any = useState(0);
 
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
@@ -154,7 +162,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
     let codInfo: any = {
       ...codData,
-      invoiceValue: totalInvoiceValue,
+      invoiceValue:
+        Environment === "production" &&
+        (sellerId === 103529 || sellerId === 129176)
+          ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
+          : totalInvoiceValue,
+      // invoiceValue: invoiceUpdateDetails?.isInvoiceUpdated
+      //   ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
+      //   : totalInvoiceValue,
       isCod: false,
       collectableAmount: 0,
     };
@@ -299,10 +314,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         };
         break;
       case "invoiceValue":
-        tempArr[boxIndex] = {
+        tempArr[boxIndex].codInfo = {
           ...tempArr[boxIndex].codInfo,
           invoiceValue: value && +value,
         };
+        setInvoiceUpdateDetails({
+          isInvoiceUpdated: true,
+          boxIndex,
+        });
         break;
       case "insurance":
         tempArr[boxIndex] = {
@@ -374,6 +393,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       const payload = { tempOrderId: shipyaari_id, source: orderSource };
       const { data } = await POST(GET_LATEST_ORDER, payload);
 
+      setSource(data?.data?.[0]?.source);
+
+      setSellerId(data?.data?.[0]?.sellerId);
+
       const { data: catalogueProducts } = await POST(GET_PRODUCTS);
 
       const { data: boxData } = await POST(GET_SELLER_BOX);
@@ -431,12 +454,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   // };
 
   const setBoxAndCODInfo = async () => {
-    let codDataInfo = {
-      ...codData,
-      isCod: orderType === "B2B" || paymentMode !== "cod" ? false : true,
-    };
-    if (codDataInfo.isCod && !codDataInfo.collectableAmount) {
-      toast.error("COD Amount Must Be Required");
+    for (let item of packages) {
+      if (item.codInfo.isCod && item.codInfo.collectableAmount <= 0) {
+        toast.error("COD Amount Must Be Required");
+        return;
+      }
+    }
+
+    if (codData?.invoiceValue <= 0) {
+      toast.error("Invoice must be greater than zero");
       return;
     }
 
@@ -624,6 +650,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     isOrderCOD={isOrderCOD}
                     setIsOrderCOD={setIsOrderCOD}
                     transitType={transitType}
+                    source={source}
+                    sellerId={sellerId}
                   />
                 );
               })}
@@ -880,7 +908,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                           // recommended={index === 1 ? true : false}
                         />
                       </div>
-
                     );
                   })
                 ) : (
