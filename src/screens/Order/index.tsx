@@ -34,6 +34,7 @@ import {
   GET_ORDER_ERRORS,
   RECHARGE_STATUS,
   PAYMENT_ERRORS,
+  DUPLICATE_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -78,6 +79,7 @@ import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
+import { DuplicateModel } from "../../components/Duplicate";
 // import OrderUpdationModal from "../Order/OrderUpdationModal";
 
 import ShopifyIcon from "../../assets/Catalogue/shopifyLg.svg";
@@ -775,6 +777,7 @@ const Index = () => {
   };
 
   const warningMessageForDuplicate = (data: any) => {
+    console.log("🚀 ~ warningMessageForDuplicate ~ data:", data);
     return (
       <div>
         <div>
@@ -2255,7 +2258,7 @@ const Index = () => {
         }}
         title={warningMessageForDelete(deleteModalDraftOrder?.payload)}
       />
-      {/* 
+
       <DuplicateModel
         url={DUPLICATE_ORDER}
         postData={duplicateOrderModalData?.data?.payLoad}
@@ -2268,7 +2271,7 @@ const Index = () => {
           });
         }}
         title={warningMessageForDuplicate(duplicateOrderModalData?.data)}
-      /> */}
+      />
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
         onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
