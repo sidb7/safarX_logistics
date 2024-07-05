@@ -27,7 +27,6 @@ import AccessDenied from "../../../components/AccessDenied";
 import { getQueryJson } from "../../../utils/utility";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 import CustomRadioButton from "../../../components/RadioButton/Index";
-import RecipientType from "../NewDelivery/Recipient/recipient";
 
 const steps = [
   {
@@ -80,8 +79,7 @@ const PickupLocation = () => {
   const [pickupDate, setPickupDate] = useState("");
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
   const [pickupDateInEpoch, setPickupDateInEpoch] = useState("");
-  const [orderType, setOrderType] = useState("B2C");
-  const [transitType, settransitType] = useState("FORWARD");
+  const [orderType, setOrderType] = useState("FORWARD");
   const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
@@ -258,8 +256,7 @@ const PickupLocation = () => {
           },
         };
       }
-      payload["transit"] = transitType;
-      payload["orderType"] = orderType;
+      payload["transit"] = orderType;
 
       const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
 
@@ -280,6 +277,7 @@ const PickupLocation = () => {
       return error;
     }
   };
+  //
 
   useEffect(() => {
     (async () => {
@@ -408,7 +406,7 @@ const PickupLocation = () => {
       {isActive ? (
         <div className="w-full ">
           <Breadcrum label="Add New Order" />
-          {/* <div className="pl-5 flex gap-2">
+          <div className="pl-5 flex gap-2">
             <div className="flex items-center h-6 gap-x-2 ">
               <CustomRadioButton
                 name="FORWARD"
@@ -439,19 +437,11 @@ const PickupLocation = () => {
                 Reverse
               </p>
             </div>
-          </div> */}
+          </div>
 
           <div className=" p-2 mb-4 lg:mb-8">
             <Stepper steps={steps} />
           </div>
-
-          <RecipientType
-            orderType={orderType}
-            setOrderType={setOrderType}
-            transitType={transitType}
-            setTransitType={settransitType}
-            inputError={inputError}
-          />
 
           {/* PICKUP ADDRESS */}
 
