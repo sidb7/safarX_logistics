@@ -17,6 +17,7 @@ import {
   GET_LATEST_ORDER,
   GET_SELLER_BOX,
   GET_PRODUCTS,
+  Environment,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PackageBox from "./PackageBox";
@@ -131,6 +132,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
   let orderId = params?.orderId || "";
+  const [source, setSource]: any = useState("");
+  const [sellerId, setSellerId]: any = useState(0);
 
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
@@ -159,9 +162,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
     let codInfo: any = {
       ...codData,
-      invoiceValue: invoiceUpdateDetails?.isInvoiceUpdated
-        ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
-        : totalInvoiceValue,
+      invoiceValue:
+        Environment === "production" &&
+        (sellerId === 103529 || sellerId === 129176)
+          ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
+          : totalInvoiceValue,
+      // invoiceValue: invoiceUpdateDetails?.isInvoiceUpdated
+      //   ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
+      //   : totalInvoiceValue,
       isCod: false,
       collectableAmount: 0,
     };
@@ -384,6 +392,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       setIsLoading(true);
       const payload = { tempOrderId: shipyaari_id, source: orderSource };
       const { data } = await POST(GET_LATEST_ORDER, payload);
+
+      setSource(data?.data?.[0]?.source);
+
+      setSellerId(data?.data?.[0]?.sellerId);
 
       const { data: catalogueProducts } = await POST(GET_PRODUCTS);
 
@@ -638,6 +650,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     isOrderCOD={isOrderCOD}
                     setIsOrderCOD={setIsOrderCOD}
                     transitType={transitType}
+                    source={source}
+                    sellerId={sellerId}
                   />
                 );
               })}
