@@ -228,53 +228,53 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "Download Invoice",
       },
     ],
-    "IN TRANSIT": [
-      {
-        icon: CrossIcon,
-        hovertext: "Cancel Orders",
-        identifier: "Cancel",
-        buttonName: "CANCEL ORDERS",
-      },
-    ],
-    "OUT OF DELIVERY": [
-      {
-        icon: CrossIcon,
-        hovertext: "Cancel Orders",
-        identifier: "Cancel",
-        buttonName: "CANCEL ORDERS",
-      },
-    ],
-    DELIVERED: [
-      {
-        icon: CrossIcon,
-        hovertext: "Cancel Orders",
-        identifier: "Cancel",
-        buttonName: "CANCEL ORDERS",
-      },
-    ],
-    RETURN: [
-      {
-        icon: CrossIcon,
-        hovertext: "Cancel Orders",
-        identifier: "Cancel",
-        buttonName: "CANCEL ORDERS",
-      },
-    ],
-    EXCEPTION: [
-      {
-        icon: CrossIcon,
-        hovertext: "Cancel Orders",
-        identifier: "Cancel",
-        buttonName: "CANCEL ORDERS",
-      },
-    ],
+    // "IN TRANSIT": [
+    //   {
+    //     icon: CrossIcon,
+    //     hovertext: "Cancel Orders",
+    //     identifier: "Cancel",
+    //     buttonName: "CANCEL ORDERS",
+    //   },
+    // ],
+    // "OUT OF DELIVERY": [
+    //   {
+    //     icon: CrossIcon,
+    //     hovertext: "Cancel Orders",
+    //     identifier: "Cancel",
+    //     buttonName: "CANCEL ORDERS",
+    //   },
+    // ],
+    // DELIVERED: [
+    //   {
+    //     icon: CrossIcon,
+    //     hovertext: "Cancel Orders",
+    //     identifier: "Cancel",
+    //     buttonName: "CANCEL ORDERS",
+    //   },
+    // ],
+    // RETURN: [
+    //   {
+    //     icon: CrossIcon,
+    //     hovertext: "Cancel Orders",
+    //     identifier: "Cancel",
+    //     buttonName: "CANCEL ORDERS",
+    //   },
+    // ],
+    // EXCEPTION: [
+    //   {
+    //     icon: CrossIcon,
+    //     hovertext: "Cancel Orders",
+    //     identifier: "Cancel",
+    //     buttonName: "CANCEL ORDERS",
+    //   },
+    // ],
     "READY TO PICK": [
-      {
-        icon: CrossIcon,
-        hovertext: "Cancel Orders",
-        identifier: "Cancel",
-        buttonName: "CANCEL ORDERS",
-      },
+      // {
+      //   icon: CrossIcon,
+      //   hovertext: "Cancel Orders",
+      //   identifier: "Cancel",
+      //   buttonName: "CANCEL ORDERS",
+      // },
       {
         icon: DownloadIcon,
         hovertext: "Download Manifest Reports",
