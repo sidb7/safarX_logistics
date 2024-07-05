@@ -7522,6 +7522,13 @@ const Accordion = (props: ICustomTableAccordion) => {
         const response = await POST(GET_SERVICE_LIST_ORDER, payload);
         if (response?.status) {
           setServiceLoading(false);
+          if (serviceList.length === 0)
+            response?.data?.data?.map((id: any, index: number) => {
+              return (
+                id.partnerServiceId == servicePartnerServiceId &&
+                setServiceIndex(index)
+              );
+            });
           setServiceList(response?.data?.data);
           setServiceRefresh(false);
           setAddressOpenModal(true);
@@ -8737,9 +8744,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
       boxProductDetails?.boxInfo?.[0]?.height === 0 ||
       isBoxError ||
-      (selectBoxIndex === 0 &&
-        boxProductDetails?.boxInfo?.[0]?.name === "Box 1" &&
-        source != "UNICOMMERCE")
+      (selectBoxIndex === 0 && source != "UNICOMMERCE")
     ) {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
@@ -9012,13 +9017,13 @@ const Accordion = (props: ICustomTableAccordion) => {
     // );
   }, [boxProductDetails]);
 
-  useEffect(() => {
-    serviceList.map((id: any, index: number) => {
-      return (
-        id.partnerServiceId == servicePartnerServiceId && setServiceIndex(index)
-      );
-    });
-  }, [serviceList]);
+  // useEffect(() => {
+  //   serviceList.map((id: any, index: number) => {
+  //     return (
+  //       id.partnerServiceId == servicePartnerServiceId && setServiceIndex(index)
+  //     );
+  //   });
+  // }, []);
 
   useEffect(() => {
     handlePriorValidation();
@@ -10823,6 +10828,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                               service.partnerName
                                                                             }
                                                                             className="!w-4"
+                                                                            style={{
+                                                                              accentColor:
+                                                                                "black",
+                                                                            }}
                                                                             readOnly={
                                                                               true
                                                                             }
