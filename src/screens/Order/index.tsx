@@ -200,8 +200,8 @@ const tabs = [
     orderNumber: 0,
   },
   {
-    statusName: "Ready to Pick",
-    value: "READY TO PICK",
+    statusName: "Picked Up",
+    value: "PICKED UP",
     orderNumber: 0,
   },
   // {
@@ -1114,7 +1114,7 @@ const Index = () => {
         break;
       case "BOOKED":
       case "CANCELLED":
-      case "READY TO PICK":
+      case "PICKED UP":
       case "IN TRANSIT":
       case "OUT OF DELIVERY":
       case "DELIVERED":
