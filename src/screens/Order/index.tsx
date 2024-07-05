@@ -777,6 +777,7 @@ const Index = () => {
   };
 
   const warningMessageForDuplicate = (data: any) => {
+    console.log("🚀 ~ warningMessageForDuplicate ~ data:", data);
     return (
       <div>
         <div>
@@ -2257,7 +2258,7 @@ const Index = () => {
         }}
         title={warningMessageForDelete(deleteModalDraftOrder?.payload)}
       />
-      {/* 
+
       <DuplicateModel
         url={DUPLICATE_ORDER}
         postData={duplicateOrderModalData?.data?.payLoad}
@@ -2271,7 +2272,6 @@ const Index = () => {
         }}
         title={warningMessageForDuplicate(duplicateOrderModalData?.data)}
       />
-      /> */}
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
         onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
