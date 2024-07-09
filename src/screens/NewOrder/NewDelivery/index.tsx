@@ -19,7 +19,6 @@ import RecipientType from "./Recipient/recipient";
 import { useSelector } from "react-redux";
 import ReturningDelivery from "../ReturningUser/Delivery";
 import { getQueryJson } from "../../../utils/utility";
-import { log } from "console";
 
 const steps = [
   {
@@ -69,7 +68,6 @@ const DeliveryLocation = () => {
   let orderSource = params?.source || "";
   let orderId = params?.orderId || "";
   const [transitType, setTransitType] = useState("");
-  const [orderType, setOrderType] = useState("");
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     deliveryAddress: {
@@ -277,9 +275,6 @@ const DeliveryLocation = () => {
       const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data.success && data?.data.length > 0) {
         const orderData = data?.data[0];
-        console.log("orderData", orderData.orderType);
-        setOrderType(orderData?.orderType || "");
-
         setTransitType(orderData?.transit || "");
         if (orderData?.deliveryAddress && orderData?.billingAddress) {
           setDeliveryAddress({
@@ -354,9 +349,6 @@ const DeliveryLocation = () => {
             tempOrderId: orderData?.tempOrderId || "",
             source: orderData?.source || "",
           });
-          // Logging orderType here
-          console.log("orderType:", orderData?.orderType);
-          console.log("Helo");
         }
       }
     })();
@@ -406,11 +398,10 @@ const DeliveryLocation = () => {
         <Stepper steps={steps} />
       </div>
 
-      {/* <RecipientType
+      <RecipientType
         data={{ deliveryAddress, setDeliveryAddress, inputError }}
         transitType={transitType}
-
-      /> */}
+      />
 
       {/* DELIVERY ADDRESS */}
 
@@ -509,10 +500,9 @@ const DeliveryLocation = () => {
       )}
 
       <div id="scrollDiv" />
+
       <DeliveryAddress
         data={{
-          orderType,
-          setOrderType,
           deliveryAddress,
           setDeliveryAddress,
           inputError,
@@ -535,8 +525,6 @@ const DeliveryLocation = () => {
       {!isBillingAddress && (
         <DeliveryAddress
           data={{
-            orderType,
-            setOrderType,
             deliveryAddress,
             setDeliveryAddress,
             label: "billing",
