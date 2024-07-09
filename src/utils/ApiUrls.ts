@@ -149,6 +149,7 @@ const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
 const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
+const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -386,6 +387,7 @@ const CREATE_RULE_SERVICE = `${SELLER_BASE_URL}/ruleEngine/createRuleEngine`;
 const FETCH_RULE = `${SELLER_BASE_URL}/ruleEngine/fetchRuleEngine`;
 const GET_ALLPARTNER_OFSELLER = `${SELLER_BASE_URL}/partners/getAllPartnersOfSeller`;
 const UPDATE_ALLPARTNER_OF_SELLER = `${SELLER_BASE_URL}/partners/updataAllPartnersOfSeller`;
+const GET_ALLPARTNERS_OF_RULEENGINE = `${SELLER_BASE_URL}/partners/getPartnersFromRuleEngine`;
 
 // weight Management
 const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
@@ -594,13 +596,19 @@ export {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
+  // CHANGE_PASSWORD,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
   CHANGE_PASSWORD,
   REVERSE_ORDER,
-  GET_ALLPARTNER_OFSELLER,
-  UPDATE_ALLPARTNER_OF_SELLER,
+  //  GET_ALLPARTNER_OFSELLER,
+  //  UPDATE_ALLPARTNER_OF_SELLER,
   AMAZON_REDIRECT_URL,
   UPDATE_SINGLE_SELLER,
   UPDATE_SELLER_NAME,
+  DUPLICATE_ORDER,
+  GET_ALLPARTNER_OFSELLER,
+  UPDATE_ALLPARTNER_OF_SELLER,
+  GET_ALLPARTNERS_OF_RULEENGINE,
+  // DUPLICATE_ORDER,
 };

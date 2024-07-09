@@ -27,7 +27,6 @@ import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
 import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
 import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
 import Order from "../screens/Order/index";
-import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/Onboarding/Kyc/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -171,6 +170,7 @@ import CouponScreen from "../components/Coupons/index";
 import Rules from "../screens/Order/Rules";
 import ChangePasswordv2 from "../screens/Auth/PasswordChange";
 import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
+import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -178,7 +178,6 @@ const MyRoutes: React.FC = () => {
       <Route path="/ai-address" element={<AiAddress />} />
       <Route path="/ai-listen" element={<AiListen />} />
       <Route path="/change-password" element={<ChangePasswordv2 />} />
-
       <Route
         path="/auth/login"
         element={
