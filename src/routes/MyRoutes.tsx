@@ -148,6 +148,7 @@ import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
 import ViewTicketDetails from "../screens/Help/Tickets/viewTicketDetails";
 import Reports from "../screens/NewOrder/Reports";
 import AddBox from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addBox";
+import SinglePageOrderJourney from "../screens/SinglePageOrder/index";
 
 //feedBack
 import AddFeedBack from "../screens/FeedBack/addFeedback";
@@ -530,6 +531,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <BulkUpload />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/order"
+            element={
+              <ProtectedRoute>
+                <SinglePageOrderJourney />
               </ProtectedRoute>
             }
           />
