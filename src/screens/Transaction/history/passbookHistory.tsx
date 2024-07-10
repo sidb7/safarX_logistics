@@ -78,7 +78,7 @@ export const PassbookColumns = (setSortOrder: any) => {
             width={20}
           />
           <span
-            className={`text-xs font-semibold ${
+            className={`text-xs font-semibold font-Open leading-5  ${
               status.toUpperCase() === "SUCCESS"
                 ? "text-[#7CCA62]"
                 : "text-[#F35838]"
@@ -130,7 +130,7 @@ export const PassbookColumns = (setSortOrder: any) => {
 
   return [
     columnsHelper.accessor("createdAt", {
-      header: (props) => {
+      header: (props: any) => {
         return (
           <div className="flex justify-between items-center">
             <div className="flex justify-center items-center">
@@ -139,7 +139,9 @@ export const PassbookColumns = (setSortOrder: any) => {
                 onChange={props?.table?.getToggleAllRowsSelectedHandler()}
                 intermediate={props?.table?.getIsSomeRowsSelected()}
               /> */}
-              <h1 className="text-sm font-semibold leading-5">Date</h1>
+              <h1 className="font-Open font-semibold leading-5 text-sm">
+                Date
+              </h1>
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" onClick={handleSortClick} />
@@ -160,8 +162,12 @@ export const PassbookColumns = (setSortOrder: any) => {
               />
             </div> */}
             <div className="flex flex-col  whitespace-nowrap my-4 ">
-              <span>{formattedDateTime.split(",")[0]}</span>
-              <span>{formattedDateTime.split(",")[1]}</span>
+              <span className="font-Open font-normal leading-5 text-sm">
+                {formattedDateTime.split(",")[0]}
+              </span>
+              <span className="font-Open font-normal leading-5 text-sm">
+                {formattedDateTime.split(",")[1]}
+              </span>
             </div>
           </div>
         );
@@ -170,8 +176,10 @@ export const PassbookColumns = (setSortOrder: any) => {
     columnsHelper.accessor("transactionId", {
       header: () => {
         return (
-          <div className="flex whitespace-nowrap justify-between items-center w-[90px]">
-            <h1 className="text-sm font-semibold leading-5 ">Transaction ID</h1>
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px] ">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Transaction ID
+            </h1>
             {/* <img src={sortIconTable} alt="" /> */}
           </div>
         );
@@ -179,7 +187,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex  items-center justify-between ">
-            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm   ">
               {info.row.original.transactionId}
             </div>
             <div className="cursor-pointer">
@@ -197,7 +205,9 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div className="flex justify-between items-center ">
             <div>
-              <h1 className="text-sm font-semibold leading-5 ">Shipyaari ID</h1>
+              <h1 className="font-Open font-semibold leading-5 text-sm">
+                Shipyaari ID
+              </h1>
             </div>
           </div>
         );
@@ -222,7 +232,9 @@ export const PassbookColumns = (setSortOrder: any) => {
       header: () => {
         return (
           <div className="flex whitespace-nowrap justify-between items-center w-[90px]">
-            <h1 className="text-sm font-semibold leading-5 ">Order ID</h1>
+            <h1 className="font-Open font-semibold leading-5 text-sm ">
+              Order ID
+            </h1>
             {/* <img src={sortIconTable} alt="" /> */}
           </div>
         );
@@ -230,7 +242,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex  items-center justify-between ">
-            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm">
               {info?.row?.original?.orderId}
             </div>
             <div className="cursor-pointer">
@@ -248,7 +260,9 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div className="flex justify-between items-center ">
             <div>
-              <h1 className="text-sm font-semibold leading-5 ">Tracking No</h1>
+              <h1 className="font-Open font-semibold leading-5 text-sm ">
+                Tracking No
+              </h1>
             </div>
           </div>
         );
@@ -275,7 +289,9 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div className={`flex justify-between items-center   `}>
             <div>
-              <h1 className="text-sm font-semibold leading-5 ">Credited </h1>
+              <h1 className="font-Open font-semibold leading-5 text-sm ">
+                Credited{" "}
+              </h1>
             </div>
             {/* <div className="flex">
               <img src={sortIconTable} alt="" />
@@ -285,7 +301,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex  ">
+          <div className="flex font-Open font-normal leading-5 text-sm ">
             {info?.row?.original?.type === "credit"
               ? `₹ ${info?.row?.original?.amount}`
               : "₹ 0"}
@@ -297,7 +313,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       header: () => {
         return (
           <div className="flex justify-between items-center  ">
-            <div>
+            <div className="font-Open font-semibold leading-5 text-sm">
               <h1>Debited</h1>
             </div>
             {/* <div className="flex">
@@ -309,7 +325,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         let debitedAmount = parseFloat(info?.row?.original?.amount).toFixed(2);
         return (
-          <div className="flex whitespace-nowrap   ">
+          <div className="flex whitespace-nowrap  font-Open font-normal leading-5 text-sm ">
             {info?.row?.original?.type === "debit"
               ? `₹ ${debitedAmount}`
               : "₹ 0"}
@@ -321,7 +337,9 @@ export const PassbookColumns = (setSortOrder: any) => {
       header: () => {
         return (
           <div className="flex justify-between items-center  min-w-[142px]">
-            <h1>Balance</h1>
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Balance
+            </h1>
             <img src={sortIconTable} alt="" onClick={handleSortClick} />
           </div>
         );
@@ -329,7 +347,11 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         let balance = parseFloat(info.getValue()).toFixed(2);
 
-        return <div className="flex whitespace-nowrap ">₹ {balance}</div>;
+        return (
+          <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
+            ₹ {balance}
+          </div>
+        );
       },
     }),
 
@@ -338,7 +360,9 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-sm font-semibold leading-5">Status</h1>
+              <h1 className="font-Open font-semibold leading-5 text-sm">
+                Status
+              </h1>
             </div>
             {/* <div className="flex">
               <img src={sortIconTable} alt="" />
@@ -356,7 +380,9 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-sm font-semibold leading-5">Description</h1>
+              <h1 className="font-Open font-semibold leading-5 text-sm">
+                Description
+              </h1>
             </div>
             {/* <div className="flex">
               <img src={sortIconTable} alt="" />
@@ -367,7 +393,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div>
-            <span className="font-Open font-normal text-sm leading-5 ">
+            <span className="font-Open font-normal leading-5 text-sm ">
               {info?.row?.original?.description}
             </span>
           </div>
@@ -379,7 +405,9 @@ export const PassbookColumns = (setSortOrder: any) => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1 className="text-sm font-semibold leading-5 ">Actions</h1>
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Actions
+            </h1>
           </div>
         );
       },
@@ -498,7 +526,9 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
 
         <Collapsible open={onOpen} trigger="">
           <div className="flex flex-col ml-4 mt-4">
-            <span className="text-[10px] text-[#777777] font-normal">Date</span>
+            <span className="font-Open font-semibold leading-5 text-sm">
+              Date
+            </span>
             <span className="text-xs text-[#1C1C1C] font-semibold">
               {date_DD_MMM_YYY(data?.date)}
             </span>

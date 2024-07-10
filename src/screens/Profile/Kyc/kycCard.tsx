@@ -2,6 +2,7 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
 import LabelContainer from "../../../components/LabelContainer";
+import shareIcon from "../../../assets/ShareIcon.svg";
 
 interface KYCProps {
   KycDetails: any;
@@ -26,14 +27,14 @@ export const ProfileKycCard = (props: KYCProps) => {
             KYC Details
           </span>
         </div>
-        {/* <div>
+        <div>
           <img
-            src={EditIcon}
+            src={shareIcon}
             alt=""
             className="mr-4 cursor-pointer"
-            onClick={() => navigate("/profile/edit-kyc")}
+            onClick={() => navigate("/onboarding/kyc-type")}
           />
-        </div> */}
+        </div>
       </div>
 
       {!isItLgScreen ? (

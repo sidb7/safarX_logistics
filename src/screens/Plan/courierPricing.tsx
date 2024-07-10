@@ -11,6 +11,7 @@ import RateCardTable from "./rateCardTable";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../components/Spinner";
+import { useSelector } from "react-redux";
 interface ICourierPricingPropTypes {
   logisticsData?: any;
   setLogisticsData?: any;
@@ -25,205 +26,8 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
   const [data, setData] = useState<any>({ b2bData: [], b2cData: [] });
 
   const [renderingComponents, setRenderingComponents] = useState(0);
-
-  const arrayData = [
-    { index: 0, label: "B2C" },
-    // { index: 1, label: "B2B" },
-  ];
-
-  let variableData: any;
-  let filterVariableData: any;
-  let ratesData: any;
-
-  const setScrollIndex = (id: number) => {
-    setRenderingComponents(id);
-  };
-
-  const columns = [
-    columnsHelper.accessor("serviceName", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center">
-            <div className="flex">
-              <h1 className="text-[0.875rem] font-Open font-semibold leading-5">
-                Service Name
-              </h1>
-            </div>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex justify-start text-[0.875rem] font-Open font-normal my-4 space-y-2">
-            {info.getValue()}
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("weightRangeSlab", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center ">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Weight Range Slab (Kgs)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className=" flex justify-between w-[30%] items-center text-[0.875rem] font-Open font-normal my-4 ">
-            <span>{info?.row?.original?.from}</span>
-            <span>to</span>
-            <span>{info?.row?.original?.to}</span>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("incremental", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center min-w-fit whitespace-nowrap">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Weight (Kgs)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="whitespace-nowrap flex  justify-start  text-[0.875rem] font-Open font-normal my-4 space-y-2">
-            {info?.row?.original?.weight}
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("zone1", {
-      header: () => {
-        return (
-          <div className="flex flex-col text-left min-w-fit whitespace-nowrap">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Zone 1 (Rs.)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="whitespace-nowrap w-[60%] items-baseline flex justify-between font-medium my-4 space-y-2 ">
-            <span className=" text-[0.875rem]   font-Open font-normal">
-              {info?.row?.original["ZONE 1"]?.add}
-            </span>
-            <span className="mx-2">|</span>
-            <span className="text-[0.875rem] space-x-2 font-Open font-normal flex text-blue-500">
-              <span className="">{info?.row?.original["ZONE 1"]?.base}</span>
-              <img src={upArrowBlue} alt="" />
-            </span>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("zone2", {
-      header: () => {
-        return (
-          <div className="flex flex-col text-left justify-between min-w-fit whitespace-nowrap">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Zone 2 (Rs.)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="whitespace-nowrap items-baseline w-[60%] flex justify-between font-medium my-4 space-y-2  ">
-            <span className="text-[0.875rem] font-Open font-normal">
-              {info?.row?.original["ZONE 2"]?.add}
-            </span>{" "}
-            <span className="mx-2">|</span>
-            <span className=" text-[0.875rem] font-Open font-normal space-x-2 flex text-blue-500">
-              <span>{info?.row?.original["ZONE 2"]?.base}</span>
-              <img src={upArrowBlue} alt="" />
-            </span>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("zone3", {
-      header: () => {
-        return (
-          <div className="flex flex-col text-left min-w-fit whitespace-nowrap">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Zone 3 (Rs.)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="items-baseline flex  w-[60%] justify-between font-medium my-4 space-y-2">
-            <span className="text-[0.875rem] font-Open font-normal">
-              {info?.row?.original["ZONE 3"]?.add}
-            </span>
-            <span className="mx-2">|</span>
-            <span className="text-[0.875rem] font-Open font-normal flex text-blue-500 space-x-2">
-              <span>{info?.row?.original["ZONE 3"]?.base}</span>
-              <img src={upArrowBlue} alt="" />
-            </span>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("zone4", {
-      header: () => {
-        return (
-          <div className="flex flex-col text-left min-w-fit whitespace-nowrap">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Zone 4 (Rs.)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="whitespace-nowrap w-[60%] items-baseline flex justify-between font-medium my-4 space-y-2">
-            <span className=" text-[0.875rem] font-Open font-normal">
-              {info?.row?.original["ZONE 4"]?.add}
-            </span>
-            <span className="mx-2">|</span>
-            <span className=" text-[0.875rem] font-Open font-normal flex text-blue-500 space-x-2">
-              <span>{info?.row?.original["ZONE 4"]?.base}</span>
-              <img src={upArrowBlue} alt="" />
-            </span>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("zone5", {
-      header: () => {
-        return (
-          <div className="flex flex-col text-left min-w-fit whitespace-nowrap">
-            <h1 className="text-[0.875rem] font-Open font-semibold leading-5 ">
-              Zone 5 (Rs.)
-            </h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="whitespace-nowrap items-baseline w-[60%] flex justify-between font-medium my-4 space-y-2">
-            <span className="text-[0.875rem] font-Open font-normal">
-              {info?.row?.original["ZONE 5"]?.add}
-            </span>{" "}
-            <span className="mx-2">|</span>
-            <span className="text-[0.875rem] font-Open font-normal flex text-blue-500 space-x-2">
-              <span>{info?.row?.original["ZONE 5"]?.base}</span>
-              <img src={upArrowBlue} alt="" />
-            </span>
-          </div>
-        );
-      },
-    }),
-  ];
+  // const [isMasked, setIsMasked] = useState(false);
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const variableColumns = [
     columnsHelper.accessor("serviceName", {
@@ -236,9 +40,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
               intermediate={props?.table?.getIsSomeRowsSelected()}
             /> */}
             <div>
-              <h1 className="text-sm font-Open font-semibold leading-5 ">
-                Term Type
-              </h1>
+              <h1 className="text-sm font-semibold leading-5 ">Term Type</h1>
             </div>
           </div>
         );
@@ -255,140 +57,70 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 className="!w-[16px]"
               />
             </div> */}
-            {termName["fuelSurcharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Fuel Surcharge
-              </div>
-            )}
+            {termName["fuelSurcharges"] && <div>Fuel Surcharge</div>}
             {termName["currencyAdjustmentCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Currency Adjustment Charges
-              </div>
+              <div>Currency Adjustment Charges</div>
             )}
             {termName["criticalPickupLocation"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Critical Pickup Location
-              </div>
+              <div>Critical Pickup Location</div>
             )}
             {termName["criticalDeliveryLocation"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Critical Delivery Location
-              </div>
+              <div>Critical Delivery Location</div>
             )}
             {termName["remoteAreaSurcharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Remote Area Surcharges
-              </div>
+              <div>Remote Area Surcharges</div>
             )}
 
-            {termName["outOfDeliveryArea"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Out Of Delivery Area
-              </div>
-            )}
+            {termName["outOfDeliveryArea"] && <div>Out Of Delivery Area</div>}
             {termName["reversePickUpSurcharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Reverse PickUp Surcharges
-              </div>
+              <div>Reverse PickUp Surcharges</div>
             )}
 
-            {termName["dieselMechanism"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Diesal Mechanism
-              </div>
-            )}
-            {termName["docketCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Docket Charges
-              </div>
-            )}
-            {termName["rov"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                ROV Charges
-              </div>
-            )}
-            {termName["fovCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                FOV Charges
-              </div>
-            )}
-            {termName["demurrage"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Demurrage
-              </div>
-            )}
+            {termName["dieselMechanism"] && <div>Diesal Mechanism</div>}
+            {termName["docketCharges"] && <div>Docket Charges</div>}
+            {termName["rov"] && <div>ROV Charges</div>}
+            {termName["fovCharges"] && <div>FOV Charges</div>}
+            {termName["demurrage"] && <div>Demurrage</div>}
 
-            {termName["re-attemptCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Re-Attempt Charges
-              </div>
-            )}
+            {termName["re-attemptCharges"] && <div>Re-Attempt Charges</div>}
             {termName["holidayPickup/DeliveryCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Holiday Pickup/Delivery Charges
-              </div>
+              <div>Holiday Pickup/Delivery Charges</div>
             )}
             {termName["greenTaxCharges(delhi-ncr)"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Green Tax Charges(Delhi-NCR)
-              </div>
+              <div>Green Tax Charges(Delhi-NCR)</div>
             )}
-            {termName["additionalCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Additional Charges
-              </div>
-            )}
+            {termName["additionalCharges"] && <div>Additional Charges</div>}
             {termName["handlingCharges(heavyShipment)"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Handling Charges(Heavy Shipment)
-              </div>
+              <div>Handling Charges(Heavy Shipment)</div>
             )}
             {termName["appoitmentBaseDeliveryCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Appoitment Base Delivery Charges
-              </div>
+              <div>Appoitment Base Delivery Charges</div>
             )}
             {termName["podCharge(hardCopies)"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                POD Charge (hardCopies)
-              </div>
+              <div>POD Charge (hardCopies)</div>
             )}
-            {termName["toPayCharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                To Pay Charges
-              </div>
-            )}
-            {termName["oda"] && (
-              <div className="text-sm font-Open font-normal leading-5">ODA</div>
-            )}
-            {termName["peakSurcharges"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Peak Surcharges
-              </div>
-            )}
-            {termName["baseCharge"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Base Charge
-              </div>
-            )}
+            {termName["toPayCharges"] && <div>To Pay Charges</div>}
+            {termName["oda"] && <div>ODA</div>}
+            {termName["peakSurcharges"] && <div>Peak Surcharges</div>}
+            {termName["baseCharge"] && <div>Base Charge</div>}
             {/* {termName["invoiceValue"] && (
               <div>Insurance Charges on Invoice value (Optional)</div>
             )} */}
-            {termName["pincodeCharge"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Pincode Charge
-              </div>
+            {termName["pincodeCharge"] && <div>Pincode Charge</div>}
+            {termName["addhocCharge"] && <div>Addhoc Charge</div>}
+            {termName["allWeight"] && <div>All Weight</div>}
+            {termName["deliveryagainstconsigneecopy"] && (
+              <div>Delivery against consignee copy</div>
             )}
-            {termName["addhocCharge"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                Addhoc Charge
-              </div>
+            {termName["sp.deliverycharge"] && <div>Sp. delivery charge</div>}
+            {termName["multistory"] && <div>Multi Story</div>}
+            {termName["keralahandlingcharges"] && (
+              <div>Kerala Handling Charges</div>
             )}
-            {termName["allWeight"] && (
-              <div className="text-sm font-Open font-normal leading-5">
-                All Weight
-              </div>
+            {termName["freestoragefacility"] && (
+              <div>Free Storage facility</div>
             )}
+            {termName["damageclaim"] && <div>Damage Claim</div>}
           </div>
         );
       },
@@ -397,9 +129,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
       header: () => {
         return (
           <div className="flex justify-between items-center max-w-[280px]">
-            <h1 className="text-sm font-Open font-semibold leading-5 ">
-              Definition
-            </h1>
+            <h1 className="text-sm font-semibold leading-5 ">Definition</h1>
           </div>
         );
       },
@@ -407,7 +137,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
         let termName = row?.original;
 
         return (
-          <div className="text-sm font-Open font-normal leading-5">
+          <div>
             {termName["fuelSurcharges"] && (
               <div>
                 Absolute Charge :{" "}
@@ -415,11 +145,9 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Percentage Charge :{" "}
                 {`${termName["fuelSurcharges"]?.percentageCharge || 0}%`},
                 Calculate On :{" "}
-                {`${termName["fuelSurcharges"]?.calculateOn || "N/A"}`},
+                {`${termName["fuelSurcharges"]?.calculateOn || "Base Charge"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["fuelSurcharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["fuelSurcharges"]?.preferenceTo || "Higher"}`}
               </div>
             )}
             {termName["currencyAdjustmentCharges"] && (
@@ -437,9 +165,9 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   termName["currencyAdjustmentCharges"]?.calculateOn || "N/A"
                 }`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
+                {`${
                   termName["currencyAdjustmentCharges"]?.preferenceTo || "N/A"
-                )}`}
+                }`}
               </div>
             )}
             {termName["criticalPickupLocation"] && (
@@ -455,9 +183,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 , Calculate On :{" "}
                 {`${termName["criticalPickupLocation"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["criticalPickupLocation"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["criticalPickupLocation"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["criticalDeliveryLocation"] && (
@@ -475,9 +201,9 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   termName["criticalDeliveryLocation"]?.calculateOn || "N/A"
                 }`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
+                {`${
                   termName["criticalDeliveryLocation"]?.preferenceTo || "N/A"
-                )}`}
+                }`}
               </div>
             )}
             {termName["remoteAreaSurcharges"] && (
@@ -489,9 +215,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["remoteAreaSurcharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["remoteAreaSurcharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["remoteAreaSurcharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
 
@@ -504,9 +228,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["outOfDeliveryArea"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["outOfDeliveryArea"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["outOfDeliveryArea"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["reversePickUpSurcharges"] && (
@@ -522,9 +244,9 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 , Calculate On :{" "}
                 {`${termName["reversePickUpSurcharges"]?.calculateOn || "N/A"}`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
+                {`${
                   termName["reversePickUpSurcharges"]?.preferenceTo || "N/A"
-                )}`}
+                }`}
               </div>
             )}
 
@@ -537,9 +259,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["dieselMechanism"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["dieselMechanism"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["dieselMechanism"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["docketCharges"] && (
@@ -551,9 +271,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["docketCharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["docketCharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["docketCharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["rov"] && (
@@ -562,9 +280,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 , Percentage Charge :{" "}
                 {`${termName["rov"]?.percentageCharge || 0}%`}, Calculate On :{" "}
                 {`${termName["rov"]?.calculateOn || "N/A"}`}, Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["rov"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["rov"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["fovCharges"] && (
@@ -575,9 +291,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 {`${termName["fovCharges"]?.percentageCharge || 0}%`}, Calculate
                 On : {`${termName["fovCharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["fovCharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["fovCharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["demurrage"] && (
@@ -588,9 +302,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 {`${termName["demurrage"]?.percentageCharge || 0}%`}, Calculate
                 On : {`${termName["demurrage"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["demurrage"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["demurrage"]?.preferenceTo || "N/A"}`}
               </div>
             )}
 
@@ -603,9 +315,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["re-attemptCharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["re-attemptCharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["re-attemptCharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["holidayPickup/DeliveryCharges"] && (
@@ -625,30 +335,30 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   "N/A"
                 }`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
+                {`${
                   termName["holidayPickup/DeliveryCharges"]?.preferenceTo ||
-                    "N/A"
-                )}`}
+                  "N/A"
+                }`}
               </div>
             )}
             {termName["greenTaxCharges(delhi-ncr)"] && (
               <div>
                 Absolute Charge :{" "}
                 {`Rs.${
-                  termName["greenTaxCharges(delhi-ncr"]?.absoluteCharge || 0
+                  termName["greenTaxCharges(delhi-ncr)"]?.absoluteCharge || 0
                 }`}{" "}
                 , Percentage Charge :{" "}
                 {`${
-                  termName["greenTaxCharges(delhi-ncr"]?.percentageCharge || 0
+                  termName["greenTaxCharges(delhi-ncr)"]?.percentageCharge || 0
                 }%`}
                 , Calculate On :{" "}
                 {`${
-                  termName["greenTaxCharges(delhi-ncr"]?.calculateOn || "N/A"
+                  termName["greenTaxCharges(delhi-ncr)"]?.calculateOn || "N/A"
                 }`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["greenTaxCharges(delhi-ncr"]?.preferenceTo || "N/A"
-                )}`}
+                {`${
+                  termName["greenTaxCharges(delhi-ncr)"]?.preferenceTo || "N/A"
+                }`}
               </div>
             )}
             {termName["additionalCharges"] && (
@@ -660,9 +370,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["additionalCharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["additionalCharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["additionalCharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["handlingCharges(heavyShipment)"] && (
@@ -683,10 +391,10 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   "N/A"
                 }`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
+                {`${
                   termName["handlingCharges(heavyShipment)"]?.preferenceTo ||
-                    "N/A"
-                )}`}
+                  "N/A"
+                }`}
               </div>
             )}
             {termName["appoitmentBaseDeliveryCharges"] && (
@@ -706,24 +414,22 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   "N/A"
                 }`}
                 , Preference To :{" "}
-                {`${capitalizeFirstLetter(
+                {`${
                   termName["appoitmentBaseDeliveryCharges"]?.preferenceTo ||
-                    "N/A"
-                )}`}
+                  "N/A"
+                }`}
               </div>
             )}
             {termName["podCharge(hardCopies)"] && (
               <div>
                 Absolute Charge :{" "}
-                {`Rs.${termName["podCharge(hardCopies"]?.absoluteCharge || 0}`}{" "}
+                {`Rs.${termName["podCharge(hardCopies)"]?.absoluteCharge || 0}`}{" "}
                 , Percentage Charge :{" "}
-                {`${termName["podCharge(hardCopies"]?.percentageCharge || 0}%`},
-                Calculate On :{" "}
-                {`${termName["podCharge(hardCopies"]?.calculateOn || "N/A"}`},
+                {`${termName["podCharge(hardCopies)"]?.percentageCharge || 0}%`}
+                , Calculate On :{" "}
+                {`${termName["podCharge(hardCopies)"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["podCharge(hardCopies"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["podCharge(hardCopies)"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["toPayCharges"] && (
@@ -735,9 +441,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["toPayCharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["toPayCharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["toPayCharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["oda"] && (
@@ -746,9 +450,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 , Percentage Charge :{" "}
                 {`${termName["oda"]?.percentageCharge || 0}%`}, Calculate On :{" "}
                 {`${termName["oda"]?.calculateOn || "N/A"}`}, Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["oda"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["oda"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["peakSurcharges"] && (
@@ -760,9 +462,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["peakSurcharges"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["peakSurcharges"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["peakSurcharges"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["baseCharge"] && (
@@ -773,9 +473,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 {`${termName["baseCharge"]?.percentageCharge || 0}%`}, Calculate
                 On : {`${termName["baseCharge"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["baseCharge"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["baseCharge"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {/* {termName["invoiceValue"] && (
@@ -790,9 +488,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["pincodeCharge"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["pincodeCharge"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["pincodeCharge"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["addhocCharge"] && (
@@ -804,9 +500,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 Calculate On :{" "}
                 {`${termName["addhocCharge"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["addhocCharge"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["addhocCharge"]?.preferenceTo || "N/A"}`}
               </div>
             )}
             {termName["allWeight"] && (
@@ -817,9 +511,87 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 {`${termName["allWeight"]?.percentageCharge || 0}%`}, Calculate
                 On : {`${termName["allWeight"]?.calculateOn || "N/A"}`},
                 Preference To :{" "}
-                {`${capitalizeFirstLetter(
-                  termName["allWeight"]?.preferenceTo || "N/A"
-                )}`}
+                {`${termName["allWeight"]?.preferenceTo || "N/A"}`}
+              </div>
+            )}
+            {termName["deliveryagainstconsigneecopy"] && (
+              <div>
+                Absolute Charge :{" "}
+                {`Rs.${
+                  termName["deliveryagainstconsigneecopy"]?.absoluteCharge || 0
+                }`}{" "}
+                , Percentage Charge :{" "}
+                {`${
+                  termName["deliveryagainstconsigneecopy"]?.percentageCharge ||
+                  0
+                }%`}
+                , Calculate On :{" "}
+                {`${
+                  termName["deliveryagainstconsigneecopy"]?.calculateOn || "N/A"
+                }`}
+                , Preference To :{" "}
+                {`${
+                  termName["deliveryagainstconsigneecopy"]?.preferenceTo ||
+                  "N/A"
+                }`}
+              </div>
+            )}
+            {termName["sp.deliverycharge"] && (
+              <div>
+                Absolute Charge :{" "}
+                {`Rs.${termName["sp.deliverycharge"]?.absoluteCharge || 0}`} ,
+                Percentage Charge :{" "}
+                {`${termName["sp.deliverycharge"]?.percentageCharge || 0}%`},
+                Calculate On :{" "}
+                {`${termName["sp.deliverycharge"]?.calculateOn || "N/A"}`},
+                Preference To :{" "}
+                {`${termName["sp.deliverycharge"]?.preferenceTo || "N/A"}`}
+              </div>
+            )}
+            {termName["multistory"] && (
+              <div>
+                Absolute Charge :{" "}
+                {`Rs.${termName["multistory"]?.absoluteCharge || 0}`} ,
+                Percentage Charge :{" "}
+                {`${termName["multistory"]?.percentageCharge || 0}%`}, Calculate
+                On : {`${termName["multistory"]?.calculateOn || "N/A"}`},
+                Preference To :{" "}
+                {`${termName["multistory"]?.preferenceTo || "N/A"}`}
+              </div>
+            )}
+            {termName["keralahandlingcharges"] && (
+              <div>
+                Absolute Charge :{" "}
+                {`Rs.${termName["keralahandlingcharges"]?.absoluteCharge || 0}`}{" "}
+                , Percentage Charge :{" "}
+                {`${termName["keralahandlingcharges"]?.percentageCharge || 0}%`}
+                , Calculate On :{" "}
+                {`${termName["keralahandlingcharges"]?.calculateOn || "N/A"}`},
+                Preference To :{" "}
+                {`${termName["keralahandlingcharges"]?.preferenceTo || "N/A"}`}
+              </div>
+            )}
+            {termName["freestoragefacility"] && (
+              <div>
+                Absolute Charge :{" "}
+                {`Rs.${termName["freestoragefacility"]?.absoluteCharge || 0}`} ,
+                Percentage Charge :{" "}
+                {`${termName["freestoragefacility"]?.percentageCharge || 0}%`},
+                Calculate On :{" "}
+                {`${termName["freestoragefacility"]?.calculateOn || "N/A"}`},
+                Preference To :{" "}
+                {`${termName["freestoragefacility"]?.preferenceTo || "N/A"}`}
+              </div>
+            )}
+            {termName["damageclaim"] && (
+              <div>
+                Absolute Charge :{" "}
+                {`Rs.${termName["damageclaim"]?.absoluteCharge || 0}`} ,
+                Percentage Charge :{" "}
+                {`${termName["damageclaim"]?.percentageCharge || 0}%`},
+                Calculate On :{" "}
+                {`${termName["damageclaim"]?.calculateOn || "N/A"}`}, Preference
+                To : {`${termName["damageclaim"]?.preferenceTo || "N/A"}`}
               </div>
             )}
           </div>
@@ -828,9 +600,24 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
     }),
   ];
 
-  const RatesForpartners: any = () => {
-    return logisticsData?.map((logisticsInfo: any, index: number) => {
-      if (logisticsData.length > 0) {
+  const arrayData = [
+    { index: 0, label: "B2C" },
+    { index: 1, label: "B2B" },
+  ];
+
+  let variableData: any;
+  let filterVariableData: any;
+
+  const setScrollIndex = (id: number) => {
+    setRenderingComponents(id);
+  };
+
+  const RatesB2CForpartners: any = () => {
+    let logisticsB2CData: any = logisticsData?.filter(
+      (el: any) => el?.accountType === "B2C"
+    );
+    return logisticsB2CData?.map((logisticsInfo: any, index: number) => {
+      if (logisticsB2CData.length > 0) {
         variableData = logisticsInfo?.variables;
         filterVariableData = variableData?.filter(
           (obj: any) => obj?.isActive === true
@@ -890,7 +677,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
                           {/* variable charges code commented for now as no requirement for now */}
 
-                          {/* <div className="ml-4 mt-6">
+                          <div className="ml-4 mt-6">
                             {" "}
                             <h4 className="text-[22px] font-Lato font-semibold">
                               Variable Charges{" "}
@@ -901,7 +688,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                                 columns={variableColumns}
                               />
                             </div>
-                          </div> */}
+                          </div>
                         </>
                       )}
                     </div>
@@ -915,20 +702,306 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
     });
   };
 
+  // if user isMasked then it will work
+  const RatesB2CForMaskedpartners: any = () => {
+    let logisticsB2CData: any = logisticsData?.filter(
+      (el: any) => el?.accountType === "B2C"
+    );
+
+    return logisticsB2CData?.map((logisticsInfo: any, index: number) => {
+      let firstB2CObject = logisticsInfo?.rates?.[0];
+
+      let serviceArray = firstB2CObject?.service?.slice(0, 2);
+      serviceArray?.forEach((element: any, i: number) => {
+        if (i < 2) {
+          if (element?.mode === "AIR") {
+            element.partnerServiceName = "Air";
+          } else if (element?.mode === "SURFACE") {
+            element.partnerServiceName = "SURFACE";
+          }
+        }
+      });
+
+      return (
+        <>
+          <div className="mt-5">
+            {/* {console.log("logisticsInfo?.rates", logisticsInfo?.rates)} */}
+            <div className="flex flex-col mb-2 " key={index}>
+              <div
+                className={`grid grid-cols-2 px-4  h-[50px] gap-y-6 cursor-pointer
+                        ${
+                          firstB2CObject?.isCollapse
+                            ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                            : "shadow-md rounded "
+                        }
+                        `}
+                onClick={() => {
+                  let temp = [...logisticsData];
+
+                  if (firstB2CObject.isCollapse === true) {
+                    firstB2CObject.isCollapse = false;
+                    setLogisticsData(temp);
+                  } else {
+                    firstB2CObject.isCollapse = true;
+                    setLogisticsData(temp);
+                  }
+                }}
+              >
+                <div className="flex items-center gap-x-2">
+                  <h1 className="self-center justify-start text-[16px] font-semibold font-Lato text-[#1C1C1C] whitespace-nowrap ">
+                    {/* {capitalizeFirstLetter(firstB2CObject.partnerName)} */}
+                    {capitalizeFirstLetter("Shipyaari")}
+                  </h1>
+                </div>
+                <div className="flex justify-end items-center gap-x-1">
+                  <img
+                    src={
+                      firstB2CObject.isCollapse === true
+                        ? UpArrowIcon
+                        : DownArrowIcon
+                    }
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => {}}
+                  />
+                </div>
+              </div>
+              {firstB2CObject.isCollapse && (
+                <>
+                  <div className="overflow-auto ">
+                    <RateCardTable serviceData={serviceArray} />
+                  </div>
+
+                  {/* variable charges code commented for now as no requirement for now */}
+
+                  <div className="ml-4 mt-6">
+                    {" "}
+                    <h4 className="text-[22px] font-Lato font-semibold">
+                      Variable Charges{" "}
+                    </h4>{" "}
+                    <div className="mt-7">
+                      <CustomTable
+                        data={filterVariableData || []}
+                        columns={variableColumns}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      );
+    });
+  };
+
+  const RatesB2BForpartners: any = () => {
+    let logisticsB2CData: any = logisticsData?.filter(
+      (el: any) => el?.accountType === "B2B"
+    );
+    return logisticsB2CData?.map((logisticsInfo: any, index: number) => {
+      if (logisticsB2CData.length > 0) {
+        variableData = logisticsInfo?.variables;
+        filterVariableData = variableData?.filter(
+          (obj: any) => obj?.isActive === true
+        );
+      }
+      return (
+        <>
+          <div className="mt-5">
+            {logisticsInfo?.rates.map((rateCard: any, index: number) => {
+              if (rateCard?.isActive === true) {
+                return (
+                  <>
+                    <div className="flex flex-col mb-2 " key={index}>
+                      <div
+                        className={`grid grid-cols-2 px-4  h-[50px] gap-y-6 cursor-pointer
+                        ${
+                          rateCard?.isCollapse
+                            ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                            : "shadow-md rounded "
+                        }
+                        `}
+                        onClick={() => {
+                          let temp = [...logisticsData];
+
+                          if (rateCard.isCollapse === true) {
+                            rateCard.isCollapse = false;
+                            setLogisticsData(temp);
+                          } else {
+                            rateCard.isCollapse = true;
+                            setLogisticsData(temp);
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <h1 className="self-center justify-start text-[16px] font-semibold font-Lato text-[#1C1C1C] whitespace-nowrap ">
+                            {capitalizeFirstLetter(rateCard.partnerName)}
+                          </h1>
+                        </div>
+                        <div className="flex justify-end items-center gap-x-1">
+                          <img
+                            src={
+                              rateCard.isCollapse === true
+                                ? UpArrowIcon
+                                : DownArrowIcon
+                            }
+                            alt=""
+                            className="cursor-pointer"
+                            onClick={() => {}}
+                          />
+                        </div>
+                      </div>
+                      {rateCard.isCollapse && (
+                        <>
+                          <div className="overflow-auto ">
+                            <RateCardTable serviceData={rateCard?.service} />
+                          </div>
+
+                          {/* variable charges code commented for now as no requirement for now */}
+
+                          <div className="ml-4 mt-6">
+                            {" "}
+                            <h4 className="text-[22px] font-Lato font-semibold">
+                              Variable Charges{" "}
+                            </h4>{" "}
+                            <div className="mt-7">
+                              <CustomTable
+                                data={filterVariableData || []}
+                                columns={variableColumns}
+                              />
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                );
+              }
+            })}
+          </div>
+        </>
+      );
+    });
+  };
+
+  // if user isMasked then it will work
+  const RatesB2BForMaskedpartners: any = () => {
+    let logisticsB2BData: any = logisticsData?.filter(
+      (el: any) => el?.accountType === "B2B"
+    );
+
+    return logisticsB2BData?.map((logisticsInfo: any, index: number) => {
+      let firstB2BObject = logisticsInfo?.rates?.[0];
+
+      let serviceArray = firstB2BObject?.service?.slice(0, 2);
+      serviceArray?.forEach((element: any, i: number) => {
+        if (i < 2) {
+          if (element?.mode === "AIR") {
+            element.partnerServiceName = "Air";
+          } else if (element?.mode === "SURFACE") {
+            element.partnerServiceName = "SURFACE";
+          }
+        }
+      });
+      return (
+        <>
+          <div className="mt-5">
+            {/* {console.log("logisticsInfo?.rates", logisticsInfo?.rates)} */}
+            <div className="flex flex-col mb-2 " key={index}>
+              <div
+                className={`grid grid-cols-2 px-4  h-[50px] gap-y-6 cursor-pointer
+                        ${
+                          firstB2BObject?.isCollapse
+                            ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                            : "shadow-md rounded "
+                        }
+                        `}
+                onClick={() => {
+                  let temp = [...logisticsData];
+
+                  if (firstB2BObject.isCollapse === true) {
+                    firstB2BObject.isCollapse = false;
+                    setLogisticsData(temp);
+                  } else {
+                    firstB2BObject.isCollapse = true;
+                    setLogisticsData(temp);
+                  }
+                }}
+              >
+                <div className="flex items-center gap-x-2">
+                  <h1 className="self-center justify-start text-[16px] font-semibold font-Lato text-[#1C1C1C] whitespace-nowrap ">
+                    {/* {capitalizeFirstLetter(firstB2BObject.partnerName)} */}
+                    {capitalizeFirstLetter("Shipyaari")}
+                  </h1>
+                </div>
+                <div className="flex justify-end items-center gap-x-1">
+                  <img
+                    src={
+                      firstB2BObject.isCollapse === true
+                        ? UpArrowIcon
+                        : DownArrowIcon
+                    }
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => {}}
+                  />
+                </div>
+              </div>
+              {firstB2BObject.isCollapse && (
+                <>
+                  <div className="overflow-auto ">
+                    <RateCardTable serviceData={serviceArray} />
+                  </div>
+
+                  {/* variable charges code commented for now as no requirement for now */}
+
+                  <div className="ml-4 mt-6">
+                    {" "}
+                    <h4 className="text-[22px] font-Lato font-semibold">
+                      Variable Charges{" "}
+                    </h4>{" "}
+                    <div className="mt-7">
+                      <CustomTable
+                        data={filterVariableData || []}
+                        columns={variableColumns}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      );
+    });
+  };
+
   useEffect(() => {
     (async () => {
       const { data } = await POST(COURIER_PRICING);
       if (data?.success) {
-        if (data.data[0].accountType === "B2C") {
-          setData({ ...data, b2cData: data.data[0].rates });
-        } else {
-          setData({ ...data, b2bData: data.data[0].rates });
-        }
+        // if (data.data[0].accountType === "B2C") {
+        //   setData(data?.data);
+        // } else {
+        //   setData({ ...data, b2bData: data.data[0].rates });
+        // }
+        setData(data?.data);
       } else {
         toast.error(data.message);
       }
     })();
   }, [renderingComponents]);
+
+  function getComponentToRender(renderingComponents: any, isMasked: any) {
+    if (renderingComponents === 0) {
+      return isMasked ? <RatesB2CForMaskedpartners /> : <RatesB2CForpartners />;
+    } else if (renderingComponents === 1) {
+      return isMasked ? <RatesB2BForMaskedpartners /> : <RatesB2BForpartners />;
+    } else {
+      return null; // Default case if no conditions are met
+    }
+  }
 
   return (
     <div>
@@ -941,20 +1014,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
       </div>
 
       <div className="mx-5 lg:ml-[20px] mb-[68px] customScroll ">
-        {/* {data[0].accountType==="B2C"} */}
-
-        {renderingComponents === 0 ? (
-          // <CustomTable columns={columns} data={data.b2cData || []} />
-          isLoading ? (
-            <div className="flex justify-center w-[100%] h-[40vh] items-center">
-              <Spinner />
-            </div>
-          ) : (
-            <RatesForpartners />
-          )
-        ) : (
-          <CustomTable columns={columns} data={data.b2bData || []} />
-        )}
+        {getComponentToRender(renderingComponents, isMasked)}
       </div>
     </div>
   );

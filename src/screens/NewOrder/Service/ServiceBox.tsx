@@ -21,6 +21,7 @@ interface IRadioButtonProps {
   selectedOption?: any;
   setSelectedOption?: any;
   ignoreRecommended?: boolean;
+  isMasked?: any;
 }
 
 const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
@@ -33,7 +34,9 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     selectedOption,
     setSelectedOption,
     ignoreRecommended,
+    isMasked,
   } = props;
+  console.log("options", options);
 
   const [surface, setSurface] = useState(true);
   const [air, setAir] = useState(true);
@@ -169,9 +172,11 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
             </div>
             <div className=" ">
               <p className="text-[16px] font-semibold font-Open pt-2">
-                {`${toPascalCase(option.text?.partnerName)}: ${toPascalCase(
-                  option.text?.companyServiceName
-                )}`}
+                {isMasked
+                  ? "Shipyaari"
+                  : `${toPascalCase(option.text?.partnerName)}: ${toPascalCase(
+                      option.text?.companyServiceName
+                    )}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
                 {`\u20B9`}{" "}

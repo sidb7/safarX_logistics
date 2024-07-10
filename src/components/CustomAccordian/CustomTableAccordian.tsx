@@ -6702,6 +6702,7 @@ import OneButton from "../Button/OneButton";
 
 interface ICustomTableAccordion {
   getAllSellerData?: any;
+  isMasked?: any;
 }
 
 const Accordion = (props: ICustomTableAccordion) => {

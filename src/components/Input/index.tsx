@@ -1,5 +1,8 @@
 import { Tooltip } from "react-tooltip";
 import "../../styles/inputBox.css";
+import InfoCircle from "../../assets/info-circle.svg";
+import React, { useState } from "react";
+
 interface propTypes {
   label?: string;
   value?: string | number;
@@ -35,7 +38,14 @@ interface propTypes {
   ref?: any;
   title?: any;
   id?: any;
-  borderColor?: any;
+  errorCondition?: {
+    // regex?: RegExp | string; // Accept either a RegExp object or a string representing the regex pattern
+    message?: string;
+    // onBlur?: boolean; // Add this line
+  };
+  range?: boolean; // Add this line
+  startDateValue?: string; // Add this line
+  endDateValue?: string; // Add this line
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -76,8 +86,36 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     title = "",
     ref = {},
     id,
-    borderColor,
+    errorCondition, // Added errorCondition prop
+
+    // Add the following props
+    range = false,
+    startDateValue = "",
+    endDateValue = "",
   } = props;
+
+  // Function to check if the error condition is met
+  // const isErrorConditionMet = (value: string, onBlur: boolean = false) => {
+  //   if (
+  //     errorCondition &&
+  //     (errorCondition.regex instanceof RegExp ||
+  //       typeof errorCondition.regex === "string")
+  //   ) {
+  //     const regex =
+  //       typeof errorCondition.regex === "string"
+  //         ? new RegExp(errorCondition.regex)
+  //         : errorCondition.regex;
+  //     if (onBlur) {
+  //       return !regex.test(value);
+  //     } else {
+  //       return false; // Return false if not on blur
+  //     }
+  //   }
+  //   return false;
+  // };
+
+  // NEW: Add state variable to track focus state
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <div className="flex  flex-col text-start  w-full">
@@ -88,12 +126,22 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           type={inputType}
           placeholder={placeholder}
           className={`${className} ${
-            errorMessage !== true && errorMessage !== false && "!border-[red]"
-          }  ${inputError && !value ? "border-red-500" : "border-[#A4A4A4]"}
+            errorMessage !== true &&
+            errorMessage !== false &&
+            "!border-[#F35838]"
+          }  ${
+            (!isFocused && errorCondition?.message) || (inputError && !value)
+              ? "border-[#F35838]"
+              : "border-[#A4A4A4]"
+          }
            rounded border-[1px] w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
-          onBlur={(e: any) => onBlur(e)}
+          onBlur={(e) => {
+            onBlur(e);
+            setIsFocused(false); // Set isFocused to false on blur
+          }}
+          onFocus={() => setIsFocused(true)} // Set isFocused to true on focus
           autoComplete={autoComplete}
           value={value}
           defaultValue={defaultValue}
@@ -109,9 +157,11 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 
         <label
           className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
-            (value || tempLabel) && "filled"
+            (value || tempLabel || isFocused) && "filled"
           } ${
-            errorMessage !== true && errorMessage !== false && "!text-[red] "
+            errorMessage !== true &&
+            errorMessage !== false &&
+            "!text-[#F35838] "
           }`}
           htmlFor={id}
         >
@@ -152,7 +202,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           />
         </div>
       </div>
-      <span
+      {/* <span
         className={`text-[red] transition-all ease-out h-0 ${
           errorMessage !== false &&
           errorMessage !== true &&
@@ -160,14 +210,43 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         } opacity-0 delay-100 font-Open text-[11px] mt-1 px-2 `}
       >
         {errorMessage && errorMessage}
-      </span>
+      </span> */}
 
-      {inputError && !value && (
+      {errorMessage !== false && errorMessage !== true && (
+        <div className="flex items-center gap-x-1 mt-1">
+          <img src={InfoCircle} alt="" width={16} height={16} />
+          <span className="font-normal text-[#F35838] text-xs leading-3">
+            {errorMessage && errorMessage}
+          </span>
+        </div>
+      )}
+
+      {/* {inputError && !value && (
         <span
-          className={`text-[red] transition-all ease-out h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
+          className={`text-[red] transition-all ease-out h-[18px] delay-100 font-Open font-normal text-[12px] mt-1 px-2 leading-4`}
         >
           Field is required
         </span>
+      )} */}
+
+      {inputError && !value && (
+        <div className="flex items-center gap-x-1 mt-1">
+          <img src={InfoCircle} alt="" width={16} height={16} />
+          <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
+            Field is required
+          </span>
+        </div>
+      )}
+
+      {/* Render dynamic error message based on errorCondition */}
+      {/* Render dynamic error message based on errorCondition */}
+      {!isFocused && errorCondition?.message && (
+        <div className="flex items-center gap-x-1 mt-1">
+          <img src={InfoCircle} alt="" width={16} height={16} />
+          <span className="font-normal text-[#F35838] text-xs leading-3">
+            {errorCondition.message}
+          </span>
+        </div>
       )}
     </div>
   );

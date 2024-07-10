@@ -37,12 +37,21 @@ const Tracking = () => {
   const [orderType, setOrderType] = useState<any>(false);
   const [rtoAwbNo, setRtoAwbNo] = useState<any>();
   const [cancelledOrder, setCancelledOrder] = useState<any>(false);
+
   const [lastUpdate, setLastUpdate] = useState<any>({
     time: "",
     day: "",
     date: "",
     hours: "",
   });
+
+  const [isMasked, setIsMasked] = useState(false);
+  useEffect(() => {
+    let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+    if (temp) {
+      setIsMasked(temp?.isMaskedUser);
+    }
+  }, []);
 
   const steps = [
     {
@@ -374,7 +383,11 @@ const Tracking = () => {
                                       <>
                                         <div className="flex flex-col md:flex-row justify-between gap-y-1 md:gap-y-0">
                                           <img
-                                            src={each?.logoUrl}
+                                            src={
+                                              isMasked
+                                                ? LARGE_LOGO
+                                                : each?.logoUrl
+                                            }
                                             alt=""
                                             className="w-20"
                                           />

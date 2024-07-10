@@ -211,7 +211,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                 </div>
               </div>
               <div>
-                <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
+                <div className="flex flex-col px-5 py-10 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
                   <div>
                     <span className="text-xl font-semibold leading-[26px] font-Lato capitalize">
                       {question}
@@ -223,7 +223,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                       onChange={(e) => handlerDropDown(e)}
                       heading="Select Your Industry"
                       value={dropDownvalue}
-                      selectClassName="!h-[38px] "
+                      selectClassName="!h-[48px] "
                     />
                   </div>
                 </div>
