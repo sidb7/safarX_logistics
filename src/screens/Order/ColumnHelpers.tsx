@@ -1817,7 +1817,9 @@ export const columnHelpersForRest = (
               <div className="py-2 flex flex-col">
                 <span className="text-sm font-light">Delivery Partner</span>
                 <div className="font-semibold">
-                  {capitalizeFirstLetter(service?.partnerName)}
+                  {isMasked
+                    ? "Shipyaari"
+                    : capitalizeFirstLetter(service?.partnerName)}
                 </div>
               </div>
 
