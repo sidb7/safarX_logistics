@@ -6950,7 +6950,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [dropDownContent, setDropDownContent] = useState<any>(false);
   const [existingBox, setExistingBox] = useState<any>(false);
   const [addnewBox, setAddNewBox] = useState<any>(false);
-  const { getAllSellerData } = props;
+  const { getAllSellerData, isMasked } = props;
   let servicePartnerServiceId: any;
 
   const mainDate: any = convertEpochToDateTimeV2(
@@ -7530,7 +7530,16 @@ const Accordion = (props: ICustomTableAccordion) => {
                 setServiceIndex(index)
               );
             });
-          setServiceList(response?.data?.data);
+          // setServiceList(response?.data?.data);
+          if (isMasked) {
+            let slice: any = response?.data?.data.slice(0, 2);
+            slice.forEach((element: any) => {
+              element.partnerName = "Shipyaari";
+            });
+            setServiceList(slice);
+          } else {
+            setServiceList(response?.data?.data);
+          }
           setServiceRefresh(false);
           setAddressOpenModal(true);
         } else {
