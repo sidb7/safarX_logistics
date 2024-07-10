@@ -10897,11 +10897,11 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 Partner Name
                                                               </p>
                                                               <p className="font-open">
-                                                                {
-                                                                  item[
-                                                                    "Partner Name"
-                                                                  ]
-                                                                }
+                                                                {isMasked
+                                                                  ? "Shipyaari"
+                                                                  : item[
+                                                                      "Partner Name"
+                                                                    ]}
                                                               </p>
                                                             </div>
                                                             <div className="flex justify-between mx-2">
