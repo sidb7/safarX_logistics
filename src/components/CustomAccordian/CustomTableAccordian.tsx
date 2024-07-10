@@ -6716,11 +6716,14 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
 
   const [boxName, setBoxName] = useState(false);
+
+  console.log("boxName", boxName);
+
   const [openIndex, setOpenIndex] = useState<any>(null);
 
   const [orderDetails, setOrderDetails]: any = useState([]);
   const [apiCall, setApiCall] = useState<any>(false);
-
+  const [source, setSource]: any = useState("");
   const [openPickupDatePicker, setOpenPickupDatePicker] =
     useState<Boolean>(false);
   const [isLoading, setIsLoading]: any = useState(false);
@@ -7430,14 +7433,23 @@ const Accordion = (props: ICustomTableAccordion) => {
       orders: [orderPayload],
     };
     const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, payload);
+    // console.log("🚀 ~ placeOrder ~ placeOrderPromise:", placeOrderPromise);
     let promisePlaceOrder = new Promise(function (resolve, reject) {
       resolve(placeOrderPromise);
     });
+
+    // if (placeOrderPromise?.data?.success) {
+    //   toast.success(placeOrderPromise?.data?.message);
+    //   //   navigate("/orders/view-orders?activeTab=booked");
+    // } else {
+    //   toast.error(placeOrderPromise?.data?.message);
+    // }
+
     promisePlaceOrder
       .then((orderPlaceResponse: any) => {
-        if (orderPlaceResponse?.success) {
+        if (orderPlaceResponse?.status) {
           toast.success(orderPlaceResponse?.data?.message);
-          navigate("/orders/view-orders?activeTab=booked");
+          //   navigate("/orders/view-orders?activeTab=booked");
         } else {
           toast.error(orderPlaceResponse?.data?.message);
         }
@@ -7510,6 +7522,13 @@ const Accordion = (props: ICustomTableAccordion) => {
         const response = await POST(GET_SERVICE_LIST_ORDER, payload);
         if (response?.status) {
           setServiceLoading(false);
+          if (serviceList.length === 0)
+            response?.data?.data?.map((id: any, index: number) => {
+              return (
+                id.partnerServiceId == servicePartnerServiceId &&
+                setServiceIndex(index)
+              );
+            });
           setServiceList(response?.data?.data);
           setServiceRefresh(false);
           setAddressOpenModal(true);
@@ -7529,7 +7548,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
-    console.log("orderDetails: ", orderDetails);
     if (addressOpen?.current == false) {
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
       if (
@@ -7630,6 +7648,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         } else {
           toast.error(data?.message || "Something went wrong");
         }
+        return;
       } catch (error) {
         console.log(error);
       }
@@ -7918,6 +7937,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         updateData.orderId = rowsData?.orderId;
         updateData.tempOrderId = rowsData?.tempOrderId;
         updateData.source = rowsData?.source;
+        setSource(rowsData?.source);
         setUpdatePayload({ ...updateData });
 
         let rows: any = [
@@ -7972,7 +7992,8 @@ const Accordion = (props: ICustomTableAccordion) => {
           "GST Number": rowsData?.deliveryAddress?.gstNumber,
         });
 
-        let boxObj: any = { title: "" };
+        let boxObj: any = { title: "Box Info" };
+        if (rowsData?.boxInfo?.length === 0) rows.push(boxObj);
         rowsData?.boxInfo?.map((item: any, index: any) => {
           let title = `Box Info ${
             rowsData?.boxInfo?.length > 1 ? `${index + 1}` : ""
@@ -8634,7 +8655,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
       !getDeliveryAddressData?.deliveryAddress?.city ||
       !getDeliveryAddressData?.deliveryAddress?.contact?.contactName ||
-      getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
+      // getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
       //     ?.length === 0 ||
       // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
       //     ?.length === 0 ||
@@ -8666,7 +8687,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
       getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-      getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+      // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
       getPickAddressData?.pickUpAddress?.city?.length === 0 ||
       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
@@ -8702,18 +8723,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     //box and product
 
-    if (
-      boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
-      // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.name === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.length === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.height === 0 ||
-      isBoxError ||
-      (selectBoxIndex === 0 &&
-        boxProductDetails?.boxInfo?.[0]?.name === "Box 1")
-    ) {
-      // let element4: any = document.getElementById("Box Info  Product(s) x 5");
+    if (boxProductDetails?.boxInfo?.length === 0) {
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
 
       // let element5: any = document.getElementById("Box 1");
@@ -8724,55 +8734,83 @@ const Accordion = (props: ICustomTableAccordion) => {
 
       if (element4 && !enabled) element4.classList.add("!border-red-500");
       if (element5 && !enabled) element5.style.borderColor = "red";
-      // if (element5) element5.classList.add("!border-red-500");
-    } else {
-      // let element4: any = document.getElementById("Box Info  Product(s) x 5");
-      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-      // let element5: any = document.getElementById("Box 1");
-      // let element5: any = document.getElementById(
-      //     `${boxProductDetails?.boxInfo?.[0]?.name}`
-      // );
-      let element5: any = document.getElementById(
-        // `${boxProductDetails?.boxInfo?.[0]?.name}`
-        "Box 1"
-      );
-
-      if (element4) element4.style.borderColor = "#E8E8E8";
-      if (element5 && !enabled) element5.style.borderColor = "#E8E8E8";
     }
 
-    for (
-      let i = 0;
-      i < boxProductDetails?.boxInfo?.[0]?.products?.length;
-      i++
-    ) {
+    if (source !== "UNICOMMERCE") {
       if (
-        boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0
-        //commenting as not mandatory
-        // ||
-        // boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
-        // boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
-        // boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
+        boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
+        // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.name === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.length === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
+        boxProductDetails?.boxInfo?.[0]?.height === 0 ||
+        isBoxError
       ) {
-        let element6 = document.getElementById(
-          `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+        // let element4: any = document.getElementById("Box Info  Product(s) x 5");
+        let element4: any = document.getElementById(
+          `${orderDetails[2]?.title}`
         );
 
-        let element4: any = document.getElementById(
-          `${orderDetails[2]?.title}`
+        // let element5: any = document.getElementById("Box 1");
+        let element5: any = document.getElementById(
+          // `${boxProductDetails?.boxInfo?.[0]?.name}`
+          "Box 1"
         );
-        if (element6) element6.style.borderColor = "red";
-        if (element4 && !enabled) element4.style.borderColor = "red";
-        // break;
+
+        if (element4 && !enabled) element4.classList.add("!border-red-500");
+        if (element5 && !enabled) element5.style.borderColor = "red";
+        // if (element5) element5.classList.add("!border-red-500");
       } else {
+        // let element4: any = document.getElementById("Box Info  Product(s) x 5");
         let element4: any = document.getElementById(
           `${orderDetails[2]?.title}`
         );
-        let element6 = document.getElementById(
-          `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+        // let element5: any = document.getElementById("Box 1");
+        // let element5: any = document.getElementById(
+        //     `${boxProductDetails?.boxInfo?.[0]?.name}`
+        // );
+        let element5: any = document.getElementById(
+          // `${boxProductDetails?.boxInfo?.[0]?.name}`
+          "Box 1"
         );
-        if (element6) element6.style.borderColor = "#E8E8E8";
+
         if (element4) element4.style.borderColor = "#E8E8E8";
+        if (element5 && !enabled) element5.style.borderColor = "#E8E8E8";
+      }
+
+      for (
+        let i = 0;
+        i < boxProductDetails?.boxInfo?.[0]?.products?.length;
+        i++
+      ) {
+        if (
+          boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0
+          //commenting as not mandatory
+          // ||
+          // boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
+          // boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
+          // boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
+        ) {
+          let element6 = document.getElementById(
+            `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+          );
+
+          let element4: any = document.getElementById(
+            `${orderDetails[2]?.title}`
+          );
+          if (element6) element6.style.borderColor = "red";
+          if (element4 && !enabled) element4.style.borderColor = "red";
+          // break;
+        } else {
+          let element4: any = document.getElementById(
+            `${orderDetails[2]?.title}`
+          );
+          let element6 = document.getElementById(
+            `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+          );
+          if (element6) element6.style.borderColor = "#E8E8E8";
+          if (element4) element4.style.borderColor = "#E8E8E8";
+        }
       }
     }
   };
@@ -8788,7 +8826,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+        // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.landmark?.trim().length ===
         //     0 ||
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
@@ -8834,19 +8872,20 @@ const Accordion = (props: ICustomTableAccordion) => {
         // getDeliveryAddressData?.deliveryAddress?.contact?.contactType
         //   ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
-          0 ||
+        // getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
+        //   0 ||
         // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
         //     ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
-        getDeliveryAddressData?.deliveryAddress?.pincode === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.pincode === 0
+        // ||
         // getDeliveryAddressData?.deliveryAddress?.addressType?.length ===
         //     0 ||
-        (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
-          getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
+        // (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
+        //   getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
       ) {
         setErrorsArray([...errorsArray, "deliveryAddress"]);
         setOpen({
@@ -8983,13 +9022,13 @@ const Accordion = (props: ICustomTableAccordion) => {
     // );
   }, [boxProductDetails]);
 
-  useEffect(() => {
-    serviceList.map((id: any, index: number) => {
-      return (
-        id.partnerServiceId == servicePartnerServiceId && setServiceIndex(index)
-      );
-    });
-  }, [serviceList]);
+  // useEffect(() => {
+  //   serviceList.map((id: any, index: number) => {
+  //     return (
+  //       id.partnerServiceId == servicePartnerServiceId && setServiceIndex(index)
+  //     );
+  //   });
+  // }, []);
 
   useEffect(() => {
     handlePriorValidation();
@@ -9001,6 +9040,8 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxProductDetails,
     openIndex,
   ]);
+
+  console.log("orderDetails: ", orderDetails);
 
   return (
     <div className="overflow-auto h-[100%] pb-[2rem]">
@@ -9102,7 +9143,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                   return index === 0 ? (
                                     ""
                                   ) : item?.title?.includes("Box") &&
-                                    index === 4 ? (
+                                    index === 4 &&
+                                    boxProductDetails?.boxInfo?.length > 0 ? (
                                     <div
                                       className="items-center flex flex-col gap-y-[1rem] justify-between my-5 w-[100%]"
                                       style={{
@@ -9688,7 +9730,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 <div className="border border-black-600 px-5 rounded-md">
                                                   {boxAccordian && (
                                                     <>
-                                                      {boxDetailsData?.length ===
+                                                      {boxProductDetails
+                                                        ?.boxInfo?.length ===
                                                       0 ? (
                                                         <>
                                                           <p className="font-open text-[14px] font-medium mt-6">
@@ -9724,91 +9767,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {enabled && (
-                                                            <div>
-                                                              <div className="my-4">
-                                                                <CustomInputBox
-                                                                  label="Box Name"
-                                                                  onChange={(
-                                                                    e
-                                                                  ) => {}}
-                                                                  value={
-                                                                    eachBox?.name
-                                                                  }
-                                                                />
-                                                              </div>
-
-                                                              <div className="grid grid-cols-2 gap-x-2">
-                                                                <div>
-                                                                  <CustomInputBox
-                                                                    label="Dead Weight"
-                                                                    onChange={(
-                                                                      e
-                                                                    ) => {}}
-                                                                    value={
-                                                                      eachBox?.deadWeight
-                                                                    }
-                                                                  />
-                                                                </div>
-                                                                <div>
-                                                                  <CustomInputBox
-                                                                    label="Volumetric Weight"
-                                                                    onChange={(
-                                                                      e
-                                                                    ) => {}}
-                                                                    value={
-                                                                      eachBox?.volumetricWeight
-                                                                    }
-                                                                  />
-                                                                </div>
-                                                              </div>
-                                                              <div className="grid grid-cols-2 gap-x-2 mt-3">
-                                                                <div>
-                                                                  <CustomDropDown
-                                                                    onChange={() => {}}
-                                                                    options={
-                                                                      measureUnits
-                                                                    }
-                                                                  />
-                                                                </div>
-                                                                <div className="grid  grid-cols-3 gap-x-2">
-                                                                  <div>
-                                                                    <CustomInputBox
-                                                                      label="Length"
-                                                                      onChange={(
-                                                                        e
-                                                                      ) => {}}
-                                                                      value={
-                                                                        eachBox?.length
-                                                                      }
-                                                                    />
-                                                                  </div>
-                                                                  <div>
-                                                                    <CustomInputBox
-                                                                      label="Breadth"
-                                                                      onChange={(
-                                                                        e
-                                                                      ) => {}}
-                                                                      value={
-                                                                        eachBox?.breadth
-                                                                      }
-                                                                    />
-                                                                  </div>
-                                                                  <div>
-                                                                    <CustomInputBox
-                                                                      label="Height"
-                                                                      onChange={(
-                                                                        e
-                                                                      ) => {}}
-                                                                      value={
-                                                                        eachBox?.height
-                                                                      }
-                                                                    />
-                                                                  </div>
-                                                                </div>
-                                                              </div>
-                                                            </div>
-                                                          )}
                                                           {!enabled && (
                                                             <div className="mt-4">
                                                               <CustomDropDown
@@ -9917,10 +9875,124 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 />
                                                               </span>
                                                               <span className="font-open mt-1 ">
-                                                                Add Your Box
+                                                                Customize Your
+                                                                Box
                                                               </span>
                                                             </p>
                                                           )}
+                                                          {/* {boxName === false
+                                                            ? "box"
+                                                            : "Product"} */}
+                                                          {
+                                                            !boxName &&
+                                                              !customInpuBox &&
+                                                              !existingBox && (
+                                                                <div>
+                                                                  <div className="my-4">
+                                                                    <CustomInputBox
+                                                                      label="Box Name"
+                                                                      onChange={(
+                                                                        e
+                                                                      ) => {}}
+                                                                      value={
+                                                                        eachBox?.name
+                                                                      }
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                    />
+                                                                  </div>
+
+                                                                  <div className="grid grid-cols-2 gap-x-2">
+                                                                    <div>
+                                                                      <CustomInputBox
+                                                                        label="Dead Weight"
+                                                                        onChange={(
+                                                                          e
+                                                                        ) => {}}
+                                                                        value={
+                                                                          eachBox?.deadWeight
+                                                                        }
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                      />
+                                                                    </div>
+                                                                    <div>
+                                                                      <CustomInputBox
+                                                                        label="Volumetric Weight"
+                                                                        onChange={(
+                                                                          e
+                                                                        ) => {}}
+                                                                        value={
+                                                                          eachBox?.volumetricWeight
+                                                                        }
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                      />
+                                                                    </div>
+                                                                  </div>
+                                                                  <div className="grid grid-cols-2 gap-x-2 mt-3">
+                                                                    <div>
+                                                                      <CustomDropDown
+                                                                        onChange={() => {}}
+                                                                        options={
+                                                                          measureUnits
+                                                                        }
+                                                                      />
+                                                                    </div>
+                                                                    <div className="grid  grid-cols-3 gap-x-2">
+                                                                      <div>
+                                                                        <CustomInputBox
+                                                                          label="Length"
+                                                                          onChange={(
+                                                                            e
+                                                                          ) => {}}
+                                                                          value={
+                                                                            eachBox?.length
+                                                                          }
+                                                                          isDisabled={
+                                                                            true
+                                                                          }
+                                                                        />
+                                                                      </div>
+                                                                      <div>
+                                                                        <CustomInputBox
+                                                                          label="Breadth"
+                                                                          onChange={(
+                                                                            e
+                                                                          ) => {}}
+                                                                          value={
+                                                                            eachBox?.breadth
+                                                                          }
+                                                                          isDisabled={
+                                                                            true
+                                                                          }
+                                                                        />
+                                                                      </div>
+                                                                      <div>
+                                                                        <CustomInputBox
+                                                                          label="Height"
+                                                                          onChange={(
+                                                                            e
+                                                                          ) => {}}
+                                                                          value={
+                                                                            eachBox?.height
+                                                                          }
+                                                                          isDisabled={
+                                                                            true
+                                                                          }
+                                                                        />
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              )
+                                                            //   : (
+                                                            //     <div>hello</div>
+                                                            //   )
+                                                          }
                                                           <div className=" my-2">
                                                             {customInpuBox && (
                                                               <div className="">
@@ -10274,6 +10346,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             )}
                                                             {/* existing box */}
                                                             {existingBox && (
+                                                              //   !customInpuBox &&
+                                                              //   !boxName &&
                                                               <div className=" my-1 pb-1">
                                                                 <div className="mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
                                                                   <p className="text-[16px] font-open ">
@@ -10759,6 +10833,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                               service.partnerName
                                                                             }
                                                                             className="!w-4"
+                                                                            style={{
+                                                                              accentColor:
+                                                                                "black",
+                                                                            }}
                                                                             readOnly={
                                                                               true
                                                                             }
@@ -12116,9 +12194,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       });
                                                     }
                                                   }}
-                                                  // inputError={
-                                                  //     inputError
-                                                  // }
+                                                  inputError={inputError}
                                                 />
                                               </div>
                                               <div className="xl:w-[274px]">

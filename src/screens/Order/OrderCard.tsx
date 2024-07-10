@@ -127,7 +127,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
     } else if (
       currentStatus === "BOOKED" ||
       "CANCELLED" ||
-      "READY TO PICK" ||
+      "PICKED UP" ||
       "IN TRANSIT" ||
       "OUT OF DELIVERY" ||
       "DELIVERED" ||
@@ -158,7 +158,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
         { title: "Download Label", actionType: "download_label" },
         { title: "Download Invoice", actionType: "download_invoice" },
       ],
-      "READY TO PICK": [
+      "PICKED UP": [
         { title: "Track Order", actionType: "track_order" },
         { title: "Download Label", actionType: "download_label" },
         { title: "Download Invoice", actionType: "download_invoice" },

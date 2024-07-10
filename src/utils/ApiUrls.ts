@@ -146,7 +146,6 @@ const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
-
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -591,8 +590,9 @@ export {
   CHANGE_PASSWORD,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
+  DUPLICATE_ORDER,
   GET_ALLPARTNER_OFSELLER,
   UPDATE_ALLPARTNER_OF_SELLER,
   GET_ALLPARTNERS_OF_RULEENGINE,
-  DUPLICATE_ORDER,
+  // DUPLICATE_ORDER,
 };
