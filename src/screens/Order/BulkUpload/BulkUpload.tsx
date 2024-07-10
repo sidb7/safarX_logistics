@@ -191,7 +191,7 @@ const BulkUpload = (props: ITypeProps) => {
                 B2C
               </p>
 
-              {/* commented as instructed */}
+              {/* uncommented as instructed */}
               <Checkbox
                 checked={selectedOption === "B2B"}
                 onChange={() => handleOptionSelect("B2B")}

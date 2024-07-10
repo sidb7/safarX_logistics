@@ -34,6 +34,7 @@ import {
   GET_ORDER_ERRORS,
   RECHARGE_STATUS,
   PAYMENT_ERRORS,
+  DUPLICATE_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -81,6 +82,16 @@ import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
 import DoneIcon from "../../assets/Done .svg";
 import DateButton from "../../components/Button/DateButton";
+import OrderUpdationModal from "../Order/OrderUpdationModal";
+import { DuplicateModel } from "../../components/Duplicate";
+// import OrderUpdationModal from "../Order/OrderUpdationModal";
+
+import ShopifyIcon from "../../assets/Catalogue/shopifyLg.svg";
+import WoocommerceIcon from "../../assets/Catalogue/WooCommerceLg.svg";
+import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
+import CustomSwitchToggle from "../../components/CustomSwitchToggle";
+// import { DuplicateModel } from "../../components/Duplicate";
+
 let allOrdersCount: any;
 
 const Buttons = (className?: string) => {
@@ -259,6 +270,8 @@ const Index = () => {
     awbNo: "",
     orderId: "",
   });
+  const [isChannelPartner, setIsChannelPartner] = useState(false);
+  const [storeDetails, setStoreDetails] = useState([]);
 
   let thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -268,6 +281,10 @@ const Index = () => {
     payload: "",
   });
   const [partnerModalData, setPartnerModalData]: any = useState({
+    isOpen: false,
+    data: [],
+  });
+  const [duplicateOrderModalData, setDuplicateOrderModalData]: any = useState({
     isOpen: false,
     data: [],
   });
@@ -785,15 +802,24 @@ const Index = () => {
 
       const { data } = await POST(POST_SYNC_ORDER, payload);
       if (data?.success) {
-        toast.success("Sync In Progress", {
-          className: "custom-toast-success",
-        });
-        setTimeout(() => {
-          window.location.href = "/orders/view-orders?activeTab=draft";
-          window.onload = () => {
-            window.location.reload();
-          };
-        }, 18000);
+        if (data?.message.includes("CHANNELPARTNER")) {
+          setIsChannelPartner(true);
+          setIsSyncModalLoading(false);
+          toast.success("Channel Partner Exists", {
+            className: "custom-toast-success",
+          });
+          setStoreDetails(data?.data);
+        } else {
+          toast.success("Sync In Progress", {
+            className: "custom-toast-success",
+          });
+          setTimeout(() => {
+            window.location.href = "/orders/view-orders?activeTab=draft";
+            window.onload = () => {
+              window.location.reload();
+            };
+          }, 18000);
+        }
       } else {
         // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
@@ -816,6 +842,18 @@ const Index = () => {
     //     "infinite-rotate"
     //   );
     // }
+  };
+
+  const warningMessageForDuplicate = (data: any) => {
+    return (
+      <div>
+        <div>
+          <span>
+            Are You Sure You Want To Duplicate this Order - {data?.tempOrderId}
+          </span>
+        </div>
+      </div>
+    );
   };
 
   const warningMessageForDelete = (data?: any) => {
@@ -1057,6 +1095,7 @@ const Index = () => {
       setSelectedRowData([]);
       if (data?.status || data?.success) {
         setIsLoading(false);
+
         return data?.data[0];
       } else {
         setIsLoading(false);
@@ -1125,7 +1164,12 @@ const Index = () => {
     }
   };
 
-  const orderActions = (payLoad: any, actionType: any, currentStatus?: any) => {
+  const orderActions = (
+    payLoad: any,
+    actionType: any,
+    currentStatus?: any,
+    data?: any
+  ) => {
     switch (currentStatus) {
       case "DRAFT":
         if (actionType === "edit") {
@@ -1137,6 +1181,14 @@ const Index = () => {
             },
           });
           // setIsPartnerModal(true);
+        } else if (actionType === "duplicate_order") {
+          setDuplicateOrderModalData({
+            isOpen: true,
+            data: {
+              tempOrderId: data?.tempOrderId,
+              payLoad: data,
+            },
+          });
         } else {
           setDeleteModalDraftOrder({
             isOpen: true,
@@ -1160,6 +1212,14 @@ const Index = () => {
           getSingleFile(payLoad, actionType);
         } else if (actionType === "download_invoice") {
           getSingleFile(payLoad, actionType);
+        } else if (actionType === "duplicate_order") {
+          setDuplicateOrderModalData({
+            isOpen: true,
+            data: {
+              tempOrderId: data?.tempOrderId,
+              payLoad: data,
+            },
+          });
         }
         break;
       default:
@@ -2282,6 +2342,20 @@ const Index = () => {
         }}
         title={warningMessageForDelete(deleteModalDraftOrder?.payload)}
       />
+
+      <DuplicateModel
+        url={DUPLICATE_ORDER}
+        postData={duplicateOrderModalData?.data?.payLoad}
+        isOpen={duplicateOrderModalData?.isOpen}
+        reloadData={handleTabChanges}
+        closeModal={() => {
+          setDuplicateOrderModalData({
+            ...duplicateOrderModalData,
+            isOpen: false,
+          });
+        }}
+        title={warningMessageForDuplicate(duplicateOrderModalData?.data)}
+      />
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
         onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
@@ -2502,6 +2576,55 @@ const Index = () => {
           {isSyncModalLoading ? (
             <div className="flex justify-center h-[90vh] items-center lg:!py-2 lg:!px-4">
               <Spinner />
+            </div>
+          ) : isChannelPartner ? (
+            <div>
+              <div className="mt-[1rem] mx-[1rem] flex flex-col  p-[1rem] border-4 rounded-md">
+                <div>
+                  Due to Unicommerce integration, cart syncing will be disabled
+                  for our web application.. <br />
+                  To Enable Sync Please Contact Administration.
+                </div>
+                {/* <div className="mt-[2rem] border-4 px-[0.5rem] py-[0.25rem] w-[max-content] rounded-md">
+                    Go To Catalogue
+                  </div> */}
+              </div>
+
+              {storeDetails?.map((store: any) => (
+                <div className="w-[100%] flex justify-center">
+                  <div className="mt-[1rem] mx-[1rem] flex p-[1rem] border-4 rounded-md w-[100%]">
+                    <div className="min-w-[45%]">
+                      <img
+                        src={`${
+                          store.channel === "SHOPIFY"
+                            ? ShopifyIcon
+                            : store.channel === "WOOCOMMERCE"
+                            ? WoocommerceIcon
+                            : store.channel === "UNICOMMERCE"
+                            ? UnicommerceIcon
+                            : "/"
+                        }`}
+                        alt="store icon"
+                        width={150}
+                      />
+                    </div>
+                    <div>
+                      <div>
+                        Store Name: {capitalizeFirstLetter(store.storeName)}
+                      </div>
+                      <div className="flex items-center gap-x-2">
+                        {/* <span>Sync</span> */}
+                        {/* <CustomSwitchToggle
+                          toggleValue={(boolean: boolean) =>
+                            console.log(boolean)
+                          }
+                          initValue={false}
+                        /> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             channelReduxData.map((elem: any) => (

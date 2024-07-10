@@ -1,10 +1,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
+import Copy from "../../assets/copy.svg";
 import {
   date_DD_MMM_YYYY_HH_MM,
   date_DD_MMM_YYYY_HH_MM_SS,
 } from "../../utils/dateFormater";
 import ShowLabel from "./ShowLabel";
+
+import trackingIcon from "../../assets/trackingMenu.svg";
+import frameIcon from "../../assets/frame.svg";
 import CrossIcon from "../../assets/cross.svg";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import InformativeIcon from "../../assets/I icon.svg";
@@ -77,44 +81,95 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
     DRAFT: [
       //commneted as it is not needed at this time
       // { title: "Edit Order", actionType: "edit" },
-      { title: "Delete Order", actionType: "delete" },
+      { title: "Delete Order", actionType: "delete", icon: CrossIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     BOOKED: [
-      { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Cancel Order", actionType: "cancel_order" },
+      {
+        title: "Download Label",
+        actionType: "download_label",
+        icon: frameIcon,
+      },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Cancel Order", actionType: "cancel_order", icon: CrossIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
-    CANCELLED: [{ title: "Track Order", actionType: "track_order" }],
-    "PICKED UP": [
-      { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
+    CANCELLED: [
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
+    ],
+    "READY TO PICK": [
+      {
+        title: "Download Label",
+        actionType: "download_label",
+        icon: frameIcon,
+      },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     "IN TRANSIT": [
-      { title: "Track Order", actionType: "track_order" },
       // { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     EXCEPTION: [
-      { title: "Track Order", actionType: "track_order" },
       // { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      {
+        title: "Track Order",
+        actionType: "track_order",
+        icon: trackingIcon,
+      },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     "OUT OF DELIVERY": [
-      { title: "Track Order", actionType: "track_order" },
       // { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     DELIVERED: [
-      { title: "Track Order", actionType: "track_order" },
       // { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
     RETURN: [
-      { title: "Track Order", actionType: "track_order" },
       // { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
+      {
+        title: "Download Invoice",
+        actionType: "download_invoice",
+        icon: frameIcon,
+      },
+      { title: "Track Order", actionType: "track_order", icon: trackingIcon },
+      { title: "Duplicate Order", actionType: "duplicate_order", icon: Copy },
     ],
   };
 
@@ -130,7 +185,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         "_blank"
       );
     } else {
-      orderActions(payLoad, actionType, currentStatus);
+      orderActions(payLoad, actionType, currentStatus, data);
     }
   };
 
@@ -140,8 +195,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         <>
           {action?.actionType === "download_label" ? (
             <div
-              className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
-              key={`${index}_${action}`}
+              className="hover:bg-[#E5E7EB] flex justify-start items-center px-3 py-2"
               onClick={() =>
                 actionClickHandler(
                   payLoad,
@@ -151,12 +205,17 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
                 )
               }
             >
-              {fileUrl !== "" ? action?.title : "Download Label"}
+              <div className="w-[20px]">
+                <img src={action.icon} alt="" />
+              </div>
+
+              <div className="ml-1" key={`${index}_${action}`}>
+                {fileUrl !== "" ? action?.title : "Download Label"}
+              </div>
             </div>
           ) : (
             <div
-              className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
-              key={`${index}_${action}`}
+              className="flex hover:bg-[#E5E7EB] justify-start items-center py-2 px-3"
               onClick={() =>
                 actionClickHandler(
                   payLoad,
@@ -166,7 +225,12 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
                 )
               }
             >
-              {action?.title}
+              <div className=" w-[20px]">
+                <img src={action.icon} alt="" />
+              </div>
+              <div className="ml-1" key={`${index}_${action}`}>
+                {action?.title}
+              </div>
             </div>
           )}
         </>
@@ -356,15 +420,24 @@ const idHelper = (
     cell: (info: any) => {
       const {
         tempOrderId,
-        orderId,
         status = [],
-        source,
         updatedAt,
+        createdAt,
         orderType,
+        orderId,
+        source,
         otherDetails,
         awb,
       } = info?.row?.original;
       // const AWB = otherDetails?.awbNo;
+
+      // const statusOnlyForBooked = status?.find(
+      //   (item: any) => item?.currentStatus === "BOOKED"
+      // );
+
+      // const timeStamp = statusOnlyForBooked?.timeStamp;
+      const time = createdAt && date_DD_MMM_YYYY_HH_MM_SS(createdAt);
+
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -385,7 +458,7 @@ const idHelper = (
               </div>
             </div>
           )}
-          {orderId && (
+          {/* {orderId && (
             <div className="">
               <span className=" font-Open font-normal leading-4 text-xs ">
                 Order ID :
@@ -413,52 +486,16 @@ const idHelper = (
                 />
               </div>
             </div>
-          )}
-          {awb && (
+          )} */}
+          {time && (
             <div className="">
-              <span className=" font-Open font-normal leading-4 text-xs ">
-                Tracking :
-              </span>
-              <div className="flex  items-center font-Open font-semibold leading-5 text-sm ">
-                {/* console.log("log 1 where it is commented") */}
-                <span
-                  onClick={
-                    // on going work temporary currently commented
-
-                    () => {
-                      setOpenRightModalForTracking({
-                        ...openRightModalForTracking,
-                        isOpen: true,
-                        awbNo: awb,
-                      });
-                    }
-
-                    // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
-                    // navigate({
-                    //   pathname: "/tracking",
-                    //   search: `?trackingNo=${awb}`,
-                    // })
-                  }
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
-                  data-tooltip-id="my-tooltip-inline"
-                  data-tooltip-content="Track"
-                >
-                  {awb}
-                </span>
-                <Tooltip
-                  id="my-tooltip-inline"
-                  style={{
-                    backgroundColor: "bg-neutral-900",
-                    color: "#FFFFFF",
-                    width: "fit-content",
-                    fontSize: "14px",
-                    lineHeight: "16px",
-                  }}
-                />
-                <CopyTooltip stringToBeCopied={awb} />
+              <span className=" text-sm font-light">Booked Time :</span>
+              <div className=" flex text-base items-center font-medium">
+                {time}
               </div>
             </div>
           )}
+
           <div className="flex items-center mt-[0.5rem]">
             <span className="font-Open font-normal leading-4 text-xs">
               Source :
@@ -736,7 +773,7 @@ export const columnHelperForNewOrder = (
 
   return [
     ColumnsHelper.accessor("IDs", {
-      header: (props) => {
+      header: (props: any) => {
         return (
           <div className="flex items-center font-Open font-semibold leading-5 text-sm">
             <PartialChecked
@@ -1431,7 +1468,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   return [
     // ...commonColumnHelper,
     ColumnsHelper.accessor("Pick up Expected", {
-      header: (props) => {
+      header: (props: any) => {
         return (
           <div className="flex items-center">
             <div className="flex justify-between mr-3 !my-[-10px] cursor-pointer ">
@@ -1448,7 +1485,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         );
       },
       cell: (info: any) => {
-        const { pickupAddress, service } = info?.row?.original;
+        const { pickupAddress, service, source, orderId, otherDetails, awb } =
+          info?.row?.original;
+
         return (
           <div className="flex">
             <div className="flex justify-center mr-4 !my-[-12px] cursor-pointer pt-1">
@@ -1460,21 +1499,98 @@ export const ColumnHelperForBookedAndReadyToPicked = (
               />
             </div>
             <div className=" ">
+              {orderId && (
+                <div className="">
+                  <span className=" text-sm font-light">Order ID :</span>
+                  <div className=" flex text-base items-center font-medium">
+                    <span className="">
+                      {source === "SHOPIFY" ||
+                      source === "ZOHO" ||
+                      source === "WOOCOMMERCE"
+                        ? otherDetails?.orderNumber
+                          ? `${otherDetails?.orderNumber}`
+                          : orderId
+                        : orderId}
+                    </span>
+                    <CopyTooltip
+                      stringToBeCopied={
+                        source === "SHOPIFY" ||
+                        source === "ZOHO" ||
+                        source === "WOOCOMMERCE"
+                          ? otherDetails?.orderNumber
+                            ? `${otherDetails?.orderNumber}`
+                            : orderId
+                          : orderId
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {source === "UNICOMMERCE" && (
+                <div className="">
+                  <span className=" text-sm font-light">Order Number :</span>
+                  <div className=" flex text-base items-center font-medium">
+                    {otherDetails?.orderNumber}
+                  </div>
+                </div>
+              )}
+
               <p className="">
                 {pickupAddress?.pickupDate
                   ? date_DD_MMM_YYYY_HH_MM_SS(pickupAddress?.pickupDate)
                   : null}
               </p>
-              <div className="py-2 flex flex-col">
-                <span className=" font-Open font-normal leading-4 text-xs">
-                  Delivery Partner
-                </span>
-                <div className=" font-Open font-semibold leading-5 text-sm">
-                  {isMasked
-                    ? "Shipyaari"
-                    : capitalizeFirstLetter(service?.partnerName)}
+              <div className="pt-2 pb-1 flex flex-col">
+                <span className="text-sm font-light">Delivery Partner</span>
+                <div className="font-semibold">
+                  {capitalizeFirstLetter(service?.partnerName)}
                 </div>
               </div>
+
+              {awb && (
+                <div className="">
+                  <span className=" text-sm font-light">Tracking :</span>
+                  <div className="flex text-base items-center font-medium">
+                    {/* console.log("log 1 where it is commented") */}
+                    <span
+                      onClick={
+                        // on going work temporary currently commented
+
+                        () => {
+                          setOpenRightModalForTracking({
+                            ...openRightModalForTracking,
+                            isOpen: true,
+                            awbNo: awb,
+                          });
+                        }
+
+                        // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                        // navigate({
+                        //   pathname: "/tracking",
+                        //   search: `?trackingNo=${awb}`,
+                        // })
+                      }
+                      className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Track"
+                    >
+                      {awb}
+                    </span>
+                    <Tooltip
+                      id="my-tooltip-inline"
+                      style={{
+                        backgroundColor: "bg-neutral-900",
+                        color: "#FFFFFF",
+                        width: "fit-content",
+                        fontSize: "14px",
+                        lineHeight: "16px",
+                      }}
+                    />
+                    <CopyTooltip stringToBeCopied={awb} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -1633,7 +1749,7 @@ export const columnHelpersForRest = (
   return [
     // ...commonColumnHelper,
     ColumnsHelper.accessor("packageType", {
-      header: (props) => {
+      header: (props: any) => {
         return (
           <div className="flex items-center font-Open font-semibold leading-5 text-sm">
             <PartialChecked
@@ -1646,7 +1762,8 @@ export const columnHelpersForRest = (
         );
       },
       cell: (info: any) => {
-        const { service } = info?.row?.original;
+        const { pickupAddress, service, source, orderId, otherDetails, awb } =
+          info?.row?.original;
         return (
           <div className="flex">
             <div className="flex justify-center mr-4 !my-[-6px] cursor-pointer">
@@ -1657,15 +1774,94 @@ export const columnHelpersForRest = (
                 className="!w-[16px]"
               />
             </div>
-            <div className="py-2 flex flex-col">
-              <span className="font-Open font-normal leading-4 text-xs ">
-                Delivery Partner
-              </span>
-              <div className="font-Open font-semibold leading-5 text-sm">
-                {isMasked
-                  ? "Shipyaari"
-                  : capitalizeFirstLetter(service?.partnerName)}
+            <div>
+              {orderId && (
+                <div className="">
+                  <span className=" text-sm font-light">Order ID :</span>
+                  <div className=" flex text-base items-center font-medium">
+                    <span className="">
+                      {source === "SHOPIFY" ||
+                      source === "ZOHO" ||
+                      source === "WOOCOMMERCE"
+                        ? otherDetails?.orderNumber
+                          ? `${otherDetails?.orderNumber}`
+                          : orderId
+                        : orderId}
+                    </span>
+                    <CopyTooltip
+                      stringToBeCopied={
+                        source === "SHOPIFY" ||
+                        source === "ZOHO" ||
+                        source === "WOOCOMMERCE"
+                          ? otherDetails?.orderNumber
+                            ? `${otherDetails?.orderNumber}`
+                            : orderId
+                          : orderId
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {source === "UNICOMMERCE" && (
+                <div className="">
+                  <span className=" text-sm font-light">Order Number :</span>
+                  <div className=" flex text-base items-center font-medium">
+                    {otherDetails?.orderNumber}
+                  </div>
+                </div>
+              )}
+
+              <div className="py-2 flex flex-col">
+                <span className="text-sm font-light">Delivery Partner</span>
+                <div className="font-semibold">
+                  {capitalizeFirstLetter(service?.partnerName)}
+                </div>
               </div>
+
+              {awb && (
+                <div className="">
+                  <span className=" text-sm font-light">Tracking :</span>
+                  <div className="flex text-base items-center font-medium">
+                    {/* console.log("log 1 where it is commented") */}
+                    <span
+                      onClick={
+                        // on going work temporary currently commented
+
+                        () => {
+                          setOpenRightModalForTracking({
+                            ...openRightModalForTracking,
+                            isOpen: true,
+                            awbNo: awb,
+                          });
+                        }
+
+                        // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                        // navigate({
+                        //   pathname: "/tracking",
+                        //   search: `?trackingNo=${awb}`,
+                        // })
+                      }
+                      className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Track"
+                    >
+                      {awb}
+                    </span>
+                    <Tooltip
+                      id="my-tooltip-inline"
+                      style={{
+                        backgroundColor: "bg-neutral-900",
+                        color: "#FFFFFF",
+                        width: "fit-content",
+                        fontSize: "14px",
+                        lineHeight: "16px",
+                      }}
+                    />
+                    <CopyTooltip stringToBeCopied={awb} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
