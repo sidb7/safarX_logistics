@@ -674,21 +674,6 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                           <div className="overflow-auto ">
                             <RateCardTable serviceData={rateCard?.service} />
                           </div>
-
-                          {/* variable charges code commented for now as no requirement for now */}
-
-                          <div className="ml-4 mt-6">
-                            {" "}
-                            <h4 className="text-[22px] font-Lato font-semibold">
-                              Variable Charges{" "}
-                            </h4>{" "}
-                            <div className="mt-7">
-                              <CustomTable
-                                data={filterVariableData || []}
-                                columns={variableColumns}
-                              />
-                            </div>
-                          </div>
                         </>
                       )}
                     </div>
@@ -696,6 +681,20 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 );
               }
             })}
+            {/* variable charges code commented for now as no requirement for now */}
+
+            <div className="ml-4 mt-6">
+              {" "}
+              <h4 className="text-[22px] font-Lato font-semibold">
+                Variable Charges{" "}
+              </h4>{" "}
+              <div className="mt-7">
+                <CustomTable
+                  data={filterVariableData || []}
+                  columns={variableColumns}
+                />
+              </div>
+            </div>
           </div>
         </>
       );
@@ -771,23 +770,22 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   <div className="overflow-auto ">
                     <RateCardTable serviceData={serviceArray} />
                   </div>
-
-                  {/* variable charges code commented for now as no requirement for now */}
-
-                  <div className="ml-4 mt-6">
-                    {" "}
-                    <h4 className="text-[22px] font-Lato font-semibold">
-                      Variable Charges{" "}
-                    </h4>{" "}
-                    <div className="mt-7">
-                      <CustomTable
-                        data={filterVariableData || []}
-                        columns={variableColumns}
-                      />
-                    </div>
-                  </div>
                 </>
               )}
+            </div>
+            {/* variable charges code commented for now as no requirement for now */}
+
+            <div className="ml-4 mt-6">
+              {" "}
+              <h4 className="text-[22px] font-Lato font-semibold">
+                Variable Charges{" "}
+              </h4>{" "}
+              <div className="mt-7">
+                <CustomTable
+                  data={filterVariableData || []}
+                  columns={variableColumns}
+                />
+              </div>
             </div>
           </div>
         </>
@@ -857,21 +855,6 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                           <div className="overflow-auto ">
                             <RateCardTable serviceData={rateCard?.service} />
                           </div>
-
-                          {/* variable charges code commented for now as no requirement for now */}
-
-                          <div className="ml-4 mt-6">
-                            {" "}
-                            <h4 className="text-[22px] font-Lato font-semibold">
-                              Variable Charges{" "}
-                            </h4>{" "}
-                            <div className="mt-7">
-                              <CustomTable
-                                data={filterVariableData || []}
-                                columns={variableColumns}
-                              />
-                            </div>
-                          </div>
                         </>
                       )}
                     </div>
@@ -879,6 +862,20 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 );
               }
             })}
+            {/* variable charges code commented for now as no requirement for now */}
+
+            <div className="ml-4 mt-6">
+              {" "}
+              <h4 className="text-[22px] font-Lato font-semibold">
+                Variable Charges{" "}
+              </h4>{" "}
+              <div className="mt-7">
+                <CustomTable
+                  data={filterVariableData || []}
+                  columns={variableColumns}
+                />
+              </div>
+            </div>
           </div>
         </>
       );
@@ -953,23 +950,22 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                   <div className="overflow-auto ">
                     <RateCardTable serviceData={serviceArray} />
                   </div>
-
-                  {/* variable charges code commented for now as no requirement for now */}
-
-                  <div className="ml-4 mt-6">
-                    {" "}
-                    <h4 className="text-[22px] font-Lato font-semibold">
-                      Variable Charges{" "}
-                    </h4>{" "}
-                    <div className="mt-7">
-                      <CustomTable
-                        data={filterVariableData || []}
-                        columns={variableColumns}
-                      />
-                    </div>
-                  </div>
                 </>
               )}
+            </div>
+            {/* variable charges code commented for now as no requirement for now */}
+
+            <div className="ml-4 mt-6">
+              {" "}
+              <h4 className="text-[22px] font-Lato font-semibold">
+                Variable Charges{" "}
+              </h4>{" "}
+              <div className="mt-7">
+                <CustomTable
+                  data={filterVariableData || []}
+                  columns={variableColumns}
+                />
+              </div>
             </div>
           </div>
         </>
