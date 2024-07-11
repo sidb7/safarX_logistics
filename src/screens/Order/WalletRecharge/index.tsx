@@ -114,6 +114,10 @@ const WalletRecharge = () => {
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
   const [dataFromSession, setDataFromSession] = useState<any>();
   const [balanceZeroOrNegative, setBalanceZeroOrNegative] = useState(false);
+  console.log(
+    "🚀 ~ WalletRecharge ~ balanceZeroOrNegative:",
+    balanceZeroOrNegative
+  );
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -484,7 +488,7 @@ const WalletRecharge = () => {
             });
             // Check if the current balance is 0 or negative
             const currentBalance = response?.data?.phpBalance;
-            const isBalanceZeroOrNegative = currentBalance <= 0;
+            const isBalanceZeroOrNegative = currentBalance < 0;
             setBalanceZeroOrNegative(isBalanceZeroOrNegative);
           } else {
             toast.error(response?.message);
@@ -572,7 +576,7 @@ const WalletRecharge = () => {
                         setWalletValue(event.target.value);
                       }}
                       wrapperClass="w-[200px]"
-                      selectClassName="text-[18px] mt-6"
+                      selectClassName="text-[12px] mt-6"
                     />
                     <JusPay
                       isDisabled={isDisabled}

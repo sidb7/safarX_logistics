@@ -28,6 +28,8 @@ import {
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { updateButtonFlag } from "../../redux/reducers/updateButtonReducer";
 
 let dummyErrors = [
   "Insufficient Balance",
@@ -171,9 +173,12 @@ const Errors = (props: ErrorProps) => {
   const [isFixDisabled, setIsFixDisabled] = useState(true);
 
   let singlePaymentAmount = 0;
+  let isFetching: any = true;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const updateButtonClick = useSelector((state: any) => state.buttonFlagSlice);
 
   const handleProductsDetails = (index?: any) => {
     setGlobalIndex(index === globalIndex ? null : index);
@@ -289,7 +294,6 @@ const Errors = (props: ErrorProps) => {
   };
 
   const fixAllHandler = async (errorName: any, data: any, index: any) => {
-    let isFetching: any = true;
     try {
       setAddressLoader(true);
       setIndexFixedAllLoader(index);
@@ -577,8 +581,11 @@ const Errors = (props: ErrorProps) => {
   };
 
   useEffect(() => {
-    if (!isErrorModalOpen) {
+    if (!isErrorModalOpen && !updateButtonClick.flag) {
       getErrors();
+    } else if (updateButtonClick.flag) {
+      getErrors(isFetching);
+      dispatch(updateButtonFlag(false));
     }
   }, [isErrorModalOpen]);
 

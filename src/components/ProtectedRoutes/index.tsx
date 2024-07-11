@@ -12,7 +12,7 @@ import {
 } from "../../utils/utility";
 import { POST } from "../../utils/webService";
 import { VALIDATE_USER_TOKEN } from "../../utils/ApiUrls";
-import { setWalletBalance } from "../../redux/reducers/userReducer";
+import { isMasked, setWalletBalance } from "../../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 
 interface Props {
@@ -66,6 +66,9 @@ const ProtectedRoute = ({ children }: Props) => {
             setIsAuthenticated(true);
             dispatch(
               setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
+            );
+            dispatch(
+              isMasked({ isMasked: response?.data?.data?.[0]?.isMaskedUser })
             );
           }
         })()

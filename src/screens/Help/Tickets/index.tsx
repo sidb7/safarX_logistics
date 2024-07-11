@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SummaryIcon from "../../../assets/serv/Summary.svg";
+import SummaryIcon from "../../../assets/serv/summary.svg";
 
 import CustomDropDown from "../../../components/DropDown";
 import { ticketTypeOptions } from "../../../utils/dummyData";

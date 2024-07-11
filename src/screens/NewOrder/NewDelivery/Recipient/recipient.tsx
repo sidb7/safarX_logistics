@@ -172,13 +172,13 @@ export default RecipientType;
 //         isError ? "border-red-500" : "border-[#EAEAEA]"
 //       }  ${
 //         transitType === "FORWARD" ? "xl:w-1/3" : "xl:w-1/4"
-//       } bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-2/4 `}
+//       } bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-2/4 `} // remove the xl:w-1/4 when implementing the b2b option from this line
 //       id="consumer-type"
 //     >
 //       <div
 //         className={`${
 //           transitType === "FORWARD" ? "grid grid-cols-2" : "grid grid-cols-1"
-//         } grid`}
+//         } grid`} // remove the grid-cols-1 when implementing the b2b option from this line
 //       >
 //         <div
 //           className={`relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
