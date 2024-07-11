@@ -239,6 +239,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     }
   };
 
+  console.log("productInputState", productInputState);
+
   return (
     <>
       <Breadcrum label="Add New Order" />
