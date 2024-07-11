@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
-
+import AddressCardDetails from "./AddressDetails";
+import ShippingDetails from "./ShippingDetails/index";
 import BoxInfo from "./components/boxInfo";
 import PackageDetails from "./PackageDetails.tsx";
 
@@ -81,11 +82,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     <>
       <div>
         <Breadcrum label="Add New Order" />
-
         <div className="flex gap-5 mx-5">
           <div className="flex-1 ">
             <div className="flex flex-col gap-y-4 border-1 border-gray-300 !h-[calc(100vh-180px)] customScroll">
-              <div className=" border-2 border-gray-300 h-[50%]"></div>
+              <div className=" border-2 border-gray-300 h-[50%]">
+                <AddressCardDetails />
+              </div>
 
               {/* Amit */}
 
@@ -95,12 +97,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   setOrder={setOrder}
                 />
               </div>
-              {/* <div className=" border-2 border-gray-300 min-h-[222px] max-h-[268px]"></div> */}
             </div>
           </div>
           <div className="flex-1">
             <div className="flex flex-col">
-              <div className="border-2 border-gray-300 h-[268px]"></div>
+              <ShippingDetails />
             </div>
           </div>
         </div>

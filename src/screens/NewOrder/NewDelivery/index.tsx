@@ -277,7 +277,8 @@ const DeliveryLocation = () => {
       const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data.success && data?.data.length > 0) {
         const orderData = data?.data[0];
-        console.log("orderData", orderData.orderType);
+        // console.log("🚀 ~ orderData whole data:", orderData);
+        // console.log("orderData", orderData.orderType);
         setOrderType(orderData?.orderType || "");
 
         setTransitType(orderData?.transit || "");
