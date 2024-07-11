@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import AddressCardDetails from "./AddressDetails";
-import Ship from "./PackageDetais/index";
-
+import ShippingDetails from "./ShippingDetails/index";
 import BoxInfo from "./components/boxInfo";
 import PackageDetails from "./PackageDetails.tsx";
 
@@ -102,7 +101,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           </div>
           <div className="flex-1">
             <div className="flex flex-col">
-              <Ship />
+              <ShippingDetails />
             </div>
           </div>
         </div>
