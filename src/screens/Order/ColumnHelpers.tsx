@@ -1937,6 +1937,8 @@ export const columnHelpersForRest = (
           sellerId = "-",
           status,
           source,
+          orderType,
+          transit,
         } = info?.row?.original;
         let individualData: any = info?.row?.original;
         const { AWB } = status[0] ?? "";
@@ -1988,17 +1990,19 @@ export const columnHelpersForRest = (
               }}
             /> */}
 
-            {currentStatus === "DELIVERED" && (
-              <div>
-                <img
-                  src={ReverseIcon}
-                  className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                  onClick={() =>
-                    setInfoReverseModalFunction(individualData?.awb)
-                  }
-                />
-              </div>
-            )}
+            {currentStatus === "DELIVERED" &&
+              orderType !== "B2B" &&
+              transit === "FORWARD" && (
+                <div>
+                  <img
+                    src={ReverseIcon}
+                    className="w-[18px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                    onClick={() =>
+                      setInfoReverseModalFunction(individualData?.awb)
+                    }
+                  />
+                </div>
+              )}
 
             <CustomToolTip
               position="bottom"
