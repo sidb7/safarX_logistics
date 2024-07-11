@@ -22,6 +22,8 @@ const ReverseSummary = (props: Iprops) => {
   };
 
   const bookReverseOrder = async () => {
+    let codObj = summaryData?.boxArray?.[0]?.codInfo;
+    codObj.isCod = false;
     setIsloading(true);
     // console.log("summaryData", summaryData);
     let productTemp = [];
@@ -74,7 +76,7 @@ const ReverseSummary = (props: Iprops) => {
             height: summaryData?.boxArray?.[0]?.height,
             measureUnit: summaryData?.boxArray?.[0]?.measureUnit,
             products: productTemp,
-            codInfo: summaryData?.boxArray?.[0]?.codInfo,
+            codInfo: codObj,
             podInfo: summaryData?.boxArray?.[0]?.podInfo,
             insurance: summaryData?.boxArray?.[0]?.insurance?.isInsured
               ? true
