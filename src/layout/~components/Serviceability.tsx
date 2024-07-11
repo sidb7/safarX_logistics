@@ -297,7 +297,7 @@ const Serviceability = (props: ITypeProps) => {
                 <GroupRadioButtons
                   options={[
                     { text: "B2C", value: "B2C" },
-                    // { text: "B2B", value: "B2B" },
+                    { text: "B2B", value: "B2B" },
                   ]}
                   value={serviceValue}
                   selectedValue={setServiceValue}

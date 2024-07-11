@@ -13,6 +13,8 @@ import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import CustomTableWithScroll from "../../components/CustomTableWithScroll";
+import OneButton from "../../components/Button/OneButton";
+import { useSelector } from "react-redux";
 
 interface ITypeProps {
   onClick?: any;
@@ -20,6 +22,7 @@ interface ITypeProps {
 
 const ServicabilityPincode = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const { onClick } = props;
   const [pincode, setPincode] = useState("");
@@ -63,7 +66,15 @@ const ServicabilityPincode = (props: ITypeProps) => {
           }
         );
 
-        setResponse(tempArray);
+        if (isMasked) {
+          let slice = tempArray?.slice(0, 1);
+          slice.forEach((element: any, i: number) => {
+            element.partnerServiceName = "Shipyaari";
+          });
+          setResponse(slice);
+        } else {
+          setResponse(tempArray);
+        }
       } else {
         toast.error(response?.message);
       }
@@ -200,22 +211,26 @@ const ServicabilityPincode = (props: ITypeProps) => {
           />
         </div>
       </div>
+      <div className="flex flex-col items-center px-4 mt-5">
+        <div className="w-full max-w-md mb-4">
+          <CustomInputBox
+            label="Enter Pincode"
+            value={pincode}
+            onChange={handlePincodeChange}
+            className="w-full"
+          />
+        </div>
 
-      <div className="mb-4 lg:mr-10 ml-10 w-[20%]">
-        <CustomInputBox
-          label="Enter Pincode"
-          value={pincode}
-          onChange={handlePincodeChange}
-        />
-      </div>
-
-      <div className="mb-6 w-[20%] ml-10">
-        <AddButton
-          text="Check Availability"
-          onClick={() => {
-            postServicablePincode(payload);
-          }}
-        />
+        <div className="w-full max-w-md mb-6">
+          <OneButton
+            text="Check Availability"
+            onClick={() => {
+              postServicablePincode(payload);
+            }}
+            variant="primary"
+            className="w-full"
+          />
+        </div>
       </div>
 
       {response && response.length > 0 && (

@@ -57,7 +57,7 @@ const BoxDetails = (props: IBoxdetails) => {
   useEffect(() => {
     if (
       selectedBox?.codInfo?.isCod &&
-      sellerId !== 131620 &&
+      (sellerId == 103529 || sellerId == 129176) &&
       Environment === "production"
     ) {
       selectedBox.codInfo.collectableAmount =
@@ -437,7 +437,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     label="Invoice Value"
                     isDisabled={
                       source === "WEBSITE" &&
-                      sellerId == 131620 &&
+                      (sellerId == 103529 || sellerId == 129176) &&
                       Environment === "production"
                         ? false
                         : true

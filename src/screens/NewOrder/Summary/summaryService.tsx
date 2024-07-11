@@ -25,6 +25,7 @@ interface ISummaryData {
   shipyaari_id?: any;
   orderSource?: any;
   orderId?: any;
+  isMasked?: any;
 }
 const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceName = "",
@@ -48,6 +49,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   shipyaari_id = "",
   orderSource = "",
   orderId = "",
+  isMasked,
 }) => {
   const navigate = useNavigate();
 
@@ -76,12 +78,18 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           </div>
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
-          <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] font-semibold">
-            {partnerName}
-          </p>
-          <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
-            {companyServiceName}
-          </p>
+          {isMasked ? (
+            "Shipyaari"
+          ) : (
+            <>
+              <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] font-semibold">
+                {partnerName}
+              </p>
+              <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
+                {companyServiceName}
+              </p>
+            </>
+          )}
           <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
             {baseWeight} kg
           </p>

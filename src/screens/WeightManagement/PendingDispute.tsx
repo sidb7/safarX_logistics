@@ -157,22 +157,32 @@ const PendingDispute = ({
             <div className=" flex flex-col text-[#1C1C1C] font-Odiven text-sm leading-5 ">
               <div className="text-[15px]">
                 {ProductList.map((data: any, i: any) => {
-                  return <span>Product {i + 1}</span>;
+                  return (
+                    <span className="font-Open font-normal leading-5 text-sm">
+                      Product {i + 1}
+                    </span>
+                  );
                 })}
               </div>
               <div className="my-2">
-                <div className="text-[14px]">Category :</div>
+                <div className="font-Open font-normal leading-4 text-xs ">
+                  Category :
+                </div>
                 <div>
                   {ProductList.map((data: any, i: any) => {
                     return (
-                      <span className="font-semibold">{data?.category}</span>
+                      <span className="font-Open font-semibold leading-5 text-sm">
+                        {data?.category}
+                      </span>
                     );
                   })}
                 </div>
               </div>
               <div>
-                <div className="text-[14px]">SKU :</div>
-                <div className="text-[14px]">
+                <div className="font-Open font-normal leading-4 text-xs">
+                  SKU :
+                </div>
+                <div className="font-Open font-semibold leading-5 text-sm">
                   {ProductList.map((data: any, i: any) => {
                     return <span className="font-semibold">{data?.sku}</span>;
                   })}
@@ -200,12 +210,20 @@ const PendingDispute = ({
         return (
           <div className=" flex flex-col  text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
             <div className="mb-4">
-              <div>Delivery Partner</div>
-              <div className="font-semibold">{rowData?.courierPartnerName}</div>
+              <div className="font-Open font-normal leading-4 text-xs ">
+                Delivery Partner
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm">
+                {rowData?.courierPartnerName}
+              </div>
             </div>
             <div className="mt-3">
-              <div>Tracking ID</div>
-              <div className="font-semibold">{rowData?.awb}</div>
+              <div className="font-Open font-normal leading-4 text-xs ">
+                Tracking ID
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm">
+                {rowData?.awb}
+              </div>
             </div>
           </div>
         );
@@ -229,8 +247,10 @@ const PendingDispute = ({
         return (
           <div className=" flex flex-col  text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
             <div className="mb-4">
-              <div>Volumetric Weight</div>
-              <div className="font-semibold ">
+              <div className="font-Open font-normal leading-4 text-xs  ">
+                Volumetric Weight
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm ">
                 <div>
                   {`${orderPlaceInfo?.length} X ${orderPlaceInfo?.breadth} X ${orderPlaceInfo?.height}`}
                 </div>
@@ -238,8 +258,10 @@ const PendingDispute = ({
               </div>
             </div>
             <div className="mt-3">
-              <div>Price</div>
-              <div className="font-semibold">{`₹ ${orderPlaceInfo?.service?.total}`}</div>
+              <div className="font-Open font-normal leading-4 text-xs  ">
+                Price
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm ">{`₹ ${orderPlaceInfo?.service?.total}`}</div>
             </div>
           </div>
         );
@@ -262,8 +284,10 @@ const PendingDispute = ({
         return (
           <div className=" flex flex-col  text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
             <div className="mb-4">
-              <div>Volumetric Weight</div>
-              <div className="font-semibold ">
+              <div className="font-Open font-normal leading-4 text-xs ">
+                Volumetric Weight
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm ">
                 <div>
                   {`${disputeInfo?.length} X ${
                     disputeInfo?.breadth
@@ -276,8 +300,10 @@ const PendingDispute = ({
             </div>
             {rowData?.newServiceObj?.total && (
               <div className="mt-3">
-                <div>Price</div>
-                <div className="font-semibold">{`₹ ${rowData?.newServiceObj?.total}`}</div>
+                <div className="font-Open font-normal leading-4 text-xs ">
+                  Price
+                </div>
+                <div className="font-Open font-semibold leading-5 text-sm ">{`₹ ${rowData?.newServiceObj?.total}`}</div>
               </div>
             )}
           </div>
@@ -300,14 +326,18 @@ const PendingDispute = ({
         return (
           <div className=" flex flex-col text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
             <div className="mb-4">
-              <div>Weight Difference</div>
-              <div className="font-semibold">
+              <div className="font-Open font-normal leading-4 text-xs ">
+                Weight Difference
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm ">
                 {`${rowData?.differenceInWeightKG.toFixed(2)} Kg`}
               </div>
             </div>
             <div className="mt-3">
-              <div>Price Difference</div>
-              <div className="font-semibold">
+              <div className="font-Open font-normal leading-4 text-xs ">
+                Price Difference
+              </div>
+              <div className="font-Open font-semibold leading-5 text-sm ">
                 {`₹ ${rowData?.differenceInCharge.toFixed(2)}`}
               </div>
             </div>

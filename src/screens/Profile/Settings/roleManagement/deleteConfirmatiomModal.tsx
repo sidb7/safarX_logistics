@@ -8,15 +8,14 @@ const DeleteConfirmModale = (props: any) => {
   return (
     <div>
       <div className="flex flex-col  ">
-        <div className="flex justify-end">
-        </div>
+        <div className="flex justify-end"></div>
         <div className="flex justify-center mb-2">
           <img src={DeleteGif} alt="" />
         </div>
 
         <div className=" mb-6">
           <p className="  text-base   lg:text-lg font-semibold  text-center">
-            {`Do you want to delete this  ${
+            {`Do you want to delete this ${
               isUser ? roleInfo?.firstName : roleInfo?.roleName || "N/A"
             } ${title} ?`}
           </p>

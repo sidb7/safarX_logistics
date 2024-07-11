@@ -163,7 +163,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     let codInfo: any = {
       ...codData,
       invoiceValue:
-        Environment === "production" && sellerId === 131620
+        Environment === "production" &&
+        (sellerId === 103529 || sellerId === 129176)
           ? packages?.[invoiceUpdateDetails?.boxIndex]?.codInfo?.invoiceValue
           : totalInvoiceValue,
       // invoiceValue: invoiceUpdateDetails?.isInvoiceUpdated

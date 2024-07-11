@@ -15,6 +15,7 @@ import {
 import { Spinner } from "../../../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import Close from "../../../../../assets/CloseIcon.svg";
+import OneButton from "../../../../../components/Button/OneButton";
 
 interface ITypeProps {
   onClick?: any;
@@ -92,7 +93,20 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const generateExcelFile = async (data: any) => {
-    const ws = XLSX.utils.json_to_sheet(data);
+    let headers = [
+      "Source",
+      "Product Id",
+      "Name",
+      "Category",
+      "SKU",
+      "Length (cm)",
+      "Breadth (cm)",
+      "Height (cm)",
+      "Dead Weight (Kg)",
+      "Unit Price (Rs)",
+      "Unit Tax (Rs)",
+    ];
+    const ws = XLSX.utils.json_to_sheet(data, { header: headers });
     const wb = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
@@ -235,14 +249,23 @@ const BulkUpload = (props: ITypeProps) => {
 
   const renderHeaderComponent = () => {
     return (
-      <CustomButton
-        icon={whiteDownloadIcon}
-        showIcon={true}
-        text={`Download Sample`}
-        className="!p-5"
+      // <CustomButton
+      //   icon={whiteDownloadIcon}
+      //   showIcon={true}
+      //   text={`Download Sample`}
+      //   className="!p-5"
+      //   onClick={() => {
+      //     downloadSampleProducts();
+      //   }}
+      // />
+      <OneButton
+        text="Download Sample"
         onClick={() => {
           downloadSampleProducts();
         }}
+        variant="primary"
+        className=" px-4"
+        icon={whiteDownloadIcon}
       />
     );
   };

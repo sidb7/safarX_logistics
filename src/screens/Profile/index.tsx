@@ -94,7 +94,10 @@ export const Profile = () => {
         </div>
       ) : (
         <>
-          <ProfileCard ProfileDetails={profileData} />
+          <ProfileCard
+            ProfileDetails={profileData}
+            getProfileData={getProfileData}
+          />
           <ProfileKycCard KycDetails={profileData?.kycDetails} />
           <ProfileBankCard BankDetails={profileData?.bankDetails} />
           <ProfileBrandingDetails

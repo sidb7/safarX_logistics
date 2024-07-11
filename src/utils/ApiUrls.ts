@@ -137,6 +137,10 @@ const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
 
+//Update Seller Profile
+const UPDATE_SINGLE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
+const UPDATE_SELLER_NAME = `${SELLER_BASE_URL}/seller/updateSellerName`;
+
 // Order URLs
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 const GET_STATUS_COUNT = `${SELLER_BASE_URL}/order/getOrderCountIn`;
@@ -146,7 +150,6 @@ const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
-
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -397,6 +400,11 @@ const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
 // Errors Handling API
 const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
 
+// Reverse order API
+const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
+
+// Amazon Redirect Url
+const AMAZON_REDIRECT_URL = `${SELLER_URL}/amazonCheckParams`;
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -588,11 +596,19 @@ export {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
-  CHANGE_PASSWORD,
+  // CHANGE_PASSWORD,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
+  CHANGE_PASSWORD,
+  REVERSE_ORDER,
+  //  GET_ALLPARTNER_OFSELLER,
+  //  UPDATE_ALLPARTNER_OF_SELLER,
+  AMAZON_REDIRECT_URL,
+  UPDATE_SINGLE_SELLER,
+  UPDATE_SELLER_NAME,
+  DUPLICATE_ORDER,
   GET_ALLPARTNER_OFSELLER,
   UPDATE_ALLPARTNER_OF_SELLER,
   GET_ALLPARTNERS_OF_RULEENGINE,
-  DUPLICATE_ORDER,
+  // DUPLICATE_ORDER,
 };
