@@ -8,7 +8,7 @@ interface IIndexProps {}
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
   return (
     <>
-      <div className="border-[1px] rounded-md border-[#004EFF] px-4 py-[22px]">
+      <div className="border-[1px] rounded-md border-[#E8E8E8] border-[#004EFF] px-4 py-[22px]">
         {/* header section  */}
         <div className="flex justify-between">
           <div className="flex gap-x-2 items-center">
