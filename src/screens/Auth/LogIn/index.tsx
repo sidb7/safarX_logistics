@@ -5,7 +5,7 @@ import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import CustomButton from "../../../components/Button/index";
 import CustomInputBox from "../../../components/Input";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
@@ -19,6 +19,7 @@ import {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
+  AMAZON_REDIRECT_URL,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -40,6 +41,7 @@ import { socketCallbacks } from "../../../Socket";
 import { useErrorBoundary } from "react-error-boundary";
 import { getQueryJson } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
+import { isMasked, login } from "../../../redux/reducers/userReducer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -88,10 +90,20 @@ const Index = () => {
           response?.data[0]?.token
         );
 
-        // console.log(
-        //   "🚀 ~ file: index.tsx:87 ~ logInOnClick ~ response?.data[0]?.sellerId:",
-        //   response?.data[0]
-        // );
+        //for hubspot sso
+        const params = getQueryJson();
+
+        const supportedUrl =
+          "https://support.shipyaari.com/_hcms/mem/jwt/verify";
+
+        if (params?.hasOwnProperty("redirect_url")) {
+          if (params?.redirect_url === supportedUrl) {
+            window.location.replace(
+              `${params?.redirect_url}?jwt=${response?.data[0]?.token}`
+            );
+          }
+          return;
+        }
 
         window?.dataLayer?.push({
           event: "login",
@@ -116,6 +128,40 @@ const Index = () => {
         if (token !== "") {
           console.log("socketConnectedAfterlogin");
           socketCallbacks.connectSocket(dispatch);
+        }
+
+        const [
+          selling_partner_id,
+          amazon_callback_uri,
+          amazon_state,
+          spapi_oauth_code,
+        ] = [
+          "selling_partner_id",
+          "amazon_callback_uri",
+          "amazon_state",
+          "spapi_oauth_code",
+        ].map((key) => localStorage.getItem(key));
+        const state = response?.data[0]?.sellerId;
+
+        if (
+          selling_partner_id &&
+          amazon_callback_uri &&
+          amazon_state &&
+          state
+        ) {
+          ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach(
+            (key) => localStorage.removeItem(key)
+          );
+          // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+          const redirectUrl = AMAZON_REDIRECT_URL;
+          window.location.href =
+            amazon_callback_uri +
+            "?redirect_uri=" +
+            redirectUrl +
+            "&amazon_state=" +
+            amazon_state +
+            "&state=" +
+            state;
         }
 
         // redirect based on qna and kyc done or not
@@ -204,6 +250,36 @@ const Index = () => {
         socketCallbacks.connectSocket(dispatch);
       }
 
+      const [
+        selling_partner_id,
+        amazon_callback_uri,
+        amazon_state,
+        spapi_oauth_code,
+      ] = [
+        "selling_partner_id",
+        "amazon_callback_uri",
+        "amazon_state",
+        "spapi_oauth_code",
+      ].map((key) => localStorage.getItem(key));
+      const state = response?.data[0]?.sellerId;
+      // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+      const redirectUrl = AMAZON_REDIRECT_URL;
+
+      if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
+        ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach(
+          (key) => localStorage.removeItem(key)
+        );
+
+        window.location.href =
+          amazon_callback_uri +
+          "?redirect_uri=" +
+          redirectUrl +
+          "&amazon_state=" +
+          amazon_state +
+          "&state=" +
+          state;
+      }
+
       setLoading(false);
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
@@ -239,14 +315,66 @@ const Index = () => {
         )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";
 
+    const params = getQueryJson();
+    const keys = [
+      "selling_partner_id",
+      "amazon_callback_uri",
+      "amazon_state",
+      "spapi_oauth_code",
+    ];
+    keys.forEach((key) => {
+      if (params?.hasOwnProperty(key)) {
+        localStorage.setItem(key, params[key]);
+      }
+    });
+
+    const [
+      selling_partner_id,
+      amazon_callback_uri,
+      amazon_state,
+      spapi_oauth_code,
+    ] = [
+      "selling_partner_id",
+      "amazon_callback_uri",
+      "amazon_state",
+      "spapi_oauth_code",
+    ].map((key) => localStorage.getItem(key));
+    // const redirectUrl = 'http://loc/alhost:8010/amazonCheckParams';
+
+    // Set a timeout to hide the boot screen
     setTimeout(() => {
       setShowBootScreen(false);
     }, 2000);
     token &&
       (async () => {
         const response = await POST(VALIDATE_USER_TOKEN);
+        const amazonsellerId: any = localStorage.getItem("sellerId");
+        const state = amazonsellerId;
+        // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+        const redirectUrl = AMAZON_REDIRECT_URL;
         if (response?.data?.success) {
-          navigate("/dashboard/overview");
+          if (
+            selling_partner_id &&
+            amazon_callback_uri &&
+            amazon_state &&
+            state
+          ) {
+            [
+              "selling_partner_id",
+              "amazon_callback_uri",
+              "amazon_state",
+            ].forEach((key) => localStorage.removeItem(key));
+            window.location.href =
+              amazon_callback_uri +
+              "?redirect_uri=" +
+              redirectUrl +
+              "&amazon_state=" +
+              amazon_state +
+              "&state=" +
+              state;
+          } else {
+            navigate("/dashboard/overview");
+          }
         }
       })();
   }, []);
@@ -384,7 +512,9 @@ const Index = () => {
                   </div>
                   <div>
                     <CustomInputBox
-                      containerStyle="mt-[17px]"
+                      containerStyle={`mt-[17px] ${
+                        loginError.email ? "border-red-500" : ""
+                      }`}
                       label="Email"
                       id="email"
                       //commented as by default placeholder text is getting top of the input box
@@ -420,16 +550,60 @@ const Index = () => {
                           });
                         }
                       }}
+                      errorCondition={{
+                        // regex: "email",
+                        message: loginError?.email,
+                        // onBlur: true, // Trigger error condition check on blur
+                      }}
+                      // inputError={loginError.email !== ""}
                     />
-                    {loginError.email !== "" && (
+                    {/* {loginError.email !== "" && (
                       <div className="flex items-center gap-x-1 mt-1">
                         <img src={InfoCircle} alt="" width={10} height={10} />
                         <span className="font-normal text-[#F35838] text-xs leading-3">
                           {loginError.email}
                         </span>
                       </div>
-                    )}
+                    )} */}
                   </div>
+
+                  {/* <div>
+                    <CustomInputBox
+                      containerStyle={`mt-[17px] ${
+                        loginError.email ? "border-red-500" : ""
+                      }`}
+                      label="Email"
+                      id="email"
+                      inputType="email"
+                      value={loginCredentials.email}
+                      onChange={(e) => {
+                        setLoginCredentials({
+                          ...loginCredentials,
+                          email: e.target.value,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (!loginCredentials?.email) {
+                          setLoginError({
+                            ...loginError,
+                            email: "Please Enter Your Email ID",
+                          });
+                        } else if (!emailRegex.test(e.target.value)) {
+                          setLoginError({
+                            ...loginError,
+                            email: "Incorrect Email ID",
+                          });
+                        } else {
+                          setLoginError({ ...loginError, email: "" });
+                        }
+                      }}
+                      errorCondition={{
+                        // regex: "email",
+                        message: loginError.email,
+                        // onBlur: true, // Trigger error condition check on blur
+                      }}
+                    />
+                  </div> */}
 
                   <div>
                     <CustomInputBox
@@ -480,15 +654,20 @@ const Index = () => {
                           });
                         }
                       }}
+                      errorCondition={{
+                        // regex: "email",
+                        message: loginError?.password,
+                        // onBlur: true, // Trigger error condition check on blur
+                      }}
                     />
-                    {loginError.password !== "" && (
+                    {/* {loginError.password !== "" && (
                       <div className="flex items-center gap-x-1 mt-1">
                         <img src={InfoCircle} alt="" width={10} height={10} />
                         <span className="font-normal text-[#F35838] text-xs leading-3">
                           {loginError.password}
                         </span>
                       </div>
-                    )}
+                    )} */}
                   </div>
                   <div className="mt-[-15px]">
                     {" "}

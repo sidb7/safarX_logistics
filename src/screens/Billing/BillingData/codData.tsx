@@ -74,7 +74,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="py-4">
-            <p className="font-Open text-sm font-normal leading-5">
+            <p className="font-Open text-xs font-normal leading-4">
               {info.row.original.reportNumber}
             </p>
           </div>
@@ -96,7 +96,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div>
-            <p className="font-Open text-sm font-normal leading-5">
+            <p className="font-Open text-xs font-normal leading-4">
               {info.row.original.reportNumber}
             </p>
           </div>
@@ -107,7 +107,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               CodAmount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -118,7 +118,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            <p className="font-Open text-sm font-normal leading-5">
+            <p className="font-Open text-xs font-normal leading-4">
               ₹ {info?.row?.original?.details?.codAmountRemittable}
             </p>
           </div>
@@ -129,7 +129,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Addon Charges
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -139,7 +139,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="">
+          <div className="font-Open font-normal leading-4 text-xs">
             <p>₹{info.row?.original?.addonCharges || 0}</p>
           </div>
         );
@@ -149,7 +149,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Settlement Amount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -159,7 +159,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="">
+          <div className="font-Open font-normal leading-4 text-xs ">
             <p>₹{info.row.original?.settlementAmount || 0}</p>
           </div>
         );
@@ -169,7 +169,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               OutStanding Amount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -179,7 +179,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="">
+          <div className="font-Open font-normal leading-4 text-xs ">
             <p>₹{info.row.original?.outStandingAmount || 0}</p>
           </div>
         );
@@ -189,7 +189,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Hold Amount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -199,7 +199,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="">
+          <div className="font-Open font-normal leading-4 text-xs ">
             <p>₹{info.row.original?.holdAmount || 0}</p>
           </div>
         );
@@ -209,7 +209,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Recovery Amount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -220,7 +220,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div
-            className=""
+            className="font-Open font-normal leading-4 text-xs "
             onClick={() =>
               setCodModal({ isOpen: true, data: info?.row?.original })
             }
@@ -234,7 +234,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Cod Recharge
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -244,7 +244,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="">
+          <div className="font-Open font-normal leading-4 text-xs ">
             <p>₹{info.row.original?.codRecharge || 0}</p>
           </div>
         );
@@ -254,7 +254,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Net Paid
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -266,7 +266,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         //   info.row.original?.netPaid;
 
         return (
-          <div className="">
+          <div className="font-Open font-normal leading-4 text-xs ">
             <p className="text-[#5958FF] cursor-pointer">
               ₹ {info?.row?.original?.details?.codAmountRemitted}
             </p>
@@ -278,7 +278,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Payment Ref No
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -289,14 +289,18 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         //   ₹ info.row.original?.netPaid;
 
-        return <div className=""> {info?.row?.original?.details?.utrNo}</div>;
+        return (
+          <div className="font-Open font-normal leading-4 text-xs ">
+            {info?.row?.original?.details?.utrNo}
+          </div>
+        );
       },
     }),
     columnsHelper.accessor("awb", {
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               AWB
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
@@ -329,7 +333,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       header: () => {
         return (
           <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Actions
             </p>
           </div>

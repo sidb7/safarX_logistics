@@ -446,7 +446,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         break;
       }
       case "BOOKED":
-      case "READY TO PICK": {
+      case "PICKED UP": {
         // if (selectedRowdata.length > 0) {
         if (identifier === "Cancel") {
           if (selectedRowdata.length > 0) {
@@ -633,7 +633,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const filterButton = () => {
     if (isLgScreen) {
-      if (currentStatus === "BOOKED" || "READY TO PICK") {
+      if (currentStatus === "BOOKED" || "PICKED UP") {
         return (
           <div className="grid grid-cols-4 lg:flex ">
             {getActionsIcon()?.length > 0 && manifestButton && (
