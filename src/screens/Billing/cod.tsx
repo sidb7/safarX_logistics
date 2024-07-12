@@ -14,6 +14,8 @@ import CodRemittedAwbModal from "./Modal/codRemittedAwbsModal";
 import ReactDatePicker from "react-datepicker";
 import { convertXMLToXLSX } from "../../utils/helper";
 import { toast } from "react-hot-toast";
+import DatePicker from "react-datepicker";
+import DateButton from "../../components/Button/DateButton";
 
 interface IInvoiceProps {}
 
@@ -117,6 +119,12 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   //   await convertXMLToXLSX(formattedData, `BankData_${formattedDate}.xlsx`);
   // };
 
+  const handleClear = () => {
+    setDateRange([null, null]);
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   const downloadReport = async (reportNumber: any) => {
     setIsDownloading(true);
 
@@ -184,7 +192,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
               <SearchBox label="Search" value="" onChange={() => {}} />
             </div>
             <div className="">
-              <ReactDatePicker
+              {/* <ReactDatePicker
                 selectsRange={true}
                 startDate={startDate}
                 endDate={endDate}
@@ -205,6 +213,39 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 placeholderText="Select From & To Date"
                 className="cursor-pointer h-12 border-solid border-2 datepickerCss  pl-6"
                 dateFormat="dd/MM/yyyy"
+              /> */}
+              <DatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update: any) => {
+                  setDateRange(update);
+                  if (update[0] === null && update[1] === null) {
+                    // Explicitly set startDate and endDate to null when cleared
+                    setStartDate(null);
+                    setEndDate(null);
+                    // fetchCodRemittanceData();
+                  } else {
+                    // Update startDate and endDate based on the selected range
+                    setStartDate(update[0]);
+                    setEndDate(update[1]);
+                  }
+                }}
+                // isClearable={true}
+                dateFormat="dd/MM/yyyy"
+                customInput={
+                  <DateButton
+                    text="Select From & To Date" // Text for the button
+                    onClick={() => {}} // onClick is managed by DatePicker
+                    className="h-[36px]"
+                    value={
+                      startDate && endDate
+                        ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                        : ""
+                    } // Display date range
+                    onClear={handleClear} // Handle clear action
+                  />
+                } // Include placeholder onClick function
               />
             </div>
           </div>

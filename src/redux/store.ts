@@ -10,6 +10,7 @@ import { onboardingSlice } from "./reducers/onboarding";
 import { Environment } from "../utils/ApiUrls";
 import { ChannelSlice } from "./reducers/syncChannel";
 import { paginationSlice } from "./reducers/paginationReducer";
+import { buttonFlagSlice } from "./reducers/updateButtonReducer";
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
@@ -22,6 +23,7 @@ export const store = configureStore({
     onboarding: onboardingSlice.reducer,
     channel: ChannelSlice.reducer,
     paginationSlice: paginationSlice.reducer,
+    buttonFlagSlice: buttonFlagSlice.reducer,
   },
   devTools: Environment !== "production" ? true : false,
 });

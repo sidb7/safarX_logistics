@@ -27,7 +27,6 @@ import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
 import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
 import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
 import Order from "../screens/Order/index";
-
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/Onboarding/Kyc/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -149,6 +148,7 @@ import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
 import ViewTicketDetails from "../screens/Help/Tickets/viewTicketDetails";
 import Reports from "../screens/NewOrder/Reports";
 import AddBox from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addBox";
+import SinglePageOrderJourney from "../screens/SinglePageOrder/index";
 
 //feedBack
 import AddFeedBack from "../screens/FeedBack/addFeedback";
@@ -169,7 +169,7 @@ import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
 import Label from "../screens/Profile/Settings/labelSetting";
 import CouponScreen from "../components/Coupons/index";
 import Rules from "../screens/Order/Rules";
-import ChangePasswordv2 from "../screens/Auth/ChangePassword";
+import ChangePasswordv2 from "../screens/Auth/PasswordChange";
 import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
 import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 
@@ -190,6 +190,15 @@ const MyRoutes: React.FC = () => {
           </ErrorBoundary>
         }
       />
+
+      {/* <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePasswordv2 />
+          </ProtectedRoute>
+        }
+      /> */}
 
       <Route
         path="/"
@@ -522,6 +531,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <BulkUpload />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/order"
+            element={
+              <ProtectedRoute>
+                <SinglePageOrderJourney />
               </ProtectedRoute>
             }
           />

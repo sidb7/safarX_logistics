@@ -93,8 +93,17 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const generateExcelFile = async (data: any) => {
-    const ws: any = XLSX.utils.json_to_sheet(data);
-
+    let headers = [
+      "Box Id",
+      "Name",
+      "Color",
+      "Length (cm)",
+      "Breadth (cm)",
+      "Height (cm)",
+      "Dead Weight (Kg)",
+      "Price (Rs)",
+    ];
+    const ws: any = XLSX.utils.json_to_sheet(data, { header: headers });
     // // Get the range of the first column
     // const range = XLSX.utils.decode_range(ws["!ref"]);
     // for (let rowNum = range.s.r; rowNum <= range.e.r; rowNum++) {

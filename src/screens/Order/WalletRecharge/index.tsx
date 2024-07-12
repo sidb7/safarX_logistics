@@ -576,7 +576,7 @@ const WalletRecharge = () => {
                         setWalletValue(event.target.value);
                       }}
                       wrapperClass="w-[200px]"
-                      selectClassName="text-[18px] mt-6"
+                      selectClassName="text-[12px] mt-6"
                     />
                     <JusPay
                       isDisabled={isDisabled}

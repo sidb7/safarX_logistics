@@ -50,6 +50,7 @@ import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 import ReverseCustomAccordian from "./Reverse/index";
+import ReverseSummary from "./Reverse/summary";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
@@ -79,6 +80,9 @@ import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
+import DoneIcon from "../../assets/Done .svg";
+import DateButton from "../../components/Button/DateButton";
+import OrderUpdationModal from "../Order/OrderUpdationModal";
 import { DuplicateModel } from "../../components/Duplicate";
 // import OrderUpdationModal from "../Order/OrderUpdationModal";
 
@@ -156,7 +160,7 @@ const Buttons = (className?: string) => {
 //   "NOT PICKED",
 //   "CANCELLED",
 //   "DRAFT",
-//   "READY TO PICK",
+//   "PICKED UP",
 //   "PICKED UP",
 //   "IN TRANSIT",
 //   "DESTINATION CITY",
@@ -315,11 +319,20 @@ const Index = () => {
     isOpen: false,
     data: {},
   });
+  const [bookReverseCenterModal, setBookReverseCenterModal] = useState(false);
+  const [
+    infoReverseSummaryModalContent,
+    setInfoReverseSummaryModalContent,
+  ]: any = useState({
+    isOpen: false,
+    data: {},
+  });
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
   const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
 
   const roles = useSelector((state: any) => state?.roles);
   const channelReduxData = useSelector((state: any) => state?.channel?.channel);
+  const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
@@ -371,6 +384,14 @@ const Index = () => {
 
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
+  // const [isMasked, setIsMasked] = useState(false);
+
+  // useEffect(() => {
+  //   let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+  //   if (temp) {
+  //     setIsMasked(temp?.isMaskedUser);
+  //   }
+  // }, []);
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
@@ -409,6 +430,14 @@ const Index = () => {
 
   const setInfoReverseModalFunction = async (data: any) => {
     setInfoReverseModalContent({
+      isOpen: true,
+      data: data,
+    });
+  };
+
+  const setInfoReverseSummaryModalFunction = async (data: any) => {
+    console.log("🚀 ~ setInfoReverseSummaryModalFunction ~ data:", data);
+    setInfoReverseSummaryModalContent({
       isOpen: true,
       data: data,
     });
@@ -523,12 +552,18 @@ const Index = () => {
     }
   };
 
+  const handleClear = () => {
+    setDateRange([null, null]);
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   const Buttons = (className?: string) => {
     return (
       <div>
         <div className="flex justify-end mb-4">
-          <div className="border border-[#AFAFAF] w-[230px]  !h-[36px] rounded-md">
-            <DatePicker
+          <div className="">
+            {/* <DatePicker
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
@@ -549,6 +584,39 @@ const Index = () => {
               placeholderText="Select From & To Date"
               className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
               dateFormat="dd/MM/yyyy"
+            /> */}
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update: any) => {
+                setDateRange(update);
+                if (update[0] === null && update[1] === null) {
+                  // Explicitly set startDate and endDate to null when cleared
+                  setStartDate(null);
+                  setEndDate(null);
+                  // fetchCodRemittanceData();
+                } else {
+                  // Update startDate and endDate based on the selected range
+                  setStartDate(update[0]);
+                  setEndDate(update[1]);
+                }
+              }}
+              // isClearable={true}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <DateButton
+                  text="Select From & To Date" // Text for the button
+                  onClick={() => {}} // onClick is managed by DatePicker
+                  className="h-[36px]"
+                  value={
+                    startDate && endDate
+                      ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                      : ""
+                  } // Display date range
+                  onClear={handleClear} // Handle clear action
+                />
+              } // Include placeholder onClick function
             />
           </div>
           <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border w-[250px]">
@@ -777,7 +845,6 @@ const Index = () => {
   };
 
   const warningMessageForDuplicate = (data: any) => {
-    console.log("🚀 ~ warningMessageForDuplicate ~ data:", data);
     return (
       <div>
         <div>
@@ -852,7 +919,7 @@ const Index = () => {
         </div>
 
         <div
-          ref={syncRef}
+          // ref={syncRef}
           onClick={handleSyncOrder} // Function Added
           className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
         >
@@ -1003,13 +1070,27 @@ const Index = () => {
       }
       setTotalcount(orderCount ? orderCount : 0);
 
-      setDraftOrderCount({
-        ...draftOrderCount,
-        all: allOrdersCount || orderCount,
-        draft: draftCount || 0,
-        // failed: failedCount || 0,
-        error: errorCount || 0,
-      });
+      if (payload.filterArrOne) {
+        setDraftOrderCount({
+          ...draftOrderCount,
+          all:
+            allOrdersCount && orderCount
+              ? Math.min(allOrdersCount, orderCount)
+              : orderCount,
+          draft: draftCount || 0,
+          error: errorCount || 0,
+        });
+      } else {
+        setDraftOrderCount({
+          ...draftOrderCount,
+          all:
+            allOrdersCount && orderCount
+              ? Math.max(allOrdersCount, orderCount)
+              : orderCount,
+          draft: draftCount || 0,
+          error: errorCount || 0,
+        });
+      }
 
       setSelectedRowData([]);
       if (data?.status || data?.success) {
@@ -1268,7 +1349,8 @@ const Index = () => {
               currentStatus,
               orderActions,
               setOpenRightModalForTracking,
-              openRightModalForTracking
+              openRightModalForTracking,
+              isMasked
             )
           );
           break;
@@ -1281,7 +1363,8 @@ const Index = () => {
               currentStatus,
               orderActions,
               setOpenRightModalForTracking,
-              openRightModalForTracking
+              openRightModalForTracking,
+              isMasked
             )
           );
           break;
@@ -1295,7 +1378,8 @@ const Index = () => {
               setInfoModalContentFunction,
               setInfoReverseModalFunction,
               setOpenRightModalForTracking,
-              openRightModalForTracking
+              openRightModalForTracking,
+              isMasked
             )
           );
           break;
@@ -1338,7 +1422,7 @@ const Index = () => {
       case "Payment Type":
         const tempArr = [...data];
 
-        for (let i = 0; i < tempArr.length; i++) {
+        for (let i = 0; i < tempArr?.length; i++) {
           if (tempArr[i] === "Prepaid") {
             tempArr[i] = false;
           } else if (tempArr[i] === "Cod") {
@@ -1478,7 +1562,7 @@ const Index = () => {
       ? getIndexFromActiveTab(statusData, activeTab)
       : 0;
 
-    if (searchedText.length > 0) {
+    if (searchedText?.length > 0) {
       searchDebounce(
         tabIndex,
         true,
@@ -1612,8 +1696,8 @@ const Index = () => {
       }
 
       if (
-        filterPayLoadData?.filterArrOne.length > 0 ||
-        filterPayLoadData?.filterArrTwo.length > 0
+        filterPayLoadData?.filterArrOne?.length > 0 ||
+        filterPayLoadData?.filterArrTwo?.length > 0
       ) {
         const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
           (obj: any) => !Object.keys(obj).includes("createdAt")
@@ -1651,7 +1735,7 @@ const Index = () => {
         );
       }
 
-      if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+      if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
@@ -1699,7 +1783,7 @@ const Index = () => {
     arrLebels: string[],
     setIsLoadingManifest: any
   ) => {
-    if (!arrLebels.length) {
+    if (!arrLebels?.length) {
       toast.error("Please Select One Orders For label");
       return;
     }
@@ -1758,7 +1842,7 @@ const Index = () => {
     arrLebels: string[],
     setIsLoadingManifest: any
   ) => {
-    if (!arrLebels.length) {
+    if (!arrLebels?.length) {
       toast.error("Please Select One Orders For Tax Invoice");
       return;
     }
@@ -2026,7 +2110,7 @@ const Index = () => {
   }, [filterState]);
 
   useEffect(() => {
-    if (channelReduxData.length > 0) {
+    if (channelReduxData?.length > 0) {
       setIsSyncModalLoading(false);
     }
   }, [channelReduxData]);
@@ -2205,7 +2289,7 @@ const Index = () => {
                     )
                   ) : (
                     <div className="border border-white my-5">
-                      {orders.length > 0 ? (
+                      {orders?.length > 0 ? (
                         <>
                           {orders?.map((data: any, i: any) => (
                             <OrderCard
@@ -2294,16 +2378,13 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <CustomTableAccordian getAllSellerData={infoModalContent} />
-
-        {/* commented as the orderupdationModal is not going to use now */}
-        {/* <OrderUpdationModal
-          getIdData={infoModalContent}
-          setInfoModalContent={setInfoModalContent}
-        /> */}
+        <CustomTableAccordian
+          getAllSellerData={infoModalContent}
+          isMasked={isMasked}
+        />
       </CustomRightModal>
 
-      {/* Rverse Order Modal */}
+      {/* Reverse Order Modal */}
       <CustomRightModal
         isOpen={infoReverseModalContent.isOpen}
         onClose={() => setInfoReverseModalContent({ isOpen: false, data: {} })}
@@ -2327,9 +2408,64 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <ReverseCustomAccordian awbData={infoReverseModalContent} />
-        {/* <CustomTableAccordian getAllSellerData={infoModalContent} /> */}
+        <ReverseCustomAccordian
+          awbData={infoReverseModalContent}
+          summaryData={setInfoReverseSummaryModalFunction}
+        />
       </CustomRightModal>
+
+      {/* Reverse Order Summary Modal */}
+      <CustomRightModal
+        isOpen={infoReverseSummaryModalContent.isOpen}
+        onClose={() =>
+          setInfoReverseSummaryModalContent({ isOpen: false, data: {} })
+        }
+        className="!justify-start !w-[434px]"
+      >
+        <div>
+          <div className="p-[20px] flex justify-between">
+            <div className="flex">
+              <img src={Delivery_Icon} className="mr-2" />
+              <span className="text-[24px] font-Lato font-normal">
+                Reverse Order
+              </span>
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() =>
+                setInfoReverseSummaryModalContent({ isOpen: false, data: {} })
+              }
+            >
+              <img src={CloseIcon} />
+            </div>
+          </div>
+        </div>
+        <ReverseSummary
+          summaryData={infoReverseSummaryModalContent?.data}
+          setState={setInfoReverseSummaryModalContent}
+          reverseModal={setInfoReverseModalContent}
+          bookOrder={setBookReverseCenterModal}
+        />
+      </CustomRightModal>
+
+      {/* center modal for book reverse order */}
+      <CenterModal
+        isOpen={bookReverseCenterModal}
+        onRequestClose={() => setBookReverseCenterModal(false)}
+        className="max-w-[500px] max-h-[300px]"
+      >
+        <div className="flex flex-col text-center text-[18px] text-[#1C1C1C] font-Lato font-normal">
+          <img src={DoneIcon} className="h-[124px] w-[124px] self-center" />
+          <span>Thank You</span>
+          <span>Your Reverse order has been placed.</span>
+          <span>You can find your orders in Reverse section</span>
+          <CustomButton
+            className="mt-[24px] w-[127px] h-[20px] p-4 self-center"
+            text={"GO TO ORDER"}
+            onClick={() => setBookReverseCenterModal(false)}
+          />
+        </div>
+      </CenterModal>
 
       <CustomRightModal
         isOpen={isErrorModalOpen}

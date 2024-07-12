@@ -65,6 +65,8 @@ const BoxDetails = (props: IBoxdetails) => {
     }
   }, [selectedBox?.codInfo?.isCod]);
 
+  console.log("Envirment + SellerId : ", { Environment, sellerId });
+
   const calculateVolumeWeight = (
     length: number,
     breadth: number,

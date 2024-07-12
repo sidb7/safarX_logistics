@@ -1,5 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
+import shareIcon from "../../../assets/ShareIcon.svg";
 // import DummyImage from "../../../assets/Profile/DummyImage.svg";
 import { useNavigate } from "react-router-dom";
 import LabelContainer from "../../../components/LabelContainer";
@@ -36,7 +37,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
         {!kycCheck && (
           <div>
             <img
-              src={EditIcon}
+              src={shareIcon}
               alt=""
               className="mr-4 cursor-pointer"
               // onClick={() => navigate("/profile/edit-bank")}

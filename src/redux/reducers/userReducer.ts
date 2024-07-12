@@ -8,6 +8,7 @@ interface UserState {
   loggedIn: boolean;
   isReturningUser: boolean;
   walletBalance: number;
+  isMasked: boolean;
 }
 
 // Define the initial state using that type
@@ -18,6 +19,7 @@ const initialState: UserState = {
   loggedIn: false,
   isReturningUser: true,
   walletBalance: 0,
+  isMasked: true,
 };
 
 export const userSlice = createSlice({
@@ -42,9 +44,12 @@ export const userSlice = createSlice({
     setWalletBalance: (state, action: PayloadAction<{ amt: number }>) => {
       state.walletBalance = action.payload.amt;
     },
+    isMasked: (state, action) => {
+      state.isMasked = action.payload.isMasked;
+    },
     // other reducers...
   },
 });
 
-export const { login, logout, setWalletBalance } = userSlice.actions;
+export const { login, logout, setWalletBalance, isMasked } = userSlice.actions;
 export default userSlice.reducer;

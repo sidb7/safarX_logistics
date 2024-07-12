@@ -16,7 +16,7 @@ import NoDataFoundGif from "../../assets/NoDataFound.gif";
 import Location from "../../assets/Location.svg";
 import AccordianCloseIcon from "../../assets/AccordianCloseIcon.svg";
 import AccordianOpenIcon from "../../assets/AccordianOpen.svg";
-import RefreshIcon from "../../assets/RefreshIcon.svg";
+import RefreshIcon from "../../assets/refreshIcon.svg";
 import { isNumber } from "lodash";
 interface INewTrackingContentProps {
   setOpenRightModalForTracking?: any;
