@@ -9,14 +9,34 @@ import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import OneButton from "../../components/Button/OneButton";
+import crossIcon from "../../assets/cross.svg";
 import tickIcon from "../../assets/tick.svg";
 import DownloadIcon from "../../assets/download.svg";
+import CustomInputBox from "../../components/Input";
+import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
+import { generateUniqueCode } from "../../utils/utility";
+import InputBox from "../../components/Input";
+import { POST } from "../../utils/webService";
+import toast from "react-hot-toast";
+import walletIcon from "../../assets/Group.svg";
+import {
+  FETCH_LABELS_REPORT_DOWNLOAD,
+  FETCH_MANIFEST_DATA,
+  FETCH_MULTI_TAX_REPORT_DOWNLOAD,
+  REVERSE_ORDER,
+} from "../../utils/ApiUrls";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import { useNavigate } from "react-router-dom";
+import { tokenKey } from "../../utils/utility";
+import { useSelector } from "react-redux";
 
 interface IIndexProps {}
 
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
-  const [order, setOrder] = useState({
+  const [showDownloadLebal, setDownloadLebal] = useState(false);
+  const [isLoadingManifest, setIsLoadingManifest] = useState(false);
+  const [order, setOrder]: any = useState({
     pickupDetails: {
       fullAddress: "",
       pincode: 0,
@@ -34,57 +54,59 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       },
       gstNumber: "",
     },
-    boxInfo: [
-      {
-        name: "box_1",
-        weightUnit: "Kg",
-        deadWeight: 1,
-        length: 1,
-        breadth: 1,
-        height: 1,
-        measureUnit: "cm",
-        products: [
-          {
-            name: "Apple Iphone",
-            category: "Electronic",
-            sku: "abc",
-            qty: 2,
-            unitPrice: 100,
-            unitTax: 180,
-            weightUnit: "kg",
-            deadWeight: 1,
-            length: 32,
-            breadth: 32,
-            height: 42,
-            measureUnit: "cm",
-          },
-        ],
-        codInfo: {
-          isCod: false,
-          collectableAmount: 0,
-          invoiceValue: 2000,
-        },
-        podInfo: {
-          isPod: false,
-        },
-        insurance: false,
-      },
-    ],
+    boxInfo: [],
     orderType: "B2C",
     transit: "FORWARD",
-    courierPartner: "Bluedart",
+    courierPartner: "",
     source: "API",
-    pickupDate: "1711606459000",
+    pickupDate: "",
     gstNumber: "",
     orderId: "",
     eWayBillNo: 0,
     awb: "rr",
     brandName: "Google",
-    brandLogo:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/250px-Google_2015_logo.svg.png",
+    brandLogo: "",
   });
 
-  console.log("order", order);
+  // {
+  //       name: "Apple Iphone",
+  //       category: "Electronic",
+  //       sku: "abc",
+  //       qty: 2,
+  //       unitPrice: 100,
+  //       unitTax: 180,
+  //       weightUnit: "kg",
+  //       deadWeight: 1,
+  //       length: 32,
+  //       breadth: 32,
+  //       height: 42,
+  //       measureUnit: "cm",
+  //     },
+
+  //  {
+  //     name: "box_1",
+  //     weightUnit: "Kg",
+  //     deadWeight: 1,
+  //     length: 1,
+  //     breadth: 1,
+  //     height: 1,
+  //     measureUnit: "cm",
+  //     products: [],
+  //     codInfo: {
+  //       isCod: false,
+  //       collectableAmount: 0,
+  //       invoiceValue: 2000,
+  //     },
+  //     podInfo: {
+  //       isPod: false,
+  //     },
+  //     insurance: false,
+  //   },
+  const [showAlertBox, setShowAlertBox] = useState(false);
+
+  const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
+
+  const navigate = useNavigate();
 
   let data = [
     {
@@ -103,6 +125,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     },
   ];
 
+  const sumInvoiceValue =
+    order?.boxInfo.length > 0 &&
+    order?.boxInfo.reduce(
+      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+      0
+    );
+
   const SummaryColumns = [
     columnsHelper.accessor("serialNo", {
       header: () => {
@@ -113,29 +142,30 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
       cell: (info: any) => {
+        console.log("rowData", info.row);
         return (
           <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px] ">
-            {info.row.original.id || "-"}
+            {info.row?.index + 1 || "-"}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("orderId", {
-      header: () => {
-        return (
-          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
-            Order ID
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {info.row.original.orderId || "-"}
-          </div>
-        );
-      },
-    }),
+    // columnsHelper.accessor("orderId", {
+    //   header: () => {
+    //     return (
+    //       <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+    //         Order ID
+    //       </p>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+    //         {info.row.original.orderId || "-"}
+    //       </div>
+    //     );
+    //   },
+    // }),
     columnsHelper.accessor("package", {
       header: () => {
         return (
@@ -147,7 +177,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       cell: (info: any) => {
         return (
           <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {capitalizeFirstLetter(info.row.original.package) || "-"}
+            {capitalizeFirstLetter(info.row.original?.name) || "-"}
           </div>
         );
       },
@@ -169,37 +199,267 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       },
     }),
 
-    columnsHelper.accessor("charge", {
-      header: () => {
-        return (
-          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
-            Charge
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {info.row.original.charge || "-"}
-          </div>
-        );
-      },
-    }),
+    // columnsHelper.accessor("charge", {
+    //   header: () => {
+    //     return (
+    //       <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+    //         Charge
+    //       </p>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+    //         {info.row.original.charge || "-"}
+    //       </div>
+    //     );
+    //   },
+    // }),
   ];
 
+  const fetchManifest = async (awbArray?: any) => {
+    let payload = {
+      awbs: awbArray,
+    };
+    setIsLoadingManifest(true);
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(FETCH_MANIFEST_DATA, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message);
+      setIsLoadingManifest(false);
+      // setManifestButton(true);
+      return;
+    }
+    const data = await response.blob();
+
+    const blob = new Blob([data], { type: "application/pdf" });
+
+    var url = URL.createObjectURL(blob);
+    setIsLoadingManifest(false);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Manifest_Report.pdf`;
+    a.click();
+  };
+
+  // ----------------------------------------------------------------------------------------------------------------------------
+  const fetchLabels = async (
+    arrLebels: string[],
+    setIsLoadingManifest: any
+  ) => {
+    if (!arrLebels?.length) {
+      toast.error("Please Select One Orders For label");
+      return;
+    }
+
+    setIsLoadingManifest({
+      isLoading: true,
+      identifier: "Download_Labels",
+    });
+
+    const payload: any = {
+      awbs: arrLebels.filter((item: any) => item !== ""),
+    };
+
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
+
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const resdata: any = await data.blob();
+
+    const blob = new Blob([resdata], { type: resdata?.type });
+    let filename: any;
+    if (resdata?.type === "image/png") {
+      filename = "Label_Report.png";
+    } else {
+      filename = "Label_Report.pdf";
+    }
+
+    var url = URL.createObjectURL(blob);
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    return true;
+  };
+
+  // -----------------------------------------------------------------------------------------------------------------------------
+  const fetchMultiTax = async (
+    arrLebels: string[],
+    setIsLoadingManifest: any
+  ) => {
+    if (!arrLebels?.length) {
+      toast.error("Please Select One Orders For Tax Invoice");
+      return;
+    }
+
+    setIsLoadingManifest({
+      isLoading: true,
+      identifier: "Download_Multi_Tax",
+    });
+
+    const payload: any = {
+      awbs: arrLebels.filter((item: any) => item !== ""),
+    };
+
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
+
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const resdata: any = await data.blob();
+
+    const blob = new Blob([resdata], { type: "application/pdf" });
+
+    var url = URL.createObjectURL(blob);
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Multi_Tax_Invoices.pdf`;
+    a.click();
+    return true;
+  };
+
   const handlePickupDetailsChange = (newPickupDetails: any) => {
-    setOrder((prevOrder) => ({
+    setOrder((prevOrder: any) => ({
       ...prevOrder,
       pickupDetails: newPickupDetails,
     }));
   };
 
   const handleDeliveryDetailsChange = (newDeliveryDetails: any) => {
-    setOrder((prevOrder) => ({
+    setOrder((prevOrder: any) => ({
       ...prevOrder,
       deliveryDetails: newDeliveryDetails,
     }));
   };
+
+  const PlaceOrder = async () => {
+    const payload = { ...order };
+
+    if (walletBalance < sumInvoiceValue) {
+      setShowAlertBox(true);
+      return;
+    }
+
+    try {
+      const { data } = await POST(REVERSE_ORDER, payload);
+
+      console.log("data", data);
+
+      if (data?.success) {
+        setDownloadLebal(true);
+        toast.success(data?.message || "Successfully Placed order");
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
+    }
+  };
+
+  //   // let fileName = "";
+  //   let awbs = {
+  //     awbs: payload?.awbs,
+  //   };
+
+  //   let header = {
+  //     Accept: "/",
+  //     Authorization: `Bearer ${localStorage.getItem(
+  //       `${localStorage.getItem("sellerId")}_${tokenKey}`
+  //     )}`,
+  //     "Content-Type": "application/json",
+  //   };
+
+  //   if (actionType === "download_label") {
+  //     const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+  //       method: "POST",
+  //       headers: header,
+  //       body: JSON.stringify(awbs),
+  //     });
+
+  //     const resdata: any = await data?.blob();
+  //     const blob = new Blob([resdata], { type: resdata?.type });
+  //     let filename: any;
+  //     if (resdata?.type === "image/png") {
+  //       filename = "Label_Report.png";
+  //     } else {
+  //       filename = "Label_Report.pdf";
+  //     }
+
+  //     var url = URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.download = filename;
+  //     a.click();
+  //     return true;
+  //   } else {
+  //     const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
+  //       method: "POST",
+  //       headers: header,
+  //       body: JSON.stringify(awbs),
+  //     });
+
+  //     const resdata: any = await data?.blob();
+
+  //     const blob = new Blob([resdata], { type: "application/pdf" });
+
+  //     var url = URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.download = `Tax_Report.pdf`;
+  //     a.click();
+  //     return true;
+  //   }
+  // };
 
   const summaryDetails = () => {
     return (
@@ -215,64 +475,66 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           {/* table section  */}
           <div className="px-5">
             <CustomTable
-              data={data || []}
+              data={order?.boxInfo || []}
               columns={SummaryColumns}
               thclassName={"!w-auto "}
               tdclassName={"!w-auto"}
             />
           </div>
-          <div className="flex justify-center items-center pt-5 pb-12">
-            <OneButton
-              onClick={() => {}}
-              text={`Pay ₹ ${8000} `}
-              variant="primary"
-              className="!w-[228px]"
-            />
-          </div>
 
-          {/* success part when payment done and order placed  */}
-          <div>
-            {/* success card  */}
+          {!showDownloadLebal ? (
+            <div className="flex justify-center items-center pt-5 pb-12">
+              <OneButton
+                onClick={PlaceOrder}
+                text={`Pay ₹ ${sumInvoiceValue} `}
+                variant="primary"
+                className="!w-[228px]"
+              />
+            </div>
+          ) : (
+            <div>
+              {/* success card  */}
 
-            {/* <div className=" px-2 py-7">
-              <div className="flex gap-x-[6px] px-4 py-1 bg-[#A3DA91] border rounded-lg items-center">
-                <img src={tickIcon} alt="tick-icon" />
-                <p className="text-xs font-Open font-semibold leading-[22px] text-[#1C1C1C]">
-                  Congratulations! Your shipment has been booked successfully.
-                  Please download and paste the shipping label on your package
-                </p>
+              <div className=" px-2 py-7 mx-3">
+                <div className="flex gap-x-[6px] px-4 py-1 bg-[#A3DA91] border rounded-lg items-center">
+                  <img src={tickIcon} alt="tick-icon" />
+                  <p className="text-xs font-Open font-semibold leading-[22px] text-[#1C1C1C]">
+                    Congratulations! Your shipment has been booked successfully.
+                    Please download and paste the shipping label on your package
+                  </p>
+                </div>
               </div>
-            </div> */}
 
-            {/* downloads */}
+              {/* downloads */}
 
-            {/* <div className="flex justify-center items-center gap-3 mb-5">
-              <OneButton
-                text={"Label"}
-                onClick={() => {}}
-                variant="quad"
-                showIcon={true}
-                icon={DownloadIcon}
-                textTransform="capitalize"
-              />
-              <OneButton
-                text={"Invoice"}
-                onClick={() => {}}
-                variant="quad"
-                showIcon={true}
-                icon={DownloadIcon}
-                textTransform="capitalize"
-              />
-              <OneButton
-                text={"Manifest"}
-                onClick={() => {}}
-                variant="quad"
-                showIcon={true}
-                icon={DownloadIcon}
-                textTransform="capitalize"
-              />
-            </div> */}
-          </div>
+              {/* <div className="flex justify-center items-center gap-3 mb-5">
+                <OneButton
+                  text={"Label"}
+                  onClick={() => {}}
+                  variant="quad"
+                  showIcon={true}
+                  icon={DownloadIcon}
+                  textTransform="capitalize"
+                />
+                <OneButton
+                  text={"Invoice"}
+                  onClick={() => {}}
+                  variant="quad"
+                  showIcon={true}
+                  icon={DownloadIcon}
+                  textTransform="capitalize"
+                />
+                <OneButton
+                  text={"Manifest"}
+                  onClick={() => fetchManifest()}
+                  variant="quad"
+                  showIcon={true}
+                  icon={DownloadIcon}
+                  textTransform="capitalize"
+                />
+              </div> */}
+            </div>
+          )}
         </div>
       </>
     );
@@ -284,7 +546,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <div className="flex gap-5 mx-5">
           <div className="flex-1 ">
             <div className="flex flex-col gap-y-4  !h-[calc(100vh-180px)] customScroll">
-              <div className=" h-[50%]">
+              <div className="max-h-[50%] overflow-hidden">
                 <AddressCardDetails
                   pickupDetails={order?.pickupDetails}
                   deliveryDetails={order?.deliveryDetails}
@@ -292,35 +554,203 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   onDeliveryDetailsChange={handleDeliveryDetailsChange}
                 />
               </div>
-              <div className=" border rounded">
+              <div className=" rounded !max-h-[400px] overflow-hidden">
                 <PackageDetails
                   packageDetails={order?.boxInfo}
+                  order={order}
                   setOrder={setOrder}
                 />
+              </div>
+
+              <div className="border p-3 rounded flex items-center justify-between ">
+                <div className="md:!w-[300px]">
+                  <CustomInputBox
+                    isRightIcon={true}
+                    containerStyle=""
+                    rightIcon={AutoGenerateIcon}
+                    className="w-full !text-base !font-semibold"
+                    imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+                    value={order?.orderId}
+                    maxLength={12}
+                    label="Order ID"
+                    onChange={(e) => {
+                      setOrder((prevState: any) => {
+                        return { ...prevState, orderId: e.target.value };
+                      });
+                    }}
+                    onClick={() => {
+                      const orderId = generateUniqueCode(8, 12);
+                      setOrder((prevState: any) => {
+                        return { ...prevState, orderId: orderId };
+                      });
+                    }}
+                    visibility={true}
+                    setVisibility={() => {}}
+                    name="orderId"
+                    data-cy="auto-generate-order-id"
+                  />
+                </div>
+
+                {/* <div className="flex mt-2 gap-x-4 ml-1">
+                  <div className=" flex justify-start items-center h-fit">
+                    <input
+                      type="radio"
+                      name="type"
+                      value={"credit"}
+                      className=" mr-2 w-[20px] h-[20px]"
+                      checked={!order?.isCod}
+                      onChange={(e) => {
+                        setOrder((prevState: any) => {
+                          return {
+                            ...prevState,
+                            isCod: false,
+                          };
+                        });
+                      }}
+                    />
+                    <div>PREPAID</div>
+                  </div>
+                  <div className=" flex justify-start items-center  h-fit">
+                    <input
+                      type="radio"
+                      name="type"
+                      value={"debit"}
+                      className=" mr-2 w-[20px] h-[20px] "
+                      checked={order?.isCod}
+                      onChange={(e) => {
+                        setOrder((prevState: any) => {
+                          return {
+                            ...prevState,
+                            isCod: true,
+                          };
+                        });
+                      }}
+                    />
+                    <div>COD</div>
+                  </div>
+                </div> */}
+
+                {/* <div className="flex gap-x-4">
+                  <div>
+                    <InputBox
+                      label="Collectable Amount"
+                      // value={order?.}
+                      name="deadWeight"
+                      inputType="text"
+                      inputMode="numeric"
+                      // onChange={(e: any) => {
+                      //   if (!isNaN(e.target.value)) {
+                      //     onChangeHandler(e);
+                      //   }
+                      // }}
+                      //   inputError={inputError}
+                    />
+                  </div>
+                  <div>
+                    <InputBox
+                      label="Invoice value"
+                      // value={boxInputData?.deadWeight}
+                      name="deadWeight"
+                      inputType="text"
+                      inputMode="numeric"
+                      // onChange={(e: any) => {
+                      //   if (!isNaN(e.target.value)) {
+                      //     onChangeHandler(e);
+                      //   }
+                      // }}
+                      //   inputError={inputError}
+                    />
+                  </div>
+                </div> */}
               </div>
             </div>
           </div>
           <div className="flex-1">
             <div className="flex flex-col gap-y-5">
               <div>
-                <ShippingDetails />
+                <ShippingDetails order={order} setOrder={setOrder} />
               </div>
-              <div>{summaryDetails()}</div>
-              <div className="border-[1px] rounded-md border-[#E8E8E8]">
-                <div className="flex justify-between items-center px-4 py-3">
-                  <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
-                    Ready to place a new order? Click here!
-                  </span>
-                  <OneButton
-                    onClick={() => {}}
-                    text={`CREATE NEW ORDER `}
-                    variant="primary"
-                  />
-                </div>
-              </div>
+              {order?.boxInfo?.length > 0 && (
+                <>
+                  <div>{summaryDetails()}</div>
+                  {showDownloadLebal && (
+                    <div className="border-[1px] rounded-md border-[#E8E8E8]">
+                      <div className="flex justify-between items-center px-4 py-3">
+                        <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
+                          Ready to place a new order? Click here!
+                        </span>
+                        <OneButton
+                          onClick={() =>
+                            setOrder({
+                              pickupDetails: {
+                                fullAddress: "",
+                                pincode: 0,
+                                contact: {
+                                  name: "",
+                                  mobileNo: 0,
+                                },
+                              },
+                              deliveryDetails: {
+                                fullAddress: "",
+                                pincode: 0,
+                                contact: {
+                                  name: "",
+                                  mobileNo: 0,
+                                },
+                                gstNumber: "",
+                              },
+                              boxInfo: [],
+                              orderType: "B2C",
+                              transit: "FORWARD",
+                              courierPartner: "",
+                              source: "API",
+                              pickupDate: "",
+                              gstNumber: "",
+                              orderId: "",
+                              eWayBillNo: 0,
+                              awb: "rr",
+                              brandName: "Google",
+                              brandLogo: "",
+                            })
+                          }
+                          text={`CREATE NEW ORDER `}
+                          variant="primary"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
+        <CenterModal
+          isOpen={showAlertBox}
+          onRequestClose={() => setShowAlertBox(false)}
+          className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
+        >
+          <>
+            <div>
+              <div className="flex justify-center items-center mb-4">
+                <img src={walletIcon} alt="" />
+              </div>
+              <div className="max-w-[400px] flex justify-center text-center">
+                {" "}
+                Your wallet balance is too low to complete this transaction.
+                Please Recharge Your Wallet
+              </div>
+
+              <div className="mt-5">
+                <OneButton
+                  onClick={() => navigate(`/wallet/view-wallet`)}
+                  text={`RECHARGE WALLET`}
+                  variant="primary"
+                  className="!w-[228px]"
+                />
+              </div>
+            </div>
+          </>
+        </CenterModal>
       </div>
     </>
   );

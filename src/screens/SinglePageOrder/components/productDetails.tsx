@@ -111,7 +111,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
           </div>
         </div>
         <span className="flex text-[12px] lg:text-[14px] ">
-          {`${weight} | ${length} x ${breadth} x ${height} cm`}
+          {` ${length} x ${breadth} x ${height} cm`}
         </span>
       </div>
     </div>

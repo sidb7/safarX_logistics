@@ -15,32 +15,108 @@ import Checkbox from "../../../components/CheckBox";
 import CustomInputBox from "../../../components/Input";
 import { Environment } from "../../../utils/ApiUrls";
 
-function BoxInfo({ index, data, setProductModal }: any) {
-  const [allProducts, setAllProducts] = useState(data?.products);
+function BoxInfo({
+  index,
+  data,
+  setProductModal,
+  setOrder,
+  removeProduct,
+  removeBox,
+  setEditBoxModal,
+  setEditProductModal,
+}: any) {
+  const [allProducts, setAllProducts]: any = useState([]);
+
+  const calculateVolumeWeight = (
+    length: number,
+    breadth: number,
+    height: number
+  ): number => {
+    const volume = length * breadth * height;
+    return volume / 5000;
+  };
+
+  const addUnit = (index: number) => {
+    let arr = allProducts;
+    const { length, breadth, height } = allProducts[index];
+    arr[index].qty++;
+    let calacVolu: any = +calculateVolumeWeight(
+      length,
+      breadth,
+      height
+    ).toFixed(2);
+    arr[index].volumetricWeight = +(calacVolu.toFixed(4) * +arr[index].qty);
+    setAllProducts([...arr]);
+  };
+
+  const removeUnit = (index: number) => {
+    let arr: any = allProducts;
+    const { length, breadth, height } = allProducts[index];
+    arr[index].qty = +arr[index].qty;
+    arr[index].qty === 1 ? (arr[index].qty = 1) : arr[index].qty--;
+    let calacVolu: any = +calculateVolumeWeight(
+      length,
+      breadth,
+      height
+    ).toFixed(2);
+    arr[index].volumetricWeight = +(calacVolu.toFixed(4) * +arr[index].qty);
+    setAllProducts([...arr]);
+  };
+
+  useEffect(() => {
+    setAllProducts(data?.products);
+  }, [data?.products]);
 
   return (
-    <div className="p-4 my-2 bg-[#F2F6FF] rounded">
+    <div className="px-4 py-2 my-2 bg-[#F2F6FF] rounded">
       <div className="gap-y-4">
         <div className="flex justify-between items-center">
           <div className=" flex flex-col">
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-start">
               <div className="text-[20px] my-2 font-bold font-Open">
                 {data?.name}
               </div>
-              <div className=" mx-5 px-2 rounded bg-[#ffffff]">
-                Applied Weight : 16.8 Kg
+              <div className="flex items-center justify-center gap-x-4 mx-5 px-3 py-1 rounded-lg bg-[#ffffff] shadow-md">
+                <div>
+                  Applied Weight :
+                  {`${
+                    data?.appliedWeight ? +data?.appliedWeight + "Kg" : "0 Kg"
+                  }`}
+                </div>
+                <div className="flex items-center justify-center">
+                  <div className="text-[15px]">COD</div>
+                  <div
+                    className={`rounded-full w-[12px] ml-1 h-[12px] ${
+                      data?.codInfo?.isCod ? "bg-[#4BB543]" : "bg-[#F35838]"
+                    }`}
+                  ></div>
+                </div>
               </div>
             </div>
             <div className="flex items-center">
-              {data?.length} X {data?.breadth} X {data?.height} | V: 16.8 Kg |
-              D: {data?.deadWeight} Kg
+              {data?.length} X {data?.breadth} X {data?.height} | V:{" "}
+              {data?.volumetricWeight} Kg | D: {data?.deadWeight} Kg
+            </div>
+            <div className="flex gap-x-4 mt-2 rounded-lg">
+              <div>
+                CollectableAmount : {data?.codInfo?.collectableAmount || 0}
+              </div>
+              <div>InvoiceValue : {data?.codInfo?.invoiceValue || 0}</div>
             </div>
           </div>
           <div className="">
-            <button className="">
+            <button
+              className=""
+              onClick={() =>
+                setEditBoxModal({
+                  isOpen: true,
+                  state: { id: index, data: data },
+                })
+              }
+            >
               <img src={editIcon} alt="" className="w-[25px]" />
             </button>
-            <button className="mx-4">
+            <button className="mx-4" onClick={() => removeBox(index)}>
               <img src={deleteIcon} alt="" className="w-[25px]" />
             </button>
           </div>
@@ -55,12 +131,20 @@ function BoxInfo({ index, data, setProductModal }: any) {
                 {")"}
               </div>
               <div className="flex justify-center items-center ml-6">
-                <button className="">
+                <button
+                  className=""
+                  onClick={() =>
+                    setEditProductModal({
+                      isOpen: true,
+                      state: { id: index, data: data?.products },
+                    })
+                  }
+                >
                   <img src={editIcon} alt="" className="w-[20px]" />
                 </button>
-                <button className="ml-4">
+                {/* <button className="ml-4">
                   <img src={deleteIcon} alt="" className="w-[20px]" />
-                </button>
+                </button> */}
               </div>
             </div>
             {allProducts.length > 0 && (
@@ -81,15 +165,12 @@ function BoxInfo({ index, data, setProductModal }: any) {
             data-cy="product-list"
           >
             {allProducts.length > 0 ? (
-              allProducts?.map((e: any, index: number, arr: any) => {
+              allProducts?.map((e: any, i: number, arr: any) => {
                 return (
-                  <div key={index} data-cy={`product-item-${index}`}>
-                    <div
-                      className="flex justify-between items-center "
-                      key={index}
-                    >
+                  <div key={i} data-cy={`product-item-${i}`}>
+                    <div className="flex justify-between items-center " key={i}>
                       <ProductDetails
-                        key={index}
+                        key={i}
                         image={ItemIcon}
                         weight={`${e?.appliedWeight} Kg`}
                         productName={e?.name || 0}
@@ -98,7 +179,7 @@ function BoxInfo({ index, data, setProductModal }: any) {
                         height={e?.height || 0}
                         dimensionClassName="!font-light"
                         className="!border-none !shadow-none !h-[70px]"
-                        data-cy={`product-box-${index}`}
+                        data-cy={`product-box-${i}`}
                       />
                       <div className="flex items-center p-1 lg:p-2  gap-2 !mr-2 rounded-lg">
                         <div>
@@ -106,8 +187,8 @@ function BoxInfo({ index, data, setProductModal }: any) {
                             src={subtractIcon}
                             alt=""
                             className="cursor-pointer"
-                            //   onClick={() => removeUnit(index)}
-                            data-cy={`remove-unit-${index}`}
+                            onClick={() => removeUnit(i)}
+                            data-cy={`remove-unit-${i}`}
                           />
                         </div>
                         <div>
@@ -118,19 +199,20 @@ function BoxInfo({ index, data, setProductModal }: any) {
                             src={addIcon}
                             className="cursor-pointer"
                             alt=""
-                            //   onClick={() => addUnit(index)}
-                            data-cy={`add-unit-${index}`}
+                            onClick={() => addUnit(i)}
+                            data-cy={`add-unit-${i}`}
                           />
                         </div>
 
-                        <div
+                        <button
                           className={`${
                             arr.length === 1
                               ? "hue-rotate-60 opacity-40 !cursor-not-allowed"
                               : ""
                           } ml-2 cursor-pointer `}
-                          // onClick={() => handleDeleteProduct(index)}
-                          data-cy={`delete-product-${index}`}
+                          // onClick={() => handleDeleteProduct(i)}
+                          data-cy={`delete-product-${i}`}
+                          onClick={() => removeProduct(index, i)}
                         >
                           <img
                             src={DeleteIcon}
@@ -139,13 +221,11 @@ function BoxInfo({ index, data, setProductModal }: any) {
                             } `}
                             alt=""
                           />
-                        </div>
+                        </button>
                       </div>
                     </div>
 
-                    {allProducts.length - 1 !== index && (
-                      <hr data-cy={`hr-${index}`} />
-                    )}
+                    {allProducts.length - 1 !== i && <hr data-cy={`hr-${i}`} />}
                   </div>
                 );
               })
