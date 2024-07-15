@@ -35,7 +35,7 @@ interface IAddressCardProps {
     setDeliveryAddress: any;
     addressLabel: string;
     inputError: boolean;
-    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
+    setInputError?: any;
   };
 }
 
@@ -440,20 +440,22 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
         {orderType === "B2B" && addressLabel === "Delivery Address" && (
           <div className="mb-4 lg:mb-6 lg:mr-6">
+            {/* {console.log("inputError sdsd", inputError) as any} */}
             <CustomInputBox
               label="GST No."
               maxLength={15}
               inputError={inputError}
               value={deliveryAddress.gstNumber}
-              onChange={(e) => {
-                const gstValue = e.target.value;
-
-                const isValidGST = validateGST(gstValue);
-                console.log("isvalid", isValidGST);
-                setValidationErrorGST(isValidGST ? null : "Invalid GST number");
-
+              onChange={(e: any) => {
+                if (validateGST(e.target.value)) {
+                  setValidationErrorGST(null);
+                  setInputError(false);
+                } else {
+                  setValidationErrorGST("Invalid GST number");
+                  setInputError(true);
+                }
                 setDeliveryAddress((prevData: any) => {
-                  let updatedGSTValue = gstValue;
+                  let updatedGSTValue = e.target.value;
 
                   if (
                     validGstStateCode.length > 0 &&
@@ -467,12 +469,20 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                     gstNumber: updatedGSTValue,
                   };
                 });
-
-                if (setInputError) {
-                  setInputError(false);
-                }
               }}
+              // onChange={(e) => {
+              //   const gstValue = e.target.value;
+
+              //   const isValidGST = validateGST(gstValue);
+              //   console.log("isvalid", isValidGST);
+              //   setValidationErrorGST(isValidGST ? null : "Invalid GST number");
+
+              //   // if (setInputError) {
+              //   //   setInputError(false);
+              //   // }
+              // }}
             />
+
             {(inputError || validationErrorGST) && (
               <div className="flex items-center gap-x-1 mt-1">
                 <img src={InfoCircle} alt="" width={10} height={10} />
