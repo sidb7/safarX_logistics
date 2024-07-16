@@ -310,7 +310,25 @@ const MainCommonHelper = (navigate: any = "") => {
       cell: (info: any) => {
         return (
           <div className="font-Open font-normal leading-5 text-sm py-3">
-            {info?.row?.original?.deliveryAddress?.fullAddress ? (
+            {info?.row?.original?.routes &&
+            info?.row?.original?.routes?.length !== 0 ? (
+              <>
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.routes?.[0]?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.routes?.[0]?.fullAddress
+                  )}
+                </span>
+
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {info?.row?.original?.routes?.[0]?.contact?.mobileNo}
+                </div>
+              </>
+            ) : info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
                 <div className="font-Open font-normal leading-5 text-sm">
                   {capitalizeFirstLetter(
@@ -1272,9 +1290,27 @@ export const columnHelperForNewOrder = (
       cell: (info: any) => {
         return (
           <div className="font-Open font-normal leading-5 text-sm py-3">
-            {info?.row?.original?.deliveryAddress?.fullAddress ? (
+            {info?.row?.original?.routes &&
+            info?.row?.original?.routes?.length !== 0 ? (
               <>
-                <div className=" font-Open font-normal leading-5 text-sm ">
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.routes?.[0]?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.routes?.[0]?.fullAddress
+                  )}
+                </span>
+
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {info?.row?.original?.routes?.[0]?.contact?.mobileNo}
+                </div>
+              </>
+            ) : info?.row?.original?.deliveryAddress?.fullAddress ? (
+              <>
+                <div className="font-Open font-normal leading-5 text-sm">
                   {capitalizeFirstLetter(
                     info?.row?.original?.deliveryAddress?.contact?.name
                   )}
@@ -1285,14 +1321,14 @@ export const columnHelperForNewOrder = (
                   )}
                 </span>
 
-                <div className=" font-Open font-normal leading-5 text-sm ">
+                <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
                 </div>
               </>
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className=" font-Open font-normal leading-5 text-sm  text-[black]"
+                className="decoration-2 text-[black]"
               >
                 No Delivery Address Found
               </div>
