@@ -43,7 +43,7 @@ import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
@@ -91,6 +91,7 @@ import WoocommerceIcon from "../../assets/Catalogue/WooCommerceLg.svg";
 import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
 import CustomSwitchToggle from "../../components/CustomSwitchToggle";
 // import { DuplicateModel } from "../../components/Duplicate";
+import { timerObject } from "../../redux/reducers/syncChannel";
 
 let allOrdersCount: any;
 
@@ -332,6 +333,7 @@ const Index = () => {
 
   const roles = useSelector((state: any) => state?.roles);
   const channelReduxData = useSelector((state: any) => state?.channel?.channel);
+  const dispatch = useDispatch();
   const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
@@ -398,6 +400,8 @@ const Index = () => {
 
   let syncChannelTextObj: any = localStorage.getItem("userInfo");
   syncChannelTextObj = JSON.parse(syncChannelTextObj);
+
+  let syncTimerState = useSelector((state: any) => state?.channel?.time?.time);
 
   let syncChannelText = syncChannelTextObj?.nextStep?.isChannelIntegrated
     ? "Sync Channel"
@@ -674,26 +678,32 @@ const Index = () => {
             />
           </div>
 
-          {/* <div
+          <div
             ref={syncRef}
             onClick={handleSyncOrder}
-            className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+            className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
           >
-            <img src={SyncIcon} alt="" width="16px" />
-            <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
+            <img src={SyncIcon} alt="" width="16px" className="z-10" />
+            <span className="text-[#004EFF] z-10 text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
               {syncChannelText}
             </span>
-          </div> */}
+            <div
+              // style={{
+              //   background: "linear-gradient(90deg, #ff0000, #00ff00, #0000ff)",
+              // }}
+              className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
+            ></div>
+          </div>
+          {/* w-[${syncChannelWidth}%] */}
 
-          <OneButton
+          {/* <OneButton
             ref={syncRef}
             text={syncChannelText}
             onClick={handleSyncOrder}
             variant="secondary"
             showIcon={true}
             icon={SyncIcon}
-          />
-
+          /> */}
           {/* <div
             className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
             // onClick={() => setIsModalOpen(true)}
@@ -744,15 +754,14 @@ const Index = () => {
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
 
+        dispatch(timerObject({ startTimer: true }));
+        localStorage.setItem("isSyncCompleted", "false");
+
         // Check if syncRef.current is not null
         if (syncRef.current) {
           // Access the child nodes and properties only if syncRef.current is not null
           const buttonTextNode = syncRef.current.childNodes[1];
           const buttonIconNode = syncRef.current.childNodes[0];
-
-          if (buttonTextNode) {
-            buttonTextNode.textContent = "Sync In Progress...";
-          }
 
           syncRef.current.style.backgroundColor = "#F8F8F8";
           syncRef.current.style.pointerEvents = "none";
@@ -917,7 +926,7 @@ const Index = () => {
             className="text-[14px] font-semibold"
           />
         </div>
-
+        {/* 
         <div
           // ref={syncRef}
           onClick={handleSyncOrder} // Function Added
@@ -927,7 +936,7 @@ const Index = () => {
           <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
             Sync Channel
           </span>
-        </div>
+        </div> */}
 
         <div
           className="flex flex-col items-center "
@@ -2144,6 +2153,20 @@ const Index = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (syncRef.current && (syncTimerState || syncTimerState <= 0)) {
+      syncRef.current.style.pointerEvents = "none";
+      syncRef.current.style.backgroundColor = "#A4A4A4";
+      syncRef.current.childNodes[2].style.width = `${
+        100 - (100 * syncTimerState) / 180
+      }%`;
+      if (!syncTimerState || syncTimerState == "0") {
+        syncRef.current.classList.add("zoom-in");
+        syncRef.current.style.pointerEvents = "all";
+      }
+    }
+  }, [syncTimerState]);
 
   return (
     <>

@@ -30,6 +30,7 @@ import "./styles/index.css";
 
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter } from "react-router-dom";
+import { timer } from "./redux/reducers/syncChannel";
 const timestamp = Date.now(); // Get the current timestamp in milliseconds
 const date = new Date(timestamp); // Create a Date object from the timestamp
 
@@ -220,6 +221,37 @@ const App = () => {
       }
     };
   }, [userInfoString]);
+
+  let syncTime: any = localStorage.getItem("syncTime");
+
+  let isSyncCompleted: any = localStorage.getItem("isSyncCompleted");
+
+  let syncTimerObject: any = useSelector(
+    (state: any) => state?.channel?.timerObject
+  );
+
+  useEffect(() => {
+    if (
+      syncTimerObject?.startTimer ||
+      (isSyncCompleted && isSyncCompleted === "false")
+    ) {
+      let time =
+        parseInt(syncTime) && parseInt(syncTime) > 0 ? parseInt(syncTime) : 180;
+      // setLocalStorage("syncBoolean", false);
+      if (time > 0) {
+        let timerEvent = setInterval(() => {
+          --time;
+          setLocalStorage("syncTime", time);
+          // dispatch(timerObject({ time: 240, startTimer: true }));
+          dispatch(timer({ time }));
+          if (time <= 0) {
+            setLocalStorage("isSyncCompleted", true);
+            clearInterval(timerEvent);
+          }
+        }, 1000);
+      }
+    }
+  }, [syncTime, syncTimerObject]);
 
   useEffect(() => {
     const receiveMessage = (event: any) => {
