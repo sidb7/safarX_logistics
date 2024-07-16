@@ -15,28 +15,15 @@ import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/C
 import CustomSearchDropDown from "../../components/CustomSearchDropDown";
 import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
-import { includes } from "lodash";
 
-function ProductModal({ onClose, setOrder, index }: any) {
-  const [boxInputData, setBoxInputData]: any = useState({
-    name: "",
-    category: "",
-    sku: "",
-    qty: 1,
-    unitPrice: 100,
-    unitTax: 180,
-    weightUnit: "kg",
-    deadWeight: 1,
-    length: 0,
-    breadth: 0,
-    height: 0,
-    measureUnit: "cm",
-  });
+function EditBoxModal({ onClose, data, setOrder }: any) {
+  const [boxInputData, setBoxInputData]: any = useState();
 
   const onChangeHandler = (e: any) => {
+    const { name, value } = e.target;
     setBoxInputData((prevState: any) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
@@ -49,43 +36,37 @@ function ProductModal({ onClose, setOrder, index }: any) {
     return volume / 5000;
   };
 
-  const addProductToBox: any = (boxIndex: any, newProduct: any) => {
+  const onSave = () => {
     setOrder((prevOrder: any) => {
       const updatedBoxInfo = [...prevOrder.boxInfo];
-      const updatedProducts = [
-        ...updatedBoxInfo[boxIndex]?.products,
-        {
-          ...newProduct,
-          length: +boxInputData.length,
-          breadth: +boxInputData.breadth,
-          height: +boxInputData.height,
-          deadWeight: +boxInputData.deadWeight,
-          volumetricWeight: calculateVolumeWeight(
+      updatedBoxInfo[data?.id] = {
+        ...boxInputData,
+        length: +boxInputData.length,
+        breadth: +boxInputData.breadth,
+        height: +boxInputData.height,
+        deadWeight: +boxInputData.deadWeight,
+        volumetricWeight: calculateVolumeWeight(
+          boxInputData.length,
+          boxInputData.breadth,
+          boxInputData.height
+        ),
+        appliedWeight: Math.max(
+          boxInputData.deadWeight,
+          calculateVolumeWeight(
             boxInputData.length,
             boxInputData.breadth,
             boxInputData.height
-          ),
-          appliedWeight: Math.max(
-            boxInputData.deadWeight,
-            calculateVolumeWeight(
-              boxInputData.length,
-              boxInputData.breadth,
-              boxInputData.height
-            )
-          ),
-        },
-      ];
-      updatedBoxInfo[boxIndex] = {
-        ...updatedBoxInfo[boxIndex],
-        products: updatedProducts,
+          )
+        ),
       };
-      return {
-        ...prevOrder,
-        boxInfo: updatedBoxInfo,
-      };
+      return { ...prevOrder, boxInfo: updatedBoxInfo };
     });
     onClose(false);
   };
+
+  useEffect(() => {
+    setBoxInputData(data?.data);
+  }, [data?.products]);
 
   return (
     <>
@@ -96,7 +77,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
               <img src={packegeIcon} alt="" />
             </div>
             <span className="text-[18px] ml-2 font-bold font-Open">
-              Add Product
+              Edit Packages
             </span>
           </div>
           <button onClick={() => onClose(false)}>
@@ -115,63 +96,63 @@ function ProductModal({ onClose, setOrder, index }: any) {
                 // onClick={() => handleProductsDetails(index)}
               >
                 <div className="flex flex-col gap-y-[10px] w-[100%] px-[1rem]">
-                  {/* <div>
-                    <CustomSearchDropDown
-                      value={boxInputData.name}
-                      initValue={boxInputData.name}
-                      className=""
-                      apiUrl={GET_SELLER_BOX}
-                      label={"Search Product"}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: "category", value: e },
-                          index
-                        )
-                      }
-                    />
-                  
-                  </div> */}
+                  <div className="flex gap-x-4 mb-2">
+                    <div className=" flex justify-start items-center h-fit">
+                      <input
+                        type="radio"
+                        name="type"
+                        value={boxInputData?.codInfo?.isCod}
+                        className=" mr-2 w-[15px] h-[15px]"
+                        checked={!boxInputData?.codInfo?.isCod}
+                        onChange={(e) => {
+                          setBoxInputData(() => {
+                            return {
+                              ...boxInputData,
+                              codInfo: {
+                                ...boxInputData.codInfo,
+                                isCod: false,
+                              },
+                            };
+                          });
+                        }}
+                      />
+                      <div className="text-[15px]">PREPAID</div>
+                    </div>
+                    <div className=" flex justify-start items-center h-fit">
+                      <input
+                        type="radio"
+                        name="type"
+                        value={boxInputData?.codInfo?.isCod}
+                        className=" mr-2 w-[15px] h-[15px] "
+                        checked={boxInputData?.codInfo?.isCod}
+                        onChange={(e) => {
+                          setBoxInputData(() => {
+                            return {
+                              ...boxInputData,
+                              codInfo: {
+                                ...boxInputData.codInfo,
+                                isCod: true,
+                              },
+                            };
+                          });
+                        }}
+                      />
+                      <div className="text-[15px]">COD</div>
+                    </div>
+                  </div>
 
                   <div>
                     <InputBox
-                      label="Product Name"
+                      label="Box Name"
                       value={boxInputData?.name}
                       name="name"
                       inputType="text"
                       onChange={(e: any) => onChangeHandler(e)}
-                      //   inputError={inputError}
+                      inputError={true}
                     />
                   </div>
 
-                  <div>
-                    <CustomInputWithDropDown
-                      value={boxInputData?.category}
-                      initValue={boxInputData?.name}
-                      onChange={(e: any) => {
-                        setBoxInputData((prevState: any) => ({
-                          ...prevState,
-                          category: e,
-                        }));
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <InputBox
-                      label="Price"
-                      value={boxInputData?.unitPrice}
-                      name="unitPrice"
-                      inputType="text"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      //   inputError={inputError}
-                    />
-                  </div>
-
-                  <div>
+                  <div className="mt-2">
                     <InputBox
                       label="Dead Weight (Kg)"
                       value={boxInputData?.deadWeight}
@@ -183,7 +164,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
                           onChangeHandler(e);
                         }
                       }}
-                      //   inputError={inputError}
+                      inputError={true}
                     />
                   </div>
                 </div>
@@ -241,6 +222,55 @@ function ProductModal({ onClose, setOrder, index }: any) {
                     />
                   </div>
                 </div>
+
+                <div className="flex w-[100%] px-4 gap-x-4 justify-between items-center">
+                  <div className="flex-1">
+                    <InputBox
+                      label="Collectable Amount"
+                      value={boxInputData?.codInfo?.collectableAmount}
+                      name="deadWeight"
+                      inputType="text"
+                      inputMode="numeric"
+                      onChange={(e: any) => {
+                        if (!isNaN(e.target.value)) {
+                          setBoxInputData(() => {
+                            return {
+                              ...boxInputData,
+                              codInfo: {
+                                ...boxInputData.codInfo,
+                                collectableAmount: +e.target.value,
+                              },
+                            };
+                          });
+                        }
+                      }}
+                      // inputError={true}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <InputBox
+                      label="Invoice value"
+                      value={boxInputData?.codInfo?.invoiceValue}
+                      name="deadWeight"
+                      inputType="text"
+                      inputMode="numeric"
+                      onChange={(e: any) => {
+                        if (!isNaN(e.target.value)) {
+                          setBoxInputData(() => {
+                            return {
+                              ...boxInputData,
+                              codInfo: {
+                                ...boxInputData.codInfo,
+                                invoiceValue: +e.target.value,
+                              },
+                            };
+                          });
+                        }
+                      }}
+                      // inputError={true}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -252,7 +282,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
       >
         <ServiceButton
           text={"SAVE"}
-          onClick={() => addProductToBox(index, boxInputData)}
+          onClick={onSave}
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
@@ -260,4 +290,4 @@ function ProductModal({ onClose, setOrder, index }: any) {
   );
 }
 
-export default ProductModal;
+export default EditBoxModal;

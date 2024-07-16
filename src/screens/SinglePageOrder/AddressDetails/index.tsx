@@ -157,14 +157,15 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
 
+  // ${
+  //       isPickupAddressEmpty || isDeliveryAddressEmpty
+  //         ? "border-[1px] border-[#004EFF] rounded-md "
+  //         : "border-[1px] border-[#E8E8E8] rounded-md "}
+
   return (
     <>
       <div
-        className={`${
-          isPickupAddressEmpty || isDeliveryAddressEmpty
-            ? "border-[1px] border-[#004EFF] rounded-md "
-            : "border-[1px] border-[#E8E8E8] rounded-md "
-        } min-h-[222px] px-3 py-[12px]`}
+        className={`border-[1px] border-[#E8E8E8] rounded-md  min-h-[222px] max-w-[] px-3 py-[12px]`}
       >
         {isPickupAddressEmpty ? (
           <div>
@@ -176,7 +177,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
             </div>
             <div className="flex items-start p-3">
               <OneButton
-                text={"Add Pickup Details"}
+                text={"ADD PICKUP DETAILS"}
                 onClick={() => {
                   setCurrentEditType("pickup");
                   setIsPickupRightModal(true);
@@ -204,7 +205,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
             </div>
             <div className="flex items-start p-3">
               <OneButton
-                text={"Add Delivery Details"}
+                text={"ADD DELIVERY DETAILS"}
                 onClick={() => {
                   setCurrentEditType("delivery");
                   setIsDeliveryRightModal(true);
