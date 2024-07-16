@@ -143,6 +143,8 @@ const DeliveryLocation = () => {
   const [returningUserDeliveryData, setReturningUserDeliveryData] =
     useState<any>([]);
 
+  const [gstError, setGstError] = useState(false); // New state for GST error
+
   const isObjectEmpty = (obj: any) => {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -201,69 +203,80 @@ const DeliveryLocation = () => {
   };
 
   const postDeliveryOrderDetails = async () => {
-    try {
-      const isDeliveryAddressValid = !isObjectEmpty(
-        deliveryAddress.deliveryAddress
-      );
-      const isbillingAddressValid = !isObjectEmpty(
-        deliveryAddress.billingAddress
-      );
+    if (inputError) {
+      // console.log("invalid gst if condition");
+      toast.error("Please enter valid details");
+      return;
+    } else {
+      // console.log("valid gst");
 
-      const isContactDetailsValid = !isContactObjectEmpty(
-        deliveryAddress.deliveryAddress.contact
-      );
-      const isContactDetailsBillingValid = !isObjectEmpty(
-        deliveryAddress.billingAddress.contact
-      );
-
-      if (
-        !isDeliveryAddressValid ||
-        !isContactDetailsValid ||
-        (!isBillingAddress &&
-          !isbillingAddressValid &&
-          !isContactDetailsBillingValid)
-      ) {
-        setInputError(true);
-
-        return;
-      }
-      if (
-        deliveryAddress.orderType === "B2B" &&
-        !isGSTFieldValid(deliveryAddress.orderType, deliveryAddress.gstNumber)
-      ) {
-        setInputError(true);
-        return;
-      }
-
-      setInputError(false);
-      let payload = {};
-      if (isBillingAddress) {
-        payload = {
-          ...deliveryAddress,
-          deliveryAddress: {
-            ...deliveryAddress.deliveryAddress,
-          },
-          billingAddress: deliveryAddress.deliveryAddress,
-        };
-      } else {
-        payload = {
-          ...deliveryAddress,
-        };
-      }
-
-      const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
-
-      if (response?.success) {
-        toast.success(response?.message);
-
-        navigate(
-          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
+      try {
+        const isDeliveryAddressValid = !isObjectEmpty(
+          deliveryAddress.deliveryAddress
         );
-      } else {
-        toast.error(response?.message);
+        const isbillingAddressValid = !isObjectEmpty(
+          deliveryAddress.billingAddress
+        );
+        const isContactDetailsValid = !isContactObjectEmpty(
+          deliveryAddress.deliveryAddress.contact
+        );
+        const isContactDetailsBillingValid = !isContactObjectEmpty(
+          deliveryAddress.billingAddress.contact
+        );
+        const isGSTValid = isGSTFieldValid(
+          deliveryAddress.orderType,
+          deliveryAddress.gstNumber
+        );
+        if (
+          !isDeliveryAddressValid ||
+          !isContactDetailsValid ||
+          (!isBillingAddress &&
+            !isbillingAddressValid &&
+            !isContactDetailsBillingValid)
+        ) {
+          setInputError(true);
+          if (deliveryAddress.orderType === "B2B" && !isGSTValid) {
+            setGstError(true); // Set GST error state
+          } else {
+            setGstError(false); // Reset GST error state if other fields are invalid
+          }
+          return;
+        }
+        if (
+          deliveryAddress.orderType === "B2B" &&
+          !isGSTFieldValid(deliveryAddress.orderType, deliveryAddress.gstNumber)
+        ) {
+          setInputError(true);
+          return;
+        }
+        setInputError(false);
+        setGstError(false); // Reset GST error state on successful validation
+        let payload = {};
+        if (isBillingAddress) {
+          payload = {
+            ...deliveryAddress,
+            deliveryAddress: {
+              ...deliveryAddress.deliveryAddress,
+            },
+            billingAddress: deliveryAddress.deliveryAddress,
+          };
+        } else {
+          payload = {
+            ...deliveryAddress,
+          };
+        }
+        const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
+        if (response?.success) {
+          toast.success(response?.message);
+          navigate(
+            `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
+          );
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        return error;
       }
-    } catch (error) {
-      return error;
     }
   };
 
@@ -548,8 +561,11 @@ const DeliveryLocation = () => {
       )}
 
       <BottomLayout
-        callApi={() => postDeliveryOrderDetails()}
-        // Button2Name={true}
+        callApi={() => {
+          // if (!inputError) {
+          postDeliveryOrderDetails();
+          // }
+        }}
         finalButtonText="NEXT"
       />
     </div>
