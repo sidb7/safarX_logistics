@@ -527,10 +527,12 @@ const Tracking = () => {
                                                 To:
                                               </p>
                                               <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
-                                                {
-                                                  each?.deliveryAddress
-                                                    ?.fullAddress
-                                                }
+                                                {each?.routes &&
+                                                each?.routes?.length !== 0
+                                                  ? each?.routes?.[0]
+                                                      ?.fullAddress
+                                                  : each?.deliveryAddress
+                                                      ?.fullAddress}
                                               </p>
                                             </div>
                                           </div>
