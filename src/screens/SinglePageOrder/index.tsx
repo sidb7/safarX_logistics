@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import AddressCardDetails from "./AddressDetails";
 import ShippingDetails from "./ShippingDetails/index";
@@ -18,6 +18,7 @@ import { generateUniqueCode } from "../../utils/utility";
 import InputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import toast from "react-hot-toast";
+import infoIcon from "../../assets/info.svg";
 import walletIcon from "../../assets/Group.svg";
 import {
   FETCH_LABELS_REPORT_DOWNLOAD,
@@ -29,13 +30,15 @@ import CenterModal from "../../components/CustomModal/customCenterModal";
 import { useNavigate } from "react-router-dom";
 import { tokenKey } from "../../utils/utility";
 import { useSelector } from "react-redux";
+import CopyTooltip from "../../components/CopyToClipboard";
 
 interface IIndexProps {}
 
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [showDownloadLebal, setDownloadLebal] = useState(false);
-  const [isLoadingManifest, setIsLoadingManifest] = useState(false);
+  const [transporterNoModalOpen, setTransporterNoModalOpen] = useState(false);
+  const [isDownloadLoading, setDownloadLoading]: any = useState({});
   const [order, setOrder]: any = useState({
     pickupDetails: {
       fullAddress: "",
@@ -63,65 +66,79 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     gstNumber: "",
     orderId: "",
     eWayBillNo: 0,
-    awb: "rr",
+    awb: "",
     brandName: "Google",
     brandLogo: "",
   });
+  const [awbListForDownLoad, setAwbListForDownLoad] = useState([]);
 
-  // {
-  //       name: "Apple Iphone",
-  //       category: "Electronic",
-  //       sku: "abc",
-  //       qty: 2,
-  //       unitPrice: 100,
-  //       unitTax: 180,
-  //       weightUnit: "kg",
-  //       deadWeight: 1,
-  //       length: 32,
-  //       breadth: 32,
-  //       height: 42,
-  //       measureUnit: "cm",
-  //     },
-
-  //  {
-  //     name: "box_1",
-  //     weightUnit: "Kg",
-  //     deadWeight: 1,
-  //     length: 1,
-  //     breadth: 1,
-  //     height: 1,
-  //     measureUnit: "cm",
-  //     products: [],
-  //     codInfo: {
-  //       isCod: false,
-  //       collectableAmount: 0,
-  //       invoiceValue: 2000,
-  //     },
-  //     podInfo: {
-  //       isPod: false,
-  //     },
-  //     insurance: false,
-  //   },
   const [showAlertBox, setShowAlertBox] = useState(false);
 
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
 
   const navigate = useNavigate();
 
+  function validateOrder(order: any) {
+    const pickupDetailsValid =
+      order.pickupDetails.fullAddress.trim() !== "" &&
+      order.pickupDetails.pincode !== 0 &&
+      order.pickupDetails.contact.name.trim() !== "" &&
+      order.pickupDetails.contact.mobileNo !== 0;
+
+    const deliveryDetailsValid =
+      order.deliveryDetails.fullAddress.trim() !== "" &&
+      order.deliveryDetails.pincode !== 0 &&
+      order.deliveryDetails.contact.name.trim() !== "" &&
+      order.deliveryDetails.contact.mobileNo !== 0;
+
+    const boxInfoValid =
+      Array.isArray(order.boxInfo) && order.boxInfo.length > 0;
+
+    const courierPartnerValid = order.courierPartner.trim() !== "";
+
+    return (
+      pickupDetailsValid &&
+      deliveryDetailsValid &&
+      boxInfoValid &&
+      courierPartnerValid
+    );
+  }
+
   let data = [
     {
       id: 1,
-      orderId: "12345",
-      package: "WhiteBox",
-      appliedWeight: 18,
-      charge: 100,
+      courierPartner: "DTDC",
+      transporterNo: "34567898YTZ3",
     },
     {
       id: 2,
-      orderId: "1234567",
-      package: "BrownBox",
-      appliedWeight: 22,
-      charge: 999,
+      courierPartner: "BlueDart",
+      transporterNo: "34567898YTZ3",
+    },
+    {
+      id: 3,
+      courierPartner: "Delhivery",
+      transporterNo: "34567898YTZ3",
+    },
+    {
+      id: 4,
+      courierPartner: "DTDC",
+      transporterNo: "34567898YTZ3",
+    },
+    {
+      id: 5,
+      courierPartner: "BlueDart",
+      transporterNo: "34567898YTZ3",
+    },
+    {
+      id: 6,
+      courierPartner: "Delhivery",
+      transporterNo: "34567898YTZ3",
+    },
+    {
+      id: 7,
+      courierPartner: "DTDC",
+      transporterNo: "34567898YTZ3",
     },
   ];
 
@@ -221,7 +238,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     let payload = {
       awbs: awbArray,
     };
-    setIsLoadingManifest(true);
+    setDownloadLoading({
+      isLoading: true,
+      identifier: "downloadManifest",
+    });
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
@@ -237,7 +257,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     if (!response.ok) {
       const errorData = await response.json();
       toast.error(errorData.message);
-      setIsLoadingManifest(false);
+      setDownloadLoading({
+        isLoading: false,
+        identifier: "downloadManifest",
+      });
       // setManifestButton(true);
       return;
     }
@@ -246,7 +269,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     const blob = new Blob([data], { type: "application/pdf" });
 
     var url = URL.createObjectURL(blob);
-    setIsLoadingManifest(false);
+    setDownloadLoading({
+      isLoading: false,
+      identifier: "downloadManifest",
+    });
 
     const a = document.createElement("a");
     a.href = url;
@@ -254,17 +280,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     a.click();
   };
 
-  // ----------------------------------------------------------------------------------------------------------------------------
-  const fetchLabels = async (
-    arrLebels: string[],
-    setIsLoadingManifest: any
-  ) => {
+  const fetchLabels = async (arrLebels: string[]) => {
     if (!arrLebels?.length) {
       toast.error("Please Select One Orders For label");
       return;
     }
 
-    setIsLoadingManifest({
+    setDownloadLoading({
       isLoading: true,
       identifier: "Download_Labels",
     });
@@ -286,9 +308,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       body: JSON.stringify(payload),
     });
 
-    setIsLoadingManifest({
+    setDownloadLoading({
       isLoading: false,
-      identifier: "",
+      identifier: "Download_Labels",
     });
 
     const resdata: any = await data.blob();
@@ -302,9 +324,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     }
 
     var url = URL.createObjectURL(blob);
-    setIsLoadingManifest({
+
+    setDownloadLoading({
       isLoading: false,
-      identifier: "",
+      identifier: "Download_Labels",
     });
 
     const a = document.createElement("a");
@@ -314,17 +337,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     return true;
   };
 
-  // -----------------------------------------------------------------------------------------------------------------------------
-  const fetchMultiTax = async (
-    arrLebels: string[],
-    setIsLoadingManifest: any
-  ) => {
+  const fetchMultiTax = async (arrLebels: string[]) => {
     if (!arrLebels?.length) {
       toast.error("Please Select One Orders For Tax Invoice");
       return;
     }
 
-    setIsLoadingManifest({
+    setDownloadLoading({
       isLoading: true,
       identifier: "Download_Multi_Tax",
     });
@@ -346,19 +365,18 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       body: JSON.stringify(payload),
     });
 
-    setIsLoadingManifest({
+    setDownloadLoading({
       isLoading: false,
-      identifier: "",
+      identifier: "Download_Multi_Tax",
     });
-
     const resdata: any = await data.blob();
 
     const blob = new Blob([resdata], { type: "application/pdf" });
 
     var url = URL.createObjectURL(blob);
-    setIsLoadingManifest({
+    setDownloadLoading({
       isLoading: false,
-      identifier: "",
+      identifier: "Download_Multi_Tax",
     });
 
     const a = document.createElement("a");
@@ -393,9 +411,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     try {
       const { data } = await POST(REVERSE_ORDER, payload);
 
-      console.log("data", data);
-
       if (data?.success) {
+        const listOfawbs = data?.data[0]?.awbs.map(
+          (awb: any) => awb?.tracking?.awb
+        );
+        setAwbListForDownLoad(listOfawbs);
+        console.log("listOfawbs", listOfawbs);
+
         setDownloadLebal(true);
         toast.success(data?.message || "Successfully Placed order");
       } else {
@@ -405,61 +427,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       toast.error(error?.message);
     }
   };
-
-  //   // let fileName = "";
-  //   let awbs = {
-  //     awbs: payload?.awbs,
-  //   };
-
-  //   let header = {
-  //     Accept: "/",
-  //     Authorization: `Bearer ${localStorage.getItem(
-  //       `${localStorage.getItem("sellerId")}_${tokenKey}`
-  //     )}`,
-  //     "Content-Type": "application/json",
-  //   };
-
-  //   if (actionType === "download_label") {
-  //     const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
-  //       method: "POST",
-  //       headers: header,
-  //       body: JSON.stringify(awbs),
-  //     });
-
-  //     const resdata: any = await data?.blob();
-  //     const blob = new Blob([resdata], { type: resdata?.type });
-  //     let filename: any;
-  //     if (resdata?.type === "image/png") {
-  //       filename = "Label_Report.png";
-  //     } else {
-  //       filename = "Label_Report.pdf";
-  //     }
-
-  //     var url = URL.createObjectURL(blob);
-  //     const a = document.createElement("a");
-  //     a.href = url;
-  //     a.download = filename;
-  //     a.click();
-  //     return true;
-  //   } else {
-  //     const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
-  //       method: "POST",
-  //       headers: header,
-  //       body: JSON.stringify(awbs),
-  //     });
-
-  //     const resdata: any = await data?.blob();
-
-  //     const blob = new Blob([resdata], { type: "application/pdf" });
-
-  //     var url = URL.createObjectURL(blob);
-  //     const a = document.createElement("a");
-  //     a.href = url;
-  //     a.download = `Tax_Report.pdf`;
-  //     a.click();
-  //     return true;
-  //   }
-  // };
 
   const summaryDetails = () => {
     return (
@@ -489,12 +456,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 text={`Pay ₹ ${sumInvoiceValue} `}
                 variant="primary"
                 className="!w-[228px]"
+                disabled={!validateOrder(order)}
               />
             </div>
           ) : (
             <div>
-              {/* success card  */}
-
               <div className=" px-2 py-7 mx-3">
                 <div className="flex gap-x-[6px] px-4 py-1 bg-[#A3DA91] border rounded-lg items-center">
                   <img src={tickIcon} alt="tick-icon" />
@@ -505,40 +471,71 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 </div>
               </div>
 
-              {/* downloads */}
-
-              {/* <div className="flex justify-center items-center gap-3 mb-5">
+              <div className="flex justify-center items-center gap-3 mb-5">
                 <OneButton
                   text={"Label"}
-                  onClick={() => {}}
+                  onClick={() => fetchLabels(awbListForDownLoad)}
                   variant="quad"
                   showIcon={true}
                   icon={DownloadIcon}
+                  loading={
+                    isDownloadLoading?.isLoading &&
+                    isDownloadLoading?.identifier === "Download_Labels"
+                  }
                   textTransform="capitalize"
                 />
                 <OneButton
                   text={"Invoice"}
-                  onClick={() => {}}
+                  onClick={() => fetchMultiTax(awbListForDownLoad)}
                   variant="quad"
                   showIcon={true}
                   icon={DownloadIcon}
                   textTransform="capitalize"
+                  loading={
+                    isDownloadLoading?.isLoading &&
+                    isDownloadLoading?.identifier === "Download_Multi_Tax"
+                  }
                 />
                 <OneButton
                   text={"Manifest"}
-                  onClick={() => fetchManifest()}
+                  onClick={() => fetchManifest(awbListForDownLoad)}
                   variant="quad"
                   showIcon={true}
                   icon={DownloadIcon}
                   textTransform="capitalize"
+                  loading={
+                    isDownloadLoading?.isLoading &&
+                    isDownloadLoading?.identifier === "downloadManifest"
+                  }
                 />
-              </div> */}
+              </div>
             </div>
           )}
         </div>
       </>
     );
   };
+
+  React.useEffect(() => {
+    if (order?.boxInfo?.length > 0 && sumInvoiceValue > 50000) {
+      (async () => {
+        console.log("its working");
+        const response = await POST("");
+
+        if (!response?.data?.success) {
+        } else {
+          const { nextStep, walletBalance } = response?.data?.data[0];
+          const { kyc, bank } = nextStep;
+
+          if (!kyc) {
+            navigate("/");
+            return;
+          }
+        }
+      })();
+    }
+  }, [order?.boxInfo]);
+
   return (
     <>
       <div>
@@ -562,8 +559,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 />
               </div>
 
-              <div className="border p-3 rounded flex items-center justify-between ">
-                <div className="md:!w-[300px]">
+              <div className="border p-3 rounded gap-x-4 flex items-center">
+                <div className="md:!w-[50%] ">
                   <CustomInputBox
                     isRightIcon={true}
                     containerStyle=""
@@ -591,77 +588,42 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   />
                 </div>
 
-                {/* <div className="flex mt-2 gap-x-4 ml-1">
-                  <div className=" flex justify-start items-center h-fit">
-                    <input
-                      type="radio"
-                      name="type"
-                      value={"credit"}
-                      className=" mr-2 w-[20px] h-[20px]"
-                      checked={!order?.isCod}
-                      onChange={(e) => {
-                        setOrder((prevState: any) => {
-                          return {
-                            ...prevState,
-                            isCod: false,
-                          };
-                        });
+                {sumInvoiceValue > 50000 && (
+                  <div className="flex md:!w-[50%] gap-x-4">
+                    <div className="w-full">
+                      <InputBox
+                        label="Transporter No"
+                        value={order?.transporterNo}
+                        name="transporterNo"
+                        inputType="text"
+                        inputMode="numeric"
+                        onChange={(e: any) => {
+                          if (!isNaN(e.target.value)) {
+                            setOrder((prevState: any) => {
+                              return {
+                                ...prevState,
+                                transporterNo: e.target.value,
+                              };
+                            });
+                          }
+                        }}
+                        //   inputError={inputError}
+                      />
+                    </div>
+                    <button
+                      className="flex justify-center items-center"
+                      onClick={() => {
+                        setTransporterNoModalOpen(true);
                       }}
-                    />
-                    <div>PREPAID</div>
+                    >
+                      <img
+                        src={infoIcon}
+                        alt="infoIcon for Transporter"
+                        className="w-[25px] cursor-pointer"
+                      />
+                    </button>
                   </div>
-                  <div className=" flex justify-start items-center  h-fit">
-                    <input
-                      type="radio"
-                      name="type"
-                      value={"debit"}
-                      className=" mr-2 w-[20px] h-[20px] "
-                      checked={order?.isCod}
-                      onChange={(e) => {
-                        setOrder((prevState: any) => {
-                          return {
-                            ...prevState,
-                            isCod: true,
-                          };
-                        });
-                      }}
-                    />
-                    <div>COD</div>
-                  </div>
-                </div> */}
-
-                {/* <div className="flex gap-x-4">
-                  <div>
-                    <InputBox
-                      label="Collectable Amount"
-                      // value={order?.}
-                      name="deadWeight"
-                      inputType="text"
-                      inputMode="numeric"
-                      // onChange={(e: any) => {
-                      //   if (!isNaN(e.target.value)) {
-                      //     onChangeHandler(e);
-                      //   }
-                      // }}
-                      //   inputError={inputError}
-                    />
-                  </div>
-                  <div>
-                    <InputBox
-                      label="Invoice value"
-                      // value={boxInputData?.deadWeight}
-                      name="deadWeight"
-                      inputType="text"
-                      inputMode="numeric"
-                      // onChange={(e: any) => {
-                      //   if (!isNaN(e.target.value)) {
-                      //     onChangeHandler(e);
-                      //   }
-                      // }}
-                      //   inputError={inputError}
-                    />
-                  </div>
-                </div> */}
+                )}
               </div>
             </div>
           </div>
@@ -680,39 +642,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                           Ready to place a new order? Click here!
                         </span>
                         <OneButton
-                          onClick={() =>
-                            setOrder({
-                              pickupDetails: {
-                                fullAddress: "",
-                                pincode: 0,
-                                contact: {
-                                  name: "",
-                                  mobileNo: 0,
-                                },
-                              },
-                              deliveryDetails: {
-                                fullAddress: "",
-                                pincode: 0,
-                                contact: {
-                                  name: "",
-                                  mobileNo: 0,
-                                },
-                                gstNumber: "",
-                              },
-                              boxInfo: [],
-                              orderType: "B2C",
-                              transit: "FORWARD",
-                              courierPartner: "",
-                              source: "API",
-                              pickupDate: "",
-                              gstNumber: "",
-                              orderId: "",
-                              eWayBillNo: 0,
-                              awb: "rr",
-                              brandName: "Google",
-                              brandLogo: "",
-                            })
-                          }
+                          onClick={() => window.location.reload()}
                           text={`CREATE NEW ORDER `}
                           variant="primary"
                         />
@@ -724,6 +654,66 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             </div>
           </div>
         </div>
+        <CenterModal
+          isOpen={transporterNoModalOpen}
+          onRequestClose={() => setTransporterNoModalOpen(false)}
+          className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
+        >
+          <>
+            <div className="w-[100%] h-[100%] p-4">
+              <div className="flex justify-between pb-2 items-center">
+                <div className="font-bold font-Open">E-Way Details</div>
+                <button
+                  className="flex justify-center items-center"
+                  onClick={() => setTransporterNoModalOpen(false)}
+                >
+                  <img
+                    src={crossIcon}
+                    alt=""
+                    className="w-[20px] cursor-pointer"
+                  />
+                </button>
+              </div>
+
+              <div className=" max-h-[220px] border-b customScroll mt-2">
+                <table className="min-w-full divide-y divide-gray-200 border-collapse border border-gray-300">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 w-[60px]  font-medium  uppercase tracking-wider border border-gray-300">
+                        ID
+                      </th>
+                      <th className="px-3 font-medium  uppercase tracking-wider border border-gray-300">
+                        Courier Partner
+                      </th>
+                      <th className="px-3 font-medium  uppercase tracking-wider border border-gray-300">
+                        Transporter No
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y !max-h-[200px] !overflow-hidden customScroll  divide-gray-200">
+                    {data.map((item) => (
+                      <tr key={item.id}>
+                        <td className="px-3 w-[60px] whitespace-nowrap border border-gray-300">
+                          {item.id}
+                        </td>
+                        <td className="px-3  whitespace-nowrap border border-gray-300">
+                          {item.courierPartner || "-"}
+                        </td>
+                        <td className="px-3 whitespace-nowrap border border-gray-300">
+                          <span className="mr-1">
+                            {" "}
+                            {item.transporterNo || "-"}
+                          </span>
+                          <CopyTooltip stringToBeCopied={item.transporterNo} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        </CenterModal>
         <CenterModal
           isOpen={showAlertBox}
           onRequestClose={() => setShowAlertBox(false)}

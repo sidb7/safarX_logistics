@@ -172,7 +172,8 @@ function BoxInfo({
                       <ProductDetails
                         key={i}
                         image={ItemIcon}
-                        weight={`${e?.appliedWeight} Kg`}
+                        appliedWeight={`${e?.appliedWeight} Kg`}
+                        deadWeight={e?.deadWeight}
                         productName={e?.name || 0}
                         breadth={e?.breadth || 0}
                         length={e?.length || 0}

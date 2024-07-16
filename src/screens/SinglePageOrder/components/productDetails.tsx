@@ -5,7 +5,8 @@ import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
 interface IPackageBoxProps {
   image?: any;
   productName: string;
-  weight?: string;
+  appliedWeight?: string;
+  deadWeight?: any;
   dimension?: string;
   className?: string;
   dimensionClassName?: string;
@@ -29,7 +30,8 @@ interface IPackageBoxProps {
 const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
   image = "",
   productName = "",
-  weight = "",
+  appliedWeight = "",
+  deadWeight = "",
   height = "",
   breadth = "",
   length = "",
@@ -111,7 +113,8 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
           </div>
         </div>
         <span className="flex text-[12px] lg:text-[14px] ">
-          {` ${length} x ${breadth} x ${height} cm`}
+          {` ${length} x ${breadth} x ${height} cm`} | V: {appliedWeight} Kg |
+          D: {deadWeight} Kg
         </span>
       </div>
     </div>
