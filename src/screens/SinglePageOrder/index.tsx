@@ -471,7 +471,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 </div>
               </div>
 
-              <div className="flex justify-center items-center gap-3 mb-5">
+              <div className="flex justify-center items-center gap-x-3 mb-5">
                 <OneButton
                   text={"Label"}
                   onClick={() => fetchLabels(awbListForDownLoad)}
@@ -483,6 +483,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     isDownloadLoading?.identifier === "Download_Labels"
                   }
                   textTransform="capitalize"
+                  className={`!w-[120px] !bg-transparent`}
                 />
                 <OneButton
                   text={"Invoice"}
@@ -495,6 +496,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     isDownloadLoading?.isLoading &&
                     isDownloadLoading?.identifier === "Download_Multi_Tax"
                   }
+                  className={`!w-[120px] !bg-transparent`}
                 />
                 <OneButton
                   text={"Manifest"}
@@ -507,6 +509,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     isDownloadLoading?.isLoading &&
                     isDownloadLoading?.identifier === "downloadManifest"
                   }
+                  className={`!w-[120px] !bg-transparent`}
                 />
               </div>
             </div>
@@ -628,6 +631,29 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             </div>
           </div>
           <div className="flex-1">
+            {/* <div className="flex justify-end items-center mb-2">
+              <div className=" flex justify-start items-center h-fit">
+                <input
+                  type="radio"
+                  name="type"
+                  value={"B2C"}
+                  className=" mr-2 w-[15px] h-[15px]"
+                  checked={order?.orderType === "B2C"}
+                  // onChange={(e) => {
+                  //   setBoxInputData(() => {
+                  //     return {
+                  //       ...boxInputData,
+                  //       codInfo: {
+                  //         ...boxInputData.codInfo,
+                  //         isCod: false,
+                  //       },
+                  //     };
+                  //   });
+                  // }}
+                />
+                <div className="text-[15px]">B2C</div>
+              </div>
+            </div> */}
             <div className="flex flex-col gap-y-5">
               <div>
                 <ShippingDetails order={order} setOrder={setOrder} />
@@ -679,13 +705,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 <table className="min-w-full divide-y divide-gray-200 border-collapse border border-gray-300">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-3 w-[60px]  font-medium  uppercase tracking-wider border border-gray-300">
+                      <th className="px-3 w-[60px] text-[15px]  font-medium  uppercase tracking-wider border border-gray-300">
                         ID
                       </th>
-                      <th className="px-3 font-medium  uppercase tracking-wider border border-gray-300">
+                      <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
                         Courier Partner
                       </th>
-                      <th className="px-3 font-medium  uppercase tracking-wider border border-gray-300">
+                      <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
                         Transporter No
                       </th>
                     </tr>
@@ -693,13 +719,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   <tbody className="bg-white divide-y !max-h-[200px] !overflow-hidden customScroll  divide-gray-200">
                     {data.map((item) => (
                       <tr key={item.id}>
-                        <td className="px-3 w-[60px] whitespace-nowrap border border-gray-300">
+                        <td className="px-3 w-[60px] text-[14px] whitespace-nowrap border border-gray-300">
                           {item.id}
                         </td>
-                        <td className="px-3  whitespace-nowrap border border-gray-300">
+                        <td className="px-3  text-[14px] whitespace-nowrap border border-gray-300">
                           {item.courierPartner || "-"}
                         </td>
-                        <td className="px-3 whitespace-nowrap border border-gray-300">
+                        <td className="px-3 text-[14px] whitespace-nowrap border border-gray-300">
                           <span className="mr-1">
                             {" "}
                             {item.transporterNo || "-"}
