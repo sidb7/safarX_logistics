@@ -36,6 +36,11 @@ function BoxInfo({
     return volume / 5000;
   };
 
+  const getColorByIndex = (index: any) => {
+    const colors = ["#F2F6FF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
+    return colors[index % colors.length];
+  };
+
   const addUnit = (index: number) => {
     let arr = allProducts;
     const { length, breadth, height } = allProducts[index];
@@ -68,7 +73,10 @@ function BoxInfo({
   }, [data?.products]);
 
   return (
-    <div className="px-4 py-2 my-2 bg-[#F2F6FF] rounded">
+    <div
+      className={`px-4 py-2 my-2 rounded`}
+      style={{ backgroundColor: getColorByIndex(index) }}
+    >
       <div className="gap-y-4">
         <div className="flex justify-between items-center">
           <div className=" flex flex-col">

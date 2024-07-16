@@ -599,16 +599,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         value={order?.transporterNo}
                         name="transporterNo"
                         inputType="text"
-                        inputMode="numeric"
                         onChange={(e: any) => {
-                          if (!isNaN(e.target.value)) {
-                            setOrder((prevState: any) => {
-                              return {
-                                ...prevState,
-                                transporterNo: e.target.value,
-                              };
-                            });
-                          }
+                          setOrder((prevState: any) => {
+                            return {
+                              ...prevState,
+                              transporterNo: e.target.value,
+                            };
+                          });
                         }}
                         //   inputError={inputError}
                       />
@@ -706,7 +703,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-3 w-[60px] text-[15px]  font-medium  uppercase tracking-wider border border-gray-300">
-                        ID
+                        Sr. No
                       </th>
                       <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
                         Courier Partner
@@ -727,7 +724,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         </td>
                         <td className="px-3 text-[14px] whitespace-nowrap border border-gray-300">
                           <span className="mr-1">
-                            {" "}
                             {item.transporterNo || "-"}
                           </span>
                           <CopyTooltip stringToBeCopied={item.transporterNo} />
