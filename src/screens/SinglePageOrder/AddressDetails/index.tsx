@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import PlusIcon from "../../../assets/plusIcon.svg";
@@ -12,105 +12,216 @@ import ProfileIcon from "../../../assets/Catalogue/profileIcon.svg";
 import ContactIcon from "../../../assets/ReturningUser/phoneIcon.svg";
 import AddressLocationIcon from "../../../assets/serv/location.svg";
 
-interface IAddressCardDetailsProps {}
+interface IContact {
+  name: string;
+  mobileNo: number;
+}
 
-const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = (
-  props
-) => {
-  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
+interface IPickupDetails {
+  fullAddress: string;
+  pincode: number;
+  contact: IContact;
+}
+
+interface IDeliveryDetails extends IPickupDetails {
+  gstNumber: string;
+}
+
+interface IAddressCardDetailsProps {
+  pickupDetails: IPickupDetails;
+  deliveryDetails: IDeliveryDetails;
+  onPickupDetailsChange: (newPickupDetails: IPickupDetails) => void;
+  onDeliveryDetailsChange: (newDeliveryDetails: IDeliveryDetails) => void;
+}
+
+const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
+  pickupDetails,
+  deliveryDetails,
+  onPickupDetailsChange,
+  onDeliveryDetailsChange,
+}) => {
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
-  // console.log("🚀 ~ isPickupRightModal:", isPickupRightModal);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
     useState<boolean>(false);
-  // console.log("🚀 ~ isDeliveryRightModal:", isDeliveryRightModal);
-  return (
-    <>
-      <div className="border-[1px] rounded-md border-[#004EFF] min-h-[222px] max-h-[268px] px-3 py-[12px]">
-        {/* pickup section  */}
-        {/* <div className="flex gap-x-[6px] items-center text-center">
-          <img src={WebLocationIcon} alt="locationIcon" />
-          <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
-            Pickup Details
-          </p>
-        </div>
-        <div className="flex items-start p-3">
-          <OneButton
-            text={"Add Pickup Details"}
-            onClick={() => setIsPickupRightModal(true)}
-            variant="quad"
-            showIcon={true}
-            icon={PlusIcon}
-            textTransform="capitalize"
-          />
-        </div> */}
-        {/* the address filled section  */}
-        <div className="flex justify-between">
-          <div className="flex gap-x-[6px] items-center text-center">
-            <img src={WebLocationIcon} alt="locationIcon" />
-            <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
-              Pickup Details
-            </p>
-          </div>
-          <div>
-            <img src={EditIcon} alt="edit" />
-          </div>
-        </div>
-        <div className="flex flex-col p-3 gap-y-2">
-          <div className="flex gap-x-5">
-            <div className="flex gap-x-[6px] items-center">
-              <img src={ProfileIcon} alt="profile" />
-              <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-                anish sharma
-              </span>
-            </div>
-            <div className="flex gap-x-[6px] items-center">
-              <img src={ContactIcon} alt="phone icon" />
-              <p className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-                +91{" "}
-                <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-                  9876543210
-                </span>
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-x-[6px] items-center ">
-            <img src={AddressLocationIcon} alt="address-location-icon" />
-            <p className="font-Open font-semibold text-sm text-[#323232] leading-[18px] capitalize">
-              jhindal warehouse -{" "}
-              <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-                400012
-              </span>
-            </p>
-          </div>
-          <div>
-            <p className="font-Open font-normal text-sm text-[#323232] leading-5">
-              Door 12, sector 8, Shankar Nagar, Plot no. ICICI Bank, Andheri
-              link road{" "}
-            </p>
-          </div>
-        </div>
+  const [currentEditType, setCurrentEditType] = useState<
+    "pickup" | "delivery" | null
+  >(null);
+  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
 
-        {/* border line  */}
-        <div className="border-[1px] mt-[8px] mb-6"></div>
-        {/* delivery section  */}
+  const [pickupAddress, setPickupAddress] =
+    useState<IPickupDetails>(pickupDetails);
+  const [deliveryAddress, setDeliveryAddress] =
+    useState<IDeliveryDetails>(deliveryDetails);
+
+  const [pickupLandmark, setPickupLandmark] = useState<string>("");
+  const [deliveryLandmark, setDeliveryLandmark] = useState<string>("");
+
+  useEffect(() => {
+    setPickupAddress(pickupDetails);
+  }, [pickupDetails]);
+
+  useEffect(() => {
+    setDeliveryAddress(deliveryDetails);
+  }, [deliveryDetails]);
+
+  const handlePickupDetailsSave = (
+    newDetails: IPickupDetails,
+    landmark: string
+  ) => {
+    setPickupAddress(newDetails);
+    setPickupLandmark(landmark);
+    onPickupDetailsChange(newDetails);
+    setIsPickupRightModal(false);
+  };
+
+  const handleDeliveryDetailsSave = (
+    newDetails: IDeliveryDetails,
+    landmark: string
+  ) => {
+    setDeliveryAddress(newDetails);
+    setDeliveryLandmark(landmark);
+    onDeliveryDetailsChange(newDetails);
+    setIsDeliveryRightModal(false);
+  };
+
+  const handleEditClick = (type: "pickup" | "delivery") => {
+    if (type === "pickup") {
+      setCurrentEditType("pickup");
+      setIsPickupRightModal(true);
+    } else if (type === "delivery") {
+      setCurrentEditType("delivery");
+      setIsDeliveryRightModal(true);
+    }
+  };
+
+  const renderAddressDetails = (
+    details: any,
+    type: string,
+    landmark: string
+  ) => (
+    <div>
+      <div className="flex justify-between">
         <div className="flex gap-x-[6px] items-center text-center">
           <img src={WebLocationIcon} alt="locationIcon" />
           <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
-            Delivery Details
+            {type} Details
           </p>
         </div>
-        <div className="flex items-start p-3">
-          <OneButton
-            text={"Add Delivery Details"}
-            onClick={() => setIsDeliveryRightModal(true)}
-            variant="quad"
-            showIcon={true}
-            icon={PlusIcon}
-            textTransform="capitalize"
-          />
+        <div
+          onClick={() =>
+            handleEditClick(type === "Pickup" ? "pickup" : "delivery")
+          }
+        >
+          <img src={EditIcon} alt="edit" className="cursor-pointer" />
         </div>
       </div>
-      {/* pickup details modal  */}
+      <div className="flex flex-col p-3 gap-y-2">
+        <div className="flex gap-x-5">
+          <div className="flex gap-x-[6px] items-center">
+            <img src={ProfileIcon} alt="profile" />
+            <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
+              {details.contact.name}
+            </span>
+          </div>
+          <div className="flex gap-x-[6px] items-center">
+            <img src={ContactIcon} alt="phone icon" />
+            <p className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
+              +91{" "}
+              <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
+                {details.contact.mobileNo}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-x-[6px] items-center">
+          <img src={AddressLocationIcon} alt="address-location-icon" />
+          <p className="font-Open font-semibold text-sm text-[#323232] leading-[18px] capitalize">
+            {landmark} - {details.pincode}
+          </p>
+        </div>
+        <p className="font-Open font-normal text-sm text-[#323232] leading-5">
+          {details.fullAddress}
+        </p>
+      </div>
+    </div>
+  );
+
+  const isAddressEmpty = (address: IPickupDetails | IDeliveryDetails) => {
+    return (
+      !address.fullAddress ||
+      !address.pincode ||
+      !address.contact.name ||
+      !address.contact.mobileNo
+    );
+  };
+  const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
+  const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
+
+  // ${
+  //       isPickupAddressEmpty || isDeliveryAddressEmpty
+  //         ? "border-[1px] border-[#004EFF] rounded-md "
+  //         : "border-[1px] border-[#E8E8E8] rounded-md "}
+
+  return (
+    <>
+      <div
+        className={`border-[1px] border-[#E8E8E8] rounded-md  min-h-[222px] max-w-[] px-3 py-[12px]`}
+      >
+        {isPickupAddressEmpty ? (
+          <div>
+            <div className="flex gap-x-[6px] items-center text-center">
+              <img src={WebLocationIcon} alt="locationIcon" />
+              <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+                Pickup Details
+              </p>
+            </div>
+            <div className="flex items-start p-3">
+              <OneButton
+                text={"ADD PICKUP DETAILS"}
+                onClick={() => {
+                  setCurrentEditType("pickup");
+                  setIsPickupRightModal(true);
+                }}
+                variant="quad"
+                showIcon={true}
+                icon={PlusIcon}
+                textTransform="capitalize"
+              />
+            </div>
+          </div>
+        ) : (
+          renderAddressDetails(pickupAddress, "Pickup", pickupLandmark)
+        )}
+
+        <div className="border-[1px] mt-[8px] mb-6"></div>
+
+        {isDeliveryAddressEmpty ? (
+          <div>
+            <div className="flex gap-x-[6px] items-center text-center">
+              <img src={WebLocationIcon} alt="locationIcon" />
+              <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+                Delivery Details
+              </p>
+            </div>
+            <div className="flex items-start p-3">
+              <OneButton
+                text={"ADD DELIVERY DETAILS"}
+                onClick={() => {
+                  setCurrentEditType("delivery");
+                  setIsDeliveryRightModal(true);
+                }}
+                variant="quad"
+                showIcon={true}
+                icon={PlusIcon}
+                textTransform="capitalize"
+              />
+            </div>
+          </div>
+        ) : (
+          renderAddressDetails(deliveryAddress, "Delivery", deliveryLandmark)
+        )}
+      </div>
+
       <RightSideModal
         isOpen={isPickupRightModal}
         onClose={() => setIsPickupRightModal(false)}
@@ -119,12 +230,13 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = (
         }`}
       >
         <PickupDetailsContent
-          isPickupRightModal={isPickupRightModal}
+          details={pickupAddress}
+          landmark={pickupLandmark}
           setIsPickupRightModal={setIsPickupRightModal}
+          onSave={handlePickupDetailsSave}
         />
       </RightSideModal>
 
-      {/* delivery details modal  */}
       <RightSideModal
         isOpen={isDeliveryRightModal}
         onClose={() => setIsDeliveryRightModal(false)}
@@ -133,8 +245,10 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = (
         }`}
       >
         <DeliveryDetailsContent
-          isDeliveryRightModal={isDeliveryRightModal}
+          details={deliveryAddress}
+          landmark={deliveryLandmark}
           setIsDeliveryRightModal={setIsDeliveryRightModal}
+          onSave={handleDeliveryDetailsSave}
         />
       </RightSideModal>
     </>
