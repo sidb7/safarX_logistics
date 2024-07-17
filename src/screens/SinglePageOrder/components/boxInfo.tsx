@@ -86,13 +86,15 @@ function BoxInfo({
               </div>
               <div className="flex items-center justify-center gap-x-4 mx-5 px-3 py-1 rounded-lg bg-[#ffffff] shadow-md">
                 <div>
-                  Applied Weight :
+                  Applied Weight :{" "}
                   {`${
                     data?.appliedWeight ? +data?.appliedWeight + "Kg" : "0 Kg"
                   }`}
                 </div>
                 <div className="flex items-center justify-center">
-                  <div className="text-[15px]">COD</div>
+                  <div className="text-[15px]">
+                    {data?.codInfo?.isCod ? "COD" : "PREPAID"}
+                  </div>
                   <div
                     className={`rounded-full w-[12px] ml-1 h-[12px] ${
                       data?.codInfo?.isCod ? "bg-[#4BB543]" : "bg-[#F35838]"

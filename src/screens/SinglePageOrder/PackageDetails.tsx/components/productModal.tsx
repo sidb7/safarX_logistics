@@ -13,9 +13,10 @@ import DeleteGif from "../../../../assets/common/DeleteGif.gif";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
 import CustomSearchDropDown from "../../components/CustomSearchDropDown";
-import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
+import { GET_PRODUCT_URL, GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { includes } from "lodash";
+import SearchDropDown from "../../components/searchDropDown";
 
 function ProductModal({ onClose, setOrder, index }: any) {
   const [boxInputData, setBoxInputData]: any = useState({
@@ -23,20 +24,49 @@ function ProductModal({ onClose, setOrder, index }: any) {
     category: "",
     sku: "",
     qty: 1,
-    unitPrice: 100,
-    unitTax: 180,
+    unitPrice: 0,
+    unitTax: 0,
     weightUnit: "kg",
     deadWeight: 1,
-    length: 0,
-    breadth: 0,
-    height: 0,
+    length: 1,
+    breadth: 1,
+    height: 1,
     measureUnit: "cm",
   });
 
+  const productValidation = () => {
+    if (
+      boxInputData.name.trim() === "" ||
+      boxInputData.unitPrice === 0 ||
+      typeof boxInputData.unitPrice !== "number" ||
+      boxInputData.deadWeight === 0 ||
+      typeof boxInputData.deadWeight !== "number" ||
+      boxInputData.length === 0 ||
+      typeof boxInputData.length !== "number" ||
+      boxInputData.breadth === 0 ||
+      typeof boxInputData.breadth !== "number" ||
+      boxInputData.height === 0 ||
+      typeof boxInputData.height !== "number"
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const onChangeHandler = (e: any) => {
+    const dimension = [
+      "unitPrice",
+      "deadWeight",
+      "length",
+      "breadth",
+      "height",
+    ];
+
     setBoxInputData((prevState: any) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: dimension.includes(e.target.name)
+        ? +e.target.value
+        : e.target.value,
     }));
   };
 
@@ -114,23 +144,16 @@ function ProductModal({ onClose, setOrder, index }: any) {
                 }}
                 // onClick={() => handleProductsDetails(index)}
               >
-                <div className="flex flex-col gap-y-[10px] w-[100%] px-[1rem]">
-                  {/* <div>
-                    <CustomSearchDropDown
-                      value={boxInputData.name}
-                      initValue={boxInputData.name}
-                      className=""
-                      apiUrl={GET_SELLER_BOX}
-                      label={"Search Product"}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: "category", value: e },
-                          index
-                        )
-                      }
+                <div className="flex flex-col gap-y-4 w-[100%] px-[1rem]">
+                  <div>
+                    <SearchDropDown
+                      className={`border`}
+                      apiUrl={GET_PRODUCT_URL}
+                      label="Search Product"
+                      setFunc={setBoxInputData}
+                      identifier="PRODUCT"
                     />
-                  
-                  </div> */}
+                  </div>
 
                   <div>
                     <InputBox
@@ -253,6 +276,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
         <ServiceButton
           text={"SAVE"}
           onClick={() => addProductToBox(index, boxInputData)}
+          disabled={productValidation()}
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>

@@ -18,7 +18,6 @@ import { generateUniqueCode } from "../../utils/utility";
 import InputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import toast from "react-hot-toast";
-import infoIcon from "../../assets/info.svg";
 import walletIcon from "../../assets/Group.svg";
 import {
   FETCH_LABELS_REPORT_DOWNLOAD,
@@ -37,7 +36,6 @@ interface IIndexProps {}
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [showDownloadLebal, setDownloadLebal] = useState(false);
-  const [transporterNoModalOpen, setTransporterNoModalOpen] = useState(false);
   const [isDownloadLoading, setDownloadLoading]: any = useState({});
   const [order, setOrder]: any = useState({
     pickupDetails: {
@@ -554,7 +552,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   onDeliveryDetailsChange={handleDeliveryDetailsChange}
                 />
               </div>
-              <div className=" rounded !max-h-[400px] overflow-hidden">
+              <div className=" rounded !max-h-[500px] overflow-hidden">
                 <PackageDetails
                   packageDetails={order?.boxInfo}
                   order={order}
@@ -562,7 +560,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 />
               </div>
 
-              <div className="border p-3 rounded gap-x-4 flex items-center">
+              {/* <div className="border p-3 rounded gap-x-4 flex items-center">
                 <div className="md:!w-[50%] ">
                   <CustomInputBox
                     isRightIcon={true}
@@ -590,67 +588,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     data-cy="auto-generate-order-id"
                   />
                 </div>
-
-                {sumInvoiceValue > 50000 && (
-                  <div className="flex md:!w-[50%] gap-x-4">
-                    <div className="w-full">
-                      <InputBox
-                        label="Transporter No"
-                        value={order?.transporterNo}
-                        name="transporterNo"
-                        inputType="text"
-                        onChange={(e: any) => {
-                          setOrder((prevState: any) => {
-                            return {
-                              ...prevState,
-                              transporterNo: e.target.value,
-                            };
-                          });
-                        }}
-                        //   inputError={inputError}
-                      />
-                    </div>
-                    <button
-                      className="flex justify-center items-center"
-                      onClick={() => {
-                        setTransporterNoModalOpen(true);
-                      }}
-                    >
-                      <img
-                        src={infoIcon}
-                        alt="infoIcon for Transporter"
-                        className="w-[25px] cursor-pointer"
-                      />
-                    </button>
-                  </div>
-                )}
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex-1">
-            {/* <div className="flex justify-end items-center mb-2">
-              <div className=" flex justify-start items-center h-fit">
-                <input
-                  type="radio"
-                  name="type"
-                  value={"B2C"}
-                  className=" mr-2 w-[15px] h-[15px]"
-                  checked={order?.orderType === "B2C"}
-                  // onChange={(e) => {
-                  //   setBoxInputData(() => {
-                  //     return {
-                  //       ...boxInputData,
-                  //       codInfo: {
-                  //         ...boxInputData.codInfo,
-                  //         isCod: false,
-                  //       },
-                  //     };
-                  //   });
-                  // }}
-                />
-                <div className="text-[15px]">B2C</div>
-              </div>
-            </div> */}
             <div className="flex flex-col gap-y-5">
               <div>
                 <ShippingDetails order={order} setOrder={setOrder} />
@@ -677,65 +618,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             </div>
           </div>
         </div>
-        <CenterModal
-          isOpen={transporterNoModalOpen}
-          onRequestClose={() => setTransporterNoModalOpen(false)}
-          className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
-        >
-          <>
-            <div className="w-[100%] h-[100%] p-4">
-              <div className="flex justify-between pb-2 items-center">
-                <div className="font-bold font-Open">E-Way Details</div>
-                <button
-                  className="flex justify-center items-center"
-                  onClick={() => setTransporterNoModalOpen(false)}
-                >
-                  <img
-                    src={crossIcon}
-                    alt=""
-                    className="w-[20px] cursor-pointer"
-                  />
-                </button>
-              </div>
 
-              <div className=" max-h-[220px] border-b customScroll mt-2">
-                <table className="min-w-full divide-y divide-gray-200 border-collapse border border-gray-300">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-3 w-[60px] text-[15px]  font-medium  uppercase tracking-wider border border-gray-300">
-                        Sr. No
-                      </th>
-                      <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
-                        Courier Partner
-                      </th>
-                      <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
-                        Transporter No
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y !max-h-[200px] !overflow-hidden customScroll  divide-gray-200">
-                    {data.map((item) => (
-                      <tr key={item.id}>
-                        <td className="px-3 w-[60px] text-[14px] whitespace-nowrap border border-gray-300">
-                          {item.id}
-                        </td>
-                        <td className="px-3  text-[14px] whitespace-nowrap border border-gray-300">
-                          {item.courierPartner || "-"}
-                        </td>
-                        <td className="px-3 text-[14px] whitespace-nowrap border border-gray-300">
-                          <span className="mr-1">
-                            {item.transporterNo || "-"}
-                          </span>
-                          <CopyTooltip stringToBeCopied={item.transporterNo} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </>
-        </CenterModal>
         <CenterModal
           isOpen={showAlertBox}
           onRequestClose={() => setShowAlertBox(false)}
