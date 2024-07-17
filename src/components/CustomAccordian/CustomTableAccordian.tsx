@@ -6734,6 +6734,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   const [serviceLoading, setServiceLoading] = useState<any>(false);
   const [productAccordian, setproductAccordian] = useState<any>([]);
+  console.log("productAccordian", productAccordian);
   const [otherDetailsAccordian, setOtherDetailsAccordian] = useState(false);
   const [validationError, setValidationError] = useState<any>({
     contactName: "",
@@ -6944,6 +6945,8 @@ const Accordion = (props: ICustomTableAccordion) => {
   });
 
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
+
+  console.log("selectBoxIndex", selectBoxIndex);
 
   //to know the box id
   const [selectBoxId, setSelectBoxId] = useState<any>(-1);
@@ -7558,6 +7561,11 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
+    console.log("handleItemClick Check index", index);
+    console.log("box requestName", requestName);
+    if (requestName === "Box & Products") {
+      setSelectBoxIndex(index - 2);
+    }
     if (addressOpen?.current == false) {
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
       if (
@@ -8119,6 +8127,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
 
   const handleBoxAccordian = async () => {
+    console.log("box rendered here");
     if (boxAccordian === true && !enabled) {
       try {
         if (
@@ -8483,7 +8492,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     dataIndex: any,
     accordionTrigger?: boolean
   ) => {
-    console.log("ProductLoop Triggered", typeof deadWeight);
+    console.log("selectBoxIndexproductLoops", selectBoxIndex);
 
     if (accordionTrigger) {
       if (deadWeight[dataIndex].deadWeight > 0) return false;
@@ -8496,7 +8505,8 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     // for (let i = 0; i < productAccordian.length; i++) {
     // const product = productAccordian[dataIndex];
-    const product = boxProductDetails?.boxInfo?.[0]?.products?.[dataIndex];
+    const product =
+      boxProductDetails?.boxInfo?.[selectBoxIndex]?.products?.[dataIndex];
 
     // if (deadWeight > 0) {
     //     let productBorderError = document.getElementById(product.productId);
@@ -8974,7 +8984,11 @@ const Accordion = (props: ICustomTableAccordion) => {
   }, [addressOpenModal]);
 
   useEffect(() => {
-    setproductAccordian(boxProductDetails?.boxInfo?.[0]?.products);
+    setproductAccordian(boxProductDetails?.boxInfo?.[selectBoxIndex]?.products);
+    console.log(
+      "boxProductDetails?.boxInfo?.[selectBoxIndex]?.products",
+      boxProductDetails?.boxInfo?.[selectBoxIndex]?.products
+    );
     if (!enabled) {
       setProdctError(
         boxProductDetails?.boxInfo?.[0]?.products?.map(
@@ -9030,7 +9044,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     //     }
     //   )
     // );
-  }, [boxProductDetails]);
+  }, [boxProductDetails, selectBoxIndex]);
 
   // useEffect(() => {
   //   serviceList.map((id: any, index: number) => {
@@ -9663,6 +9677,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       // )
                                                     ) {
                                                       handleBoxAccordian();
+
                                                       // setBoxAccordian(false);
                                                       // setCustomInputBox(false);
                                                       setBoxName(false);
