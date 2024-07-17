@@ -528,7 +528,7 @@ const Tracking = () => {
                                               </p>
                                               <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
                                                 {each?.routes &&
-                                                each?.routes?.length !== 0
+                                                each?.routes?.length >= 1
                                                   ? each?.routes?.[0]
                                                       ?.fullAddress
                                                   : each?.deliveryAddress
