@@ -65,6 +65,10 @@ const RuleEngineCustomInputWithDropDown: React.FC<
     getCategories();
   }, [inputValue, initValue]);
 
+  // useEffect(() => {
+  //   setInputValue(initValue);
+  // }, [initValue]);
+
   return (
     <div
       className="relative w-full"

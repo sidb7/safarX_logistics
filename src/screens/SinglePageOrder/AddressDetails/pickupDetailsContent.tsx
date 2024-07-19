@@ -4,6 +4,8 @@ import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import InfoCircle from "../../../assets/info-circle.svg";
+import SearchDropDown from "../components/searchDropDown";
+import { RETURNING_USER_PICKUP } from "../../../utils/ApiUrls";
 
 interface IContact {
   name: string;
@@ -145,6 +147,13 @@ const PickupDetailsContent: React.FunctionComponent<
     setIsPickupRightModal(false); // Close the modal after saving
   };
 
+  const autoSetData = (pickupDetails: any, landmark: any) => {
+    setPickupDetails(pickupDetails);
+    setLocalLandmark(landmark);
+  };
+
+  // RETURNING_USER_PICKUP;
+
   return (
     <>
       <div className="mx-5">
@@ -163,6 +172,16 @@ const PickupDetailsContent: React.FunctionComponent<
           </div>
         </div>
         <div className="flex flex-col gap-y-5 mt-1">
+          <div>
+            <SearchDropDown
+              className={`border`}
+              apiUrl={RETURNING_USER_PICKUP}
+              label="Search Package"
+              setFunc={autoSetData}
+              identifier="ADDRESS"
+            />
+          </div>
+
           <CustomInputBox
             label="Receiver's Name"
             value={pickupDetails.contact.name}
