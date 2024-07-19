@@ -4,6 +4,8 @@ import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import InfoCircle from "../../../assets/info-circle.svg";
+import { RETURNING_USER_DELIVERY } from "../../../utils/ApiUrls";
+import SearchDropDown from "../components/searchDropDown";
 
 interface IContact {
   name: string;
@@ -147,6 +149,11 @@ const DeliveryDetailsContent: React.FunctionComponent<
     setIsDeliveryRightModal(false); // Close the modal after saving
   };
 
+  const autoSetData = (pickupDetails: any, landmark: any) => {
+    setDeliveryDetails(pickupDetails);
+    setLocalLandmark(landmark);
+  };
+
   return (
     <>
       <div className="mx-5">
@@ -165,6 +172,16 @@ const DeliveryDetailsContent: React.FunctionComponent<
           </div>
         </div>
         <div className="flex flex-col gap-y-5 mt-1">
+          <div>
+            <SearchDropDown
+              className={`border`}
+              apiUrl={RETURNING_USER_DELIVERY}
+              label="Search Package"
+              setFunc={autoSetData}
+              identifier="ADDRESS"
+            />
+          </div>
+
           <CustomInputBox
             label="Receiver's Name"
             value={deliveryDetails.contact.name}

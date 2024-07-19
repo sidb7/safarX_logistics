@@ -36,6 +36,11 @@ function BoxInfo({
     return volume / 5000;
   };
 
+  const getColorByIndex = (index: any) => {
+    const colors = ["#F2F6FF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
+    return colors[index % colors.length];
+  };
+
   const addUnit = (index: number) => {
     let arr = allProducts;
     const { length, breadth, height } = allProducts[index];
@@ -68,7 +73,10 @@ function BoxInfo({
   }, [data?.products]);
 
   return (
-    <div className="px-4 py-2 my-2 bg-[#F2F6FF] rounded">
+    <div
+      className={`px-4 py-2 my-2 rounded`}
+      style={{ backgroundColor: getColorByIndex(index) }}
+    >
       <div className="gap-y-4">
         <div className="flex justify-between items-center">
           <div className=" flex flex-col">
@@ -78,13 +86,15 @@ function BoxInfo({
               </div>
               <div className="flex items-center justify-center gap-x-4 mx-5 px-3 py-1 rounded-lg bg-[#ffffff] shadow-md">
                 <div>
-                  Applied Weight :
+                  Applied Weight :{" "}
                   {`${
                     data?.appliedWeight ? +data?.appliedWeight + "Kg" : "0 Kg"
                   }`}
                 </div>
                 <div className="flex items-center justify-center">
-                  <div className="text-[15px]">COD</div>
+                  <div className="text-[15px]">
+                    {data?.codInfo?.isCod ? "COD" : "PREPAID"}
+                  </div>
                   <div
                     className={`rounded-full w-[12px] ml-1 h-[12px] ${
                       data?.codInfo?.isCod ? "bg-[#4BB543]" : "bg-[#F35838]"
