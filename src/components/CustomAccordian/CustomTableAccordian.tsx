@@ -7785,11 +7785,12 @@ const Accordion = (props: ICustomTableAccordion) => {
         source: data?.data?.[0]?.data?.[0]?.source,
       });
 
-      data?.data?.[0]?.data?.[0]?.errorList?.map((item: any) => {
-        if (item.category === "Box And Product" && item.isActive)
-          setIsBoxError(true);
-        else setIsBoxError(false);
-      });
+      // data?.data?.[0]?.data?.[0]?.errorList?.map((item: any) => {
+      //   if (item.category === "Box And Product" && item.isActive)
+      //     setIsBoxError(true);
+      //   else setIsBoxError(false);
+      // });
+
       //commented out it is showing the previous data
       // setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
       setBoxDetailsData(boxData?.data?.data);
