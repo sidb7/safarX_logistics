@@ -311,7 +311,7 @@ const MainCommonHelper = (navigate: any = "") => {
         return (
           <div className="font-Open font-normal leading-5 text-sm py-3">
             {info?.row?.original?.routes &&
-            info?.row?.original?.routes?.length !== 0 ? (
+            info?.row?.original?.routes?.length >= 1 ? (
               <>
                 <div className="font-Open font-normal leading-5 text-sm">
                   {capitalizeFirstLetter(
@@ -1291,7 +1291,7 @@ export const columnHelperForNewOrder = (
         return (
           <div className="font-Open font-normal leading-5 text-sm py-3">
             {info?.row?.original?.routes &&
-            info?.row?.original?.routes?.length !== 0 ? (
+            info?.row?.original?.routes?.length >= 1 ? (
               <>
                 <div className="font-Open font-normal leading-5 text-sm">
                   {capitalizeFirstLetter(

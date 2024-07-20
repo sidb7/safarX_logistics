@@ -92,7 +92,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
               Courier Options
             </p>
           </div>
-          <div className="flex gap-x-1 items-center">
+          {/* <div className="flex gap-x-1 items-center">
             <CustomRadioButton
               name="singlePage"
               value="singlePage"
@@ -117,7 +117,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
             <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
               Fastest
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="mt-4">
           <div>
