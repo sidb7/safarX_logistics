@@ -686,14 +686,14 @@ export const ChannelIntegrationCarts = {
     //   storesIntegrated: 5,
     //   channel: "UNICOMMERCE",
     // },
-    {
-      name: "STORE_NAME",
-      icon: AmazonPngIcon,
-      iconLg: AmazonPngIcon,
-      integrated: false,
-      storesIntegrated: 5,
-      channel: "AMAZON",
-    },
+    // {
+    //   name: "STORE_NAME",
+    //   icon: AmazonPngIcon,
+    //   iconLg: AmazonPngIcon,
+    //   integrated: false,
+    //   storesIntegrated: 5,
+    //   channel: "AMAZON",
+    // },
     // {
     //   name: "Woo",
     //   icon: WooIcon,
