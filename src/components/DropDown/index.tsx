@@ -68,7 +68,7 @@ const CustomDropDown = (props: IDropDownProps) => {
           placeholder={placeHolder}
           name={name}
           disabled={disabled}
-          className={`${selectClassName} select-dropdown rounded  ${
+          className={`${selectClassName} select-dropdown rounded cursor-pointer ${
             inputError && !value
               ? "!border-red-500"
               : "border-[1px] border-[#A4A4A4]"
@@ -77,7 +77,7 @@ const CustomDropDown = (props: IDropDownProps) => {
           {heading && (
             <option
               value={""}
-              className="text-[12px] text-[#777777] absolute leading-4 font-Open"
+              className="text-[12px] text-[#777777] absolute leading-4 font-Open text-center"
             >
               {heading}
             </option>
