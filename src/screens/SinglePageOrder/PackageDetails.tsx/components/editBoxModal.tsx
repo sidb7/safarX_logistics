@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import packegeIcon from "../../../../assets/Delivery Icon.svg";
 import CustomDropDown from "../../../../components/DropDown";
 import InputBox from "../../../../components/Input";
@@ -8,13 +8,13 @@ import CustomInputBox from "../../../../components/Input";
 import AutoGenerateIcon from "../../../../assets/Product/autogenerate.svg";
 import crossIcon from "../../../../assets/cross.svg";
 import infoIcon from "../../../../assets/info.svg";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import ItemIcon from "../../../../assets/Product/Item.svg";
 import DownArrowIcon from "../../../../assets/Filter/downArrow.svg";
 import BoxIcon from "../../../../assets/layer.svg";
 import VanIcon from "../../../../assets/vanWithoutBG.svg";
 import InfoCircle from "../../../../assets/info-circle.svg";
 import DeleteGif from "../../../../assets/common/DeleteGif.gif";
-import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import {
   capitalizeFirstLetter,
   generateUniqueCode,
@@ -23,75 +23,13 @@ import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/C
 import CustomSearchDropDown from "../../components/CustomSearchDropDown";
 import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
-import SearchDropDown from "../../components/searchDropDown";
 import CopyTooltip from "../../../../components/CopyToClipboard";
 
-function BoxModal({ onClose, setOrder }: any) {
-  const [services, setServices] = useState([]);
-  const [serviceIndex, setServiceIndex]: any = useState(0);
-  const [globalIndex, setGlobalIndex]: any = useState(null);
+function EditBoxModal({ onClose, data, setOrder }: any) {
+  const [boxInputData, setBoxInputData]: any = useState();
   const [transporterNoModalOpen, setTransporterNoModalOpen] = useState(false);
-  const [boxInputData, setBoxInputData]: any = useState({
-    name: "box_1",
-    weightUnit: "Kg",
-    deadWeight: 1,
-    length: 1,
-    breadth: 1,
-    height: 1,
-    measureUnit: "cm",
-    products: [],
-    codInfo: {
-      isCod: false,
-      collectableAmount: 0,
-      invoiceValue: 0,
-    },
-    podInfo: {
-      isPod: false,
-    },
-    insurance: false,
-    eWayBillNo: 0,
-  });
 
-  const calculateVolumeWeight = (
-    length: number,
-    breadth: number,
-    height: number
-  ): number => {
-    const volume = length * breadth * height;
-    return volume / 5000;
-  };
-
-  const boxValidation = () => {
-    if (
-      boxInputData.name.trim() === "" ||
-      boxInputData.deadWeight === 0 ||
-      (typeof boxInputData.deadWeight !== "number" &&
-        boxInputData.deadWeight.trim() === "") ||
-      boxInputData.length === 0 ||
-      (typeof boxInputData.length !== "number" &&
-        boxInputData.length.trim() === "") ||
-      boxInputData.breadth === 0 ||
-      (typeof boxInputData.breadth !== "number" &&
-        boxInputData.breadth.trim() === "") ||
-      boxInputData.height === 0 ||
-      (typeof boxInputData.height !== "number" &&
-        boxInputData.height.trim() === "") ||
-      (boxInputData.codInfo.isCod &&
-        boxInputData.codInfo.collectableAmount === 0) ||
-      boxInputData.codInfo.invoiceValue === 0 ||
-      (boxInputData.codInfo.invoiceValue > 50000 &&
-        boxInputData.transporterNo === "") ||
-      (boxInputData.codInfo.invoiceValue > 50000 &&
-        boxInputData.eWayBillNo === 0) ||
-      (typeof boxInputData.eWayBillNo !== "number" &&
-        boxInputData.eWayBillNo.trim() === "")
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  let data = [
+  let transporterList = [
     {
       id: 1,
       courierPartner: "DTDC",
@@ -137,6 +75,7 @@ function BoxModal({ onClose, setOrder }: any) {
       "breadth",
       "height",
     ];
+
     const { name, value } = e.target;
     setBoxInputData((prevState: any) => ({
       ...prevState,
@@ -144,40 +83,76 @@ function BoxModal({ onClose, setOrder }: any) {
     }));
   };
 
-  console.log(
-    "boxInputData===============================================>",
-    boxInputData
-  );
+  const calculateVolumeWeight = (
+    length: number,
+    breadth: number,
+    height: number
+  ): number => {
+    const volume = length * breadth * height;
+    return volume / 5000;
+  };
+
+  const boxValidation = () => {
+    if (
+      boxInputData.name.trim() === "" ||
+      boxInputData.deadWeight === 0 ||
+      (typeof boxInputData.deadWeight !== "number" &&
+        boxInputData.deadWeight.trim() === "") ||
+      boxInputData.length === 0 ||
+      (typeof boxInputData.length !== "number" &&
+        boxInputData.length.trim() === "") ||
+      boxInputData.breadth === 0 ||
+      (typeof boxInputData.breadth !== "number" &&
+        boxInputData.breadth.trim() === "") ||
+      boxInputData.height === 0 ||
+      (typeof boxInputData.height !== "number" &&
+        boxInputData.height.trim() === "") ||
+      (boxInputData.codInfo.isCod &&
+        boxInputData.codInfo.collectableAmount === 0) ||
+      boxInputData.codInfo.invoiceValue === 0 ||
+      (boxInputData.codInfo.invoiceValue > 50000 &&
+        boxInputData.transporterNo === "") ||
+      (boxInputData.codInfo.invoiceValue > 50000 &&
+        boxInputData.eWayBillNo === 0) ||
+      (typeof boxInputData.eWayBillNo !== "number" &&
+        boxInputData.eWayBillNo.trim() === "")
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const onSave = () => {
-    setOrder((prevOrder: any) => ({
-      ...prevOrder,
-      boxInfo: [
-        ...prevOrder.boxInfo,
-        {
-          ...boxInputData,
-          length: +boxInputData.length,
-          breadth: +boxInputData.breadth,
-          height: +boxInputData.height,
-          deadWeight: +boxInputData.deadWeight,
-          volumetricWeight: calculateVolumeWeight(
+    setOrder((prevOrder: any) => {
+      const updatedBoxInfo = [...prevOrder.boxInfo];
+      updatedBoxInfo[data?.id] = {
+        ...boxInputData,
+        length: +boxInputData.length,
+        breadth: +boxInputData.breadth,
+        height: +boxInputData.height,
+        deadWeight: +boxInputData.deadWeight,
+        volumetricWeight: calculateVolumeWeight(
+          boxInputData.length,
+          boxInputData.breadth,
+          boxInputData.height
+        ),
+        appliedWeight: Math.max(
+          boxInputData.deadWeight,
+          calculateVolumeWeight(
             boxInputData.length,
             boxInputData.breadth,
             boxInputData.height
-          ),
-          appliedWeight: Math.max(
-            boxInputData.deadWeight,
-            calculateVolumeWeight(
-              boxInputData.length,
-              boxInputData.breadth,
-              boxInputData.height
-            )
-          ),
-        },
-      ],
-    }));
+          )
+        ),
+      };
+      return { ...prevOrder, boxInfo: updatedBoxInfo };
+    });
     onClose(false);
   };
+
+  useEffect(() => {
+    setBoxInputData(data?.data);
+  }, [data?.products]);
 
   return (
     <>
@@ -188,7 +163,7 @@ function BoxModal({ onClose, setOrder }: any) {
               <img src={packegeIcon} alt="" />
             </div>
             <span className="text-[18px] ml-2 font-bold font-Open">
-              Add Packages
+              Edit Packages
             </span>
           </div>
           <button onClick={() => onClose(false)}>
@@ -206,17 +181,7 @@ function BoxModal({ onClose, setOrder }: any) {
                 }}
                 // onClick={() => handleProductsDetails(index)}
               >
-                <div className="flex flex-col gap-y-6 w-[100%] px-[1rem]">
-                  <div>
-                    <SearchDropDown
-                      className={`border`}
-                      apiUrl={GET_SELLER_BOX}
-                      label="Search Package"
-                      setFunc={setBoxInputData}
-                      identifier="BOX"
-                    />
-                  </div>
-
+                <div className="flex flex-col gap-y-[10px] w-[100%] px-[1rem]">
                   <div>
                     <InputBox
                       label="Box Name"
@@ -224,7 +189,7 @@ function BoxModal({ onClose, setOrder }: any) {
                       name="name"
                       inputType="text"
                       onChange={(e: any) => onChangeHandler(e)}
-                      //   inputError={inputError}
+                      inputError={true}
                     />
                   </div>
 
@@ -240,11 +205,11 @@ function BoxModal({ onClose, setOrder }: any) {
                           onChangeHandler(e);
                         }
                       }}
-                      //   inputError={inputError}
+                      inputError={true}
                     />
                   </div>
                 </div>
-                <div className="flex justify-between w-[100%] gap-x-6 px-[1rem]">
+                <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
                   <div className="w-[50%]">
                     <CustomDropDown
                       onChange={() => {}}
@@ -256,7 +221,7 @@ function BoxModal({ onClose, setOrder }: any) {
                       ]}
                     />
                   </div>
-                  <div className="flex w-[50%]  gap-x-4">
+                  <div className="flex w-[50%] gap-x-4">
                     <InputBox
                       label="L"
                       inputType="text"
@@ -380,7 +345,6 @@ function BoxModal({ onClose, setOrder }: any) {
                       name="deadWeight"
                       inputType="text"
                       inputMode="numeric"
-                      isDisabled={!boxInputData?.codInfo?.isCod}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           setBoxInputData(() => {
@@ -394,6 +358,7 @@ function BoxModal({ onClose, setOrder }: any) {
                           });
                         }
                       }}
+                      // inputError={true}
                     />
                   </div>
                   <div className="flex-1">
@@ -416,6 +381,7 @@ function BoxModal({ onClose, setOrder }: any) {
                           });
                         }
                       }}
+                      // inputError={true}
                     />
                   </div>
                 </div>
@@ -485,7 +451,6 @@ function BoxModal({ onClose, setOrder }: any) {
         <ServiceButton
           text={"SAVE"}
           onClick={onSave}
-          disabled={boxValidation()}
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
@@ -527,7 +492,7 @@ function BoxModal({ onClose, setOrder }: any) {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y !max-h-[200px] !overflow-hidden customScroll  divide-gray-200">
-                  {data.map((item) => (
+                  {transporterList.map((item) => (
                     <tr key={item.id}>
                       <td className="px-3 w-[60px] text-[14px] whitespace-nowrap border border-gray-300">
                         {item.id}
@@ -553,4 +518,4 @@ function BoxModal({ onClose, setOrder }: any) {
   );
 }
 
-export default BoxModal;
+export default EditBoxModal;

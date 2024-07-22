@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import packegeIcon from "../../../../assets/Delivery Icon.svg";
 import CustomDropDown from "../../../../components/DropDown";
 import InputBox from "../../../../components/Input";
@@ -13,34 +13,70 @@ import DeleteGif from "../../../../assets/common/DeleteGif.gif";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
 import CustomSearchDropDown from "../../components/CustomSearchDropDown";
-import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
+import { GET_PRODUCT_URL, GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import { includes } from "lodash";
+import SearchDropDown from "../../components/searchDropDown";
 
 function ProductModal({ onClose, setOrder, index }: any) {
-  const [services, setServices] = useState([]);
-  const [serviceIndex, setServiceIndex]: any = useState(0);
-  const [globalIndex, setGlobalIndex]: any = useState(null);
   const [boxInputData, setBoxInputData]: any = useState({
-    name: "Apple Iphone",
-    category: "Electronic",
-    sku: "abc",
-    qty: 2,
-    unitPrice: 100,
-    unitTax: 180,
+    name: "",
+    category: "",
+    sku: "",
+    qty: 1,
+    unitPrice: 0,
+    unitTax: 0,
     weightUnit: "kg",
     deadWeight: 1,
-    length: 32,
-    breadth: 32,
-    height: 42,
+    length: 1,
+    breadth: 1,
+    height: 1,
     measureUnit: "cm",
   });
 
+  const productValidation = () => {
+    if (
+      boxInputData.name.trim() === "" ||
+      boxInputData.unitPrice === 0 ||
+      typeof boxInputData.unitPrice !== "number" ||
+      boxInputData.deadWeight === 0 ||
+      typeof boxInputData.deadWeight !== "number" ||
+      boxInputData.length === 0 ||
+      typeof boxInputData.length !== "number" ||
+      boxInputData.breadth === 0 ||
+      typeof boxInputData.breadth !== "number" ||
+      boxInputData.height === 0 ||
+      typeof boxInputData.height !== "number"
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const onChangeHandler = (e: any) => {
-    const { name, value } = e.target;
+    const dimension = [
+      "unitPrice",
+      "deadWeight",
+      "length",
+      "breadth",
+      "height",
+    ];
+
     setBoxInputData((prevState: any) => ({
       ...prevState,
-      [name]: value,
+      [e.target.name]: dimension.includes(e.target.name)
+        ? +e.target.value
+        : e.target.value,
     }));
+  };
+
+  const calculateVolumeWeight = (
+    length: number,
+    breadth: number,
+    height: number
+  ): number => {
+    const volume = length * breadth * height;
+    return volume / 5000;
   };
 
   const addProductToBox: any = (boxIndex: any, newProduct: any) => {
@@ -48,7 +84,26 @@ function ProductModal({ onClose, setOrder, index }: any) {
       const updatedBoxInfo = [...prevOrder.boxInfo];
       const updatedProducts = [
         ...updatedBoxInfo[boxIndex]?.products,
-        newProduct,
+        {
+          ...newProduct,
+          length: +boxInputData.length,
+          breadth: +boxInputData.breadth,
+          height: +boxInputData.height,
+          deadWeight: +boxInputData.deadWeight,
+          volumetricWeight: calculateVolumeWeight(
+            boxInputData.length,
+            boxInputData.breadth,
+            boxInputData.height
+          ),
+          appliedWeight: Math.max(
+            boxInputData.deadWeight,
+            calculateVolumeWeight(
+              boxInputData.length,
+              boxInputData.breadth,
+              boxInputData.height
+            )
+          ),
+        },
       ];
       updatedBoxInfo[boxIndex] = {
         ...updatedBoxInfo[boxIndex],
@@ -59,9 +114,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
         boxInfo: updatedBoxInfo,
       };
     });
-  };
-  const handleService = (index: any) => {
-    setServiceIndex(index);
+    onClose(false);
   };
 
   return (
@@ -77,7 +130,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
             </span>
           </div>
           <button onClick={() => onClose(false)}>
-            <img src={packegeIcon} alt="" />
+            <img src={CloseIcon} alt="" />
           </button>
         </div>
         <div>
@@ -91,22 +144,15 @@ function ProductModal({ onClose, setOrder, index }: any) {
                 }}
                 // onClick={() => handleProductsDetails(index)}
               >
-                <div className="flex flex-col gap-y-[10px] w-[100%] px-[1rem]">
+                <div className="flex flex-col gap-y-4 w-[100%] px-[1rem]">
                   <div>
-                    <CustomSearchDropDown
-                      value={boxInputData.name}
-                      initValue={boxInputData.name}
-                      className=""
-                      apiUrl={GET_SELLER_BOX}
-                      label={"Search Product"}
-                      // onChange={(e: any) =>
-                      //   handleProductInputChange(
-                      //     { name: "category", value: e },
-                      //     index
-                      //   )
-                      // }
+                    <SearchDropDown
+                      className={`border`}
+                      apiUrl={GET_PRODUCT_URL}
+                      label="Search Product"
+                      setFunc={setBoxInputData}
+                      identifier="PRODUCT"
                     />
-                    {/* GET_SELLER_BOX */}
                   </div>
 
                   <div>
@@ -117,6 +163,19 @@ function ProductModal({ onClose, setOrder, index }: any) {
                       inputType="text"
                       onChange={(e: any) => onChangeHandler(e)}
                       //   inputError={inputError}
+                    />
+                  </div>
+
+                  <div>
+                    <CustomInputWithDropDown
+                      value={boxInputData?.category}
+                      initValue={boxInputData?.name}
+                      onChange={(e: any) => {
+                        setBoxInputData((prevState: any) => ({
+                          ...prevState,
+                          category: e,
+                        }));
+                      }}
                     />
                   </div>
 
@@ -217,6 +276,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
         <ServiceButton
           text={"SAVE"}
           onClick={() => addProductToBox(index, boxInputData)}
+          disabled={productValidation()}
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>

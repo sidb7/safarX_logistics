@@ -36,6 +36,9 @@ import { capitalizeFirstLetter } from "../../utils/utility";
 import { toast } from "react-hot-toast";
 import CodPricing from "./CodPricing";
 import OneButton from "../../components/Button/OneButton";
+import infoIcon from "../../assets/info.svg";
+import CustomCenterModal from "../../components/CustomModal/customCenterModal";
+import ZoneMappingModal from "./ZoneMappingModal";
 
 interface ITypeProps {}
 
@@ -57,6 +60,8 @@ const PlanDetails = (props: ITypeProps) => {
 
   // State to hold COD rate card data
   const [codData, setCodData] = useState<any>([]);
+  const [modeSelect, setModeSelect] = useState("B2C");
+  const [modalShowZoneMapping, setModalShowZoneMapping] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -850,6 +855,44 @@ const PlanDetails = (props: ITypeProps) => {
           <div className=" mb-9 mx-5 lg:ml-[20px]">
             <PlanDetailsCard planDetails={planData} />
           </div>
+          <div className=" mb-9 mx-5 lg:ml-[20px]">
+            <div className="flex gap-2 items-center ">
+              <input
+                type="radio"
+                value="B2C"
+                name="zoneMapping"
+                checked={modeSelect === "B2C" ? true : false}
+                onChange={(e) => setModeSelect(e.target.value)}
+              />
+              B2C
+              <input
+                type="radio"
+                value="B2B"
+                name="zoneMapping"
+                checked={modeSelect === "B2B" ? true : false}
+                onChange={(e) => setModeSelect(e.target.value)}
+              />
+              B2B
+              <div className="font-bold flex">
+                <span>Zone Mapping - {modeSelect}</span>
+                <span
+                  className="mx-2 self-center cursor-pointer"
+                  onClick={() => setModalShowZoneMapping(true)}
+                >
+                  <img src={infoIcon} alt="" />
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <CustomCenterModal
+            isOpen={modalShowZoneMapping}
+            onRequestClose={() => setModalShowZoneMapping(false)}
+            className=" !flex !justify-center !items-center !w-[70%] !h-2/4"
+          >
+            <ZoneMappingModal type={modeSelect} />
+          </CustomCenterModal>
+
           {/* Pricing Details */}
           <div className="mb-4 mx-5 lg:ml-[20px]">
             <ScrollNav
