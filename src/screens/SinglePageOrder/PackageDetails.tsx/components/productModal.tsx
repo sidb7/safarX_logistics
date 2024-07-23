@@ -38,15 +38,20 @@ function ProductModal({ onClose, setOrder, index }: any) {
     if (
       boxInputData.name.trim() === "" ||
       boxInputData.unitPrice === 0 ||
-      typeof boxInputData.unitPrice !== "number" ||
+      (typeof boxInputData.unitPrice !== "number" &&
+        boxInputData.unitPrice.trim() === "") ||
       boxInputData.deadWeight === 0 ||
-      typeof boxInputData.deadWeight !== "number" ||
+      (typeof boxInputData.deadWeight !== "number" &&
+        boxInputData.deadWeight.trim() === "") ||
       boxInputData.length === 0 ||
-      typeof boxInputData.length !== "number" ||
+      (typeof boxInputData.length !== "number" &&
+        boxInputData.length.trim() === "") ||
       boxInputData.breadth === 0 ||
-      typeof boxInputData.breadth !== "number" ||
+      (typeof boxInputData.breadth !== "number" &&
+        boxInputData.breadth.trim() === "") ||
       boxInputData.height === 0 ||
-      typeof boxInputData.height !== "number"
+      (typeof boxInputData.height !== "number" &&
+        boxInputData.height.trim() === "")
     ) {
       return true;
     }
