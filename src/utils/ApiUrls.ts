@@ -406,6 +406,10 @@ const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
 // Amazon Redirect Url
 const AMAZON_REDIRECT_URL = `${SELLER_URL}/amazonCheckParams`;
 
+//Communication Rate Card Delivery Max
+const GET_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/getCommunicationRateCard`;
+const UPDATE_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/updateCommunicationRateCard`;
+
 const FETCH_ZONE_MATRIX = `${SELLER_BASE_URL}/order/zoneMatrix`;
 
 export {
@@ -615,4 +619,6 @@ export {
   GET_ALLPARTNERS_OF_RULEENGINE,
   FETCH_ZONE_MATRIX,
   // DUPLICATE_ORDER,
+  GET_COMMUNICATION_RATE_CARD,
+  UPDATE_COMMUNICATION_RATE_CARD,
 };
