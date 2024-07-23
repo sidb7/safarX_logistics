@@ -162,7 +162,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
             errorMessage !== true &&
             errorMessage !== false &&
             "!text-[#F35838] "
-          }`}
+          } ${labelClassName}`}
           htmlFor={id}
         >
           {label}

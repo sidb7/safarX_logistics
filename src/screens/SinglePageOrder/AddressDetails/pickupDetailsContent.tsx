@@ -5,7 +5,12 @@ import CrossIcon from "../../../assets/CloseIcon.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import InfoCircle from "../../../assets/info-circle.svg";
 import SearchDropDown from "../components/searchDropDown";
-import { RETURNING_USER_PICKUP } from "../../../utils/ApiUrls";
+import {
+  GET_PINCODE_DATA,
+  RETURNING_USER_PICKUP,
+} from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 interface IContact {
   name: string;
@@ -37,7 +42,8 @@ const PickupDetailsContent: React.FunctionComponent<
   IPickupDetailsContentProps
 > = ({ details, landmark, setIsPickupRightModal, onSave }) => {
   const [pickupDetails, setPickupDetails] = useState<IPickupDetails>(details);
-  const [localLandmark, setLocalLandmark] = useState<string>(landmark);
+  const [localLandmark, setLocalLandmark] = useState<any>(landmark);
+
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
     name: null,
     mobileNo: null,
@@ -147,6 +153,18 @@ const PickupDetailsContent: React.FunctionComponent<
     setIsPickupRightModal(false); // Close the modal after saving
   };
 
+  const handlePincode = async (pincode: any) => {
+    if (pincode.length === 6) {
+      const { data: response } = await POST(GET_PINCODE_DATA, { pincode });
+      setLocalLandmark({
+        ...localLandmark,
+        state: capitalizeFirstLetter(response?.data?.[0]?.state),
+        city: capitalizeFirstLetter(response?.data?.[0]?.city),
+        country: "India",
+      });
+    }
+  };
+
   const autoSetData = (pickupDetails: any, landmark: any) => {
     setPickupDetails(pickupDetails);
     setLocalLandmark(landmark);
@@ -183,7 +201,7 @@ const PickupDetailsContent: React.FunctionComponent<
           </div>
 
           <CustomInputBox
-            label="Receiver's Name"
+            label="Sender Name"
             value={pickupDetails.contact.name}
             onChange={handleContactChange}
             name="name"
@@ -198,7 +216,7 @@ const PickupDetailsContent: React.FunctionComponent<
           )}
           <div>
             <CustomInputBox
-              label="Receiver's Mobile Number"
+              label="Sender Mobile Number"
               value={pickupDetails.contact.mobileNo.toString()}
               inputMode="numeric"
               maxLength={10}
@@ -236,7 +254,10 @@ const PickupDetailsContent: React.FunctionComponent<
                 value={pickupDetails.pincode}
                 inputMode="numeric"
                 maxLength={6}
-                onChange={handlePincodeChange}
+                onChange={(e: any) => {
+                  handlePincode(e.target.value);
+                  handlePincodeChange(e);
+                }}
                 name="pincode"
               />
               {validationErrors.pincode && (
@@ -251,7 +272,7 @@ const PickupDetailsContent: React.FunctionComponent<
             <div>
               <CustomInputBox
                 label="Landmark"
-                value={localLandmark}
+                value={localLandmark?.landmark}
                 onChange={handleLandmarkChange}
                 name="landmark"
               />

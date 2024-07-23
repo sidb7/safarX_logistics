@@ -50,7 +50,7 @@ const Checkbox: React.FC<IProps> = ({
   return (
     <div
       className={`${checkboxClassName} ${className} ${
-        disabled ? "text-[gray] bg-gray-100" : ""
+        disabled ? "text-[#f8f8f8]" : ""
       } cursor-pointer flex items-center justify-start py-1 transition-colors duration-200 text-gray-600 rounded-md`}
       onClick={handleCheckboxChange}
     >
