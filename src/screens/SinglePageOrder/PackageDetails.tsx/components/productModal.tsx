@@ -25,7 +25,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
     sku: "",
     qty: 1,
     unitPrice: "",
-    unitTax: "",
+    unitTax: 0,
     weightUnit: "kg",
     deadWeight: "",
     length: "",
@@ -176,6 +176,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
                       label="Search Product"
                       setFunc={setBoxInputData}
                       identifier="PRODUCT"
+                      emptyMsg={`No Product Found`}
                     />
                   </div>
 

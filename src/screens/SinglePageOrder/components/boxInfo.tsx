@@ -341,8 +341,8 @@ function BoxInfo({
               </div>
               <div className="flex items-center my-2">
                 {data?.length} X {data?.breadth} X {data?.height} cm | V:{" "}
-                {data?.volumetricWeight} Kg | D: {data?.deadWeight} Kg | Final
-                Weight :{" "}
+                {+data?.volumetricWeight.toFixed(2)} Kg | D:{" "}
+                {+data?.deadWeight.toFixed(2)} Kg | Final Weight :{" "}
                 {`${
                   data?.appliedWeight ? +data?.appliedWeight + "Kg" : "0 Kg"
                 }`}
@@ -447,10 +447,12 @@ function BoxInfo({
                         <ProductDetails
                           key={i}
                           image={ItemIcon}
-                          appliedWeight={`${e?.appliedWeight} Kg`}
-                          volumetricWeight={`${e?.volumetricWeight} Kg`}
+                          appliedWeight={`${e?.appliedWeight.toFixed(2)} Kg`}
+                          volumetricWeight={`${e?.volumetricWeight.toFixed(
+                            2
+                          )} Kg`}
                           unitPrice={`${e?.unitPrice}`}
-                          deadWeight={e?.deadWeight}
+                          deadWeight={e?.deadWeight.toFixed(2)}
                           productName={e?.name || 0}
                           breadth={e?.breadth || 0}
                           length={e?.length || 0}
