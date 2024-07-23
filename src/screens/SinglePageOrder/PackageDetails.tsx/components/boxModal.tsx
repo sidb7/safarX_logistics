@@ -171,6 +171,7 @@ function BoxModal({ onClose, setOrder }: any) {
                       label="Search Package"
                       setFunc={setBoxInputData}
                       identifier="BOX"
+                      emptyMsg={`No Box Found`}
                     />
                   </div>
 
