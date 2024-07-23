@@ -76,13 +76,11 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
       height += box.height;
     });
 
-    return { length, breadth, height };
+    return { length, width: breadth, height };
   };
 
   const getServices = async () => {
     setisLoading(true);
-
-    console.log("totalDimension", getCombinationDimensionValueOfAllBoxes());
 
     const { data } = await POST(apiUrl, {
       pickupPincode: +state?.pickupDetails?.pincode,
