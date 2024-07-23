@@ -97,6 +97,8 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
     }
   };
 
+  console.log("pickupAddress", pickupAddress);
+
   const renderAddressDetails = (details: any, type: string, landmark: any) => {
     const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} , ${details?.pincode}`;
     return (
