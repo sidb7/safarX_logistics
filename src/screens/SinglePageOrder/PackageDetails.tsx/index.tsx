@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BoxInfo from "../components/boxInfo";
 import packegeIcon from "../../../assets/Delivery Icon.svg";
 import addIcon from "../../../assets/addBlackIcon.svg";
@@ -8,34 +8,67 @@ import ProductDetails from "../components/productDetails";
 import ProductModal from "./components/productModal";
 import EditBoxModal from "./components/editBoxModal";
 import EditProductModal from "./components/editProductModal";
+import OrderIdModal from "./components/orderIdModal";
 
 function PackageDetails({ packageDetails, order, setOrder }: any) {
   const [boxModal, setBoxModal]: any = useState(false);
+  const [boxInfoData, setBoxInfoData] = useState([]);
   const [productModal, setProductModal]: any = useState({
     isOpen: false,
     id: 0,
+  });
+  const [OpenOrderIdModal, setopenOrderIdModal] = useState({
+    state: {},
+    isOpen: false,
   });
   const [editBoxModal, setEditBoxModal]: any = useState({
     isOpen: false,
     state: {},
   });
-  console.log("🚀 ~ editBoxModal:", editBoxModal);
   const [editProductModal, setEditProductModal]: any = useState({
     isOpen: false,
     state: {},
   });
 
-  function removeProduct(boxIndex: any, productIndex: any) {
+  function removeBox(boxIndex: any) {
     let tempOrder = { ...order };
-    tempOrder.boxInfo[boxIndex].products.splice(productIndex, 1);
+    tempOrder?.boxInfo.splice(boxIndex, 1);
     setOrder(tempOrder);
   }
 
-  function removeBox(boxIndex: any) {
+  function removeProduct(boxIndex: any, productIndex: any) {
     let tempOrder = { ...order };
-    tempOrder.boxInfo.splice(boxIndex, 1);
+    let productList = tempOrder.boxInfo[boxIndex].products;
+
+    const productUnitPrice =
+      tempOrder.boxInfo[boxIndex].products[productIndex].unitPrice;
+
+    tempOrder.boxInfo[boxIndex].products.splice(productIndex, 1);
+
+    tempOrder.boxInfo[boxIndex].codInfo.invoiceValue -= productUnitPrice;
+
+    const boxAppliedWeight = Math.max(
+      tempOrder.boxInfo[boxIndex]?.volumetricWeight,
+      tempOrder.boxInfo[boxIndex]?.deadWeight
+    );
+
+    const TotalAppliedWeightOfAllProduct = productList.reduce(
+      (acc: any, product: any) => acc + +product.appliedWeight,
+      0
+    );
+    const updateBoxAppliedWeight = Math.max(
+      TotalAppliedWeightOfAllProduct,
+      boxAppliedWeight
+    );
+
+    tempOrder.boxInfo[boxIndex].appliedWeight = updateBoxAppliedWeight;
+
     setOrder(tempOrder);
   }
+
+  useEffect(() => {
+    setBoxInfoData(packageDetails);
+  }, [packageDetails]);
 
   return (
     <>
@@ -74,21 +107,23 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
             </button>
           </div>
         </div>
-        <div className=" max-h-[300px] customScroll">
-          {packageDetails.length > 0 ? (
-            packageDetails?.map((boxData: any, i: number) => {
+        <div className=" max-h-[300px] pb-[20px] customScroll">
+          {boxInfoData.length > 0 ? (
+            boxInfoData?.map((boxData: any, i: number) => {
               return (
-                <div id={`${i + 1}`} className="">
+                <div id={`${i + 1}`} className="px-2  ">
                   <BoxInfo
                     key={`{${i}_${boxData?.name}`}
                     index={i}
                     data={boxData}
                     setProductModal={setProductModal}
+                    order={order}
                     setOrder={setOrder}
                     removeProduct={removeProduct}
                     removeBox={removeBox}
                     setEditBoxModal={setEditBoxModal}
                     setEditProductModal={setEditProductModal}
+                    setIsOpen={setopenOrderIdModal}
                   />
                 </div>
               );
@@ -153,6 +188,37 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
         <EditProductModal
           onClose={setEditProductModal}
           data={editProductModal?.state}
+          setOrder={setOrder}
+        />
+      </RightSideModal>
+
+      <RightSideModal
+        className=" w-full lg:w-[400px]"
+        wrapperClassName="rounded-l-xl"
+        isOpen={editProductModal?.isOpen}
+        onClose={() =>
+          setEditProductModal({
+            isOpen: false,
+            state: {},
+          })
+        }
+      >
+        <EditProductModal
+          onClose={setEditProductModal}
+          data={editProductModal?.state}
+          setOrder={setOrder}
+        />
+      </RightSideModal>
+
+      <RightSideModal
+        className=" w-full lg:w-[400px]"
+        wrapperClassName="rounded-l-xl"
+        isOpen={OpenOrderIdModal?.isOpen}
+        onClose={() => setopenOrderIdModal({ state: {}, isOpen: false })}
+      >
+        <OrderIdModal
+          onClose={setopenOrderIdModal}
+          state={OpenOrderIdModal?.state}
           setOrder={setOrder}
         />
       </RightSideModal>

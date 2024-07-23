@@ -28,48 +28,135 @@ function EditProductModal({ onClose, data, setOrder }: any) {
     return volume / 5000;
   };
 
-  const handleChange = (e: any, i: number) => {
-    const newProducts: any = [...editProduct];
+  // const handleChange = (e: any, i: number) => {
+  //   const newProducts: any = [...editProduct];
 
-    if (e.target.name === "name") {
-      newProducts[i][e.target.name] = e.target.value;
-    } else {
-      newProducts[i][e.target.name] = +e.target.value;
+  //   newProducts[i][e.target.name] = e.target.value;
+
+  //   if (["length", "breadth", "height"].includes(e.target.name)) {
+  //     newProducts[i].volumetricWeight = +calculateVolumeWeight(
+  //       +newProducts[i]?.length,
+  //       +newProducts[i]?.breadth,
+  //       +newProducts[i]?.height
+  //     );
+  //     newProducts[i].appliedWeight = Math.max(
+  //       +newProducts[i].deadWeight,
+  //       calculateVolumeWeight(
+  //         +newProducts[i].length,
+  //         +newProducts[i].breadth,
+  //         +newProducts[i].height
+  //       )
+  //     );
+  //   }
+  //   setEditProduct(newProducts);
+  // };
+
+  const handleChange = (e: any, index: number) => {
+    const { name, value } = e.target;
+    const updatedProducts = [...editProduct];
+    const product = { ...updatedProducts[index], [name]: value };
+    console.log("conditional inner block==============>1");
+    if (["length", "breadth", "height", "deadWeight"].includes(name)) {
+      const length = +product.length;
+      const breadth = +product.breadth;
+      const height = +product.height;
+
+      console.log("conditional inner block==============>2");
+
+      const volumetricWeight = calculateVolumeWeight(length, breadth, height);
+      const appliedWeight = Math.max(+product.deadWeight, volumetricWeight);
+
+      product.volumetricWeight = volumetricWeight;
+      product.appliedWeight = appliedWeight;
     }
 
-    if (["length", "breadth", "height"].includes(e.target.name)) {
-      newProducts[i].volumetricWeight = +calculateVolumeWeight(
-        newProducts[i]?.length,
-        newProducts[i]?.breadth,
-        newProducts[i]?.height
-      );
-      newProducts[i].appliedWeight = Math.max(
-        newProducts[i].deadWeight,
-        calculateVolumeWeight(
-          newProducts[i].length,
-          newProducts[i].breadth,
-          newProducts[i].height
-        )
-      );
-    }
-
-    setEditProduct(newProducts);
+    updatedProducts[index] = product;
+    setEditProduct(updatedProducts);
   };
 
   const onSaveHandler = () => {
     setOrder((prevState: any) => {
       const updatedBoxInfo = [...prevState.boxInfo];
-      updatedBoxInfo[data?.id] = {
-        ...updatedBoxInfo[data?.id],
-        products: editProduct,
+      const boxId = data?.id;
+      const box = updatedBoxInfo[boxId] || { products: [], codInfo: {} };
+
+      const updatedProducts = editProduct.map((product: any) => ({
+        ...product,
+        length: +product.length,
+        breadth: +product.breadth,
+        height: +product.height,
+        deadWeight: +product.deadWeight,
+        volumetricWeight: +product.volumetricWeight,
+        appliedWeight: +product.appliedWeight,
+      }));
+
+      const updatedInvoiceValue = updatedProducts.reduce(
+        (acc: number, product: any) => acc + +product.unitPrice,
+        0
+      );
+
+      const TotalAppliedWeightOfAllProduct = updatedProducts.reduce(
+        (acc: any, product: any) => acc + +product.appliedWeight,
+        0
+      );
+
+      const boxAppliedWeight = Math.max(
+        TotalAppliedWeightOfAllProduct,
+        box?.appliedWeight
+      );
+
+      const updatedAppliedWeight = boxAppliedWeight;
+
+      updatedBoxInfo[boxId] = {
+        ...box,
+        products: updatedProducts,
+        codInfo: {
+          ...box.codInfo,
+          invoiceValue: updatedInvoiceValue,
+        },
+        appliedWeight: updatedAppliedWeight,
       };
+
       return {
         ...prevState,
         boxInfo: updatedBoxInfo,
       };
     });
+
     onClose(false);
   };
+
+  // const onSaveHandler = () => {
+  //   setOrder((prevState: any) => {
+  //     const updatedBoxInfo = [...prevState.boxInfo];
+  //     updatedBoxInfo[data?.id] = {
+  //       ...updatedBoxInfo[data?.id],
+  //       products: editProduct.map((product: any) => {
+  //         return {
+  //           ...product,
+  //           length: +product.length,
+  //           breadth: +product.breadth,
+  //           height: +product.height,
+  //           deadWeight: +product.deadWeight,
+  //           volumetricWeight: +product.volumetricWeight,
+  //           appliedWeight: +product.appliedWeight,
+  //         };
+  //       }),
+  //       codInfo: {
+  //         ...updatedBoxInfo[data?.id]?.codInfo,
+  //         invoiceValue: editProduct.reduce(
+  //           (acc: any, product: any) => acc + +product.unitPrice,
+  //           0
+  //         ),
+  //       },
+  //     };
+  //     return {
+  //       ...prevState,
+  //       boxInfo: updatedBoxInfo,
+  //     };
+  //   });
+  //   onClose(false);
+  // };
 
   useEffect(() => {
     setEditProduct(data?.data);

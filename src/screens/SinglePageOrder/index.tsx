@@ -62,8 +62,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     source: "API",
     pickupDate: "",
     gstNumber: "",
-    orderId: "",
-    eWayBillNo: 0,
+    // orderId: "",
+    // eWayBillNo: 0,
     awb: "",
     brandName: "Google",
     brandLogo: "",
@@ -90,7 +90,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       order.deliveryDetails.contact.mobileNo !== 0;
 
     const boxInfoValid =
-      Array.isArray(order.boxInfo) && order.boxInfo.length > 0;
+      Array.isArray(order?.boxInfo) && order?.boxInfo.length > 0;
 
     const courierPartnerValid = order.courierPartner.trim() !== "";
 
@@ -140,6 +140,93 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     },
   ];
 
+  const Buttons = (className?: string) => {
+    return (
+      <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
+        <div className=" flex justify-start items-center h-fit">
+          <input
+            type="radio"
+            name="type"
+            value={order?.orderType}
+            className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+            checked={order?.orderType === "B2C"}
+            onChange={(e) => {
+              setOrder((prevState: any) => {
+                return {
+                  ...prevState,
+                  orderType: "B2C",
+                };
+              });
+            }}
+          />
+          <div className="text-[15px]">B2C</div>
+        </div>
+        <div className=" flex justify-start items-center h-fit">
+          <input
+            type="radio"
+            name="type"
+            value={order?.orderType}
+            className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+            checked={order?.orderType === "B2B"}
+            onChange={(e) => {
+              setOrder((prevState: any) => {
+                return {
+                  ...prevState,
+                  orderType: "B2B",
+                };
+              });
+            }}
+          />
+          <div className="text-[15px]">B2B</div>
+        </div>
+        <div
+          className=" flex justify-start items-center h-fit"
+          title="coming soon"
+        >
+          <input
+            type="radio"
+            name="type"
+            disabled={true}
+            value={order?.orderType}
+            className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+            checked={order?.orderType === "REVERSE"}
+            onChange={(e) => {
+              setOrder((prevState: any) => {
+                return {
+                  ...prevState,
+                  orderType: "REVERSE",
+                };
+              });
+            }}
+          />
+          <div className="text-[15px]">Reverse</div>
+        </div>
+        <div
+          className=" flex justify-start items-center h-fit"
+          title="coming soon"
+        >
+          <input
+            type="radio"
+            name="type"
+            disabled={true}
+            value={order?.orderType}
+            className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+            checked={order?.orderType === "INTERNATIONAL"}
+            onChange={(e) => {
+              setOrder((prevState: any) => {
+                return {
+                  ...prevState,
+                  orderType: "INTERNATIONAL",
+                };
+              });
+            }}
+          />
+          <div className="text-[15px]">International</div>
+        </div>
+      </div>
+    );
+  };
+
   const sumInvoiceValue =
     order?.boxInfo.length > 0 &&
     order?.boxInfo.reduce(
@@ -157,7 +244,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
       cell: (info: any) => {
-        console.log("rowData", info.row);
         return (
           <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px] ">
             {info.row?.index + 1 || "-"}
@@ -165,22 +251,22 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
     }),
-    // columnsHelper.accessor("orderId", {
-    //   header: () => {
-    //     return (
-    //       <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
-    //         Order ID
-    //       </p>
-    //     );
-    //   },
-    //   cell: (info: any) => {
-    //     return (
-    //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-    //         {info.row.original.orderId || "-"}
-    //       </div>
-    //     );
-    //   },
-    // }),
+    columnsHelper.accessor("orderId", {
+      header: () => {
+        return (
+          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+            Order ID
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+            {info.row.original.orderId || "-"}
+          </div>
+        );
+      },
+    }),
     columnsHelper.accessor("package", {
       header: () => {
         return (
@@ -197,6 +283,22 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
     }),
+    columnsHelper.accessor("package", {
+      header: () => {
+        return (
+          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+            Eway Bill
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+            {info.row.original?.ewaybillNumber || "-"}
+          </div>
+        );
+      },
+    }),
     columnsHelper.accessor("appliedWeight", {
       header: () => {
         return (
@@ -208,28 +310,29 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       cell: (info: any) => {
         return (
           <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {info.row.original.appliedWeight || "-"}
+            {info.row.original.appliedWeight || "-"} Kg
           </div>
         );
       },
     }),
 
-    // columnsHelper.accessor("charge", {
-    //   header: () => {
-    //     return (
-    //       <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
-    //         Charge
-    //       </p>
-    //     );
-    //   },
-    //   cell: (info: any) => {
-    //     return (
-    //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-    //         {info.row.original.charge || "-"}
-    //       </div>
-    //     );
-    //   },
-    // }),
+    columnsHelper.accessor("charge", {
+      header: () => {
+        return (
+          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+            Charge
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        console.log("rowData", info.row.original?.codInfo?.invoiceValue);
+        return (
+          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+            {info.row.original?.codInfo?.invoiceValue || "-"}
+          </div>
+        );
+      },
+    }),
   ];
 
   const fetchManifest = async (awbArray?: any) => {
@@ -540,7 +643,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   return (
     <>
       <div>
-        <Breadcrum label="Add New Order" />
+        <Breadcrum label="Add New Order" component={Buttons()} />
         <div className="flex gap-5 mx-5">
           <div className="flex-1 ">
             <div className="flex flex-col gap-y-4  !h-[calc(100vh-180px)] customScroll">
@@ -607,7 +710,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         </span>
                         <OneButton
                           onClick={() => window.location.reload()}
-                          text={`CREATE NEW ORDER `}
+                          text={`CREATE NEW ORDER`}
                           variant="primary"
                         />
                       </div>
