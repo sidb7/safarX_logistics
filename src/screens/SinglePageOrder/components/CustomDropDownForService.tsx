@@ -57,21 +57,43 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
+  console.log(state);
+
+  const sumInvoiceValue =
+    state?.boxInfo.length > 0 &&
+    state?.boxInfo.reduce(
+      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+      0
+    );
+
+  const getCombinationDimensionValueOfAllBoxes = () => {
+    let length = 0;
+    let breadth = 0;
+    let height = 0;
+    state?.boxInfo.forEach((box: any) => {
+      length += box.length;
+      breadth += box.breadth;
+      height += box.height;
+    });
+
+    return { length, breadth, height };
+  };
+
   const getServices = async () => {
     setisLoading(true);
 
-    console.log(state?.pickupDetails?.pincode);
+    console.log("totalDimension", getCombinationDimensionValueOfAllBoxes());
 
     const { data } = await POST(apiUrl, {
       pickupPincode: +state?.pickupDetails?.pincode,
       deliveryPincode: +state?.deliveryDetails?.pincode,
-      invoiceValue: 1000,
+      invoiceValue: sumInvoiceValue,
       paymentMode: state?.isCod ? "COD" : "PREPAID",
-      serviceId: "a07d01f5",
       weight: 1,
       orderType: "B2C",
-      dimension: { length: 12, width: 12, height: 1212 },
+      dimension: getCombinationDimensionValueOfAllBoxes(),
     });
+    //  serviceId: "a07d01f5",
     if (data?.success) {
       let options = data?.data;
       options?.forEach((item: any) => {
