@@ -53,8 +53,11 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const [deliveryAddress, setDeliveryAddress] =
     useState<IDeliveryDetails>(deliveryDetails);
 
-  const [pickupLandmark, setPickupLandmark] = useState<string>("");
+  const [pickupLandmark, setPickupLandmark] = useState<any>("");
   const [deliveryLandmark, setDeliveryLandmark] = useState<any>({});
+
+  console.log("pickupLandmark", pickupLandmark);
+  console.log("deliveryLandmark", deliveryLandmark);
 
   useEffect(() => {
     setPickupAddress(pickupDetails);
@@ -95,7 +98,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   };
 
   const renderAddressDetails = (details: any, type: string, landmark: any) => {
-    // console.log("landmark======================>", landmark);
+    const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} , ${details?.pincode}`;
     return (
       <div>
         <div className="flex justify-between">
@@ -145,14 +148,16 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
               alt="address-location-icon"
               className="w-[15px] h-[15px]"
             />
-            <p className="font-Open font-semibold ml-1 max-w-[600px] text-[13px] text-[#323232] leading-[18px] capitalize">
-              {details.fullAddress}
-              {/* {landmark?.landmark} - {details.pincode} */}
-            </p>
+            <div className="">
+              <p className="font-Open font-semibold ml-1 max-w-[600px] text-[13px] text-[#323232] leading-[18px] capitalize">
+                {details.fullAddress}
+                {/* {landmark?.landmark} - {details.pincode} */}
+              </p>
+              <p className="font-Open font-normal ml-1 mt-1 max-w-[600px] text-[13px] text-[#323232] leading-[18px] capitalize">
+                {otherDetails}
+              </p>
+            </div>
           </div>
-          {/* <p className="font-Open font-normal text-sm text-[#323232] leading-5">
-            {details.fullAddress}
-          </p> */}
         </div>
       </div>
     );
