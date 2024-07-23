@@ -166,7 +166,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             type="radio"
             name="type"
             value={order?.orderType}
+            title="coming soon"
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+            disabled={true}
             checked={order?.orderType === "B2B"}
             onChange={(e) => {
               setOrder((prevState: any) => {
