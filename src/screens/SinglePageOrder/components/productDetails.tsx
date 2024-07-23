@@ -6,6 +6,8 @@ interface IPackageBoxProps {
   image?: any;
   productName: string;
   appliedWeight?: string;
+  volumetricWeight?: string;
+  unitPrice?: any;
   deadWeight?: any;
   dimension?: string;
   className?: string;
@@ -31,6 +33,8 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
   image = "",
   productName = "",
   appliedWeight = "",
+  volumetricWeight = "",
+  unitPrice = "",
   deadWeight = "",
   height = "",
   breadth = "",
@@ -53,7 +57,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
 }) => {
   return (
     <div
-      className={` ${className} items-center product-box flex itisActiveChannelems-center border-2 rounded-md h-20 min-w-[200px] relative ${
+      className={` ${className} items-center product-box  flex w-fit itisActiveChannelems-center border-2 rounded-md min-w-[200px] relative ${
         isSelected && "border-[#004EFF]"
       }`}
       onClick={onClick}
@@ -70,15 +74,12 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
       >
         {label}
       </span>
-      <div className="w-20 p-3.5 flex justify-center items-center">
-        <img src={image} className="" alt="" />
-      </div>
-      {/* <div className="mr-3 lg:mr-0 lg:px-4 w-auto h-[100%] overflow-hidden">
-        <img className="w-[100%]  h-[100%] object-contain" src={image} alt="" />
-      </div> */}
-      <div className="flex flex-col w-full">
+
+      <div className="flex flex-col w-full ">
         <div className="flex justify-between ">
-          <span className={`line-clamp-1 !${productNameClass} w-[100px]`}>
+          <span
+            className={`!${productNameClass} max-w-[660px] rounded-md text-[14px] text-[#000000] flex-wrap font-bold font-Open`}
+          >
             {productName}
           </span>
 
@@ -112,9 +113,10 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
             )}
           </div>
         </div>
-        <span className="flex text-[12px] lg:text-[14px] ">
-          {` ${length} x ${breadth} x ${height} cm`} | V: {appliedWeight} Kg |
-          D: {deadWeight} Kg
+        <span className="flex text-[12px] !font-normal lg:text-[14px] ">
+          {` ${length} x ${breadth} x ${height} cm`} | V: {volumetricWeight}| D:{" "}
+          {deadWeight} Kg | Final Weight : {`${appliedWeight}`} | ₹ :{" "}
+          {`${unitPrice}`}
         </span>
       </div>
     </div>

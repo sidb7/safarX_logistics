@@ -104,7 +104,12 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
             pincode: value?.pincode,
             fullAddress: value?.fullAddress,
           },
-          value?.landmark
+          {
+            landmark: value?.landmark,
+            country: value?.country,
+            city: value?.city,
+            state: value?.state,
+          }
         );
         return;
       }

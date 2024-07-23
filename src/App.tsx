@@ -295,6 +295,7 @@ const App = () => {
       seller_email: sellerData?.email,
       sellerId: sellerData?.sellerId,
       seller_name: sellerData?.name,
+      mobileNo: sellerData?.nextStep?.contactNumber,
       seller_kyc: sellerData?.nextStep?.kyc,
       seller_bank_verification_done: sellerData?.nextStep?.bank,
       isReturningUser: sellerData?.isReturningUser,

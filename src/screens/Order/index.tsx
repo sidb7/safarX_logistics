@@ -92,6 +92,8 @@ import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
 import CustomSwitchToggle from "../../components/CustomSwitchToggle";
 // import { DuplicateModel } from "../../components/Duplicate";
 import { timerObject } from "../../redux/reducers/syncChannel";
+import WhatsappIcon from "../../assets/whatsappIcon.svg";
+import DeltaOnBlaze from "./deltaOnBlaze";
 
 let allOrdersCount: any;
 
@@ -337,7 +339,7 @@ const Index = () => {
   const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isXlScreen } = ResponsiveState();
   const navigate = useNavigate();
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -383,7 +385,8 @@ const Index = () => {
       isOpen: false,
       awbNo: "",
     });
-
+  const [openRightModalForDelta, setOpenRightModalForDelta] =
+    useState<any>(false);
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
   // const [isMasked, setIsMasked] = useState(false);
@@ -722,6 +725,19 @@ const Index = () => {
             showIcon={true}
             icon={BlukOrderIcon}
           />
+
+          {/* {isLgScreen ? (
+            <OneButton
+              text="Delivery Max"
+              className="!bg-[#60D669] !border-[#60D669] !text-[#FFFFFF] !px-4 !py-2 !font-Open !font-semibold !text-[14px] !leading-5 !rounded-[4px] hover:!bg-[#27B031] hover:!shadow-cardShadow2a focus:!bg-[#60D669] focus:border focus:!border-[#27B031]"
+              onClick={() => setOpenRightModalForDelta(true)}
+              // variant="secondary"
+              showIcon={true}
+              icon={WhatsappIcon}
+            />
+          ) : (
+            <></>
+          )} */}
 
           {isModalOpen && (
             <CenterModal
@@ -2707,11 +2723,23 @@ const Index = () => {
             isOpen: false,
           })
         }
+        className=""
       >
         <NewTrackingContent
           setOpenRightModalForTracking={setOpenRightModalForTracking}
           openRightModalForTracking={openRightModalForTracking}
         />
+      </CustomRightModal>
+
+      {/* delta on blaze right modal  */}
+      <CustomRightModal
+        isOpen={openRightModalForDelta}
+        onClose={() => setOpenRightModalForDelta(false)}
+        className={`${isXlScreen ? "!w-1/3" : isLgScreen ? "!w-2/3" : ""}`}
+      >
+        <>
+          <DeltaOnBlaze setOpenRightModalForDelta={setOpenRightModalForDelta} />
+        </>
       </CustomRightModal>
     </>
   );
