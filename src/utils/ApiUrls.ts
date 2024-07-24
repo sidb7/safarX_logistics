@@ -379,6 +379,8 @@ const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 /* Billing */
 const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
 const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
+const DOWNLOAD_INVOICE_FROM_S3 = `${SELLER_BASE_URL}/billing/downloadInvoiceFromS3`;
+const DOWNLOAD_MISREPORT_FROM_S3 = `${SELLER_BASE_URL}/billing/downloadMisReportFromS3`;
 
 // RuleEngine
 const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPartner`;
@@ -621,4 +623,6 @@ export {
   // DUPLICATE_ORDER,
   GET_COMMUNICATION_RATE_CARD,
   UPDATE_COMMUNICATION_RATE_CARD,
+  DOWNLOAD_INVOICE_FROM_S3,
+  DOWNLOAD_MISREPORT_FROM_S3,
 };
