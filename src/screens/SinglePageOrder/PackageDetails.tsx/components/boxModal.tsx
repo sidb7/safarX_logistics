@@ -81,29 +81,41 @@ function BoxModal({ onClose, setOrder }: any) {
   };
 
   const boxValidation = () => {
-    if (
-      boxInputData.name.trim() === "" ||
-      boxInputData.deadWeight === 0 ||
-      (typeof boxInputData.deadWeight !== "number" &&
-        boxInputData.deadWeight.trim() === "") ||
-      boxInputData.length === 0 ||
-      (typeof boxInputData.length !== "number" &&
-        boxInputData.length.trim() === "") ||
-      boxInputData.breadth === 0 ||
-      (typeof boxInputData.breadth !== "number" &&
-        boxInputData.breadth.trim() === "") ||
-      boxInputData.height === 0 ||
-      (typeof boxInputData.height !== "number" &&
-        boxInputData.height.trim() === "")
-      // (boxInputData.codInfo.isCod &&
-      //   boxInputData.codInfo.collectableAmount === 0) ||
-      // boxInputData.codInfo.invoiceValue === 0 ||
-      // (boxInputData.codInfo.invoiceValue > 50000 &&
-      //   boxInputData.transporterNo === "")
-    ) {
-      return true;
+    let errors = [];
+
+    if (!boxInputData.name) {
+      errors.push("Name should not be empty.");
     }
-    return false;
+    if (
+      !boxInputData.deadWeight ||
+      boxInputData.deadWeight === "0" ||
+      boxInputData.deadWeight === 0
+    ) {
+      errors.push("Dead weight should not be empty or zero.");
+    }
+    if (
+      !boxInputData.length ||
+      boxInputData.length === "0" ||
+      boxInputData.length === 0
+    ) {
+      errors.push("Length should not be empty or zero.");
+    }
+    if (
+      !boxInputData.breadth ||
+      boxInputData.breadth === "0" ||
+      boxInputData.breadth === 0
+    ) {
+      errors.push("Breadth should not be empty or zero.");
+    }
+    if (
+      !boxInputData.height ||
+      boxInputData.height === "0" ||
+      boxInputData.height === 0
+    ) {
+      errors.push("Height should not be empty or zero.");
+    }
+
+    return errors.length > 0 ? true : false;
   };
 
   const onChangeHandler = (e: any) => {
@@ -117,7 +129,6 @@ function BoxModal({ onClose, setOrder }: any) {
 
   const onSave = () => {
     handleVolumCalc();
-    console.log("Save", boxInputData);
     setOrder((prevOrder: any) => ({
       ...prevOrder,
       boxInfo: [

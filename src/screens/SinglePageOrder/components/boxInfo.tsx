@@ -85,11 +85,17 @@ function BoxInfo({
       breadth,
       height
     ).toFixed(2);
-    obj.boxInfo[index].products[productIndex].volumetricWeight = +(
-      calacVolu.toFixed(4) * +obj.boxInfo[index].products[productIndex].qty
-    );
+
+    // obj.boxInfo[index].products[productIndex].volumetricWeight = +(
+    //   calacVolu.toFixed(4) * +obj.boxInfo[index].products[productIndex].qty
+    // );
 
     let originalUnitPrice: any = 0;
+
+    let baseProductAppliedWeight: any = Math.max(
+      +obj.boxInfo[index].products[productIndex].volumetricWeight,
+      +obj.boxInfo[index].products[productIndex].deadWeight
+    );
 
     if (+obj.boxInfo[index].products[productIndex].qty > 2) {
       originalUnitPrice =
@@ -97,17 +103,17 @@ function BoxInfo({
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
-
+    // set unitPrice-------------------------------------------------------------------
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
+    //-------------------------------------------------------------------
 
-    obj.boxInfo[index].products[productIndex].appliedWeight = Math.max(
-      obj.boxInfo[index].products[productIndex].volumetricWeight,
-      obj.boxInfo[index].products[productIndex].deadWeight
-    );
+    //
+    obj.boxInfo[index].products[productIndex].appliedWeight =
+      baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
-    const boxAppliedWeight = Math.max(
+    const boxBaseAppliedWeight = Math.max(
       obj.boxInfo[index]?.volumetricWeight,
       obj.boxInfo[index]?.deadWeight
     );
@@ -118,9 +124,8 @@ function BoxInfo({
     );
     const updateBoxAppliedWeight = Math.max(
       TotalAppliedWeightOfAllProduct,
-      boxAppliedWeight
+      boxBaseAppliedWeight
     );
-
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
@@ -133,35 +138,42 @@ function BoxInfo({
 
     let initQty = obj.boxInfo[index].products[productIndex].qty;
 
+    //quantity------------------------------------------------------
     initQty === 1
       ? (obj.boxInfo[index].products[productIndex].qty = 1)
       : obj.boxInfo[index].products[productIndex].qty--;
+    // ------------------------------------------------------
 
     let calacVolu: any = +calculateVolumeWeight(
       length,
       breadth,
       height
     ).toFixed(2);
-    obj.boxInfo[index].products[productIndex].volumetricWeight = +(
-      calacVolu.toFixed(4) * +obj.boxInfo[index].products[productIndex].qty
-    );
+
     let originalUnitPrice: any = 0;
+
+    let baseProductAppliedWeight: any = Math.max(
+      +obj.boxInfo[index].products[productIndex].volumetricWeight,
+      +obj.boxInfo[index].products[productIndex].deadWeight
+    );
+
     if (initQty >= 2) {
       originalUnitPrice =
         +obj.boxInfo[index].products[productIndex].unitPrice / initQty;
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
+
+    //unitPrice--------------------------------------------------
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
 
-    obj.boxInfo[index].products[productIndex].appliedWeight = Math.max(
-      obj.boxInfo[index].products[productIndex].volumetricWeight,
-      obj.boxInfo[index].products[productIndex].deadWeight
-    );
+    //appliedWeight----------------------------------------------
+    obj.boxInfo[index].products[productIndex].appliedWeight =
+      baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
-    const boxAppliedWeight = Math.max(
+    const boxBaseAppliedWeight = Math.max(
       obj.boxInfo[index]?.volumetricWeight,
       obj.boxInfo[index]?.deadWeight
     );
@@ -172,10 +184,10 @@ function BoxInfo({
     );
     const updateBoxAppliedWeight = Math.max(
       TotalAppliedWeightOfAllProduct,
-      boxAppliedWeight
+      boxBaseAppliedWeight
     );
-
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
+
     setOrder({ ...obj });
   };
 
@@ -344,7 +356,9 @@ function BoxInfo({
                 {+data?.volumetricWeight.toFixed(2)} Kg | D:{" "}
                 {+data?.deadWeight.toFixed(2)} Kg | Final Weight :{" "}
                 {`${
-                  data?.appliedWeight ? +data?.appliedWeight + "Kg" : "0 Kg"
+                  data?.appliedWeight
+                    ? +data?.appliedWeight.toFixed(2) + "Kg"
+                    : "0 Kg"
                 }`}
               </div>
 
