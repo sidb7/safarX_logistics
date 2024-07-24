@@ -37,6 +37,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [showDownloadLebal, setDownloadLebal] = useState(false);
   const [isDownloadLoading, setDownloadLoading]: any = useState({});
+  // const [courierPrice, setCourierPrice] = useState(0)
   const [order, setOrder]: any = useState({
     pickupDetails: {
       fullAddress: "",
@@ -101,44 +102,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       courierPartnerValid
     );
   }
-
-  let data = [
-    {
-      id: 1,
-      courierPartner: "DTDC",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 2,
-      courierPartner: "BlueDart",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 3,
-      courierPartner: "Delhivery",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 4,
-      courierPartner: "DTDC",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 5,
-      courierPartner: "BlueDart",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 6,
-      courierPartner: "Delhivery",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 7,
-      courierPartner: "DTDC",
-      transporterNo: "34567898YTZ3",
-    },
-  ];
 
   const Buttons = (className?: string) => {
     return (
@@ -229,12 +192,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     );
   };
 
-  const sumInvoiceValue =
-    order?.boxInfo.length > 0 &&
-    order?.boxInfo.reduce(
-      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
-      0
-    );
+  // const sumInvoiceValue =
+  //   order?.boxInfo.length > 0 &&
+  //   order?.boxInfo.reduce(
+  //     (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+  //     0
+  //   );
 
   const SummaryColumns = [
     columnsHelper.accessor("serialNo", {
@@ -318,23 +281,23 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       },
     }),
 
-    columnsHelper.accessor("charge", {
-      header: () => {
-        return (
-          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
-            Charge
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        console.log("rowData", info.row.original?.codInfo?.invoiceValue);
-        return (
-          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {info.row.original?.codInfo?.invoiceValue || "-"}
-          </div>
-        );
-      },
-    }),
+    // columnsHelper.accessor("charge", {
+    //   header: () => {
+    //     return (
+    //       <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+    //         Charge
+    //       </p>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     console.log("rowData", info.row.original?.codInfo?.invoiceValue);
+    //     return (
+    //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+    //         {info.row.original?.codInfo?.invoiceValue || "-"}
+    //       </div>
+    //     );
+    //   },
+    // }),
   ];
 
   const fetchManifest = async (awbArray?: any) => {
@@ -504,9 +467,21 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   };
 
   const PlaceOrder = async () => {
-    const payload = { ...order };
+    let payload = { ...order };
 
-    if (walletBalance < sumInvoiceValue) {
+    payload.boxInfo = payload.boxInfo.map((box: any) => {
+      return {
+        ...box,
+        products: box.products.map((product: any) => {
+          return {
+            ...product,
+            unitPrice: product.unitPrice / product.qty,
+          };
+        }),
+      };
+    });
+
+    if (walletBalance < order?.totalPrice) {
       setShowAlertBox(true);
       return;
     }
@@ -556,7 +531,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             <div className="flex justify-center items-center pt-5 pb-12">
               <OneButton
                 onClick={PlaceOrder}
-                text={`Pay ₹ ${sumInvoiceValue} `}
+                text={`Place Order ₹ ${
+                  order?.totalPrice ? order?.totalPrice : 0
+                } `}
                 variant="primary"
                 className="!w-[228px]"
                 disabled={!validateOrder(order)}
@@ -622,25 +599,25 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     );
   };
 
-  React.useEffect(() => {
-    if (order?.boxInfo?.length > 0 && sumInvoiceValue > 50000) {
-      (async () => {
-        console.log("its working");
-        const response = await POST("");
+  // React.useEffect(() => {
+  //   if (order?.boxInfo?.length > 0 && totalPrice > 50000) {
+  //     (async () => {
+  //       console.log("its working");
+  //       const response = await POST("");
 
-        if (!response?.data?.success) {
-        } else {
-          const { nextStep, walletBalance } = response?.data?.data[0];
-          const { kyc, bank } = nextStep;
+  //       if (!response?.data?.success) {
+  //       } else {
+  //         const { nextStep, walletBalance } = response?.data?.data[0];
+  //         const { kyc, bank } = nextStep;
 
-          if (!kyc) {
-            navigate("/");
-            return;
-          }
-        }
-      })();
-    }
-  }, [order?.boxInfo]);
+  //         if (!kyc) {
+  //           navigate("/");
+  //           return;
+  //         }
+  //       }
+  //     })();
+  //   }
+  // }, [order?.boxInfo]);
 
   return (
     <>
