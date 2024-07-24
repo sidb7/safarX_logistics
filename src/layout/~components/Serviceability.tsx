@@ -151,7 +151,26 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row?.original?.zone}
+            {info.row?.original?.zoneName || "-"}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("deliveryCharges", {
+      header: () => {
+        return (
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+            {"Delivery Charges"}
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        const deliveryCharges =
+          info.row?.original?.base + info.row?.original?.add;
+
+        return (
+          <div className="flex items-center text-center justify-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap pb-[6px]">
+            {deliveryCharges || "-"}
           </div>
         );
       },
@@ -199,11 +218,12 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row?.original?.gst || "---"}
+            {info.row?.original?.total}
           </div>
         );
       },
     }),
+
     columnsHelper.accessor("total", {
       header: () => {
         return (

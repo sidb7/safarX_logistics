@@ -77,7 +77,7 @@ const CustomDropDown = (props: IDropDownProps) => {
           {heading && (
             <option
               value={""}
-              className="text-[12px] text-[#777777] absolute leading-4 font-Open text-center"
+              className="text-[12px] text-[#777777] absolute leading-4 font-Open"
             >
               {heading}
             </option>
