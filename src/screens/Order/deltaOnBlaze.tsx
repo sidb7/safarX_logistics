@@ -271,7 +271,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-4  text-[#1C1C1C] self-center whitespace-nowrap">
-              Communication Mode
+              Mode
             </p>
           </div>
         );
@@ -547,7 +547,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
     const fetchCommunicationRateCard = async () => {
       try {
         const response = await POST(GET_COMMUNICATION_RATE_CARD, {});
-        console.log("🚀 ~ fetchCommunicationRateCard ~ response:", response);
+        // console.log("🚀 ~ fetchCommunicationRateCard ~ response:", response);
         if (response?.data?.success) {
           setRateCardDetails({
             rateCardId: response?.data?.data[0]?.rateCardId || "",
@@ -591,7 +591,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             className="cursor-pointer"
           />
         </div>
-        <div className="h-[calc(100vh-90px)] overflow-y-scroll pb-4">
+        <div className="h-[calc(100vh-90px)] overflow-y-scroll pb-7">
           <div>
             <p className="font-Open font-semibold text-lg  text-[#1C1C1C] leading-[22px] px-5 pt-5">
               Setup Your Communication
