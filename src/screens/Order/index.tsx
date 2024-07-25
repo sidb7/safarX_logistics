@@ -2735,7 +2735,7 @@ const Index = () => {
       <CustomRightModal
         isOpen={openRightModalForDelta}
         onClose={() => setOpenRightModalForDelta(false)}
-        className={`${isXlScreen ? "!w-1/3" : isLgScreen ? "!w-2/3" : ""}`}
+        className={`${isXlScreen ? "!w-1/2" : isLgScreen ? "!w-2/3" : ""}`}
       >
         <>
           <DeltaOnBlaze setOpenRightModalForDelta={setOpenRightModalForDelta} />
