@@ -1266,7 +1266,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       if (data?.success) {
         toast.success(data?.message);
         setIsBulkModalOpen(false);
-        getAllOrders("DRAFT", stateValue);
+        getAllOrders("", stateValue);
       } else {
         toast.error(data?.message || "Failed While Updating Address");
       }
