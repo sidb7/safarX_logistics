@@ -1207,11 +1207,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           mobileNo: searchResult?.[index]?.contact?.mobileNo,
           fullAddress: searchResult?.[index]?.fullAddress,
           pincode: searchResult?.[index]?.pincode,
-          landMark: searchResult?.[index]?.landMark,
+          landMark: searchResult?.[index]?.landmark,
         },
       });
 
-      if (bulkActionObject[typeOfAddress].name?.length <= 0) {
+      if (searchResult?.[index]?.name?.length <= 0) {
         setValidationErrors({
           ...validationErrors,
           [typeOfAddress]: {
@@ -1219,9 +1219,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             name: "Name is required",
           },
         });
-      }
+      } else
+        setValidationErrors({
+          ...validationErrors,
+          [typeOfAddress]: {
+            ...validationErrors[typeOfAddress],
+            name: null,
+          },
+        });
 
-      if (bulkActionObject[typeOfAddress].fullAddress?.length <= 0) {
+      if (searchResult?.[index]?.fullAddress?.length <= 0) {
         setValidationErrors({
           ...validationErrors,
           [typeOfAddress]: {
@@ -1229,9 +1236,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             fullAddress: "Fulladdress is required",
           },
         });
-      }
+      } else
+        setValidationErrors({
+          ...validationErrors,
+          [typeOfAddress]: {
+            ...validationErrors[typeOfAddress],
+            fullAddress: null,
+          },
+        });
 
-      if (bulkActionObject[typeOfAddress].landMark?.length <= 0) {
+      if (searchResult?.[index]?.landMark?.length <= 0) {
         setValidationErrors({
           ...validationErrors,
           [typeOfAddress]: {
@@ -1239,7 +1253,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             landMark: "Landmark is required",
           },
         });
-      }
+      } else
+        setValidationErrors({
+          ...validationErrors,
+          [typeOfAddress]: {
+            ...validationErrors[typeOfAddress],
+            landMark: null,
+          },
+        });
     }
 
     setSearchResult([]);
