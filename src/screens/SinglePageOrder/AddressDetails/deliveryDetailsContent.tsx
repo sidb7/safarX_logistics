@@ -4,8 +4,13 @@ import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import InfoCircle from "../../../assets/info-circle.svg";
-import { RETURNING_USER_DELIVERY } from "../../../utils/ApiUrls";
+import {
+  GET_PINCODE_DATA,
+  RETURNING_USER_DELIVERY,
+} from "../../../utils/ApiUrls";
 import SearchDropDown from "../components/searchDropDown";
+import { POST } from "../../../utils/webService";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 interface IContact {
   name: string;
@@ -39,7 +44,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
 > = ({ details, landmark, setIsDeliveryRightModal, onSave }) => {
   const [deliveryDetails, setDeliveryDetails] =
     useState<IDeliveryDetails>(details);
-  const [localLandmark, setLocalLandmark] = useState<string>(landmark);
+  const [localLandmark, setLocalLandmark] = useState<any>(landmark);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
     name: null,
     mobileNo: null,
@@ -149,6 +154,18 @@ const DeliveryDetailsContent: React.FunctionComponent<
     setIsDeliveryRightModal(false); // Close the modal after saving
   };
 
+  const handlePincode = async (pincode: any) => {
+    if (pincode.length === 6) {
+      const { data: response } = await POST(GET_PINCODE_DATA, { pincode });
+      setLocalLandmark({
+        ...localLandmark,
+        state: capitalizeFirstLetter(response?.data?.[0]?.state),
+        city: capitalizeFirstLetter(response?.data?.[0]?.city),
+        country: "India",
+      });
+    }
+  };
+
   const autoSetData = (pickupDetails: any, landmark: any) => {
     setDeliveryDetails(pickupDetails);
     setLocalLandmark(landmark);
@@ -176,7 +193,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
             <SearchDropDown
               className={`border`}
               apiUrl={RETURNING_USER_DELIVERY}
-              label="Search Package"
+              label="Search delivery address"
               setFunc={autoSetData}
               identifier="ADDRESS"
             />
@@ -236,7 +253,10 @@ const DeliveryDetailsContent: React.FunctionComponent<
                 value={deliveryDetails.pincode}
                 inputMode="numeric"
                 maxLength={6}
-                onChange={handlePincodeChange}
+                onChange={(e: any) => {
+                  handlePincode(e.target.value);
+                  handlePincodeChange(e);
+                }}
                 name="pincode"
               />
               {validationErrors.pincode && (
@@ -251,7 +271,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
             <div>
               <CustomInputBox
                 label="Landmark"
-                value={localLandmark}
+                value={localLandmark?.landmark}
                 onChange={handleLandmarkChange}
                 name="landmark"
               />

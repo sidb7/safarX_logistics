@@ -26,7 +26,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import CopyTooltip from "../../../../components/CopyToClipboard";
 
 function EditBoxModal({ onClose, data, setOrder }: any) {
-  const [boxInputData, setBoxInputData]: any = useState();
+  const [boxInputData, setBoxInputData]: any = useState({});
   const [transporterNoModalOpen, setTransporterNoModalOpen] = useState(false);
 
   let transporterList = [
@@ -68,18 +68,11 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
   ];
 
   const onChangeHandler = (e: any) => {
-    const dimension = [
-      "unitPrice",
-      "deadWeight",
-      "length",
-      "breadth",
-      "height",
-    ];
-
     const { name, value } = e.target;
+    console.log("Name", name, "value", value);
     setBoxInputData((prevState: any) => ({
       ...prevState,
-      [name]: dimension.includes(name) ? +value : value,
+      [name]: value,
     }));
   };
 
@@ -92,59 +85,78 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
     return volume / 5000;
   };
 
+  const handleVolumCalc = () => {
+    const { length, height, breadth, deadWeight: weight } = boxInputData;
+    if (!length) return;
+    if (!height) return;
+    if (!breadth) return;
+
+    const volumetricWeight = +calculateVolumeWeight(
+      length,
+      breadth,
+      height
+    ).toFixed(2);
+    let tempBox = boxInputData;
+    tempBox["volumetricWeight"] = volumetricWeight;
+    tempBox["appliedWeight"] = Math.max(volumetricWeight, weight);
+    setBoxInputData({ ...tempBox });
+  };
+
   const boxValidation = () => {
-    if (
-      boxInputData.name.trim() === "" ||
-      boxInputData.deadWeight === 0 ||
-      (typeof boxInputData.deadWeight !== "number" &&
-        boxInputData.deadWeight.trim() === "") ||
-      boxInputData.length === 0 ||
-      (typeof boxInputData.length !== "number" &&
-        boxInputData.length.trim() === "") ||
-      boxInputData.breadth === 0 ||
-      (typeof boxInputData.breadth !== "number" &&
-        boxInputData.breadth.trim() === "") ||
-      boxInputData.height === 0 ||
-      (typeof boxInputData.height !== "number" &&
-        boxInputData.height.trim() === "") ||
-      (boxInputData.codInfo.isCod &&
-        boxInputData.codInfo.collectableAmount === 0) ||
-      boxInputData.codInfo.invoiceValue === 0 ||
-      (boxInputData.codInfo.invoiceValue > 50000 &&
-        boxInputData.transporterNo === "") ||
-      (boxInputData.codInfo.invoiceValue > 50000 &&
-        boxInputData.eWayBillNo === 0) ||
-      (typeof boxInputData.eWayBillNo !== "number" &&
-        boxInputData.eWayBillNo.trim() === "")
-    ) {
-      return true;
+    let errors = [];
+
+    if (!boxInputData.name) {
+      errors.push("Name should not be empty.");
     }
-    return false;
+
+    const fields = [
+      { value: boxInputData.deadWeight, name: "Dead weight" },
+      { value: boxInputData.length, name: "Length" },
+      { value: boxInputData.breadth, name: "Breadth" },
+      { value: boxInputData.height, name: "Height" },
+    ];
+
+    const isZeroString = (value: any) => /^0+$/.test(value);
+
+    fields.forEach((field) => {
+      if (
+        !field.value ||
+        parseFloat(field.value) === 0 ||
+        isZeroString(field.value)
+      ) {
+        errors.push(`${field.name} should not be empty or zero.`);
+      }
+    });
+
+    return errors.length > 0 ? true : false;
   };
 
   const onSave = () => {
+    handleVolumCalc();
     setOrder((prevOrder: any) => {
       const updatedBoxInfo = [...prevOrder.boxInfo];
       updatedBoxInfo[data?.id] = {
         ...boxInputData,
-        length: +boxInputData.length,
-        breadth: +boxInputData.breadth,
-        height: +boxInputData.height,
-        deadWeight: +boxInputData.deadWeight,
-        volumetricWeight: calculateVolumeWeight(
-          boxInputData.length,
-          boxInputData.breadth,
-          boxInputData.height
-        ),
-        appliedWeight: Math.max(
-          boxInputData.deadWeight,
-          calculateVolumeWeight(
-            boxInputData.length,
-            boxInputData.breadth,
-            boxInputData.height
-          )
-        ),
+        length: +boxInputData?.length,
+        breadth: +boxInputData?.breadth,
+        height: +boxInputData?.height,
+        deadWeight: +boxInputData?.deadWeight,
+        volumetricWeight: boxInputData?.volumetricWeight,
       };
+
+      const TotalAppliedWeightOfAllProduct = updatedBoxInfo[
+        data?.id
+      ].products.reduce(
+        (acc: any, product: any) => acc + +product.appliedWeight,
+        0
+      );
+      const updateBoxAppliedWeight = Math.max(
+        TotalAppliedWeightOfAllProduct,
+        boxInputData?.appliedWeight
+      );
+
+      updatedBoxInfo[data?.id].appliedWeight = updateBoxAppliedWeight;
+
       return { ...prevOrder, boxInfo: updatedBoxInfo };
     });
     onClose(false);
@@ -231,6 +243,8 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           onChangeHandler(e);
+                          //
+                          console.log("length is number");
                         }
                       }}
                       // inputError={inputError}
@@ -244,6 +258,8 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           onChangeHandler(e);
+                        } else {
+                          console.log("breadth is not number");
                         }
                       }}
                       // inputError={inputError}
@@ -264,7 +280,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                   </div>
                 </div>
 
-                <div className="flex !w-[100%] px-4">
+                {/* <div className="flex !w-[100%] px-4">
                   <CustomInputBox
                     isRightIcon={true}
                     containerStyle=""
@@ -290,9 +306,9 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                     name="orderId"
                     data-cy="auto-generate-order-id"
                   />
-                </div>
+                </div> */}
 
-                <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
+                {/* <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
                   <div className=" flex justify-start items-center h-fit">
                     <input
                       type="radio"
@@ -305,7 +321,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                           return {
                             ...boxInputData,
                             codInfo: {
-                              ...boxInputData.codInfo,
+                              ...boxInputData?.codInfo,
                               isCod: false,
                             },
                           };
@@ -326,7 +342,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                           return {
                             ...boxInputData,
                             codInfo: {
-                              ...boxInputData.codInfo,
+                              ...boxInputData?.codInfo,
                               isCod: true,
                             },
                           };
@@ -351,7 +367,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                             return {
                               ...boxInputData,
                               codInfo: {
-                                ...boxInputData.codInfo,
+                                ...boxInputData?.codInfo,
                                 collectableAmount: +e.target.value,
                               },
                             };
@@ -374,7 +390,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                             return {
                               ...boxInputData,
                               codInfo: {
-                                ...boxInputData.codInfo,
+                                ...boxInputData?.codInfo,
                                 invoiceValue: +e.target.value,
                               },
                             };
@@ -384,9 +400,9 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                       // inputError={true}
                     />
                   </div>
-                </div>
+                </div> */}
 
-                {boxInputData.codInfo.invoiceValue > 50000 && (
+                {/* {boxInputData?.codInfo?.invoiceValue > 50000 && (
                   <div>
                     <div className="flex gap-x-2">
                       <div className="w-full">
@@ -438,7 +454,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -451,6 +467,7 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
         <ServiceButton
           text={"SAVE"}
           onClick={onSave}
+          disabled={boxValidation()}
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>

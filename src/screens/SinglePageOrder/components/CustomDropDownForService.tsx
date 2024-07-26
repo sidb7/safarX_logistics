@@ -12,22 +12,26 @@ import index from "../../NewOrder/Filter";
 interface CustomInputWithDropDownProps {
   value?: any;
   initValue?: any;
+  sortIdentifier?: any;
   className?: any;
   apiUrl?: any;
   label?: any;
   state?: any;
   setFunc?: any;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   value,
   initValue,
+  sortIdentifier,
   className,
   apiUrl,
   label,
   state,
   setFunc,
+  disabled = false,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -57,21 +61,41 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
+  const sumInvoiceValue =
+    state?.boxInfo.length > 0 &&
+    state?.boxInfo.reduce(
+      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+      0
+    );
+
+  const sumOfAppliedWeightOfAllBox =
+    state?.boxInfo.length > 0 &&
+    state?.boxInfo.reduce((sum: any, box: any) => sum + box?.appliedWeight, 0);
+
+  const getCombinationDimensionValueOfAllBoxes = () => {
+    let length = 0;
+    let breadth = 0;
+    let height = 0;
+    state?.boxInfo.forEach((box: any) => {
+      length += box.length;
+      breadth += box.breadth;
+      height += box.height;
+    });
+
+    return { length, width: breadth, height };
+  };
+
   const getServices = async () => {
     setisLoading(true);
-
-    console.log(state?.pickupDetails?.pincode);
 
     const { data } = await POST(apiUrl, {
       pickupPincode: +state?.pickupDetails?.pincode,
       deliveryPincode: +state?.deliveryDetails?.pincode,
-      invoiceValue: 1000,
-      paymentMode: state?.isCod ? "COD" : "PREPAID",
-      serviceId: "a07d01f5",
-      weight: 1,
-      orderType: "B2C",
-      dimension: { length: 12, width: 12, height: 1212 },
+      boxInfo: state?.boxInfo,
+      transit: state?.transit,
+      orderType: state?.orderType,
     });
+
     if (data?.success) {
       let options = data?.data;
       options?.forEach((item: any) => {
@@ -79,6 +103,10 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
           return w[0].toUpperCase() + w.slice(1).toLowerCase();
         });
       });
+
+      if (sortIdentifier === "Cheapest") {
+        options.sort((a: any, b: any) => a.total - b.total);
+      }
 
       setArrayValue(options);
       setFilterData(options);
@@ -94,20 +122,36 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     setSearchInput(
       `${value?.name} : ${capitalizeFirstLetter(value?.serviceMode)}`
     );
+
     setFunc((prevState: any) => {
       return {
         ...prevState,
         courierPartner: value?.name,
         serviceMode: value?.serviceMode,
+        totalPrice: value?.value,
+        partnerServiceName: value?.partnerServiceName,
       };
     });
   };
 
   useEffect(() => {
-    if (state?.pickupDetails?.pincode && state?.deliveryDetails?.pincode) {
+    console.log("sortIdentifier---test--1", sortIdentifier.length, disabled);
+    if (sortIdentifier.length !== 0 && disabled === false) {
+      console.log("sortIdentifier---test--2", sortIdentifier.length, disabled);
+
       getServices();
     }
-  }, [state, state?.isCod]);
+  }, [sortIdentifier, disabled, state]);
+
+  useEffect(() => {
+    if (sortIdentifier.length === 0) {
+      setSearchInput("");
+      setFilterData([]);
+      setArrayValue([]);
+    }
+  }, [sortIdentifier, state]);
+
+  console.log("filterData", filterData);
 
   return (
     <div
@@ -123,12 +167,15 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         label={label}
         autoComplete={"off"}
         value={searchInput}
+        isDisabled={disabled && sortIdentifier.length === 0}
         name="category"
         onChange={(e) => {
           if (!isDropdownOpen) setIsDropdownOpen(true);
           onSearchHandler(e.target.value);
         }}
-        className={`${className} w-full downarrowImage`}
+        className={`${className} ${
+          disabled && sortIdentifier.length === 0 && "border-[#e4e4e4]"
+        } w-full downarrowImage`}
         data-cy="custom-input"
       />
 
@@ -146,18 +193,18 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                 <ProgressBar />
               </div>
             )}
-            {filterData.length ? (
+            {filterData.length > 0 && sortIdentifier.length !== 0 ? (
               filterData?.map((item: any, index: number) => (
                 <div
                   className="cursor-pointer flex botder-b justify-between items-center py-2 px-4 hover:bg-slate-100"
                   key={index}
                   onClick={(e: any) => {
                     setIsDropdownOpen(false);
-
                     setSelectedDataToMainState({
                       name: item?.name,
                       value: item?.total,
                       serviceMode: item?.serviceMode,
+                      partnerServiceName: item?.partnerServiceName,
                     });
                   }}
                   data-cy={`dropdown-item-${index}`}

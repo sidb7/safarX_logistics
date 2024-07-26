@@ -43,6 +43,39 @@ function padZero(num: any) {
   return num.toString().padStart(2, "0"); // Pad the number with leading zero if less than 10
 }
 
+const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(userInfo);
+        console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
+        const {
+          sellerId,
+          email,
+          contactNumber,
+          isWalletRechage,
+          isReturningUser,
+          name,
+          nextStep,
+        } = parsedUserInfo;
+
+        window?.dataLayer?.push({
+          event: "page_view",
+          seller_email: email,
+          sellerId: sellerId,
+          seller_name: name,
+          seller_kyc: nextStep?.kyc,
+          seller_mobileNumber: contactNumber,
+          seller_bank_verification_done: nextStep?.bank,
+          isWalletRechage,
+          isReturningUser: isReturningUser,
+        });
+      } catch (error) {
+        console.error("Failed to parse user info:", error);
+      }
+    } else {
+      console.log("No user info available in localStorage");
+    }
+
 declare global {
   interface Window {
     dataLayer?: any;
@@ -76,7 +109,45 @@ const App = () => {
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
   console.log("isSocketconnectedApp.tsx", isSocketInitialized);
 
+  
+  
+
   useEffect(() => {
+
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(userInfo);
+        console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
+        const {
+          sellerId,
+          email,
+          contactNumber,
+          isReturningUser,
+          name,
+          nextStep,
+          isWalletRechage,
+        } = parsedUserInfo;
+
+        window?.dataLayer?.push({
+          event: "page_view",
+          seller_email: email,
+          sellerId: sellerId,
+          seller_name: name,
+          seller_kyc: nextStep?.kyc,
+          isWalletRechage: isWalletRechage,
+          seller_mobileNumber: contactNumber,
+          seller_bank_verification_done: nextStep?.bank,
+          isReturningUser: isReturningUser,
+        });
+      } catch (error) {
+        console.error("Failed to parse user info:", error);
+      }
+    } else {
+      console.log("No user info available in localStorage");
+    }
+    
+    
     //Init G Tag Manager
     TagManager.initialize(tagManagerArgs);
 
@@ -295,6 +366,7 @@ const App = () => {
       seller_email: sellerData?.email,
       sellerId: sellerData?.sellerId,
       seller_name: sellerData?.name,
+      seller_mobileNumber: sellerData?.nextStep?.contactNumber,
       seller_kyc: sellerData?.nextStep?.kyc,
       seller_bank_verification_done: sellerData?.nextStep?.bank,
       isReturningUser: sellerData?.isReturningUser,

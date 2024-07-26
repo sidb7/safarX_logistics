@@ -1,15 +1,3 @@
-// import React from 'react'
-
-// function SearchDropDown() {
-//   return (
-//     <div>
-
-//     </div>
-//   )
-// }
-
-// export default SearchDropDown
-
 import React, { useEffect, useState, useRef } from "react";
 import CustomInputBox from "../../../components/Input";
 import "../../../../src/components/CategoriesDropDown/CategoriesDropDown.css";
@@ -28,7 +16,8 @@ interface CustomInputWithDropDownProps {
   apiUrl?: any;
   label?: any;
   setFunc?: any;
-  identifier: any;
+  identifier?: any;
+  emptyMsg?: any;
   // value?: any;
   // initValue?: any;
   // state?: any;
@@ -41,6 +30,7 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
   label,
   setFunc,
   identifier,
+  emptyMsg,
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -104,7 +94,12 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
             pincode: value?.pincode,
             fullAddress: value?.fullAddress,
           },
-          value?.landmark
+          {
+            landmark: value?.landmark,
+            country: value?.country,
+            city: value?.city,
+            state: value?.state,
+          }
         );
         return;
       }
@@ -197,7 +192,7 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
               ))
             ) : (
               <p className="flex justify-center items-center text-[15px] text-[#777777] font-semibold h-[50px] mx-1">
-                NO SERVICE FOUND
+                {emptyMsg ? emptyMsg : "No Data Found"}
               </p>
             )}
           </div>

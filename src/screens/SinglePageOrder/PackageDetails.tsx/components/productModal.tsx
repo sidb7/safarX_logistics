@@ -24,49 +24,50 @@ function ProductModal({ onClose, setOrder, index }: any) {
     category: "",
     sku: "",
     qty: 1,
-    unitPrice: 0,
+    unitPrice: "",
     unitTax: 0,
     weightUnit: "kg",
-    deadWeight: 1,
-    length: 1,
-    breadth: 1,
-    height: 1,
+    deadWeight: "",
+    length: "",
+    breadth: "",
+    height: "",
     measureUnit: "cm",
   });
 
   const productValidation = () => {
-    if (
-      boxInputData.name.trim() === "" ||
-      boxInputData.unitPrice === 0 ||
-      typeof boxInputData.unitPrice !== "number" ||
-      boxInputData.deadWeight === 0 ||
-      typeof boxInputData.deadWeight !== "number" ||
-      boxInputData.length === 0 ||
-      typeof boxInputData.length !== "number" ||
-      boxInputData.breadth === 0 ||
-      typeof boxInputData.breadth !== "number" ||
-      boxInputData.height === 0 ||
-      typeof boxInputData.height !== "number"
-    ) {
-      return true;
+    let errors = [];
+
+    if (!boxInputData.name) {
+      errors.push("Name should not be empty.");
     }
-    return false;
+
+    const fields = [
+      { value: boxInputData.deadWeight, name: "Dead weight" },
+      { value: boxInputData.length, name: "Length" },
+      { value: boxInputData.breadth, name: "Breadth" },
+      { value: boxInputData.height, name: "Height" },
+      { value: boxInputData.unitPrice, name: "unit Price" },
+    ];
+
+    const isZeroString = (value: any) => /^0+$/.test(value);
+
+    fields.forEach((field) => {
+      if (
+        !field.value ||
+        parseFloat(field.value) === 0 ||
+        isZeroString(field.value)
+      ) {
+        errors.push(`${field.name} should not be empty or zero.`);
+      }
+    });
+
+    return errors.length > 0 ? true : false;
   };
 
   const onChangeHandler = (e: any) => {
-    const dimension = [
-      "unitPrice",
-      "deadWeight",
-      "length",
-      "breadth",
-      "height",
-    ];
-
     setBoxInputData((prevState: any) => ({
       ...prevState,
-      [e.target.name]: dimension.includes(e.target.name)
-        ? +e.target.value
-        : e.target.value,
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -80,40 +81,71 @@ function ProductModal({ onClose, setOrder, index }: any) {
   };
 
   const addProductToBox: any = (boxIndex: any, newProduct: any) => {
+    const { length, breadth, height, deadWeight, unitPrice } = boxInputData;
+    const parsedLength = +length;
+    const parsedBreadth = +breadth;
+    const parsedHeight = +height;
+    const parsedDeadWeight = +deadWeight;
+    const parsedUnitPrice = +unitPrice;
+    const volumetricWeight = +calculateVolumeWeight(
+      parsedLength,
+      parsedBreadth,
+      parsedHeight
+    ).toFixed(2);
+    const appliedWeight = Math.max(parsedDeadWeight, volumetricWeight);
+
     setOrder((prevOrder: any) => {
       const updatedBoxInfo = [...prevOrder.boxInfo];
+      const box = updatedBoxInfo[boxIndex];
+
       const updatedProducts = [
-        ...updatedBoxInfo[boxIndex]?.products,
+        ...box.products,
         {
           ...newProduct,
-          length: +boxInputData.length,
-          breadth: +boxInputData.breadth,
-          height: +boxInputData.height,
-          deadWeight: +boxInputData.deadWeight,
-          volumetricWeight: calculateVolumeWeight(
-            boxInputData.length,
-            boxInputData.breadth,
-            boxInputData.height
-          ),
-          appliedWeight: Math.max(
-            boxInputData.deadWeight,
-            calculateVolumeWeight(
-              boxInputData.length,
-              boxInputData.breadth,
-              boxInputData.height
-            )
-          ),
+          length: parsedLength,
+          breadth: parsedBreadth,
+          height: parsedHeight,
+          deadWeight: parsedDeadWeight,
+          unitPrice: parsedUnitPrice,
+          volumetricWeight,
+          appliedWeight,
         },
       ];
+
+      const TotalAppliedWeightOfAllProduct = updatedProducts.reduce(
+        (acc: any, product: any) => acc + +product.appliedWeight,
+        0
+      );
+
+      const boxAppliedWeight = Math.max(
+        TotalAppliedWeightOfAllProduct,
+        box?.appliedWeight
+      );
+
+      const updatedInvoiceValue = updatedProducts.reduce(
+        (acc: any, product: any) => acc + +product.unitPrice,
+        0
+      );
+
+      const updatedAppliedWeight = boxAppliedWeight;
+
       updatedBoxInfo[boxIndex] = {
-        ...updatedBoxInfo[boxIndex],
+        ...box,
         products: updatedProducts,
+        codInfo: {
+          ...box.codInfo,
+          invoiceValue: updatedInvoiceValue,
+          collectableAmount: updatedInvoiceValue,
+        },
+        appliedWeight: updatedAppliedWeight,
       };
+
       return {
         ...prevOrder,
         boxInfo: updatedBoxInfo,
       };
     });
+
     onClose(false);
   };
 
@@ -142,7 +174,6 @@ function ProductModal({ onClose, setOrder, index }: any) {
                   boxShadow:
                     "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
                 }}
-                // onClick={() => handleProductsDetails(index)}
               >
                 <div className="flex flex-col gap-y-4 w-[100%] px-[1rem]">
                   <div>
@@ -152,6 +183,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
                       label="Search Product"
                       setFunc={setBoxInputData}
                       identifier="PRODUCT"
+                      emptyMsg={`No Product Found`}
                     />
                   </div>
 

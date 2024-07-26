@@ -53,8 +53,11 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const [deliveryAddress, setDeliveryAddress] =
     useState<IDeliveryDetails>(deliveryDetails);
 
-  const [pickupLandmark, setPickupLandmark] = useState<string>("");
-  const [deliveryLandmark, setDeliveryLandmark] = useState<string>("");
+  const [pickupLandmark, setPickupLandmark] = useState<any>("");
+  const [deliveryLandmark, setDeliveryLandmark] = useState<any>({});
+
+  console.log("pickupLandmark", pickupLandmark);
+  console.log("deliveryLandmark", deliveryLandmark);
 
   useEffect(() => {
     setPickupAddress(pickupDetails);
@@ -94,57 +97,73 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
     }
   };
 
-  const renderAddressDetails = (
-    details: any,
-    type: string,
-    landmark: string
-  ) => (
-    <div>
-      <div className="flex justify-between">
-        <div className="flex gap-x-[6px] items-center text-center">
-          <img src={WebLocationIcon} alt="locationIcon" />
-          <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
-            {type} Details
-          </p>
-        </div>
-        <div
-          onClick={() =>
-            handleEditClick(type === "Pickup" ? "pickup" : "delivery")
-          }
-        >
-          <img src={EditIcon} alt="edit" className="cursor-pointer" />
-        </div>
-      </div>
-      <div className="flex flex-col p-3 gap-y-2">
-        <div className="flex gap-x-5">
-          <div className="flex gap-x-[6px] items-center">
-            <img src={ProfileIcon} alt="profile" />
-            <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-              {details.contact.name}
-            </span>
-          </div>
-          <div className="flex gap-x-[6px] items-center">
-            <img src={ContactIcon} alt="phone icon" />
-            <p className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-              +91{" "}
-              <span className="font-Open font-semibold text-sm text-[#323232] leading-[18px]">
-                {details.contact.mobileNo}
-              </span>
+  console.log("pickupAddress", pickupAddress);
+
+  const renderAddressDetails = (details: any, type: string, landmark: any) => {
+    const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} , ${details?.pincode}`;
+    return (
+      <div>
+        <div className="flex justify-between">
+          <div className="flex gap-x-[6px] items-center text-center">
+            <img src={WebLocationIcon} alt="locationIcon" />
+            <p className="font-Open font-semibold text-[18px] text-[#1C1C1C] leading-5 capitalize">
+              {type} Details
             </p>
           </div>
+          <div
+            onClick={() =>
+              handleEditClick(type === "Pickup" ? "pickup" : "delivery")
+            }
+          >
+            <img src={EditIcon} alt="edit" className="cursor-pointer" />
+          </div>
         </div>
-        <div className="flex gap-x-[6px] items-center">
-          <img src={AddressLocationIcon} alt="address-location-icon" />
-          <p className="font-Open font-semibold text-sm text-[#323232] leading-[18px] capitalize">
-            {landmark} - {details.pincode}
-          </p>
+        <div className="flex flex-col p-3 gap-y-2">
+          <div className="flex gap-x-5">
+            <div className="flex gap-x-[6px] items-center">
+              <img
+                src={ProfileIcon}
+                alt="profile"
+                className="w-[15px] h-[15px]"
+              />
+              <span className="font-Open font-semibold ml-1 text-[14px] text-[#323232] leading-[18px]">
+                {details.contact.name}
+              </span>
+            </div>
+            <div className="flex gap-x-[6px] items-center">
+              <img
+                src={ContactIcon}
+                alt="phone icon"
+                className="w-[15px] h-[15px]"
+              />
+              <p className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+                +91{" "}
+                <span className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+                  {details.contact.mobileNo}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-x-[6px]">
+            <img
+              src={AddressLocationIcon}
+              alt="address-location-icon"
+              className="w-[15px] h-[15px]"
+            />
+            <div className="">
+              <p className="font-Open font-semibold ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
+                {details.fullAddress}
+                {/* {landmark?.landmark} - {details.pincode} */}
+              </p>
+              <p className="font-Open font-semibold ml-1 mt-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
+                {otherDetails}
+              </p>
+            </div>
+          </div>
         </div>
-        <p className="font-Open font-normal text-sm text-[#323232] leading-5">
-          {details.fullAddress}
-        </p>
       </div>
-    </div>
-  );
+    );
+  };
 
   const isAddressEmpty = (address: IPickupDetails | IDeliveryDetails) => {
     return (
@@ -165,7 +184,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   return (
     <>
       <div
-        className={`border-[1px] border-[#E8E8E8] rounded-md  min-h-[222px] max-w-[] px-3 py-[12px]`}
+        className={`border-[1px] border-[#E8E8E8] max-h-[100%] customScroll rounded-md px-3 py-[12px]`}
       >
         {isPickupAddressEmpty ? (
           <div>

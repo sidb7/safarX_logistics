@@ -322,6 +322,7 @@ const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
 
 //Serviceability URL
 const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
+const GET_AVAILABLE_SERVICES_FOR_SINGLEORDER = `${SELLER_BASE_URL}/order/getAvailableServicesingleOrderPage`;
 const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
 
 //Dashboard URL
@@ -381,6 +382,8 @@ const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 /* Billing */
 const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
 const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
+const DOWNLOAD_INVOICE_FROM_S3 = `${SELLER_BASE_URL}/billing/downloadInvoiceFromS3`;
+const DOWNLOAD_MISREPORT_FROM_S3 = `${SELLER_BASE_URL}/billing/downloadMisReportFromS3`;
 
 // RuleEngine
 const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPartner`;
@@ -408,7 +411,13 @@ const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
 // Amazon Redirect Url
 const AMAZON_REDIRECT_URL = `${SELLER_URL}/amazonCheckParams`;
 
+//Communication Rate Card Delivery Max
+const GET_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/getCommunicationRateCard`;
+const UPDATE_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/updateCommunicationRateCard`;
+
 const FETCH_ZONE_MATRIX = `${SELLER_BASE_URL}/order/zoneMatrix`;
+
+// order / getAvailableServicesingleOrderPage;
 
 export {
   ADMIN_URL,
@@ -532,6 +541,7 @@ export {
   UPDATE_WOOCOMMERCE_STORE,
   CANCEL_TEMP_SELLER_ORDER,
   POST_SERVICEABILITY,
+  GET_AVAILABLE_SERVICES_FOR_SINGLEORDER,
   GET_COMPANY_SERVICE,
   ADD_PICKUP_ADDRESS_CATALOGUE,
   CREATE_FEEDBACK,
@@ -619,4 +629,8 @@ export {
   // DUPLICATE_ORDER,
   GET_ALL_ADDRESSS,
   UPDATE_ALL_ADDRESS,
+  GET_COMMUNICATION_RATE_CARD,
+  UPDATE_COMMUNICATION_RATE_CARD,
+  DOWNLOAD_INVOICE_FROM_S3,
+  DOWNLOAD_MISREPORT_FROM_S3,
 };

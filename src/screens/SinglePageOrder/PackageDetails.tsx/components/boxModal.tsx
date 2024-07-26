@@ -26,18 +26,18 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import SearchDropDown from "../../components/searchDropDown";
 import CopyTooltip from "../../../../components/CopyToClipboard";
 
-function BoxModal({ onClose, setOrder }: any) {
+function BoxModal({ onClose, setOrder, order }: any) {
   const [services, setServices] = useState([]);
   const [serviceIndex, setServiceIndex]: any = useState(0);
   const [globalIndex, setGlobalIndex]: any = useState(null);
   const [transporterNoModalOpen, setTransporterNoModalOpen] = useState(false);
   const [boxInputData, setBoxInputData]: any = useState({
-    name: "box_1",
+    name: "White Box",
     weightUnit: "Kg",
-    deadWeight: 1,
-    length: 1,
-    breadth: 1,
-    height: 1,
+    deadWeight: 0.5,
+    length: 0.5,
+    breadth: 0.5,
+    height: 0.5,
     measureUnit: "cm",
     products: [],
     codInfo: {
@@ -49,7 +49,8 @@ function BoxModal({ onClose, setOrder }: any) {
       isPod: false,
     },
     insurance: false,
-    eWayBillNo: 0,
+    ewaybillNumber: "",
+    transporterNo: "",
   });
 
   const calculateVolumeWeight = (
@@ -61,95 +62,64 @@ function BoxModal({ onClose, setOrder }: any) {
     return volume / 5000;
   };
 
-  const boxValidation = () => {
-    if (
-      boxInputData.name.trim() === "" ||
-      boxInputData.deadWeight === 0 ||
-      (typeof boxInputData.deadWeight !== "number" &&
-        boxInputData.deadWeight.trim() === "") ||
-      boxInputData.length === 0 ||
-      (typeof boxInputData.length !== "number" &&
-        boxInputData.length.trim() === "") ||
-      boxInputData.breadth === 0 ||
-      (typeof boxInputData.breadth !== "number" &&
-        boxInputData.breadth.trim() === "") ||
-      boxInputData.height === 0 ||
-      (typeof boxInputData.height !== "number" &&
-        boxInputData.height.trim() === "") ||
-      (boxInputData.codInfo.isCod &&
-        boxInputData.codInfo.collectableAmount === 0) ||
-      boxInputData.codInfo.invoiceValue === 0 ||
-      (boxInputData.codInfo.invoiceValue > 50000 &&
-        boxInputData.transporterNo === "") ||
-      (boxInputData.codInfo.invoiceValue > 50000 &&
-        boxInputData.eWayBillNo === 0) ||
-      (typeof boxInputData.eWayBillNo !== "number" &&
-        boxInputData.eWayBillNo.trim() === "")
-    ) {
-      return true;
-    }
-    return false;
+  const handleVolumCalc = () => {
+    const { length, height, breadth, deadWeight: weight } = boxInputData;
+    if (!length) return;
+    if (!height) return;
+    if (!breadth) return;
+
+    const volumetricWeight = +calculateVolumeWeight(
+      length,
+      breadth,
+      height
+    ).toFixed(2);
+    let tempBox = boxInputData;
+    tempBox["volumetricWeight"] = volumetricWeight;
+    tempBox["appliedWeight"] = Math.max(volumetricWeight, weight);
+
+    setBoxInputData({ ...tempBox });
   };
 
-  let data = [
-    {
-      id: 1,
-      courierPartner: "DTDC",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 2,
-      courierPartner: "BlueDart",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 3,
-      courierPartner: "Delhivery",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 4,
-      courierPartner: "DTDC",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 5,
-      courierPartner: "BlueDart",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 6,
-      courierPartner: "Delhivery",
-      transporterNo: "34567898YTZ3",
-    },
-    {
-      id: 7,
-      courierPartner: "DTDC",
-      transporterNo: "34567898YTZ3",
-    },
-  ];
+  const boxValidation = () => {
+    let errors = [];
+
+    if (!boxInputData.name) {
+      errors.push("Name should not be empty.");
+    }
+
+    const fields = [
+      { value: boxInputData.deadWeight, name: "Dead weight" },
+      { value: boxInputData.length, name: "Length" },
+      { value: boxInputData.breadth, name: "Breadth" },
+      { value: boxInputData.height, name: "Height" },
+    ];
+
+    const isZeroString = (value: any) => /^0+$/.test(value);
+
+    fields.forEach((field) => {
+      if (
+        !field.value ||
+        parseFloat(field.value) === 0 ||
+        isZeroString(field.value)
+      ) {
+        errors.push(`${field.name} should not be empty or zero.`);
+      }
+    });
+
+    return errors.length > 0 ? true : false;
+  };
 
   const onChangeHandler = (e: any) => {
-    const dimension = [
-      "unitPrice",
-      "deadWeight",
-      "length",
-      "breadth",
-      "height",
-    ];
     const { name, value } = e.target;
     setBoxInputData((prevState: any) => ({
       ...prevState,
-      [name]: dimension.includes(name) ? +value : value,
+      [name]: value,
     }));
   };
 
-  console.log(
-    "boxInputData===============================================>",
-    boxInputData
-  );
-
   const onSave = () => {
+    handleVolumCalc();
+
     setOrder((prevOrder: any) => ({
       ...prevOrder,
       boxInfo: [
@@ -160,19 +130,15 @@ function BoxModal({ onClose, setOrder }: any) {
           breadth: +boxInputData.breadth,
           height: +boxInputData.height,
           deadWeight: +boxInputData.deadWeight,
-          volumetricWeight: calculateVolumeWeight(
-            boxInputData.length,
-            boxInputData.breadth,
-            boxInputData.height
-          ),
-          appliedWeight: Math.max(
-            boxInputData.deadWeight,
-            calculateVolumeWeight(
-              boxInputData.length,
-              boxInputData.breadth,
-              boxInputData.height
-            )
-          ),
+          volumetricWeight: boxInputData.volumetricWeight,
+          appliedWeight: boxInputData.appliedWeight,
+          codInfo: {
+            ...boxInputData.codInfo,
+            isCod:
+              prevOrder?.boxInfo.length > 0
+                ? prevOrder?.boxInfo[0]?.codInfo?.isCod
+                : false,
+          },
         },
       ],
     }));
@@ -214,6 +180,7 @@ function BoxModal({ onClose, setOrder }: any) {
                       label="Search Package"
                       setFunc={setBoxInputData}
                       identifier="BOX"
+                      emptyMsg={`No Box Found`}
                     />
                   </div>
 
@@ -232,9 +199,9 @@ function BoxModal({ onClose, setOrder }: any) {
                     <InputBox
                       label="Dead Weight (Kg)"
                       value={boxInputData?.deadWeight}
-                      name="deadWeight"
                       inputType="text"
                       inputMode="numeric"
+                      name="deadWeight"
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           onChangeHandler(e);
@@ -299,7 +266,7 @@ function BoxModal({ onClose, setOrder }: any) {
                   </div>
                 </div>
 
-                <div className="flex !w-[100%] px-4">
+                {/* <div className="flex !w-[100%] px-4">
                   <CustomInputBox
                     isRightIcon={true}
                     containerStyle=""
@@ -455,7 +422,7 @@ function BoxModal({ onClose, setOrder }: any) {
                     <div className="mt-5">
                       <div className="md:!w-[372px]">
                         <CustomInputBox
-                          inputType="number"
+                          inputType="text"
                           label="Enter Eway Bill No."
                           value={boxInputData?.eWayBillNo}
                           onChange={(e) => {
@@ -472,7 +439,7 @@ function BoxModal({ onClose, setOrder }: any) {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>
@@ -489,66 +456,6 @@ function BoxModal({ onClose, setOrder }: any) {
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
-
-      <CenterModal
-        isOpen={transporterNoModalOpen}
-        onRequestClose={() => setTransporterNoModalOpen(false)}
-        className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
-      >
-        <>
-          <div className="w-[100%] h-[100%] p-4">
-            <div className="flex justify-between pb-2 items-center">
-              <div className="font-bold font-Open">E-Way Details</div>
-              <button
-                className="flex justify-center items-center"
-                onClick={() => setTransporterNoModalOpen(false)}
-              >
-                <img
-                  src={crossIcon}
-                  alt=""
-                  className="w-[20px] cursor-pointer"
-                />
-              </button>
-            </div>
-
-            <div className=" max-h-[220px] border-b customScroll mt-2">
-              <table className="min-w-full divide-y divide-gray-200 border-collapse border border-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-3 w-[60px] text-[15px]  font-medium  uppercase tracking-wider border border-gray-300">
-                      Sr. No
-                    </th>
-                    <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
-                      Courier Partner
-                    </th>
-                    <th className="px-3 font-medium  text-[15px] uppercase tracking-wider border border-gray-300">
-                      Transporter No
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y !max-h-[200px] !overflow-hidden customScroll  divide-gray-200">
-                  {data.map((item) => (
-                    <tr key={item.id}>
-                      <td className="px-3 w-[60px] text-[14px] whitespace-nowrap border border-gray-300">
-                        {item.id}
-                      </td>
-                      <td className="px-3  text-[14px] whitespace-nowrap border border-gray-300">
-                        {item.courierPartner || "-"}
-                      </td>
-                      <td className="px-3 text-[14px] whitespace-nowrap border border-gray-300">
-                        <span className="mr-1">
-                          {item.transporterNo || "-"}
-                        </span>
-                        <CopyTooltip stringToBeCopied={item.transporterNo} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </>
-      </CenterModal>
     </>
   );
 }

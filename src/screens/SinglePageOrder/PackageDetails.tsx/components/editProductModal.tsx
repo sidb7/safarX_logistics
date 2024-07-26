@@ -28,54 +28,157 @@ function EditProductModal({ onClose, data, setOrder }: any) {
     return volume / 5000;
   };
 
-  const handleChange = (e: any, i: number) => {
-    const newProducts: any = [...editProduct];
+  const productValidation = () => {
+    let errors: any = [];
 
-    if (e.target.name === "name") {
-      newProducts[i][e.target.name] = e.target.value;
-    } else {
-      newProducts[i][e.target.name] = +e.target.value;
+    for (let i = 0; i < editProduct.length; i++) {
+      const product = editProduct[i];
+
+      // Initialize the error object for the current product
+      const tempErrors: any = {};
+
+      if (!product.name) {
+        tempErrors.name = "Name should not be empty.";
+      }
+      const fields = [
+        { value: product.deadWeight, name: "Dead weight", key: "deadWeight" },
+        { value: product.length, name: "Length", key: "length" },
+        { value: product.breadth, name: "Breadth", key: "breadth" },
+        { value: product.height, name: "Height", key: "height" },
+        { value: product.unitPrice, name: "Unit Price", key: "unitPrice" },
+      ];
+
+      const isZeroString = (value: any) => /^0+$/.test(value);
+
+      fields.forEach((field) => {
+        if (
+          !field.value ||
+          parseFloat(field.value) === 0 ||
+          isZeroString(field.value)
+        ) {
+          tempErrors[field.key] = `${field.name} should not be empty or zero.`;
+        }
+      });
+
+      Object.keys(tempErrors).length && errors.push(tempErrors);
     }
 
-    if (["length", "breadth", "height"].includes(e.target.name)) {
-      newProducts[i].volumetricWeight = +calculateVolumeWeight(
-        newProducts[i]?.length,
-        newProducts[i]?.breadth,
-        newProducts[i]?.height
-      );
-      newProducts[i].appliedWeight = Math.max(
-        newProducts[i].deadWeight,
-        calculateVolumeWeight(
-          newProducts[i].length,
-          newProducts[i].breadth,
-          newProducts[i].height
-        )
-      );
+    return errors.length > 0 ? true : false;
+  };
+
+  console.log("productValidation", productValidation());
+
+  // const productValidation = () => {
+  //   let errors: any = [];
+
+  //   for (let i = 0; i < editProduct.length; i++) {
+  //     const product = editProduct[i];
+
+  //     errors[i] = {};
+
+  //     if (!product.name) {
+  //       errors[i].name = "Name should not be empty.";
+  //     }
+  //     const fields = [
+  //       { value: product.deadWeight, name: "Dead weight", key: "deadWeight" },
+  //       { value: product.length, name: "Length", key: "length" },
+  //       { value: product.breadth, name: "Breadth", key: "breadth" },
+  //       { value: product.height, name: "Height", key: "height" },
+  //       { value: product.unitPrice, name: "unit Price", key: "unitPrice" },
+  //     ];
+  //     const isZeroString = (value: any) => /^0+$/.test(value);
+  //     fields.forEach((field) => {
+  //       if (
+  //         !field.value ||
+  //         parseFloat(field.value) === 0 ||
+  //         isZeroString(field.value)
+  //       ) {
+  //         errors[i][field?.key] = `${field.name} should not be empty or zero.`;
+  //       }
+  //     });
+
+  //     console.log("product", product);
+  //   }
+
+  //   return errors.length > 0 ? true : false;
+  // };
+
+  const handleChange = (e: any, index: number) => {
+    const { name, value } = e.target;
+    const updatedProducts = [...editProduct];
+    const product = { ...updatedProducts[index], [name]: value };
+
+    if (["length", "breadth", "height", "deadWeight"].includes(name)) {
+      const length = +product.length;
+      const breadth = +product.breadth;
+      const height = +product.height;
+
+      const volumetricWeight = calculateVolumeWeight(length, breadth, height);
+      const appliedWeight = Math.max(+product.deadWeight, volumetricWeight);
+
+      product.volumetricWeight = volumetricWeight;
+      product.appliedWeight = appliedWeight;
     }
 
-    setEditProduct(newProducts);
+    updatedProducts[index] = product;
+    setEditProduct(updatedProducts);
   };
 
   const onSaveHandler = () => {
     setOrder((prevState: any) => {
       const updatedBoxInfo = [...prevState.boxInfo];
-      updatedBoxInfo[data?.id] = {
-        ...updatedBoxInfo[data?.id],
-        products: editProduct,
+      const boxId = data?.id;
+      const box = updatedBoxInfo[boxId] || { products: [], codInfo: {} };
+
+      const updatedProducts = editProduct.map((product: any) => ({
+        ...product,
+        length: +product.length,
+        breadth: +product.breadth,
+        height: +product.height,
+        deadWeight: +product.deadWeight,
+        volumetricWeight: +product.volumetricWeight,
+        appliedWeight: +product.appliedWeight,
+      }));
+
+      const updatedInvoiceValue = updatedProducts.reduce(
+        (acc: number, product: any) => acc + +product.unitPrice,
+        0
+      );
+
+      const TotalAppliedWeightOfAllProduct = updatedProducts.reduce(
+        (acc: any, product: any) => acc + +product.appliedWeight,
+        0
+      );
+
+      const boxAppliedWeight = Math.max(
+        TotalAppliedWeightOfAllProduct,
+        box?.appliedWeight
+      );
+
+      const updatedAppliedWeight = boxAppliedWeight;
+
+      updatedBoxInfo[boxId] = {
+        ...box,
+        products: updatedProducts,
+        codInfo: {
+          ...box.codInfo,
+          invoiceValue: updatedInvoiceValue,
+        },
+        appliedWeight: updatedAppliedWeight,
       };
+
       return {
         ...prevState,
         boxInfo: updatedBoxInfo,
       };
     });
+
     onClose(false);
   };
 
   useEffect(() => {
     setEditProduct(data?.data);
   }, [data?.products]);
-
-  console.log("editProduct", editProduct);
 
   return (
     <>
@@ -235,6 +338,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
         <ServiceButton
           text={"SAVE"}
           onClick={onSaveHandler}
+          disabled={productValidation()}
           className={` bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>

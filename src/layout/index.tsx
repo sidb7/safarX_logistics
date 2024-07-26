@@ -23,8 +23,16 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
     if (userInfo) {
       try {
         const parsedUserInfo = JSON.parse(userInfo);
-        const { sellerId, email, isReturningUser, name, nextStep } =
-          parsedUserInfo;
+        console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
+        const {
+          sellerId,
+          email,
+          contactNumber,
+          isReturningUser,
+          name,
+          nextStep,
+          isWalletRechage,
+        } = parsedUserInfo;
 
         window?.dataLayer?.push({
           event: "page_view",
@@ -32,6 +40,8 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           sellerId: sellerId,
           seller_name: name,
           seller_kyc: nextStep?.kyc,
+          isWalletRechage: isWalletRechage,
+          seller_mobileNumber: contactNumber,
           seller_bank_verification_done: nextStep?.bank,
           isReturningUser: isReturningUser,
         });
