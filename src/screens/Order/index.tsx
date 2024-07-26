@@ -386,6 +386,24 @@ const Index = () => {
 
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
+
+  const [bulkActionObject, setBulkActionObject] = useState({
+    pickupAddress: {
+      name: "",
+      mobileNo: "",
+      fullAddress: "",
+      pincode: "",
+      landMark: "",
+    },
+    deliveryAddress: {
+      name: "",
+      mobileNo: "",
+      fullAddress: "",
+      pincode: "",
+      landMark: "",
+    },
+  });
+
   // const [isMasked, setIsMasked] = useState(false);
 
   // useEffect(() => {
@@ -2228,6 +2246,8 @@ const Index = () => {
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
+                bulkActionObject={bulkActionObject}
+                setBulkActionObject={setBulkActionObject}
               />
             </div>
             <div
