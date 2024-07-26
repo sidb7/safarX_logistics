@@ -320,6 +320,7 @@ const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
 
 //Serviceability URL
 const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
+const GET_AVAILABLE_SERVICES_FOR_SINGLEORDER = `${SELLER_BASE_URL}/order/getAvailableServicesingleOrderPage`;
 const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
 
 //Dashboard URL
@@ -413,6 +414,8 @@ const GET_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/getCommunicati
 const UPDATE_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/updateCommunicationRateCard`;
 
 const FETCH_ZONE_MATRIX = `${SELLER_BASE_URL}/order/zoneMatrix`;
+
+// order / getAvailableServicesingleOrderPage;
 
 export {
   ADMIN_URL,
@@ -536,6 +539,7 @@ export {
   UPDATE_WOOCOMMERCE_STORE,
   CANCEL_TEMP_SELLER_ORDER,
   POST_SERVICEABILITY,
+  GET_AVAILABLE_SERVICES_FOR_SINGLEORDER,
   GET_COMPANY_SERVICE,
   ADD_PICKUP_ADDRESS_CATALOGUE,
   CREATE_FEEDBACK,

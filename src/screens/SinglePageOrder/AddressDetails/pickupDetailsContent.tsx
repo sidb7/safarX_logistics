@@ -194,7 +194,7 @@ const PickupDetailsContent: React.FunctionComponent<
             <SearchDropDown
               className={`border`}
               apiUrl={RETURNING_USER_PICKUP}
-              label="Search Package"
+              label="Search Pickup Address"
               setFunc={autoSetData}
               identifier="ADDRESS"
             />

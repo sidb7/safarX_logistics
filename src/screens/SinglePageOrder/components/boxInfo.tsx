@@ -7,7 +7,10 @@ import subtractIcon from "../../../assets/gray-subtract-circle.svg";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
 import addIcon from "../../../assets/Product/addCircle.svg";
 import CustomDropDown from "../../../components/DropDown";
-import { generateUniqueCode } from "../../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  generateUniqueCode,
+} from "../../../utils/utility";
 
 import ProductIcon from "../../../assets/Product/Product.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
@@ -67,6 +70,14 @@ function BoxInfo({
         (acc: any, product: any) => acc + product.unitPrice,
         0
       );
+
+      newState.boxInfo[index].codInfo.collectableAmount = newState.boxInfo[
+        index
+      ]?.products.reduce(
+        (acc: any, product: any) => acc + product.unitPrice,
+        0
+      );
+
       return newState;
     });
   };
@@ -85,10 +96,6 @@ function BoxInfo({
       breadth,
       height
     ).toFixed(2);
-
-    // obj.boxInfo[index].products[productIndex].volumetricWeight = +(
-    //   calacVolu.toFixed(4) * +obj.boxInfo[index].products[productIndex].qty
-    // );
 
     let originalUnitPrice: any = 0;
 
@@ -138,11 +145,9 @@ function BoxInfo({
 
     let initQty = obj.boxInfo[index].products[productIndex].qty;
 
-    //quantity------------------------------------------------------
     initQty === 1
       ? (obj.boxInfo[index].products[productIndex].qty = 1)
       : obj.boxInfo[index].products[productIndex].qty--;
-    // ------------------------------------------------------
 
     let calacVolu: any = +calculateVolumeWeight(
       length,
@@ -164,12 +169,10 @@ function BoxInfo({
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
 
-    //unitPrice--------------------------------------------------
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
 
-    //appliedWeight----------------------------------------------
     obj.boxInfo[index].products[productIndex].appliedWeight =
       baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
@@ -193,68 +196,15 @@ function BoxInfo({
 
   const OnChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    if (name === "isCod") {
-      setCodInfo((prevState: any) => {
-        return {
-          ...prevState,
-          codInfo: {
-            ...prevState.codInfo,
-            [name]: value === "COD" ? true : false,
-            collectableAmount:
-              value === "COD" ? "" : prevState.codInfo.collectableAmount,
-          },
-        };
-      });
-    } else {
-      setCodInfo((prevState: any) => {
-        return {
-          ...prevState,
-          codInfo: {
-            ...prevState.codInfo,
-            [name]: value,
-          },
-        };
-      });
-    }
+    setOrder((prevState: any) => {
+      const updatedBoxInfo = [...prevState.boxInfo];
+      updatedBoxInfo[index].codInfo[name] = value;
+      return {
+        ...prevState,
+        boxInfo: updatedBoxInfo,
+      };
+    });
   };
-
-  useEffect(() => {
-    if (
-      codInfo?.codInfo?.isCod ||
-      codInfo?.codInfo?.collectableAmount.trim() !== "" ||
-      codInfo?.codInfo?.invoiceValue.trim() !== ""
-    ) {
-      setOrder((prevState: any) => {
-        const updatedBoxInfo = [...prevState.boxInfo];
-        const updatedCodInfo = {
-          ...updatedBoxInfo[index],
-          codInfo: {
-            invoiceValue: +codInfo?.codInfo?.invoiceValue,
-            collectableAmount: codInfo?.codInfo?.isCod
-              ? +codInfo?.codInfo?.collectableAmount
-              : 0,
-            isCod: codInfo?.codInfo?.isCod,
-          },
-          ewaybillNumber:
-            +codInfo?.codInfo?.invoiceValue >= 50000
-              ? updatedBoxInfo?.[index]?.ewaybillNumber
-              : "",
-          transporterNo:
-            +codInfo?.codInfo?.invoiceValue >= 50000
-              ? updatedBoxInfo?.[index]?.transporterNo
-              : "",
-          orderId: codInfo?.orderId,
-        };
-        updatedBoxInfo[index] = { ...updatedCodInfo };
-        return { ...prevState, boxInfo: updatedBoxInfo };
-      });
-    }
-  }, [
-    codInfo?.codInfo?.isCod,
-    codInfo?.codInfo?.collectableAmount,
-    codInfo?.codInfo?.invoiceValue,
-    codInfo?.orderId,
-  ]);
 
   useEffect(() => {
     setCodInfo((prevState: any) => {
@@ -282,58 +232,11 @@ function BoxInfo({
             <div className=" flex w-[100%] flex-col">
               <div className="flex items-center justify-between">
                 <div className=" flex justify-start items-center">
-                  <div className="text-[22px] my-2 font-bold font-Open">
-                    {data?.name}
-                  </div>
-                  <div className="flex items-center justify-center gap-x-4 mx-5 rounded-lg">
-                    <CustomInputBox
-                      isRightIcon={true}
-                      containerStyle=""
-                      rightIcon={orderIdGenarateIcon}
-                      labelClassName={`!text-black !bg-[${getColorByIndex(
-                        index
-                      )}]`}
-                      className={`!bg-transparent !w-[180px] !h-[36px] !text-base !text-[12px] !font-semibold`}
-                      imageClassName="!h-[20px] !w-[20px] !top-[25%] !right-2"
-                      value={codInfo?.orderId}
-                      maxLength={12}
-                      label="Order ID"
-                      onChange={(e: any) => OnChangeHandler(e)}
-                      onClick={() => {
-                        const orderId = generateUniqueCode(8, 12);
-                        setCodInfo((prevState: any) => {
-                          return {
-                            ...prevState,
-                            orderId: orderId,
-                          };
-                        });
-                      }}
-                      visibility={true}
-                      setVisibility={() => {}}
-                      name="orderId"
-                      data-cy="auto-generate-order-id"
-                    />
-                  </div>
-                  <div className="flex justify-center">
-                    <CustomDropDown
-                      heading="Payment Mode"
-                      name="isCod"
-                      selectClassName={`!cursor-pointer !h-[36px] border `}
-                      onChange={OnChangeHandler}
-                      value={codInfo?.codInfo?.isCod ? "COD" : "PREPAID"}
-                      options={[
-                        {
-                          label: "COD",
-                          value: "COD",
-                        },
-                        {
-                          label: "Prepaid",
-                          value: "PREPAID",
-                        },
-                      ]}
-                    />
+                  <div className="text-[18px] my-2 font-bold font-Open">
+                    {capitalizeFirstLetter(data?.name)}
                   </div>
                 </div>
+
                 <div className="flex gap-x-4">
                   <button
                     className=""
@@ -351,7 +254,8 @@ function BoxInfo({
                   </button>
                 </div>
               </div>
-              <div className="flex items-center my-2">
+
+              <div className="flex text-[16px] items-center ">
                 {data?.length} X {data?.breadth} X {data?.height} cm | V:{" "}
                 {+data?.volumetricWeight.toFixed(2)} Kg | D:{" "}
                 {+data?.deadWeight.toFixed(2)} Kg | Final Weight :{" "}
@@ -362,17 +266,18 @@ function BoxInfo({
                 }`}
               </div>
 
-              <div className="flex gap-x-4 mt-3 ">
+              <div className="flex gap-x-4 mt-5">
                 <div className="">
                   <InputBox
                     label="Invoice value"
-                    value={codInfo?.codInfo?.invoiceValue}
+                    value={data?.codInfo?.invoiceValue}
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
                     labelClassName={`!text-black  !bg-[${getColorByIndex(
                       index
                     )}]`}
+                    isDisabled={true}
                     className={`!bg-transparent !w-[110px] !h-[36px]`}
                     onChange={(e: any) => {
                       if (!isNaN(e.target.value)) {
@@ -382,11 +287,11 @@ function BoxInfo({
                   />
                 </div>
 
-                {codInfo?.codInfo?.isCod && (
+                {data?.codInfo?.isCod && (
                   <div className="">
                     <InputBox
                       label="Collectable Amount"
-                      value={codInfo?.codInfo?.collectableAmount}
+                      value={data?.codInfo?.collectableAmount}
                       name="collectableAmount"
                       inputType="text"
                       inputMode="numeric"
@@ -394,7 +299,6 @@ function BoxInfo({
                         index
                       )}]`}
                       className={`!bg-transparent !w-[150px] !h-[36px]`}
-                      isDisabled={codInfo?.isCod}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           OnChangeHandler(e);
