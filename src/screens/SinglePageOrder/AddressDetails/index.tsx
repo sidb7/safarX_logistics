@@ -106,7 +106,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
         <div className="flex justify-between">
           <div className="flex gap-x-[6px] items-center text-center">
             <img src={WebLocationIcon} alt="locationIcon" />
-            <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+            <p className="font-Open font-semibold text-[18px] text-[#1C1C1C] leading-5 capitalize">
               {type} Details
             </p>
           </div>
@@ -126,7 +126,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 alt="profile"
                 className="w-[15px] h-[15px]"
               />
-              <span className="font-Open font-semibold ml-1 text-[13px] text-[#323232] leading-[18px]">
+              <span className="font-Open font-semibold ml-1 text-[14px] text-[#323232] leading-[18px]">
                 {details.contact.name}
               </span>
             </div>
@@ -136,9 +136,9 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 alt="phone icon"
                 className="w-[15px] h-[15px]"
               />
-              <p className="font-Open font-semibold text-[13px] text-[#323232] leading-[18px]">
+              <p className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
                 +91{" "}
-                <span className="font-Open font-semibold text-[13px] text-[#323232] leading-[18px]">
+                <span className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
                   {details.contact.mobileNo}
                 </span>
               </p>
@@ -151,11 +151,11 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
               className="w-[15px] h-[15px]"
             />
             <div className="">
-              <p className="font-Open font-semibold ml-1 max-w-[600px] text-[13px] text-[#323232] leading-[18px] capitalize">
+              <p className="font-Open font-semibold ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
                 {details.fullAddress}
                 {/* {landmark?.landmark} - {details.pincode} */}
               </p>
-              <p className="font-Open font-normal ml-1 mt-1 max-w-[600px] text-[13px] text-[#323232] leading-[18px] capitalize">
+              <p className="font-Open font-semibold ml-1 mt-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
                 {otherDetails}
               </p>
             </div>

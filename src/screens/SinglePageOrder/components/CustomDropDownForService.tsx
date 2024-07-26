@@ -61,8 +61,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
-  console.log(state);
-
   const sumInvoiceValue =
     state?.boxInfo.length > 0 &&
     state?.boxInfo.reduce(
@@ -93,13 +91,11 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     const { data } = await POST(apiUrl, {
       pickupPincode: +state?.pickupDetails?.pincode,
       deliveryPincode: +state?.deliveryDetails?.pincode,
-      invoiceValue: sumInvoiceValue,
-      paymentMode: state?.isCod ? "COD" : "PREPAID",
-      weight: sumOfAppliedWeightOfAllBox,
-      orderType: "B2C",
-      dimension: getCombinationDimensionValueOfAllBoxes(),
+      boxInfo: state?.boxInfo,
+      transit: state?.transit,
+      orderType: state?.orderType,
     });
-    //  serviceId: "a07d01f5",
+
     if (data?.success) {
       let options = data?.data;
       options?.forEach((item: any) => {
@@ -133,6 +129,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         courierPartner: value?.name,
         serviceMode: value?.serviceMode,
         totalPrice: value?.value,
+        partnerServiceName: value?.partnerServiceName,
       };
     });
   };
@@ -153,6 +150,8 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
       setArrayValue([]);
     }
   }, [sortIdentifier, state]);
+
+  console.log("filterData", filterData);
 
   return (
     <div
@@ -201,11 +200,11 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                   key={index}
                   onClick={(e: any) => {
                     setIsDropdownOpen(false);
-
                     setSelectedDataToMainState({
                       name: item?.name,
                       value: item?.total,
                       serviceMode: item?.serviceMode,
+                      partnerServiceName: item?.partnerServiceName,
                     });
                   }}
                   data-cy={`dropdown-item-${index}`}

@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { tokenKey } from "../../utils/utility";
 import { useSelector } from "react-redux";
 import CopyTooltip from "../../components/CopyToClipboard";
+import { forEach } from "lodash";
 
 interface IIndexProps {}
 
@@ -37,7 +38,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [showDownloadLebal, setDownloadLebal] = useState(false);
   const [isDownloadLoading, setDownloadLoading]: any = useState({});
-  // const [courierPrice, setCourierPrice] = useState(0)
+  const [paymentMode, setPaymentMode] = useState("PREPAID");
   const [order, setOrder]: any = useState({
     pickupDetails: {
       fullAddress: "",
@@ -60,7 +61,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     orderType: "B2C",
     transit: "FORWARD",
     courierPartner: "",
-    source: "API",
+    source: "WEBSITE",
     pickupDate: "",
     gstNumber: "",
     // orderId: "",
@@ -164,7 +165,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               });
             }}
           />
-          <div className="text-[15px]">Reverse</div>
+          <div className="text-[15px]">B2C Reverse</div>
         </div>
         <div
           className=" flex justify-start items-center h-fit"
@@ -494,7 +495,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           (awb: any) => awb?.tracking?.awb
         );
         setAwbListForDownLoad(listOfawbs);
-        console.log("listOfawbs", listOfawbs);
 
         setDownloadLebal(true);
         toast.success(data?.message || "Successfully Placed order");
@@ -599,25 +599,16 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     );
   };
 
-  // React.useEffect(() => {
-  //   if (order?.boxInfo?.length > 0 && totalPrice > 50000) {
-  //     (async () => {
-  //       console.log("its working");
-  //       const response = await POST("");
+  const paymentModeToggle = (e: any) => {
+    setPaymentMode(e);
+    let tempOrder = { ...order };
+    tempOrder.boxInfo.forEach((element: any) => {
+      element.codInfo.isCod = e === "COD" ? true : false;
+    });
+    setOrder(tempOrder);
+  };
 
-  //       if (!response?.data?.success) {
-  //       } else {
-  //         const { nextStep, walletBalance } = response?.data?.data[0];
-  //         const { kyc, bank } = nextStep;
-
-  //         if (!kyc) {
-  //           navigate("/");
-  //           return;
-  //         }
-  //       }
-  //     })();
-  //   }
-  // }, [order?.boxInfo]);
+  console.log("order", order);
 
   return (
     <>
@@ -626,7 +617,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <div className="flex gap-5 mx-5">
           <div className="flex-1 ">
             <div className="flex flex-col gap-y-4  !h-[calc(100vh-180px)] customScroll">
-              <div className="max-h-[50%] overflow-hidden">
+              <div className="!max-h-[450px] overflow-hidden">
                 <AddressCardDetails
                   pickupDetails={order?.pickupDetails}
                   deliveryDetails={order?.deliveryDetails}
@@ -634,7 +625,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   onDeliveryDetailsChange={handleDeliveryDetailsChange}
                 />
               </div>
-              <div className=" rounded !max-h-[500px] overflow-hidden">
+              <div className=" rounded !max-h-[450px] overflow-hidden">
                 <PackageDetails
                   packageDetails={order?.boxInfo}
                   order={order}
@@ -642,7 +633,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 />
               </div>
 
-              {/* <div className="border p-3 rounded gap-x-4 flex items-center">
+              <div className="border p-3 rounded gap-x-4 flex items-center">
                 <div className="md:!w-[50%] ">
                   <CustomInputBox
                     isRightIcon={true}
@@ -670,7 +661,47 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     data-cy="auto-generate-order-id"
                   />
                 </div>
-              </div> */}
+
+                <div className="flex gap-x-4 items-center">
+                  <div className="flex justify-center items-center">
+                    <input
+                      type="radio"
+                      name="paymentMode"
+                      value="COD"
+                      disabled={
+                        Array.isArray(order?.boxInfo) &&
+                        order?.boxInfo.length === 0
+                      }
+                      className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                      checked={paymentMode === "COD"}
+                      onChange={(e: any) => paymentModeToggle(e.target.value)}
+                    />
+                    <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                      COD
+                    </span>
+                  </div>
+                  <div
+                    className="flex justify-center items-center "
+                    title="comming soon"
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMode"
+                      value="PREPAID"
+                      disabled={
+                        Array.isArray(order?.boxInfo) &&
+                        order?.boxInfo.length === 0
+                      }
+                      className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                      checked={paymentMode === "PREPAID"}
+                      onChange={(e: any) => paymentModeToggle(e.target.value)}
+                    />
+                    <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                      PREPAID
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex-1">
@@ -678,7 +709,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               <div>
                 <ShippingDetails order={order} setOrder={setOrder} />
               </div>
-              {order?.boxInfo?.length > 0 && (
+              {order?.boxInfo?.length > 0 && order?.courierPartner && (
                 <>
                   <div>{summaryDetails()}</div>
                   {showDownloadLebal && (
