@@ -218,7 +218,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row?.original?.total}
+            {info.row?.original?.tax}
           </div>
         );
       },

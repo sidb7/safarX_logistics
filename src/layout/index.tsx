@@ -31,6 +31,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           isReturningUser,
           name,
           nextStep,
+          isWalletRechage,
         } = parsedUserInfo;
 
         window?.dataLayer?.push({
@@ -39,7 +40,8 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           sellerId: sellerId,
           seller_name: name,
           seller_kyc: nextStep?.kyc,
-          mobileNo: contactNumber,
+          isWalletRechage: isWalletRechage,
+          seller_mobileNumber: contactNumber,
           seller_bank_verification_done: nextStep?.bank,
           isReturningUser: isReturningUser,
         });
