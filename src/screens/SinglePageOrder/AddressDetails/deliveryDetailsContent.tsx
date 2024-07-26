@@ -193,7 +193,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
             <SearchDropDown
               className={`border`}
               apiUrl={RETURNING_USER_DELIVERY}
-              label="Search Package"
+              label="Search delivery address"
               setFunc={autoSetData}
               identifier="ADDRESS"
             />

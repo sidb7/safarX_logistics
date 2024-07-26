@@ -46,6 +46,7 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
     tempOrder.boxInfo[boxIndex].products.splice(productIndex, 1);
 
     tempOrder.boxInfo[boxIndex].codInfo.invoiceValue -= productUnitPrice;
+    tempOrder.boxInfo[boxIndex].codInfo.collectableAmount -= productUnitPrice;
 
     const boxAppliedWeight = Math.max(
       tempOrder.boxInfo[boxIndex]?.volumetricWeight,
@@ -79,7 +80,7 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
               <div>
                 <img src={packegeIcon} />
               </div>
-              <span className="text-[18px]  mx-2 font-bold font-Open">
+              <span className="text-[19px]  mx-2 font-bold font-Open">
                 Packages
               </span>
             </div>
@@ -140,7 +141,7 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
         isOpen={boxModal}
         onClose={() => setBoxModal(false)}
       >
-        <BoxModal onClose={setBoxModal} setOrder={setOrder} />
+        <BoxModal onClose={setBoxModal} setOrder={setOrder} order={order} />
       </RightSideModal>
 
       <RightSideModal
@@ -156,7 +157,6 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
         />
       </RightSideModal>
 
-      {/* --------------------edit boz and product modal --------------------- */}
       <RightSideModal
         className=" w-full lg:w-[400px]"
         wrapperClassName="rounded-l-xl"

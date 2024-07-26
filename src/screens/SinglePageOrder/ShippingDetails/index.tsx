@@ -6,7 +6,10 @@ import { Spinner } from "../../../components/Spinner";
 import DownArrowIcon from "../../../assets/Filter/downArrow.svg";
 import VanIcon from "../../../assets/vanWithoutBG.svg";
 import { POST } from "../../../utils/webService";
-import { POST_SERVICEABILITY } from "../../../utils/ApiUrls";
+import {
+  GET_AVAILABLE_SERVICES_FOR_SINGLEORDER,
+  POST_SERVICEABILITY,
+} from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import CustomSearchDropDown from "../components/CustomSearchDropDown";
@@ -109,7 +112,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
               initValue={""}
               sortIdentifier={sortServiceiblity}
               className={""}
-              apiUrl={POST_SERVICEABILITY}
+              apiUrl={GET_AVAILABLE_SERVICES_FOR_SINGLEORDER}
               label={"Select Service"}
               state={order}
               setFunc={setOrder}

@@ -108,34 +108,25 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
     if (!boxInputData.name) {
       errors.push("Name should not be empty.");
     }
-    if (
-      !boxInputData.deadWeight ||
-      boxInputData.deadWeight === "0" ||
-      boxInputData.deadWeight === 0
-    ) {
-      errors.push("Dead weight should not be empty or zero.");
-    }
-    if (
-      !boxInputData.length ||
-      boxInputData.length === "0" ||
-      boxInputData.length === 0
-    ) {
-      errors.push("Length should not be empty or zero.");
-    }
-    if (
-      !boxInputData.breadth ||
-      boxInputData.breadth === "0" ||
-      boxInputData.breadth === 0
-    ) {
-      errors.push("Breadth should not be empty or zero.");
-    }
-    if (
-      !boxInputData.height ||
-      boxInputData.height === "0" ||
-      boxInputData.height === 0
-    ) {
-      errors.push("Height should not be empty or zero.");
-    }
+
+    const fields = [
+      { value: boxInputData.deadWeight, name: "Dead weight" },
+      { value: boxInputData.length, name: "Length" },
+      { value: boxInputData.breadth, name: "Breadth" },
+      { value: boxInputData.height, name: "Height" },
+    ];
+
+    const isZeroString = (value: any) => /^0+$/.test(value);
+
+    fields.forEach((field) => {
+      if (
+        !field.value ||
+        parseFloat(field.value) === 0 ||
+        isZeroString(field.value)
+      ) {
+        errors.push(`${field.name} should not be empty or zero.`);
+      }
+    });
 
     return errors.length > 0 ? true : false;
   };
