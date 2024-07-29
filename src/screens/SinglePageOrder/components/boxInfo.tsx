@@ -36,6 +36,7 @@ function BoxInfo({
   setEditBoxModal,
   setEditProductModal,
   setIsOpen,
+  setSortServiciblity,
 }: any) {
   const [allProducts, setAllProducts]: any = useState([]);
   const [codInfo, setCodInfo]: any = useState({
@@ -110,13 +111,11 @@ function BoxInfo({
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
-    // set unitPrice-------------------------------------------------------------------
+
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
-    //-------------------------------------------------------------------
 
-    //
     obj.boxInfo[index].products[productIndex].appliedWeight =
       baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
@@ -136,6 +135,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const removeUnit = (productIndex: number) => {
@@ -192,6 +192,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const OnChangeHandler = (e: any) => {
@@ -204,6 +205,7 @@ function BoxInfo({
         boxInfo: updatedBoxInfo,
       };
     });
+    setSortServiciblity("");
   };
 
   useEffect(() => {
@@ -224,7 +226,7 @@ function BoxInfo({
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2  rounded`}
+        className={`px-4 pt-2 pb-4 my-2  rounded-lg`}
         style={{ backgroundColor: getColorByIndex(index) }}
       >
         <div className="gap-y-4">
@@ -240,12 +242,13 @@ function BoxInfo({
                 <div className="flex gap-x-4">
                   <button
                     className=""
-                    onClick={() =>
+                    onClick={() => {
                       setEditBoxModal({
                         isOpen: true,
                         state: { id: index, data: data },
-                      })
-                    }
+                      });
+                      setSortServiciblity("");
+                    }}
                   >
                     <img src={editIcon} alt="" className="w-[22px]" />
                   </button>
@@ -274,7 +277,7 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    labelClassName={`!text-black  !bg-[${getColorByIndex(
+                    labelClassName={`!text-black !bg-[${getColorByIndex(
                       index
                     )}]`}
                     isDisabled={true}
@@ -333,23 +336,26 @@ function BoxInfo({
                   {allProducts.length}
                   {")"}
                 </div>
-                <div className="flex justify-center items-center ml-6">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditProductModal({
-                        isOpen: true,
-                        state: { id: index, data: data?.products },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[20px]" />
-                  </button>
-                </div>
+                {allProducts.length > 0 && (
+                  <div className="flex justify-center items-center ml-6">
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditProductModal({
+                          isOpen: true,
+                          state: { id: index, data: data?.products },
+                        });
+                        setSortServiciblity("");
+                      }}
+                    >
+                      <img src={editIcon} alt="" className="w-[20px]" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div
-              className={`!transition-all gap-y-2 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
+              className={`!transition-all gap-y-1 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
                 allProducts.length > 0 && " border-x-[#E8E8E8]"
               } shadow-none`}
               data-cy="product-list"
@@ -438,7 +444,10 @@ function BoxInfo({
 
               <button
                 className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
-                onClick={() => setProductModal({ isOpen: true, id: index })}
+                onClick={() => {
+                  setProductModal({ isOpen: true, id: index });
+                  setSortServiciblity("");
+                }}
               >
                 ADD PRODUCT
               </button>

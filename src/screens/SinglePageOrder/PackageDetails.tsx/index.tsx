@@ -10,7 +10,12 @@ import EditBoxModal from "./components/editBoxModal";
 import EditProductModal from "./components/editProductModal";
 import OrderIdModal from "./components/orderIdModal";
 
-function PackageDetails({ packageDetails, order, setOrder }: any) {
+function PackageDetails({
+  packageDetails,
+  order,
+  setOrder,
+  setSortServiciblity,
+}: any) {
   const [boxModal, setBoxModal]: any = useState(false);
   const [boxInfoData, setBoxInfoData] = useState([]);
   const [productModal, setProductModal]: any = useState({
@@ -34,6 +39,7 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
     let tempOrder = { ...order };
     tempOrder?.boxInfo.splice(boxIndex, 1);
     setOrder(tempOrder);
+    setSortServiciblity("");
   }
 
   function removeProduct(boxIndex: any, productIndex: any) {
@@ -65,6 +71,7 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
     tempOrder.boxInfo[boxIndex].appliedWeight = updateBoxAppliedWeight;
 
     setOrder(tempOrder);
+    setSortServiciblity("");
   }
 
   useEffect(() => {
@@ -102,7 +109,10 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
             )} */}
             <button
               className="flex justify-center items-center cursor-pointer"
-              onClick={() => setBoxModal(true)}
+              onClick={() => {
+                setBoxModal(true);
+                setSortServiciblity("");
+              }}
             >
               <img src={addIcon} alt="" />
             </button>
@@ -125,6 +135,7 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
                     setEditBoxModal={setEditBoxModal}
                     setEditProductModal={setEditProductModal}
                     setIsOpen={setopenOrderIdModal}
+                    setSortServiciblity={setSortServiciblity}
                   />
                 </div>
               );
