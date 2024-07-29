@@ -389,51 +389,55 @@ function BoxInfo({
                           data-cy={`product-box-${i}`}
                         />
                         <div className="flex items-center p-1 lg:p-2 w-[100px]  gap-2 !mr-2 rounded-lg">
-                          {!showDownloadLebal && (
-                            <div className="bg-transparent">
-                              <img
-                                src={subtractIcon}
-                                alt=""
-                                className="cursor-pointer w-[15px]"
-                                onClick={() => {
-                                  removeUnit(i);
-                                  setInvoiceValueWithProductPrice();
-                                }}
-                                data-cy={`remove-unit-${i}`}
-                              />
-                            </div>
-                          )}
+                          <button
+                            className="bg-transparent"
+                            disabled={showDownloadLebal}
+                          >
+                            <img
+                              src={subtractIcon}
+                              alt=""
+                              className="cursor-pointer w-[15px]"
+                              onClick={() => {
+                                removeUnit(i);
+                                setInvoiceValueWithProductPrice();
+                              }}
+                              data-cy={`remove-unit-${i}`}
+                            />
+                          </button>
+
                           <div>
                             <p>{e.qty}</p>
                           </div>
-                          {!showDownloadLebal && (
-                            <div>
-                              <img
-                                src={addIcon}
-                                className="cursor-pointer"
-                                alt=""
-                                onClick={() => {
-                                  addUnit(i);
-                                  setInvoiceValueWithProductPrice();
-                                }}
-                                data-cy={`add-unit-${i}`}
-                              />
-                            </div>
-                          )}
 
-                          {!showDownloadLebal && (
-                            <button
-                              className={` ml-2 cursor-pointer `}
-                              data-cy={`delete-product-${i}`}
-                              onClick={() => removeProduct(index, i)}
-                            >
-                              <img
-                                src={DeleteIcon}
-                                className={`!h-4 !w-4 `}
-                                alt=""
-                              />
-                            </button>
-                          )}
+                          <button disabled={showDownloadLebal}>
+                            <img
+                              src={addIcon}
+                              className="cursor-pointer"
+                              alt=""
+                              onClick={() => {
+                                addUnit(i);
+                                setInvoiceValueWithProductPrice();
+                              }}
+                              data-cy={`add-unit-${i}`}
+                            />
+                          </button>
+
+                          <button
+                            className={` ml-2 ${
+                              showDownloadLebal
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } `}
+                            data-cy={`delete-product-${i}`}
+                            onClick={() => removeProduct(index, i)}
+                            disabled={showDownloadLebal}
+                          >
+                            <img
+                              src={DeleteIcon}
+                              className={`!h-4 !w-4 `}
+                              alt=""
+                            />
+                          </button>
                         </div>
                       </div>
 

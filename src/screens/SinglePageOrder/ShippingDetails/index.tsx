@@ -20,6 +20,7 @@ interface IIndexProps {
   setOrder?: any;
   setSortServiciblity: any;
   sortServiceiblity: any;
+  showDownloadLebal: any;
 }
 
 const Index: React.FunctionComponent<IIndexProps> = ({
@@ -27,6 +28,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   setOrder,
   setSortServiciblity,
   sortServiceiblity,
+  showDownloadLebal,
 }: IIndexProps) => {
   function validateForServicebility(order: any) {
     const pickupDetailsValid =
@@ -46,21 +48,6 @@ const Index: React.FunctionComponent<IIndexProps> = ({
 
     return pickupDetailsValid && deliveryDetailsValid && boxInfoValid;
   }
-
-  // useEffect(() => {
-  //   if (validateForServicebility(order)) {
-  //     setOrder((prevState: any) => {
-  //       return {
-  //         ...prevState,
-  //         courierPartner: "",
-  //         serviceMode: "",
-  //         totalPrice: 0,
-  //         partnerServiceName: "",
-  //       };
-  //     });
-  //   }
-  //   setSortServiciblity("");
-  // }, [order, order?.pickupDetails, order?.deliveryDetails]);
 
   return (
     <>
@@ -119,6 +106,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
               state={order}
               setFunc={setOrder}
               disabled={!validateForServicebility(order)}
+              showDownloadLebal={showDownloadLebal}
             />
           </div>
         </div>
