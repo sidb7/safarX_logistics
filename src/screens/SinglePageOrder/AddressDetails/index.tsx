@@ -35,6 +35,7 @@ interface IAddressCardDetailsProps {
   onDeliveryDetailsChange: (newDeliveryDetails: IDeliveryDetails) => void;
   order: any;
   setSortServiciblity: any;
+  showDownloadLebal: boolean;
 }
 
 const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
@@ -44,6 +45,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   onDeliveryDetailsChange,
   order,
   setSortServiciblity,
+  showDownloadLebal,
 }) => {
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
@@ -110,14 +112,16 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
               {type} Details
             </p>
           </div>
-          <div
-            onClick={() => {
-              handleEditClick(type === "Pickup" ? "pickup" : "delivery");
-              setSortServiciblity("");
-            }}
-          >
-            <img src={EditIcon} alt="edit" className="cursor-pointer" />
-          </div>
+          {!showDownloadLebal && (
+            <div
+              onClick={() => {
+                handleEditClick(type === "Pickup" ? "pickup" : "delivery");
+                setSortServiciblity("");
+              }}
+            >
+              <img src={EditIcon} alt="edit" className="cursor-pointer" />
+            </div>
+          )}
         </div>
         <div className="flex flex-col p-3 gap-y-2">
           <div className="flex gap-x-5">
@@ -190,11 +194,6 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   };
   const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
-
-  // ${
-  //       isPickupAddressEmpty || isDeliveryAddressEmpty
-  //         ? "border-[1px] border-[#004EFF] rounded-md "
-  //         : "border-[1px] border-[#E8E8E8] rounded-md "}
 
   return (
     <>
