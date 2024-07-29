@@ -192,8 +192,6 @@ const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const ACTIVATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/activatePickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
-const GET_ALL_ADDRESSS = `${SELLER_BASE_URL}/pickupAddress/getAllAddress`;
-const UPDATE_ALL_ADDRESS = `${SELLER_BASE_URL}/order/bulkUpdateAddress`;
 
 // PAYMENT GATEWAYS
 // Paytm
@@ -627,8 +625,6 @@ export {
   GET_ALLPARTNERS_OF_RULEENGINE,
   FETCH_ZONE_MATRIX,
   // DUPLICATE_ORDER,
-  GET_ALL_ADDRESSS,
-  UPDATE_ALL_ADDRESS,
   GET_COMMUNICATION_RATE_CARD,
   UPDATE_COMMUNICATION_RATE_CARD,
   DOWNLOAD_INVOICE_FROM_S3,
