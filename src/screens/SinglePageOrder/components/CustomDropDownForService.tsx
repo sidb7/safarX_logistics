@@ -158,6 +158,8 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     });
   }, [sortIdentifier]);
 
+  // console.log("")
+
   return (
     <div
       className="relative w-full"
