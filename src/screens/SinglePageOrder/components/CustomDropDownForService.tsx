@@ -19,6 +19,7 @@ interface CustomInputWithDropDownProps {
   state?: any;
   setFunc?: any;
   disabled?: boolean;
+  showDownloadLebal: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -32,6 +33,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   state,
   setFunc,
   disabled = false,
+  showDownloadLebal,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -156,6 +158,8 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     });
   }, [sortIdentifier]);
 
+  // console.log("")
+
   return (
     <div
       className="relative w-full"
@@ -170,7 +174,9 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         label={label}
         autoComplete={"off"}
         value={searchInput}
-        isDisabled={disabled && sortIdentifier.length === 0}
+        isDisabled={
+          (disabled && sortIdentifier.length === 0) || showDownloadLebal
+        }
         name="category"
         onChange={(e) => {
           if (!isDropdownOpen) setIsDropdownOpen(true);
