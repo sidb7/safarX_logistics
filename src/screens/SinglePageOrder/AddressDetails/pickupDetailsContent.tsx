@@ -88,8 +88,10 @@ const PickupDetailsContent: React.FunctionComponent<
 
   const handleLandmarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setLocalLandmark(value);
-    validateField("landmark", value);
+    setLocalLandmark({
+      ...localLandmark,
+      landmark: value,
+    });
   };
 
   const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +158,7 @@ const PickupDetailsContent: React.FunctionComponent<
     if (Object.values(errors).some((error) => error !== null)) {
       return; // Prevent saving if there are validation errors
     }
+
     onSave(pickupDetails, localLandmark);
     setIsPickupRightModal(false); // Close the modal after saving
   };
@@ -163,6 +166,9 @@ const PickupDetailsContent: React.FunctionComponent<
   const handlePincode = async (pincode: any) => {
     if (pincode.length === 6) {
       const { data: response } = await POST(GET_PINCODE_DATA, { pincode });
+
+      console.log("pincode handler is working");
+
       setLocalLandmark({
         ...localLandmark,
         state: capitalizeFirstLetter(response?.data?.[0]?.state),
@@ -190,6 +196,10 @@ const PickupDetailsContent: React.FunctionComponent<
       }));
     }
   }, []);
+
+  useEffect(() => {
+    console.log("localLandmark", localLandmark);
+  }, [localLandmark]);
 
   return (
     <>

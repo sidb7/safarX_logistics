@@ -119,6 +119,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             type="radio"
             name="type"
             value={order?.orderType}
+            disabled={showDownloadLebal}
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
             checked={order?.orderType === "B2C"}
             onChange={(e) => {
@@ -139,7 +140,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             value={order?.orderType}
             title="coming soon"
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-            disabled={["INDIVIDUAL"].includes(kycCheck?.businessType)}
+            disabled={
+              ["INDIVIDUAL"].includes(kycCheck?.businessType) ||
+              showDownloadLebal
+            }
             checked={order?.orderType === "B2B"}
             onChange={(e) => {
               setOrder((prevState: any) => {
@@ -200,12 +204,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     );
   };
 
-  // const sumInvoiceValue =
-  //   order?.boxInfo.length > 0 &&
-  //   order?.boxInfo.reduce(
-  //     (sum: any, box: any) => sum + box.codInfo.invoiceValue,
-  //     0
-  //   );
+  const sumInvoiceValue =
+    order?.boxInfo.length > 0 &&
+    order?.boxInfo.reduce(
+      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+      0
+    );
 
   const SummaryColumns = [
     columnsHelper.accessor("serialNo", {
@@ -224,22 +228,22 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
     }),
-    columnsHelper.accessor("orderId", {
-      header: () => {
-        return (
-          <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
-            Order ID
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {info.row.original.orderId || "-"}
-          </div>
-        );
-      },
-    }),
+    // columnsHelper.accessor("orderId", {
+    //   header: () => {
+    //     return (
+    //       <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
+    //         Order ID
+    //       </p>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
+    //         {info.row.original.orderId || "-"}
+    //       </div>
+    //     );
+    //   },
+    // }),
     columnsHelper.accessor("package", {
       header: () => {
         return (
@@ -538,6 +542,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               Summary
             </p>
           </div>
+          {/* <div className="px-5">
+            <div>ORDER ID : {order?.orderId}</div>
+          </div> */}
           {/* table section  */}
           <div className="px-5">
             <CustomTable
@@ -653,6 +660,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   onDeliveryDetailsChange={handleDeliveryDetailsChange}
                   order={order}
                   setSortServiciblity={setSortServiciblity}
+                  showDownloadLebal={showDownloadLebal}
                 />
               </div>
               <div className=" rounded !max-h-[450px] overflow-hidden">
@@ -661,11 +669,22 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   order={order}
                   setOrder={setOrder}
                   setSortServiciblity={setSortServiciblity}
+                  showDownloadLebal={showDownloadLebal}
                 />
               </div>
 
-              <div className="border p-3 rounded gap-x-4 flex items-center">
-                <div className="md:!w-[50%] ">
+              <div
+                className={`border p-3 rounded gap-x-4 flex items-center ${
+                  order?.orderType === "B2B" &&
+                  sumInvoiceValue >= 50000 &&
+                  "justify-between"
+                }`}
+              >
+                <div
+                  className={`${
+                    order?.orderType === "B2B" ? "md:!w-[35%]" : "md:!w-[50%]"
+                  }`}
+                >
                   <CustomInputBox
                     isRightIcon={true}
                     containerStyle=""
@@ -681,6 +700,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       });
                       setSortServiciblity("");
                     }}
+                    isDisabled={showDownloadLebal}
                     onClick={() => {
                       const orderId = generateUniqueCode(8, 12);
                       setOrder((prevState: any) => {
@@ -703,12 +723,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         name="paymentMode"
                         value="COD"
                         disabled={
-                          Array.isArray(order?.boxInfo) &&
-                          order?.boxInfo.length === 0
+                          (Array.isArray(order?.boxInfo) &&
+                            order?.boxInfo.length === 0) ||
+                          showDownloadLebal
                         }
                         className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                         checked={paymentMode === "COD"}
-                        onChange={(e: any) => paymentModeToggle(e.target.value)}
+                        onChange={(e: any) => {
+                          paymentModeToggle(e.target.value);
+                        }}
                       />
                       <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
                         COD
@@ -724,8 +747,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       name="paymentMode"
                       value="PREPAID"
                       disabled={
-                        Array.isArray(order?.boxInfo) &&
-                        order?.boxInfo.length === 0
+                        (Array.isArray(order?.boxInfo) &&
+                          order?.boxInfo.length === 0) ||
+                        showDownloadLebal
                       }
                       className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                       checked={paymentMode === "PREPAID"}
@@ -736,6 +760,27 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     </span>
                   </div>
                 </div>
+                {["B2B"].includes(order?.orderType) &&
+                  sumInvoiceValue >= 50000 && (
+                    <div className="md:!w-[35%]">
+                      <CustomInputBox
+                        inputType="text"
+                        label="Enter Eway Bill No."
+                        name="eWayBillNo"
+                        isDisabled={showDownloadLebal}
+                        value={order?.ewaybillNumber}
+                        onChange={(e) => {
+                          setOrder((prevState: any) => {
+                            return {
+                              ...prevState,
+                              eWayBillNo: e.target.value,
+                            };
+                          });
+                          setSortServiciblity("");
+                        }}
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           </div>

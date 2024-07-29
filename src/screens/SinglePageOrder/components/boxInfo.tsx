@@ -37,6 +37,7 @@ function BoxInfo({
   setEditProductModal,
   setIsOpen,
   setSortServiciblity,
+  showDownloadLebal,
 }: any) {
   const [allProducts, setAllProducts]: any = useState([]);
   const [codInfo, setCodInfo]: any = useState({
@@ -238,24 +239,25 @@ function BoxInfo({
                     {capitalizeFirstLetter(data?.name)}
                   </div>
                 </div>
-
-                <div className="flex gap-x-4">
-                  <button
-                    className=""
-                    onClick={() => {
-                      setEditBoxModal({
-                        isOpen: true,
-                        state: { id: index, data: data },
-                      });
-                      setSortServiciblity("");
-                    }}
-                  >
-                    <img src={editIcon} alt="" className="w-[22px]" />
-                  </button>
-                  <button onClick={() => removeBox(index)}>
-                    <img src={deleteIcon} alt="" className="w-[22px]" />
-                  </button>
-                </div>
+                {!showDownloadLebal && (
+                  <div className="flex gap-x-4">
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditBoxModal({
+                          isOpen: true,
+                          state: { id: index, data: data },
+                        });
+                        setSortServiciblity("");
+                      }}
+                    >
+                      <img src={editIcon} alt="" className="w-[22px]" />
+                    </button>
+                    <button onClick={() => removeBox(index)}>
+                      <img src={deleteIcon} alt="" className="w-[22px]" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="flex text-[16px] items-center ">
@@ -311,19 +313,20 @@ function BoxInfo({
                   </div>
                 )}
 
-                {codInfo?.codInfo?.invoiceValue >= 50000 && (
-                  <button
-                    className="text-[#004EFF] font-bold font-Open"
-                    onClick={() =>
-                      setIsOpen({
-                        state: { id: index, data: data },
-                        isOpen: true,
-                      })
-                    }
-                  >
-                    EWAY BILL
-                  </button>
-                )}
+                {codInfo?.codInfo?.invoiceValue >= 50000 &&
+                  order?.orderType === "B2C" && (
+                    <button
+                      className="text-[#004EFF] font-bold font-Open"
+                      onClick={() =>
+                        setIsOpen({
+                          state: { id: index, data: data },
+                          isOpen: true,
+                        })
+                      }
+                    >
+                      EWAY BILL
+                    </button>
+                  )}
               </div>
             </div>
           </div>
@@ -336,7 +339,7 @@ function BoxInfo({
                   {allProducts.length}
                   {")"}
                 </div>
-                {allProducts.length > 0 && (
+                {allProducts.length > 0 && !showDownloadLebal && (
                   <div className="flex justify-center items-center ml-6">
                     <button
                       className=""
@@ -386,45 +389,51 @@ function BoxInfo({
                           data-cy={`product-box-${i}`}
                         />
                         <div className="flex items-center p-1 lg:p-2 w-[100px]  gap-2 !mr-2 rounded-lg">
-                          <div className="bg-transparent">
-                            <img
-                              src={subtractIcon}
-                              alt=""
-                              className="cursor-pointer w-[15px]"
-                              onClick={() => {
-                                removeUnit(i);
-                                setInvoiceValueWithProductPrice();
-                              }}
-                              data-cy={`remove-unit-${i}`}
-                            />
-                          </div>
+                          {!showDownloadLebal && (
+                            <div className="bg-transparent">
+                              <img
+                                src={subtractIcon}
+                                alt=""
+                                className="cursor-pointer w-[15px]"
+                                onClick={() => {
+                                  removeUnit(i);
+                                  setInvoiceValueWithProductPrice();
+                                }}
+                                data-cy={`remove-unit-${i}`}
+                              />
+                            </div>
+                          )}
                           <div>
                             <p>{e.qty}</p>
                           </div>
-                          <div>
-                            <img
-                              src={addIcon}
-                              className="cursor-pointer"
-                              alt=""
-                              onClick={() => {
-                                addUnit(i);
-                                setInvoiceValueWithProductPrice();
-                              }}
-                              data-cy={`add-unit-${i}`}
-                            />
-                          </div>
+                          {!showDownloadLebal && (
+                            <div>
+                              <img
+                                src={addIcon}
+                                className="cursor-pointer"
+                                alt=""
+                                onClick={() => {
+                                  addUnit(i);
+                                  setInvoiceValueWithProductPrice();
+                                }}
+                                data-cy={`add-unit-${i}`}
+                              />
+                            </div>
+                          )}
 
-                          <button
-                            className={` ml-2 cursor-pointer `}
-                            data-cy={`delete-product-${i}`}
-                            onClick={() => removeProduct(index, i)}
-                          >
-                            <img
-                              src={DeleteIcon}
-                              className={`!h-4 !w-4 `}
-                              alt=""
-                            />
-                          </button>
+                          {!showDownloadLebal && (
+                            <button
+                              className={` ml-2 cursor-pointer `}
+                              data-cy={`delete-product-${i}`}
+                              onClick={() => removeProduct(index, i)}
+                            >
+                              <img
+                                src={DeleteIcon}
+                                className={`!h-4 !w-4 `}
+                                alt=""
+                              />
+                            </button>
+                          )}
                         </div>
                       </div>
 
@@ -439,19 +448,22 @@ function BoxInfo({
                   );
                 })}
             </div>
-            <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
-              <img src={ButtonIcon} alt="Add Product" width="px" />
 
-              <button
-                className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
-                onClick={() => {
-                  setProductModal({ isOpen: true, id: index });
-                  setSortServiciblity("");
-                }}
-              >
-                ADD PRODUCT
+            {!showDownloadLebal && (
+              <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
+                <img src={ButtonIcon} alt="Add Product" width="px" />
+
+                <button
+                  className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
+                  onClick={() => {
+                    setProductModal({ isOpen: true, id: index });
+                    setSortServiciblity("");
+                  }}
+                >
+                  ADD PRODUCT
+                </button>
               </button>
-            </button>
+            )}
           </div>
         </div>
       </div>
