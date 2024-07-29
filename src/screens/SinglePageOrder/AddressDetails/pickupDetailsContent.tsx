@@ -5,9 +5,6 @@ import CrossIcon from "../../../assets/CloseIcon.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import InfoCircle from "../../../assets/info-circle.svg";
 import SearchDropDown from "../components/searchDropDown";
-import { gstRegex } from "../../../utils/regexCheck";
-import ErrorIcon from "../../../assets/common/info-circle.svg";
-
 import {
   GET_PINCODE_DATA,
   RETURNING_USER_PICKUP,
@@ -24,7 +21,6 @@ interface IPickupDetails {
   fullAddress: string;
   pincode: number;
   contact: IContact;
-  gstNumber?: any;
 }
 
 interface IPickupDetailsContentProps {
@@ -32,7 +28,6 @@ interface IPickupDetailsContentProps {
   landmark: string;
   setIsPickupRightModal: (value: boolean) => void;
   onSave: (details: IPickupDetails, landmark: string) => void;
-  order: any;
 }
 
 interface ValidationErrors {
@@ -45,12 +40,9 @@ interface ValidationErrors {
 
 const PickupDetailsContent: React.FunctionComponent<
   IPickupDetailsContentProps
-> = ({ details, landmark, setIsPickupRightModal, onSave, order }) => {
+> = ({ details, landmark, setIsPickupRightModal, onSave }) => {
   const [pickupDetails, setPickupDetails] = useState<IPickupDetails>(details);
   const [localLandmark, setLocalLandmark] = useState<any>(landmark);
-  const [gstError, setgstError] = useState<any>("");
-  let kycCheck: any = localStorage.getItem("kycValue");
-  kycCheck = JSON.parse(kycCheck);
 
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
     name: null,
@@ -156,6 +148,7 @@ const PickupDetailsContent: React.FunctionComponent<
     if (Object.values(errors).some((error) => error !== null)) {
       return; // Prevent saving if there are validation errors
     }
+
     onSave(pickupDetails, localLandmark);
     setIsPickupRightModal(false); // Close the modal after saving
   };
@@ -173,23 +166,11 @@ const PickupDetailsContent: React.FunctionComponent<
   };
 
   const autoSetData = (pickupDetails: any, landmark: any) => {
-    setPickupDetails((prevDetails) => ({
-      ...prevDetails,
-      contact: pickupDetails?.contact,
-      fullAddress: pickupDetails?.fullAddress,
-      pincode: pickupDetails?.pincode,
-    }));
+    setPickupDetails(pickupDetails);
     setLocalLandmark(landmark);
   };
 
-  useEffect(() => {
-    if (kycCheck?.kycDetails?.gstNumber && ["B2B"].includes(order?.orderType)) {
-      setPickupDetails((prevDetails) => ({
-        ...prevDetails,
-        gstNumber: kycCheck?.kycDetails?.gstNumber,
-      }));
-    }
-  }, []);
+  // RETURNING_USER_PICKUP;
 
   return (
     <>
@@ -305,45 +286,6 @@ const PickupDetailsContent: React.FunctionComponent<
               )}
             </div>
           </div>
-          {["B2B"].includes(order?.orderType) && (
-            <div>
-              <CustomInputBox
-                containerStyle="md:!w-auto"
-                label="GST Number"
-                value={pickupDetails?.gstNumber}
-                id={"gstNumber"}
-                name="gstNumber"
-                maxLength={15}
-                isDisabled={true}
-                className={`${
-                  gstError !== "" &&
-                  gstError !== undefined &&
-                  "border-[#F35838]"
-                }  md:!w-[100%]   !font-Open`}
-                labelClassName="!font-Open"
-                onChange={(e: any) => {
-                  const gstValue = e.target.value.toUpperCase();
-
-                  if (gstRegex.test(gstValue)) {
-                    handleInputChange(e);
-                  } else {
-                    setgstError("Enter Valid GST Number");
-                  }
-                }}
-              />
-
-              {/* To display error */}
-
-              {gstError !== "" && gstError !== undefined && (
-                <div className="flex items-center gap-x-1 mt-1 ">
-                  <img src={ErrorIcon} alt="" width={10} height={10} />
-                  <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                    {gstError}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
       <div

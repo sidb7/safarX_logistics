@@ -34,10 +34,10 @@ function BoxModal({ onClose, setOrder, order }: any) {
   const [boxInputData, setBoxInputData]: any = useState({
     name: "White Box",
     weightUnit: "Kg",
-    deadWeight: 2.5,
-    length: 1.5,
-    breadth: 1.5,
-    height: 1.5,
+    deadWeight: 0.5,
+    length: 0.5,
+    breadth: 0.5,
+    height: 0.5,
     measureUnit: "cm",
     products: [],
     codInfo: {

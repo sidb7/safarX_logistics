@@ -31,7 +31,6 @@ import { tokenKey } from "../../utils/utility";
 import { useSelector } from "react-redux";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { forEach } from "lodash";
-import { Spinner } from "../../components/Spinner";
 
 interface IIndexProps {}
 
@@ -39,9 +38,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [showDownloadLebal, setDownloadLebal] = useState(false);
   const [isDownloadLoading, setDownloadLoading]: any = useState({});
-  const [placeOrderLoader, setplaceOrderLoader] = useState(false);
   const [paymentMode, setPaymentMode] = useState("PREPAID");
-  const [sortServiceiblity, setSortServiciblity] = useState("");
   const [order, setOrder]: any = useState({
     pickupDetails: {
       fullAddress: "",
@@ -73,10 +70,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     brandName: "Google",
     brandLogo: "",
   });
-
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
-
   const [awbListForDownLoad, setAwbListForDownLoad] = useState([]);
 
   const [showAlertBox, setShowAlertBox] = useState(false);
@@ -139,7 +132,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             value={order?.orderType}
             title="coming soon"
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-            disabled={["INDIVIDUAL"].includes(kycCheck?.businessType)}
+            disabled={true}
             checked={order?.orderType === "B2B"}
             onChange={(e) => {
               setOrder((prevState: any) => {
@@ -256,7 +249,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
     }),
-    columnsHelper.accessor(" EwayBill", {
+    columnsHelper.accessor("package", {
       header: () => {
         return (
           <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
@@ -298,7 +291,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     //     );
     //   },
     //   cell: (info: any) => {
-    //
+    //     console.log("rowData", info.row.original?.codInfo?.invoiceValue);
     //     return (
     //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
     //         {info.row.original?.codInfo?.invoiceValue || "-"}
@@ -476,6 +469,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
   const PlaceOrder = async () => {
     let payload = { ...order };
+
     payload.boxInfo = payload.boxInfo.map((box: any) => {
       return {
         ...box,
@@ -488,42 +482,27 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       };
     });
 
-    if (payload?.orderType === "B2B") {
-      if (
-        payload?.pickupDetails?.gstNumber === undefined ||
-        payload?.pickupDetails?.gstNumber.trim() === "" ||
-        payload?.deliveryDetails?.gstNumber === undefined ||
-        payload?.deliveryDetails?.gstNumber.trim() === ""
-      ) {
-        toast.error("Please Enter GST Number");
-        return;
-      }
-    }
-
     if (walletBalance < order?.totalPrice) {
       setShowAlertBox(true);
       return;
     }
+
     try {
-      setplaceOrderLoader(true);
       const { data } = await POST(REVERSE_ORDER, payload);
 
       if (data?.success) {
         const listOfawbs = data?.data[0]?.awbs.map(
-          (awb: any) => `${awb?.tracking?.awb}`
+          (awb: any) => awb?.tracking?.awb
         );
-
         setAwbListForDownLoad(listOfawbs);
-        setplaceOrderLoader(false);
+
         setDownloadLebal(true);
         toast.success(data?.message || "Successfully Placed order");
       } else {
         toast.error(data?.message);
-        setplaceOrderLoader(false);
       }
     } catch (error: any) {
       toast.error(error?.message);
-      setplaceOrderLoader(false);
     }
   };
 
@@ -550,21 +529,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
           {!showDownloadLebal ? (
             <div className="flex justify-center items-center pt-5 pb-12">
-              {placeOrderLoader ? (
-                <div className="flex justify-center items-center py-1 rounded-lg !w-[228px]">
-                  <Spinner />
-                </div>
-              ) : (
-                <OneButton
-                  onClick={PlaceOrder}
-                  text={`Place Order ₹ ${
-                    order?.totalPrice ? order?.totalPrice : 0
-                  } `}
-                  variant="primary"
-                  className="!w-[228px]"
-                  disabled={!validateOrder(order)}
-                />
-              )}
+              <OneButton
+                onClick={PlaceOrder}
+                text={`Place Order ₹ ${
+                  order?.totalPrice ? order?.totalPrice : 0
+                } `}
+                variant="primary"
+                className="!w-[228px]"
+                disabled={!validateOrder(order)}
+              />
             </div>
           ) : (
             <div>
@@ -631,12 +604,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     let tempOrder = { ...order };
     tempOrder.boxInfo.forEach((element: any) => {
       element.codInfo.isCod = e === "COD" ? true : false;
-      element.codInfo.collectableAmount =
-        e !== "COD" ? 0 : element.codInfo.invoiceValue;
     });
     setOrder(tempOrder);
-    setSortServiciblity("");
   };
+
+  console.log("order", order);
 
   return (
     <>
@@ -651,8 +623,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   deliveryDetails={order?.deliveryDetails}
                   onPickupDetailsChange={handlePickupDetailsChange}
                   onDeliveryDetailsChange={handleDeliveryDetailsChange}
-                  order={order}
-                  setSortServiciblity={setSortServiciblity}
                 />
               </div>
               <div className=" rounded !max-h-[450px] overflow-hidden">
@@ -660,7 +630,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   packageDetails={order?.boxInfo}
                   order={order}
                   setOrder={setOrder}
-                  setSortServiciblity={setSortServiciblity}
                 />
               </div>
 
@@ -679,14 +648,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       setOrder((prevState: any) => {
                         return { ...prevState, orderId: e.target.value };
                       });
-                      setSortServiciblity("");
                     }}
                     onClick={() => {
                       const orderId = generateUniqueCode(8, 12);
                       setOrder((prevState: any) => {
                         return { ...prevState, orderId: orderId };
                       });
-                      setSortServiciblity("");
                     }}
                     visibility={true}
                     setVisibility={() => {}}
@@ -696,25 +663,23 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 </div>
 
                 <div className="flex gap-x-4 items-center">
-                  {order?.orderType === "B2C" && (
-                    <div className="flex justify-center items-center">
-                      <input
-                        type="radio"
-                        name="paymentMode"
-                        value="COD"
-                        disabled={
-                          Array.isArray(order?.boxInfo) &&
-                          order?.boxInfo.length === 0
-                        }
-                        className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                        checked={paymentMode === "COD"}
-                        onChange={(e: any) => paymentModeToggle(e.target.value)}
-                      />
-                      <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
-                        COD
-                      </span>
-                    </div>
-                  )}
+                  <div className="flex justify-center items-center">
+                    <input
+                      type="radio"
+                      name="paymentMode"
+                      value="COD"
+                      disabled={
+                        Array.isArray(order?.boxInfo) &&
+                        order?.boxInfo.length === 0
+                      }
+                      className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                      checked={paymentMode === "COD"}
+                      onChange={(e: any) => paymentModeToggle(e.target.value)}
+                    />
+                    <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                      COD
+                    </span>
+                  </div>
                   <div
                     className="flex justify-center items-center "
                     title="comming soon"
@@ -742,12 +707,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           <div className="flex-1">
             <div className="flex flex-col gap-y-5">
               <div>
-                <ShippingDetails
-                  order={order}
-                  setOrder={setOrder}
-                  setSortServiciblity={setSortServiciblity}
-                  sortServiceiblity={sortServiceiblity}
-                />
+                <ShippingDetails order={order} setOrder={setOrder} />
               </div>
               {order?.boxInfo?.length > 0 && order?.courierPartner && (
                 <>

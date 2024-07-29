@@ -18,16 +18,14 @@ import CustomSearchBoxForService from "../components/CustomDropDownForService";
 interface IIndexProps {
   order?: any;
   setOrder?: any;
-  setSortServiciblity: any;
-  sortServiceiblity: any;
 }
 
 const Index: React.FunctionComponent<IIndexProps> = ({
   order,
   setOrder,
-  setSortServiciblity,
-  sortServiceiblity,
 }: IIndexProps) => {
+  const [sortServiceiblity, setSortServiciblity] = useState("");
+
   function validateForServicebility(order: any) {
     const pickupDetailsValid =
       order.pickupDetails.fullAddress.trim() !== "" &&
@@ -47,20 +45,20 @@ const Index: React.FunctionComponent<IIndexProps> = ({
     return pickupDetailsValid && deliveryDetailsValid && boxInfoValid;
   }
 
-  // useEffect(() => {
-  //   if (validateForServicebility(order)) {
-  //     setOrder((prevState: any) => {
-  //       return {
-  //         ...prevState,
-  //         courierPartner: "",
-  //         serviceMode: "",
-  //         totalPrice: 0,
-  //         partnerServiceName: "",
-  //       };
-  //     });
-  //   }
-  //   setSortServiciblity("");
-  // }, [order, order?.pickupDetails, order?.deliveryDetails]);
+  useEffect(() => {
+    if (validateForServicebility(order)) {
+      setOrder((prevState: any) => {
+        return {
+          ...prevState,
+          courierPartner: "",
+          serviceMode: "",
+          totalPrice: 0,
+        };
+      });
+    }
+    console.log("setSortServiciblity === `` ");
+    setSortServiciblity("");
+  }, [order?.boxInfo, order?.pickupDetails, order?.deliveryDetails]);
 
   return (
     <>
@@ -77,7 +75,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
             <div className="flex justify-center items-center">
               <input
                 type="radio"
-                name="partners"
+                name="singlePage"
                 value="Cheapest"
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 // disabled={true}
@@ -94,7 +92,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
             >
               <input
                 type="radio"
-                name="partners"
+                name="singlePage"
                 value="Fastest"
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 disabled={true}

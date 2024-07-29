@@ -11,8 +11,6 @@ import {
 import SearchDropDown from "../components/searchDropDown";
 import { POST } from "../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../utils/utility";
-import ErrorIcon from "../../../assets/common/info-circle.svg";
-import { gstRegex } from "../../../utils/regexCheck";
 
 interface IContact {
   name: string;
@@ -31,7 +29,6 @@ interface IDeliveryDetailsContentProps {
   landmark: string;
   setIsDeliveryRightModal: (value: boolean) => void;
   onSave: (details: IDeliveryDetails, landmark: string) => void;
-  order: any;
 }
 
 interface ValidationErrors {
@@ -40,12 +37,11 @@ interface ValidationErrors {
   pincode: string | null;
   fullAddress: string | null;
   landmark: string | null;
-  gstNumber?: string | null;
 }
 
 const DeliveryDetailsContent: React.FunctionComponent<
   IDeliveryDetailsContentProps
-> = ({ details, landmark, setIsDeliveryRightModal, onSave, order }) => {
+> = ({ details, landmark, setIsDeliveryRightModal, onSave }) => {
   const [deliveryDetails, setDeliveryDetails] =
     useState<IDeliveryDetails>(details);
   const [localLandmark, setLocalLandmark] = useState<any>(landmark);
@@ -55,10 +51,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
     pincode: null,
     fullAddress: null,
     landmark: null,
-    gstNumber: null,
   });
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
 
   useEffect(() => {
     setDeliveryDetails(details);
@@ -151,16 +144,6 @@ const DeliveryDetailsContent: React.FunctionComponent<
       landmark: localLandmark ? null : "Landmark is required",
     };
 
-    if (order?.orderType === "B2B") {
-      if (
-        deliveryDetails?.gstNumber == undefined ||
-        deliveryDetails?.gstNumber.trim() === ""
-      ) {
-        errors.gstNumber = "GST Number is required";
-      } else if (!gstRegex.test(deliveryDetails?.gstNumber)) {
-        errors.gstNumber = "Enter Valid GST Number";
-      }
-    }
     setValidationErrors(errors);
 
     if (Object.values(errors).some((error) => error !== null)) {
@@ -302,37 +285,6 @@ const DeliveryDetailsContent: React.FunctionComponent<
               )}
             </div>
           </div>
-
-          {["B2B"].includes(order?.orderType) && (
-            <div>
-              <CustomInputBox
-                containerStyle="md:!w-auto"
-                label="GST Number"
-                value={deliveryDetails?.gstNumber}
-                id={"gstNumber"}
-                name="gstNumber"
-                maxLength={15}
-                className={`${
-                  validationErrors.gstNumber !== "" &&
-                  validationErrors.gstNumber !== null &&
-                  "border-[#F35838]"
-                }  md:!w-[100%]   !font-Open`}
-                labelClassName="!font-Open"
-                onChange={(e: any) => {
-                  handleInputChange(e);
-                }}
-              />
-              {validationErrors.gstNumber !== "" &&
-                validationErrors.gstNumber !== null && (
-                  <div className="flex items-center gap-x-1 mt-1 ">
-                    <img src={ErrorIcon} alt="" width={10} height={10} />
-                    <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                      {validationErrors.gstNumber}
-                    </span>
-                  </div>
-                )}
-            </div>
-          )}
         </div>
       </div>
       <div

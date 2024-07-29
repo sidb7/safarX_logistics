@@ -23,8 +23,8 @@ const TimerCounter = (props: IProps) => {
   const [clickedOnce, setClickedOnce] = useState<any>(false);
 
   useEffect(() => {
-    let atype = localStorage.getItem("aadharNumber");
     let btype = localStorage.getItem("businessType");
+    let atype = localStorage.getItem("aadharNumber");
     let gtype = localStorage.getItem("gstNumber");
 
     setBusinessType(btype);

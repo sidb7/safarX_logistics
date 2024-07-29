@@ -135,7 +135,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
         codInfo: {
           ...box.codInfo,
           invoiceValue: updatedInvoiceValue,
-          collectableAmount: 0,
+          collectableAmount: updatedInvoiceValue,
         },
         appliedWeight: updatedAppliedWeight,
       };
