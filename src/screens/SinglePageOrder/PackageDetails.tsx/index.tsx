@@ -15,6 +15,7 @@ function PackageDetails({
   order,
   setOrder,
   setSortServiciblity,
+  showDownloadLebal,
 }: any) {
   const [boxModal, setBoxModal]: any = useState(false);
   const [boxInfoData, setBoxInfoData] = useState([]);
@@ -102,20 +103,17 @@ function PackageDetails({
             </div>
           </div>
           <div className="flex gap-x-4">
-            {/* {packageDetails.length > 0 && (
-              <div className="border text-[15px] py-1 px-2 rounded">
-                Total Applied Weight : 33.6 Kg
-              </div>
-            )} */}
-            <button
-              className="flex justify-center items-center cursor-pointer"
-              onClick={() => {
-                setBoxModal(true);
-                setSortServiciblity("");
-              }}
-            >
-              <img src={addIcon} alt="" />
-            </button>
+            {!showDownloadLebal && (
+              <button
+                className="flex justify-center items-center cursor-pointer"
+                onClick={() => {
+                  setBoxModal(true);
+                  setSortServiciblity("");
+                }}
+              >
+                <img src={addIcon} alt="" />
+              </button>
+            )}
           </div>
         </div>
         <div className=" max-h-[300px] pb-[20px] customScroll">
@@ -136,6 +134,7 @@ function PackageDetails({
                     setEditProductModal={setEditProductModal}
                     setIsOpen={setopenOrderIdModal}
                     setSortServiciblity={setSortServiciblity}
+                    showDownloadLebal={showDownloadLebal}
                   />
                 </div>
               );
