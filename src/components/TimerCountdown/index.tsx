@@ -20,6 +20,7 @@ const TimerCounter = (props: IProps) => {
   const [clientId, setClientId] = useState<any>();
   const [aadharNumber, setAadharNumber] = useState<any>();
   const [gstNumber, setGstNumber] = useState<any>();
+  const [clickedOnce, setClickedOnce] = useState<any>(false);
 
   useEffect(() => {
     let atype = localStorage.getItem("aadharNumber");
@@ -39,6 +40,7 @@ const TimerCounter = (props: IProps) => {
 
       if (seconds === 0) {
         if (minutes === 0) {
+          setClickedOnce(false);
           clearInterval(interval);
         } else {
           setSeconds(sec);
@@ -95,17 +97,23 @@ const TimerCounter = (props: IProps) => {
   };
 
   const resendOtp = async () => {
+    setClickedOnce(true);
     if (
       businessType === "individual" ||
       (businessType === "business" && routeCheck === true)
     ) {
-      resentAadharOtp();
+      {
+        resentAadharOtp();
+      }
     } else {
-      resentGstOtp();
+      {
+        resentGstOtp();
+      }
     }
   };
 
   const resendOtpTimer = () => {
+    console.log("resend timer");
     const minute = minutes < 10 ? `0${minutes}` : minutes;
     const second = seconds < 10 ? `0${seconds}` : seconds;
 
@@ -128,7 +136,7 @@ const TimerCounter = (props: IProps) => {
 
       <div className="flex items-center gap-x-2 font-normal text-[12px] self-center">
         <p className="text-[#494949] font-Open font-normal text-xs leading-4">
-          Didn't Receive Code ?
+          {!clickedOnce && <span>Didn't Receive Code ?</span>}
           <span
             className={`mx-1 text-[#004EFF] text-[12px] font-extrabold leading-5  ${
               seconds > 0 || (seconds > 0 && minutes === 0)
@@ -141,7 +149,7 @@ const TimerCounter = (props: IProps) => {
               }
             }}
           >
-            Resend
+            {!clickedOnce && <span>Resend</span>}
           </span>
         </p>
       </div>
