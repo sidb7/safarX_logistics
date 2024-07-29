@@ -792,6 +792,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   setOrder={setOrder}
                   setSortServiciblity={setSortServiciblity}
                   sortServiceiblity={sortServiceiblity}
+                  showDownloadLebal={showDownloadLebal}
                 />
               </div>
               {order?.boxInfo?.length > 0 && order?.courierPartner && (
