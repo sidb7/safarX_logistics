@@ -113,10 +113,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     );
   }
 
-  useEffect(() => {
-    console.log("order", order);
-  }, [order]);
-
   const Buttons = (className?: string) => {
     return (
       <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
