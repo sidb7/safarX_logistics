@@ -10,6 +10,7 @@ import DeliveryDetailsContent from "./deliveryDetailsContent";
 import EditIcon from "../../../assets/editIcon.svg";
 import ProfileIcon from "../../../assets/Catalogue/profileIcon.svg";
 import ContactIcon from "../../../assets/ReturningUser/phoneIcon.svg";
+import gstIcon from "../../../assets/gstIcon.svg";
 import AddressLocationIcon from "../../../assets/serv/location.svg";
 
 interface IContact {
@@ -32,6 +33,9 @@ interface IAddressCardDetailsProps {
   deliveryDetails: IDeliveryDetails;
   onPickupDetailsChange: (newPickupDetails: IPickupDetails) => void;
   onDeliveryDetailsChange: (newDeliveryDetails: IDeliveryDetails) => void;
+  order: any;
+  setSortServiciblity: any;
+  showDownloadLebal: boolean;
 }
 
 const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
@@ -39,6 +43,9 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   deliveryDetails,
   onPickupDetailsChange,
   onDeliveryDetailsChange,
+  order,
+  setSortServiciblity,
+  showDownloadLebal,
 }) => {
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
@@ -55,9 +62,6 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
 
   const [pickupLandmark, setPickupLandmark] = useState<any>("");
   const [deliveryLandmark, setDeliveryLandmark] = useState<any>({});
-
-  console.log("pickupLandmark", pickupLandmark);
-  console.log("deliveryLandmark", deliveryLandmark);
 
   useEffect(() => {
     setPickupAddress(pickupDetails);
@@ -97,26 +101,27 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
     }
   };
 
-  console.log("pickupAddress", pickupAddress);
-
   const renderAddressDetails = (details: any, type: string, landmark: any) => {
     const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} , ${details?.pincode}`;
     return (
       <div>
-        <div className="flex justify-between">
+        <div className="flex justify-between ">
           <div className="flex gap-x-[6px] items-center text-center">
             <img src={WebLocationIcon} alt="locationIcon" />
             <p className="font-Open font-semibold text-[18px] text-[#1C1C1C] leading-5 capitalize">
               {type} Details
             </p>
           </div>
-          <div
-            onClick={() =>
-              handleEditClick(type === "Pickup" ? "pickup" : "delivery")
-            }
-          >
-            <img src={EditIcon} alt="edit" className="cursor-pointer" />
-          </div>
+          {!showDownloadLebal && (
+            <div
+              onClick={() => {
+                handleEditClick(type === "Pickup" ? "pickup" : "delivery");
+                setSortServiciblity("");
+              }}
+            >
+              <img src={EditIcon} alt="edit" className="cursor-pointer" />
+            </div>
+          )}
         </div>
         <div className="flex flex-col p-3 gap-y-2">
           <div className="flex gap-x-5">
@@ -143,6 +148,20 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 </span>
               </p>
             </div>
+            {details.gstNumber && (
+              <div className="flex gap-x-[6px] items-center">
+                <img
+                  src={gstIcon}
+                  alt="phone icon"
+                  className="w-[15px] h-[15px]"
+                />
+                <p className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+                  <span className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+                    {details.gstNumber}
+                  </span>
+                </p>
+              </div>
+            )}
           </div>
           <div className="flex gap-x-[6px]">
             <img
@@ -175,11 +194,6 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   };
   const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
-
-  // ${
-  //       isPickupAddressEmpty || isDeliveryAddressEmpty
-  //         ? "border-[1px] border-[#004EFF] rounded-md "
-  //         : "border-[1px] border-[#E8E8E8] rounded-md "}
 
   return (
     <>
@@ -253,6 +267,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
           landmark={pickupLandmark}
           setIsPickupRightModal={setIsPickupRightModal}
           onSave={handlePickupDetailsSave}
+          order={order}
         />
       </RightSideModal>
 
@@ -268,6 +283,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
           landmark={deliveryLandmark}
           setIsDeliveryRightModal={setIsDeliveryRightModal}
           onSave={handleDeliveryDetailsSave}
+          order={order}
         />
       </RightSideModal>
     </>

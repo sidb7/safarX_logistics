@@ -36,6 +36,8 @@ function BoxInfo({
   setEditBoxModal,
   setEditProductModal,
   setIsOpen,
+  setSortServiciblity,
+  showDownloadLebal,
 }: any) {
   const [allProducts, setAllProducts]: any = useState([]);
   const [codInfo, setCodInfo]: any = useState({
@@ -110,13 +112,11 @@ function BoxInfo({
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
-    // set unitPrice-------------------------------------------------------------------
+
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
-    //-------------------------------------------------------------------
 
-    //
     obj.boxInfo[index].products[productIndex].appliedWeight =
       baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
@@ -136,6 +136,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const removeUnit = (productIndex: number) => {
@@ -192,6 +193,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const OnChangeHandler = (e: any) => {
@@ -204,6 +206,7 @@ function BoxInfo({
         boxInfo: updatedBoxInfo,
       };
     });
+    setSortServiciblity("");
   };
 
   useEffect(() => {
@@ -224,7 +227,7 @@ function BoxInfo({
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2  rounded`}
+        className={`px-4 pt-2 pb-4 my-2  rounded-lg`}
         style={{ backgroundColor: getColorByIndex(index) }}
       >
         <div className="gap-y-4">
@@ -236,23 +239,25 @@ function BoxInfo({
                     {capitalizeFirstLetter(data?.name)}
                   </div>
                 </div>
-
-                <div className="flex gap-x-4">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditBoxModal({
-                        isOpen: true,
-                        state: { id: index, data: data },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[22px]" />
-                  </button>
-                  <button onClick={() => removeBox(index)}>
-                    <img src={deleteIcon} alt="" className="w-[22px]" />
-                  </button>
-                </div>
+                {!showDownloadLebal && (
+                  <div className="flex gap-x-4">
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditBoxModal({
+                          isOpen: true,
+                          state: { id: index, data: data },
+                        });
+                        setSortServiciblity("");
+                      }}
+                    >
+                      <img src={editIcon} alt="" className="w-[22px]" />
+                    </button>
+                    <button onClick={() => removeBox(index)}>
+                      <img src={deleteIcon} alt="" className="w-[22px]" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="flex text-[16px] items-center ">
@@ -274,7 +279,7 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    labelClassName={`!text-black  !bg-[${getColorByIndex(
+                    labelClassName={`!text-black !bg-[${getColorByIndex(
                       index
                     )}]`}
                     isDisabled={true}
@@ -308,19 +313,20 @@ function BoxInfo({
                   </div>
                 )}
 
-                {codInfo?.codInfo?.invoiceValue >= 50000 && (
-                  <button
-                    className="text-[#004EFF] font-bold font-Open"
-                    onClick={() =>
-                      setIsOpen({
-                        state: { id: index, data: data },
-                        isOpen: true,
-                      })
-                    }
-                  >
-                    EWAY BILL
-                  </button>
-                )}
+                {codInfo?.codInfo?.invoiceValue >= 50000 &&
+                  order?.orderType === "B2C" && (
+                    <button
+                      className="text-[#004EFF] font-bold font-Open"
+                      onClick={() =>
+                        setIsOpen({
+                          state: { id: index, data: data },
+                          isOpen: true,
+                        })
+                      }
+                    >
+                      EWAY BILL
+                    </button>
+                  )}
               </div>
             </div>
           </div>
@@ -333,23 +339,26 @@ function BoxInfo({
                   {allProducts.length}
                   {")"}
                 </div>
-                <div className="flex justify-center items-center ml-6">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditProductModal({
-                        isOpen: true,
-                        state: { id: index, data: data?.products },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[20px]" />
-                  </button>
-                </div>
+                {allProducts.length > 0 && !showDownloadLebal && (
+                  <div className="flex justify-center items-center ml-6">
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditProductModal({
+                          isOpen: true,
+                          state: { id: index, data: data?.products },
+                        });
+                        setSortServiciblity("");
+                      }}
+                    >
+                      <img src={editIcon} alt="" className="w-[20px]" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div
-              className={`!transition-all gap-y-2 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
+              className={`!transition-all gap-y-1 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
                 allProducts.length > 0 && " border-x-[#E8E8E8]"
               } shadow-none`}
               data-cy="product-list"
@@ -380,7 +389,10 @@ function BoxInfo({
                           data-cy={`product-box-${i}`}
                         />
                         <div className="flex items-center p-1 lg:p-2 w-[100px]  gap-2 !mr-2 rounded-lg">
-                          <div className="bg-transparent">
+                          <button
+                            className="bg-transparent"
+                            disabled={showDownloadLebal}
+                          >
                             <img
                               src={subtractIcon}
                               alt=""
@@ -391,11 +403,13 @@ function BoxInfo({
                               }}
                               data-cy={`remove-unit-${i}`}
                             />
-                          </div>
+                          </button>
+
                           <div>
                             <p>{e.qty}</p>
                           </div>
-                          <div>
+
+                          <button disabled={showDownloadLebal}>
                             <img
                               src={addIcon}
                               className="cursor-pointer"
@@ -406,12 +420,17 @@ function BoxInfo({
                               }}
                               data-cy={`add-unit-${i}`}
                             />
-                          </div>
+                          </button>
 
                           <button
-                            className={` ml-2 cursor-pointer `}
+                            className={` ml-2 ${
+                              showDownloadLebal
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } `}
                             data-cy={`delete-product-${i}`}
                             onClick={() => removeProduct(index, i)}
+                            disabled={showDownloadLebal}
                           >
                             <img
                               src={DeleteIcon}
@@ -433,16 +452,22 @@ function BoxInfo({
                   );
                 })}
             </div>
-            <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
-              <img src={ButtonIcon} alt="Add Product" width="px" />
 
-              <button
-                className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
-                onClick={() => setProductModal({ isOpen: true, id: index })}
-              >
-                ADD PRODUCT
+            {!showDownloadLebal && (
+              <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
+                <img src={ButtonIcon} alt="Add Product" width="px" />
+
+                <button
+                  className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
+                  onClick={() => {
+                    setProductModal({ isOpen: true, id: index });
+                    setSortServiciblity("");
+                  }}
+                >
+                  ADD PRODUCT
+                </button>
               </button>
-            </button>
+            )}
           </div>
         </div>
       </div>

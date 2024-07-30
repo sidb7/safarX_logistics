@@ -19,6 +19,7 @@ interface CustomInputWithDropDownProps {
   state?: any;
   setFunc?: any;
   disabled?: boolean;
+  showDownloadLebal: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -32,6 +33,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   state,
   setFunc,
   disabled = false,
+  showDownloadLebal,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -122,7 +124,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     setSearchInput(
       `${value?.name} : ${capitalizeFirstLetter(value?.serviceMode)}`
     );
-
     setFunc((prevState: any) => {
       return {
         ...prevState,
@@ -135,10 +136,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   };
 
   useEffect(() => {
-    console.log("sortIdentifier---test--1", sortIdentifier.length, disabled);
     if (sortIdentifier.length !== 0 && disabled === false) {
-      console.log("sortIdentifier---test--2", sortIdentifier.length, disabled);
-
       getServices();
     }
   }, [sortIdentifier, disabled, state]);
@@ -149,9 +147,18 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
       setFilterData([]);
       setArrayValue([]);
     }
-  }, [sortIdentifier, state]);
+    setFunc((prevState: any) => {
+      return {
+        ...prevState,
+        courierPartner: "",
+        serviceMode: "",
+        totalPrice: 0,
+        partnerServiceName: "",
+      };
+    });
+  }, [sortIdentifier]);
 
-  console.log("filterData", filterData);
+  // console.log("")
 
   return (
     <div
@@ -167,7 +174,9 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         label={label}
         autoComplete={"off"}
         value={searchInput}
-        isDisabled={disabled && sortIdentifier.length === 0}
+        isDisabled={
+          (disabled && sortIdentifier.length === 0) || showDownloadLebal
+        }
         name="category"
         onChange={(e) => {
           if (!isDropdownOpen) setIsDropdownOpen(true);

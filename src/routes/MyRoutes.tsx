@@ -536,7 +536,7 @@ const MyRoutes: React.FC = () => {
           />
 
           <Route
-            path="/order"
+            path="/orders/quick-order-place"
             element={
               <ProtectedRoute>
                 <SinglePageOrderJourney />
