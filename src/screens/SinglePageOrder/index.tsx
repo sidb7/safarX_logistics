@@ -35,6 +35,38 @@ import { Spinner } from "../../components/Spinner";
 
 interface IIndexProps {}
 
+const initialState: any = {
+  pickupDetails: {
+    fullAddress: "",
+    pincode: 0,
+    contact: {
+      name: "",
+      mobileNo: 0,
+    },
+  },
+  deliveryDetails: {
+    fullAddress: "",
+    pincode: 0,
+    contact: {
+      name: "",
+      mobileNo: 0,
+    },
+    gstNumber: "",
+  },
+  boxInfo: [],
+  orderType: "B2C",
+  transit: "FORWARD",
+  courierPartner: "",
+  source: "WEBSITE",
+  pickupDate: "",
+  gstNumber: "",
+  // orderId: "",
+  // eWayBillNo: 0,
+  awb: "",
+  brandName: "Google",
+  brandLogo: "",
+};
+
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [showDownloadLebal, setDownloadLebal] = useState(false);
@@ -42,37 +74,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [placeOrderLoader, setplaceOrderLoader] = useState(false);
   const [paymentMode, setPaymentMode] = useState("PREPAID");
   const [sortServiceiblity, setSortServiciblity] = useState("");
-  const [order, setOrder]: any = useState({
-    pickupDetails: {
-      fullAddress: "",
-      pincode: 0,
-      contact: {
-        name: "",
-        mobileNo: 0,
-      },
-    },
-    deliveryDetails: {
-      fullAddress: "",
-      pincode: 0,
-      contact: {
-        name: "",
-        mobileNo: 0,
-      },
-      gstNumber: "",
-    },
-    boxInfo: [],
-    orderType: "B2C",
-    transit: "FORWARD",
-    courierPartner: "",
-    source: "WEBSITE",
-    pickupDate: "",
-    gstNumber: "",
-    // orderId: "",
-    // eWayBillNo: 0,
-    awb: "",
-    brandName: "Google",
-    brandLogo: "",
-  });
+  const [order, setOrder]: any = useState(initialState);
 
   let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
@@ -121,23 +123,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             value={order?.orderType}
             disabled={showDownloadLebal}
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-            checked={order?.orderType === "B2C"}
-            onChange={(e) => {
-              setOrder((prevState: any) => {
-                return {
-                  ...prevState,
-                  orderType: "B2C",
-                  pickupDetails: {
-                    ...prevState.pickupDetails,
-                    gstNumber: "",
-                  },
-                  deliveryDetails: {
-                    ...prevState.deliveryDetails,
-                    gstNumber: "",
-                  },
-                };
-              });
-            }}
+            checked={order?.orderType === "B2C" && order?.transit === "FORWARD"}
+            onChange={(e) =>
+              setOrder({
+                ...initialState,
+                orderType: "B2C",
+                transit: "FORWARD",
+              })
+            }
           />
           <div className="text-[15px]">B2C</div>
         </div>
@@ -151,37 +144,31 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               ["INDIVIDUAL"].includes(kycCheck?.businessType) ||
               showDownloadLebal
             }
-            checked={order?.orderType === "B2B"}
-            onChange={(e) => {
-              setOrder((prevState: any) => {
-                return {
-                  ...prevState,
-                  orderType: "B2B",
-                };
-              });
-            }}
+            checked={order?.orderType === "B2B" && order?.transit === "FORWARD"}
+            onChange={(e) =>
+              setOrder({
+                ...initialState,
+                orderType: "B2B",
+                transit: "FORWARD",
+              })
+            }
           />
           <div className="text-[15px]">B2B</div>
         </div>
-        <div
-          className=" flex justify-start items-center h-fit"
-          title="coming soon"
-        >
+        <div className=" flex justify-start items-center h-fit">
           <input
             type="radio"
             name="type"
-            disabled={true}
             value={order?.orderType}
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-            checked={order?.orderType === "REVERSE"}
-            onChange={(e) => {
-              setOrder((prevState: any) => {
-                return {
-                  ...prevState,
-                  orderType: "REVERSE",
-                };
-              });
-            }}
+            checked={order?.orderType === "B2C" && order?.transit === "REVERSE"}
+            onChange={(e) =>
+              setOrder({
+                ...initialState,
+                orderType: "B2C",
+                transit: "REVERSE",
+              })
+            }
           />
           <div className="text-[15px]">B2C Reverse</div>
         </div>
