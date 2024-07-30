@@ -39,6 +39,7 @@ import OneButton from "../../components/Button/OneButton";
 import infoIcon from "../../assets/info.svg";
 import CustomCenterModal from "../../components/CustomModal/customCenterModal";
 import ZoneMappingModal from "./ZoneMappingModal";
+import FeatureRateCard from "./featureRateCard";
 
 interface ITypeProps {}
 
@@ -71,6 +72,7 @@ const PlanDetails = (props: ITypeProps) => {
     { index: 0, label: "Courier Pricing" },
     // { index: 1, label: "VAS Pricing" },
     { index: 1, label: "COD Pricing" },
+    // { index: 2, label: "Features" },
   ];
   let pricingData = [
     {
@@ -910,6 +912,8 @@ const PlanDetails = (props: ITypeProps) => {
           )}
 
           {renderingComponents === 1 && <CodPricing codData={codData} />}
+
+          {/* {renderingComponents === 2 && <FeatureRateCard />} */}
 
           {/* Info Cards */}
           {/* <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-6 mx-5 lg:ml-[30px] ">
