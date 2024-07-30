@@ -127,6 +127,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 return {
                   ...prevState,
                   orderType: "B2C",
+                  pickupDetails: {
+                    ...prevState.pickupDetails,
+                    gstNumber: "",
+                  },
+                  deliveryDetails: {
+                    ...prevState.deliveryDetails,
+                    gstNumber: "",
+                  },
                 };
               });
             }}
@@ -138,7 +146,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             type="radio"
             name="type"
             value={order?.orderType}
-            title="coming soon"
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
             disabled={
               ["INDIVIDUAL"].includes(kycCheck?.businessType) ||
@@ -738,10 +745,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       </span>
                     </div>
                   )}
-                  <div
-                    className="flex justify-center items-center "
-                    title="comming soon"
-                  >
+                  <div className="flex justify-center items-center ">
                     <input
                       type="radio"
                       name="paymentMode"
