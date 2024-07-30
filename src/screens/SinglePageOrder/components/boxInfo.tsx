@@ -7,7 +7,10 @@ import subtractIcon from "../../../assets/gray-subtract-circle.svg";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
 import addIcon from "../../../assets/Product/addCircle.svg";
 import CustomDropDown from "../../../components/DropDown";
-import { generateUniqueCode } from "../../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  generateUniqueCode,
+} from "../../../utils/utility";
 
 import ProductIcon from "../../../assets/Product/Product.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
@@ -33,6 +36,8 @@ function BoxInfo({
   setEditBoxModal,
   setEditProductModal,
   setIsOpen,
+  setSortServiciblity,
+  showDownloadLebal,
 }: any) {
   const [allProducts, setAllProducts]: any = useState([]);
   const [codInfo, setCodInfo]: any = useState({
@@ -67,6 +72,14 @@ function BoxInfo({
         (acc: any, product: any) => acc + product.unitPrice,
         0
       );
+
+      newState.boxInfo[index].codInfo.collectableAmount = newState.boxInfo[
+        index
+      ]?.products.reduce(
+        (acc: any, product: any) => acc + product.unitPrice,
+        0
+      );
+
       return newState;
     });
   };
@@ -85,11 +98,13 @@ function BoxInfo({
       breadth,
       height
     ).toFixed(2);
-    obj.boxInfo[index].products[productIndex].volumetricWeight = +(
-      calacVolu.toFixed(4) * +obj.boxInfo[index].products[productIndex].qty
-    );
 
     let originalUnitPrice: any = 0;
+
+    let baseProductAppliedWeight: any = Math.max(
+      +obj.boxInfo[index].products[productIndex].volumetricWeight,
+      +obj.boxInfo[index].products[productIndex].deadWeight
+    );
 
     if (+obj.boxInfo[index].products[productIndex].qty > 2) {
       originalUnitPrice =
@@ -102,12 +117,10 @@ function BoxInfo({
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
 
-    obj.boxInfo[index].products[productIndex].appliedWeight = Math.max(
-      obj.boxInfo[index].products[productIndex].volumetricWeight,
-      obj.boxInfo[index].products[productIndex].deadWeight
-    );
+    obj.boxInfo[index].products[productIndex].appliedWeight =
+      baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
-    const boxAppliedWeight = Math.max(
+    const boxBaseAppliedWeight = Math.max(
       obj.boxInfo[index]?.volumetricWeight,
       obj.boxInfo[index]?.deadWeight
     );
@@ -118,12 +131,12 @@ function BoxInfo({
     );
     const updateBoxAppliedWeight = Math.max(
       TotalAppliedWeightOfAllProduct,
-      boxAppliedWeight
+      boxBaseAppliedWeight
     );
-
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const removeUnit = (productIndex: number) => {
@@ -142,26 +155,29 @@ function BoxInfo({
       breadth,
       height
     ).toFixed(2);
-    obj.boxInfo[index].products[productIndex].volumetricWeight = +(
-      calacVolu.toFixed(4) * +obj.boxInfo[index].products[productIndex].qty
-    );
+
     let originalUnitPrice: any = 0;
+
+    let baseProductAppliedWeight: any = Math.max(
+      +obj.boxInfo[index].products[productIndex].volumetricWeight,
+      +obj.boxInfo[index].products[productIndex].deadWeight
+    );
+
     if (initQty >= 2) {
       originalUnitPrice =
         +obj.boxInfo[index].products[productIndex].unitPrice / initQty;
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
+
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
 
-    obj.boxInfo[index].products[productIndex].appliedWeight = Math.max(
-      obj.boxInfo[index].products[productIndex].volumetricWeight,
-      obj.boxInfo[index].products[productIndex].deadWeight
-    );
+    obj.boxInfo[index].products[productIndex].appliedWeight =
+      baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
-    const boxAppliedWeight = Math.max(
+    const boxBaseAppliedWeight = Math.max(
       obj.boxInfo[index]?.volumetricWeight,
       obj.boxInfo[index]?.deadWeight
     );
@@ -172,77 +188,26 @@ function BoxInfo({
     );
     const updateBoxAppliedWeight = Math.max(
       TotalAppliedWeightOfAllProduct,
-      boxAppliedWeight
+      boxBaseAppliedWeight
     );
-
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
+
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const OnChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    if (name === "isCod") {
-      setCodInfo((prevState: any) => {
-        return {
-          ...prevState,
-          codInfo: {
-            ...prevState.codInfo,
-            [name]: value === "COD" ? true : false,
-            collectableAmount:
-              value === "COD" ? "" : prevState.codInfo.collectableAmount,
-          },
-        };
-      });
-    } else {
-      setCodInfo((prevState: any) => {
-        return {
-          ...prevState,
-          codInfo: {
-            ...prevState.codInfo,
-            [name]: value,
-          },
-        };
-      });
-    }
+    setOrder((prevState: any) => {
+      const updatedBoxInfo = [...prevState.boxInfo];
+      updatedBoxInfo[index].codInfo[name] = value;
+      return {
+        ...prevState,
+        boxInfo: updatedBoxInfo,
+      };
+    });
+    setSortServiciblity("");
   };
-
-  useEffect(() => {
-    if (
-      codInfo?.codInfo?.isCod ||
-      codInfo?.codInfo?.collectableAmount.trim() !== "" ||
-      codInfo?.codInfo?.invoiceValue.trim() !== ""
-    ) {
-      setOrder((prevState: any) => {
-        const updatedBoxInfo = [...prevState.boxInfo];
-        const updatedCodInfo = {
-          ...updatedBoxInfo[index],
-          codInfo: {
-            invoiceValue: +codInfo?.codInfo?.invoiceValue,
-            collectableAmount: codInfo?.codInfo?.isCod
-              ? +codInfo?.codInfo?.collectableAmount
-              : 0,
-            isCod: codInfo?.codInfo?.isCod,
-          },
-          ewaybillNumber:
-            +codInfo?.codInfo?.invoiceValue >= 50000
-              ? updatedBoxInfo?.[index]?.ewaybillNumber
-              : "",
-          transporterNo:
-            +codInfo?.codInfo?.invoiceValue >= 50000
-              ? updatedBoxInfo?.[index]?.transporterNo
-              : "",
-          orderId: codInfo?.orderId,
-        };
-        updatedBoxInfo[index] = { ...updatedCodInfo };
-        return { ...prevState, boxInfo: updatedBoxInfo };
-      });
-    }
-  }, [
-    codInfo?.codInfo?.isCod,
-    codInfo?.codInfo?.collectableAmount,
-    codInfo?.codInfo?.invoiceValue,
-    codInfo?.orderId,
-  ]);
 
   useEffect(() => {
     setCodInfo((prevState: any) => {
@@ -262,7 +227,7 @@ function BoxInfo({
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2  rounded`}
+        className={`px-4 pt-2 pb-4 my-2  rounded-lg`}
         style={{ backgroundColor: getColorByIndex(index) }}
       >
         <div className="gap-y-4">
@@ -270,95 +235,54 @@ function BoxInfo({
             <div className=" flex w-[100%] flex-col">
               <div className="flex items-center justify-between">
                 <div className=" flex justify-start items-center">
-                  <div className="text-[22px] my-2 font-bold font-Open">
-                    {data?.name}
+                  <div className="text-[18px] my-2 font-bold font-Open">
+                    {capitalizeFirstLetter(data?.name)}
                   </div>
-                  <div className="flex items-center justify-center gap-x-4 mx-5 rounded-lg">
-                    <CustomInputBox
-                      isRightIcon={true}
-                      containerStyle=""
-                      rightIcon={orderIdGenarateIcon}
-                      labelClassName={`!text-black !bg-[${getColorByIndex(
-                        index
-                      )}]`}
-                      className={`!bg-transparent !w-[180px] !h-[36px] !text-base !text-[12px] !font-semibold`}
-                      imageClassName="!h-[20px] !w-[20px] !top-[25%] !right-2"
-                      value={codInfo?.orderId}
-                      maxLength={12}
-                      label="Order ID"
-                      onChange={(e: any) => OnChangeHandler(e)}
+                </div>
+                {!showDownloadLebal && (
+                  <div className="flex gap-x-4">
+                    <button
+                      className=""
                       onClick={() => {
-                        const orderId = generateUniqueCode(8, 12);
-                        setCodInfo((prevState: any) => {
-                          return {
-                            ...prevState,
-                            orderId: orderId,
-                          };
+                        setEditBoxModal({
+                          isOpen: true,
+                          state: { id: index, data: data },
                         });
+                        setSortServiciblity("");
                       }}
-                      visibility={true}
-                      setVisibility={() => {}}
-                      name="orderId"
-                      data-cy="auto-generate-order-id"
-                    />
+                    >
+                      <img src={editIcon} alt="" className="w-[22px]" />
+                    </button>
+                    <button onClick={() => removeBox(index)}>
+                      <img src={deleteIcon} alt="" className="w-[22px]" />
+                    </button>
                   </div>
-                  <div className="flex justify-center">
-                    <CustomDropDown
-                      heading="Payment Mode"
-                      name="isCod"
-                      selectClassName={`!cursor-pointer !h-[36px] border `}
-                      onChange={OnChangeHandler}
-                      value={codInfo?.codInfo?.isCod ? "COD" : "PREPAID"}
-                      options={[
-                        {
-                          label: "COD",
-                          value: "COD",
-                        },
-                        {
-                          label: "Prepaid",
-                          value: "PREPAID",
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-x-4">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditBoxModal({
-                        isOpen: true,
-                        state: { id: index, data: data },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[22px]" />
-                  </button>
-                  <button onClick={() => removeBox(index)}>
-                    <img src={deleteIcon} alt="" className="w-[22px]" />
-                  </button>
-                </div>
+                )}
               </div>
-              <div className="flex items-center my-2">
+
+              <div className="flex text-[16px] items-center ">
                 {data?.length} X {data?.breadth} X {data?.height} cm | V:{" "}
                 {+data?.volumetricWeight.toFixed(2)} Kg | D:{" "}
                 {+data?.deadWeight.toFixed(2)} Kg | Final Weight :{" "}
                 {`${
-                  data?.appliedWeight ? +data?.appliedWeight + "Kg" : "0 Kg"
+                  data?.appliedWeight
+                    ? +data?.appliedWeight.toFixed(2) + "Kg"
+                    : "0 Kg"
                 }`}
               </div>
 
-              <div className="flex gap-x-4 mt-3 ">
+              <div className="flex gap-x-4 mt-5">
                 <div className="">
                   <InputBox
                     label="Invoice value"
-                    value={codInfo?.codInfo?.invoiceValue}
+                    value={data?.codInfo?.invoiceValue}
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    labelClassName={`!text-black  !bg-[${getColorByIndex(
+                    labelClassName={`!text-black !bg-[${getColorByIndex(
                       index
                     )}]`}
+                    isDisabled={true}
                     className={`!bg-transparent !w-[110px] !h-[36px]`}
                     onChange={(e: any) => {
                       if (!isNaN(e.target.value)) {
@@ -368,11 +292,11 @@ function BoxInfo({
                   />
                 </div>
 
-                {codInfo?.codInfo?.isCod && (
+                {data?.codInfo?.isCod && (
                   <div className="">
                     <InputBox
                       label="Collectable Amount"
-                      value={codInfo?.codInfo?.collectableAmount}
+                      value={data?.codInfo?.collectableAmount}
                       name="collectableAmount"
                       inputType="text"
                       inputMode="numeric"
@@ -380,7 +304,6 @@ function BoxInfo({
                         index
                       )}]`}
                       className={`!bg-transparent !w-[150px] !h-[36px]`}
-                      isDisabled={codInfo?.isCod}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           OnChangeHandler(e);
@@ -390,19 +313,20 @@ function BoxInfo({
                   </div>
                 )}
 
-                {codInfo?.codInfo?.invoiceValue >= 50000 && (
-                  <button
-                    className="text-[#004EFF] font-bold font-Open"
-                    onClick={() =>
-                      setIsOpen({
-                        state: { id: index, data: data },
-                        isOpen: true,
-                      })
-                    }
-                  >
-                    EWAY BILL
-                  </button>
-                )}
+                {codInfo?.codInfo?.invoiceValue >= 50000 &&
+                  order?.orderType === "B2C" && (
+                    <button
+                      className="text-[#004EFF] font-bold font-Open"
+                      onClick={() =>
+                        setIsOpen({
+                          state: { id: index, data: data },
+                          isOpen: true,
+                        })
+                      }
+                    >
+                      EWAY BILL
+                    </button>
+                  )}
               </div>
             </div>
           </div>
@@ -415,23 +339,26 @@ function BoxInfo({
                   {allProducts.length}
                   {")"}
                 </div>
-                <div className="flex justify-center items-center ml-6">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditProductModal({
-                        isOpen: true,
-                        state: { id: index, data: data?.products },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[20px]" />
-                  </button>
-                </div>
+                {allProducts.length > 0 && !showDownloadLebal && (
+                  <div className="flex justify-center items-center ml-6">
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditProductModal({
+                          isOpen: true,
+                          state: { id: index, data: data?.products },
+                        });
+                        setSortServiciblity("");
+                      }}
+                    >
+                      <img src={editIcon} alt="" className="w-[20px]" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div
-              className={`!transition-all gap-y-2 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
+              className={`!transition-all gap-y-1 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
                 allProducts.length > 0 && " border-x-[#E8E8E8]"
               } shadow-none`}
               data-cy="product-list"
@@ -462,7 +389,10 @@ function BoxInfo({
                           data-cy={`product-box-${i}`}
                         />
                         <div className="flex items-center p-1 lg:p-2 w-[100px]  gap-2 !mr-2 rounded-lg">
-                          <div className="bg-transparent">
+                          <button
+                            className="bg-transparent"
+                            disabled={showDownloadLebal}
+                          >
                             <img
                               src={subtractIcon}
                               alt=""
@@ -473,11 +403,13 @@ function BoxInfo({
                               }}
                               data-cy={`remove-unit-${i}`}
                             />
-                          </div>
+                          </button>
+
                           <div>
                             <p>{e.qty}</p>
                           </div>
-                          <div>
+
+                          <button disabled={showDownloadLebal}>
                             <img
                               src={addIcon}
                               className="cursor-pointer"
@@ -488,12 +420,17 @@ function BoxInfo({
                               }}
                               data-cy={`add-unit-${i}`}
                             />
-                          </div>
+                          </button>
 
                           <button
-                            className={` ml-2 cursor-pointer `}
+                            className={` ml-2 ${
+                              showDownloadLebal
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } `}
                             data-cy={`delete-product-${i}`}
                             onClick={() => removeProduct(index, i)}
+                            disabled={showDownloadLebal}
                           >
                             <img
                               src={DeleteIcon}
@@ -515,16 +452,22 @@ function BoxInfo({
                   );
                 })}
             </div>
-            <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
-              <img src={ButtonIcon} alt="Add Product" width="px" />
 
-              <button
-                className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
-                onClick={() => setProductModal({ isOpen: true, id: index })}
-              >
-                ADD PRODUCT
+            {!showDownloadLebal && (
+              <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
+                <img src={ButtonIcon} alt="Add Product" width="px" />
+
+                <button
+                  className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
+                  onClick={() => {
+                    setProductModal({ isOpen: true, id: index });
+                    setSortServiciblity("");
+                  }}
+                >
+                  ADD PRODUCT
+                </button>
               </button>
-            </button>
+            )}
           </div>
         </div>
       </div>

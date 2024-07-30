@@ -103,35 +103,32 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
   };
 
   const boxValidation = () => {
-    console.log("boxInputData", boxInputData);
-    // if (
-    //   boxInputData.name.trim() === "" ||
-    //   boxInputData.deadWeight === 0 ||
-    //   (typeof boxInputData.deadWeight !== "number" &&
-    //     boxInputData.deadWeight.trim() === "") ||
-    //   boxInputData.length === 0 ||
-    //   (typeof boxInputData.length !== "number" &&
-    //     boxInputData.length.trim() === "") ||
-    //   boxInputData.breadth === 0 ||
-    //   (typeof boxInputData.breadth !== "number" &&
-    //     boxInputData.breadth.trim() === "") ||
-    //   boxInputData.height === 0 ||
-    //   (typeof boxInputData.height !== "number" &&
-    //     boxInputData.height.trim() === "")
-    // (boxInputData.codInfo.isCod &&
-    //   boxInputData.codInfo.collectableAmount === 0) ||
-    // boxInputData.codInfo.invoiceValue === 0 ||
-    // (boxInputData.codInfo.invoiceValue > 50000 &&
-    //   boxInputData.transporterNo === "") ||
-    // (boxInputData.codInfo.invoiceValue > 50000 &&
-    //   boxInputData.eWayBillNo === 0) ||
-    // (typeof boxInputData.eWayBillNo !== "number" &&
-    //   boxInputData.eWayBillNo.trim() === "")
-    // ) {
-    //   return true;
-    // }
-    // return false;
-    return false;
+    let errors = [];
+
+    if (!boxInputData.name) {
+      errors.push("Name should not be empty.");
+    }
+
+    const fields = [
+      { value: boxInputData.deadWeight, name: "Dead weight" },
+      { value: boxInputData.length, name: "Length" },
+      { value: boxInputData.breadth, name: "Breadth" },
+      { value: boxInputData.height, name: "Height" },
+    ];
+
+    const isZeroString = (value: any) => /^0+$/.test(value);
+
+    fields.forEach((field) => {
+      if (
+        !field.value ||
+        parseFloat(field.value) === 0 ||
+        isZeroString(field.value)
+      ) {
+        errors.push(`${field.name} should not be empty or zero.`);
+      }
+    });
+
+    return errors.length > 0 ? true : false;
   };
 
   const onSave = () => {
@@ -145,8 +142,21 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
         height: +boxInputData?.height,
         deadWeight: +boxInputData?.deadWeight,
         volumetricWeight: boxInputData?.volumetricWeight,
-        appliedWeight: boxInputData?.appliedWeight,
       };
+
+      const TotalAppliedWeightOfAllProduct = updatedBoxInfo[
+        data?.id
+      ].products.reduce(
+        (acc: any, product: any) => acc + +product.appliedWeight,
+        0
+      );
+      const updateBoxAppliedWeight = Math.max(
+        TotalAppliedWeightOfAllProduct,
+        boxInputData?.appliedWeight
+      );
+
+      updatedBoxInfo[data?.id].appliedWeight = updateBoxAppliedWeight;
+
       return { ...prevOrder, boxInfo: updatedBoxInfo };
     });
     onClose(false);

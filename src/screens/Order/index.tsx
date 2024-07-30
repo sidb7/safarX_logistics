@@ -389,6 +389,24 @@ const Index = () => {
     useState<any>(false);
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
+
+  const [bulkActionObject, setBulkActionObject] = useState({
+    pickupAddress: {
+      name: "",
+      mobileNo: "",
+      fullAddress: "",
+      pincode: "",
+      landMark: "",
+    },
+    deliveryAddress: {
+      name: "",
+      mobileNo: "",
+      fullAddress: "",
+      pincode: "",
+      landMark: "",
+    },
+  });
+
   // const [isMasked, setIsMasked] = useState(false);
 
   // useEffect(() => {
@@ -2244,6 +2262,8 @@ const Index = () => {
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
+                bulkActionObject={bulkActionObject}
+                setBulkActionObject={setBulkActionObject}
               />
             </div>
             <div
@@ -2735,7 +2755,7 @@ const Index = () => {
       <CustomRightModal
         isOpen={openRightModalForDelta}
         onClose={() => setOpenRightModalForDelta(false)}
-        className={`${isXlScreen ? "!w-1/3" : isLgScreen ? "!w-2/3" : ""}`}
+        className={`${isXlScreen ? "!w-1/2" : isLgScreen ? "!w-2/3" : ""}`}
       >
         <>
           <DeltaOnBlaze setOpenRightModalForDelta={setOpenRightModalForDelta} />

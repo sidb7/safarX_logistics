@@ -35,27 +35,33 @@ function ProductModal({ onClose, setOrder, index }: any) {
   });
 
   const productValidation = () => {
-    if (
-      boxInputData.name.trim() === "" ||
-      boxInputData.unitPrice === 0 ||
-      (typeof boxInputData.unitPrice !== "number" &&
-        boxInputData.unitPrice.trim() === "") ||
-      boxInputData.deadWeight === 0 ||
-      (typeof boxInputData.deadWeight !== "number" &&
-        boxInputData.deadWeight.trim() === "") ||
-      boxInputData.length === 0 ||
-      (typeof boxInputData.length !== "number" &&
-        boxInputData.length.trim() === "") ||
-      boxInputData.breadth === 0 ||
-      (typeof boxInputData.breadth !== "number" &&
-        boxInputData.breadth.trim() === "") ||
-      boxInputData.height === 0 ||
-      (typeof boxInputData.height !== "number" &&
-        boxInputData.height.trim() === "")
-    ) {
-      return true;
+    let errors = [];
+
+    if (!boxInputData.name) {
+      errors.push("Name should not be empty.");
     }
-    return false;
+
+    const fields = [
+      { value: boxInputData.deadWeight, name: "Dead weight" },
+      { value: boxInputData.length, name: "Length" },
+      { value: boxInputData.breadth, name: "Breadth" },
+      { value: boxInputData.height, name: "Height" },
+      { value: boxInputData.unitPrice, name: "unit Price" },
+    ];
+
+    const isZeroString = (value: any) => /^0+$/.test(value);
+
+    fields.forEach((field) => {
+      if (
+        !field.value ||
+        parseFloat(field.value) === 0 ||
+        isZeroString(field.value)
+      ) {
+        errors.push(`${field.name} should not be empty or zero.`);
+      }
+    });
+
+    return errors.length > 0 ? true : false;
   };
 
   const onChangeHandler = (e: any) => {
@@ -129,6 +135,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
         codInfo: {
           ...box.codInfo,
           invoiceValue: updatedInvoiceValue,
+          collectableAmount: 0,
         },
         appliedWeight: updatedAppliedWeight,
       };
