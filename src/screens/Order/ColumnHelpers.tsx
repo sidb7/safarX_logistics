@@ -286,6 +286,9 @@ const MainCommonHelper = (navigate: any = "") => {
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.pickupAddress?.contact?.mobileNo}
                 </div>
+                <div className="font-Open font-normal leading-5 text-sm">
+                  Pincode : <b>{info?.row?.original?.pickupAddress?.pincode}</b>
+                </div>
               </>
             ) : (
               <div
@@ -327,6 +330,12 @@ const MainCommonHelper = (navigate: any = "") => {
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.routes?.[0]?.contact?.mobileNo}
                 </div>
+                <div className="font-Open font-normal leading-5 text-sm">
+                  Pincode :{" "}
+                  <b>
+                    {info?.row?.original?.routes?.[0]?.pickupAddress?.pincode}
+                  </b>
+                </div>
               </>
             ) : info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
@@ -343,6 +352,10 @@ const MainCommonHelper = (navigate: any = "") => {
 
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
+                </div>
+                <div className="font-Open font-normal leading-5 text-sm">
+                  Pincode :{" "}
+                  <b>{info?.row?.original?.deliveryAddress?.pincode}</b>
                 </div>
               </>
             ) : (
@@ -1247,6 +1260,10 @@ export const columnHelperForNewOrder = (
         );
       },
       cell: (info: any) => {
+        console.log(
+          "info?.row?.original?.pickupAddress",
+          info?.row?.original?.pickupAddress
+        );
         return (
           <div className=" font-Open font-normal leading-5 text-sm  py-3">
             {capitalizeFirstLetter(
@@ -1265,6 +1282,9 @@ export const columnHelperForNewOrder = (
                 </span>
                 <div className="font-Open font-normal leading-5 text-sm ">
                   {info?.row?.original?.pickupAddress?.contact?.mobileNo}
+                </div>
+                <div className="font-Open font-normal leading-5 text-sm ">
+                  Pincode : <b>{info?.row?.original?.pickupAddress?.pincode}</b>
                 </div>
               </>
             ) : (
@@ -1307,6 +1327,10 @@ export const columnHelperForNewOrder = (
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.routes?.[0]?.contact?.mobileNo}
                 </div>
+                <div className="font-Open font-normal leading-5 text-sm ">
+                  Pincode :{" "}
+                  <b>{info?.row?.original?.deliveryAddress?.pincode}</b>
+                </div>
               </>
             ) : info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
@@ -1323,6 +1347,10 @@ export const columnHelperForNewOrder = (
 
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
+                </div>
+                <div className="font-Open font-normal leading-5 text-sm ">
+                  Pincode :{" "}
+                  <b>{info?.row?.original?.deliveryAddress?.pincode}</b>
                 </div>
               </>
             ) : (
