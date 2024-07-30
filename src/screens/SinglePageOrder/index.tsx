@@ -76,6 +76,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [sortServiceiblity, setSortServiciblity] = useState("");
   const [order, setOrder]: any = useState(initialState);
 
+  console.log("order", order?.orderType, order?.transit);
+
   let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
 
@@ -732,24 +734,26 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       </span>
                     </div>
                   )}
-                  <div className="flex justify-center items-center ">
-                    <input
-                      type="radio"
-                      name="paymentMode"
-                      value="PREPAID"
-                      disabled={
-                        (Array.isArray(order?.boxInfo) &&
-                          order?.boxInfo.length === 0) ||
-                        showDownloadLebal
-                      }
-                      className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                      checked={paymentMode === "PREPAID"}
-                      onChange={(e: any) => paymentModeToggle(e.target.value)}
-                    />
-                    <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
-                      PREPAID
-                    </span>
-                  </div>
+                  {order?.transit !== "REVERSE" && (
+                    <div className="flex justify-center items-center ">
+                      <input
+                        type="radio"
+                        name="paymentMode"
+                        value="PREPAID"
+                        disabled={
+                          (Array.isArray(order?.boxInfo) &&
+                            order?.boxInfo.length === 0) ||
+                          showDownloadLebal
+                        }
+                        className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                        checked={paymentMode === "PREPAID"}
+                        onChange={(e: any) => paymentModeToggle(e.target.value)}
+                      />
+                      <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                        PREPAID
+                      </span>
+                    </div>
+                  )}
                 </div>
                 {["B2B"].includes(order?.orderType) &&
                   sumInvoiceValue >= 50000 && (
