@@ -74,7 +74,9 @@ const Checkbox: React.FC<IProps> = ({
         {textLabel?.[1] !== undefined ? (
           <>
             {textLabel?.[0]}{" "}
-            <span className="text-[0.800rem]">-{textLabel?.[1]}</span>
+            <span className={`${labelClassName}text-[0.800rem]`}>
+              -{textLabel?.[1]}
+            </span>
           </>
         ) : (
           textLabel?.[0]

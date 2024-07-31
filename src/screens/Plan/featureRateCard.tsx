@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CustomInputBox from "../../components/Input";
 import Checkbox from "../../components/CheckBox";
+// import Checkbox from "../../../components/CheckBox";
 
 interface IFeatureRateCardProps {}
 
@@ -20,35 +21,35 @@ const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
         featureSubMenu: [
           {
             featureSubTitle: "Catalog Management",
-            isActive: false,
+            isActive: true,
             type: "checkbox",
             module: ["a", "ab"],
           },
           {
             featureSubTitle: "AI based Carrier allocation",
-            isActive: false,
+            isActive: true,
             type: "checkbox",
             module: ["a", "ab"],
           },
           {
             featureSubTitle: "Marketplace Channel Integrations",
-            isActive: false,
+            isActive: true,
             type: "checkbox",
             submenu: [
               {
                 name: "Woocommerce",
                 type: "checkbox",
-                isActive: false,
+                isActive: true,
               },
               {
                 name: "Shopify",
                 type: "checkbox",
-                isActive: false,
+                isActive: true,
               },
               {
                 name: "Amazon",
                 type: "checkbox",
-                isActive: false,
+                isActive: true,
               },
               {
                 name: "Unicommerce",
@@ -1243,39 +1244,56 @@ const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
                         >
                           <div className="flex items-center gap-x-3">
                             {menuData?.type !== "input" && (
+                              // <Checkbox
+                              //   checked={menuData?.isActive}
+                              //   onChange={
+                              //     () => {}
+                              //     //   handle_Level_2_Pages(
+                              //     //     index,
+                              //     //     index2,
+                              //     //     !menuData?.isActive
+                              //     //   )
+                              //   }
+                              //   style={{ accentColor: "black" }}
+                              //   disabled={true}
+                              // />
                               <Checkbox
+                                key={index}
+                                showCase={true}
                                 checked={menuData?.isActive}
-                                onChange={
-                                  () => {}
-                                  //   handle_Level_2_Pages(
-                                  //     index,
-                                  //     index2,
-                                  //     !menuData?.isActive
-                                  //   )
-                                }
+                                onChange={() => {}}
+                                name={menuData.featureSubTitle}
+                                label={menuData.featureSubTitle}
                                 style={{ accentColor: "black" }}
+                                checkboxClassName="gap-2 mt-1"
+                                labelClassName="mt-1 !text-[18px] !text-[#1C1C1C] !font-Lato !font-semibold !leading-7"
                               />
                             )}
-                            <div className="text-[18px] font-Lato font-semibold">
+                            {/* <div className="text-[18px] font-Lato font-semibold">
                               {menuData?.featureSubTitle}
-                            </div>
+                            </div> */}
                             {menuData?.type === "input" && (
-                              <CustomInputBox
-                                label="Order"
-                                // containerClass="w-full"
-                                className="!h-[40px]"
-                                value={menuData?.value}
-                                onChange={(e) =>
-                                  //   handle_Level_2_Pages(
-                                  //     index,
-                                  //     index2,
-                                  //     true,
-                                  //     e.target.value
-                                  //   )
-                                  {}
-                                }
-                                isDisabled={true}
-                              />
+                              <>
+                                <div className="text-[18px] font-Lato font-semibold">
+                                  {menuData?.featureSubTitle}
+                                </div>
+                                <CustomInputBox
+                                  label="Order"
+                                  // containerClass="w-full"
+                                  className="!h-[40px]"
+                                  value={menuData?.value}
+                                  onChange={(e) =>
+                                    //   handle_Level_2_Pages(
+                                    //     index,
+                                    //     index2,
+                                    //     true,
+                                    //     e.target.value
+                                    //   )
+                                    {}
+                                  }
+                                  isDisabled={true}
+                                />
+                              </>
                             )}
                           </div>
                           {menuData?.submenu?.length && (
@@ -1300,26 +1318,41 @@ const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
                           <div className="cursor-pointer px-10 py-3 flex gap-2">
                             {menuData?.submenu?.map(
                               (submenuData: any, index3: number) => (
-                                <div
-                                  key={index3}
-                                  className="flex items-center gap-x-2"
-                                >
-                                  <Checkbox
-                                    checked={submenuData?.isActive}
-                                    onChange={() =>
-                                      //   handle_Level_3_Pages(
-                                      //     index,
-                                      //     index2,
-                                      //     index3,
-                                      //     !submenuData?.isActive
-                                      //   )
-                                      {}
-                                    }
-                                  />
-                                  <div className="text-[18px] font-Lato font-semibold">
-                                    {submenuData?.name}
+                                console.log("menu screen", submenuData),
+                                (
+                                  <div
+                                    key={index3}
+                                    className="flex items-center gap-x-2"
+                                  >
+                                    {/* <Checkbox
+                                      checked={submenuData?.isActive}
+                                      onChange={() =>
+                                        //   handle_Level_3_Pages(
+                                        //     index,
+                                        //     index2,
+                                        //     index3,
+                                        //     !submenuData?.isActive
+                                        //   )
+                                        {}
+                                      }
+                                    /> */}
+                                    <Checkbox
+                                      key={index}
+                                      checked={submenuData?.isActive}
+                                      showCase={true}
+                                      onChange={() => {}}
+                                      name={submenuData.name}
+                                      label={submenuData.name}
+                                      style={{ accentColor: "black" }}
+                                      checkboxClassName="gap-2 mt-1"
+                                      labelClassName="mt-1 !text-[18px] !text-[#1C1C1C] !font-Lato !font-semibold !leading-7"
+                                    />
+
+                                    {/* <div className="text-[18px] font-Lato font-semibold">
+                                      {submenuData?.name}
+                                    </div> */}
                                   </div>
-                                </div>
+                                )
                               )
                             )}
                           </div>
