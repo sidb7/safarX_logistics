@@ -71,7 +71,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               data-tooltip-id="my-tooltip-delivery-max"
               data-tooltip-content={`${
                 TemplateName === "Tracking Updates"
-                  ? "Applicable for Pickup, In Transit, Out for delivery and delivered status."
+                  ? "Applicable for Out for delivery , Reached Destination and delivered status."
                   : ""
               }`}
             />
@@ -484,6 +484,29 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
     // }),
   ];
 
+  // const handleCheckboxChange = (
+  //   templateName: string,
+  //   channelName: string,
+  //   checked: boolean
+  // ) => {
+  //   setCommunicationChannels((prevChannels: any) => {
+  //     return prevChannels.map((template: any) => {
+  //       if (template.templateName === templateName) {
+  //         const updatedChannels = template.communicationChannels.map(
+  //           (channel: any) => {
+  //             if (channel.channelName === channelName) {
+  //               return { ...channel, isChecked: checked };
+  //             }
+  //             return channel;
+  //           }
+  //         );
+  //         return { ...template, communicationChannels: updatedChannels };
+  //       }
+  //       return template;
+  //     });
+  //   });
+  // };
+
   const handleCheckboxChange = (
     templateName: string,
     channelName: string,
@@ -500,7 +523,17 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               return channel;
             }
           );
-          return { ...template, communicationChannels: updatedChannels };
+
+          // Determine if the outer isChecked should be true
+          const isTemplateChecked = updatedChannels.some(
+            (channel: any) => channel.isChecked
+          );
+
+          return {
+            ...template,
+            communicationChannels: updatedChannels,
+            isChecked: isTemplateChecked,
+          };
         }
         return template;
       });

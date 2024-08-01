@@ -6665,7 +6665,10 @@
 // export default Accordion;
 
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import { GET_SELLER_ORDER_COMPLETE_DATA } from "../../utils/ApiUrls";
+import {
+  GET_COURIER_PARTNER_SERVICE,
+  GET_SELLER_ORDER_COMPLETE_DATA,
+} from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import {
   capitalizeFirstLetter,
@@ -7523,7 +7526,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         };
 
         setServiceLoading(true);
-        const response = await POST(GET_SERVICE_LIST_ORDER, payload);
+        const response = await POST(GET_COURIER_PARTNER_SERVICE, payload);
         if (response?.status) {
           setServiceLoading(false);
           if (serviceList.length === 0)
