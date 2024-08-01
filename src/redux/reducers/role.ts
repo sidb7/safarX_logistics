@@ -10,7 +10,6 @@ export function checkPageAuthorized(name: any) {
   name = name.toLowerCase();
   if (role) {
     for (let parent of role?.menu) {
-      console.log("🚀 ~ checkPageAuthorized ~ parent:", parent);
       if (parent.name.toLowerCase() === name) {
         status = true;
         break;
