@@ -47,6 +47,10 @@ const ReverseSummary = (props: Iprops) => {
       }
     }
 
+    let filterIsActiveReverseOrder = summaryData?.reverseSeviceArray.filter(
+      (el: any) => el?.isChecked === true
+    );
+
     try {
       const payload = {
         pickupDetails: {
@@ -85,7 +89,7 @@ const ReverseSummary = (props: Iprops) => {
         ],
         orderType: "B2C",
         transit: "REVERSE",
-        courierPartner: summaryData?.reverseSeviceArray?.[0]?.partnerName,
+        courierPartner: filterIsActiveReverseOrder?.[0]?.partnerName,
         pickupDate: summaryData?.pickupTime,
         gstNumber: "",
         orderId: "",

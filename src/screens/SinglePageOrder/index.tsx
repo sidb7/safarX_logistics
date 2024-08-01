@@ -712,28 +712,29 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 </div>
 
                 <div className="flex gap-x-4 items-center">
-                  {order?.orderType === "B2C" && (
-                    <div className="flex justify-center items-center">
-                      <input
-                        type="radio"
-                        name="paymentMode"
-                        value="COD"
-                        disabled={
-                          (Array.isArray(order?.boxInfo) &&
-                            order?.boxInfo.length === 0) ||
-                          showDownloadLebal
-                        }
-                        className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                        checked={paymentMode === "COD"}
-                        onChange={(e: any) => {
-                          paymentModeToggle(e.target.value);
-                        }}
-                      />
-                      <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
-                        COD
-                      </span>
-                    </div>
-                  )}
+                  {order?.orderType === "B2C" &&
+                    order?.transit === "FORWARD" && (
+                      <div className="flex justify-center items-center">
+                        <input
+                          type="radio"
+                          name="paymentMode"
+                          value="COD"
+                          disabled={
+                            (Array.isArray(order?.boxInfo) &&
+                              order?.boxInfo.length === 0) ||
+                            showDownloadLebal
+                          }
+                          className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                          checked={paymentMode === "COD"}
+                          onChange={(e: any) => {
+                            paymentModeToggle(e.target.value);
+                          }}
+                        />
+                        <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                          COD
+                        </span>
+                      </div>
+                    )}
                   {order?.transit !== "REVERSE" && (
                     <div className="flex justify-center items-center ">
                       <input
