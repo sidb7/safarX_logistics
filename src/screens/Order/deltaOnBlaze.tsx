@@ -666,7 +666,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
-          text={"ACTIVATE"}
+          text={"UPDATE SETTINGS"}
           onClick={handleSave}
           className="!bg-[#60D669] !border-[#60D669] h-[36px] !text-[#FFFFFF] !px-4 !py-2 !font-Open !font-semibold !text-[14px] !leading-5 !rounded-[4px] hover:!bg-[#27B031] hover:!shadow-cardShadow2a focus:!bg-[#60D669] focus:border focus:!border-[#27B031]"
         />
