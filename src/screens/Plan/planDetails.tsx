@@ -63,6 +63,8 @@ const PlanDetails = (props: ITypeProps) => {
   const [codData, setCodData] = useState<any>([]);
   const [modeSelect, setModeSelect] = useState("B2C");
   const [modalShowZoneMapping, setModalShowZoneMapping] = useState(false);
+  const [featureRateCardData, setFeatureRateCardData] = useState<any>([]);
+  // console.log("🚀 ~ PlanDetails ~ featureRateCardData:", featureRateCardData);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -758,6 +760,14 @@ const PlanDetails = (props: ITypeProps) => {
           .map((card: any) => card.data);
         setCodData(filteredCodData);
         setIsLoading(false);
+
+        // Filter and set feature rate card data
+        const filteredFeatureRateCardData = rateCards
+          .filter((card: any) => card.type === "FEATURE_RATE_CARD")
+          .map((card: any) => card.data);
+
+        setFeatureRateCardData(filteredFeatureRateCardData || []);
+        setIsLoading(false);
       } else {
         setIsLoading(false);
         toast.error(data.message);
@@ -913,7 +923,9 @@ const PlanDetails = (props: ITypeProps) => {
 
           {renderingComponents === 1 && <CodPricing codData={codData} />}
 
-          {/* {renderingComponents === 2 && <FeatureRateCard />} */}
+          {/* {renderingComponents === 2 && (
+            <FeatureRateCard featureRateCard={featureRateCardData} />
+          )} */}
 
           {/* Info Cards */}
           {/* <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-6 mx-5 lg:ml-[30px] ">
