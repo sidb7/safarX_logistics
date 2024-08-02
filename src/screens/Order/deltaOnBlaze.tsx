@@ -587,7 +587,12 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             rateCardName: response?.data?.data[0]?.rateCardName || "",
           });
 
-          const rateCardData = response.data?.data?.[0]?.rates;
+          // const rateCardData = response.data?.data?.[0]?.rates;
+          // setCommunicationChannels(rateCardData);
+
+          const rateCardData = response.data?.data?.[0]?.rates.filter(
+            (rate: any) => rate.templateName !== "Global Rate"
+          );
           setCommunicationChannels(rateCardData);
 
           const filteredData = rateCardData
@@ -633,7 +638,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columns={columns}
                 data={communicationChannels || []}
-                thclassName={"!pb-4"}
+                thclassName={"!pb-4 !relative !z-0"}
                 tdclassName={"border-0 border-b !pb-[16px]"}
                 trclassName={"!shadow-none !rounded-none"}
               />
@@ -647,7 +652,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columns={PricingColumns}
                 data={filteredRateCard || []}
-                thclassName={"!pb-4"}
+                thclassName={"!pb-4 !z-0"}
                 tdclassName={"border-0 border-b !pb-[16px]"}
                 trclassName={"!shadow-none !rounded-none"}
               />

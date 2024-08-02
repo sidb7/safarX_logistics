@@ -3,11 +3,14 @@ import CustomInputBox from "../../components/Input";
 import Checkbox from "../../components/CheckBox";
 // import Checkbox from "../../../components/CheckBox";
 
-interface IFeatureRateCardProps {}
+interface IFeatureRateCardProps {
+  featureRateCard: any;
+}
 
-const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
-  props
-) => {
+const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = ({
+  featureRateCard,
+}) => {
+  // console.log("🚀 ~ featureRateCard:", featureRateCard);
   const [featureRateCardData, setFeatureRateCardData] = useState<any>({
     companyId: "",
     createdBy: "",
@@ -1244,19 +1247,6 @@ const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
                         >
                           <div className="flex items-center gap-x-3">
                             {menuData?.type !== "input" && (
-                              // <Checkbox
-                              //   checked={menuData?.isActive}
-                              //   onChange={
-                              //     () => {}
-                              //     //   handle_Level_2_Pages(
-                              //     //     index,
-                              //     //     index2,
-                              //     //     !menuData?.isActive
-                              //     //   )
-                              //   }
-                              //   style={{ accentColor: "black" }}
-                              //   disabled={true}
-                              // />
                               <Checkbox
                                 key={index}
                                 showCase={true}
@@ -1266,7 +1256,14 @@ const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
                                 label={menuData.featureSubTitle}
                                 style={{ accentColor: "black" }}
                                 checkboxClassName="gap-2 mt-1"
-                                labelClassName="mt-1 !text-[18px] !text-[#1C1C1C] !font-Lato !font-semibold !leading-7"
+                                labelClassName={`${
+                                  menuData?.isActive === false
+                                    ? "!text-[18px] !text-[#E8E8E8] !font-Lato !font-semibold !leading-7"
+                                    : "!text-[18px] !text-[#1C1C1C] !font-Lato !font-semibold !leading-7"
+                                }mt-1 `}
+                                disabled={
+                                  menuData?.isActive === false ? true : false
+                                }
                               />
                             )}
                             {/* <div className="text-[18px] font-Lato font-semibold">
@@ -1345,7 +1342,16 @@ const FeatureRateCard: React.FunctionComponent<IFeatureRateCardProps> = (
                                       label={submenuData.name}
                                       style={{ accentColor: "black" }}
                                       checkboxClassName="gap-2 mt-1"
-                                      labelClassName="mt-1 !text-[18px] !text-[#1C1C1C] !font-Lato !font-semibold !leading-7"
+                                      labelClassName={`${
+                                        submenuData?.isActive === false
+                                          ? "!text-[18px] !text-[#E8E8E8] !font-Lato !font-semibold !leading-7"
+                                          : "!text-[18px] !text-[#1C1C1C] !font-Lato !font-semibold !leading-7"
+                                      }mt-1 `}
+                                      disabled={
+                                        submenuData?.isActive === false
+                                          ? true
+                                          : false
+                                      }
                                     />
 
                                     {/* <div className="text-[18px] font-Lato font-semibold">
