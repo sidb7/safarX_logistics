@@ -44,37 +44,37 @@ function padZero(num: any) {
 }
 
 const userInfo = localStorage.getItem("userInfo");
-    if (userInfo) {
-      try {
-        const parsedUserInfo = JSON.parse(userInfo);
-        console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
-        const {
-          sellerId,
-          email,
-          contactNumber,
-          isWalletRechage,
-          isReturningUser,
-          name,
-          nextStep,
-        } = parsedUserInfo;
+if (userInfo) {
+  try {
+    const parsedUserInfo = JSON.parse(userInfo);
+    // console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
+    const {
+      sellerId,
+      email,
+      contactNumber,
+      isWalletRechage,
+      isReturningUser,
+      name,
+      nextStep,
+    } = parsedUserInfo;
 
-        window?.dataLayer?.push({
-          event: "page_view",
-          seller_email: email,
-          sellerId: sellerId,
-          seller_name: name,
-          seller_kyc: nextStep?.kyc,
-          seller_mobileNumber: contactNumber,
-          seller_bank_verification_done: nextStep?.bank,
-          isWalletRechage,
-          isReturningUser: isReturningUser,
-        });
-      } catch (error) {
-        console.error("Failed to parse user info:", error);
-      }
-    } else {
-      console.log("No user info available in localStorage");
-    }
+    window?.dataLayer?.push({
+      event: "page_view",
+      seller_email: email,
+      sellerId: sellerId,
+      seller_name: name,
+      seller_kyc: nextStep?.kyc,
+      seller_mobileNumber: contactNumber,
+      seller_bank_verification_done: nextStep?.bank,
+      isWalletRechage,
+      isReturningUser: isReturningUser,
+    });
+  } catch (error) {
+    console.error("Failed to parse user info:", error);
+  }
+} else {
+  console.log("No user info available in localStorage");
+}
 
 declare global {
   interface Window {
@@ -107,18 +107,14 @@ const App = () => {
 
   const dispatch = useDispatch();
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
-  console.log("isSocketconnectedApp.tsx", isSocketInitialized);
-
-  
-  
+  // console.log("isSocketconnectedApp.tsx", isSocketInitialized);
 
   useEffect(() => {
-
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       try {
         const parsedUserInfo = JSON.parse(userInfo);
-        console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
+        // console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
         const {
           sellerId,
           email,
@@ -146,8 +142,7 @@ const App = () => {
     } else {
       console.log("No user info available in localStorage");
     }
-    
-    
+
     //Init G Tag Manager
     TagManager.initialize(tagManagerArgs);
 
@@ -164,7 +159,7 @@ const App = () => {
     // };
   }, []);
 
-  console.log("packageversion", process.env.npm_package_version);
+  // console.log("packageversion", process.env.npm_package_version);
 
   //sentry code
   const userInfoString = localStorage.getItem("userInfo");
@@ -326,11 +321,11 @@ const App = () => {
 
   useEffect(() => {
     const receiveMessage = (event: any) => {
-      console.log("🚀 ~ receiveMessage ~ ADMIN_URL:", ADMIN_URL);
+      // console.log("🚀 ~ receiveMessage ~ ADMIN_URL:", ADMIN_URL);
       const expectedOrigin = ADMIN_URL;
       if (event.origin.includes(expectedOrigin)) {
         const sellerData = event.data.sellerData;
-        console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
+        // console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
         if (sellerData) {
           loginFromSeller(JSON.parse(sellerData));
         }
@@ -379,7 +374,7 @@ const App = () => {
       : "";
 
     if (token !== "") {
-      console.log("socketConnectedAfterlogin");
+      // console.log("socketConnectedAfterlogin");
       socketCallbacks.connectSocket(dispatch);
     }
 
