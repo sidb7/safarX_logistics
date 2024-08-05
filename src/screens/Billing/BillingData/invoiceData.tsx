@@ -182,7 +182,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <span className=" border-[#d4b27f] border-[1px] p-2 rounded-md bg-[#f4eee5] text-[#d4b27f] font-semibold">
-              {status || "NA"}
+              {status || "Unpaid"}
             </span>
           </div>
         );
