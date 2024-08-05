@@ -178,10 +178,11 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
       },
 
       cell: (info: any) => {
+        const status = info?.row?.original?.status;
         return (
           <div className="">
             <span className=" border-[#d4b27f] border-[1px] p-2 rounded-md bg-[#f4eee5] text-[#d4b27f] font-semibold">
-              PAID
+              {status || "NA"}
             </span>
           </div>
         );
