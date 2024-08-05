@@ -587,7 +587,12 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             rateCardName: response?.data?.data[0]?.rateCardName || "",
           });
 
-          const rateCardData = response.data?.data?.[0]?.rates;
+          // const rateCardData = response.data?.data?.[0]?.rates;
+          // setCommunicationChannels(rateCardData);
+
+          const rateCardData = response.data?.data?.[0]?.rates.filter(
+            (rate: any) => rate.templateName !== "Global Rate"
+          );
           setCommunicationChannels(rateCardData);
 
           const filteredData = rateCardData
@@ -633,7 +638,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columns={columns}
                 data={communicationChannels || []}
-                thclassName={"!pb-4"}
+                thclassName={"!pb-4 !relative !z-0"}
                 tdclassName={"border-0 border-b !pb-[16px]"}
                 trclassName={"!shadow-none !rounded-none"}
               />
@@ -647,7 +652,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columns={PricingColumns}
                 data={filteredRateCard || []}
-                thclassName={"!pb-4"}
+                thclassName={"!pb-4 !z-0"}
                 tdclassName={"border-0 border-b !pb-[16px]"}
                 trclassName={"!shadow-none !rounded-none"}
               />
@@ -661,7 +666,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
-          text={"ACTIVATE"}
+          text={"UPDATE SETTINGS"}
           onClick={handleSave}
           className="!bg-[#60D669] !border-[#60D669] h-[36px] !text-[#FFFFFF] !px-4 !py-2 !font-Open !font-semibold !text-[14px] !leading-5 !rounded-[4px] hover:!bg-[#27B031] hover:!shadow-cardShadow2a focus:!bg-[#60D669] focus:border focus:!border-[#27B031]"
         />
