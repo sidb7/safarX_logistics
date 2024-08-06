@@ -417,6 +417,11 @@ const FETCH_ZONE_MATRIX = `${SELLER_BASE_URL}/order/zoneMatrix`;
 
 // order / getAvailableServicesingleOrderPage;
 
+// Advance Rule Engine
+
+const FETCH_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/fetchAdvanceRuleEngine`;
+const CREATE_UPDATE_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/createAdvanceRuleEngine`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -629,4 +634,6 @@ export {
   UPDATE_COMMUNICATION_RATE_CARD,
   DOWNLOAD_INVOICE_FROM_S3,
   DOWNLOAD_MISREPORT_FROM_S3,
+  FETCH_ADVANCE_RULE_ENGINE,
+  CREATE_UPDATE_ADVANCE_RULE_ENGINE,
 };
