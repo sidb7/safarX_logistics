@@ -20,6 +20,7 @@ interface CustomInputWithDropDownProps {
   setFunc?: any;
   disabled?: boolean;
   showDownloadLebal: any;
+  setShowPickupDate: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -34,6 +35,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   setFunc,
   disabled = false,
   showDownloadLebal,
+  setShowPickupDate,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -63,29 +65,29 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
-  const sumInvoiceValue =
-    state?.boxInfo.length > 0 &&
-    state?.boxInfo.reduce(
-      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
-      0
-    );
+  // const sumInvoiceValue =
+  //   state?.boxInfo.length > 0 &&
+  //   state?.boxInfo.reduce(
+  //     (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+  //     0
+  //   );
 
-  const sumOfAppliedWeightOfAllBox =
-    state?.boxInfo.length > 0 &&
-    state?.boxInfo.reduce((sum: any, box: any) => sum + box?.appliedWeight, 0);
+  // const sumOfAppliedWeightOfAllBox =
+  //   state?.boxInfo.length > 0 &&
+  //   state?.boxInfo.reduce((sum: any, box: any) => sum + box?.appliedWeight, 0);
 
-  const getCombinationDimensionValueOfAllBoxes = () => {
-    let length = 0;
-    let breadth = 0;
-    let height = 0;
-    state?.boxInfo.forEach((box: any) => {
-      length += box.length;
-      breadth += box.breadth;
-      height += box.height;
-    });
+  // const getCombinationDimensionValueOfAllBoxes = () => {
+  //   let length = 0;
+  //   let breadth = 0;
+  //   let height = 0;
+  //   state?.boxInfo.forEach((box: any) => {
+  //     length += box.length;
+  //     breadth += box.breadth;
+  //     height += box.height;
+  //   });
 
-    return { length, width: breadth, height };
-  };
+  //   return { length, width: breadth, height };
+  // };
 
   const getServices = async () => {
     setisLoading(true);
@@ -112,6 +114,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
 
       setArrayValue(options);
       setFilterData(options);
+      setIsDropdownOpen(true);
       setTimeout(() => {
         setisLoading(false);
       }, 1000);
@@ -133,13 +136,14 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         partnerServiceName: value?.partnerServiceName,
       };
     });
+    setShowPickupDate("");
   };
 
   useEffect(() => {
     if (sortIdentifier.length !== 0 && disabled === false) {
       getServices();
     }
-  }, [sortIdentifier, disabled, state]);
+  }, [sortIdentifier, disabled]);
 
   useEffect(() => {
     if (sortIdentifier.length === 0) {
@@ -154,6 +158,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         serviceMode: "",
         totalPrice: 0,
         partnerServiceName: "",
+        pickupDate: "",
       };
     });
   }, [sortIdentifier]);
@@ -224,7 +229,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                     )}`}
                   </p>
                   <p className="text-[15px] text-[#777777] leading-4 font-Open">
-                    ₹ {item?.total}
+                    ₹ {item?.total.toFixed(2)}
                   </p>
                 </div>
               ))

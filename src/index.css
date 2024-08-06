@@ -89,3 +89,15 @@ th {
 .blur-out {
   animation: blurOut 1s forwards 1s; /* Delay blur animation to start after zoom */
 }
+
+.draggable {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dragging {
+  opacity: 0.1;
+}
+
+.dropping {
+  transform: translateY(10px); /* Adjust as needed */
+}

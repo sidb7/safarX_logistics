@@ -74,7 +74,6 @@ function OrderIdModal({ onClose, state, setOrder }: any) {
   };
 
   useEffect(() => {
-    console.log(state?.data, state?.data);
     if (
       state?.data?.eWayBillNo?.trim() !== "" ||
       state?.data?.transporterNo?.trim() !== ""
