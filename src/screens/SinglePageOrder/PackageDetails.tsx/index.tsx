@@ -6,6 +6,7 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import BoxModal from "./components/boxModal";
 import ProductDetails from "../components/productDetails";
 import ProductModal from "./components/productModal";
+import { useMediaQuery } from "react-responsive";
 import EditBoxModal from "./components/editBoxModal";
 import EditProductModal from "./components/editProductModal";
 import OrderIdModal from "./components/orderIdModal";
@@ -35,6 +36,7 @@ function PackageDetails({
     isOpen: false,
     state: {},
   });
+  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
 
   function removeBox(boxIndex: any) {
     let tempOrder = { ...order };
@@ -81,46 +83,52 @@ function PackageDetails({
 
   return (
     <>
-      <div className="border  h-full rounded-md">
-        <div className="p-2 border-b  flex items-center justify-between">
-          <div className="flex items-center">
+      <div className="border w-full h-full rounded-md overflow-auto scroll-smooth !max-h-[350px] lg:!max-h-[300px]">
+        <div
+          className="p-2 border-b bg-white z-10  top-0 "
+          style={{ position: "sticky" }}
+        >
+          <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <div>
-                <img src={packegeIcon} />
+              <div className="flex items-center">
+                <div>
+                  <img src={packegeIcon} />
+                </div>
+                <span className="text-[19px]  mx-2 font-bold font-Open">
+                  Packages
+                </span>
               </div>
-              <span className="text-[19px]  mx-2 font-bold font-Open">
-                Packages
-              </span>
+              <div className="max-w-[200px] flex items-center">
+                {packageDetails?.map((data: any, i: any) => {
+                  return (
+                    <a className="border rounded px-1 mx-2" href={`#${i + 1}`}>
+                      {i + 1}
+                    </a>
+                  );
+                })}
+              </div>
             </div>
-            <div className="max-w-[200px] flex items-center">
-              {packageDetails?.map((data: any, i: any) => {
-                return (
-                  <a className="border rounded px-1 mx-2" href={`#${i + 1}`}>
-                    {i + 1}
-                  </a>
-                );
-              })}
+            <div className="flex gap-x-4">
+              {!showDownloadLebal && (
+                <button
+                  className="flex justify-center items-center cursor-pointer"
+                  onClick={() => {
+                    setBoxModal(true);
+                    setSortServiciblity("");
+                  }}
+                >
+                  <img src={addIcon} alt="" />
+                </button>
+              )}
             </div>
-          </div>
-          <div className="flex gap-x-4">
-            {!showDownloadLebal && (
-              <button
-                className="flex justify-center items-center cursor-pointer"
-                onClick={() => {
-                  setBoxModal(true);
-                  setSortServiciblity("");
-                }}
-              >
-                <img src={addIcon} alt="" />
-              </button>
-            )}
           </div>
         </div>
-        <div className=" max-h-[300px] pb-[20px] customScroll">
+        <div className=" my-2 scroll-smooth">
           {boxInfoData.length > 0 ? (
             boxInfoData?.map((boxData: any, i: number) => {
               return (
-                <div id={`${i + 1}`} className="px-2  ">
+                <div className="px-3 relative">
+                  <div id={`${i + 1}`} className="absolute top-[-60px]"></div>
                   <BoxInfo
                     key={`{${i}_${boxData?.name}`}
                     index={i}
@@ -146,7 +154,9 @@ function PackageDetails({
       </div>
 
       <RightSideModal
-        className=" w-full lg:w-[400px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
+        }`}
         wrapperClassName="rounded-l-xl"
         isOpen={boxModal}
         onClose={() => setBoxModal(false)}
@@ -155,7 +165,9 @@ function PackageDetails({
       </RightSideModal>
 
       <RightSideModal
-        className=" w-full lg:w-[400px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
+        }`}
         wrapperClassName="rounded-l-xl"
         isOpen={productModal?.isOpen}
         onClose={() => setProductModal({ isOpen: false, id: 0 })}
@@ -168,7 +180,9 @@ function PackageDetails({
       </RightSideModal>
 
       <RightSideModal
-        className=" w-full lg:w-[400px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
+        }`}
         wrapperClassName="rounded-l-xl"
         isOpen={editBoxModal?.isOpen}
         onClose={() =>
@@ -185,7 +199,9 @@ function PackageDetails({
         />
       </RightSideModal>
       <RightSideModal
-        className=" w-full lg:w-[400px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
+        }`}
         wrapperClassName="rounded-l-xl"
         isOpen={editProductModal?.isOpen}
         onClose={() =>
@@ -203,7 +219,9 @@ function PackageDetails({
       </RightSideModal>
 
       <RightSideModal
-        className=" w-full lg:w-[400px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
+        }`}
         wrapperClassName="rounded-l-xl"
         isOpen={editProductModal?.isOpen}
         onClose={() =>
@@ -221,7 +239,9 @@ function PackageDetails({
       </RightSideModal>
 
       <RightSideModal
-        className=" w-full lg:w-[400px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
+        }`}
         wrapperClassName="rounded-l-xl"
         isOpen={OpenOrderIdModal?.isOpen}
         onClose={() => setopenOrderIdModal({ state: {}, isOpen: false })}

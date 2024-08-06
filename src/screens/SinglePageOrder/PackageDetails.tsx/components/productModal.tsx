@@ -13,26 +13,44 @@ import DeleteGif from "../../../../assets/common/DeleteGif.gif";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
 import CustomSearchDropDown from "../../components/CustomSearchDropDown";
-import { GET_PRODUCT_URL, GET_SELLER_BOX } from "../../../../utils/ApiUrls";
+import {
+  CREATE_BULK_PRODUCT,
+  GET_PRODUCT_URL,
+  GET_SELLER_BOX,
+} from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { includes } from "lodash";
 import SearchDropDown from "../../components/searchDropDown";
+import { POST } from "../../../../utils/webService";
+import {
+  checkNonNegative,
+  isRequired,
+} from "../../../../utils/validationRules";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+const initialState: any = {
+  name: "",
+  category: "",
+  sku: "",
+  qty: 1,
+  unitPrice: "",
+  unitTax: 0,
+  weightUnit: "kg",
+  currency: "INR",
+  deadWeight: "",
+  divisor: "5000",
+  length: "",
+  breadth: "",
+  height: "",
+  measureUnit: "cm",
+};
 
 function ProductModal({ onClose, setOrder, index }: any) {
-  const [boxInputData, setBoxInputData]: any = useState({
-    name: "",
-    category: "",
-    sku: "",
-    qty: 1,
-    unitPrice: "",
-    unitTax: 0,
-    weightUnit: "kg",
-    deadWeight: "",
-    length: "",
-    breadth: "",
-    height: "",
-    measureUnit: "cm",
-  });
+  const [boxInputData, setBoxInputData]: any = useState(initialState);
+  const [isnewData, setIsNewData]: any = useState(false);
+  const [isAutoPopulateData, setIsAutoPopulateData]: any = useState(false);
+  const navigate = useNavigate();
 
   const productValidation = () => {
     let errors = [];
@@ -78,6 +96,35 @@ function ProductModal({ onClose, setOrder, index }: any) {
   ): number => {
     const volume = length * breadth * height;
     return volume / 5000;
+  };
+
+  const addProductToCatalogue = async () => {
+    const { length, breadth, height, deadWeight } = boxInputData;
+    const parsedLength = +length;
+    const parsedBreadth = +breadth;
+    const parsedHeight = +height;
+    const parsedDeadWeight = +deadWeight;
+    const volumetricWeight = +calculateVolumeWeight(
+      parsedLength,
+      parsedBreadth,
+      parsedHeight
+    ).toFixed(2);
+    const appliedWeight = Math.max(parsedDeadWeight, volumetricWeight);
+
+    const payload = {
+      ...boxInputData,
+      volumetricWeight,
+      appliedWeight,
+    };
+
+    const { data: response } = await POST(CREATE_BULK_PRODUCT, {
+      products: [payload],
+    });
+    if (response?.success) {
+      toast.success(response?.message);
+    } else {
+      toast.error(response?.message);
+    }
   };
 
   const addProductToBox: any = (boxIndex: any, newProduct: any) => {
@@ -146,6 +193,9 @@ function ProductModal({ onClose, setOrder, index }: any) {
       };
     });
 
+    if (isnewData) {
+      addProductToCatalogue();
+    }
     onClose(false);
   };
 
@@ -184,117 +234,127 @@ function ProductModal({ onClose, setOrder, index }: any) {
                       setFunc={setBoxInputData}
                       identifier="PRODUCT"
                       emptyMsg={`No Product Found`}
+                      setIsNewData={setIsNewData}
+                      setIsAutoPopulateData={setIsAutoPopulateData}
+                      newDataMessage="Create New Box"
+                      setInputData={setBoxInputData}
+                      initialState={initialState}
                     />
                   </div>
 
-                  <div>
-                    <InputBox
-                      label="Product Name"
-                      value={boxInputData?.name}
-                      name="name"
-                      inputType="text"
-                      onChange={(e: any) => onChangeHandler(e)}
-                      //   inputError={inputError}
-                    />
-                  </div>
+                  {(isnewData || isAutoPopulateData) && (
+                    <>
+                      <div>
+                        <InputBox
+                          label="Product Name"
+                          value={boxInputData?.name}
+                          name="name"
+                          inputType="text"
+                          onChange={(e: any) => onChangeHandler(e)}
+                          //   inputError={inputError}
+                        />
+                      </div>
 
-                  <div>
-                    <CustomInputWithDropDown
-                      value={boxInputData?.category}
-                      initValue={boxInputData?.name}
-                      onChange={(e: any) => {
-                        setBoxInputData((prevState: any) => ({
-                          ...prevState,
-                          category: e,
-                        }));
-                      }}
-                    />
-                  </div>
+                      <div>
+                        <CustomInputWithDropDown
+                          value={boxInputData?.category}
+                          initValue={boxInputData?.name}
+                          onChange={(e: any) => {
+                            setBoxInputData((prevState: any) => ({
+                              ...prevState,
+                              category: e,
+                            }));
+                          }}
+                        />
+                      </div>
 
-                  <div>
-                    <InputBox
-                      label="Price"
-                      value={boxInputData?.unitPrice}
-                      name="unitPrice"
-                      inputType="text"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      //   inputError={inputError}
-                    />
-                  </div>
+                      <div>
+                        <InputBox
+                          label="Price"
+                          value={boxInputData?.unitPrice}
+                          name="unitPrice"
+                          inputType="text"
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
+                          //   inputError={inputError}
+                        />
+                      </div>
 
-                  <div>
-                    <InputBox
-                      label="Dead Weight (Kg)"
-                      value={boxInputData?.deadWeight}
-                      name="deadWeight"
-                      inputType="text"
-                      inputMode="numeric"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      //   inputError={inputError}
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
-                  <div className="w-[50%]">
-                    <CustomDropDown
-                      onChange={() => {}}
-                      options={[
-                        {
-                          label: boxInputData?.measureUnit,
-                          value: boxInputData?.measureUnit,
-                        },
-                      ]}
-                    />
-                  </div>
-                  <div className="flex w-[50%] gap-x-4">
-                    <InputBox
-                      label="L"
-                      inputType="text"
-                      inputMode="numeric"
-                      name="length"
-                      value={boxInputData?.length}
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      // inputError={inputError}
-                    />
-                    <InputBox
-                      label="B"
-                      value={boxInputData?.breadth}
-                      name="breadth"
-                      inputType="text"
-                      inputMode="numeric"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      // inputError={inputError}
-                    />
-                    <InputBox
-                      label="H"
-                      value={boxInputData?.height}
-                      name="height"
-                      inputType="text"
-                      inputMode="numeric"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      // inputError={inputError}
-                    />
-                  </div>
+                      <div>
+                        <InputBox
+                          label="Dead Weight (Kg)"
+                          value={boxInputData?.deadWeight}
+                          name="deadWeight"
+                          inputType="text"
+                          inputMode="numeric"
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
+                          //   inputError={inputError}
+                        />
+                      </div>
+
+                      <div className="flex justify-between w-[100%] gap-x-[2rem]">
+                        <div className="w-[50%]">
+                          <CustomDropDown
+                            onChange={() => {}}
+                            options={[
+                              {
+                                label: boxInputData?.measureUnit,
+                                value: boxInputData?.measureUnit,
+                              },
+                            ]}
+                          />
+                        </div>
+                        <div className="flex w-[50%] gap-x-4">
+                          <InputBox
+                            label="L"
+                            inputType="text"
+                            inputMode="numeric"
+                            name="length"
+                            value={boxInputData?.length}
+                            onChange={(e: any) => {
+                              if (!isNaN(e.target.value)) {
+                                onChangeHandler(e);
+                              }
+                            }}
+                            // inputError={inputError}
+                          />
+                          <InputBox
+                            label="B"
+                            value={boxInputData?.breadth}
+                            name="breadth"
+                            inputType="text"
+                            inputMode="numeric"
+                            onChange={(e: any) => {
+                              if (!isNaN(e.target.value)) {
+                                onChangeHandler(e);
+                              }
+                            }}
+                            // inputError={inputError}
+                          />
+                          <InputBox
+                            label="H"
+                            value={boxInputData?.height}
+                            name="height"
+                            inputType="text"
+                            inputMode="numeric"
+                            onChange={(e: any) => {
+                              if (!isNaN(e.target.value)) {
+                                onChangeHandler(e);
+                              }
+                            }}
+                            // inputError={inputError}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

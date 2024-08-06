@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import packegeIcon from "../../../../assets/Delivery Icon.svg";
 import CustomDropDown from "../../../../components/DropDown";
 import InputBox from "../../../../components/Input";
@@ -21,37 +21,55 @@ import {
 } from "../../../../utils/utility";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
 import CustomSearchDropDown from "../../components/CustomSearchDropDown";
-import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
+import {
+  CREATE_BULK_PRODUCT,
+  CREATE_SELLER_BOX,
+  GET_SELLER_BOX,
+} from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import SearchDropDown from "../../components/searchDropDown";
 import CopyTooltip from "../../../../components/CopyToClipboard";
+import { POST } from "../../../../utils/webService";
+import toast from "react-hot-toast";
+
+const initialState: any = {
+  name: "",
+  weightUnit: "Kg",
+  deadWeight: 0,
+  length: 0,
+  breadth: 0,
+  height: 0,
+  measureUnit: "cm",
+  products: [],
+  codInfo: {
+    isCod: false,
+    collectableAmount: 0,
+    invoiceValue: 0,
+  },
+  podInfo: {
+    isPod: false,
+  },
+  insurance: false,
+  eWayBillNo: "",
+  transporterNo: "",
+};
+
+const boxDataForCatalogue = {
+  name: "",
+  length: "",
+  breadth: "",
+  height: "",
+  color: "Brown",
+  price: "323",
+  deadWeight: "",
+};
 
 function BoxModal({ onClose, setOrder, order }: any) {
-  const [services, setServices] = useState([]);
-  const [serviceIndex, setServiceIndex]: any = useState(0);
-  const [globalIndex, setGlobalIndex]: any = useState(null);
-  const [transporterNoModalOpen, setTransporterNoModalOpen] = useState(false);
-  const [boxInputData, setBoxInputData]: any = useState({
-    name: "White Box",
-    weightUnit: "Kg",
-    deadWeight: 2.5,
-    length: 1.5,
-    breadth: 1.5,
-    height: 1.5,
-    measureUnit: "cm",
-    products: [],
-    codInfo: {
-      isCod: false,
-      collectableAmount: 0,
-      invoiceValue: 0,
-    },
-    podInfo: {
-      isPod: false,
-    },
-    insurance: false,
-    eWayBillNo: "",
-    transporterNo: "",
-  });
+  const [isnewData, setIsNewData]: any = useState(false);
+  const [isAutoPopulateData, setIsAutoPopulateData]: any = useState(false);
+
+  const [boxInputData, setBoxInputData]: any = useState(initialState);
+  const [addToCatalogueLoader, setAddToCatalogueLoader] = useState(false);
 
   const calculateVolumeWeight = (
     length: number,
@@ -117,6 +135,38 @@ function BoxModal({ onClose, setOrder, order }: any) {
     }));
   };
 
+  const addBoxToCatalogue = async () => {
+    const { name, length, breadth, height, deadWeight } = boxInputData;
+    const parsedLength = +length;
+    const parsedBreadth = +breadth;
+    const parsedHeight = +height;
+    const parsedDeadWeight = +deadWeight;
+    const volumetricWeight = +calculateVolumeWeight(
+      parsedLength,
+      parsedBreadth,
+      parsedHeight
+    ).toFixed(2);
+    const appliedWeight = Math.max(parsedDeadWeight, volumetricWeight);
+
+    const payload = {
+      ...boxDataForCatalogue,
+      name: name,
+      length: parsedLength,
+      breadth: parsedBreadth,
+      height: parsedHeight,
+      deadWeight: parsedDeadWeight,
+      volumetricWeight,
+      appliedWeight,
+    };
+
+    const { data: response } = await POST(CREATE_SELLER_BOX, payload);
+    if (response?.success) {
+      toast.success(response?.message);
+    } else {
+      toast.error(response?.message);
+    }
+  };
+
   const onSave = () => {
     handleVolumCalc();
 
@@ -142,6 +192,10 @@ function BoxModal({ onClose, setOrder, order }: any) {
         },
       ],
     }));
+
+    if (isnewData) {
+      addBoxToCatalogue();
+    }
     onClose(false);
   };
 
@@ -172,274 +226,102 @@ function BoxModal({ onClose, setOrder, order }: any) {
                 }}
                 // onClick={() => handleProductsDetails(index)}
               >
-                <div className="flex flex-col gap-y-6 w-[100%] px-[1rem]">
-                  <div>
-                    <SearchDropDown
-                      className={`border`}
-                      apiUrl={GET_SELLER_BOX}
-                      label="Search Package"
-                      setFunc={setBoxInputData}
-                      identifier="BOX"
-                      emptyMsg={`No Box Found`}
-                    />
-                  </div>
-
-                  <div>
-                    <InputBox
-                      label="Box Name"
-                      value={boxInputData?.name}
-                      name="name"
-                      inputType="text"
-                      onChange={(e: any) => onChangeHandler(e)}
-                      //   inputError={inputError}
-                    />
-                  </div>
-
-                  <div className="mt-2">
-                    <InputBox
-                      label="Dead Weight (Kg)"
-                      value={boxInputData?.deadWeight}
-                      inputType="text"
-                      inputMode="numeric"
-                      name="deadWeight"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      //   inputError={inputError}
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-between w-[100%] gap-x-6 px-[1rem]">
-                  <div className="w-[50%]">
-                    <CustomDropDown
-                      onChange={() => {}}
-                      options={[
-                        {
-                          label: boxInputData?.measureUnit,
-                          value: boxInputData?.measureUnit,
-                        },
-                      ]}
-                    />
-                  </div>
-                  <div className="flex w-[50%]  gap-x-4">
-                    <InputBox
-                      label="L"
-                      inputType="text"
-                      inputMode="numeric"
-                      name="length"
-                      value={boxInputData?.length}
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      // inputError={inputError}
-                    />
-                    <InputBox
-                      label="B"
-                      value={boxInputData?.breadth}
-                      name="breadth"
-                      inputType="text"
-                      inputMode="numeric"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      // inputError={inputError}
-                    />
-                    <InputBox
-                      label="H"
-                      value={boxInputData?.height}
-                      name="height"
-                      inputType="text"
-                      inputMode="numeric"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          onChangeHandler(e);
-                        }
-                      }}
-                      // inputError={inputError}
-                    />
-                  </div>
-                </div>
-
-                {/* <div className="flex !w-[100%] px-4">
-                  <CustomInputBox
-                    isRightIcon={true}
-                    containerStyle=""
-                    rightIcon={AutoGenerateIcon}
-                    className="w-full !text-base !font-semibold"
-                    imageClassName="!h-[12px] !w-[113px] !top-[40%] "
-                    value={boxInputData?.orderId}
-                    maxLength={12}
-                    label="Order ID"
-                    onChange={(e) => {
-                      setBoxInputData((prevState: any) => {
-                        return { ...prevState, orderId: e.target.value };
-                      });
-                    }}
-                    onClick={() => {
-                      const orderId = generateUniqueCode(8, 12);
-                      setBoxInputData((prevState: any) => {
-                        return { ...prevState, orderId: orderId };
-                      });
-                    }}
-                    visibility={true}
-                    setVisibility={() => {}}
-                    name="orderId"
-                    data-cy="auto-generate-order-id"
+                <div className="w-[100%] px-[1rem]">
+                  <SearchDropDown
+                    className={`border`}
+                    apiUrl={GET_SELLER_BOX}
+                    label="Search Package"
+                    setFunc={setBoxInputData}
+                    identifier="BOX"
+                    emptyMsg={`No Box Found`}
+                    setIsNewData={setIsNewData}
+                    setIsAutoPopulateData={setIsAutoPopulateData}
+                    newDataMessage="Create New Box"
+                    setInputData={setBoxInputData}
+                    initialState={initialState}
                   />
                 </div>
-
-                <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
-                  <div className=" flex justify-start items-center h-fit">
-                    <input
-                      type="radio"
-                      name="type"
-                      value={boxInputData?.codInfo?.isCod}
-                      className=" mr-2 w-[15px] h-[15px]"
-                      checked={!boxInputData?.codInfo?.isCod}
-                      onChange={(e) => {
-                        setBoxInputData(() => {
-                          return {
-                            ...boxInputData,
-                            codInfo: {
-                              ...boxInputData.codInfo,
-                              isCod: false,
-                            },
-                          };
-                        });
-                      }}
-                    />
-                    <div className="text-[15px]">PREPAID</div>
-                  </div>
-                  <div className=" flex justify-start items-center h-fit">
-                    <input
-                      type="radio"
-                      name="type"
-                      value={boxInputData?.codInfo?.isCod}
-                      className=" mr-2 w-[15px] h-[15px] "
-                      checked={boxInputData?.codInfo?.isCod}
-                      onChange={(e) => {
-                        setBoxInputData(() => {
-                          return {
-                            ...boxInputData,
-                            codInfo: {
-                              ...boxInputData.codInfo,
-                              isCod: true,
-                            },
-                          };
-                        });
-                      }}
-                    />
-                    <div className="text-[15px]">COD</div>
-                  </div>
-                </div>
-
-                <div className="flex w-[100%] px-4 gap-x-4 justify-between items-center">
-                  <div className="flex-1">
-                    <InputBox
-                      label="Collectable Amount"
-                      value={boxInputData?.codInfo?.collectableAmount}
-                      name="deadWeight"
-                      inputType="text"
-                      inputMode="numeric"
-                      isDisabled={!boxInputData?.codInfo?.isCod}
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          setBoxInputData(() => {
-                            return {
-                              ...boxInputData,
-                              codInfo: {
-                                ...boxInputData.codInfo,
-                                collectableAmount: +e.target.value,
-                              },
-                            };
-                          });
-                        }
-                      }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <InputBox
-                      label="Invoice value"
-                      value={boxInputData?.codInfo?.invoiceValue}
-                      name="deadWeight"
-                      inputType="text"
-                      inputMode="numeric"
-                      onChange={(e: any) => {
-                        if (!isNaN(e.target.value)) {
-                          setBoxInputData(() => {
-                            return {
-                              ...boxInputData,
-                              codInfo: {
-                                ...boxInputData.codInfo,
-                                invoiceValue: +e.target.value,
-                              },
-                            };
-                          });
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {boxInputData.codInfo.invoiceValue > 50000 && (
-                  <div>
-                    <div className="flex gap-x-2">
-                      <div className="w-full">
+                {(isnewData || isAutoPopulateData) && (
+                  <div className="flex flex-col gap-y-[1rem] ">
+                    <div className="flex flex-col gap-y-4 mt-1 w-[100%] px-[1rem]">
+                      <div>
                         <InputBox
-                          label="Transporter No"
-                          value={boxInputData?.transporterNo}
-                          name="transporterNo"
+                          label="Box Name"
+                          value={boxInputData?.name}
+                          name="name"
                           inputType="text"
+                          onChange={(e: any) => onChangeHandler(e)}
+                        />
+                      </div>
+
+                      <div className="mt-2">
+                        <InputBox
+                          label="Dead Weight (Kg)"
+                          value={boxInputData?.deadWeight}
+                          inputType="text"
+                          inputMode="numeric"
+                          name="deadWeight"
                           onChange={(e: any) => {
-                            setBoxInputData((prevState: any) => {
-                              return {
-                                ...prevState,
-                                transporterNo: e.target.value,
-                              };
-                            });
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
                           }}
                         />
                       </div>
-                      <button
-                        className="flex justify-center items-center"
-                        onClick={() => {
-                          setTransporterNoModalOpen(true);
-                        }}
-                      >
-                        <img
-                          src={infoIcon}
-                          alt="infoIcon for Transporter"
-                          className="w-[20px] cursor-pointer"
-                        />
-                      </button>
                     </div>
-                    <div className="mt-5">
-                      <div className="md:!w-[372px]">
-                        <CustomInputBox
+                    <div className="flex justify-between w-[100%] mt-2 gap-x-6 px-[1rem]">
+                      <div className="w-[50%]">
+                        <CustomDropDown
+                          onChange={() => {}}
+                          options={[
+                            {
+                              label: boxInputData?.measureUnit,
+                              value: boxInputData?.measureUnit,
+                            },
+                          ]}
+                        />
+                      </div>
+                      <div className="flex w-[50%]  gap-x-4">
+                        <InputBox
+                          label="L"
                           inputType="text"
-                          label="Enter Eway Bill No."
-                          value={boxInputData?.eWayBillNo}
-                          onChange={(e) => {
-                            if (e.target.value.length <= 12)
-                              setBoxInputData((prevState: any) => {
-                                return {
-                                  ...prevState,
-                                  eWayBillNo: e.target.value,
-                                };
-                              });
+                          inputMode="numeric"
+                          name="length"
+                          value={boxInputData?.length}
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
                           }}
-                          name="ewaybillNumber"
+                        />
+                        <InputBox
+                          label="B"
+                          value={boxInputData?.breadth}
+                          name="breadth"
+                          inputType="text"
+                          inputMode="numeric"
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
+                        />
+                        <InputBox
+                          label="H"
+                          value={boxInputData?.height}
+                          name="height"
+                          inputType="text"
+                          inputMode="numeric"
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
                         />
                       </div>
                     </div>
                   </div>
-                )} */}
+                )}
               </div>
             </div>
           </div>
