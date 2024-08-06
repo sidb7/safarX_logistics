@@ -228,14 +228,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "Download Invoice",
       },
     ],
-    // "IN TRANSIT": [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
+    "IN TRANSIT": [
+      {
+        icon: CrossIcon,
+        hovertext: "Rto Orders",
+        identifier: "Rto",
+        buttonName: "RTO ORDERS",
+      },
+    ],
     // "OUT OF DELIVERY": [
     //   {
     //     icon: CrossIcon,
@@ -260,14 +260,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     //     buttonName: "CANCEL ORDERS",
     //   },
     // ],
-    // EXCEPTION: [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
+    EXCEPTION: [
+      {
+        icon: CrossIcon,
+        hovertext: "Rto Orders",
+        identifier: "Rto",
+        buttonName: "RTO ORDERS",
+      },
+      {
+        icon: CrossIcon,
+        hovertext: "Re-Attempt Orders",
+        identifier: "Re-Attempt",
+        buttonName: "RE-ATTEMPT ORDERS",
+      },
+    ],
     "READY TO PICK": [
       // {
       //   icon: CrossIcon,
@@ -512,7 +518,29 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         // }
         break;
       }
-      case "IN TRANSIT":
+      case "IN TRANSIT": {
+        // if (selectedRowdata.length > 0) {
+        if (identifier === "Cancel") {
+          if (selectedRowdata.length > 0) {
+            const awbNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
+            setCancellationModal &&
+              setCancellationModal({ isOpen: true, payload: awbNo });
+          } else {
+            toast.error("Please select atleast one order for Cancellation");
+            return;
+          }
+        } else {
+          toast.error("Please select atleast one order for Download Invoice");
+          return;
+        }
+
+        // } else {
+        //   toast.error("Please select atleast one order for tax Invoice");
+        // }
+        break;
+      }
       case "OUT OF DELIVERY":
       case "DELIVERED":
       case "RETURN":
@@ -524,6 +552,19 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             });
             setCancellationModal &&
               setCancellationModal({ isOpen: true, payload: awbNo });
+          }
+        } else if (identifier === "Download_menifest_report") {
+          if (selectedRowdata.length > 0) {
+            const awbsNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
+
+            fetchManifest(awbsNo);
+          } else {
+            toast.error(
+              "Please select atleast one order for Download Manifest"
+            );
+            return;
           }
         } else {
           toast.error("Please select atleast one order");
@@ -748,6 +789,94 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 Filter
               </span>
             </div> */}
+          </div>
+        );
+      } else if (currentStatus === "IN TRANSIT") {
+        // buttons and the logic to here for "IN TRANSIT"
+        return (
+          <div className="grid grid-cols-4 lg:flex ">
+            {getActionsIcon()?.length > 0 && manifestButton && (
+              <div className="rounded-md flex mx-3 gap-x-3">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <button
+                        key={index}
+                        className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } rounded-l-md rounded-r-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
+                        }
+                      >
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+                        <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
+                      </button>
+                    </>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      } else if (currentStatus === "EXCEPTION") {
+        // buttons and the logic to here for "EXCEPTION"
+        return (
+          <div className="grid grid-cols-4 lg:flex ">
+            {getActionsIcon()?.length > 0 && manifestButton && (
+              <div className="rounded-md flex mx-3 gap-x-3">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <button
+                        key={index}
+                        className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } rounded-l-md rounded-r-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
+                        }
+                      >
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+                        <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
+                      </button>
+                    </>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
       } else {

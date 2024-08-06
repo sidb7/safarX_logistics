@@ -10,7 +10,13 @@ import EditBoxModal from "./components/editBoxModal";
 import EditProductModal from "./components/editProductModal";
 import OrderIdModal from "./components/orderIdModal";
 
-function PackageDetails({ packageDetails, order, setOrder }: any) {
+function PackageDetails({
+  packageDetails,
+  order,
+  setOrder,
+  setSortServiciblity,
+  showDownloadLebal,
+}: any) {
   const [boxModal, setBoxModal]: any = useState(false);
   const [boxInfoData, setBoxInfoData] = useState([]);
   const [productModal, setProductModal]: any = useState({
@@ -95,17 +101,17 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
             </div>
           </div>
           <div className="flex gap-x-4">
-            {/* {packageDetails.length > 0 && (
-              <div className="border text-[15px] py-1 px-2 rounded">
-                Total Applied Weight : 33.6 Kg
-              </div>
-            )} */}
-            <button
-              className="flex justify-center items-center cursor-pointer"
-              onClick={() => setBoxModal(true)}
-            >
-              <img src={addIcon} alt="" />
-            </button>
+            {!showDownloadLebal && (
+              <button
+                className="flex justify-center items-center cursor-pointer"
+                onClick={() => {
+                  setBoxModal(true);
+                  setSortServiciblity("");
+                }}
+              >
+                <img src={addIcon} alt="" />
+              </button>
+            )}
           </div>
         </div>
         <div className=" max-h-[300px] pb-[20px] customScroll">
@@ -125,6 +131,8 @@ function PackageDetails({ packageDetails, order, setOrder }: any) {
                     setEditBoxModal={setEditBoxModal}
                     setEditProductModal={setEditProductModal}
                     setIsOpen={setopenOrderIdModal}
+                    setSortServiciblity={setSortServiciblity}
+                    showDownloadLebal={showDownloadLebal}
                   />
                 </div>
               );

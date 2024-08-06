@@ -49,7 +49,7 @@ function BoxModal({ onClose, setOrder, order }: any) {
       isPod: false,
     },
     insurance: false,
-    ewaybillNumber: "",
+    eWayBillNo: "",
     transporterNo: "",
   });
 

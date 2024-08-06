@@ -18,11 +18,17 @@ import CustomSearchBoxForService from "../components/CustomDropDownForService";
 interface IIndexProps {
   order?: any;
   setOrder?: any;
+  setSortServiciblity: any;
+  sortServiceiblity: any;
+  showDownloadLebal: any;
 }
 
 const Index: React.FunctionComponent<IIndexProps> = ({
   order,
   setOrder,
+  setSortServiciblity,
+  sortServiceiblity,
+  showDownloadLebal,
 }: IIndexProps) => {
   const [sortServiceiblity, setSortServiciblity] = useState("");
 
@@ -44,21 +50,6 @@ const Index: React.FunctionComponent<IIndexProps> = ({
 
     return pickupDetailsValid && deliveryDetailsValid && boxInfoValid;
   }
-
-  useEffect(() => {
-    if (validateForServicebility(order)) {
-      setOrder((prevState: any) => {
-        return {
-          ...prevState,
-          courierPartner: "",
-          serviceMode: "",
-          totalPrice: 0,
-        };
-      });
-    }
-    console.log("setSortServiciblity === `` ");
-    setSortServiciblity("");
-  }, [order?.boxInfo, order?.pickupDetails, order?.deliveryDetails]);
 
   return (
     <>
@@ -117,6 +108,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
               state={order}
               setFunc={setOrder}
               disabled={!validateForServicebility(order)}
+              showDownloadLebal={showDownloadLebal}
             />
           </div>
         </div>

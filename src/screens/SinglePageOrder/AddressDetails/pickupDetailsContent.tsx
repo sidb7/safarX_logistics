@@ -80,8 +80,10 @@ const PickupDetailsContent: React.FunctionComponent<
 
   const handleLandmarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setLocalLandmark(value);
-    validateField("landmark", value);
+    setLocalLandmark({
+      ...localLandmark,
+      landmark: value,
+    });
   };
 
   const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +158,9 @@ const PickupDetailsContent: React.FunctionComponent<
   const handlePincode = async (pincode: any) => {
     if (pincode.length === 6) {
       const { data: response } = await POST(GET_PINCODE_DATA, { pincode });
+
+      console.log("pincode handler is working");
+
       setLocalLandmark({
         ...localLandmark,
         state: capitalizeFirstLetter(response?.data?.[0]?.state),
@@ -171,6 +176,10 @@ const PickupDetailsContent: React.FunctionComponent<
   };
 
   // RETURNING_USER_PICKUP;
+
+  useEffect(() => {
+    console.log("localLandmark", localLandmark);
+  }, [localLandmark]);
 
   return (
     <>

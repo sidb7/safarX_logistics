@@ -81,7 +81,10 @@ const DeliveryDetailsContent: React.FunctionComponent<
 
   const handleLandmarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setLocalLandmark(value);
+    setLocalLandmark({
+      ...localLandmark,
+      landmark: value,
+    });
     validateField("landmark", value);
   };
 
