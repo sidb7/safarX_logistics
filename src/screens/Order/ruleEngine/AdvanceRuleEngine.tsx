@@ -7,7 +7,7 @@
 // };
 
 import React, { useState } from "react";
-import QueryBuilder from "react-querybuilder";
+// import QueryBuilder from "react-querybuilder";
 
 const fields = [
   { name: "paymentMode", label: "Payment Mode" },
@@ -31,11 +31,11 @@ const AdvanceRuleEngine = () => {
     <div>
       <h1>Rule Engine</h1>
       <div className="query-builder">
-        <QueryBuilder
+        {/* <QueryBuilder
           fields={fields}
           query={query}
           onQueryChange={handleQueryChange}
-        />
+        /> */}
       </div>
       <button onClick={handleExecuteAction}>Execute Action</button>
     </div>
