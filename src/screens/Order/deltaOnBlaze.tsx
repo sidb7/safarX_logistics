@@ -71,7 +71,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               data-tooltip-id="my-tooltip-delivery-max"
               data-tooltip-content={`${
                 TemplateName === "Tracking Updates"
-                  ? "Applicable for Pickup, In Transit, Out for delivery and delivered status."
+                  ? "Applicable for Out for delivery , Reached Destination and delivered status."
                   : ""
               }`}
             />
@@ -484,6 +484,29 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
     // }),
   ];
 
+  // const handleCheckboxChange = (
+  //   templateName: string,
+  //   channelName: string,
+  //   checked: boolean
+  // ) => {
+  //   setCommunicationChannels((prevChannels: any) => {
+  //     return prevChannels.map((template: any) => {
+  //       if (template.templateName === templateName) {
+  //         const updatedChannels = template.communicationChannels.map(
+  //           (channel: any) => {
+  //             if (channel.channelName === channelName) {
+  //               return { ...channel, isChecked: checked };
+  //             }
+  //             return channel;
+  //           }
+  //         );
+  //         return { ...template, communicationChannels: updatedChannels };
+  //       }
+  //       return template;
+  //     });
+  //   });
+  // };
+
   const handleCheckboxChange = (
     templateName: string,
     channelName: string,
@@ -500,7 +523,17 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               return channel;
             }
           );
-          return { ...template, communicationChannels: updatedChannels };
+
+          // Determine if the outer isChecked should be true
+          const isTemplateChecked = updatedChannels.some(
+            (channel: any) => channel.isChecked
+          );
+
+          return {
+            ...template,
+            communicationChannels: updatedChannels,
+            isChecked: isTemplateChecked,
+          };
         }
         return template;
       });
@@ -554,7 +587,12 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             rateCardName: response?.data?.data[0]?.rateCardName || "",
           });
 
-          const rateCardData = response.data?.data?.[0]?.rates;
+          // const rateCardData = response.data?.data?.[0]?.rates;
+          // setCommunicationChannels(rateCardData);
+
+          const rateCardData = response.data?.data?.[0]?.rates.filter(
+            (rate: any) => rate.templateName !== "Global Rate"
+          );
           setCommunicationChannels(rateCardData);
 
           const filteredData = rateCardData
@@ -600,7 +638,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columns={columns}
                 data={communicationChannels || []}
-                thclassName={"!pb-4"}
+                thclassName={"!pb-4 !relative !z-0"}
                 tdclassName={"border-0 border-b !pb-[16px]"}
                 trclassName={"!shadow-none !rounded-none"}
               />
@@ -614,7 +652,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columns={PricingColumns}
                 data={filteredRateCard || []}
-                thclassName={"!pb-4"}
+                thclassName={"!pb-4 !z-0"}
                 tdclassName={"border-0 border-b !pb-[16px]"}
                 trclassName={"!shadow-none !rounded-none"}
               />
@@ -628,7 +666,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
-          text={"ACTIVATE"}
+          text={"UPDATE SETTINGS"}
           onClick={handleSave}
           className="!bg-[#60D669] !border-[#60D669] h-[36px] !text-[#FFFFFF] !px-4 !py-2 !font-Open !font-semibold !text-[14px] !leading-5 !rounded-[4px] hover:!bg-[#27B031] hover:!shadow-cardShadow2a focus:!bg-[#60D669] focus:border focus:!border-[#27B031]"
         />

@@ -389,24 +389,6 @@ const Index = () => {
     useState<any>(false);
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
-
-  const [bulkActionObject, setBulkActionObject] = useState({
-    pickupAddress: {
-      name: "",
-      mobileNo: "",
-      fullAddress: "",
-      pincode: "",
-      landMark: "",
-    },
-    deliveryAddress: {
-      name: "",
-      mobileNo: "",
-      fullAddress: "",
-      pincode: "",
-      landMark: "",
-    },
-  });
-
   // const [isMasked, setIsMasked] = useState(false);
 
   // useEffect(() => {
@@ -421,6 +403,9 @@ const Index = () => {
 
   let syncChannelTextObj: any = localStorage.getItem("userInfo");
   syncChannelTextObj = JSON.parse(syncChannelTextObj);
+
+  let kycValue: any = localStorage.getItem("kycValue");
+  kycValue = JSON.parse(kycValue);
 
   let syncTimerState = useSelector((state: any) => state?.channel?.time?.time);
 
@@ -744,7 +729,7 @@ const Index = () => {
             icon={BlukOrderIcon}
           />
 
-          {isLgScreen ? (
+          {isLgScreen && kycValue?.communicationRateCardExists ? (
             <OneButton
               text="Delivery Max"
               className="!bg-[#60D669] !border-[#60D669] !text-[#FFFFFF] !px-4 !py-2 !font-Open !font-semibold !text-[14px] !leading-5 !rounded-[4px] hover:!bg-[#27B031] hover:!shadow-cardShadow2a focus:!bg-[#60D669] focus:border focus:!border-[#27B031]"
@@ -2262,8 +2247,6 @@ const Index = () => {
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
-                bulkActionObject={bulkActionObject}
-                setBulkActionObject={setBulkActionObject}
               />
             </div>
             <div

@@ -14,16 +14,18 @@ export function checkPageAuthorized(name: any) {
         status = true;
         break;
       } else {
-        for (let child of parent.menu) {
-          if (child.name.toLowerCase() === name) {
-            status = true;
-            break;
+        if (parent?.menu?.length > 0) {
+          for (let child of parent?.menu) {
+            if (child.name.toLowerCase() === name) {
+              status = true;
+              break;
+            }
           }
-        }
-        for (let child of parent.menu?.[0].pages) {
-          if (child.name.toLowerCase() === name) {
-            status = true;
-            break;
+          for (let child of parent?.menu?.[0]?.pages) {
+            if (child.name.toLowerCase() === name) {
+              status = true;
+              break;
+            }
           }
         }
       }

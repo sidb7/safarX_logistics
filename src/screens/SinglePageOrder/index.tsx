@@ -84,6 +84,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     return storedValue !== null ? JSON.parse(storedValue) : initialState;
   });
 
+  console.log("order", order?.orderType, order?.transit);
+
   let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
 
@@ -777,6 +779,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         </span>
                       </div>
                     )}
+
                   <div className="flex justify-center items-center ">
                     <input
                       type="radio"

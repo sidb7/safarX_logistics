@@ -10,7 +10,6 @@ interface ISearchBoxProps {
   onChange: any;
   getFullContent?: any;
   customPlaceholder?: string;
-  imgClassName?: string;
 }
 
 export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
@@ -20,7 +19,6 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   onChange,
   getFullContent,
   customPlaceholder,
-  imgClassName,
 }) => {
   const resetRef: any = useRef<HTMLInputElement | null>(null);
 
@@ -38,13 +36,13 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
         alt="Clear Search"
         className={`absolute right-0 h-full cursor-pointer p-2 z-0 ${
           value ? "" : "hidden"
-        } ${imgClassName}`}
+        }`}
         onClick={handleReset}
       />
       <img
         src={SearchBoxIcon}
         alt=""
-        className={`absolute left-0 h-full p-2 z-0 ${imgClassName}`}
+        className="absolute left-0 h-full p-2 z-0"
       />
       <input
         ref={resetRef}

@@ -27,6 +27,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [invoiceArray, setInvoiceArray] = useState<any>([]);
+  console.log("invoiceArray", invoiceArray);
   const [creditArray, setCreditArray] = useState<any>([]);
 
   const getCurrentPath = () => {
@@ -66,7 +67,6 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
       const { data } = await POST(GET_ALL_INVOICES, {});
       if (data?.success) {
         setIsLoading(false);
-        console.log("data?.data", data?.data?.[0]?.results?.[0]);
         setInvoiceArray(data?.data?.[0]?.results);
       } else {
         toast.error(data?.message);
@@ -102,7 +102,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
           </div>
           <div>
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
             </div>
           </div>
         </div>
