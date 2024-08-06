@@ -112,13 +112,11 @@ function BoxInfo({
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
-    // set unitPrice-------------------------------------------------------------------
+
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
-    //-------------------------------------------------------------------
 
-    //
     obj.boxInfo[index].products[productIndex].appliedWeight =
       baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
@@ -138,6 +136,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const removeUnit = (productIndex: number) => {
@@ -194,6 +193,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const OnChangeHandler = (e: any) => {
@@ -206,6 +206,7 @@ function BoxInfo({
         boxInfo: updatedBoxInfo,
       };
     });
+    setSortServiciblity("");
   };
 
   useEffect(() => {
@@ -226,7 +227,7 @@ function BoxInfo({
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2  rounded`}
+        className={`px-4 pt-2 pb-4 my-2  rounded-lg`}
         style={{ backgroundColor: getColorByIndex(index) }}
       >
         <div className="gap-y-4">
@@ -278,7 +279,7 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    labelClassName={`!text-black  !bg-[${getColorByIndex(
+                    labelClassName={`!text-black !bg-[${getColorByIndex(
                       index
                     )}]`}
                     isDisabled={true}
@@ -357,7 +358,7 @@ function BoxInfo({
               </div>
             </div>
             <div
-              className={`!transition-all gap-y-2 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
+              className={`!transition-all gap-y-1 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
                 allProducts.length > 0 && " border-x-[#E8E8E8]"
               } shadow-none`}
               data-cy="product-list"

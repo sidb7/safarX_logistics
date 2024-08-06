@@ -31,6 +31,7 @@ import { tokenKey } from "../../utils/utility";
 import { useSelector } from "react-redux";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { forEach } from "lodash";
+import { Spinner } from "../../components/Spinner";
 
 interface IIndexProps {}
 
@@ -255,7 +256,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         );
       },
     }),
-    columnsHelper.accessor("package", {
+    columnsHelper.accessor(" EwayBill", {
       header: () => {
         return (
           <p className="font-Open text-[10px] font-semibold leading-[16px] text-[#000000] text-center">
@@ -297,7 +298,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     //     );
     //   },
     //   cell: (info: any) => {
-    //     console.log("rowData", info.row.original?.codInfo?.invoiceValue);
+    //
     //     return (
     //       <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
     //         {info.row.original?.codInfo?.invoiceValue || "-"}
@@ -475,7 +476,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
   const PlaceOrder = async () => {
     let payload = { ...order };
-
     payload.boxInfo = payload.boxInfo.map((box: any) => {
       return {
         ...box,
@@ -488,27 +488,42 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       };
     });
 
+    if (payload?.orderType === "B2B") {
+      if (
+        payload?.pickupDetails?.gstNumber === undefined ||
+        payload?.pickupDetails?.gstNumber.trim() === "" ||
+        payload?.deliveryDetails?.gstNumber === undefined ||
+        payload?.deliveryDetails?.gstNumber.trim() === ""
+      ) {
+        toast.error("Please Enter GST Number");
+        return;
+      }
+    }
+
     if (walletBalance < order?.totalPrice) {
       setShowAlertBox(true);
       return;
     }
-
     try {
+      setplaceOrderLoader(true);
       const { data } = await POST(REVERSE_ORDER, payload);
 
       if (data?.success) {
         const listOfawbs = data?.data[0]?.awbs.map(
-          (awb: any) => awb?.tracking?.awb
+          (awb: any) => `${awb?.tracking?.awb}`
         );
-        setAwbListForDownLoad(listOfawbs);
 
+        setAwbListForDownLoad(listOfawbs);
+        setplaceOrderLoader(false);
         setDownloadLebal(true);
         toast.success(data?.message || "Successfully Placed order");
       } else {
         toast.error(data?.message);
+        setplaceOrderLoader(false);
       }
     } catch (error: any) {
       toast.error(error?.message);
+      setplaceOrderLoader(false);
     }
   };
 
@@ -538,15 +553,21 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
           {!showDownloadLebal ? (
             <div className="flex justify-center items-center pt-5 pb-12">
-              <OneButton
-                onClick={PlaceOrder}
-                text={`Place Order ₹ ${
-                  order?.totalPrice ? order?.totalPrice : 0
-                } `}
-                variant="primary"
-                className="!w-[228px]"
-                disabled={!validateOrder(order)}
-              />
+              {placeOrderLoader ? (
+                <div className="flex justify-center items-center py-1 rounded-lg !w-[228px]">
+                  <Spinner />
+                </div>
+              ) : (
+                <OneButton
+                  onClick={PlaceOrder}
+                  text={`Place Order ₹ ${
+                    order?.totalPrice ? order?.totalPrice : 0
+                  } `}
+                  variant="primary"
+                  className="!w-[228px]"
+                  disabled={!validateOrder(order)}
+                />
+              )}
             </div>
           ) : (
             <div>
@@ -613,11 +634,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     let tempOrder = { ...order };
     tempOrder.boxInfo.forEach((element: any) => {
       element.codInfo.isCod = e === "COD" ? true : false;
+      element.codInfo.collectableAmount =
+        e !== "COD" ? 0 : element.codInfo.invoiceValue;
     });
     setOrder(tempOrder);
+    setSortServiciblity("");
   };
-
-  console.log("order", order);
 
   return (
     <>
@@ -672,6 +694,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       setOrder((prevState: any) => {
                         return { ...prevState, orderId: e.target.value };
                       });
+                      setSortServiciblity("");
                     }}
                     isDisabled={showDownloadLebal}
                     onClick={() => {
@@ -679,6 +702,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       setOrder((prevState: any) => {
                         return { ...prevState, orderId: orderId };
                       });
+                      setSortServiciblity("");
                     }}
                     visibility={true}
                     setVisibility={() => {}}

@@ -40,6 +40,7 @@ function PackageDetails({
     let tempOrder = { ...order };
     tempOrder?.boxInfo.splice(boxIndex, 1);
     setOrder(tempOrder);
+    setSortServiciblity("");
   }
 
   function removeProduct(boxIndex: any, productIndex: any) {
@@ -71,6 +72,7 @@ function PackageDetails({
     tempOrder.boxInfo[boxIndex].appliedWeight = updateBoxAppliedWeight;
 
     setOrder(tempOrder);
+    setSortServiciblity("");
   }
 
   useEffect(() => {

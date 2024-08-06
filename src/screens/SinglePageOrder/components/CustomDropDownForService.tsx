@@ -124,7 +124,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     setSearchInput(
       `${value?.name} : ${capitalizeFirstLetter(value?.serviceMode)}`
     );
-
     setFunc((prevState: any) => {
       return {
         ...prevState,
@@ -137,10 +136,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   };
 
   useEffect(() => {
-    console.log("sortIdentifier---test--1", sortIdentifier.length, disabled);
     if (sortIdentifier.length !== 0 && disabled === false) {
-      console.log("sortIdentifier---test--2", sortIdentifier.length, disabled);
-
       getServices();
     }
   }, [sortIdentifier, disabled, state]);
@@ -151,9 +147,16 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
       setFilterData([]);
       setArrayValue([]);
     }
-  }, [sortIdentifier, state]);
-
-  console.log("filterData", filterData);
+    setFunc((prevState: any) => {
+      return {
+        ...prevState,
+        courierPartner: "",
+        serviceMode: "",
+        totalPrice: 0,
+        partnerServiceName: "",
+      };
+    });
+  }, [sortIdentifier]);
 
   // console.log("")
 

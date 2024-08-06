@@ -30,8 +30,6 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   sortServiceiblity,
   showDownloadLebal,
 }: IIndexProps) => {
-  const [sortServiceiblity, setSortServiciblity] = useState("");
-
   function validateForServicebility(order: any) {
     const pickupDetailsValid =
       order.pickupDetails.fullAddress.trim() !== "" &&
@@ -66,7 +64,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
             <div className="flex justify-center items-center">
               <input
                 type="radio"
-                name="singlePage"
+                name="partners"
                 value="Cheapest"
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 // disabled={true}
@@ -83,7 +81,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
             >
               <input
                 type="radio"
-                name="singlePage"
+                name="partners"
                 value="Fastest"
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 disabled={true}
