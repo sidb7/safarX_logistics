@@ -150,6 +150,7 @@ const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
+const RTO_REATTEMPT = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -636,4 +637,5 @@ export {
   DOWNLOAD_MISREPORT_FROM_S3,
   FETCH_ADVANCE_RULE_ENGINE,
   CREATE_UPDATE_ADVANCE_RULE_ENGINE,
+  RTO_REATTEMPT,
 };
