@@ -103,7 +103,7 @@ const reducer = (state: any, action: any) => {
     case "SET_RULE_ENGINE_FIELD":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? { ...engine, [action.field]: action.value }
             : engine
@@ -121,7 +121,7 @@ const reducer = (state: any, action: any) => {
     case "ADD_CONDITION":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? {
                 ...engine,
@@ -145,7 +145,7 @@ const reducer = (state: any, action: any) => {
     case "REMOVE_CONDITION":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? {
                 ...engine,
@@ -167,11 +167,11 @@ const reducer = (state: any, action: any) => {
     case "SET_CONDITION":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? {
                 ...engine,
-                conditions: engine.conditions.map(
+                conditions: engine?.conditions?.map(
                   (condition: any, condIndex: number) =>
                     condIndex === action.index
                       ? { ...condition, ...action.condition }
@@ -193,7 +193,7 @@ const reducer = (state: any, action: any) => {
     case "ADD_ACTION":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? {
                 ...engine,
@@ -216,7 +216,7 @@ const reducer = (state: any, action: any) => {
     case "REMOVE_ACTION":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? {
                 ...engine,
@@ -238,11 +238,11 @@ const reducer = (state: any, action: any) => {
     case "SET_ACTION":
       return {
         ...state,
-        ruleEngines: state.ruleEngines.map((engine: any, index: number) =>
+        ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
             ? {
                 ...engine,
-                actions: engine.actions.map(
+                actions: engine?.actions?.map(
                   (actionItem: any, actionIndex: number) =>
                     actionIndex === action.index
                       ? { ...actionItem, ...action.action }
@@ -378,10 +378,12 @@ const AdvanceRuleEngine_1 = () => {
       const getAllPartnersWithService = await POST(GET_PLANS_PREVIEW, {});
       const advanceRuleEngine = await POST(FETCH_ADVANCE_RULE_ENGINE, {});
 
-      dispatch({
-        type: "SET_INITIAL_STATE",
-        ruleEngines: advanceRuleEngine?.data?.data?.[0]?.ruleEngine,
-      });
+      if (advanceRuleEngine?.data?.success) {
+        dispatch({
+          type: "SET_INITIAL_STATE",
+          ruleEngines: advanceRuleEngine?.data?.data?.[0]?.ruleEngine,
+        });
+      }
 
       const rateCard =
         getAllPartnersWithService?.data?.data?.[0]?.rateCards?.filter(
@@ -393,10 +395,16 @@ const AdvanceRuleEngine_1 = () => {
 
       let partnerService = rateCard?.data?.rates
         ?.map((item: any) =>
-          item?.service?.map((innerItem: any) => ({
-            label: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
-            value: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
-          }))
+          item?.service
+            ?.map((innerItem: any) =>
+              innerItem.isActive
+                ? {
+                    label: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
+                    value: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
+                  }
+                : undefined
+            )
+            .filter(Boolean)
         )
         .flat();
       actionOptions = [...partnerService];
@@ -428,7 +436,7 @@ const AdvanceRuleEngine_1 = () => {
             </button>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
-            {state.ruleEngines.map((ruleEngine: any, engineIndex: any) => (
+            {state?.ruleEngines?.map((ruleEngine: any, engineIndex: any) => (
               <div
                 key={engineIndex}
                 draggable
@@ -491,7 +499,7 @@ const AdvanceRuleEngine_1 = () => {
                           engineIndex,
                         })
                       }
-                      value={ruleEngine?.triggerEvent}
+                      value={ruleEngine?.triggerEvent || ""}
                       options={triggerEvents}
                       heading="Trigger Event"
                     />
@@ -506,7 +514,7 @@ const AdvanceRuleEngine_1 = () => {
                           engineIndex,
                         })
                       }
-                      value={ruleEngine?.gate}
+                      value={ruleEngine?.gate || ""}
                       options={gateFields}
                       heading="Gate"
                     />
@@ -515,131 +523,132 @@ const AdvanceRuleEngine_1 = () => {
                 <div className="mb-2 w-[100%]">
                   <h4 className="text-lg mb-2 font-medium">Conditions:</h4>
                   <div className="space-y-4">
-                    {ruleEngine.conditions.map((condition: any, index: any) => (
-                      <div
-                        key={`${engineIndex}-${index}-01`}
-                        className="grid grid-cols-1 md:grid-cols-4 gap-4"
-                      >
-                        <div>
-                          <CustomDropDown
-                            onChange={(option) =>
-                              dispatch({
-                                type: "SET_CONDITION",
-                                index,
-                                condition: {
-                                  ...condition,
-                                  field: option?.target?.value,
-                                },
-                                engineIndex,
-                              })
-                            }
-                            value={condition?.field}
-                            options={conditionFields}
-                            heading="Select Field"
-                          />
-                        </div>
-                        <div>
-                          <CustomDropDown
-                            onChange={(option) =>
-                              dispatch({
-                                type: "SET_CONDITION",
-                                index,
-                                condition: {
-                                  ...condition,
-                                  operator: option?.target?.value,
-                                },
-                                engineIndex,
-                              })
-                            }
-                            value={condition?.operator}
-                            options={
-                              condition?.field === "paymentMode"
-                                ? [
-                                    { value: "=", label: "Is Equal To" },
-                                    { value: "!=", label: "Is Not Equal To" },
-                                  ]
-                                : conditionOperators
-                            }
-                            heading="Select Operator"
-                          />
-                        </div>
-                        <div>
-                          {state?.ruleEngines?.[engineIndex]?.conditions?.[
-                            index
-                          ]?.field === "paymentMode" ? (
+                    {ruleEngine?.conditions?.map(
+                      (condition: any, index: any) => (
+                        <div
+                          key={`${engineIndex}-${index}-01`}
+                          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+                        >
+                          <div>
                             <CustomDropDown
-                              onChange={(option) => {
+                              onChange={(option) =>
                                 dispatch({
                                   type: "SET_CONDITION",
                                   index,
                                   condition: {
                                     ...condition,
-                                    value: option?.target?.value,
+                                    field: option?.target?.value,
                                   },
                                   engineIndex,
-                                });
-                              }}
-                              value={
-                                state?.ruleEngines?.[engineIndex]?.conditions?.[
-                                  index
-                                ]?.value
+                                })
                               }
-                              options={paymentOptions}
-                              // heading={
-                              //   state?.ruleEngines?.[engineIndex]?.conditions?.[
-                              //     index
-                              //   ]?.value
-                              //     ? state?.ruleEngines?.[engineIndex]?.conditions?.[
-                              //         index
-                              //       ]?.value
-                              //     : "Select Payment Mode"
-                              // }
-                              heading="Select Payment Mode"
+                              value={condition?.field || ""}
+                              options={conditionFields}
+                              heading="Select Field"
                             />
-                          ) : (
-                            <CustomInputBox
-                              label="Value"
-                              name={`conditions.${index}.value`}
-                              value={condition.value}
-                              onChange={(e) => {
-                                // let regex = /[^0-9]+\\.?[0-9]*/;
-                                // const regex = /^-?\d+(\.\d+)?$/;
-                                const regex = /^\d*\.?\d*$/;
-
-                                if (
-                                  regex.test(e?.target?.value) ||
-                                  e?.target?.value === ""
-                                ) {
+                          </div>
+                          <div>
+                            <CustomDropDown
+                              onChange={(option) =>
+                                dispatch({
+                                  type: "SET_CONDITION",
+                                  index,
+                                  condition: {
+                                    ...condition,
+                                    operator: option?.target?.value,
+                                  },
+                                  engineIndex,
+                                })
+                              }
+                              value={condition?.operator || ""}
+                              options={
+                                condition?.field === "paymentMode"
+                                  ? [
+                                      { value: "=", label: "Is Equal To" },
+                                      { value: "!=", label: "Is Not Equal To" },
+                                    ]
+                                  : conditionOperators
+                              }
+                              heading="Select Operator"
+                            />
+                          </div>
+                          <div>
+                            {state?.ruleEngines?.[engineIndex]?.conditions?.[
+                              index
+                            ]?.field === "paymentMode" ? (
+                              <CustomDropDown
+                                onChange={(option) => {
                                   dispatch({
                                     type: "SET_CONDITION",
                                     index,
                                     condition: {
                                       ...condition,
-                                      value: e.target.value,
+                                      value: option?.target?.value,
                                     },
                                     engineIndex,
                                   });
+                                }}
+                                value={
+                                  state?.ruleEngines?.[engineIndex]
+                                    ?.conditions?.[index]?.value || ""
                                 }
-                              }}
-                              className="block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                options={paymentOptions}
+                                // heading={
+                                //   state?.ruleEngines?.[engineIndex]?.conditions?.[
+                                //     index
+                                //   ]?.value
+                                //     ? state?.ruleEngines?.[engineIndex]?.conditions?.[
+                                //         index
+                                //       ]?.value
+                                //     : "Select Payment Mode"
+                                // }
+                                heading="Select Payment Mode"
+                              />
+                            ) : (
+                              <CustomInputBox
+                                label="Value"
+                                name={`conditions.${index}.value`}
+                                value={condition.value}
+                                onChange={(e) => {
+                                  // let regex = /[^0-9]+\\.?[0-9]*/;
+                                  // const regex = /^-?\d+(\.\d+)?$/;
+                                  const regex = /^\d*\.?\d*$/;
+
+                                  if (
+                                    regex.test(e?.target?.value) ||
+                                    e?.target?.value === ""
+                                  ) {
+                                    dispatch({
+                                      type: "SET_CONDITION",
+                                      index,
+                                      condition: {
+                                        ...condition,
+                                        value: e.target.value,
+                                      },
+                                      engineIndex,
+                                    });
+                                  }
+                                }}
+                                className="block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              />
+                            )}
+                          </div>
+                          <div className="flex items-center">
+                            <img
+                              src={DeleteIcon}
+                              className="cursor-pointer"
+                              onClick={() =>
+                                dispatch({
+                                  type: "REMOVE_CONDITION",
+                                  index,
+                                  engineIndex,
+                                })
+                              }
                             />
-                          )}
+                          </div>
                         </div>
-                        <div className="flex items-center">
-                          <img
-                            src={DeleteIcon}
-                            className="cursor-pointer"
-                            onClick={() =>
-                              dispatch({
-                                type: "REMOVE_CONDITION",
-                                index,
-                                engineIndex,
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                     <div
                       style={{ width: "fit-content" }}
                       className="flex cursor-pointer items-center border-2 px-[0.4rem] py-[0.3rem] border-gray-300 rounded-md gap-x-1"
@@ -660,7 +669,7 @@ const AdvanceRuleEngine_1 = () => {
                 <div className="mb-4 w-[100%]">
                   <h4 className="text-lg mb-2 font-medium">Actions:</h4>
                   <div className="space-y-4 ">
-                    {ruleEngine.actions.map((action: any, index: any) => (
+                    {ruleEngine?.actions?.map((action: any, index: any) => (
                       <div
                         key={`${engineIndex}-${index}-02`}
                         className="flex w-[100%] items-center gap-4"
@@ -678,7 +687,7 @@ const AdvanceRuleEngine_1 = () => {
                                 engineIndex,
                               })
                             }
-                            value={action?.courierService}
+                            value={action?.courierService || ""}
                             options={actionOptions}
                             heading="Select Courier Service"
                           />
