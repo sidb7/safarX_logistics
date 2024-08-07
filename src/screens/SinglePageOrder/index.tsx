@@ -684,6 +684,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
+  //set order data in session storage
+
   useEffect(() => {
     sessionStorage.setItem("order", JSON.stringify(order));
     sessionStorage.setItem("paymentType", paymentMode);
