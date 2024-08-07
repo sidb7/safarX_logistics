@@ -98,36 +98,30 @@ function RoleManagement() {
       header: "Actions",
       cell: ({ row }) => {
         const data = row?.original;
+        console.log("🚀 ~ RoleManagement ~ data:", data);
         return (
           <div className="flex justify-center items-center">
-            <div>
-              <OneButton
-                text="UPDATE"
-                onClick={() =>
-                  navigate(
-                    `/settings/role-management/update-role?roleId=${data?.roleId}&roleName=${data?.roleName}`
-                  )
-                }
-                variant="primary"
-                className="mr-4"
-              />
-              {/* <CustomButton
-                className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
-                text="UPDATE"
-                onClick={() =>
-                  navigate(
-                    `/settings/role-management/update-role?roleId=${data?.roleId}&roleName=${data?.roleName}`
-                  )
-                }
-                // showIcon={true}
-              /> */}
-            </div>
-            <OneButton
-              text="DELETE"
-              onClick={() => deleteRoleModal(row?.original)}
-              variant="primary"
-              className="mr-4"
-            />
+            {data?.roleName !== "SUPERUSER" && (
+              <div className="flex">
+                <OneButton
+                  text="UPDATE"
+                  onClick={() =>
+                    navigate(
+                      `/settings/role-management/update-role?roleId=${data?.roleId}&roleName=${data?.roleName}`
+                    )
+                  }
+                  variant="primary"
+                  className="mr-4"
+                />
+                <OneButton
+                  text="DELETE"
+                  onClick={() => deleteRoleModal(row?.original)}
+                  variant="primary"
+                  className="mr-4"
+                />
+              </div>
+            )}
+
             {/* <div className="ml-4">
               <CustomButton
                 className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"

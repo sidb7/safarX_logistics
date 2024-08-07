@@ -490,9 +490,11 @@ function UpdateRole() {
       });
 
       const { data: menus } = await POST(POST_GET_ALL_INITIAL_MENU, {});
+      // console.log("🚀 ~ getRoleInfo ~ menus:", menus);
 
       if (data?.success) {
-        setMenuData(data?.data?.[0]?.menu || []);
+        // setMenuData(data?.data?.[0]?.menu || []);
+        setMenuData(menus?.data);
         let temp = data?.data?.[0]?.roleName;
         let companyInfoId = data?.data?.[0]?.companyId;
         setRoleName(temp || "N/A");
