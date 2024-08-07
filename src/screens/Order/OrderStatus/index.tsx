@@ -19,6 +19,7 @@ import {
   POST_PLACE_ALL_ORDERS,
   GET_ALL_ADDRESSS,
   UPDATE_ALL_ADDRESS,
+  RTO_REATTEMPT,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-hot-toast";
@@ -41,6 +42,8 @@ import WebLocationIcon from "../../../assets/PickUp/Location.svg";
 import CustomInputBox from "../../../components/Input";
 import InfoCircle from "../../../assets/info-circle.svg";
 import BulkActionIcon from "../../../assets/Bulk_Action.svg";
+import RTOicon from "../../../assets/RTO.svg";
+import ReattemptIcon from "../../../assets/reattempt.svg"
 
 interface IOrderstatusProps {
   filterId: any;
@@ -266,7 +269,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     ],
     "IN TRANSIT": [
       {
-        icon: CrossIcon,
+        icon: RTOicon,
         hovertext: "Rto Orders",
         identifier: "Rto",
         buttonName: "RTO ORDERS",
@@ -298,13 +301,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     // ],
     EXCEPTION: [
       {
-        icon: CrossIcon,
+        icon: RTOicon,
         hovertext: "Rto Orders",
         identifier: "Rto",
         buttonName: "RTO ORDERS",
       },
       {
-        icon: CrossIcon,
+        icon: ReattemptIcon,
         hovertext: "Re-Attempt Orders",
         identifier: "Re-Attempt",
         buttonName: "RE-ATTEMPT ORDERS",
@@ -340,6 +343,47 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const getActionsIcon = () => {
     return actionsObject[currentStatus];
+  };
+
+  const rtoReattempt = async (awbArray: string[], type: string) => {
+    let payload = {
+      awbs: awbArray,
+      requestType: type,
+    };
+    setIsLoadingManifest({
+      isLoading: true,
+      identifier: "Rto",
+    });
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    try {
+      const response = await fetch(RTO_REATTEMPT, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message);
+      } else {
+        const data = await response.json();
+        toast.success("RTO Reattempt initiated successfully");
+        // Handle successful response here (e.g., update UI, refresh data)
+      }
+    } catch (error) {
+      console.error("Error in RTO Reattempt:", error);
+      toast.error("An error occurred during RTO Reattempt");
+    } finally {
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
+    }
   };
 
   const fetchManifest = async (awbArray?: any) => {
@@ -573,13 +617,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       }
       case "IN TRANSIT": {
         // if (selectedRowdata.length > 0) {
-        if (identifier === "Cancel") {
+        if (identifier === "Rto") {
           if (selectedRowdata.length > 0) {
             const awbNo = selectedRowdata.map((data: any, index: any) => {
               return data.original.awb;
             });
-            setCancellationModal &&
-              setCancellationModal({ isOpen: true, payload: awbNo });
+            console.log("AWB", awbNo);
+            rtoReattempt(awbNo, "RTO");
           } else {
             toast.error("Please select atleast one order for Cancellation");
             return;
@@ -598,29 +642,83 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       case "DELIVERED":
       case "RETURN":
       case "EXCEPTION": {
-        if (selectedRowdata.length > 0) {
-          if (identifier === "Cancel") {
-            const awbNo = selectedRowdata.map((data: any, index: any) => {
-              return data.original.awb;
-            });
-            setCancellationModal &&
-              setCancellationModal({ isOpen: true, payload: awbNo });
-          }
-        } else if (identifier === "Download_menifest_report") {
-          if (selectedRowdata.length > 0) {
-            const awbsNo = selectedRowdata.map((data: any, index: any) => {
-              return data.original.awb;
-            });
+        // if (selectedRowdata.length > 0) {
+        //   if (identifier === "Cancel") {
+        //     const awbNo = selectedRowdata.map((data: any, index: any) => {
+        //       return data.original.awb;
+        //     });
+        //     setCancellationModal &&
+        //       setCancellationModal({ isOpen: true, payload: awbNo });
+        //   }
+        // } else if (identifier === "Download_menifest_report") {
+        //   if (selectedRowdata.length > 0) {
+        //     const awbsNo = selectedRowdata.map((data: any, index: any) => {
+        //       return data.original.awb;
+        //     });
 
-            fetchManifest(awbsNo);
-          } else {
-            toast.error(
-              "Please select atleast one order for Download Manifest"
-            );
-            return;
+        //     fetchManifest(awbsNo);
+        //   } else {
+        //     toast.error(
+        //       "Please select atleast one order for Download Manifest"
+        //     );
+        //     return;
+        //   }
+        // }else if (identifier === "Rto") {
+        //   if (selectedRowdata.length > 0) {
+        //     const awbNo = selectedRowdata.map((data: any, index: any) => {
+        //       return data.original.awb;
+        //     });
+        //     console.log("AWBNO>>>>>>>>>",awbNo)
+        //     rtoReattempt(awbNo, "RTO");
+        //   } else {
+        //     toast.error(
+        //       "Please select atleast one order for TESTING"
+        //     );
+        //     return;
+        //   }
+        // } else {
+        //   toast.error("Please select atleast one order");
+        // }
+        if (selectedRowdata.length > 0) {
+          const awbNo = selectedRowdata.map((data: any) => data.original.awb);
+
+          switch (identifier) {
+            case "Cancel":
+              setCancellationModal?.({ isOpen: true, payload: awbNo });
+              break;
+            case "Download_menifest_report":
+              fetchManifest(awbNo);
+              break;
+            case "Rto":
+              console.log("AWBNO>>>>>>>>>", awbNo);
+              rtoReattempt(awbNo, "RTO");
+              break;
+            case "Re-Attempt":
+              console.log("AWBNO>>>>>>>>>", awbNo);
+              rtoReattempt(awbNo, "REATTEMPT");
+              break;
+            default:
+              toast.error("Invalid identifier");
           }
         } else {
-          toast.error("Please select atleast one order");
+          switch (identifier) {
+            case "Cancel":
+              toast.error("Please select at least one order for cancellation");
+              break;
+            case "Download_menifest_report":
+              toast.error(
+                "Please select at least one order for Download Manifest"
+              );
+              break;
+            case "Rto":
+              toast.error("Please select at least one order for RTO");
+              break;
+            case "Re-Attempt":
+              toast.error("Please select at least one order for Re-Attempt");
+              break;
+            default:
+              toast.error("Please select at least one order");
+          }
         }
         break;
       }
