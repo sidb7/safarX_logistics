@@ -325,8 +325,8 @@ const DeliveryDetailsContent: React.FunctionComponent<
     localLandmark?.flatNo,
     localLandmark?.landmark,
     localLandmark?.sector,
-    localLandmark?.city,
     localLandmark?.state,
+    localLandmark?.city,
     localLandmark?.country,
   ]);
 
