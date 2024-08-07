@@ -395,10 +395,16 @@ const AdvanceRuleEngine_1 = () => {
 
       let partnerService = rateCard?.data?.rates
         ?.map((item: any) =>
-          item?.service?.map((innerItem: any) => ({
-            label: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
-            value: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
-          }))
+          item?.service
+            ?.map((innerItem: any) =>
+              innerItem.isActive
+                ? {
+                    label: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
+                    value: `${item?.partnerName} ${innerItem?.partnerServiceName}`,
+                  }
+                : undefined
+            )
+            .filter(Boolean)
         )
         .flat();
       actionOptions = [...partnerService];
