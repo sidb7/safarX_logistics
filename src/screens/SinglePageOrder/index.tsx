@@ -18,6 +18,7 @@ import { generateUniqueCode } from "../../utils/utility";
 import InputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import toast from "react-hot-toast";
+import editIcon from "../../assets/Product/Edit.svg";
 import walletIcon from "../../assets/Group.svg";
 import {
   FETCH_LABELS_REPORT_DOWNLOAD,
@@ -32,6 +33,10 @@ import { useSelector } from "react-redux";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { forEach } from "lodash";
 import { Spinner } from "../../components/Spinner";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import { useMediaQuery } from "react-responsive";
+import { parse } from "date-fns";
+import SelectDateModalForSinglePageOrder from "./components/scheduleTimeModale";
 
 interface IIndexProps {}
 
@@ -57,7 +62,7 @@ const initialState: any = {
   orderType: "B2C",
   transit: "FORWARD",
   courierPartner: "",
-  source: "WEBSITE",
+  source: "WEBSITE_SINGLE_PAGE",
   pickupDate: "",
   gstNumber: "",
   // orderId: "",
@@ -74,7 +79,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [placeOrderLoader, setplaceOrderLoader] = useState(false);
   const [paymentMode, setPaymentMode] = useState("PREPAID");
   const [sortServiceiblity, setSortServiciblity] = useState("");
-  const [order, setOrder]: any = useState(initialState);
+  const [order, setOrder]: any = useState(() => {
+    const storedValue = sessionStorage.getItem("order");
+    return storedValue !== null ? JSON.parse(storedValue) : initialState;
+  });
 
   console.log("order", order?.orderType, order?.transit);
 
@@ -84,8 +92,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [awbListForDownLoad, setAwbListForDownLoad] = useState([]);
 
   const [showAlertBox, setShowAlertBox] = useState(false);
+  const [showDateAndTimeModal, setShowDateAndTimeModal] = useState(false);
+  const [showPickupDate, setShowPickupDate]: any = useState("");
 
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
+
+  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
 
   const navigate = useNavigate();
 
@@ -114,6 +126,34 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       courierPartnerValid
     );
   }
+
+  function convertToEpoch(dateTimeString: any) {
+    const parsedDateTime = parse(
+      dateTimeString,
+      "dd/MM/yyyy hh:mm a",
+      new Date()
+    );
+    return Math.floor(parsedDateTime.getTime());
+  }
+
+  const handlePickupTimeSelected = (pickupTime: string) => {
+    setShowPickupDate(pickupTime);
+    const editedPickupDateForEpoch: any = pickupTime?.substring(0, 19);
+    const EpochPickupDate = convertToEpoch(editedPickupDateForEpoch);
+    setOrder(() => {
+      return {
+        ...order,
+        pickupDate: EpochPickupDate,
+      };
+    });
+  };
+
+  const sumInvoiceValue =
+    order?.boxInfo.length > 0 &&
+    order?.boxInfo.reduce(
+      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
+      0
+    );
 
   const Buttons = (className?: string) => {
     return (
@@ -200,13 +240,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     );
   };
 
-  const sumInvoiceValue =
-    order?.boxInfo.length > 0 &&
-    order?.boxInfo.reduce(
-      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
-      0
-    );
-
   const SummaryColumns = [
     columnsHelper.accessor("serialNo", {
       header: () => {
@@ -267,7 +300,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       cell: (info: any) => {
         return (
           <div className="font-Open text-xs font-normal leading-[16px] text-[#000000] text-center p-[6px]">
-            {info.row.original?.ewaybillNumber || "-"}
+            {info.row.original?.eWayBillNo || "-"}
           </div>
         );
       },
@@ -516,6 +549,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
         setDownloadLebal(true);
+        sessionStorage.removeItem("order");
         toast.success(data?.message || "Successfully Placed order");
       } else {
         toast.error(data?.message);
@@ -538,9 +572,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               Summary
             </p>
           </div>
-          {/* <div className="px-5">
-            <div>ORDER ID : {order?.orderId}</div>
-          </div> */}
+          <div className="px-5 text-[14px]">
+            <div className="flex items-center">
+              <div>ORDER ID : </div>{" "}
+              <div className="ml-[8px] font-Open font-bold">
+                {" "}
+                {order?.orderId}
+              </div>
+            </div>
+          </div>
           {/* table section  */}
           <div className="px-5">
             <CustomTable
@@ -641,6 +681,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
+  useEffect(() => {
+    sessionStorage.setItem("order", JSON.stringify(order));
+  }, [order]);
+
   return (
     <>
       <div>
@@ -648,7 +692,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <div className="flex gap-5 mx-5">
           <div className="flex-1 ">
             <div className="flex flex-col gap-y-4  !h-[calc(100vh-180px)] customScroll">
-              <div className="!max-h-[450px] overflow-hidden">
+              <div className="!max-h-[450px] border-[1px] rounded-lg border-[#E8E8E8] overflow-auto scroll-smooth">
                 <AddressCardDetails
                   pickupDetails={order?.pickupDetails}
                   deliveryDetails={order?.deliveryDetails}
@@ -659,7 +703,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   showDownloadLebal={showDownloadLebal}
                 />
               </div>
-              <div className=" rounded !max-h-[450px] overflow-hidden">
+              <div className="rounded-lg !max-h-[450px] w-full">
                 <PackageDetails
                   packageDetails={order?.boxInfo}
                   order={order}
@@ -735,26 +779,25 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         </span>
                       </div>
                     )}
-                  {order?.transit !== "REVERSE" && (
-                    <div className="flex justify-center items-center ">
-                      <input
-                        type="radio"
-                        name="paymentMode"
-                        value="PREPAID"
-                        disabled={
-                          (Array.isArray(order?.boxInfo) &&
-                            order?.boxInfo.length === 0) ||
-                          showDownloadLebal
-                        }
-                        className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                        checked={paymentMode === "PREPAID"}
-                        onChange={(e: any) => paymentModeToggle(e.target.value)}
-                      />
-                      <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
-                        PREPAID
-                      </span>
-                    </div>
-                  )}
+
+                  <div className="flex justify-center items-center ">
+                    <input
+                      type="radio"
+                      name="paymentMode"
+                      value="PREPAID"
+                      disabled={
+                        (Array.isArray(order?.boxInfo) &&
+                          order?.boxInfo.length === 0) ||
+                        showDownloadLebal
+                      }
+                      className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                      checked={paymentMode === "PREPAID"}
+                      onChange={(e: any) => paymentModeToggle(e.target.value)}
+                    />
+                    <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                      PREPAID
+                    </span>
+                  </div>
                 </div>
                 {["B2B"].includes(order?.orderType) &&
                   sumInvoiceValue >= 50000 && (
@@ -789,30 +832,81 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   setSortServiciblity={setSortServiciblity}
                   sortServiceiblity={sortServiceiblity}
                   showDownloadLebal={showDownloadLebal}
+                  setShowPickupDate={setShowPickupDate}
                 />
               </div>
-              {order?.boxInfo?.length > 0 && order?.courierPartner && (
-                <>
-                  <div>{summaryDetails()}</div>
-                  {showDownloadLebal && (
-                    <div className="border-[1px] rounded-md border-[#E8E8E8]">
-                      <div className="flex justify-between items-center px-4 py-3">
-                        <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
-                          Ready to place a new order? Click here!
-                        </span>
-                        <OneButton
-                          onClick={() => window.location.reload()}
-                          text={`CREATE NEW ORDER`}
-                          variant="primary"
-                        />
+
+              {order?.courierPartner && (
+                <div className="border flex justify-between items-center p-4 rounded-lg">
+                  <div className="text-[#1C1C1C] font-Open font-semibold text-[16px] leading-[20px] ">
+                    Pickup Details
+                  </div>
+
+                  <div>
+                    {showPickupDate ? (
+                      <div className="flex gap-x-2 text-[15px]">
+                        <div>Pickup On :</div>{" "}
+                        <div className="text-[#1C1C1C] flex justify-center items-center font-Open font-bold leading-[20px] ">
+                          <span>{showPickupDate}</span>
+                          <button
+                            className="ml-2 w-[20px] h-[20px] cursor-pointer"
+                            onClick={() => setShowDateAndTimeModal(true)}
+                          >
+                            <img src={editIcon} alt="" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </>
+                    ) : (
+                      <OneButton
+                        onClick={() => setShowDateAndTimeModal(true)}
+                        text={`SELECT`}
+                        variant="primary"
+                        className="!w-[128px] font-extrabold"
+                        // disabled={}
+                      />
+                    )}
+                  </div>
+                </div>
               )}
+
+              {order?.boxInfo?.length > 0 &&
+                order?.courierPartner &&
+                order?.pickupDate && (
+                  <>
+                    <div>{summaryDetails()}</div>
+                    {showDownloadLebal && (
+                      <div className="border-[1px] rounded-md border-[#E8E8E8]">
+                        <div className="flex justify-between items-center px-4 py-3">
+                          <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
+                            Ready to place a new order? Click here!
+                          </span>
+                          <OneButton
+                            onClick={() => window.location.reload()}
+                            text={`CREATE NEW ORDER`}
+                            variant="primary"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
             </div>
           </div>
         </div>
+
+        <RightSideModal
+          className={`w-full ${
+            isLgScreen ? "md:!w-[400px]" : "mobile-modal-styles"
+          }`}
+          wrapperClassName="rounded-l-xl"
+          isOpen={showDateAndTimeModal}
+          onClose={() => setShowDateAndTimeModal(false)}
+        >
+          <SelectDateModalForSinglePageOrder
+            onClick={() => setShowDateAndTimeModal(false)}
+            onPickupTimeSelected={handlePickupTimeSelected}
+          />
+        </RightSideModal>
 
         <CenterModal
           isOpen={showAlertBox}

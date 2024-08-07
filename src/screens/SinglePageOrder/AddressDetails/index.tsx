@@ -11,6 +11,7 @@ import EditIcon from "../../../assets/editIcon.svg";
 import ProfileIcon from "../../../assets/Catalogue/profileIcon.svg";
 import ContactIcon from "../../../assets/ReturningUser/phoneIcon.svg";
 import gstIcon from "../../../assets/gstIcon.svg";
+import { v4 as uuidv4 } from "uuid";
 import AddressLocationIcon from "../../../assets/serv/location.svg";
 
 interface IContact {
@@ -60,8 +61,14 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const [deliveryAddress, setDeliveryAddress] =
     useState<IDeliveryDetails>(deliveryDetails);
 
-  const [pickupLandmark, setPickupLandmark] = useState<any>("");
-  const [deliveryLandmark, setDeliveryLandmark] = useState<any>({});
+  const [pickupLandmark, setPickupLandmark] = useState<any>(() => {
+    const storedValue = sessionStorage.getItem("pickupOtherAddressDetails");
+    return storedValue !== null ? JSON.parse(storedValue) : {};
+  });
+  const [deliveryLandmark, setDeliveryLandmark] = useState<any>(() => {
+    const storedValue = sessionStorage.getItem("DeliveryOtherAddressDetails");
+    return storedValue !== null ? JSON.parse(storedValue) : {};
+  });
 
   useEffect(() => {
     setPickupAddress(pickupDetails);
@@ -73,7 +80,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
 
   const handlePickupDetailsSave = (
     newDetails: IPickupDetails,
-    landmark: string
+    landmark: any
   ) => {
     setPickupAddress(newDetails);
     setPickupLandmark(landmark);
@@ -83,7 +90,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
 
   const handleDeliveryDetailsSave = (
     newDetails: IDeliveryDetails,
-    landmark: string
+    landmark: any
   ) => {
     setDeliveryAddress(newDetails);
     setDeliveryLandmark(landmark);
@@ -102,7 +109,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   };
 
   const renderAddressDetails = (details: any, type: string, landmark: any) => {
-    const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} , ${details?.pincode}`;
+    const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} - ${details?.pincode}`;
     return (
       <div>
         <div className="flex justify-between ">
@@ -174,9 +181,9 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 {details.fullAddress}
                 {/* {landmark?.landmark} - {details.pincode} */}
               </p>
-              <p className="font-Open font-semibold ml-1 mt-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
+              {/* <p className="font-Open font-semibold ml-1 mt-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
                 {otherDetails}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -195,11 +202,21 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
 
+  useEffect(() => {
+    sessionStorage.setItem(
+      "pickupOtherAddressDetails",
+      JSON.stringify(pickupLandmark)
+    );
+
+    sessionStorage.setItem(
+      "DeliveryOtherAddressDetails",
+      JSON.stringify(deliveryLandmark)
+    );
+  }, [pickupLandmark, deliveryLandmark]);
+
   return (
     <>
-      <div
-        className={`border-[1px] border-[#E8E8E8] max-h-[100%] customScroll rounded-md px-3 py-[12px]`}
-      >
+      <div className={`max-h-[100%] px-3 py-[12px]`}>
         {isPickupAddressEmpty ? (
           <div>
             <div className="flex gap-x-[6px] items-center text-center">
@@ -259,7 +276,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
         isOpen={isPickupRightModal}
         onClose={() => setIsPickupRightModal(false)}
         className={`w-full ${
-          isLgScreen ? "md:!w-[389px]" : "mobile-modal-styles"
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
         }`}
       >
         <PickupDetailsContent
@@ -275,7 +292,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
         isOpen={isDeliveryRightModal}
         onClose={() => setIsDeliveryRightModal(false)}
         className={`w-full ${
-          isLgScreen ? "md:!w-[389px]" : "mobile-modal-styles"
+          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
         }`}
       >
         <DeliveryDetailsContent

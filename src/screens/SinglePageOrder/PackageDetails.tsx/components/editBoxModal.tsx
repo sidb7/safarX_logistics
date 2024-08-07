@@ -150,9 +150,15 @@ function EditBoxModal({ onClose, data, setOrder }: any) {
         (acc: any, product: any) => acc + +product.appliedWeight,
         0
       );
+
+      const originalAppliedWeightOfBox = Math.max(
+        boxInputData?.deadWeight,
+        boxInputData?.volumetricWeight
+      );
+
       const updateBoxAppliedWeight = Math.max(
         TotalAppliedWeightOfAllProduct,
-        boxInputData?.appliedWeight
+        originalAppliedWeightOfBox
       );
 
       updatedBoxInfo[data?.id].appliedWeight = updateBoxAppliedWeight;

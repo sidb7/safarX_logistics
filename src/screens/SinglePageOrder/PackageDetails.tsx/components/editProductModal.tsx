@@ -66,43 +66,6 @@ function EditProductModal({ onClose, data, setOrder }: any) {
     return errors.length > 0 ? true : false;
   };
 
-  console.log("productValidation", productValidation());
-
-  // const productValidation = () => {
-  //   let errors: any = [];
-
-  //   for (let i = 0; i < editProduct.length; i++) {
-  //     const product = editProduct[i];
-
-  //     errors[i] = {};
-
-  //     if (!product.name) {
-  //       errors[i].name = "Name should not be empty.";
-  //     }
-  //     const fields = [
-  //       { value: product.deadWeight, name: "Dead weight", key: "deadWeight" },
-  //       { value: product.length, name: "Length", key: "length" },
-  //       { value: product.breadth, name: "Breadth", key: "breadth" },
-  //       { value: product.height, name: "Height", key: "height" },
-  //       { value: product.unitPrice, name: "unit Price", key: "unitPrice" },
-  //     ];
-  //     const isZeroString = (value: any) => /^0+$/.test(value);
-  //     fields.forEach((field) => {
-  //       if (
-  //         !field.value ||
-  //         parseFloat(field.value) === 0 ||
-  //         isZeroString(field.value)
-  //       ) {
-  //         errors[i][field?.key] = `${field.name} should not be empty or zero.`;
-  //       }
-  //     });
-
-  //     console.log("product", product);
-  //   }
-
-  //   return errors.length > 0 ? true : false;
-  // };
-
   const handleChange = (e: any, index: number) => {
     const { name, value } = e.target;
     const updatedProducts = [...editProduct];
@@ -150,9 +113,14 @@ function EditProductModal({ onClose, data, setOrder }: any) {
         0
       );
 
+      const originalAppliedWeightOfBox = Math.max(
+        box?.deadWeight,
+        box?.volumetricWeight
+      );
+
       const boxAppliedWeight = Math.max(
         TotalAppliedWeightOfAllProduct,
-        box?.appliedWeight
+        originalAppliedWeightOfBox
       );
 
       const updatedAppliedWeight = boxAppliedWeight;
