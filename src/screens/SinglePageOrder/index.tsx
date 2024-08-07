@@ -3,7 +3,7 @@ import { Breadcrum } from "../../components/Layout/breadcrum";
 import AddressCardDetails from "./AddressDetails";
 import ShippingDetails from "./ShippingDetails/index";
 import BoxInfo from "./components/boxInfo";
-import PackageDetails from "./PackageDetails.tsx";
+import PackageDetails from "./PackageDetails";
 import SummaryIcon from "../../assets/singleOrderSummary.svg";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -77,7 +77,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [showDownloadLebal, setDownloadLebal] = useState(false);
   const [isDownloadLoading, setDownloadLoading]: any = useState({});
   const [placeOrderLoader, setplaceOrderLoader] = useState(false);
-  const [paymentMode, setPaymentMode] = useState("PREPAID");
+  const [paymentMode, setPaymentMode]: any = useState(() => {
+    const storedValue = sessionStorage.getItem("paymentType");
+    return storedValue !== null ? storedValue : "PREPAID";
+  });
   const [sortServiceiblity, setSortServiciblity] = useState("");
   const [order, setOrder]: any = useState(() => {
     const storedValue = sessionStorage.getItem("order");
@@ -586,7 +589,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             <CustomTable
               data={order?.boxInfo || []}
               columns={SummaryColumns}
-              thclassName={"!w-auto "}
+              thclassName={"!w-auto"}
               tdclassName={"!w-auto"}
             />
           </div>
@@ -611,7 +614,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             </div>
           ) : (
             <div>
-              <div className=" px-2 py-7 mx-3">
+              <div className="px-2 py-7 mx-3">
                 <div className="flex gap-x-[6px] px-4 py-1 bg-[#A3DA91] border rounded-lg items-center">
                   <img src={tickIcon} alt="tick-icon" />
                   <p className="text-xs font-Open font-semibold leading-[22px] text-[#1C1C1C]">
@@ -681,8 +684,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
+  //set order data in session storage
+
   useEffect(() => {
     sessionStorage.setItem("order", JSON.stringify(order));
+    sessionStorage.setItem("paymentType", paymentMode);
   }, [order]);
 
   return (
