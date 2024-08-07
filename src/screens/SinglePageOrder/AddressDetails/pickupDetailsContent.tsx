@@ -334,6 +334,9 @@ const PickupDetailsContent: React.FunctionComponent<
     localLandmark?.flatNo,
     localLandmark?.landmark,
     localLandmark?.sector,
+    localLandmark?.state,
+    localLandmark?.city,
+    localLandmark?.country,
   ]);
 
   return (
