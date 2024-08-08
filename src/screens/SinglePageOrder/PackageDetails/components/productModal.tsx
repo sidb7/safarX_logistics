@@ -59,6 +59,10 @@ function ProductModal({ onClose, setOrder, index }: any) {
       errors.push("Name should not be empty.");
     }
 
+    if (!boxInputData.category) {
+      errors.push("category should not be empty.");
+    }
+
     const fields = [
       { value: boxInputData.deadWeight, name: "Dead weight" },
       { value: boxInputData.length, name: "Length" },
@@ -236,7 +240,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
                       emptyMsg={`No Product Found`}
                       setIsNewData={setIsNewData}
                       setIsAutoPopulateData={setIsAutoPopulateData}
-                      newDataMessage="Create New Box"
+                      newDataMessage="Create New Product"
                       setInputData={setBoxInputData}
                       initialState={initialState}
                     />
@@ -279,6 +283,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
                               onChangeHandler(e);
                             }
                           }}
+
                           //   inputError={inputError}
                         />
                       </div>

@@ -8,6 +8,7 @@ import { POST } from "../../../utils/webService";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import index from "../../NewOrder/Filter";
+import toast from "react-hot-toast";
 
 interface CustomInputWithDropDownProps {
   value?: any;
@@ -65,30 +66,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
-  // const sumInvoiceValue =
-  //   state?.boxInfo.length > 0 &&
-  //   state?.boxInfo.reduce(
-  //     (sum: any, box: any) => sum + box.codInfo.invoiceValue,
-  //     0
-  //   );
-
-  // const sumOfAppliedWeightOfAllBox =
-  //   state?.boxInfo.length > 0 &&
-  //   state?.boxInfo.reduce((sum: any, box: any) => sum + box?.appliedWeight, 0);
-
-  // const getCombinationDimensionValueOfAllBoxes = () => {
-  //   let length = 0;
-  //   let breadth = 0;
-  //   let height = 0;
-  //   state?.boxInfo.forEach((box: any) => {
-  //     length += box.length;
-  //     breadth += box.breadth;
-  //     height += box.height;
-  //   });
-
-  //   return { length, width: breadth, height };
-  // };
-
   const getServices = async () => {
     setisLoading(true);
 
@@ -120,6 +97,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
       }, 1000);
     } else {
       setisLoading(false);
+      toast.error(data?.message);
     }
   };
 
@@ -141,6 +119,11 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
 
   useEffect(() => {
     if (sortIdentifier.length !== 0 && disabled === false) {
+      console.log(
+        "inside of serviciblity useEffect:-->",
+        sortIdentifier,
+        disabled
+      );
       getServices();
     }
   }, [sortIdentifier, disabled]);

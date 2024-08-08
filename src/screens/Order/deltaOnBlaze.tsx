@@ -632,7 +632,10 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         <div className="h-[calc(100vh-90px)] overflow-y-scroll pb-7">
           <div>
             <p className="font-Open font-semibold text-lg  text-[#1C1C1C] leading-[22px] px-5 pt-5">
-              Setup Your Communication
+              Setup Your Communication{" "}
+              <span>
+                {`(${rateCardDetails?.rateCardName} - ${rateCardDetails?.rateCardId})`}
+              </span>
             </p>
             <div className="p-2">
               <CustomTable
