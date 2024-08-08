@@ -139,21 +139,46 @@ const BusinessType = (props: ITypeProps) => {
       let img: any = new Image();
       img.src = brandingDetails?.imageUrl;
 
-      setLoading(true);
-      const { data } = await POST(LOGO_AND_BRAND, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      img.onload = async function () {
+        // Access the natural height and width of the image
+        var height = img.naturalHeight;
+        var width = img.naturalWidth;
 
-      if (data?.success) {
-        setLoading(false);
-        toast.success(data?.message);
-        navigate("/onboarding/wallet-main");
-      } else {
-        setLoading(false);
-        toast.error(data?.message);
-      }
+        if (height > 200 || width > 700) {
+          return toast.error(
+            "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+          );
+        } else {
+          // const { data } = await POST(LOGO_AND_BRAND, formData, {
+          //   headers: {
+          //     "Content-Type": "multipart/form-data",
+          //   },
+          // });
+
+          // if (data?.success) {
+          //   toast.success(data?.message);
+          //   setBrandingModal(false);
+          //   getProfileData();
+          // } else {
+          //   toast.error(data?.message);
+          // }
+          setLoading(true);
+          const { data } = await POST(LOGO_AND_BRAND, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (data?.success) {
+            setLoading(false);
+            toast.success(data?.message);
+            navigate("/onboarding/wallet-main");
+          } else {
+            setLoading(false);
+            toast.error(data?.message);
+          }
+        }
+      };
     } catch (error) {
       return error;
     }

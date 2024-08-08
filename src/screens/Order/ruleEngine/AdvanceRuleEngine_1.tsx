@@ -169,15 +169,25 @@ const reducer = (state: any, action: any) => {
         ...state,
         ruleEngines: state?.ruleEngines?.map((engine: any, index: number) =>
           index === action.engineIndex
-            ? {
-                ...engine,
-                conditions: engine?.conditions?.map(
-                  (condition: any, condIndex: number) =>
-                    condIndex === action.index
-                      ? { ...condition, ...action.condition }
-                      : condition
-                ),
-              }
+            ? action?.key === "field"
+              ? {
+                  ...engine,
+                  conditions: engine?.conditions?.map(
+                    (condition: any, condIndex: number) =>
+                      condIndex === action.index
+                        ? { ...condition, ...action.condition, value: null }
+                        : condition
+                  ),
+                }
+              : {
+                  ...engine,
+                  conditions: engine?.conditions?.map(
+                    (condition: any, condIndex: number) =>
+                      condIndex === action.index
+                        ? { ...condition, ...action.condition }
+                        : condition
+                  ),
+                }
             : engine
         ),
       };
@@ -540,6 +550,7 @@ const AdvanceRuleEngine_1 = () => {
                                     field: option?.target?.value,
                                   },
                                   engineIndex,
+                                  key: "field",
                                 })
                               }
                               value={condition?.field || ""}
