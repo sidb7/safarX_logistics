@@ -65,8 +65,8 @@ const initialState: any = {
   source: "WEBSITE_SINGLE_PAGE",
   pickupDate: "",
   gstNumber: "",
-  // orderId: "",
-  // eWayBillNo: 0,
+  orderId: "",
+  eWayBillNo: 0,
   awb: "",
   brandName: "Google",
   brandLogo: "",
@@ -77,6 +77,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [showDownloadLebal, setDownloadLebal] = useState(false);
   const [isDownloadLoading, setDownloadLoading]: any = useState({});
   const [placeOrderLoader, setplaceOrderLoader] = useState(false);
+  const [resetOtherAddressDetails, setResetOtherAddressDetails]: any =
+    useState(false);
   const [paymentMode, setPaymentMode]: any = useState(() => {
     const storedValue = sessionStorage.getItem("paymentType");
     return storedValue !== null ? storedValue : "PREPAID";
@@ -103,6 +105,20 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
 
   const navigate = useNavigate();
+
+  // function validateForProduct(order: any) {
+  //   const errors: string[] = [];
+
+  //   order.boxInfo.forEach((box: any) => {
+  //     if (box.products.length === 0) {
+  //       errors.push(
+  //         `Box ${box.boxName} has no products. Please add products to the box.`
+  //       );
+  //     }
+  //   });
+
+  //   return errors;
+  // }
 
   function validateOrder(order: any) {
     const pickupDetailsValid =
@@ -169,13 +185,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             disabled={showDownloadLebal}
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
             checked={order?.orderType === "B2C" && order?.transit === "FORWARD"}
-            onChange={(e) =>
+            onChange={(e) => {
               setOrder({
                 ...initialState,
                 orderType: "B2C",
                 transit: "FORWARD",
-              })
-            }
+              });
+              setResetOtherAddressDetails(true);
+              setPaymentMode("PREPAID");
+            }}
           />
           <div className="text-[15px]">B2C</div>
         </div>
@@ -190,13 +208,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               showDownloadLebal
             }
             checked={order?.orderType === "B2B" && order?.transit === "FORWARD"}
-            onChange={(e) =>
+            onChange={(e) => {
               setOrder({
                 ...initialState,
                 orderType: "B2B",
                 transit: "FORWARD",
-              })
-            }
+              });
+              setResetOtherAddressDetails(true);
+              setPaymentMode("PREPAID");
+            }}
           />
           <div className="text-[15px]">B2B</div>
         </div>
@@ -207,13 +227,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             value={order?.orderType}
             className=" mr-2 w-[15px] cursor-pointer h-[15px]"
             checked={order?.orderType === "B2C" && order?.transit === "REVERSE"}
-            onChange={(e) =>
+            onChange={(e) => {
               setOrder({
                 ...initialState,
                 orderType: "B2C",
                 transit: "REVERSE",
-              })
-            }
+              });
+              setResetOtherAddressDetails(true);
+              setPaymentMode("PREPAID");
+            }}
           />
           <div className="text-[15px]">B2C Reverse</div>
         </div>
@@ -536,6 +558,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       }
     }
 
+    // if (validateForProduct(payload).length > 0) {
+    //   const errorlist = validateForProduct(payload);
+    //   errorlist.forEach((error: any) => {
+    //     toast.error(error);
+    //   });
+    //   return;
+    // }
+
     if (walletBalance < order?.totalPrice) {
       setShowAlertBox(true);
       return;
@@ -604,8 +634,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 <OneButton
                   onClick={PlaceOrder}
                   text={`Place Order ₹ ${
-                    order?.totalPrice ? order?.totalPrice : 0
-                  } `}
+                    order?.totalPrice ? order?.totalPrice.toFixed(2) : 0
+                  }`}
                   variant="primary"
                   className="!w-[228px]"
                   disabled={!validateOrder(order)}
@@ -684,8 +714,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
-  //set order data in session storage
-
   useEffect(() => {
     sessionStorage.setItem("order", JSON.stringify(order));
     sessionStorage.setItem("paymentType", paymentMode);
@@ -707,6 +735,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   order={order}
                   setSortServiciblity={setSortServiciblity}
                   showDownloadLebal={showDownloadLebal}
+                  resetOtherAddressDetails={resetOtherAddressDetails}
+                  setResetOtherAddressDetails={setResetOtherAddressDetails}
                 />
               </div>
               <div className="rounded-lg !max-h-[450px] w-full">
@@ -736,8 +766,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     containerStyle=""
                     rightIcon={AutoGenerateIcon}
                     className="w-full !text-base !font-semibold"
-                    imageClassName="!h-[12px] !w-[113px] !top-[40%] "
-                    value={order?.orderId}
+                    imageClassName="!h-[12px] !z-0 !w-[113px] !top-[40%] "
+                    value={order?.orderId || ""}
                     maxLength={12}
                     label="Order ID"
                     onChange={(e) => {
@@ -839,6 +869,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   sortServiceiblity={sortServiceiblity}
                   showDownloadLebal={showDownloadLebal}
                   setShowPickupDate={setShowPickupDate}
+                  resetOtherAddressDetails={resetOtherAddressDetails}
+                  setResetOtherAddressDetails={setResetOtherAddressDetails}
                 />
               </div>
 
@@ -887,7 +919,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             Ready to place a new order? Click here!
                           </span>
                           <OneButton
-                            onClick={() => window.location.reload()}
+                            onClick={() => {
+                              window.location.reload();
+                              sessionStorage.clear();
+                            }}
                             text={`CREATE NEW ORDER`}
                             variant="primary"
                           />

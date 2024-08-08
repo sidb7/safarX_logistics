@@ -37,6 +37,8 @@ interface IAddressCardDetailsProps {
   order: any;
   setSortServiciblity: any;
   showDownloadLebal: boolean;
+  resetOtherAddressDetails: boolean;
+  setResetOtherAddressDetails: any;
 }
 
 const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
@@ -47,6 +49,8 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   order,
   setSortServiciblity,
   showDownloadLebal,
+  resetOtherAddressDetails,
+  setResetOtherAddressDetails,
 }) => {
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
@@ -203,11 +207,23 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
 
   useEffect(() => {
+    if (resetOtherAddressDetails) {
+      setPickupLandmark({});
+      setDeliveryLandmark({});
+      const timer = setTimeout(() => {
+        setResetOtherAddressDetails(false);
+      }, 3000);
+
+      // Clean up the timer if the component unmounts or dependencies change
+      return () => clearTimeout(timer);
+    }
+  }, [order?.orderType, order?.transit]);
+
+  useEffect(() => {
     sessionStorage.setItem(
       "pickupOtherAddressDetails",
       JSON.stringify(pickupLandmark)
     );
-
     sessionStorage.setItem(
       "DeliveryOtherAddressDetails",
       JSON.stringify(deliveryLandmark)

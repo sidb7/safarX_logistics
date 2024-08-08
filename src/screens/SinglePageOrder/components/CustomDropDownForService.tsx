@@ -22,6 +22,8 @@ interface CustomInputWithDropDownProps {
   disabled?: boolean;
   showDownloadLebal: any;
   setShowPickupDate: any;
+  resetOtherAddressDetails: any;
+  setResetOtherAddressDetails: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -37,6 +39,8 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   disabled = false,
   showDownloadLebal,
   setShowPickupDate,
+  resetOtherAddressDetails,
+  setResetOtherAddressDetails,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -119,11 +123,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
 
   useEffect(() => {
     if (sortIdentifier.length !== 0 && disabled === false) {
-      console.log(
-        "inside of serviciblity useEffect:-->",
-        sortIdentifier,
-        disabled
-      );
       getServices();
     }
   }, [sortIdentifier, disabled]);
@@ -145,8 +144,17 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
       };
     });
   }, [sortIdentifier]);
+  useEffect(() => {
+    if (resetOtherAddressDetails) {
+      setSearchInput("");
+      const timer = setTimeout(() => {
+        setResetOtherAddressDetails(false);
+      }, 3000);
 
-  // console.log("")
+      // Clean up the timer if the component unmounts or dependencies change
+      return () => clearTimeout(timer);
+    }
+  }, [state?.orderType, state?.transit]);
 
   return (
     <div

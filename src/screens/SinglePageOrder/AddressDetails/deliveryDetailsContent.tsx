@@ -244,6 +244,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
   };
 
   const handleSave = async () => {
+    console.log("localLandmark-delivery", deliveryDetails);
     const errors: ValidationErrors = {
       name: deliveryDetails.contact.name ? null : "Name is required",
       mobileNo: deliveryDetails.contact.mobileNo
@@ -253,7 +254,7 @@ const DeliveryDetailsContent: React.FunctionComponent<
       fullAddress: deliveryDetails.fullAddress
         ? null
         : "Full Address is required",
-      landmark: localLandmark ? null : "Landmark is required",
+      landmark: localLandmark?.landmark ? null : "Landmark is required",
       flatNo: localLandmark.flatNo ? null : "Flat No is required",
       sector: localLandmark.sector ? null : "Locality is required",
     };
@@ -268,8 +269,8 @@ const DeliveryDetailsContent: React.FunctionComponent<
         errors.gstNumber = "Enter Valid GST Number";
       }
     }
+    console.log("errors", errors);
     setValidationErrors(errors);
-
     if (Object.values(errors).some((error) => error !== null)) {
       return; // Prevent saving if there are validation errors
     }
