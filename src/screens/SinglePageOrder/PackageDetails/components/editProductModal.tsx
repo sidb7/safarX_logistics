@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
 import packegeIcon from "../../../../assets/Delivery Icon.svg";
 import CustomDropDown from "../../../../components/DropDown";
-import InputBox from "../../../../components/Input";
-import SampleProduct from "../../../../assets/SampleProduct.svg";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
-import ItemIcon from "../../../../assets/Product/Item.svg";
-import DownArrowIcon from "../../../../assets/Filter/downArrow.svg";
-import BoxIcon from "../../../../assets/layer.svg";
-import VanIcon from "../../../../assets/vanWithoutBG.svg";
-import InfoCircle from "../../../../assets/info-circle.svg";
-import DeleteGif from "../../../../assets/common/DeleteGif.gif";
-import { capitalizeFirstLetter } from "../../../../utils/utility";
+import InputBox from "../../../../components/Input";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
-import CustomSearchDropDown from "../../components/CustomSearchDropDown";
-import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 
 function EditProductModal({ onClose, data, setOrder }: any) {
@@ -215,6 +205,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
                                 }
                               }}
                               inputError={true}
+                              isDisabled={true}
                             />
                           </div>
 

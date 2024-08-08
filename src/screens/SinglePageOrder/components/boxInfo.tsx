@@ -302,7 +302,7 @@ function BoxInfo({
                       inputMode="numeric"
                       labelClassName={`!text-black  !bg-[${
                         colors[index % colors.length]
-                      }] border`}
+                      }]`}
                       className={`!bg-transparent !w-[150px] !h-[36px]`}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
