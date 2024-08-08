@@ -59,6 +59,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
   const handleChange = (e: any, index: number) => {
     const { name, value } = e.target;
     const updatedProducts = [...editProduct];
+
     const product = { ...updatedProducts[index], [name]: value };
 
     if (["length", "breadth", "height", "deadWeight"].includes(name)) {
@@ -70,7 +71,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
       const appliedWeight = Math.max(+product.deadWeight, volumetricWeight);
 
       product.volumetricWeight = volumetricWeight;
-      product.appliedWeight = appliedWeight;
+      product.appliedWeight = appliedWeight * product?.qty;
     }
 
     updatedProducts[index] = product;

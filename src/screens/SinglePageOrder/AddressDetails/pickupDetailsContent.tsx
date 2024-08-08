@@ -248,6 +248,8 @@ const PickupDetailsContent: React.FunctionComponent<
   };
 
   const handleSave = async () => {
+    console.log("localLandmark-pickup", localLandmark.landmark);
+
     const errors: ValidationErrors = {
       name: pickupDetails.contact.name ? null : "Name is required",
       mobileNo: pickupDetails.contact.mobileNo
