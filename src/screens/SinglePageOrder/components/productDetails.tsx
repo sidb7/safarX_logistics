@@ -78,7 +78,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
       <div className="flex flex-col w-full ">
         <div className="flex justify-between ">
           <span
-            className={`!${productNameClass} max-w-[660px] rounded-md text-[14px] text-[#000000] flex-wrap font-bold font-Open`}
+            className={`!${productNameClass} max-w-[660px] rounded-md text-[16px] text-[#000000] flex-wrap font-bold font-Open`}
           >
             {productName}
           </span>

@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
 import packegeIcon from "../../../../assets/Delivery Icon.svg";
 import CustomDropDown from "../../../../components/DropDown";
-import InputBox from "../../../../components/Input";
-import SampleProduct from "../../../../assets/SampleProduct.svg";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
-import ItemIcon from "../../../../assets/Product/Item.svg";
-import DownArrowIcon from "../../../../assets/Filter/downArrow.svg";
-import BoxIcon from "../../../../assets/layer.svg";
-import VanIcon from "../../../../assets/vanWithoutBG.svg";
-import InfoCircle from "../../../../assets/info-circle.svg";
-import DeleteGif from "../../../../assets/common/DeleteGif.gif";
-import { capitalizeFirstLetter } from "../../../../utils/utility";
+import InputBox from "../../../../components/Input";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
-import CustomSearchDropDown from "../../components/CustomSearchDropDown";
-import { GET_SELLER_BOX } from "../../../../utils/ApiUrls";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 
 function EditProductModal({ onClose, data, setOrder }: any) {
@@ -66,46 +56,10 @@ function EditProductModal({ onClose, data, setOrder }: any) {
     return errors.length > 0 ? true : false;
   };
 
-  console.log("productValidation", productValidation());
-
-  // const productValidation = () => {
-  //   let errors: any = [];
-
-  //   for (let i = 0; i < editProduct.length; i++) {
-  //     const product = editProduct[i];
-
-  //     errors[i] = {};
-
-  //     if (!product.name) {
-  //       errors[i].name = "Name should not be empty.";
-  //     }
-  //     const fields = [
-  //       { value: product.deadWeight, name: "Dead weight", key: "deadWeight" },
-  //       { value: product.length, name: "Length", key: "length" },
-  //       { value: product.breadth, name: "Breadth", key: "breadth" },
-  //       { value: product.height, name: "Height", key: "height" },
-  //       { value: product.unitPrice, name: "unit Price", key: "unitPrice" },
-  //     ];
-  //     const isZeroString = (value: any) => /^0+$/.test(value);
-  //     fields.forEach((field) => {
-  //       if (
-  //         !field.value ||
-  //         parseFloat(field.value) === 0 ||
-  //         isZeroString(field.value)
-  //       ) {
-  //         errors[i][field?.key] = `${field.name} should not be empty or zero.`;
-  //       }
-  //     });
-
-  //     console.log("product", product);
-  //   }
-
-  //   return errors.length > 0 ? true : false;
-  // };
-
   const handleChange = (e: any, index: number) => {
     const { name, value } = e.target;
     const updatedProducts = [...editProduct];
+
     const product = { ...updatedProducts[index], [name]: value };
 
     if (["length", "breadth", "height", "deadWeight"].includes(name)) {
@@ -117,7 +71,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
       const appliedWeight = Math.max(+product.deadWeight, volumetricWeight);
 
       product.volumetricWeight = volumetricWeight;
-      product.appliedWeight = appliedWeight;
+      product.appliedWeight = appliedWeight * product?.qty;
     }
 
     updatedProducts[index] = product;
@@ -150,9 +104,14 @@ function EditProductModal({ onClose, data, setOrder }: any) {
         0
       );
 
+      const originalAppliedWeightOfBox = Math.max(
+        box?.deadWeight,
+        box?.volumetricWeight
+      );
+
       const boxAppliedWeight = Math.max(
         TotalAppliedWeightOfAllProduct,
-        box?.appliedWeight
+        originalAppliedWeightOfBox
       );
 
       const updatedAppliedWeight = boxAppliedWeight;
@@ -247,6 +206,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
                                 }
                               }}
                               inputError={true}
+                              isDisabled={true}
                             />
                           </div>
 

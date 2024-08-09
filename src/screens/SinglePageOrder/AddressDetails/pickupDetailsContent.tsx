@@ -7,13 +7,17 @@ import InfoCircle from "../../../assets/info-circle.svg";
 import SearchDropDown from "../components/searchDropDown";
 import { gstRegex } from "../../../utils/regexCheck";
 import ErrorIcon from "../../../assets/common/info-circle.svg";
-
+import "../../../styles/index.css";
+import { v4 as uuidv4 } from "uuid";
 import {
+  ADD_PICKUP_ADDRESS_CATALOGUE,
+  ADD_PICKUP_LOCATION,
   GET_PINCODE_DATA,
   RETURNING_USER_PICKUP,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+import toast from "react-hot-toast";
 
 interface IContact {
   name: string;
@@ -29,7 +33,7 @@ interface IPickupDetails {
 
 interface IPickupDetailsContentProps {
   details: IPickupDetails;
-  landmark: string;
+  landmark: any;
   setIsPickupRightModal: (value: boolean) => void;
   onSave: (details: IPickupDetails, landmark: string) => void;
   order: any;
@@ -41,7 +45,57 @@ interface ValidationErrors {
   pincode: string | null;
   fullAddress: string | null;
   landmark: string | null;
+  flatNo: string | null;
+  sector: string | null;
 }
+
+const initialState = {
+  pickupDetails: {
+    fullAddress: "",
+    pincode: 0,
+    contact: {
+      name: "",
+      mobileNo: 0,
+    },
+  },
+  otherAddressDetils: {
+    landmark: "",
+    country: "",
+    city: "",
+    state: "",
+    flatNo: "",
+    sector: "",
+    locality: "",
+  },
+};
+
+const DummyPayLoadDataToAddAddressToCatalagoue = {
+  flatNo: "",
+  locality: "",
+  sector: "",
+  landmark: "",
+  pincode: "",
+  city: "",
+  state: "",
+  country: "",
+  fullAddress: "",
+  addressType: "",
+  workingDays: {
+    monday: true,
+    tuesday: true,
+    wednesday: true,
+    thursday: true,
+    friday: true,
+    saturday: true,
+    sunday: true,
+  },
+  workingHours: "09:00",
+  contact: {
+    name: "",
+    mobileNo: 0,
+    type: "warehouse associate",
+  },
+};
 
 const PickupDetailsContent: React.FunctionComponent<
   IPickupDetailsContentProps
@@ -49,6 +103,8 @@ const PickupDetailsContent: React.FunctionComponent<
   const [pickupDetails, setPickupDetails] = useState<IPickupDetails>(details);
   const [localLandmark, setLocalLandmark] = useState<any>(landmark);
   const [gstError, setgstError] = useState<any>("");
+  const [isAutoPopulateData, setIsAutoPopulateData]: any = useState(false);
+  const [isnewData, setIsNewData]: any = useState(false);
   let kycCheck: any = localStorage.getItem("kycValue");
   kycCheck = JSON.parse(kycCheck);
 
@@ -58,6 +114,8 @@ const PickupDetailsContent: React.FunctionComponent<
     pincode: null,
     fullAddress: null,
     landmark: null,
+    flatNo: null,
+    sector: null,
   });
 
   useEffect(() => {
@@ -87,11 +145,12 @@ const PickupDetailsContent: React.FunctionComponent<
   };
 
   const handleLandmarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { name, value } = e.target;
     setLocalLandmark({
       ...localLandmark,
-      landmark: value,
+      [name]: value,
     });
+    validateField(name, value);
   };
 
   const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,7 +199,57 @@ const PickupDetailsContent: React.FunctionComponent<
     }
   };
 
-  const handleSave = () => {
+  const addAddressToCatalogue = async () => {
+    try {
+      const payload = {
+        ...DummyPayLoadDataToAddAddressToCatalagoue,
+        flatNo: localLandmark?.flatNo,
+        locality: localLandmark?.sector,
+        sector: localLandmark?.sector,
+        landmark: localLandmark?.landmark,
+        pincode: pickupDetails?.pincode,
+        city: localLandmark?.city,
+        state: localLandmark?.state,
+        country: localLandmark?.country,
+        fullAddress: pickupDetails?.fullAddress,
+        addressType: "Pickup Address",
+        workingDays: {
+          monday: true,
+          tuesday: true,
+          wednesday: true,
+          thursday: true,
+          friday: true,
+          saturday: true,
+          sunday: true,
+        },
+        workingHours: "09:00",
+        contact: {
+          name: pickupDetails?.contact?.name,
+          mobileNo: pickupDetails?.contact?.mobileNo,
+          type: "warehouse associate",
+        },
+      };
+
+      const { data: response } = await POST(
+        ADD_PICKUP_ADDRESS_CATALOGUE,
+        payload
+      );
+      if (response?.success) {
+        toast.success(response?.message);
+        return true;
+      } else {
+        toast.error(response?.message);
+        return false;
+      }
+    } catch (error) {
+      toast.error("An error occurred while adding the address.");
+      return false;
+    }
+  };
+
+  const handleSave = async () => {
+    console.log("localLandmark-pickup", localLandmark.landmark);
+
     const errors: ValidationErrors = {
       name: pickupDetails.contact.name ? null : "Name is required",
       mobileNo: pickupDetails.contact.mobileNo
@@ -150,24 +259,32 @@ const PickupDetailsContent: React.FunctionComponent<
       fullAddress: pickupDetails.fullAddress
         ? null
         : "Full Address is required",
-      landmark: localLandmark ? null : "Landmark is required",
+      landmark: localLandmark.landmark ? null : "Landmark is required",
+      flatNo: localLandmark.flatNo ? null : "Flat No is required",
+      sector: localLandmark.sector ? null : "Locality is required",
     };
 
     setValidationErrors(errors);
 
     if (Object.values(errors).some((error) => error !== null)) {
-      return; // Prevent saving if there are validation errors
+      return;
+    }
+
+    if (isnewData) {
+      const success: any = await addAddressToCatalogue();
+      if (!success) {
+        return;
+      }
     }
 
     onSave(pickupDetails, localLandmark);
-    setIsPickupRightModal(false); // Close the modal after saving
+
+    setIsPickupRightModal(false);
   };
 
   const handlePincode = async (pincode: any) => {
     if (pincode.length === 6) {
       const { data: response } = await POST(GET_PINCODE_DATA, { pincode });
-
-      console.log("pincode handler is working");
 
       setLocalLandmark({
         ...localLandmark,
@@ -188,6 +305,11 @@ const PickupDetailsContent: React.FunctionComponent<
     setLocalLandmark(landmark);
   };
 
+  const resetInputFields = (setDefaultState: any) => {
+    setPickupDetails(setDefaultState?.pickupDetails);
+    setLocalLandmark(setDefaultState?.otherAddressDetils);
+  };
+
   useEffect(() => {
     if (kycCheck?.kycDetails?.gstNumber && ["B2B"].includes(order?.orderType)) {
       setPickupDetails((prevDetails) => ({
@@ -198,8 +320,26 @@ const PickupDetailsContent: React.FunctionComponent<
   }, []);
 
   useEffect(() => {
-    console.log("localLandmark", localLandmark);
-  }, [localLandmark]);
+    if (
+      pickupDetails?.pincode &&
+      localLandmark?.flatNo &&
+      localLandmark?.landmark
+    ) {
+      const fullAddress = `${localLandmark?.flatNo}, ${localLandmark?.sector}, ${localLandmark?.landmark}, ${localLandmark?.city}, ${localLandmark?.state}, ${localLandmark?.country}, ${pickupDetails?.pincode}`;
+      setPickupDetails((prevDetails) => ({
+        ...prevDetails,
+        fullAddress,
+      }));
+    }
+  }, [
+    pickupDetails?.pincode,
+    localLandmark?.flatNo,
+    localLandmark?.landmark,
+    localLandmark?.sector,
+    localLandmark?.state,
+    localLandmark?.city,
+    localLandmark?.country,
+  ]);
 
   return (
     <>
@@ -226,133 +366,189 @@ const PickupDetailsContent: React.FunctionComponent<
               label="Search Pickup Address"
               setFunc={autoSetData}
               identifier="ADDRESS"
+              setIsNewData={setIsNewData}
+              setIsAutoPopulateData={setIsAutoPopulateData}
+              newDataMessage="Create New Pickup Address"
+              setInputData={resetInputFields}
+              initialState={initialState}
             />
           </div>
 
-          <CustomInputBox
-            label="Sender Name"
-            value={pickupDetails.contact.name}
-            onChange={handleContactChange}
-            name="name"
-          />
-          {validationErrors.name && (
-            <div className="flex items-center gap-x-1 mt-1">
-              <img src={InfoCircle} alt="info" width={10} height={10} />
-              <span className="font-normal text-[#F35838] text-xs leading-3">
-                {validationErrors.name}
-              </span>
-            </div>
-          )}
-          <div>
-            <CustomInputBox
-              label="Sender Mobile Number"
-              value={pickupDetails.contact.mobileNo.toString()}
-              inputMode="numeric"
-              maxLength={10}
-              onChange={handleMobileNoChange}
-              name="mobileNo"
-            />
-            {validationErrors.mobileNo && (
-              <div className="flex items-center gap-x-1 mt-1">
-                <img src={InfoCircle} alt="info" width={10} height={10} />
-                <span className="font-normal text-[#F35838] text-xs leading-3">
-                  {validationErrors.mobileNo}
-                </span>
+          {(isnewData ||
+            isAutoPopulateData ||
+            (Object.keys(pickupDetails).length > 0 &&
+              Object.keys(localLandmark).length > 0)) && (
+            <>
+              <div>
+                <CustomInputBox
+                  label="Sender Name"
+                  value={pickupDetails?.contact?.name}
+                  onChange={handleContactChange}
+                  name="name"
+                />
+                {validationErrors?.name && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="info" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {validationErrors?.name}
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <CustomInputBox
-            label="Address"
-            value={pickupDetails.fullAddress}
-            className="!h-[70px]"
-            onChange={handleInputChange}
-            name="fullAddress"
-          />
-          {validationErrors.fullAddress && (
-            <div className="flex items-center gap-x-1 mt-1">
-              <img src={InfoCircle} alt="info" width={10} height={10} />
-              <span className="font-normal text-[#F35838] text-xs leading-3">
-                {validationErrors.fullAddress}
-              </span>
-            </div>
-          )}
-          <div className="flex justify-between">
-            <div>
-              <CustomInputBox
-                label="Pincode"
-                value={pickupDetails.pincode}
-                inputMode="numeric"
-                maxLength={6}
-                onChange={(e: any) => {
-                  handlePincode(e.target.value);
-                  handlePincodeChange(e);
-                }}
-                name="pincode"
-              />
-              {validationErrors.pincode && (
-                <div className="flex items-center gap-x-1 mt-1">
-                  <img src={InfoCircle} alt="info" width={10} height={10} />
-                  <span className="font-normal text-[#F35838] text-xs leading-3">
-                    {validationErrors.pincode}
-                  </span>
+              <div>
+                <CustomInputBox
+                  label="Sender Mobile Number"
+                  value={pickupDetails?.contact?.mobileNo.toString()}
+                  inputMode="numeric"
+                  maxLength={10}
+                  onChange={handleMobileNoChange}
+                  name="mobileNo"
+                />
+                {validationErrors?.mobileNo && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="info" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {validationErrors?.mobileNo}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <textarea
+                  // label="Address"
+                  value={pickupDetails?.fullAddress}
+                  placeholder="fullAddress"
+                  className="!h-[100px] w-[100%] removePaddingPlaceHolder border border-[#999999] text-[13px] rounded-md p-2"
+                  // onChange={handleInputChange}
+                  disabled={true}
+                  name="fullAddress"
+                />
+                {/* {validationErrors?.fullAddress && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="info" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {validationErrors?.fullAddress}
+                    </span>
+                  </div>
+                )} */}
+              </div>
+
+              <div className="flex gap-x-4 mt-1">
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Plot No., Floor, Building Name"
+                    value={localLandmark?.flatNo}
+                    name="flatNo"
+                    onChange={handleLandmarkChange}
+                  />
+
+                  {validationErrors?.flatNo && (
+                    <div className="flex items-center gap-x-1 mt-1">
+                      <img src={InfoCircle} alt="info" width={10} height={10} />
+                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                        {validationErrors?.flatNo}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Locality"
+                    name="sector"
+                    value={localLandmark?.sector}
+                    className={` ${
+                      validationErrors?.sector && "!border-[#F35838]"
+                    } `}
+                    onChange={handleLandmarkChange}
+                  />
+                  {validationErrors?.sector && (
+                    <div className="flex items-center gap-x-1 mt-1">
+                      <img src={InfoCircle} alt="" width={16} height={16} />
+                      <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
+                        {validationErrors?.sector}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-x-4 justify-between">
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Pincode"
+                    value={pickupDetails?.pincode}
+                    inputMode="numeric"
+                    maxLength={6}
+                    onChange={(e: any) => {
+                      handlePincode(e.target.value);
+                      handlePincodeChange(e);
+                    }}
+                    name="pincode"
+                  />
+                  {validationErrors?.pincode && (
+                    <div className="flex items-center gap-x-1 mt-1">
+                      <img src={InfoCircle} alt="info" width={10} height={10} />
+                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                        {validationErrors?.pincode}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Landmark"
+                    value={localLandmark?.landmark}
+                    onChange={handleLandmarkChange}
+                    name="landmark"
+                  />
+                  {validationErrors?.landmark && (
+                    <div className="flex items-center gap-x-1 mt-1">
+                      <img src={InfoCircle} alt="info" width={10} height={10} />
+                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                        {validationErrors?.landmark}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {["B2B"].includes(order?.orderType) && (
+                <div>
+                  <CustomInputBox
+                    containerStyle="md:!w-auto"
+                    label="GST Number"
+                    value={pickupDetails?.gstNumber}
+                    id={"gstNumber"}
+                    name="gstNumber"
+                    maxLength={15}
+                    isDisabled={true}
+                    className={`${
+                      gstError !== "" &&
+                      gstError !== undefined &&
+                      "border-[#F35838]"
+                    }  md:!w-[100%]   !font-Open`}
+                    labelClassName="!font-Open"
+                    onChange={(e: any) => {
+                      const gstValue = e.target.value.toUpperCase();
+
+                      if (gstRegex.test(gstValue)) {
+                        handleInputChange(e);
+                      } else {
+                        setgstError("Enter Valid GST Number");
+                      }
+                    }}
+                  />
+
+                  {gstError !== "" && gstError !== undefined && (
+                    <div className="flex items-center gap-x-1 mt-1 ">
+                      <img src={ErrorIcon} alt="" width={10} height={10} />
+                      <span className="font-normal font-Open text-[#F35838] text-[10px]">
+                        {gstError}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-            <div>
-              <CustomInputBox
-                label="Landmark"
-                value={localLandmark?.landmark}
-                onChange={handleLandmarkChange}
-                name="landmark"
-              />
-              {validationErrors.landmark && (
-                <div className="flex items-center gap-x-1 mt-1">
-                  <img src={InfoCircle} alt="info" width={10} height={10} />
-                  <span className="font-normal text-[#F35838] text-xs leading-3">
-                    {validationErrors.landmark}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          {["B2B"].includes(order?.orderType) && (
-            <div>
-              <CustomInputBox
-                containerStyle="md:!w-auto"
-                label="GST Number"
-                value={pickupDetails?.gstNumber}
-                id={"gstNumber"}
-                name="gstNumber"
-                maxLength={15}
-                isDisabled={true}
-                className={`${
-                  gstError !== "" &&
-                  gstError !== undefined &&
-                  "border-[#F35838]"
-                }  md:!w-[100%]   !font-Open`}
-                labelClassName="!font-Open"
-                onChange={(e: any) => {
-                  const gstValue = e.target.value.toUpperCase();
-
-                  if (gstRegex.test(gstValue)) {
-                    handleInputChange(e);
-                  } else {
-                    setgstError("Enter Valid GST Number");
-                  }
-                }}
-              />
-
-              {/* To display error */}
-
-              {gstError !== "" && gstError !== undefined && (
-                <div className="flex items-center gap-x-1 mt-1 ">
-                  <img src={ErrorIcon} alt="" width={10} height={10} />
-                  <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                    {gstError}
-                  </span>
-                </div>
-              )}
-            </div>
+            </>
           )}
         </div>
       </div>

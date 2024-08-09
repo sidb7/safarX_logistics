@@ -11,6 +11,8 @@ import {
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import AdvanceRuleEngine from "./AdvanceRuleEngine";
+import AdvanceRuleEngine_1 from "./AdvanceRuleEngine_1";
 
 interface Partner {
   id: string;
@@ -279,12 +281,7 @@ const RuleEngine: React.FC = () => {
             </div>
           </>
         )}
-
-        {activeTab === "advanceRuleEngine" && (
-          <div className="flex justify-center items-center h-64 mt-4">
-            <h2 className="text-lg font-bold text-gray-500">Coming Soon</h2>
-          </div>
-        )}
+        {activeTab === "advanceRuleEngine" && <AdvanceRuleEngine_1 />}
       </div>
     </>
   );
