@@ -582,7 +582,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
         setDownloadLebal(true);
-        sessionStorage.removeItem("order");
+        sessionStorage.clear();
         toast.success(data?.message || "Successfully Placed order");
       } else {
         toast.error(data?.message);

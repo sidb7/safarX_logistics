@@ -238,14 +238,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "Download Invoice",
       },
     ],
-    "IN TRANSIT": [
-      {
-        icon: RTOicon,
-        hovertext: "Rto Orders",
-        identifier: "Rto",
-        buttonName: "RTO ORDERS",
-      },
-    ],
+    // "IN TRANSIT": [
+    //   {
+    //     icon: RTOicon,
+    //     hovertext: "Rto Orders",
+    //     identifier: "Rto",
+    //     buttonName: "RTO ORDERS",
+    //   },
+    // ],
     // "OUT OF DELIVERY": [
     //   {
     //     icon: CrossIcon,
@@ -270,20 +270,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     //     buttonName: "CANCEL ORDERS",
     //   },
     // ],
-    EXCEPTION: [
-      {
-        icon: RTOicon,
-        hovertext: "Rto Orders",
-        identifier: "Rto",
-        buttonName: "RTO ORDERS",
-      },
-      {
-        icon: ReattemptIcon,
-        hovertext: "Re-Attempt Orders",
-        identifier: "Re-Attempt",
-        buttonName: "RE-ATTEMPT ORDERS",
-      },
-    ],
+    // EXCEPTION: [
+    //   {
+    //     icon: RTOicon,
+    //     hovertext: "Rto Orders",
+    //     identifier: "Rto",
+    //     buttonName: "RTO ORDERS",
+    //   },
+    //   {
+    //     icon: ReattemptIcon,
+    //     hovertext: "Re-Attempt Orders",
+    //     identifier: "Re-Attempt",
+    //     buttonName: "RE-ATTEMPT ORDERS",
+    //   },
+    // ],
     "READY TO PICK": [
       // {
       //   icon: CrossIcon,
