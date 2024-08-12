@@ -31,7 +31,7 @@ import { useNavigate } from "react-router-dom";
 import { tokenKey } from "../../utils/utility";
 import { useSelector } from "react-redux";
 import CopyTooltip from "../../components/CopyToClipboard";
-import { forEach } from "lodash";
+import { add, forEach } from "lodash";
 import { Spinner } from "../../components/Spinner";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import { useMediaQuery } from "react-responsive";
@@ -89,7 +89,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     return storedValue !== null ? JSON.parse(storedValue) : initialState;
   });
 
-  console.log("order", order?.orderType, order?.transit);
+  const [highLightField, setHighLightField]: any = useState({
+    addressDetails: true,
+    packageDetails: false,
+    orderDetails: false,
+    shippingDetails: false,
+  });
 
   let kycCheck = localStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
@@ -105,20 +110,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
 
   const navigate = useNavigate();
-
-  // function validateForProduct(order: any) {
-  //   const errors: string[] = [];
-
-  //   order.boxInfo.forEach((box: any) => {
-  //     if (box.products.length === 0) {
-  //       errors.push(
-  //         `Box ${box.boxName} has no products. Please add products to the box.`
-  //       );
-  //     }
-  //   });
-
-  //   return errors;
-  // }
 
   function validateOrder(order: any) {
     const pickupDetailsValid =
@@ -726,7 +717,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <div className="flex gap-5 mx-5">
           <div className="flex-1 ">
             <div className="flex flex-col gap-y-4  !h-[calc(100vh-180px)] customScroll">
-              <div className="!max-h-[450px] border-[1px] rounded-lg border-[#E8E8E8] overflow-auto scroll-smooth">
+              <div
+                className={`!max-h-[450px] border-[1px] rounded-lg ${
+                  highLightField?.addressDetails
+                    ? "border-[#004EFF]"
+                    : "border-[#E8E8E8]"
+                }   overflow-auto scroll-smooth  `}
+              >
                 <AddressCardDetails
                   pickupDetails={order?.pickupDetails}
                   deliveryDetails={order?.deliveryDetails}
@@ -737,20 +734,32 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   showDownloadLebal={showDownloadLebal}
                   resetOtherAddressDetails={resetOtherAddressDetails}
                   setResetOtherAddressDetails={setResetOtherAddressDetails}
+                  setHighLightField={setHighLightField}
                 />
               </div>
-              <div className="rounded-lg !max-h-[450px] w-full">
+              <div
+                className={`border ${
+                  highLightField?.packageDetails
+                    ? "border-[#004EFF]"
+                    : "border-[#E8E8E8]"
+                }  rounded-lg !max-h-[450px] w-full`}
+              >
                 <PackageDetails
                   packageDetails={order?.boxInfo}
                   order={order}
                   setOrder={setOrder}
                   setSortServiciblity={setSortServiciblity}
                   showDownloadLebal={showDownloadLebal}
+                  setHighLightField={setHighLightField}
                 />
               </div>
 
               <div
-                className={`border p-3 rounded gap-x-4 flex items-center ${
+                className={`border ${
+                  highLightField?.orderDetails
+                    ? "border-[#004EFF]"
+                    : "border-[#E8E8E8]"
+                } p-3 rounded gap-x-4 flex items-center ${
                   order?.orderType === "B2B" &&
                   sumInvoiceValue >= 50000 &&
                   "justify-between"
@@ -775,6 +784,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         return { ...prevState, orderId: e.target.value };
                       });
                       setSortServiciblity("");
+                      setHighLightField({
+                        addressDetails: false,
+                        packageDetails: false,
+                        shippingDetails: false,
+                        orderDetails: true,
+                      });
                     }}
                     isDisabled={showDownloadLebal}
                     onClick={() => {
@@ -783,6 +798,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         return { ...prevState, orderId: orderId };
                       });
                       setSortServiciblity("");
+                      setHighLightField({
+                        addressDetails: false,
+                        packageDetails: false,
+                        shippingDetails: false,
+                        orderDetails: true,
+                      });
                     }}
                     visibility={true}
                     setVisibility={() => {}}
@@ -808,6 +829,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                           checked={paymentMode === "COD"}
                           onChange={(e: any) => {
                             paymentModeToggle(e.target.value);
+                            setHighLightField({
+                              addressDetails: false,
+                              packageDetails: false,
+                              shippingDetails: false,
+                              orderDetails: true,
+                            });
                           }}
                         />
                         <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
@@ -828,7 +855,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       }
                       className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                       checked={paymentMode === "PREPAID"}
-                      onChange={(e: any) => paymentModeToggle(e.target.value)}
+                      onChange={(e: any) => {
+                        paymentModeToggle(e.target.value);
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: false,
+                          shippingDetails: false,
+                          orderDetails: true,
+                        });
+                      }}
                     />
                     <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
                       PREPAID
@@ -852,6 +887,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             };
                           });
                           setSortServiciblity("");
+                          setHighLightField({
+                            addressDetails: false,
+                            packageDetails: false,
+                            shippingDetails: false,
+                            orderDetails: true,
+                          });
                         }}
                       />
                     </div>
@@ -871,6 +912,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   setShowPickupDate={setShowPickupDate}
                   resetOtherAddressDetails={resetOtherAddressDetails}
                   setResetOtherAddressDetails={setResetOtherAddressDetails}
+                  setHighLightField={setHighLightField}
+                  highLightField={highLightField}
                 />
               </div>
 

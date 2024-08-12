@@ -17,6 +17,7 @@ function PackageDetails({
   setOrder,
   setSortServiciblity,
   showDownloadLebal,
+  setHighLightField,
 }: any) {
   const [boxModal, setBoxModal]: any = useState(false);
   const [boxInfoData, setBoxInfoData] = useState([]);
@@ -83,7 +84,7 @@ function PackageDetails({
 
   return (
     <>
-      <div className="border w-full h-full rounded-md overflow-auto scroll-smooth !max-h-[350px] lg:!max-h-[300px]">
+      <div className="w-full h-full rounded-md overflow-auto scroll-smooth !max-h-[350px] lg:!max-h-[300px]">
         <div
           className="p-2 border-b bg-white z-10  top-0 "
           style={{ position: "sticky" }}
@@ -115,6 +116,12 @@ function PackageDetails({
                   onClick={() => {
                     setBoxModal(true);
                     setSortServiciblity("");
+                    setHighLightField({
+                      addressDetails: false,
+                      packageDetails: true,
+                      shippingDetails: false,
+                      orderDetails: false,
+                    });
                   }}
                 >
                   <img src={addIcon} alt="" />
@@ -143,6 +150,7 @@ function PackageDetails({
                     setIsOpen={setopenOrderIdModal}
                     setSortServiciblity={setSortServiciblity}
                     showDownloadLebal={showDownloadLebal}
+                    setHighLightField={setHighLightField}
                   />
                 </div>
               );
