@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomTable } from "../../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../../utils/utility";
@@ -7,58 +7,21 @@ import sortIcon from "../../../assets/sort.svg";
 import downloadIcon from "../../../assets/download.svg";
 import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
+import resolvedImage from "../../../assets/resolved.svg";
+import { POST } from "../../../utils/webService";
+import { GET_BILLED_ORDERS } from "../../../utils/ApiUrls";
 
-interface IOrdersDataProps {}
+interface IOrdersDataProps {
+  data: any;
+}
 
-const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
+const OrdersData: React.FunctionComponent<IOrdersDataProps> = (
+  props: IOrdersDataProps
+) => {
+  const { data } = props;
+
   const columnsHelper = createColumnHelper<any>();
-  const [data, setData] = useState([
-    {
-      order: "GYSM23698789",
-      tracking: "GYSH23678119",
-      shipyaari: "SY23678119",
-      products: "product 1 + product 2",
-      sku: "GYSH2364",
-      courierCo: "Xpress Bees",
-      dimensions: "15 x 15 x 15",
-      weight: "1",
-      price: "1000",
-      fwd: "200",
-      rto: "50",
-      wa: "20",
-      sms: "5",
-    },
-    {
-      order: "GYSM23698789",
-      tracking: "GYSH23678119",
-      shipyaari: "SY23678119",
-      products: "product 1 + product 2",
-      sku: "GYSH2364",
-      courierCo: "Xpress Bees",
-      dimensions: "15 x 15 x 15",
-      weight: "1",
-      price: "1000",
-      fwd: "200",
-      rto: "50",
-      wa: "20",
-      sms: "5",
-    },
-    {
-      order: "GYSM23698789",
-      tracking: "GYSH23678119",
-      shipyaari: "SY23678119",
-      products: "product 1 + product 2",
-      sku: "GYSH2364",
-      courierCo: "Xpress Bees",
-      dimensions: "15 x 15 x 15",
-      weight: "1",
-      price: "1000",
-      fwd: "200",
-      rto: "50",
-      wa: "20",
-      sms: "5",
-    },
-  ]);
+
   const billingOrdersHeading = [
     columnsHelper.accessor("id", {
       header: () => {
@@ -73,24 +36,28 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
       },
 
       cell: (info: any) => {
+        console.log("info", info?.row?.original);
         return (
           <div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               Order:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2 ">
-                {info.row.original.order} <img src={copyIcon} alt="" />
+                {info?.row?.original?.["order id"]}{" "}
+                <img src={copyIcon} alt="" />
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               Tracking:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                {info.row.original.tracking} <img src={copyIcon} alt="" />
+                {info?.row?.original?.["Tracking Number"]}{" "}
+                <img src={copyIcon} alt="" />
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               Shipyaari:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                {info.row.original.shipyaari} <img src={copyIcon} alt="" />
+                {info?.row?.original?.["Shipyaari ID"]}{" "}
+                <img src={copyIcon} alt="" />
               </p>
             </div>
           </div>
@@ -119,13 +86,13 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               SKU:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                {info.row.original.sku}
+                {info.row.original.SKU}
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               Courier Co.:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                {info.row.original.courierCo}
+                {info?.row?.original?.["Customer Name"]}
               </p>
             </div>
           </div>
@@ -148,18 +115,27 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
         return (
           <div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
+              Product Dimensions:
+              <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open  ">
+                {info?.row?.original?.["Product Dimensions"]}
+              </p>
               Volumetric Weight:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open  ">
-                {info.row.original.dimensions}cm
+                {info?.row?.original?.["Dimension Weight"]}
               </p>
-              <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open  mb-2">
-                {info.row.original.weight}Kg
+              Dead Weight:
+              <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open  ">
+                {info?.row?.original?.["Dead Weight"]}
+              </p>
+              Billable Weight:
+              <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open  ">
+                {info?.row?.original?.["Billable Weight"]}
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               Price:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                ₹{info.row.original.price}
+                ₹{info?.row?.original?.["Total Invoice Value"]}
               </p>
             </div>
           </div>
@@ -180,7 +156,12 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 "></p>
+          <div className="flex gap-x-2 justify-center items-center border border-[#7CCA62] rounded-md max-w-[150px] py-2 bg-[#F2FAEF]">
+            <img src={resolvedImage} alt="" className="h-4 w-4" />
+            <p className=" flex items-center text-[#7CCA62] font-Open text-sm font-semibold leading-5 ">
+              Delivered
+            </p>
+          </div>
         );
       },
     }),
@@ -202,15 +183,36 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
             <p className="text-[12px] font-semibold leading-4 font-Open flex">
               FWD:{" "}
               <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
-                ₹{info.row.original.fwd}{" "}
-                <img className="cursor-pointer" src={infoIcon} alt="" />{" "}
+                ₹{info?.row?.original?.["Applied Forward Amount"]}{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
               </span>
             </p>
             <p className="text-[12px] font-semibold leading-4 font-Open flex">
               RTO:{" "}
               <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
-                ₹{info.row.original.rto}{" "}
-                <img className="cursor-pointer" src={infoIcon} alt="" />{" "}
+                ₹{info?.row?.original?.["Applied Rto Amount"]}{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
+              </span>
+            </p>
+            <p className="text-[12px] font-semibold leading-4 font-Open flex">
+              Applied Total Amount:{" "}
+              <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
+                ₹{info?.row?.original?.["Applied Total Amount"]}{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
+              </span>
+            </p>
+            <p className="text-[12px] font-semibold leading-4 font-Open flex">
+              GST:{" "}
+              <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
+                ₹{info?.row?.original?.["GST Total"]}{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
+              </span>
+            </p>
+            <p className="text-[12px] font-semibold leading-4 font-Open flex">
+              Total Shipped Value:{" "}
+              <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
+                ₹{info?.row?.original?.["Total Shipping Bill value"]}{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
               </span>
             </p>
           </div>
@@ -236,14 +238,51 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
               WA:{" "}
               <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
                 ₹{info.row.original.wa}{" "}
-                <img className="cursor-pointer" src={infoIcon} alt="" />{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
               </span>
             </p>
             <p className="text-[12px] font-semibold leading-4 font-Open flex">
               SMS:{" "}
               <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
                 ₹{info.row.original.sms}{" "}
-                <img className="cursor-pointer" src={infoIcon} alt="" />{" "}
+                {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
+              </span>
+            </p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("updatedAmount", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+              Updated Amount
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <div className="flex flex-col gap-7">
+            <p className="text-[12px] font-semibold leading-4 font-Open flex">
+              Excess Forward amount :{" "}
+              <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
+                ₹{info?.row?.original?.["Excess Forward amount"]}{" "}
+              </span>
+            </p>
+            <p className="text-[12px] font-semibold leading-4 font-Open flex">
+              Excess RTO amount:{" "}
+              <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
+                ₹{info?.row?.original?.["Excess RTO amount"]}{" "}
+              </span>
+            </p>
+            <p className="text-[12px] font-semibold leading-4 font-Open flex">
+              Excess Total amount:{" "}
+              <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
+                ₹{info?.row?.original?.["Excess Total Amount"]}{" "}
               </span>
             </p>
           </div>
@@ -275,7 +314,7 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
     <div>
       <CustomTable
         columns={billingOrdersHeading}
-        data={[]}
+        data={data}
         thclassName={" bg-white"}
       />
     </div>
