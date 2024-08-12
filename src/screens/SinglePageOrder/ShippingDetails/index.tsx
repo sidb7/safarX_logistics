@@ -21,6 +21,9 @@ interface IIndexProps {
   setSortServiciblity: any;
   sortServiceiblity: any;
   showDownloadLebal: any;
+  setShowPickupDate: any;
+  resetOtherAddressDetails: any;
+  setResetOtherAddressDetails: any;
 }
 
 const Index: React.FunctionComponent<IIndexProps> = ({
@@ -29,6 +32,9 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   setSortServiciblity,
   sortServiceiblity,
   showDownloadLebal,
+  setShowPickupDate,
+  resetOtherAddressDetails,
+  setResetOtherAddressDetails,
 }: IIndexProps) => {
   function validateForServicebility(order: any) {
     const pickupDetailsValid =
@@ -94,7 +100,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
             </div>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 gap-y-4">
           <div>
             <CustomSearchBoxForService
               value={""}
@@ -107,6 +113,9 @@ const Index: React.FunctionComponent<IIndexProps> = ({
               setFunc={setOrder}
               disabled={!validateForServicebility(order)}
               showDownloadLebal={showDownloadLebal}
+              setShowPickupDate={setShowPickupDate}
+              resetOtherAddressDetails={resetOtherAddressDetails}
+              setResetOtherAddressDetails={setResetOtherAddressDetails}
             />
           </div>
         </div>

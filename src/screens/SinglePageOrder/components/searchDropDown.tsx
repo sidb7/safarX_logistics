@@ -10,6 +10,7 @@ import { capitalizeFirstLetter } from "../../../utils/utility";
 import index from "../../NewOrder/Filter";
 import { he } from "date-fns/locale";
 import PinCode from "../../Order/ruleEngine/pinCode";
+import { Sector } from "recharts";
 
 interface CustomInputWithDropDownProps {
   className?: any;
@@ -18,10 +19,11 @@ interface CustomInputWithDropDownProps {
   setFunc?: any;
   identifier?: any;
   emptyMsg?: any;
-  // value?: any;
-  // initValue?: any;
-  // state?: any;
-  //   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setIsNewData?: any;
+  setIsAutoPopulateData: any;
+  newDataMessage?: any;
+  setInputData?: any;
+  initialState?: any;
 }
 
 const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
@@ -31,6 +33,11 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
   setFunc,
   identifier,
   emptyMsg,
+  setIsNewData,
+  setIsAutoPopulateData,
+  newDataMessage,
+  setInputData,
+  initialState,
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -51,14 +58,17 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
       debounceTimer = setTimeout(async () => {
         setisLoading(true);
         const { data } = await POST(apiUrl, payload);
-
+        let options = [];
         if (data?.success) {
           setisLoading(false);
-          setArrayValue(data?.data);
+          options = data?.data || [];
+          options.unshift({ _id: "@dd", name: newDataMessage });
+          // setArrayValue([...options, { name: "Others" }]);
+          setArrayValue(options);
         } else {
           setisLoading(false);
-
-          throw new Error(data?.meesage);
+          options.unshift({ _id: "@dd", name: newDataMessage });
+          setArrayValue(options);
         }
       }, 800);
     } catch (error: any) {
@@ -81,10 +91,9 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
   }, []);
 
   const setSelectedDataToMainState = (value: any) => {
-    setSearchInput(value?.name);
-
     switch (identifier) {
       case "ADDRESS": {
+        setSearchInput(value?.contact?.name);
         setFunc(
           {
             contact: {
@@ -99,11 +108,15 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
             country: value?.country,
             city: value?.city,
             state: value?.state,
+            flatNo: value?.flatNo,
+            sector: value?.locality,
+            locality: value?.locality,
           }
         );
         return;
       }
       case "BOX": {
+        setSearchInput(value?.name);
         setFunc((prevState: any) => {
           return {
             ...prevState,
@@ -117,6 +130,7 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
         return;
       }
       case "PRODUCT": {
+        setSearchInput(value?.name);
         setFunc((prevState: any) => {
           return {
             ...prevState,
@@ -177,15 +191,35 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
             {arrayValue.length ? (
               arrayValue?.map((item: any, index: number) => (
                 <div
-                  className="cursor-pointer flex botder-b justify-between items-center py-2 px-4 hover:bg-slate-100"
+                  className={`${
+                    item?._id === "@dd"
+                      ? "font-semibold font-Open px-3"
+                      : "px-4"
+                  } cursor-pointer flex botder-b justify-between items-center py-2 hover:bg-slate-100 hover:shadow-inner`}
                   key={index}
                   onClick={(e: any) => {
+                    if (item?._id === "@dd") {
+                      setInputData(initialState);
+                      setIsNewData(true);
+                      setIsAutoPopulateData(false);
+                      setSearchInput(item?.name);
+                    } else {
+                      setIsNewData(false);
+                      setIsAutoPopulateData(true);
+                      setSelectedDataToMainState(item);
+                    }
+
                     setIsDropdownOpen(false);
-                    setSelectedDataToMainState(item);
                   }}
                   data-cy={`dropdown-item-${index}`}
                 >
-                  <p className="text-[15px] text-[#777777] leading-4 font-Open">
+                  <p
+                    className={`${
+                      item?._id === "@dd"
+                        ? "font-semibold font-Open text-[#0066FF]"
+                        : "text-[#777777]"
+                    } text-[15px] leading-4 font-Open`}
+                  >
                     {item?.name ? item?.name : item?.contact?.name}
                   </p>
                 </div>

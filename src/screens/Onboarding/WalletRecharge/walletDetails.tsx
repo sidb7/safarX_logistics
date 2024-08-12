@@ -63,7 +63,8 @@ const WalletDetails = () => {
         toast.success("Bank Details verified successfully");
         setWalletRechargeModalOpen(true);
         setLoading(false);
-        navigate("/dashboard/overview");
+        // navigate("/dashboard/overview");
+        navigate("/orders/quick-order-place");
         //gtm
         window?.dataLayer?.push({
           event: "seller_bank_verification",

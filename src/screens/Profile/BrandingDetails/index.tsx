@@ -55,7 +55,7 @@ const Index = (props: ITypeProps) => {
                 height: "100%",
                 objectFit: "cover",
               }}
-              src={`${data?.logoUrl || ProfileIcon}`}
+              src={`${data?.logoUrl}`}
               alt="Profile"
             />
           </div>

@@ -58,7 +58,9 @@ export const Profile = () => {
       var width = img.naturalWidth;
 
       if (height > 200 || width > 700) {
-        return toast.error("Image size should be maximum 200x700");
+        return toast.error(
+          "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+        );
       } else {
         const { data } = await POST(LOGO_AND_BRAND, formData, {
           headers: {
@@ -69,7 +71,8 @@ export const Profile = () => {
         if (data?.success) {
           toast.success(data?.message);
           setBrandingModal(false);
-          getProfileData();
+          window.location.reload();
+          // getProfileData();
         } else {
           toast.error(data?.message);
         }

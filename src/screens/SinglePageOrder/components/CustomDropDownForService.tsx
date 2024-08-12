@@ -8,6 +8,7 @@ import { POST } from "../../../utils/webService";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import index from "../../NewOrder/Filter";
+import toast from "react-hot-toast";
 
 interface CustomInputWithDropDownProps {
   value?: any;
@@ -20,6 +21,9 @@ interface CustomInputWithDropDownProps {
   setFunc?: any;
   disabled?: boolean;
   showDownloadLebal: any;
+  setShowPickupDate: any;
+  resetOtherAddressDetails: any;
+  setResetOtherAddressDetails: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -34,6 +38,9 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   setFunc,
   disabled = false,
   showDownloadLebal,
+  setShowPickupDate,
+  resetOtherAddressDetails,
+  setResetOtherAddressDetails,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -63,30 +70,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
-  const sumInvoiceValue =
-    state?.boxInfo.length > 0 &&
-    state?.boxInfo.reduce(
-      (sum: any, box: any) => sum + box.codInfo.invoiceValue,
-      0
-    );
-
-  const sumOfAppliedWeightOfAllBox =
-    state?.boxInfo.length > 0 &&
-    state?.boxInfo.reduce((sum: any, box: any) => sum + box?.appliedWeight, 0);
-
-  const getCombinationDimensionValueOfAllBoxes = () => {
-    let length = 0;
-    let breadth = 0;
-    let height = 0;
-    state?.boxInfo.forEach((box: any) => {
-      length += box.length;
-      breadth += box.breadth;
-      height += box.height;
-    });
-
-    return { length, width: breadth, height };
-  };
-
   const getServices = async () => {
     setisLoading(true);
 
@@ -112,11 +95,13 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
 
       setArrayValue(options);
       setFilterData(options);
+      setIsDropdownOpen(true);
       setTimeout(() => {
         setisLoading(false);
       }, 1000);
     } else {
       setisLoading(false);
+      toast.error(data?.message);
     }
   };
 
@@ -130,16 +115,17 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         courierPartner: value?.name,
         serviceMode: value?.serviceMode,
         totalPrice: value?.value,
-        partnerServiceName: value?.partnerServiceName,
+        courierPartnerServices: value?.courierPartnerServices,
       };
     });
+    setShowPickupDate("");
   };
 
   useEffect(() => {
     if (sortIdentifier.length !== 0 && disabled === false) {
       getServices();
     }
-  }, [sortIdentifier, disabled, state]);
+  }, [sortIdentifier, disabled]);
 
   useEffect(() => {
     if (sortIdentifier.length === 0) {
@@ -153,12 +139,22 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         courierPartner: "",
         serviceMode: "",
         totalPrice: 0,
-        partnerServiceName: "",
+        courierPartnerServices: "",
+        pickupDate: "",
       };
     });
   }, [sortIdentifier]);
+  useEffect(() => {
+    if (resetOtherAddressDetails) {
+      setSearchInput("");
+      const timer = setTimeout(() => {
+        setResetOtherAddressDetails(false);
+      }, 3000);
 
-  // console.log("")
+      // Clean up the timer if the component unmounts or dependencies change
+      return () => clearTimeout(timer);
+    }
+  }, [state?.orderType, state?.transit]);
 
   return (
     <div
@@ -213,7 +209,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                       name: item?.name,
                       value: item?.total,
                       serviceMode: item?.serviceMode,
-                      partnerServiceName: item?.partnerServiceName,
+                      courierPartnerServices: item?.partnerServiceName,
                     });
                   }}
                   data-cy={`dropdown-item-${index}`}
@@ -224,7 +220,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                     )}`}
                   </p>
                   <p className="text-[15px] text-[#777777] leading-4 font-Open">
-                    ₹ {item?.total}
+                    ₹ {item?.total.toFixed(2)}
                   </p>
                 </div>
               ))

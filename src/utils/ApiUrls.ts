@@ -150,6 +150,7 @@ const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
+const RTO_REATTEMPT = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -192,8 +193,6 @@ const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const ACTIVATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/activatePickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
-const GET_ALL_ADDRESSS = `${SELLER_BASE_URL}/pickupAddress/getAllAddress`;
-const UPDATE_ALL_ADDRESS = `${SELLER_BASE_URL}/order/bulkUpdateAddress`;
 
 // PAYMENT GATEWAYS
 // Paytm
@@ -419,6 +418,11 @@ const FETCH_ZONE_MATRIX = `${SELLER_BASE_URL}/order/zoneMatrix`;
 
 // order / getAvailableServicesingleOrderPage;
 
+// Advance Rule Engine
+
+const FETCH_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/fetchAdvanceRuleEngine`;
+const CREATE_UPDATE_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/createAdvanceRuleEngine`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -627,10 +631,11 @@ export {
   GET_ALLPARTNERS_OF_RULEENGINE,
   FETCH_ZONE_MATRIX,
   // DUPLICATE_ORDER,
-  GET_ALL_ADDRESSS,
-  UPDATE_ALL_ADDRESS,
   GET_COMMUNICATION_RATE_CARD,
   UPDATE_COMMUNICATION_RATE_CARD,
   DOWNLOAD_INVOICE_FROM_S3,
   DOWNLOAD_MISREPORT_FROM_S3,
+  FETCH_ADVANCE_RULE_ENGINE,
+  CREATE_UPDATE_ADVANCE_RULE_ENGINE,
+  RTO_REATTEMPT,
 };

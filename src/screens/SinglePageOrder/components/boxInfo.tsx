@@ -58,9 +58,9 @@ function BoxInfo({
     return volume / 5000;
   };
 
+  const colors = ["#E5EDFF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
   const getColorByIndex = (index: any) => {
-    const colors = ["#E5EDFF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
-    return colors[index % colors.length];
+    return colors[index];
   };
 
   const setInvoiceValueWithProductPrice = () => {
@@ -224,11 +224,12 @@ function BoxInfo({
   useEffect(() => {
     setAllProducts(data.products);
   }, [data.products]);
+
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2  rounded-lg`}
-        style={{ backgroundColor: getColorByIndex(index) }}
+        className={`px-4 pt-2 pb-4 my-2 border rounded-lg`}
+        style={{ backgroundColor: colors[index % colors.length] }}
       >
         <div className="gap-y-4">
           <div className="flex justify-start  items-center">
@@ -279,10 +280,10 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    labelClassName={`!text-black !bg-[${getColorByIndex(
-                      index
-                    )}]`}
                     isDisabled={true}
+                    labelClassName={`!text-black !bg-[${
+                      colors[index % colors.length]
+                    }]`}
                     className={`!bg-transparent !w-[110px] !h-[36px]`}
                     onChange={(e: any) => {
                       if (!isNaN(e.target.value)) {
@@ -300,9 +301,9 @@ function BoxInfo({
                       name="collectableAmount"
                       inputType="text"
                       inputMode="numeric"
-                      labelClassName={`!text-black  !bg-[${getColorByIndex(
-                        index
-                      )}]`}
+                      labelClassName={`!text-black  !bg-[${
+                        colors[index % colors.length]
+                      }]`}
                       className={`!bg-transparent !w-[150px] !h-[36px]`}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
