@@ -325,7 +325,7 @@ const PickupDetailsContent: React.FunctionComponent<
       localLandmark?.flatNo &&
       localLandmark?.landmark
     ) {
-      const fullAddress = `${localLandmark?.flatNo}, ${localLandmark?.sector}, ${localLandmark?.landmark}, ${localLandmark?.city}, ${localLandmark?.state}, ${localLandmark?.country}, ${pickupDetails?.pincode}`;
+      const fullAddress = `${localLandmark?.flatNo}, ${localLandmark?.sector}, ${localLandmark?.landmark}, ${localLandmark?.city}, ${localLandmark?.state}, ${localLandmark?.country} - ${pickupDetails?.pincode}`;
       setPickupDetails((prevDetails) => ({
         ...prevDetails,
         fullAddress,

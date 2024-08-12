@@ -24,6 +24,8 @@ interface IIndexProps {
   setShowPickupDate: any;
   resetOtherAddressDetails: any;
   setResetOtherAddressDetails: any;
+  setHighLightField: any;
+  highLightField: any;
 }
 
 const Index: React.FunctionComponent<IIndexProps> = ({
@@ -35,6 +37,8 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   setShowPickupDate,
   resetOtherAddressDetails,
   setResetOtherAddressDetails,
+  setHighLightField,
+  highLightField,
 }: IIndexProps) => {
   function validateForServicebility(order: any) {
     const pickupDetailsValid =
@@ -57,7 +61,13 @@ const Index: React.FunctionComponent<IIndexProps> = ({
 
   return (
     <>
-      <div className="border-[1px] rounded-md px-4 py-[22px]">
+      <div
+        className={`border-[1px] ${
+          highLightField?.shippingDetails
+            ? "border-[#004EFF]"
+            : "border-[#E8E8E8]"
+        } rounded-md px-4 py-[22px]`}
+      >
         {/* header section  */}
         <div className="flex justify-between">
           <div className="flex gap-x-2 items-center">
@@ -75,7 +85,15 @@ const Index: React.FunctionComponent<IIndexProps> = ({
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 // disabled={true}
                 checked={sortServiceiblity === "Cheapest"}
-                onChange={(e: any) => setSortServiciblity(e.target.value)}
+                onChange={(e: any) => {
+                  setSortServiciblity(e.target.value);
+                  setHighLightField({
+                    addressDetails: false,
+                    packageDetails: false,
+                    shippingDetails: true,
+                    orderDetails: false,
+                  });
+                }}
               />
               <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
                 Cheapest
