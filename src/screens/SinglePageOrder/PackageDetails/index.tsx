@@ -121,6 +121,7 @@ function PackageDetails({
                       packageDetails: true,
                       shippingDetails: false,
                       orderDetails: false,
+                      pickupTimeDetails: false,
                     });
                   }}
                 >
