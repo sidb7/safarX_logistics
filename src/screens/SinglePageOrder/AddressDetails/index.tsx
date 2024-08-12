@@ -134,6 +134,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                   packageDetails: false,
                   shippingDetails: false,
                   orderDetails: false,
+                  pickupTimeDetails: false,
                 });
               }}
             >
@@ -255,6 +256,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                     packageDetails: false,
                     shippingDetails: false,
                     orderDetails: false,
+                    pickupTimeDetails: false,
                   });
                 }}
                 variant="quad"
@@ -289,6 +291,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                     packageDetails: false,
                     shippingDetails: false,
                     orderDetails: false,
+                    pickupTimeDetails: false,
                   });
                 }}
                 variant="quad"

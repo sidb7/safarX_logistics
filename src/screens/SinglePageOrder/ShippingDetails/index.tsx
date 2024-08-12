@@ -92,6 +92,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
                     packageDetails: false,
                     shippingDetails: true,
                     orderDetails: false,
+                    pickupTimeDetails: false,
                   });
                 }}
               />
