@@ -39,6 +39,7 @@ interface IAddressCardDetailsProps {
   showDownloadLebal: boolean;
   resetOtherAddressDetails: boolean;
   setResetOtherAddressDetails: any;
+  setHighLightField: any;
 }
 
 const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
@@ -51,6 +52,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   showDownloadLebal,
   resetOtherAddressDetails,
   setResetOtherAddressDetails,
+  setHighLightField,
 }) => {
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
@@ -113,7 +115,6 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   };
 
   const renderAddressDetails = (details: any, type: string, landmark: any) => {
-    const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} - ${details?.pincode}`;
     return (
       <div>
         <div className="flex justify-between ">
@@ -128,6 +129,13 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
               onClick={() => {
                 handleEditClick(type === "Pickup" ? "pickup" : "delivery");
                 setSortServiciblity("");
+                setHighLightField({
+                  addressDetails: true,
+                  packageDetails: false,
+                  shippingDetails: false,
+                  orderDetails: false,
+                  pickupTimeDetails: false,
+                });
               }}
             >
               <img src={EditIcon} alt="edit" className="cursor-pointer" />
@@ -183,11 +191,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
             <div className="">
               <p className="font-Open font-semibold ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
                 {details.fullAddress}
-                {/* {landmark?.landmark} - {details.pincode} */}
               </p>
-              {/* <p className="font-Open font-semibold ml-1 mt-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
-                {otherDetails}
-              </p> */}
             </div>
           </div>
         </div>
@@ -247,6 +251,13 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 onClick={() => {
                   setCurrentEditType("pickup");
                   setIsPickupRightModal(true);
+                  setHighLightField({
+                    addressDetails: true,
+                    packageDetails: false,
+                    shippingDetails: false,
+                    orderDetails: false,
+                    pickupTimeDetails: false,
+                  });
                 }}
                 variant="quad"
                 showIcon={true}
@@ -275,6 +286,13 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 onClick={() => {
                   setCurrentEditType("delivery");
                   setIsDeliveryRightModal(true);
+                  setHighLightField({
+                    addressDetails: true,
+                    packageDetails: false,
+                    shippingDetails: false,
+                    orderDetails: false,
+                    pickupTimeDetails: false,
+                  });
                 }}
                 variant="quad"
                 showIcon={true}

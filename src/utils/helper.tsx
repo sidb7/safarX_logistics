@@ -1,5 +1,6 @@
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
+import { saveAs } from "file-saver";
 
 export const convertXMLToXLSX = async (apiData: any, filename: any) => {
   try {
@@ -19,6 +20,20 @@ export const convertXMLToXLSX = async (apiData: any, filename: any) => {
     return true;
   } catch (err: any) {
     console.log("error", err.message);
+    return false;
+  }
+};
+
+export const downloadCSVFromString = (
+  csvString: any,
+  filename = "download.csv"
+) => {
+  try {
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, filename);
+    return true;
+  } catch (error: any) {
+    console.error("Error downloading CSV:", error.message);
     return false;
   }
 };
