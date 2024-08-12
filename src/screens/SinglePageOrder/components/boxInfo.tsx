@@ -256,6 +256,7 @@ function BoxInfo({
                           packageDetails: true,
                           shippingDetails: false,
                           orderDetails: false,
+                          pickupTimeDetails: false,
                         });
                       }}
                     >
@@ -269,6 +270,7 @@ function BoxInfo({
                           packageDetails: true,
                           shippingDetails: false,
                           orderDetails: false,
+                          pickupTimeDetails: false,
                         });
                       }}
                     >
@@ -311,6 +313,7 @@ function BoxInfo({
                         packageDetails: true,
                         shippingDetails: false,
                         orderDetails: false,
+                        pickupTimeDetails: false,
                       });
                     }}
                   />
@@ -337,6 +340,7 @@ function BoxInfo({
                           packageDetails: true,
                           shippingDetails: false,
                           orderDetails: false,
+                          pickupTimeDetails: false,
                         });
                       }}
                     />
@@ -357,6 +361,7 @@ function BoxInfo({
                           packageDetails: true,
                           shippingDetails: false,
                           orderDetails: false,
+                          pickupTimeDetails: false,
                         });
                       }}
                     >
@@ -390,6 +395,7 @@ function BoxInfo({
                           packageDetails: true,
                           shippingDetails: false,
                           orderDetails: false,
+                          pickupTimeDetails: false,
                         });
                       }}
                     >
@@ -447,6 +453,7 @@ function BoxInfo({
                                   packageDetails: true,
                                   shippingDetails: false,
                                   orderDetails: false,
+                                  pickupTimeDetails: false,
                                 });
                               }}
                               data-cy={`remove-unit-${i}`}
@@ -470,6 +477,7 @@ function BoxInfo({
                                   packageDetails: true,
                                   shippingDetails: false,
                                   orderDetails: false,
+                                  pickupTimeDetails: false,
                                 });
                               }}
                               data-cy={`add-unit-${i}`}
@@ -490,6 +498,7 @@ function BoxInfo({
                                 packageDetails: true,
                                 shippingDetails: false,
                                 orderDetails: false,
+                                pickupTimeDetails: false,
                               });
                             }}
                             disabled={showDownloadLebal}
@@ -521,6 +530,7 @@ function BoxInfo({
                       packageDetails: true,
                       shippingDetails: false,
                       orderDetails: false,
+                      pickupTimeDetails: false,
                     });
                   }}
                 >

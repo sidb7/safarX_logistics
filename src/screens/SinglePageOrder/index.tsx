@@ -94,6 +94,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     packageDetails: false,
     orderDetails: false,
     shippingDetails: false,
+    pickupTimeDetails: false,
   });
 
   let kycCheck = localStorage.getItem("kycValue") as any;
@@ -789,6 +790,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         packageDetails: false,
                         shippingDetails: false,
                         orderDetails: true,
+                        pickupTimeDetails: false,
                       });
                     }}
                     isDisabled={showDownloadLebal}
@@ -803,6 +805,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         packageDetails: false,
                         shippingDetails: false,
                         orderDetails: true,
+                        pickupTimeDetails: false,
                       });
                     }}
                     visibility={true}
@@ -834,6 +837,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                               packageDetails: false,
                               shippingDetails: false,
                               orderDetails: true,
+                              pickupTimeDetails: false,
                             });
                           }}
                         />
@@ -862,6 +866,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                           packageDetails: false,
                           shippingDetails: false,
                           orderDetails: true,
+                          pickupTimeDetails: false,
                         });
                       }}
                     />
@@ -892,6 +897,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             packageDetails: false,
                             shippingDetails: false,
                             orderDetails: true,
+                            pickupTimeDetails: false,
                           });
                         }}
                       />
@@ -918,7 +924,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               </div>
 
               {order?.courierPartner && (
-                <div className="border flex justify-between items-center p-4 rounded-lg">
+                <div
+                  className={`border flex justify-between ${
+                    highLightField?.pickupTimeDetails
+                      ? "border-[#004EFF]"
+                      : "border-[#E8E8E8]"
+                  } items-center p-4 rounded-lg`}
+                >
                   <div className="text-[#1C1C1C] font-Open font-semibold text-[16px] leading-[20px] ">
                     Pickup Details
                   </div>
@@ -939,7 +951,16 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       </div>
                     ) : (
                       <OneButton
-                        onClick={() => setShowDateAndTimeModal(true)}
+                        onClick={() => {
+                          setShowDateAndTimeModal(true);
+                          setHighLightField({
+                            addressDetails: false,
+                            packageDetails: false,
+                            shippingDetails: false,
+                            orderDetails: false,
+                            pickupTimeDetails: true,
+                          });
+                        }}
                         text={`SELECT`}
                         variant="primary"
                         className="!w-[128px] font-extrabold"
