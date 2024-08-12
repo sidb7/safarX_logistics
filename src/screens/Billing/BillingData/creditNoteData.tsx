@@ -146,12 +146,15 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
     }),
   ];
   return (
-    <div>
-      <CustomTable
-        columns={billingOrdersHeading}
-        data={[]}
-        thclassName={" bg-white"}
-      />
+    // <div>
+    //   <CustomTable
+    //     columns={billingOrdersHeading}
+    //     data={data}
+    //     thclassName={" bg-white"}
+    //   />
+    // </div>
+    <div className="flex flex-col justify-center items-center mt-[255px] text-[12px]  text-opacity-30 font-Open">
+      coming soon!
     </div>
   );
 };
