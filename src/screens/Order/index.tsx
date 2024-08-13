@@ -312,6 +312,7 @@ const Index = () => {
       gif: false,
     },
   ]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent]: any = useState({
     isOpen: false,
@@ -446,7 +447,6 @@ const Index = () => {
   };
 
   const setInfoReverseSummaryModalFunction = async (data: any) => {
-    console.log("🚀 ~ setInfoReverseSummaryModalFunction ~ data:", data);
     setInfoReverseSummaryModalContent({
       isOpen: true,
       data: data,
@@ -573,28 +573,6 @@ const Index = () => {
       <div>
         <div className="flex justify-end mb-4">
           <div className="">
-            {/* <DatePicker
-              selectsRange={true}
-              startDate={startDate}
-              endDate={endDate}
-              onChange={(update: any) => {
-                setDateRange(update);
-                if (update[0] === null && update[1] === null) {
-                  // Explicitly set startDate and endDate to null when cleared
-                  setStartDate(null);
-                  setEndDate(null);
-                  // fetchCodRemittanceData();
-                } else {
-                  // Update startDate and endDate based on the selected range
-                  setStartDate(update[0]);
-                  setEndDate(update[1]);
-                }
-              }}
-              isClearable={true}
-              placeholderText="Select From & To Date"
-              className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
-              dateFormat="dd/MM/yyyy"
-            /> */}
             <DatePicker
               selectsRange={true}
               startDate={startDate}
@@ -2247,6 +2225,7 @@ const Index = () => {
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
+                isLoading={isLoading}
               />
             </div>
             <div
