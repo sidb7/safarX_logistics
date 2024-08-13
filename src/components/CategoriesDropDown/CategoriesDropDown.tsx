@@ -34,25 +34,40 @@ const RuleEngineCustomInputWithDropDown: React.FC<
 
   const getCategories = async () => {
     setisLoading(true);
-    const { data } = await POST(GET_CATEGOROIES, {
-      productName: inputValue ? inputValue : initValue,
-    });
-    if (data?.success) {
-      let obj = data?.data[0];
-      obj?.forEach((category: any) => {
-        category.categoryName = category?.categoryName?.replace(
-          /\w+/g,
-          function (w: any) {
-            return w[0].toUpperCase() + w.slice(1).toLowerCase();
-          }
-        );
+    try {
+      const response = await POST(GET_CATEGOROIES, {
+        productName: inputValue ? inputValue : initValue,
       });
-      setArrayValue([...obj, { categoryName: "Others" }]);
-      setTimeout(() => {
+
+      // Check if the response is valid and contains 'data'
+      if (response && response.data) {
+        const { data } = response;
+
+        if (data?.success) {
+          let obj = data?.data[0];
+          obj?.forEach((category: any) => {
+            category.categoryName = category?.categoryName?.replace(
+              /\w+/g,
+              function (w: any) {
+                return w[0].toUpperCase() + w.slice(1).toLowerCase();
+              }
+            );
+          });
+          setArrayValue([...obj, { categoryName: "Others" }]);
+          setTimeout(() => {
+            setisLoading(false);
+          }, 1000);
+        } else {
+          setisLoading(false);
+        }
+      } else {
+        // Handle the case where the response is undefined or does not contain data
+        console.error("No valid data received from the POST request.");
         setisLoading(false);
-      }, 1000);
-    } else {
-      setisLoading(false);
+      }
+    } catch (error) {
+      console.log("🚀 ~ getCategories ~ error:", error);
+      setisLoading(false); // Ensure loading state is turned off in case of error
     }
   };
 
