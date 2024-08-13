@@ -538,7 +538,7 @@ const WalletRecharge = () => {
                 </p>
               </div>
             </div> */}
-            <div className="mx-5 ">
+            <div className="mx-5">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
                 <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
@@ -565,24 +565,28 @@ const WalletRecharge = () => {
                       onChange={(e) => setWalletValue(e.target.value)}
                     />
                   </p> */}
-                  <div className="flex gap-4">
-                    <CustomDropDown
-                      heading="Select Amount"
-                      value={walletValue}
-                      options={walletMenu}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLSelectElement>
-                      ) => {
-                        setWalletValue(event.target.value);
-                      }}
-                      wrapperClass="w-[200px]"
-                      selectClassName="text-[12px] mt-6"
-                    />
-                    <JusPay
-                      isDisabled={isDisabled}
-                      amount={walletValue}
-                      callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
-                    />
+                  <div className="flex">
+                    <div>
+                      <CustomDropDown
+                        heading="Select Amount"
+                        value={walletValue}
+                        options={walletMenu}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLSelectElement>
+                        ) => {
+                          setWalletValue(event.target.value);
+                        }}
+                        wrapperClass="w-[120px] md:w-[200px]"
+                        selectClassName="text-[12px] mt-6"
+                      />
+                    </div>
+                    <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
+                      <JusPay
+                        isDisabled={isDisabled}
+                        amount={walletValue}
+                        callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                      />
+                    </div>
                   </div>
 
                   {/* <JusPay
