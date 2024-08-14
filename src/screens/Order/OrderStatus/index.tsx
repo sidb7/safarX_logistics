@@ -43,7 +43,7 @@ import CustomInputBox from "../../../components/Input";
 import InfoCircle from "../../../assets/info-circle.svg";
 import BulkActionIcon from "../../../assets/Bulk_Action.svg";
 import RTOicon from "../../../assets/RTO.svg";
-import ReattemptIcon from "../../../assets/reattempt.svg"
+import ReattemptIcon from "../../../assets/reattempt.svg";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -338,13 +338,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         headers: header,
         body: JSON.stringify(payload),
       });
-      console.log("response>>>>>>>>>>>",response)
+      console.log("response>>>>>>>>>>>", response);
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(errorData.message);
       } else {
         const data = await response.json();
-        toast.success("RTO Reattempt initiated successfully",data);
+        toast.success("RTO Reattempt initiated successfully", data);
       }
     } catch (error) {
       console.error("Error in RTO Reattempt:", error);
