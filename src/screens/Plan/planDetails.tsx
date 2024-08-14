@@ -40,6 +40,7 @@ import infoIcon from "../../assets/info.svg";
 import CustomCenterModal from "../../components/CustomModal/customCenterModal";
 import ZoneMappingModal from "./ZoneMappingModal";
 import FeatureRateCard from "./featureRateCard";
+import { Spinner } from "../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -54,6 +55,7 @@ const PlanDetails = (props: ITypeProps) => {
   const [allPlans, setAllPlans] = useState<any>([]);
   const [pendingPlan, setPendingPlan] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [LoaderForAssignValue, setLoaderForAssignValue] = useState(false);
   const [renderingComponents, setRenderingComponents] = useState<any>(0);
 
   // State to hold logistics rate card data
@@ -717,6 +719,7 @@ const PlanDetails = (props: ITypeProps) => {
   };
 
   const assignPlan = async () => {
+    setLoaderForAssignValue(true);
     let payload = { planId: pendingPlan?.planId };
     try {
       const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
@@ -725,8 +728,11 @@ const PlanDetails = (props: ITypeProps) => {
         if (responseV4?.message.includes("Approve")) {
           toast.success(responseV4?.message);
           setIsModalOpen(false);
+          setLoaderForAssignValue(false);
         } else {
           setIsModalOpen(false);
+          setLoaderForAssignValue(false);
+
           toast.success(responseV4?.message);
           window.location.reload();
         }
@@ -1137,11 +1143,17 @@ const PlanDetails = (props: ITypeProps) => {
                         }}
                         className="lg:!w-[184px] lg:!h-[54px] !bg-[white] !border-[1px] !border-[#A4A4A4] !text-[black] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
                       />
-                      <CustomButton
-                        text="yes"
-                        onClick={assignPlan}
-                        className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
-                      />
+                      {LoaderForAssignValue ? (
+                        <div className="flex justify-center items-center lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <CustomButton
+                          text="yes"
+                          onClick={assignPlan}
+                          className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

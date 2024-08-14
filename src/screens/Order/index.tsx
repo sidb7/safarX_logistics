@@ -312,7 +312,6 @@ const Index = () => {
       gif: false,
     },
   ]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent]: any = useState({
     isOpen: false,
