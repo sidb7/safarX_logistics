@@ -182,7 +182,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           </div>
           <div className="flex justify-end gap-x-2  ">
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
             </div>
             <div className="">
               {/* <ReactDatePicker
