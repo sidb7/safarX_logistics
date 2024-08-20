@@ -55,7 +55,7 @@ export const Breadcrum = ({
             className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
             onClick={() => navigate("/onboarding/kyc-type")}
           >
-            <div className="flex gap-x-2">
+            <div className="flex gap-x-2 w-[150px]">
               <img src={infoIcon} alt="" />
               <p className="font-Lato text-base font-normal">KYC Pending</p>
             </div>

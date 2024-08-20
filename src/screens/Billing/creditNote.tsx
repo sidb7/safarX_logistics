@@ -56,7 +56,7 @@ const CreditNote: React.FunctionComponent<ICreditNoteProps> = (props) => {
           </div>
           <div>
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
             </div>
           </div>
         </div>

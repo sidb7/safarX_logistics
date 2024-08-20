@@ -312,7 +312,6 @@ const Index = () => {
       gif: false,
     },
   ]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent]: any = useState({
     isOpen: false,
@@ -1118,6 +1117,7 @@ const Index = () => {
     // let fileName = "";
     let awbs = {
       awbs: payload?.awbs,
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1129,27 +1129,50 @@ const Index = () => {
     };
 
     if (actionType === "download_label") {
-      const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
-        method: "POST",
-        headers: header,
-        body: JSON.stringify(awbs),
-      });
+      try {
+        const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+          method: "POST",
+          headers: header,
+          body: JSON.stringify(awbs),
+        });
+        console.log(data);
+        if (!data.ok) {
+          const contentType = data.headers.get("Content-Type");
 
-      const resdata: any = await data?.blob();
-      const blob = new Blob([resdata], { type: resdata?.type });
-      let filename: any;
-      if (resdata?.type === "image/png") {
-        filename = "Label_Report.png";
-      } else {
-        filename = "Label_Report.pdf";
+          // Check if the Content-Type indicates JSON
+          if (contentType && contentType.includes("application/json")) {
+            const jsonData = await data.json();
+            console.log("JSON Data:", jsonData);
+
+            if (!jsonData?.success) {
+              toast.error(jsonData?.message);
+            }
+          } else {
+            // Handle other types of responses or errors
+            toast.error("An unexpected error occurred.");
+          }
+
+          return; // Exit the function to avoid further processing
+        }
+
+        const resdata: any = await data?.blob();
+        const blob = new Blob([resdata], { type: resdata?.type });
+        let filename: any;
+        if (resdata?.type === "image/png") {
+          filename = "Label_Report.png";
+        } else {
+          filename = "Label_Report.pdf";
+        }
+
+        var url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        return true;
+      } catch (error) {
+        console.log(error);
       }
-
-      var url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      return true;
     } else {
       const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
         method: "POST",
@@ -1801,6 +1824,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1810,6 +1834,7 @@ const Index = () => {
       )}`,
       "Content-Type": "application/json",
     };
+
     const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
       method: "POST",
       headers: header,
@@ -1820,6 +1845,25 @@ const Index = () => {
       isLoading: false,
       identifier: "",
     });
+
+    if (!data.ok) {
+      const contentType = data.headers.get("Content-Type");
+
+      // Check if the Content-Type indicates JSON
+      if (contentType && contentType.includes("application/json")) {
+        const jsonData = await data.json();
+        console.log("JSON Data:", jsonData);
+
+        if (!jsonData?.success) {
+          toast.error(jsonData?.message);
+        }
+      } else {
+        // Handle other types of responses or errors
+        toast.error("An unexpected error occurred.");
+      }
+
+      return; // Exit the function to avoid further processing
+    }
 
     const resdata: any = await data.blob();
 
@@ -1860,6 +1904,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1879,6 +1924,25 @@ const Index = () => {
       isLoading: false,
       identifier: "",
     });
+
+    if (!data.ok) {
+      const contentType = data.headers.get("Content-Type");
+
+      // Check if the Content-Type indicates JSON
+      if (contentType && contentType.includes("application/json")) {
+        const jsonData = await data.json();
+        console.log("JSON Data:", jsonData);
+
+        if (!jsonData?.success) {
+          toast.error(jsonData?.message);
+        }
+      } else {
+        // Handle other types of responses or errors
+        toast.error("An unexpected error occurred.");
+      }
+
+      return; // Exit the function to avoid further processing
+    }
 
     const resdata: any = await data.blob();
 
@@ -2300,7 +2364,7 @@ const Index = () => {
                         {totalCount > 0 && (
                           <Pagination
                             totalItems={totalCount}
-                            itemsPerPageOptions={[10, 50, 100, 500, 1000]}
+                            itemsPerPageOptions={[10, 50, 100]}
                             onPageChange={onPageIndexChange}
                             onItemsPerPageChange={onPerPageItemChange}
                             initialItemsPerPage={itemsPerPage}

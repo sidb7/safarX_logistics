@@ -38,23 +38,23 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
 
   return (
     <div
-      className={`relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] h-[230px] rounded border-[#EAEAEA] ${
+      className={`relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] lg:h-[230px] rounded border-[#EAEAEA] ${
         isError ? "border-red-500" : "border-[#EAEAEA]"
       }   bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-2/4 `}
       id="consumer-type"
     >
       <div
-        className={`grid ${
+        className={` flex lg:grid ${
           businessType === "INDIVIDUAL" ? "grid-cols-2" : "grid-cols-3"
-        }`}
+        } overflow-x-auto lg:overflow-x-visible first-letter  pb-4 lg:pb-4 pt-2 lg:pt-0`}
       >
         {/* B2C */}
         <div
-          className={`relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
+          className={` overflow-visible relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
             orderType === "B2C" && transitType === "FORWARD"
               ? "border-[#1C1C1C]"
               : "border-[#EAEAEA]"
-          }  p-5 cursor-pointer mx-3 font-Open font-semibold text-sm leading-5`}
+          }  p-5 cursor-pointer mx-3 font-Open font-semibold text-sm leading-5 min-w-[200px] lg:min-w-0 flex-shrink-0`}
           onClick={() => handleSelection("B2C", "FORWARD")}
           id="consumer-b2c"
         >
@@ -84,7 +84,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
               orderType === "B2B" && transitType === "FORWARD"
                 ? "border-[#1C1C1C]"
                 : "border-[#EAEAEA]"
-            } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer mx-3 font-Open font-semibold text-sm leading-5`}
+            } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer mx-3 font-Open font-semibold text-sm leading-5 min-w-[200px] lg:min-w-0 flex-shrink-0`}
             onClick={() => handleSelection("B2B", "FORWARD")}
             id="consumer-b2b"
           >
@@ -112,7 +112,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
             orderType === "B2C" && transitType === "REVERSE"
               ? "border-[#1C1C1C]"
               : "border-[#EAEAEA]"
-          }  p-5 cursor-pointer mx-3 font-Open font-semibold text-sm leading-5`}
+          }  p-5 cursor-pointer mx-3 font-Open font-semibold text-sm leading-5 min-w-[200px] lg:min-w-0 flex-shrink-0`}
           onClick={() => handleSelection("B2C", "REVERSE")}
           id="reverse-b2c"
         >
