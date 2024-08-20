@@ -361,6 +361,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const fetchManifest = async (awbArray?: any) => {
     let payload = {
       awbs: awbArray,
+      source: "WEBSITE",
     };
     setIsLoadingManifest({
       isLoading: true,

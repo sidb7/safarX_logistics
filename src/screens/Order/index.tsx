@@ -1117,6 +1117,7 @@ const Index = () => {
     // let fileName = "";
     let awbs = {
       awbs: payload?.awbs,
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1129,7 +1130,6 @@ const Index = () => {
 
     if (actionType === "download_label") {
       try {
-        console.log("dfgdf");
         const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
           method: "POST",
           headers: header,
@@ -1824,6 +1824,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1903,6 +1904,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
