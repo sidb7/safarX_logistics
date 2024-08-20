@@ -40,6 +40,7 @@ import SelectDateModalForSinglePageOrder from "./components/scheduleTimeModale";
 
 interface IIndexProps {}
 
+//initial State for the single page order
 const initialState: any = {
   pickupDetails: {
     fullAddress: "",
@@ -549,14 +550,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         return;
       }
     }
-
-    // if (validateForProduct(payload).length > 0) {
-    //   const errorlist = validateForProduct(payload);
-    //   errorlist.forEach((error: any) => {
-    //     toast.error(error);
-    //   });
-    //   return;
-    // }
 
     if (walletBalance < order?.totalPrice) {
       setShowAlertBox(true);

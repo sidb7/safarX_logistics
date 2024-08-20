@@ -206,6 +206,9 @@ const PHONEPE_TRANSACTION_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRecha
 // Wallet
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
 const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWalletTransaction`;
+const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRechargeUsingNeft`;
+
+// wallet / manualWalletRechargeUsingNeft;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
@@ -642,4 +645,5 @@ export {
   FETCH_ADVANCE_RULE_ENGINE,
   CREATE_UPDATE_ADVANCE_RULE_ENGINE,
   RTO_REATTEMPT,
+  WALLET_RECHARGE_USING_NEFT,
 };
