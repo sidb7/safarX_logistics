@@ -33,12 +33,17 @@ const BulkUpload = (props: ITypeProps) => {
   const [bulkOrderUploadFile, setBulkOrderUploadFile]: any = useState([]);
   const [file, setFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("B2C");
+  const [placeOrder, setPlaceOrder] = useState<any>("Place Order");
   const [fileName, setFileName] = useState<string | null>(null);
   const [addButton, setAddButton]: any = useState(false);
   const [disabled, setDisabled]: any = useState(true);
   const [uploadFile, setUploadFile]: any = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [transitType, setTransitType] = useState("FORWARD");
+  const placeOrderOptions = [
+    { value: "Place Order", label: "Place Order" },
+    { value: "Draft Order", label: "Draft Order" },
+  ];
   const dropdownOptions = [
     { value: "FORWARD", label: "Forward" },
     { value: "REVERSE", label: "Reverse" },
@@ -72,11 +77,12 @@ const BulkUpload = (props: ITypeProps) => {
       toast.error("Please select a file to upload.");
       return;
     }
-
+    let placeOrderBollean: any = placeOrder == "Place Order" ? true : false;
     let uuid = uuidv4();
     let formData = new FormData();
     formData.append("file", uploadFile);
     formData.append("orderType", selectedOption);
+    formData.append("placeOrder", placeOrderBollean);
     // Append transit type only if the selected option is "B2C"
     if (selectedOption === "B2C") {
       formData.append("transit", transitType);
@@ -222,6 +228,22 @@ const BulkUpload = (props: ITypeProps) => {
                   selectClassName="!h-[36px] !cursor-pointer"
                 />
               )}
+              <div className="ml-2">
+                {selectedOption === "B2C" && (
+                  <CustomDropDown
+                    options={placeOrderOptions}
+                    onChange={(e) => {
+                      // console.log("e.target.value", e.target.value);
+                      setPlaceOrder(e.target.value);
+                      // setPlaceOrder();
+                    }}
+                    value={placeOrder}
+                    name="transitType"
+                    wrapperClass="!w-40"
+                    selectClassName="!h-[36px] !cursor-pointer"
+                  />
+                )}
+              </div>
             </div>
           </div>
 
