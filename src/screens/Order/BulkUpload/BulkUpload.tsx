@@ -99,7 +99,9 @@ const BulkUpload = (props: ITypeProps) => {
 
       if (response?.success) {
         toast.success(response?.message);
-        window.location.replace("/orders/view-orders?activeTab=booked");
+        if (placeOrder === "Place Order")
+          window.location.replace("/orders/view-orders?activeTab=booked");
+        else window.location.replace("/orders/view-orders?activeTab=draft");
       } else {
         toast.error(response?.message);
       }
@@ -229,20 +231,18 @@ const BulkUpload = (props: ITypeProps) => {
                 />
               )}
               <div className="ml-2">
-                {selectedOption === "B2C" && (
-                  <CustomDropDown
-                    options={placeOrderOptions}
-                    onChange={(e) => {
-                      // console.log("e.target.value", e.target.value);
-                      setPlaceOrder(e.target.value);
-                      // setPlaceOrder();
-                    }}
-                    value={placeOrder}
-                    name="transitType"
-                    wrapperClass="!w-40"
-                    selectClassName="!h-[36px] !cursor-pointer"
-                  />
-                )}
+                <CustomDropDown
+                  options={placeOrderOptions}
+                  onChange={(e) => {
+                    // console.log("e.target.value", e.target.value);
+                    setPlaceOrder(e.target.value);
+                    // setPlaceOrder();
+                  }}
+                  value={placeOrder}
+                  name="transitType"
+                  wrapperClass="!w-40"
+                  selectClassName="!h-[36px] !cursor-pointer"
+                />
               </div>
             </div>
           </div>
