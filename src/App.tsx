@@ -392,9 +392,9 @@ const App = () => {
           <MyRoutes />
 
           <CheckIsOnline />
-          <div className="absolute bottom-6 right-6">
+          {/* <div className="absolute bottom-6 right-6">
             <MyWidget title="Help" content="" bgColor="bg-white" />
-          </div>
+          </div> */}
 
           <Toaster
             position="top-center"
