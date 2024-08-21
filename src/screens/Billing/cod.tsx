@@ -16,6 +16,7 @@ import { convertXMLToXLSX } from "../../utils/helper";
 import { toast } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import DateButton from "../../components/Button/DateButton";
+import ServiceButton from "../../components/Button/ServiceButton";
 
 interface IInvoiceProps {}
 
@@ -125,36 +126,28 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     setEndDate(null);
   };
 
-  const downloadReport = async (reportNumber: any) => {
+  const downloadReport = async (reportNumber?: any) => {
     setIsDownloading(true);
 
     // so dailyrpeortnumber, utrNO needs to given in payload too ,
 
-    const payload = {
-      sellerId: +`${localStorage.getItem("sellerId")}`,
-      reportNumber: reportNumber,
-    };
-    // const payload = {
-    //   sellerId: 2483, //only for testing
-    // };
-
-    // so dailyrpeortnumber, utrNO needs to given in payload too ,
-
     try {
-      const { data: response } = await POST(DOWNLOAD_COD_REMITTED, payload);
-      // console.log("fetchReportoutsideloop", response.data.data);
+      const { data: response } = await POST(DOWNLOAD_COD_REMITTED);
 
       if (response?.success && response?.data?.orders?.length > 0) {
-        // console.log("fetchReport", response.data.data);
         const formattedData = response?.data?.orders?.map((order: any) => {
           return {
             OrderId: order.orderId,
             AWB: order.awb,
-            CodAmount: order?.codInfo?.collectableAmount,
-            InvoiceValue: order?.codInfo?.invoiceValue,
+            InvoiceValue: order?.invoiceValue,
             SellerId: order.sellerId,
-            CourierPartnerName: order.courierPartnerName,
-            // PaymentRefNo:
+            PartnerName: order.partnerName,
+            CodRemittedAmount: order?.codRemittedAmount,
+            DeliveryDate: order?.deliveryDate,
+            PrivateCompanyId: order?.privateCompanyId,
+            Status: order?.status,
+            ReportNumber: order?.reportNumber,
+            UtrNo: order?.utrNo,
           };
         });
 
@@ -189,7 +182,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           </div>
           <div className="flex justify-end gap-x-2  ">
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
             </div>
             <div className="">
               {/* <ReactDatePicker
@@ -214,6 +207,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 className="cursor-pointer h-12 border-solid border-2 datepickerCss  pl-6"
                 dateFormat="dd/MM/yyyy"
               /> */}
+
               <DatePicker
                 selectsRange={true}
                 startDate={startDate}
@@ -246,6 +240,13 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                     onClear={handleClear} // Handle clear action
                   />
                 } // Include placeholder onClick function
+              />
+            </div>
+            <div>
+              <ServiceButton
+                text="Download"
+                className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
+                onClick={() => downloadReport()}
               />
             </div>
           </div>

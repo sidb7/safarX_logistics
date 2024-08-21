@@ -115,7 +115,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         courierPartner: value?.name,
         serviceMode: value?.serviceMode,
         totalPrice: value?.value,
-        partnerServiceName: value?.partnerServiceName,
+        courierPartnerServices: value?.courierPartnerServices,
       };
     });
     setShowPickupDate("");
@@ -139,7 +139,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         courierPartner: "",
         serviceMode: "",
         totalPrice: 0,
-        partnerServiceName: "",
+        courierPartnerServices: "",
         pickupDate: "",
       };
     });
@@ -209,7 +209,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                       name: item?.name,
                       value: item?.total,
                       serviceMode: item?.serviceMode,
-                      partnerServiceName: item?.partnerServiceName,
+                      courierPartnerServices: item?.partnerServiceName,
                     });
                   }}
                   data-cy={`dropdown-item-${index}`}

@@ -56,7 +56,7 @@ const CreditNote: React.FunctionComponent<ICreditNoteProps> = (props) => {
           </div>
           <div>
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
             </div>
           </div>
         </div>
@@ -64,14 +64,14 @@ const CreditNote: React.FunctionComponent<ICreditNoteProps> = (props) => {
           <CreditNoteData />
         </div>
 
-        {totalItemCount > 0 && (
+        {/* {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
             itemsPerPageOptions={[10, 20, 30, 50]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
           />
-        )}
+        )} */}
       </div>
     </>
   );

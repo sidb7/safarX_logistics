@@ -446,7 +446,6 @@ const Index = () => {
   };
 
   const setInfoReverseSummaryModalFunction = async (data: any) => {
-    console.log("🚀 ~ setInfoReverseSummaryModalFunction ~ data:", data);
     setInfoReverseSummaryModalContent({
       isOpen: true,
       data: data,
@@ -573,28 +572,6 @@ const Index = () => {
       <div>
         <div className="flex justify-end mb-4">
           <div className="">
-            {/* <DatePicker
-              selectsRange={true}
-              startDate={startDate}
-              endDate={endDate}
-              onChange={(update: any) => {
-                setDateRange(update);
-                if (update[0] === null && update[1] === null) {
-                  // Explicitly set startDate and endDate to null when cleared
-                  setStartDate(null);
-                  setEndDate(null);
-                  // fetchCodRemittanceData();
-                } else {
-                  // Update startDate and endDate based on the selected range
-                  setStartDate(update[0]);
-                  setEndDate(update[1]);
-                }
-              }}
-              isClearable={true}
-              placeholderText="Select From & To Date"
-              className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
-              dateFormat="dd/MM/yyyy"
-            /> */}
             <DatePicker
               selectsRange={true}
               startDate={startDate}
@@ -1140,6 +1117,7 @@ const Index = () => {
     // let fileName = "";
     let awbs = {
       awbs: payload?.awbs,
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1151,27 +1129,50 @@ const Index = () => {
     };
 
     if (actionType === "download_label") {
-      const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
-        method: "POST",
-        headers: header,
-        body: JSON.stringify(awbs),
-      });
+      try {
+        const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+          method: "POST",
+          headers: header,
+          body: JSON.stringify(awbs),
+        });
+        console.log(data);
+        if (!data.ok) {
+          const contentType = data.headers.get("Content-Type");
 
-      const resdata: any = await data?.blob();
-      const blob = new Blob([resdata], { type: resdata?.type });
-      let filename: any;
-      if (resdata?.type === "image/png") {
-        filename = "Label_Report.png";
-      } else {
-        filename = "Label_Report.pdf";
+          // Check if the Content-Type indicates JSON
+          if (contentType && contentType.includes("application/json")) {
+            const jsonData = await data.json();
+            console.log("JSON Data:", jsonData);
+
+            if (!jsonData?.success) {
+              toast.error(jsonData?.message);
+            }
+          } else {
+            // Handle other types of responses or errors
+            toast.error("An unexpected error occurred.");
+          }
+
+          return; // Exit the function to avoid further processing
+        }
+
+        const resdata: any = await data?.blob();
+        const blob = new Blob([resdata], { type: resdata?.type });
+        let filename: any;
+        if (resdata?.type === "image/png") {
+          filename = "Label_Report.png";
+        } else {
+          filename = "Label_Report.pdf";
+        }
+
+        var url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        return true;
+      } catch (error) {
+        console.log(error);
       }
-
-      var url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      return true;
     } else {
       const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
         method: "POST",
@@ -1823,6 +1824,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1832,6 +1834,7 @@ const Index = () => {
       )}`,
       "Content-Type": "application/json",
     };
+
     const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
       method: "POST",
       headers: header,
@@ -1842,6 +1845,25 @@ const Index = () => {
       isLoading: false,
       identifier: "",
     });
+
+    if (!data.ok) {
+      const contentType = data.headers.get("Content-Type");
+
+      // Check if the Content-Type indicates JSON
+      if (contentType && contentType.includes("application/json")) {
+        const jsonData = await data.json();
+        console.log("JSON Data:", jsonData);
+
+        if (!jsonData?.success) {
+          toast.error(jsonData?.message);
+        }
+      } else {
+        // Handle other types of responses or errors
+        toast.error("An unexpected error occurred.");
+      }
+
+      return; // Exit the function to avoid further processing
+    }
 
     const resdata: any = await data.blob();
 
@@ -1882,6 +1904,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1901,6 +1924,25 @@ const Index = () => {
       isLoading: false,
       identifier: "",
     });
+
+    if (!data.ok) {
+      const contentType = data.headers.get("Content-Type");
+
+      // Check if the Content-Type indicates JSON
+      if (contentType && contentType.includes("application/json")) {
+        const jsonData = await data.json();
+        console.log("JSON Data:", jsonData);
+
+        if (!jsonData?.success) {
+          toast.error(jsonData?.message);
+        }
+      } else {
+        // Handle other types of responses or errors
+        toast.error("An unexpected error occurred.");
+      }
+
+      return; // Exit the function to avoid further processing
+    }
 
     const resdata: any = await data.blob();
 
@@ -2247,6 +2289,7 @@ const Index = () => {
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
+                isLoading={isLoading}
               />
             </div>
             <div
@@ -2321,7 +2364,7 @@ const Index = () => {
                         {totalCount > 0 && (
                           <Pagination
                             totalItems={totalCount}
-                            itemsPerPageOptions={[10, 50, 100, 500, 1000]}
+                            itemsPerPageOptions={[10, 50, 100]}
                             onPageChange={onPageIndexChange}
                             onItemsPerPageChange={onPerPageItemChange}
                             initialItemsPerPage={itemsPerPage}

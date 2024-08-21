@@ -21,6 +21,7 @@ import Pagination from "../../components/Pagination";
 import { SearchBox } from "../../components/SearchBox";
 import DatePicker from "react-datepicker";
 import OneButton from "../../components/Button/OneButton";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 const WeightFreeze: React.FunctionComponent = () => {
   const roles = useSelector((state: any) => state?.roles);
@@ -35,6 +36,7 @@ const WeightFreeze: React.FunctionComponent = () => {
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchedText, setSearchedText] = useState("");
+  const { isLgScreen, isXlScreen, isMobileScreen } = ResponsiveState();
 
   const [isActive, setIsActive] = useState<any>(false);
 
@@ -136,7 +138,7 @@ const WeightFreeze: React.FunctionComponent = () => {
   };
 
   const renderHeaderComponent = () => {
-    return (
+    return !isMobileScreen ? (
       <div className="flex gap-4">
         <div className="flex gap-4">
           {/* <div className="border border-[#AFAFAF] w-[230px]  !h-[36px] rounded-md">
@@ -193,6 +195,34 @@ const WeightFreeze: React.FunctionComponent = () => {
           showIcon={true}
           text="RAISE TICKET"
           className="!p-3"
+          onClick={() => {
+            setShowRaiseTicket(true);
+          }}
+        />
+      </div>
+    ) : (
+      <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="rounded border border-[#AFAFAF]">
+            <SearchBox
+              className="removePaddingPlaceHolder !h-[34px] w-full  border-none rounded"
+              label="Search"
+              value={searchedText}
+              onChange={(e: any) => {
+                setSearchedText(e.target.value);
+              }}
+              getFullContent={() => setSearchedText("")}
+              customPlaceholder="Search By Order Id, AWB"
+            />
+          </div>
+        </div>
+
+        <OneButton
+          variant="primary"
+          icon={addIcon}
+          showIcon={true}
+          text="RAISE TICKET"
+          className="!p-3 w-full sm:w-auto"
           onClick={() => {
             setShowRaiseTicket(true);
           }}
@@ -367,7 +397,7 @@ const WeightFreeze: React.FunctionComponent = () => {
             component={renderHeaderComponent()}
           />
           <div className="m-4">
-            <div className="m-4">
+            {/* <div className="m-4">
               <div className="flex justify-between !mt-4 gap-4 mb-10">
                 {cartStatus?.map((order: any, i: number) => (
                   <div
@@ -385,6 +415,25 @@ const WeightFreeze: React.FunctionComponent = () => {
                   </div>
                 ))}
               </div>
+            </div> */}
+            <div className="m-4">
+              <div className="flex overflow-x-auto scrollbar-hide sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-10 pb-4 sm:pb-0">
+                {cartStatus?.map((order, i) => (
+                  <div
+                    className="flex-shrink-0 w-[280px] sm:w-full h-auto rounded-lg border-2 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+                    key={i}
+                  >
+                    <div className="px-4 py-3 sm:px-6 sm:py-4">
+                      <p className="text-[#1C1C1C] font-normal text-sm sm:text-base mb-1">
+                        {order?.text}
+                      </p>
+                      <div className="font-bold font-Lato text-xl sm:text-2xl lg:text-3xl">
+                        {order?.count}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             <div>
               {/* <div className="m-7">
@@ -395,11 +444,12 @@ const WeightFreeze: React.FunctionComponent = () => {
             </div>
             <div className="lg:mb-24">
               <div className="mt-4 px-5 ">
+                <div className="overflow-x-auto scrollbar-hide">
                 <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
                   {listTab?.map(({ statusName, count }, index) => {
                     return (
                       <div
-                        className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
+                        className={` flex-shrink-0 flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
                             ${
                               renderingComponents === index &&
                               "!border-[#004EFF]"
@@ -429,6 +479,7 @@ const WeightFreeze: React.FunctionComponent = () => {
                       </div>
                     );
                   })}
+                </div>
                 </div>
                 <div className="mt-4 flex justify-between text-[18px] font-Open font-semibold items-center">
                   <div className="ml-2 flex">

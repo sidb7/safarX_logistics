@@ -43,7 +43,7 @@ import CustomInputBox from "../../../components/Input";
 import InfoCircle from "../../../assets/info-circle.svg";
 import BulkActionIcon from "../../../assets/Bulk_Action.svg";
 import RTOicon from "../../../assets/RTO.svg";
-import ReattemptIcon from "../../../assets/reattempt.svg"
+import ReattemptIcon from "../../../assets/reattempt.svg";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -73,6 +73,7 @@ interface IOrderstatusProps {
   getErrors: any;
   selectedDateRange: any;
   filterPayLoad: any;
+  isLoading: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -122,6 +123,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   getErrors,
   selectedDateRange,
   filterPayLoad,
+  isLoading,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -238,14 +240,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "Download Invoice",
       },
     ],
-    "IN TRANSIT": [
-      {
-        icon: RTOicon,
-        hovertext: "Rto Orders",
-        identifier: "Rto",
-        buttonName: "RTO ORDERS",
-      },
-    ],
+    // "IN TRANSIT": [
+    //   {
+    //     icon: RTOicon,
+    //     hovertext: "Rto Orders",
+    //     identifier: "Rto",
+    //     buttonName: "RTO ORDERS",
+    //   },
+    // ],
     // "OUT OF DELIVERY": [
     //   {
     //     icon: CrossIcon,
@@ -270,20 +272,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     //     buttonName: "CANCEL ORDERS",
     //   },
     // ],
-    EXCEPTION: [
-      {
-        icon: RTOicon,
-        hovertext: "Rto Orders",
-        identifier: "Rto",
-        buttonName: "RTO ORDERS",
-      },
-      {
-        icon: ReattemptIcon,
-        hovertext: "Re-Attempt Orders",
-        identifier: "Re-Attempt",
-        buttonName: "RE-ATTEMPT ORDERS",
-      },
-    ],
+    // EXCEPTION: [
+    //   {
+    //     icon: RTOicon,
+    //     hovertext: "Rto Orders",
+    //     identifier: "Rto",
+    //     buttonName: "RTO ORDERS",
+    //   },
+    //   {
+    //     icon: ReattemptIcon,
+    //     hovertext: "Re-Attempt Orders",
+    //     identifier: "Re-Attempt",
+    //     buttonName: "RE-ATTEMPT ORDERS",
+    //   },
+    // ],
     "READY TO PICK": [
       // {
       //   icon: CrossIcon,
@@ -338,13 +340,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         headers: header,
         body: JSON.stringify(payload),
       });
-      console.log("response>>>>>>>>>>>",response)
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(errorData.message);
       } else {
         const data = await response.json();
-        toast.success("RTO Reattempt initiated successfully",data);
+        toast.success("RTO Reattempt initiated successfully", data);
       }
     } catch (error) {
       console.error("Error in RTO Reattempt:", error);
@@ -360,6 +361,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const fetchManifest = async (awbArray?: any) => {
     let payload = {
       awbs: awbArray,
+      source: "WEBSITE",
     };
     setIsLoadingManifest({
       isLoading: true,
@@ -576,7 +578,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             const awbNo = selectedRowdata.map((data: any, index: any) => {
               return data.original.awb;
             });
-            console.log("AWB", awbNo);
             rtoReattempt(awbNo, "RTO");
           } else {
             toast.error("Please select atleast one order for Cancellation");
@@ -644,11 +645,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               fetchManifest(awbNo);
               break;
             case "Rto":
-              console.log("AWBNO>>>>>>>>>", awbNo);
               rtoReattempt(awbNo, "RTO");
               break;
             case "Re-Attempt":
-              console.log("AWBNO>>>>>>>>>", awbNo);
               rtoReattempt(awbNo, "REATTEMPT");
               break;
             default:
@@ -1263,12 +1262,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       <div className="flex font-medium customScroll whitespace-nowrap mt-2 ">
         {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
           return (
-            <div
+            <button
               key={index}
               style={{ borderBottomWidth: "3px" }}
               className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
                 tabIndex === index ? "!border-[#004EFF]" : ""
               }`}
+              disabled={isLoading}
               onClick={() => setScrollIndex(index)}
             >
               <span
@@ -1285,7 +1285,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               >
                 {orderNumber}
               </span>
-            </div>
+            </button>
           );
         })}
       </div>
