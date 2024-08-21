@@ -125,9 +125,12 @@ export const Transaction = () => {
       },
       cell: ({ row }: any) => {
         const rowData = row?.original;
+
+        const match = rowData?.description.match(/[A-Z0-9]+$/);
+
         return (
           <div className="flex justify-between">
-            <div>{rowData?.utrNo || "--"}</div>
+            <div>{rowData?.utrNo ? rowData?.utrNo : match?.[0]}</div>
           </div>
         );
       },
@@ -189,43 +192,43 @@ export const Transaction = () => {
         );
       },
     }),
-    columnsHelper.accessor("totalWeight", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center min-w-[120px] ">
-            <div className="flex flex-col">CashBack</div>
-          </div>
-        );
-      },
-      cell: ({ row }: any) => {
-        const totalWeight = row?.original?.totalWeight;
-        return (
-          <div className="flex justify-between">
-            <div> -- </div>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("remark", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center min-w-[120px] ">
-            <div className="flex flex-col">
-              <h1> Action By </h1>
-            </div>
-          </div>
-        );
-      },
-      cell: ({ row }: any) => {
-        const rowData = row?.original;
+    // columnsHelper.accessor("totalWeight", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between items-center min-w-[120px] ">
+    //         <div className="flex flex-col">CashBack</div>
+    //       </div>
+    //     );
+    //   },
+    //   cell: ({ row }: any) => {
+    //     const totalWeight = row?.original?.totalWeight;
+    //     return (
+    //       <div className="flex justify-between">
+    //         <div> -- </div>
+    //       </div>
+    //     );
+    //   },
+    // }),
+    // columnsHelper.accessor("remark", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between items-center min-w-[120px] ">
+    //         <div className="flex flex-col">
+    //           <h1> Action By </h1>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    //   cell: ({ row }: any) => {
+    //     const rowData = row?.original;
 
-        return (
-          <div className="flex justify-between">
-            <div> {rowData?.approvedBy || "--"}</div>
-          </div>
-        );
-      },
-    }),
+    //     return (
+    //       <div className="flex justify-between">
+    //         <div> {rowData?.approvedBy || "--"}</div>
+    //       </div>
+    //     );
+    //   },
+    // }),
     columnsHelper.accessor("actions", {
       header: () => {
         return (
@@ -249,9 +252,9 @@ export const Transaction = () => {
               //   setShowNeftModal({ isOpen: true, modalData: rowData })
               // }
             >
-              {rowData?.status === "PENDING" ? (
+              {rowData?.status === "Requested" ? (
                 <span className="border-[0.5px] border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E] px-3 py-[4px] rounded-sm">
-                  {"Requesting"}
+                  {"Requested"}
                 </span>
               ) : rowData?.status === "DECLINED" ? (
                 <span className="border-[0.5px] border-[#F35838] bg-[#FEEEEB] text-[#F35838] px-3 py-[4px] rounded-sm">

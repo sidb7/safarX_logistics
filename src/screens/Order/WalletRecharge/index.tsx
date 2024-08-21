@@ -1243,7 +1243,7 @@ const WalletRecharge = () => {
                       onClick={() => {
                         navigate(`/wallet/transaction-history`);
                       }}
-                      text={`GO TO ORDER`}
+                      text={`GO TO Transaction History`}
                       variant="primary"
                       className="!w-[228px]"
                     />
