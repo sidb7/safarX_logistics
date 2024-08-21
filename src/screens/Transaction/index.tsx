@@ -29,6 +29,7 @@ import { useErrorBoundary } from "react-error-boundary";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Approved } from "./StatusComponents";
+import CopyTooltip from "../../components/CopyToClipboard";
 
 const arrayData = [
   { label: "Passbook" },
@@ -112,6 +113,33 @@ export const Transaction = () => {
       cell: ({ row }: any) => {
         const rowData = row?.original;
         return <div className=" flex"> {rowData?.sellerId || "--"}</div>;
+      },
+    }),
+    columnsHelper.accessor("transactionId", {
+      header: () => {
+        return (
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px] ">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Transaction ID
+            </h1>
+            {/* <img src={sortIconTable} alt="" /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  items-center justify-between ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm   ">
+              {info.row.original.transactionId}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip
+                stringToBeCopied={`${info.row.original.transactionId}
+               `}
+              />
+            </div>
+          </div>
+        );
       },
     }),
 
