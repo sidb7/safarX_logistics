@@ -29,6 +29,7 @@ import { useErrorBoundary } from "react-error-boundary";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Approved } from "./StatusComponents";
+import CopyTooltip from "../../components/CopyToClipboard";
 
 const arrayData = [
   { label: "Passbook" },
@@ -114,6 +115,32 @@ export const Transaction = () => {
         return <div className=" flex"> {rowData?.sellerId || "--"}</div>;
       },
     }),
+    columnsHelper.accessor("transactionId", {
+      header: () => {
+        return (
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px] ">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Transaction ID
+            </h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  items-center justify-between ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm   ">
+              {info.row.original.transactionId}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip
+                stringToBeCopied={`${info.row.original.transactionId}
+               `}
+              />
+            </div>
+          </div>
+        );
+      },
+    }),
 
     columnsHelper.accessor("noOfAwb", {
       header: () => {
@@ -148,7 +175,7 @@ export const Transaction = () => {
 
         return (
           <div className="flex space-x-2 items-center">
-            <div>₹ {rowData?.amount || "--"}</div>
+            <div>₹ {rowData?.amount}</div>
           </div>
         );
       },
@@ -184,31 +211,62 @@ export const Transaction = () => {
 
         return (
           <div className="flex justify-center flex-col min-w-[120px]">
-            <div>
-              ₹ {rowData?.amount} has been requested on {rowData?.createdAt}
-              through NEFT/RTGS/IMPS (New Dashboard)
-            </div>
+            <div>{rowData?.description}</div>
           </div>
         );
       },
     }),
-    // columnsHelper.accessor("totalWeight", {
-    //   header: () => {
-    //     return (
-    //       <div className="flex justify-between items-center min-w-[120px] ">
-    //         <div className="flex flex-col">CashBack</div>
-    //       </div>
-    //     );
-    //   },
-    //   cell: ({ row }: any) => {
-    //     const totalWeight = row?.original?.totalWeight;
-    //     return (
-    //       <div className="flex justify-between">
-    //         <div> -- </div>
-    //       </div>
-    //     );
-    //   },
-    // }),
+    columnsHelper.accessor("cashBack", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">CashBack</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        return (
+          <div className="flex justify-between">
+            <div> 0 </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("req,Date", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">Requested Date</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        return (
+          <div className="flex justify-between">
+            <div> {rowData?.created_At} </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("cashBack", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">Approved Date</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        //updated_At
+        return (
+          <div className="flex justify-between">
+            <div> {rowData?.updated_At} </div>
+          </div>
+        );
+      },
+    }),
     // columnsHelper.accessor("remark", {
     //   header: () => {
     //     return (
@@ -252,7 +310,7 @@ export const Transaction = () => {
               //   setShowNeftModal({ isOpen: true, modalData: rowData })
               // }
             >
-              {rowData?.status === "Requested" ? (
+              {rowData?.status === "REJECTED" ? (
                 <span className="border-[0.5px] border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E] px-3 py-[4px] rounded-sm">
                   {"Requested"}
                 </span>
