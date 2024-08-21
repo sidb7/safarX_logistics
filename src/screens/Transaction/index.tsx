@@ -26,8 +26,15 @@ import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../assets/serv/edit.svg";
 
 import { useErrorBoundary } from "react-error-boundary";
+import { capitalizeFirstLetter } from "../../utils/utility";
+import { createColumnHelper } from "@tanstack/react-table";
+import { Approved } from "./StatusComponents";
 
-const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
+const arrayData = [
+  { label: "Passbook" },
+  { label: "Cashback" },
+  { label: "NEFT/IMPS/RTGS Transaction" },
+];
 
 export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
@@ -48,10 +55,10 @@ export const Transaction = () => {
   const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
   useEffect(() => {
-    if (renderingComponents === 0) {
+    if (renderingComponents === 0 || renderingComponents === 2) {
       // setLoading(true);
       (async () => {
-        const { data } = await POST(GET_WALLET_TRANSACTION, {
+        const payload: any = {
           filter: {
             status: "",
             from: "",
@@ -62,7 +69,13 @@ export const Transaction = () => {
           pageNo: currentPage,
           sort: { _id: sortOrder === "desc" ? -1 : 1 },
           searchValue: debouncedSearchValue,
-        });
+        };
+
+        if (renderingComponents === 2) {
+          payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
+        }
+
+        const { data } = await POST(GET_WALLET_TRANSACTION, payload);
 
         if (data?.success) {
           setData(data?.data || []);
@@ -84,6 +97,179 @@ export const Transaction = () => {
     sortOrder,
     debouncedSearchValue,
   ]);
+
+  //column for wallet NEFT
+  const columnsHelper = createColumnHelper<any>();
+  const columns = [
+    columnsHelper.accessor(" Courier Partner ID and Name", {
+      header: (props: any) => {
+        return (
+          <div className="flex justify-start items-center min-w-[120px]">
+            <h1 className="text-sm font-semibold leading-5 ">Client Id</h1>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        return <div className=" flex"> {rowData?.sellerId || "--"}</div>;
+      },
+    }),
+
+    columnsHelper.accessor("noOfAwb", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <h1>Ref/UTR No.</h1>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        return (
+          <div className="flex justify-between">
+            <div>{rowData?.utrNo || "--"}</div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("uniqueCourierPartners", {
+      header: () => {
+        return (
+          <div className="flex justify-between min-w-[120px]">
+            <h1>Amount</h1>
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex space-x-2 items-center">
+            <div>₹ {rowData?.amount || "--"}</div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("charges", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px]">
+            <div className="flex flex-col">Type</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex justify-center flex-col p-3 gap-y-2">Credit</div>
+        );
+      },
+    }),
+    columnsHelper.accessor("finalAmount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">
+              <h1>Discription</h1>
+            </div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex justify-center flex-col min-w-[120px]">
+            <div>
+              ₹ {rowData?.amount} has been requested on {rowData?.createdAt}
+              through NEFT/RTGS/IMPS (New Dashboard)
+            </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("totalWeight", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">CashBack</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const totalWeight = row?.original?.totalWeight;
+        return (
+          <div className="flex justify-between">
+            <div> -- </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("remark", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">
+              <h1> Action By </h1>
+            </div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex justify-between">
+            <div> {rowData?.approvedBy || "--"}</div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("actions", {
+      header: () => {
+        return (
+          <div className="flex items-center min-w-[50px] ">
+            <div className="flex flex-col">
+              <h1> Status </h1>
+            </div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        let rowData = row.original;
+
+        console.log("rowData", rowData);
+
+        return (
+          <div className="flex cursor-pointer">
+            <div
+              className="border"
+              // onClick={() =>
+              //   setShowNeftModal({ isOpen: true, modalData: rowData })
+              // }
+            >
+              {rowData?.status === "PENDING" ? (
+                <span className="border-[0.5px] border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E] px-3 py-[4px] rounded-sm">
+                  {"Requesting"}
+                </span>
+              ) : rowData?.status === "DECLINED" ? (
+                <span className="border-[0.5px] border-[#F35838] bg-[#FEEEEB] text-[#F35838] px-3 py-[4px] rounded-sm">
+                  {capitalizeFirstLetter(rowData?.status)}
+                </span>
+              ) : rowData?.status === "SUCCESS" ? (
+                <span className="border-[0.5px] border-[#7CCA62] bg-[#F2FAEF] text-[#7CCA62] px-3 py-[4px] rounded-sm">
+                  {"Approved"}
+                </span>
+              ) : (
+                "N/A"
+              )}
+            </div>
+          </div>
+        );
+      },
+    }),
+  ];
 
   const onPageIndexChange = (paginationData: any) => {
     setCurrentPage(paginationData.currentPage);
@@ -189,6 +375,8 @@ export const Transaction = () => {
       );
     } else if (renderingComponents === 1) {
       return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
+    } else if (renderingComponents === 2) {
+      return <CustomTable data={data || []} columns={columns} />;
     }
   };
 
@@ -278,7 +466,7 @@ export const Transaction = () => {
 
                 {/* {totalItemCount > 0 && ( */}
 
-                {renderingComponents === 0 && (
+                {(renderingComponents === 0 || renderingComponents === 2) && (
                   <Pagination
                     totalItems={totalItemCount}
                     itemsPerPageOptions={[10, 20, 30, 50]}
