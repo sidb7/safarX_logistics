@@ -12,6 +12,8 @@ import {
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { downloadCSVFromString } from "../../utils/helper";
+import { ResponsiveState } from "../../utils/responsiveState";
+import BillingOrdersCard from "./BillingOrdersCard";
 
 interface IOrdersProps {}
 
@@ -20,6 +22,8 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
   const [totalItemCount, setTotalItemCount] = useState<any>(10);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [data, setData] = useState<any>([]);
+  const { isLgScreen, isMdScreen } = ResponsiveState();
+
   const arrayData = [
     { label: "Orders" },
     { label: "Invoice" },
@@ -41,7 +45,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   //on page change index
   let onPageIndexChange = (data: any) => {
-    console.log("data", data);
+    console.log("data", data.data);
     const payload: any = {
       skip: 0,
       limit: 0,
@@ -100,6 +104,8 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
     try {
       const response = await POST(GET_BILLED_ORDERS);
       setData(response?.data?.data);
+      console.log("dataforme>>>", response.data.data[0]);
+
       setTotalItemCount(response?.data?.total);
     } catch (error: any) {
       console.log(error.message);
@@ -115,7 +121,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
       <div>
         <Breadcrum label="Billing" />
         <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-          <div>
+          <div >
             <ScrollNav
               arrayData={arrayData}
               showNumber={false}
@@ -124,10 +130,11 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
             />
           </div>
           <div>
-            <div>
+            <div className={`${!isLgScreen ? ' flex justify-end' : ''}`}>
               <ServiceButton
                 text="Download"
-                className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
+                className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${!isLgScreen ? 'mt-4' : ''}`}
+
                 onClick={handleDownloadOrderCSV}
               />
             </div>
@@ -137,11 +144,46 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
           </div>
         </div>
         {/* <p>table for orders </p> */}
-        <div className="mx-4">
-          <OrdersData data={data} />
-        </div>
 
-        {totalItemCount > 0 && (
+        {isLgScreen ? (
+          <div className="mx-4">
+            <OrdersData data={data} />
+          </div>
+        ) : (
+          <div className="mx-4">
+            {data.map((order: any) => (
+              <BillingOrdersCard
+                key={order.orderId}
+                data={{
+                  status: order.status,
+                  orderId: order["order id"],
+                  amount: order.totalOrders,
+                  sku: order.SKU,
+                  trackingId: order["Tracking Number"],
+                  shipyaariId: order["Shipyaari ID"],
+                  courierName: order["Courier Name"],
+                  prodDimensions: order["Product Dimensions"],
+                  VolumetricWeight: order["Dimension Weight"],
+                  DeadWeight: order["Dead Weight"],
+                  BillableWeight: order["Billable Weight"],
+                  Price: order["Total Invoice Value"],
+                  FWD: order["Applied Forward Amount"],
+                  RTO: order["Applied Rto Amount"],
+                  TotalAmount: order["Applied Total Amount"],
+                  GST: order["GST Total"],
+                  ShippedValue: order["Total Shipping Bill value"],
+                  WA: order.wa,
+                  SMS: order.sms,
+                  ExcessForward: order["Excess Forward amount"],
+                  ExcessRTO: order["Excess RTO amount"],
+                  ExcessTotal: order["Excess Total Amount"],
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {isLgScreen && totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
             itemsPerPageOptions={[10, 20, 30, 50]}

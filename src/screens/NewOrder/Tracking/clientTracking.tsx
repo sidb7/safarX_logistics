@@ -391,6 +391,15 @@ const Tracking = () => {
                                             alt=""
                                             className="w-20"
                                           />
+                                          <div className="flex flex-col">
+                                            <span className="text-[12px] font-Open leading-[16px]">
+                                              Status:
+                                            </span>
+                                            <span className="font-bold text-[14px]">
+                                              {" "}
+                                              {trackingState[0]?.currentStatus}
+                                            </span>
+                                          </div>
                                           <div className="flex gap-x-6">
                                             {trackingState[0]?.shipmentStatus
                                               ?.EDD === "" ||
