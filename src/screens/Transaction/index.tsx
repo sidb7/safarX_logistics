@@ -30,6 +30,10 @@ import { capitalizeFirstLetter } from "../../utils/utility";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Approved } from "./StatusComponents";
 import CopyTooltip from "../../components/CopyToClipboard";
+import {
+  date_DD_MMM_YYYY_HH_MM,
+  date_DD_MMM_YYYY_HH_MM_SS,
+} from "../../utils/dateFormater";
 
 const arrayData = [
   { label: "Passbook" },
@@ -118,10 +122,8 @@ export const Transaction = () => {
     columnsHelper.accessor("transactionId", {
       header: () => {
         return (
-          <div className="flex whitespace-nowrap justify-between items-center w-[90px] ">
-            <h1 className="font-Open font-semibold leading-5 text-sm">
-              Transaction ID
-            </h1>
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <h1 className="font-semibold leading-5 text-sm">Transaction ID</h1>
           </div>
         );
       },
@@ -152,12 +154,11 @@ export const Transaction = () => {
       },
       cell: ({ row }: any) => {
         const rowData = row?.original;
-
-        const match = rowData?.description.match(/[A-Z0-9]+$/);
+        const utrNo = rowData?.description.split(" ").pop();
 
         return (
           <div className="flex justify-between">
-            <div>{rowData?.utrNo ? rowData?.utrNo : match?.[0]}</div>
+            <div>{utrNo}</div>
           </div>
         );
       },
@@ -216,7 +217,7 @@ export const Transaction = () => {
         );
       },
     }),
-    columnsHelper.accessor("cashBack", {
+    columnsHelper.accessor("cashBackSS", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[120px] ">
@@ -242,9 +243,16 @@ export const Transaction = () => {
       },
       cell: ({ row }: any) => {
         const rowData = row?.original;
+        const date: any = new Date(rowData?.createdAt);
+
+        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(date);
+
         return (
           <div className="flex justify-between">
-            <div> {rowData?.created_At} </div>
+            <div className="flex flex-col  whitespace-nowrap my-4 ">
+              <span>{formattedDateTime.split(",")[0]}</span>
+              <span>{formattedDateTime.split(",")[1]}</span>
+            </div>
           </div>
         );
       },
@@ -259,10 +267,16 @@ export const Transaction = () => {
       },
       cell: ({ row }: any) => {
         const rowData = row?.original;
-        //updated_At
+        const utcDate: any = new Date(rowData?.updated_At);
+        const epochTime = utcDate.getTime();
+        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(epochTime);
+
         return (
           <div className="flex justify-between">
-            <div> {rowData?.updated_At} </div>
+            <div className="flex flex-col  whitespace-nowrap my-4 ">
+              <span>{formattedDateTime.split(",")[0]}</span>
+              <span>{formattedDateTime.split(",")[1]}</span>
+            </div>
           </div>
         );
       },
@@ -310,11 +324,11 @@ export const Transaction = () => {
               //   setShowNeftModal({ isOpen: true, modalData: rowData })
               // }
             >
-              {rowData?.status === "REJECTED" ? (
+              {rowData?.status === "Requested" ? (
                 <span className="border-[0.5px] border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E] px-3 py-[4px] rounded-sm">
                   {"Requested"}
                 </span>
-              ) : rowData?.status === "DECLINED" ? (
+              ) : rowData?.status === "REJECTED" ? (
                 <span className="border-[0.5px] border-[#F35838] bg-[#FEEEEB] text-[#F35838] px-3 py-[4px] rounded-sm">
                   {capitalizeFirstLetter(rowData?.status)}
                 </span>
@@ -527,18 +541,18 @@ export const Transaction = () => {
 
                 {/* {totalItemCount > 0 && ( */}
 
-                {(renderingComponents === 0 || renderingComponents === 2) && (
-                  <Pagination
-                    totalItems={totalItemCount}
-                    itemsPerPageOptions={[10, 20, 30, 50]}
-                    onPageChange={onPageIndexChange}
-                    onItemsPerPageChange={onPerPageItemChange}
-                    pageNo={currentPage}
-                    initialItemsPerPage={itemsPerPage}
-                    className="!mx-0"
-                    rightmodalPagination={true}
-                  />
-                )}
+                {/* {(renderingComponents === 0 || renderingComponents === 2) && ( */}
+                <Pagination
+                  totalItems={totalItemCount}
+                  itemsPerPageOptions={[10, 20, 30, 50]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  pageNo={currentPage}
+                  initialItemsPerPage={itemsPerPage}
+                  className="!mx-0"
+                  rightmodalPagination={true}
+                />
+                {/* )} */}
 
                 {/* )} */}
               </div>
