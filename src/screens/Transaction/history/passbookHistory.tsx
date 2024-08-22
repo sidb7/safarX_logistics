@@ -149,7 +149,9 @@ export const PassbookColumns = (setSortOrder: any) => {
           </div>
         );
       },
+
       cell: (info: any) => {
+        console.log("timestamp", info.getValue());
         const formattedDateTime = date_DD_MMM_YYYY_HH_MM(info.getValue());
 
         return (
