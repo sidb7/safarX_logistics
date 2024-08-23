@@ -265,7 +265,7 @@ const SystemLog = () => {
               itemsPerPageOptions={[10, 20, 30, 50]}
               onPageChange={onPageIndexChange}
               onItemsPerPageChange={onPerPageItemChange}
-              rightmodalPagination={true}
+              // rightmodalPagination={true}
             />
           )}
           <CenterModal

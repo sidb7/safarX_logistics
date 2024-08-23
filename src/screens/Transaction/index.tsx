@@ -26,8 +26,20 @@ import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../assets/serv/edit.svg";
 
 import { useErrorBoundary } from "react-error-boundary";
+import { capitalizeFirstLetter } from "../../utils/utility";
+import { createColumnHelper } from "@tanstack/react-table";
+import { Approved } from "./StatusComponents";
+import CopyTooltip from "../../components/CopyToClipboard";
+import {
+  date_DD_MMM_YYYY_HH_MM,
+  date_DD_MMM_YYYY_HH_MM_SS,
+} from "../../utils/dateFormater";
 
-const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
+const arrayData = [
+  { label: "Passbook" },
+  { label: "Cashback" },
+  { label: "NEFT/IMPS/RTGS Transaction" },
+];
 
 export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
@@ -48,10 +60,10 @@ export const Transaction = () => {
   const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
   useEffect(() => {
-    if (renderingComponents === 0) {
+    if (renderingComponents === 0 || renderingComponents === 2) {
       // setLoading(true);
       (async () => {
-        const { data } = await POST(GET_WALLET_TRANSACTION, {
+        const payload: any = {
           filter: {
             status: "",
             from: "",
@@ -62,7 +74,13 @@ export const Transaction = () => {
           pageNo: currentPage,
           sort: { _id: sortOrder === "desc" ? -1 : 1 },
           searchValue: debouncedSearchValue,
-        });
+        };
+
+        if (renderingComponents === 2) {
+          payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
+        }
+
+        const { data } = await POST(GET_WALLET_TRANSACTION, payload);
 
         if (data?.success) {
           setData(data?.data || []);
@@ -84,6 +102,249 @@ export const Transaction = () => {
     sortOrder,
     debouncedSearchValue,
   ]);
+
+  //column for wallet NEFT
+  const columnsHelper = createColumnHelper<any>();
+  const columns = [
+    columnsHelper.accessor(" Courier Partner ID and Name", {
+      header: (props: any) => {
+        return (
+          <div className="flex justify-start items-center min-w-[120px]">
+            <h1 className="text-sm font-semibold leading-5 ">Client Id</h1>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        return <div className=" flex"> {rowData?.sellerId || "--"}</div>;
+      },
+    }),
+    columnsHelper.accessor("transactionId", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <h1 className="font-semibold leading-5 text-sm">Transaction ID</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  items-center justify-between ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm   ">
+              {info.row.original.transactionId}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip
+                stringToBeCopied={`${info.row.original.transactionId}
+               `}
+              />
+            </div>
+          </div>
+        );
+      },
+    }),
+
+    columnsHelper.accessor("noOfAwb", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <h1>Ref/UTR No.</h1>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        const utrNo = rowData?.description.split(" ").pop();
+
+        return (
+          <div className="flex justify-between">
+            <div>{utrNo}</div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("uniqueCourierPartners", {
+      header: () => {
+        return (
+          <div className="flex justify-between min-w-[120px]">
+            <h1>Amount</h1>
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex space-x-2 items-center">
+            <div>₹ {rowData?.amount}</div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("charges", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px]">
+            <div className="flex flex-col">Type</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex justify-center flex-col p-3 gap-y-2">Credit</div>
+        );
+      },
+    }),
+    columnsHelper.accessor("finalAmount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">
+              <h1>Discription</h1>
+            </div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+
+        return (
+          <div className="flex justify-center flex-col min-w-[120px]">
+            <div>{rowData?.description}</div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("cashBackSS", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">CashBack</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        return (
+          <div className="flex justify-between">
+            <div> 0 </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("req,Date", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">Requested Date</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        const date: any = new Date(rowData?.createdAt);
+
+        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(date);
+
+        return (
+          <div className="flex justify-between">
+            <div className="flex flex-col  whitespace-nowrap my-4 ">
+              <span>{formattedDateTime.split(",")[0]}</span>
+              <span>{formattedDateTime.split(",")[1]}</span>
+            </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("cashBack", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[120px] ">
+            <div className="flex flex-col">Approved Date</div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        const utcDate: any = new Date(rowData?.updated_At);
+        const epochTime = utcDate.getTime();
+        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(epochTime);
+
+        return (
+          <div className="flex justify-between">
+            <div className="flex flex-col  whitespace-nowrap my-4 ">
+              <span>{formattedDateTime.split(",")[0]}</span>
+              <span>{formattedDateTime.split(",")[1]}</span>
+            </div>
+          </div>
+        );
+      },
+    }),
+    // columnsHelper.accessor("remark", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between items-center min-w-[120px] ">
+    //         <div className="flex flex-col">
+    //           <h1> Action By </h1>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    //   cell: ({ row }: any) => {
+    //     const rowData = row?.original;
+
+    //     return (
+    //       <div className="flex justify-between">
+    //         <div> {rowData?.approvedBy || "--"}</div>
+    //       </div>
+    //     );
+    //   },
+    // }),
+    columnsHelper.accessor("actions", {
+      header: () => {
+        return (
+          <div className="flex items-center min-w-[50px] ">
+            <div className="flex flex-col">
+              <h1> Status </h1>
+            </div>
+          </div>
+        );
+      },
+      cell: ({ row }: any) => {
+        let rowData = row.original;
+
+        console.log("rowData", rowData);
+
+        return (
+          <div className="flex cursor-pointer">
+            <div
+              className="border"
+              // onClick={() =>
+              //   setShowNeftModal({ isOpen: true, modalData: rowData })
+              // }
+            >
+              {rowData?.status === "Requested" ? (
+                <span className="border-[0.5px] border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E] px-3 py-[4px] rounded-sm">
+                  {"Requested"}
+                </span>
+              ) : rowData?.status === "REJECTED" ? (
+                <span className="border-[0.5px] border-[#F35838] bg-[#FEEEEB] text-[#F35838] px-3 py-[4px] rounded-sm">
+                  {capitalizeFirstLetter(rowData?.status)}
+                </span>
+              ) : rowData?.status === "SUCCESS" ? (
+                <span className="border-[0.5px] border-[#7CCA62] bg-[#F2FAEF] text-[#7CCA62] px-3 py-[4px] rounded-sm">
+                  {"Approved"}
+                </span>
+              ) : (
+                "N/A"
+              )}
+            </div>
+          </div>
+        );
+      },
+    }),
+  ];
 
   const onPageIndexChange = (paginationData: any) => {
     setCurrentPage(paginationData.currentPage);
@@ -189,6 +450,8 @@ export const Transaction = () => {
       );
     } else if (renderingComponents === 1) {
       return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
+    } else if (renderingComponents === 2) {
+      return <CustomTable data={data || []} columns={columns} />;
     }
   };
 
@@ -278,18 +541,18 @@ export const Transaction = () => {
 
                 {/* {totalItemCount > 0 && ( */}
 
-                {renderingComponents === 0 && (
-                  <Pagination
-                    totalItems={totalItemCount}
-                    itemsPerPageOptions={[10, 20, 30, 50]}
-                    onPageChange={onPageIndexChange}
-                    onItemsPerPageChange={onPerPageItemChange}
-                    pageNo={currentPage}
-                    initialItemsPerPage={itemsPerPage}
-                    className="!mx-0"
-                    rightmodalPagination={true}
-                  />
-                )}
+                {/* {(renderingComponents === 0 || renderingComponents === 2) && ( */}
+                <Pagination
+                  totalItems={totalItemCount}
+                  itemsPerPageOptions={[10, 20, 30, 50]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  pageNo={currentPage}
+                  initialItemsPerPage={itemsPerPage}
+                  className="!mx-0"
+                  rightmodalPagination={true}
+                />
+                {/* )} */}
 
                 {/* )} */}
               </div>
