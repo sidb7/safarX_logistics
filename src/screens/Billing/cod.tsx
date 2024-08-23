@@ -171,21 +171,22 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     <>
       <div>
         <Breadcrum label="Billing" />
-        <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-          <div>
-            <ScrollNav
-              arrayData={arrayData}
-              showNumber={false}
-              setScrollIndex={setScrollIndex}
-              defaultIndexValue={3}
-            />
-          </div>
-          <div className="flex justify-end gap-x-2  ">
+        <div className="customScroll">
+          <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
             <div>
-              {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
+              <ScrollNav
+                arrayData={arrayData}
+                showNumber={false}
+                setScrollIndex={setScrollIndex}
+                defaultIndexValue={3}
+              />
             </div>
-            <div className="">
-              {/* <ReactDatePicker
+            <div className="flex justify-end gap-x-2  ">
+              <div>
+                {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
+              </div>
+              <div className="">
+                {/* <ReactDatePicker
                 selectsRange={true}
                 startDate={startDate}
                 endDate={endDate}
@@ -208,56 +209,57 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 dateFormat="dd/MM/yyyy"
               /> */}
 
-              <DatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update: any) => {
-                  setDateRange(update);
-                  if (update[0] === null && update[1] === null) {
-                    // Explicitly set startDate and endDate to null when cleared
-                    setStartDate(null);
-                    setEndDate(null);
-                    // fetchCodRemittanceData();
-                  } else {
-                    // Update startDate and endDate based on the selected range
-                    setStartDate(update[0]);
-                    setEndDate(update[1]);
-                  }
-                }}
-                // isClearable={true}
-                dateFormat="dd/MM/yyyy"
-                customInput={
-                  <DateButton
-                    text="Select From & To Date" // Text for the button
-                    onClick={() => {}} // onClick is managed by DatePicker
-                    className="h-[36px]"
-                    value={
-                      startDate && endDate
-                        ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
-                        : ""
-                    } // Display date range
-                    onClear={handleClear} // Handle clear action
-                  />
-                } // Include placeholder onClick function
-              />
-            </div>
-            <div>
-              <ServiceButton
-                text="Download"
-                className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
-                onClick={() => downloadReport()}
-              />
+                <DatePicker
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(update: any) => {
+                    setDateRange(update);
+                    if (update[0] === null && update[1] === null) {
+                      // Explicitly set startDate and endDate to null when cleared
+                      setStartDate(null);
+                      setEndDate(null);
+                      // fetchCodRemittanceData();
+                    } else {
+                      // Update startDate and endDate based on the selected range
+                      setStartDate(update[0]);
+                      setEndDate(update[1]);
+                    }
+                  }}
+                  // isClearable={true}
+                  dateFormat="dd/MM/yyyy"
+                  customInput={
+                    <DateButton
+                      text="Select From & To Date" // Text for the button
+                      onClick={() => {}} // onClick is managed by DatePicker
+                      className="h-[36px]"
+                      value={
+                        startDate && endDate
+                          ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                          : ""
+                      } // Display date range
+                      onClear={handleClear} // Handle clear action
+                    />
+                  } // Include placeholder onClick function
+                />
+              </div>
+              <div>
+                <ServiceButton
+                  text="Download"
+                  className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
+                  onClick={() => downloadReport()}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mx-4">
-          <CodData
-            setCodModal={setCodModal}
-            setAwbModal={setAwbModal}
-            tableData={codRemittedData}
-            downloadReport={downloadReport}
-          />
+          <div className="mx-4">
+            <CodData
+              setCodModal={setCodModal}
+              setAwbModal={setAwbModal}
+              tableData={codRemittedData}
+              downloadReport={downloadReport}
+            />
+          </div>
         </div>
 
         {totalItemCount > 0 && (
