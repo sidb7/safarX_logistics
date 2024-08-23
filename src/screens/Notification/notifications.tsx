@@ -51,7 +51,7 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
 
   const filterComponent = () => {
     return (
-      <div className="flex justify-between mx-5">
+      <div className="flex flex-col gap-y-4 md:flex-row justify-between mx-5">
         <div
           className={`flex text-[14px] text-[#777777] font-semibold font-Open leading-[22px] h-[44px] cursor-pointer`}
         >
@@ -98,25 +98,26 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
       {isActive ? (
         <div>
           <Breadcrum label="Notifications" />
-
-          {filterComponent()}
-          <div className="flex flex-col gap-y-4 mt-7 mx-4">
-            {notificationData?.map((data: any, index: any) => {
-              return (
-                //commented as statics data is passing and showing no data found
-                // <NotificationCard
-                //   label={data?.label}
-                //   date={data?.date}
-                //   time={data?.time}
-                //   key={index}
-                // />
-                <>
-                  <div className="w-full h-96 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
-                    No Data Found
-                  </div>
-                </>
-              );
-            })}
+          <div className="customScroll">
+            {filterComponent()}
+            <div className="flex flex-col gap-y-4 mt-7 mx-4">
+              {notificationData?.map((data: any, index: any) => {
+                return (
+                  //commented as statics data is passing and showing no data found
+                  // <NotificationCard
+                  //   label={data?.label}
+                  //   date={data?.date}
+                  //   time={data?.time}
+                  //   key={index}
+                  // />
+                  <>
+                    <div className="w-full h-96 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+                      No Data Found
+                    </div>
+                  </>
+                );
+              })}
+            </div>
           </div>
         </div>
       ) : (

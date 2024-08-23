@@ -173,7 +173,7 @@ const App = () => {
     let scriptElement: any = "";
 
     if (
-      Environment === "development" &&
+      Environment === "production" &&
       userInfo !== undefined &&
       userInfo !== null
     ) {
@@ -233,7 +233,7 @@ const App = () => {
     }
 
     if (
-      Environment === "development" &&
+      Environment === "production" &&
       userInfo !== undefined &&
       userInfo !== null
     ) {

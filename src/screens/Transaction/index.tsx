@@ -32,6 +32,7 @@ import { Approved } from "./StatusComponents";
 import CopyTooltip from "../../components/CopyToClipboard";
 import {
   date_DD_MMM_YYYY_HH_MM,
+  date_DD_MMM_YYYY_HH_MM_IST,
   date_DD_MMM_YYYY_HH_MM_SS,
 } from "../../utils/dateFormater";
 
@@ -102,6 +103,26 @@ export const Transaction = () => {
     sortOrder,
     debouncedSearchValue,
   ]);
+
+  function formatDate(dateString: any) {
+    const date = new Date(dateString);
+
+    // Format date as '23 Aug 2024'
+    const formattedDate = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    // Format time as '04:38 pm'
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return `${formattedDate} ${formattedTime}`;
+  }
 
   //column for wallet NEFT
   const columnsHelper = createColumnHelper<any>();
@@ -266,16 +287,29 @@ export const Transaction = () => {
         );
       },
       cell: ({ row }: any) => {
-        const rowData = row?.original;
-        const utcDate: any = new Date(rowData?.updated_At);
-        const epochTime = utcDate.getTime();
-        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(epochTime);
+        const timestamp = new Date(row.original.updated_At);
 
+        // Adjust for IST (UTC+5:30)
+        const istTimestamp = new Date(
+          timestamp.getTime() + 5.5 * 60 * 60 * 1000
+        );
+
+        const humanReadableDate = istTimestamp.toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+
+        const hours = istTimestamp.getUTCHours();
+        const minutes = istTimestamp.getUTCMinutes();
+        const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+        const formattedMinutes = minutes.toString().padStart(2, "0");
+        const ampm = hours >= 12 ? "pm" : "am";
+        const time = `${formattedHours}:${formattedMinutes} ${ampm}`;
         return (
           <div className="flex justify-between">
-            <div className="flex flex-col  whitespace-nowrap my-4 ">
-              <span>{formattedDateTime.split(",")[0]}</span>
-              <span>{formattedDateTime.split(",")[1]}</span>
+            <div className="flex flex-col whitespace-nowrap my-4">
+              <span>{`${humanReadableDate} ${time}`}</span>
             </div>
           </div>
         );

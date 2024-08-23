@@ -81,10 +81,7 @@ function Feedback() {
     <>
       {isActive ? (
         <div>
-          <div>
-            <Breadcrum label="Feedback" component={renderHeaderComponent()} />
-          </div>
-
+          <Breadcrum label="Feedback" component={renderHeaderComponent()} />
           <div className="flex flex-col pt-7 ">
             <div className="mx-5">
               <div className="flex font-medium customScroll whitespace-nowrap mt-2 h-[34px] ">
@@ -112,11 +109,13 @@ function Feedback() {
                 })}
               </div>
               <div className="mt-2">
-                <FeedbackTable
-                  feedbackDataList={feedbackDataList}
-                  getFeedbackList={getFeedbackList}
-                  totalItemCount={totalItemCount}
-                />
+                <div className="customScroll">
+                  <FeedbackTable
+                    feedbackDataList={feedbackDataList}
+                    getFeedbackList={getFeedbackList}
+                    totalItemCount={totalItemCount}
+                  />
+                </div>
               </div>
             </div>
           </div>
