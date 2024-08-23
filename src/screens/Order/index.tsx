@@ -818,12 +818,12 @@ const Index = () => {
           toast.success("Sync In Progress", {
             className: "custom-toast-success",
           });
-          setTimeout(() => {
-            window.location.href = "/orders/view-orders?activeTab=draft";
-            window.onload = () => {
-              window.location.reload();
-            };
-          }, 18000);
+          // setTimeout(() => {
+          //   window.location.href = "/orders/view-orders?activeTab=draft";
+          //   window.onload = () => {
+          //     window.location.reload();
+          //   };
+          // }, 18000);
         }
       } else {
         // toast.error(data?.message || "Please Integrate A Channel First");
@@ -2182,6 +2182,18 @@ const Index = () => {
   useEffect(() => {
     if (channelReduxData?.length > 0) {
       setIsSyncModalLoading(false);
+      if (
+        channelReduxData?.[0]?.TotalOrderCount -
+          channelReduxData?.[0]?.syncedOrder <=
+        8
+      ) {
+        setTimeout(() => {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }, 4000);
+      }
     }
   }, [channelReduxData]);
 
