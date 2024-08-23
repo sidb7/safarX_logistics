@@ -91,6 +91,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
       {/* {isActive || isActive === undefined ? ( */}
       <div>
         <Breadcrum label="Billing" />
+
         <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
           <div>
             <ScrollNav
@@ -106,18 +107,21 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             </div>
           </div>
         </div>
-        <div className="mx-4">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-[400px]">
-              <Spinner />
-            </div>
-          ) : (
-            <>
-              <InvoiceData invoiceData={invoiceArray} />
-            </>
-          )}
+        <div className="customScroll">
+          <div className="mx-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-[400px]">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <InvoiceData invoiceData={invoiceArray} />
+              </>
+            )}
+          </div>
         </div>
       </div>
+
       {/* ) : (
         <div>
           <AccessDenied />

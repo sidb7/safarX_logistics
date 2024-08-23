@@ -23,6 +23,7 @@ import { paymentState } from "../../../redux/reducers/paymentReducer";
 import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 import { useMediaQuery } from "react-responsive";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
+import walletIcon from "../../../assets/Group.svg";
 import CustomCenterModal from "../../../components/CustomModal/customCenterModal";
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
@@ -70,6 +71,8 @@ import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import TransactionModalContent from "../WalletRecharge/transactions/index";
 import OneButton from "../../../components/Button/OneButton";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import doneIcon from "../../../assets/Done .svg";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -108,6 +111,8 @@ const WalletRecharge = () => {
   const userDetails = useSelector((state: any) => state.signin);
   const [isDisabled, setIsDisabled] = useState(true);
   const [openRightModal, setOpenRightModal] = useState(false);
+  const [showNeftSuccessFullMsg, setShowNeftSuccessFullMsg] = useState(false);
+
   const { isLgScreen } = ResponsiveState();
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -258,7 +263,6 @@ const WalletRecharge = () => {
 
   const placeOrderApi = async () => {
     const { data } = await POST(PLACE_ORDER, {});
-
     if (data?.success) {
       // toast.success(data?.message);
       setIsLabelRightModal(true);
@@ -395,18 +399,21 @@ const WalletRecharge = () => {
   };
 
   const SubmitHandler = async () => {
+    if (rechargeInfo?.amount < 1000) {
+      toast.error("Amount should be equal or greater than 1000");
+      return;
+    }
+
     const payLoad = {
       utrNo: rechargeInfo?.utrNo,
       amount: +rechargeInfo?.amount,
     };
+
     setLoaderForRechargeWalletNeft(true);
+
     const { data } = await POST(WALLET_RECHARGE_USING_NEFT, payLoad);
     if (data?.success) {
-      setRechargeInfo({
-        amount: 0,
-        utrNo: "",
-      });
-      toast.success(data?.message);
+      setShowNeftSuccessFullMsg(true);
       setLoaderForRechargeWalletNeft(false);
     } else {
       toast.error(data?.message);
@@ -822,30 +829,21 @@ const WalletRecharge = () => {
                                 AVN Bussiness Solution Pvt Ltd
                               </div>
                               <div>
-                                <div className="font-Open text-[15px] flex">
-                                  <div>Bank : </div>
-                                  <div className="ml-1 ">
-                                    {bankDetails?.bankName === "N/A"
-                                      ? "--"
-                                      : bankDetails?.bankName}
-                                  </div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>Bank : AXIS Bank </div>
+                                  {/* <div className="ml-1 "> AXIS Bank</div> */}
                                 </div>
-                                <div className="font-Open text-[15px] flex">
-                                  <div>A/C No : </div>{" "}
-                                  <div> {bankDetails?.bankAccountNumber}</div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>A/C No : 922020042413467</div>{" "}
+                                  {/* <div> 922020042413467</div> */}
                                 </div>
-                                <div className="font-Open text-[15px] flex">
-                                  <div>Branch : </div>
-                                  <div> {" --"}</div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>Branch : Kandivali, Mumbai, MH.</div>
+                                  {/* <div>Kandivali, Mumbai, MH. </div> */}
                                 </div>
-                                <div className="font-Open text-[15px] flex">
-                                  <div>IFSC Code : </div>
-                                  <div>
-                                    {" "}
-                                    {bankDetails?.ifscCode === "N/A"
-                                      ? "--"
-                                      : bankDetails?.ifscCode}
-                                  </div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>IFSC Code : UTIB0000201</div>
+                                  {/* <div> UTIB0000201</div> */}
                                 </div>
                               </div>
                             </>
@@ -1211,15 +1209,48 @@ const WalletRecharge = () => {
                   setOpenRightModal(false);
                 }}
               />
-              {/* <BrandingModalContent
-                setBrandingModal={() => {
-                  setBrandingModal(false);
-                }}
-                brandingModalDetails={brandingModalDetails}
-                setBrandingModalDetails={setBrandingModalDetails}
-                updateBrandingDetails={updateBrandingDetails}
-              /> */}
             </RightSideModal>
+
+            <CenterModal
+              isOpen={showNeftSuccessFullMsg}
+              onRequestClose={() => setShowNeftSuccessFullMsg(false)}
+              className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
+            >
+              <>
+                <button
+                  className="flex j w-[100%] justify-end mx-8 px-4 items-center"
+                  onClick={() => {
+                    setRechargeInfo({
+                      amount: 0,
+                      utrNo: "",
+                    });
+                    setShowNeftSuccessFullMsg(false);
+                  }}
+                >
+                  <img src={WebCrossIcon} alt="" />
+                </button>
+                <div className="flex flex-col justify-center items-center">
+                  <div className="flex j w-[120px] h-[80px] items-center">
+                    <img src={doneIcon} alt="" />
+                  </div>
+                  <div className="max-w-[400px] flex flex-col justify-center text-center">
+                    <div>Congratulation!</div>
+                    <div>UTR submitted of ₹ {+rechargeInfo?.amount}</div>
+                  </div>
+
+                  <div className="mt-5">
+                    <OneButton
+                      onClick={() => {
+                        navigate(`/wallet/transaction-history`);
+                      }}
+                      text={`GO TO Transaction History`}
+                      variant="primary"
+                      className="!w-[228px]"
+                    />
+                  </div>
+                </div>
+              </>
+            </CenterModal>
           </div>
         )
       ) : (
