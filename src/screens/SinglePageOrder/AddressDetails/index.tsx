@@ -52,6 +52,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   resetOtherAddressDetails,
   setResetOtherAddressDetails,
 }) => {
+  console.log("🚀 ~ order:", order);
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
     useState<boolean>(false);

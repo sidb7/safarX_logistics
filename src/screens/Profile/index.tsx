@@ -14,6 +14,7 @@ import ProfileBrandingDetails from "./BrandingDetails";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import { ResponsiveState } from "../../utils/responsiveState";
 import BrandingModalContent from "./BrandingDetails/brandingModalContent";
+import DocumentCard from "./DocumentsForInternational/DocumentsCard";
 
 export const Profile = () => {
   const { isLgScreen } = ResponsiveState();
@@ -102,6 +103,11 @@ export const Profile = () => {
             getProfileData={getProfileData}
           />
           <ProfileKycCard KycDetails={profileData?.kycDetails} />
+
+          {/* documents  */}
+
+          <DocumentCard />
+
           <ProfileBankCard BankDetails={profileData?.bankDetails} />
           <ProfileBrandingDetails
             setBrandingModal={() => {

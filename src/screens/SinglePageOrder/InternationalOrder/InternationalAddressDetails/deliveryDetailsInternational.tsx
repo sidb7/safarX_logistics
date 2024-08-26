@@ -1,0 +1,452 @@
+import React, { useState } from "react";
+import CustomInputBox from "../../../../components/Input";
+import WebLocationIcon from "../../../../assets/PickUp/WebLocation.svg";
+import CrossIcon from "../../../../assets/CloseIcon.svg";
+import ServiceButton from "../../../../components/Button/ServiceButton";
+import InfoCircle from "../../../../assets/info-circle.svg";
+import OfficeIcon from "../../../../assets/PickUp/Office.svg";
+import LocationIcon from "../../../../assets/PickUp/Location.svg";
+import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
+import SearchDropDown from "../../components/searchDropDown";
+import { gstRegex } from "../../../../utils/regexCheck";
+import ErrorIcon from "../../../../assets/common/info-circle.svg";
+import "../../../../styles/index.css";
+import { v4 as uuidv4 } from "uuid";
+import {
+  ADD_PICKUP_ADDRESS_CATALOGUE,
+  ADD_PICKUP_LOCATION,
+  GET_PINCODE_DATA,
+  RETURNING_USER_PICKUP,
+} from "../../../../utils/ApiUrls";
+import { POST } from "../../../../utils/webService";
+import { capitalizeFirstLetter } from "../../../../utils/utility";
+import toast from "react-hot-toast";
+import CustomDropDown from "../../../../components/DropDown";
+
+interface IDeliveryDetailsInternationalProps {
+  setIsDeliveryRightModal?: any;
+}
+
+const DeliveryDetailsInternational: React.FunctionComponent<
+  IDeliveryDetailsInternationalProps
+> = ({ setIsDeliveryRightModal }) => {
+  const [deliveryAddress, setDeliveryAddress] = useState<any>({
+    deliveryAddress: {
+      fullAddress: "",
+      addressLine1: "",
+      addressLine2: "",
+      companyName: "",
+      landmark: "",
+      zipcode: "",
+      city: "",
+      state: "",
+      country: "",
+      countryCode: "",
+      addressType: "",
+      workingDays: {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
+      },
+      workingHours: "09:00",
+      contact: {
+        name: "",
+        mobileNo: 0,
+        alternateMobileNo: 0,
+        emailId: "",
+        type: "",
+        mobileNoCode: "",
+        alternateMobileNoCode: "",
+      },
+      pickupDate: 1723185000000,
+      companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
+      isActive: true,
+      deliveryAddressId: "c34348c0-ba8f-4043-82bf-4cdbd2f5b76c",
+      isDeleted: false,
+      privateCompanyId: 130278,
+      createdAt: 1722925257408,
+      createdBy: 131622,
+      created_At: "2024-07-25T11:49:02.049Z",
+      sellerId: 131622,
+      updatedAt: 1722925257408,
+      updatedBy: 131622,
+      updated_At: "2024-07-25T11:49:02.049Z",
+    },
+    transit: "FORWARD",
+    orderType: "INTERNATIONAL_B2B",
+  });
+  console.log("🚀 ~ deliveryAddress:", deliveryAddress);
+
+  const [validationErrors, setValidationErrors] = useState<any>({
+    name: null,
+    mobileNo: null,
+    alternateMobileNo: null,
+    emailId: null,
+    landmark: null,
+    fullAddress: null,
+    pincode: null,
+    country: null,
+    city: null,
+    state: null,
+    addressType: null,
+  });
+
+  const handleTextInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const updatedValue =
+      name === "mobileNo" || name === "alternateMobileNo"
+        ? Number(value)
+        : value;
+
+    setDeliveryAddress((prevState: any) => ({
+      ...prevState,
+      deliveryAddress: {
+        ...prevState.deliveryAddress,
+        [name]: updatedValue,
+      },
+    }));
+  };
+
+  const handleDropdownChange = (
+    name: string,
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const value = event.target.value;
+    setDeliveryAddress((prevState: any) => ({
+      ...prevState,
+      deliveryAddress: {
+        ...prevState.deliveryAddress,
+        [name]: value,
+      },
+    }));
+  };
+  return (
+    <>
+      <div className="mx-5">
+        <div className="flex justify-between py-5 items-center text-center">
+          <div className="flex gap-x-[8px] ">
+            <img src={WebLocationIcon} alt="locationIcon" />
+            <p className="font-Lato font-normal text-2xl text-[#323232] leading-8 capitalize">
+              Delivery Details
+            </p>
+          </div>
+          <div
+            className="cursor-pointer"
+            onClick={() => setIsDeliveryRightModal(false)}
+          >
+            <img src={CrossIcon} alt="close button" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-5 mt-1 customScroll">
+          {/* the search with slect drop down  */}
+          {/* <div>
+            <SearchDropDown
+              className={`border`}
+              apiUrl={RETURNING_USER_PICKUP}
+              label="Search Pickup Address"
+              setFunc={autoSetData}
+              identifier="ADDRESS"
+              setIsNewData={setIsNewData}
+              setIsAutoPopulateData={setIsAutoPopulateData}
+              newDataMessage="Create New Pickup Address"
+              setInputData={resetInputFields}
+              initialState={initialState}
+            /> */}
+          {/* </div> */}
+
+          <div>
+            <CustomInputBox
+              label="Name"
+              value={deliveryAddress?.contact?.name}
+              // onChange={() => {}}
+              onChange={handleTextInputChange}
+              name="name"
+            />
+            {validationErrors?.name && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="info" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {validationErrors?.name}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex gap-x-4 mt-1">
+            <div className="flex-3">
+              <CustomDropDown
+                value={deliveryAddress?.contact?.mobileNoCode}
+                onChange={(value: any) =>
+                  handleDropdownChange("mobileNoCode", value)
+                }
+                options={[
+                  {
+                    value: "IN",
+                    label: "+91",
+                  },
+                  {
+                    value: "CA",
+                    label: "+1",
+                  },
+                  {
+                    value: "AE",
+                    label: "+971",
+                  },
+                  {
+                    value: "GB",
+                    label: "+44",
+                  },
+                  {
+                    value: "US",
+                    label: "+1",
+                  },
+                ]}
+                heading="country code"
+              />
+            </div>
+            <div className="flex-1">
+              <CustomInputBox
+                label="Mobile Number"
+                value={deliveryAddress?.contact?.mobileNo.toString()}
+                inputMode="numeric"
+                maxLength={10}
+                // onChange={() => {}}
+                onChange={handleTextInputChange}
+                name="mobileNo"
+              />
+              {validationErrors?.mobileNo && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="info" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    {validationErrors?.mobileNo}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-x-4 mt-1">
+            <div className="flex-3">
+              <CustomDropDown
+                value={deliveryAddress?.contact?.alternateMobileNoCode}
+                onChange={(value: any) =>
+                  handleDropdownChange("alternateMobileNoCode", value)
+                }
+                options={[
+                  {
+                    value: "IN",
+                    label: "+91",
+                  },
+                  {
+                    value: "CA",
+                    label: "+1",
+                  },
+                  {
+                    value: "AE",
+                    label: "+971",
+                  },
+                  {
+                    value: "GB",
+                    label: "+44",
+                  },
+                  {
+                    value: "US",
+                    label: "+1",
+                  },
+                ]}
+                heading="country code"
+              />
+            </div>
+            <div className="flex-1">
+              <CustomInputBox
+                label="Alternate Mobile Number"
+                value={deliveryAddress?.contact?.alternateMobileNo.toString()}
+                inputMode="numeric"
+                maxLength={10}
+                // onChange={() => {}}
+                onChange={handleTextInputChange}
+                name="alternateMobileNo"
+              />
+              {validationErrors?.alternateMobileNo && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="info" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    {validationErrors?.alternateMobileNo}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div>
+            <CustomInputBox
+              label="Email ID"
+              value={deliveryAddress?.contact?.emailId}
+              onChange={handleTextInputChange}
+              name="emailId"
+            />
+            {validationErrors?.emailId && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="info" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {validationErrors?.emailId}
+                </span>
+              </div>
+            )}
+          </div>
+          <div>
+            <CustomInputBox
+              label="Address Line 1"
+              value={deliveryAddress?.deliveryAddress?.addressline1}
+              onChange={handleTextInputChange}
+              name="addressLine1"
+            />
+            {validationErrors?.landmark && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="info" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {validationErrors?.landmark}
+                </span>
+              </div>
+            )}
+          </div>
+          <div>
+            <CustomInputBox
+              label="Address Line 2"
+              value={deliveryAddress?.deliveryAddress?.addressLine2}
+              onChange={handleTextInputChange}
+              name="addressLine2"
+            />
+            {validationErrors?.landmark && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="info" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {validationErrors?.landmark}
+                </span>
+              </div>
+            )}
+          </div>
+          <div>
+            <CustomInputBox
+              label="Company Name"
+              value={deliveryAddress?.deliveryAddress?.companyName}
+              onChange={handleTextInputChange}
+              name="companyName"
+            />
+            {validationErrors?.landmark && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="info" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {validationErrors?.landmark}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-x-4">
+            <div className="flex-1">
+              <CustomInputBox
+                label="Zipcode"
+                value={deliveryAddress?.deliveryAddress?.zipcode}
+                // value={""}
+                // inputMode="numeric"
+                // maxLength={6}
+                // onChange={(e: any) => {
+                //   handlePincode(e.target.value);
+                //   handlePincodeChange(e);
+                // }}
+                onChange={handleTextInputChange}
+                name="zipcode"
+              />
+              {validationErrors?.pincode && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="info" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    {validationErrors?.pincode}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <CustomInputBox
+                label="Country"
+                name="country"
+                value={deliveryAddress?.deliveryAddress?.country}
+                // value={""}
+                className={` ${
+                  validationErrors?.sector && "!border-[#F35838]"
+                } `}
+                onChange={() => {}}
+              />
+              {validationErrors?.country && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="" width={16} height={16} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
+                    {validationErrors?.country}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex gap-x-4 justify-between">
+            <div className="flex-1">
+              <CustomInputBox
+                label="city"
+                value={deliveryAddress?.deliveryAddress?.city}
+                // value={""}
+                // inputMode="numeric"
+                // maxLength={6}
+                // onChange={(e: any) => {
+                //   handlePincode(e.target.value);
+                //   handlePincodeChange(e);
+                // }}
+                onChange={() => {}}
+                name="city"
+              />
+              {validationErrors?.pincode && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="info" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    {validationErrors?.pincode}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <CustomInputBox
+                label="state"
+                value={deliveryAddress?.deliveryAddress?.state}
+                // onChange={handlestateChange}
+                onChange={() => {}}
+                name="state"
+              />
+              {validationErrors?.landmark && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="info" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    {validationErrors?.landmark}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex justify-end gap-x-5 shadow-lg border-[1px] h-[68px] bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
+        style={{ width: "-webkit-fill-available" }}
+      >
+        <ServiceButton
+          text={"SAVE"}
+          // onClick={handleSave}
+          onClick={() => {}}
+          className={`bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+        />
+      </div>
+    </>
+  );
+};
+
+export default DeliveryDetailsInternational;
