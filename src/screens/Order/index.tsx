@@ -913,14 +913,14 @@ const Index = () => {
             showIcon={true}
             icon={AddOrderIcon}
           /> */}
-          <OneButton
+          {/* <OneButton
             text=" TEST ORDER"
             onClick={() => navigate("/orders/add-order/pickup")}
             variant="primary"
             showIcon={true}
             icon={AddOrderIcon}
             className="text-[14px] font-semibold"
-          />
+          /> */}
         </div>
         {/* 
         <div
