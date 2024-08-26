@@ -100,7 +100,7 @@ const WalletRecharge = () => {
   // const [footer, setFooter] = useState(true);
   const [isLabelRightModal, setIsLabelRightModal] = useState(false);
   const [showNeft, setShowNeft] = useState(false);
-  const [walletValue, setWalletValue] = useState<any>(0);
+  const [walletValue, setWalletValue] = useState<any>("100");
   const [isEdit, setIsedit] = useState<any>();
   const [upiValue, setUpiValue] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
