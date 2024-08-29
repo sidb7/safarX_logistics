@@ -19,8 +19,14 @@ import CustomInputBox from "../../../components/Input/index";
 import "./style.css";
 import { isNumber } from "lodash";
 import OneButton from "../../../components/Button/OneButton";
+import TrackingIcon from "../../../assets/Track.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 const Tracking = () => {
+  const isMobileResponsive = ResponsiveState();
+
+  console.log("isMobileResponsive", isMobileResponsive);
+
   const [trackingState, setTrackingState] = useState<any>([]);
 
   const [openOrderDetails, setOpenOrderDetails] = useState<string | null>(null);
@@ -302,19 +308,19 @@ const Tracking = () => {
             <div className="relative border-l-[2px] mt-[2px]  border-l-[#80A7FF] border-dotted">
               <div className="w-3 h-3 bg-[#80A7FF] rounded-full absolute top-2 left-[-7px]"></div>
             </div>
-            <div className="py-2">
+            <div className="py-2 w-[240px]">
               <div className="text-xs font-Open font-medium  md:w-full ">
                 <p className="capitalize text-xs font-Open">
-                  {each?.message.toLowerCase()}
+                  {each?.message?.toLowerCase()}
                 </p>
               </div>
               <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full">
-                {each?.status.toLowerCase()}
+                {each?.status?.toLowerCase()}
               </p>
               <div className="flex gap-x-1">
                 <img src={Location} alt="" className="w-4 h-4" />
                 <p className="text-xs font-Open font-normal capitalize md:w-full  ">
-                  {each?.location.toLowerCase()}
+                  {each?.location?.toLowerCase()}
                 </p>
               </div>
             </div>
@@ -333,7 +339,11 @@ const Tracking = () => {
             <img className="w-40 mt-10" src={LARGE_LOGO} alt="Shipyaari" />
           </div>
           <div className="flex justify-center items-center py-4">
-            <div className="w-[50rem]">
+            <div
+              className={`${
+                isMobileResponsive?.isMobileScreen ? "w-[340px]" : "w-[50rem]"
+              }`}
+            >
               <div className="flex md:justify-center w-full">
                 <div className="w-full">
                   <div className="flex w-full">
@@ -344,10 +354,17 @@ const Tracking = () => {
                       onChange={(e) => setTrackingNo(e.target.value)}
                     />
                     <OneButton
-                      text="Track Order"
-                      className=" ml-4 p-6 mt-1"
+                      text={`${
+                        isMobileResponsive?.isMobileScreen ? "" : "Track Order"
+                      }`}
+                      className="ml-2 p-6 mt-1"
                       onClick={() => handleTrackOrderClick()}
                       variant="primary"
+                      showIcon={
+                        isMobileResponsive?.isMobileScreen ? true : false
+                      }
+                      icon={TrackingIcon}
+                      iconClass="!w-8 !h-8 ml-2 mr-0"
                     />
                     {/* <CustomButton
                       text="Track Order"
@@ -381,7 +398,7 @@ const Tracking = () => {
                                     <div className="border-l-[12px] md:border-l-[24px]  border-l-[#80A7FF] py-4 px-2 md:px-5 rounded-lg">
                                       {/*delhivery details */}
                                       <>
-                                        <div className="flex flex-col md:flex-row justify-between gap-y-1 md:gap-y-0">
+                                        <div className="flex flex-col md:flex-row justify-between gap-y-1s md:gap-y-0">
                                           <img
                                             src={
                                               isMasked
@@ -391,8 +408,20 @@ const Tracking = () => {
                                             alt=""
                                             className="w-20"
                                           />
-                                          <div className="flex flex-col">
-                                            <span className="text-[12px] font-Open leading-[16px]">
+                                          <div
+                                            className={`${
+                                              isMobileResponsive?.isMobileScreen
+                                                ? "flex flex-col"
+                                                : "flex"
+                                            }`}
+                                          >
+                                            <span
+                                              className={`text-[12px] font-Open leading-[16px] font-extrabold ${
+                                                isMobileResponsive?.isMobileScreen
+                                                  ? "mt-2"
+                                                  : "mt-[1.1px]"
+                                              }`}
+                                            >
                                               Status:
                                             </span>
                                             <span className="font-bold text-[14px]">
@@ -407,13 +436,18 @@ const Tracking = () => {
                                               ?.EDD === undefined ? (
                                               ""
                                             ) : (
-                                              <p className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
-                                                <span className="text-[12px] font-semibold font-Open leading-[16px]">
-                                                  EDD:{" "}
-                                                </span>
-
-                                                {edd}
-                                              </p>
+                                              <div
+                                                className={` ${
+                                                  isMobileResponsive?.isMobileScreen
+                                                    ? "flex flex-col"
+                                                    : "flex items-center"
+                                                }  gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap `}
+                                              >
+                                                <div className="text-[12px] font-semibold font-Open leading-[16px]">
+                                                  EDD:
+                                                </div>
+                                                <div>{edd}</div>
+                                              </div>
                                             )}
                                             {
                                               //commented as changed the key of the updated time
@@ -427,17 +461,29 @@ const Tracking = () => {
                                                 //   ?.EDD === undefined
                                                 ""
                                               ) : (
-                                                <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
-                                                  <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  md:items-center">
+                                                <div className="flex  md:flex-row gap-x-2 my-0 md:my-0">
+                                                  <div className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  md:items-center">
                                                     Last Update:
-                                                    <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
-                                                      <span>
-                                                        {lastUpdate.hours +
-                                                          " |"}
-                                                      </span>
-                                                      <span>
+                                                    <div
+                                                      className={`${
+                                                        isMobileResponsive?.isMobileScreen
+                                                          ? "flex-col"
+                                                          : "flex"
+                                                      } gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center`}
+                                                    >
+                                                      {isMobileResponsive?.isMobileScreen ? (
+                                                        <div>
+                                                          {lastUpdate.hours}
+                                                        </div>
+                                                      ) : (
+                                                        <div>
+                                                          {lastUpdate.hours +
+                                                            " |"}
+                                                        </div>
+                                                      )}
+                                                      <div>
                                                         {lastUpdate.date}
-                                                      </span>
+                                                      </div>
                                                       {/* <p className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
                                                       {
                                                         trackingState[0]
@@ -445,7 +491,7 @@ const Tracking = () => {
                                                       }
                                                     </p> */}
                                                     </div>
-                                                  </p>
+                                                  </div>
                                                 </div>
                                               )
                                             }
@@ -454,7 +500,13 @@ const Tracking = () => {
 
                                         <div className="flex justify-between pt-2">
                                           <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
-                                            <p className="text-xs font-normal font-Open flex gap-x-1">
+                                            <p
+                                              className={`${
+                                                isMobileResponsive?.isMobileScreen
+                                                  ? "mt-1"
+                                                  : "mt-4"
+                                              } text-xs font-bold font-Open flex gap-x-1`}
+                                            >
                                               Tracking ID:
                                               <span className="font-bold font-Open text-[#004EFF]">
                                                 {each?.awb}
@@ -475,7 +527,7 @@ const Tracking = () => {
                                               </div>
                                             )}
 
-                                            <p className="text-xs font-normal font-Open flex gap-x-1">
+                                            <p className="text-xs font-bold font-Open flex gap-x-1">
                                               Order ID:
                                               <span className="font-bold font-Open text-[#004EFF]">
                                                 {each?.otherDetails?.orderNumber
