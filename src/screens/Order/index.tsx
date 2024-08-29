@@ -276,6 +276,8 @@ const Index = () => {
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
 
+  const scrollRef: any = useRef(null);
+
   let thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -429,6 +431,15 @@ const Index = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  //Scrolling the orders data of the custom table
+  const handleScroll = (event: any) => {
+    if (scrollRef.current) {
+      event.preventDefault();
+      const scrollAmount = event.deltaY * 8;
+      scrollRef.current.scrollBy({ top: scrollAmount });
+    }
+  };
 
   const setInfoModalContentFunction = async (data: any) => {
     setInfoModalContent({
@@ -2154,6 +2165,23 @@ const Index = () => {
     }
   };
 
+  //for scrolling the customTable
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+
+    // Attach the wheel event listener, wheel event is the javascript
+    if (scrollElement) {
+      scrollElement.addEventListener("wheel", handleScroll);
+    }
+
+    // Clean up the event listener on component unmount
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener("wheel", handleScroll);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     (async () => {
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
@@ -2272,7 +2300,7 @@ const Index = () => {
           {!isLgScreen && MobileButtons()}
 
           <div className="px-4 md:pl-5 md:pr-6 h-[calc(100vh-80px)]">
-            <div className=" bg-white">
+            <div className="bg-white">
               <OrderStatus
                 filterId={filterId}
                 orders={orders}
@@ -2306,7 +2334,8 @@ const Index = () => {
             </div>
             <div
               // h-[calc(100%-150px)]
-              className="overflow-y-auto my-6 h-[calc(100%-180px)]"
+              ref={scrollRef}
+              className="overflow-y-auto my-0 h-[calc(100%-180px)] scroll-smooth"
               // style={{ border: "2px solid yellow" }}
             >
               {isLoading ? (
@@ -2366,14 +2395,17 @@ const Index = () => {
                       />
                     ) : (
                       <>
-                        <CustomTable
-                          data={orders || []}
-                          columns={columnHelper || []}
-                          setRowSelectedData={setSelectedRowData}
-                          sticky={isSticky}
-                        />
+                        <div>
+                          <CustomTable
+                            data={orders || []}
+                            columns={columnHelper || []}
+                            setRowSelectedData={setSelectedRowData}
+                            sticky={isSticky}
+                          />
+                        </div>
+                        {/* As this pagination should not scroll with the table */}
 
-                        {totalCount > 0 && (
+                        {/* {totalCount > 0 && (
                           <Pagination
                             totalItems={totalCount}
                             itemsPerPageOptions={[10, 50, 100]}
@@ -2381,7 +2413,7 @@ const Index = () => {
                             onItemsPerPageChange={onPerPageItemChange}
                             initialItemsPerPage={itemsPerPage}
                           />
-                        )}
+                        )} */}
                       </>
                     )
                   ) : (
@@ -2404,6 +2436,18 @@ const Index = () => {
                     </div>
                   )}
                 </div>
+              )}
+            </div>
+            <div>
+              {totalCount > 0 && (
+                <Pagination
+                  totalItems={totalCount}
+                  itemsPerPageOptions={[10, 50, 100]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  initialItemsPerPage={itemsPerPage}
+                  className="pb-6"
+                />
               )}
             </div>
           </div>
