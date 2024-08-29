@@ -167,8 +167,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
 
   const setScrollIndex = (id: number) => {
-    // handleTabChange(id);
     const tabName = statusData[id].value;
+    console.log("tabName", tabName);
     navigate(`/orders/view-orders?activeTab=${tabName?.toLowerCase()}`);
   };
 
@@ -501,7 +501,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             });
           }
         }
-        // handleTabChange(1);
+
         break;
       }
       case "BOOKED":
@@ -1146,117 +1146,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setTotalcount(orderCount || 0);
   };
 
-  // const getErrors = async () => {
-  //   setIsErrorListLoading(true);
-  //   const { data } = await POST(GET_ORDER_ERRORS);
-  //   if (data?.status) {
-  //     const result = [];
-
-  //     for (const [key, value] of Object.entries(data?.data?.[0])) {
-  //       const currentObject = {
-  //         errorName: key,
-  //         value: value,
-  //       };
-  //       result.push(currentObject);
-  //     }
-  //     setErrorData(result);
-  //     setIsErrorListLoading(false);
-  //   } else {
-  //     setIsErrorListLoading(false);
-  //   }
-  // };
-
-  // function getObjectWithIsActiveTrue(data: any, name: any) {
-  //   const tempArrTwo = filterPayLoad?.filterArrTwo;
-  //   const tempArrOne = filterPayLoad?.filterArrOne;
-
-  //   const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
-  //     const index = arr.findIndex(
-  //       (findArr: any) => Object.keys(findArr)[0] === key
-  //     );
-
-  //     if (index > -1) {
-  //       arr[index][key][subKey] = data;
-  //     } else {
-  //       const newObj = { [key]: { [subKey]: [...data] } };
-  //       arr.push(newObj);
-  //     }
-  //   };
-
-  //   switch (name) {
-  //     case "Delivery Pincode":
-  //       updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
-  //       break;
-  //     case "Pickup Pincode":
-  //       updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
-  //       break;
-  //     case "PaymentType":
-  //       updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
-  //       break;
-  //     case "Partners":
-  //       updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
-  //       break;
-  //     case "Order Type":
-  //       updateFilterArr(tempArrOne, "orderType", "$in", data);
-  //       break;
-  //     case "Sources":
-  //       updateFilterArr(tempArrOne, "source", "$in", data);
-  //       break;
-  //     case "Seller Id":
-  //       updateFilterArr(tempArrOne, "sellerId", "$in", data);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  //   setFilterPayLoad({
-  //     ...filterPayLoad,
-  //     filterArrTwo: [...tempArrTwo],
-  //     filterArrOne: [...tempArrOne],
-  //   });
-  // }
-
-  // const applyFilterforOrders = async () => {
-  //   try {
-  //     setIsFilterLoading(true);
-  //     let payload = {
-  //       skip: 0,
-  //       limit: 10,
-  //       pageNo: 1,
-  //       sort: { _id: -1 },
-  //       currentStatus,
-  //       filterArrOne: filterPayLoad?.filterArrOne || [],
-  //       filterArrTwo: filterPayLoad?.filterArrTwo || [],
-  //     };
-  //     const { data } = await POST(GET_SELLER_ORDER, payload);
-  //     const { OrderData, orderCount } = data?.data?.[0];
-  //     setStatusCount("", currentStatus, orderCount);
-  //     setTotalcount(orderCount ? orderCount : 0);
-
-  //     console.log("filterState----------------1 filterApi", filterState);
-
-  //     if (data?.status) {
-  //       setIsFilterLoading(false);
-  //       setOrders(OrderData);
-  //       setFilterModal(false);
-  //     } else {
-  //       setIsFilterLoading(false);
-  //       setFilterModal(false);
-  //       throw new Error(data?.meesage);
-  //     }
-  //   } catch (error: any) {
-  //     setIsFilterLoading(false);
-  //     toast.error(error);
-  //     return false;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (filterState?.menu?.length > 0) {
-  //     getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
-  //   }
-  // }, [filterState]);
-
   return (
     <div className="flex flex-col pt-7">
       <div className="flex font-medium customScroll whitespace-nowrap mt-2 ">
@@ -1298,9 +1187,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center text-[22px] ">
                 {currentStatus === "DRAFT" && `${draftOrderCount.all} Orders`}
-                {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
-              00 Order
-              </span> */}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}
@@ -1312,69 +1198,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           {currentStatus === "DRAFT" && filterComponent("")}
         </>
       )}
-
-      {/* filter modal */}
-
-      {/* {isLgScreen && (
-        <RightSideModal
-          isOpen={filterModal}
-          onClose={() => {
-            setFilterModal(false);
-          }}
-          className="w-[30%] !justify-between !items-stretch !hidden lg:!block"
-        >
-          <div>
-            <div className="flex justify-between mt-5 mx-5">
-              <div>
-                <p className="text-2xl font-normal">Filter</p>
-              </div>
-              <div>
-                <img
-                  src={CloseIcon}
-                  alt="close button"
-                  onClick={() => {
-                    setFilterModal(false);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="mx-5 ">
-              <FilterScreen
-                filterState={filterState}
-                setFilterState={setFilterState}
-                setFilterPayLoad={setFilterPayLoad}
-                filterPayLoad={filterPayLoad}
-                filterModal={filterModal}
-              />
-            </div>
-
-            <div
-              className="hidden lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
-              style={{ width: "-webkit-fill-available" }}
-            >
-              <ServiceButton
-                text="RESET ALL"
-                onClick={() => {
-                  setFilterModal(false);
-                  handleTabChange(statusId);
-                }}
-                className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-              />
-              {isFilterLoading ? (
-                <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
-                  <Spinner />
-                </div>
-              ) : (
-                <ServiceButton
-                  text="APPLY"
-                  onClick={applyFilterforOrders}
-                  className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-                />
-              )}
-            </div>
-          </div>
-        </RightSideModal>
-      )} */}
     </div>
   );
 };
