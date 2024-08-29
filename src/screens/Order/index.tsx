@@ -213,21 +213,11 @@ const tabs = [
     value: "PICKED UP",
     orderNumber: 0,
   },
-  // {
-  //   statusName: "Picked Up",
-  //   value: "PICKED UP",
-  //   orderNumber: 0,
-  // },
   {
     statusName: "In Transit",
     value: "IN TRANSIT",
     orderNumber: 0,
   },
-  // {
-  //   statusName: "Destination City",
-  //   value: "DESTINATION CITY",
-  //   orderNumber: 0,
-  // },
   {
     statusName: "Out For Delivery",
     value: "OUT OF DELIVERY",
@@ -251,6 +241,11 @@ const tabs = [
   {
     statusName: "Cancelled",
     value: "CANCELLED",
+    orderNumber: 0,
+  },
+  {
+    statusName: "All Orders",
+    value: "ALL",
     orderNumber: 0,
   },
 ];
@@ -1548,13 +1543,11 @@ const Index = () => {
       const { data } = await POST(GET_STATUS_COUNT, payload);
       allOrdersCount = data?.data?.[0]?.count;
       const { status: isStatus, data: statusList } = data;
+      console.log("isStatus");
       if (isStatus) {
-        // return data?.data;
-
         if (dateFilter) {
           setStatusCount(statusList, currentStatus, undefined, dateFilter);
         }
-
         setStatusCount(statusList, currentStatus);
       }
     } catch (error) {
