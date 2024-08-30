@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
@@ -8,14 +8,162 @@ import shareIcon from "../../../assets/ShareIcon.svg";
 interface IDocumentCardProps {}
 
 const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
+  const [userData, setUserData] = useState<any>();
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
   let userInfo = localStorage.getItem("userInfo") as any;
   userInfo = JSON.parse(userInfo);
-  console.log("🚀 ~ userInfo:", userInfo?.businessType);
 
+  const renderIndividualDocument = () => {
+    return (
+      <>
+        <div className="flex flex-col p-5">
+          <LabelContainer
+            label="Sign With Stamp"
+            info={`Signature.pdf`}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+            className="text-[12px] xl:whitespace-nowrap"
+          />
+        </div>
+      </>
+    );
+  };
+
+  const renderCompanyDocument = () => {
+    return (
+      <>
+        <div
+          className={`flex flex-col  ${
+            isItLgScreen ? "border-l-[1px] mt-5 px-5" : "mt-5 px-5"
+          }`}
+        >
+          <LabelContainer
+            label="Certificate of Incorporation"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={"Incorporation.pdf"}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+
+        <div className="flex flex-col mt-5 px-5 border-l-[1px]">
+          <LabelContainer
+            label="AD Code"
+            className="text-[12px]"
+            info={"123356"}
+            classNameInfo="!text-[14px]"
+          />
+        </div>
+
+        <div
+          className={`flex flex-col  ${
+            isItLgScreen ? "border-l-[1px] mt-5 px-5" : "mt-5 px-5"
+          }`}
+        >
+          <LabelContainer
+            label="AD File"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={"AD.file.pdf"}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+
+        <div className="flex flex-col my-5 px-5 border-l-[1px]">
+          <LabelContainer
+            label="IEC Code"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={"987652723322"}
+            classNameInfo="!text-[14px]"
+          />
+        </div>
+
+        <div
+          className={`flex flex-col  ${
+            isItLgScreen ? "border-l-[1px] mt-5 px-5" : "mb-5 px-5"
+          }`}
+        >
+          <LabelContainer
+            label="IEC File"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={"file.pdf"}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+
+        <div className="flex flex-col mb-5 px-5 border-l-[1px]">
+          <LabelContainer
+            label="Sign With Stamp"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={"signature.pdf"}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+
+        <div
+          className={`flex flex-col  ${
+            isItLgScreen ? "border-l-[1px] mb-5 px-5" : "mb-5 px-5"
+          }`}
+        >
+          <LabelContainer
+            label="Certificate of Registration"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={`registration.pdf`}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+
+        <div className="flex flex-col mb-5 px-5 border-l-[1px]">
+          <LabelContainer
+            label="Board Resolution of Authority"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={`authority.pdf`}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+
+        <div
+          className={`flex flex-col  ${
+            isItLgScreen ? "border-l-[1px] mb-5 px-5" : "mb-5 px-5"
+          }`}
+        >
+          <LabelContainer
+            label="Registered Office Address Proof"
+            className="text-[12px] xl:whitespace-nowrap"
+            info={`Address.pdf`}
+            classNameInfo="!text-[14px] !text-[#004EFF]"
+            viewIconVisible={true}
+          />
+        </div>
+      </>
+    );
+  };
+
+  const renderDocument = () => {
+    if (userInfo && userInfo?.businessType === "INDIVIDUAL") {
+      return renderIndividualDocument();
+    } else if (userInfo && userInfo?.businessType === "COMPANY") {
+      return renderCompanyDocument();
+    } else {
+      return <div>No documents available</div>;
+    }
+  };
+
+  useEffect(() => {
+    let data = localStorage.getItem("userInfo") as any;
+    data = JSON.parse(data);
+
+    if (data !== "" && data !== null) {
+      setUserData(data);
+    }
+  }, []);
   return (
     <>
       <div
@@ -34,175 +182,32 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
               src={EditIcon}
               alt=""
               className="mr-4 cursor-pointer"
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/profile/document", { state: { data: userData } });
+              }}
             />
           </div>
         </div>
 
-        {!isItLgScreen ? (
+        {/* {!isItLgScreen ? (
           <div>
             <div className="grid grid-cols-2 ml-4 mt-2">
-              <div className="flex flex-col">
-                <LabelContainer label="Full Name" info={"John Doe"} />
-              </div>
-
-              {/* <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <LabelContainer
-                label="Last Name"
-                className={"ml-3"}
-                classNameInfo="ml-3"
-                info={KycDetails?.lastName}
-              />
-            </div> */}
-            </div>
-
-            <div className="grid grid-cols-2 ml-4 mt-2">
-              <div className="flex flex-col">
-                <LabelContainer label="Aadhar Details" info={"123456789123"} />
-              </div>
-
-              <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-                <LabelContainer
-                  label="GST Details"
-                  className={"ml-3"}
-                  info={"123456789123"}
-                  classNameInfo="ml-3"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 ml-4 mt-2">
-              <div className="flex flex-col">
-                <LabelContainer label="PAN Details" info={"123456789123"} />
-              </div>
-
-              <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-                <LabelContainer
-                  label="Plot no, Sector"
-                  info={"123456789123"}
-                  className={"ml-3"}
-                  classNameInfo="ml-3"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 ml-4 mt-2">
-              <div className="flex flex-col">
-                <LabelContainer label="Locality, Landmark" info={"locality"} />
-              </div>
-
-              <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-                <LabelContainer
-                  label="City, Pin code"
-                  info={`${"Delhi"}, ${"110092"} `}
-                  className={"ml-3"}
-                  classNameInfo="ml-3"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 ml-4 my-2">
-              <div className="flex flex-col">
-                <LabelContainer
-                  label="State, Country"
-                  info={`${"state"} , ${"country"}`}
-                />
-              </div>
-            </div>
+            {userInfo?.businessType === "INDIVIDUAL" ? renderIndividualDocument() : renderCompanyDocument()}
           </div>
         ) : (
           <div className="grid grid-cols-4 gap-y-8">
-            <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="First Name"
-                className="text-[12px]"
-                info={"John Doe"}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            {/* <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-            <LabelContainer
-              label="Last Name"
-              className="text-[12px]"
-              info={KycDetails?.lastName}
-              classNameInfo="!text-[14px]"
-            />
-          </div> */}
-
-            {/* <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-            <LabelContainer
-              label="Middle Name"
-              className="text-[12px]"
-              info={KycDetails?.middleName}
-              classNameInfo="!text-[14px]"
-            />
-          </div> */}
-
-            <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="GST Details"
-                className="text-[12px]"
-                info={""}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="Aadhar Details"
-                className="text-[12px]"
-                info={"123456789123"}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="PAN Details"
-                className="text-[12px]"
-                info={""}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            <div className="flex flex-col mb-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="Plot no, Sector"
-                className="text-[12px]"
-                info={""}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            <div className="flex flex-col mb-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="Locality, Landmark"
-                className="text-[12px]"
-                info={""}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            <div className="flex flex-col mb-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="City, Pin code"
-                className="text-[12px]"
-                info={`${"city"}, ${"pincode"} `}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
-
-            <div className="flex flex-col mb-5 px-5 border-l-[1px]">
-              <LabelContainer
-                label="State, Country"
-                className="text-[12px]"
-                info={`${"state"} , ${"country"}`}
-                classNameInfo="!text-[14px]"
-              />
-            </div>
+            {userInfo?.businessType === "INDIVIDUAL" ? renderIndividualDocument() : renderCompanyDocument()}
           </div>
-        )}
+        )} */}
+        <div
+          className={`${
+            isItLgScreen
+              ? "grid grid-cols-5 gap-y-8"
+              : "grid grid-cols-2 ml-4 mt-2"
+          }`}
+        >
+          {renderDocument()}
+        </div>
       </div>
     </>
   );

@@ -35,7 +35,7 @@ const SelfDeclarationContent: React.FunctionComponent<
               <p className="font-Open font-semibold text-sm leading-4 text-[#323232] ">
                 Is Commodity under 3C applicable?
               </p>
-              <img
+              {/* <img
                 src={InfoIcon}
                 alt="tooltip-icon"
                 className={`${"cursor-pointer"}`}
@@ -58,7 +58,7 @@ const SelfDeclarationContent: React.FunctionComponent<
                   letterSpacing: "1px",
                   textTransform: "capitalize",
                 }}
-              />
+              /> */}
             </div>
             <div className="flex flex-2 gap-x-4">
               <div className=" flex justify-start items-center h-fit">
@@ -97,9 +97,9 @@ const SelfDeclarationContent: React.FunctionComponent<
           <div className="flex">
             <div className="flex flex-1 gap-x-1 items-center ">
               <p className="font-Open font-semibold text-sm leading-4 text-[#323232] ">
-                Is MEIS applicable?
+                Is MEIS (Merchandise Exports from India Scheme) applicable?
               </p>
-              <img
+              {/* <img
                 src={InfoIcon}
                 alt="tooltip-icon"
                 className={`${"cursor-pointer"}`}
@@ -122,7 +122,7 @@ const SelfDeclarationContent: React.FunctionComponent<
                   letterSpacing: "1px",
                   textTransform: "capitalize",
                 }}
-              />
+              /> */}
             </div>
             <div className="flex flex-2 gap-x-4">
               <div className=" flex justify-start items-center h-fit">
@@ -163,7 +163,7 @@ const SelfDeclarationContent: React.FunctionComponent<
               <p className="font-Open font-semibold text-sm leading-4 text-[#323232] ">
                 Govt Or Non Govt
               </p>
-              <img
+              {/* <img
                 src={InfoIcon}
                 alt="tooltip-icon"
                 className={`${"cursor-pointer"}`}
@@ -186,7 +186,7 @@ const SelfDeclarationContent: React.FunctionComponent<
                   letterSpacing: "1px",
                   textTransform: "capitalize",
                 }}
-              />
+              /> */}
             </div>
             <div className="flex flex-2 gap-x-4">
               <div className=" flex justify-start items-center h-fit">
@@ -227,7 +227,7 @@ const SelfDeclarationContent: React.FunctionComponent<
               <p className="font-Open font-semibold text-sm leading-4 text-[#323232] ">
                 IGST Payment Status
               </p>
-              <img
+              {/* <img
                 src={InfoIcon}
                 alt="tooltip-icon"
                 className={`${"cursor-pointer"}`}
@@ -250,7 +250,7 @@ const SelfDeclarationContent: React.FunctionComponent<
                   letterSpacing: "1px",
                   textTransform: "capitalize",
                 }}
-              />
+              /> */}
             </div>
             <div>
               <CustomDropDown
@@ -280,7 +280,7 @@ const SelfDeclarationContent: React.FunctionComponent<
               <p className="font-Open font-semibold text-sm leading-4 text-[#323232] ">
                 International Commercial Terms
               </p>
-              <img
+              {/* <img
                 src={InfoIcon}
                 alt="tooltip-icon"
                 className={`${"cursor-pointer"}`}
@@ -303,7 +303,7 @@ const SelfDeclarationContent: React.FunctionComponent<
                   letterSpacing: "1px",
                   textTransform: "capitalize",
                 }}
-              />
+              /> */}
             </div>
             <div>
               <CustomDropDown

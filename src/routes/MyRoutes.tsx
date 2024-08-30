@@ -172,6 +172,7 @@ import Rules from "../screens/Order/Rules";
 import ChangePasswordv2 from "../screens/Auth/PasswordChange";
 import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
 import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
+import EditDocuments from "../screens/Profile/DocumentsForInternational/editDocuments";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -714,6 +715,14 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <EditProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/document"
+            element={
+              <ProtectedRoute>
+                <EditDocuments />
               </ProtectedRoute>
             }
           />

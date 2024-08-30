@@ -23,7 +23,7 @@ const CustomUploadSinglePage: React.FunctionComponent<
   showUploadText,
 }) => {
   const [fileName, setFileName] = useState<string | null>(null);
-  console.log("🚀 ~ fileName:", fileName);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = useCallback((event: any) => {
@@ -84,10 +84,10 @@ const CustomUploadSinglePage: React.FunctionComponent<
   return (
     <>
       <div
-        className={`p-3 relative flex justify-between border-[1px] rounded-[4px] border-[#A4A4A4] cursor-pointer`}
+        className={`p-3 relative flex justify-between border-[1px] rounded-[4px] border-[#A4A4A4] cursor-pointer !h-[48px]`}
       >
         <div className="flex gap-x-2  text-center items-center">
-          <img src={uploadImgPre} alt="" />
+          {/* <img src={uploadImgPre} alt="" /> */}
           <p className="text-[#777777] font-Open font-normal text-xs leading-4 text-center items-center">
             {fileName || placeholder}
           </p>{" "}
@@ -125,7 +125,7 @@ const CustomUploadSinglePage: React.FunctionComponent<
           {/* <div>UPLOAD</div> */}
           <div>
             <input
-              className="absolute cursor-pointer left-0 opacity-0 top-0 h-[48px]"
+              className="absolute cursor-pointer left-0 opacity-0 top-0 "
               type="file"
               accept="image/jpg, image/jpeg, image/png, application/pdf,"
               multiple
