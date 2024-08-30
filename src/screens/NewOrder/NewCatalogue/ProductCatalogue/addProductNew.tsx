@@ -207,7 +207,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
         wrapperClassName="rounded customScroll"
         isOpen={isProductModal}
         onClose={() => setProductModal(false)}
-        className=" w-full md:w-[52%] h-screen rounded-l-xl"
+        className=" w-full md:w-[90%] lg:w-[70%] xl:w-[52%] h-screen rounded-l-xl"
       >
         <>
           <div className="flex justify-between items-center mr-5">
@@ -252,7 +252,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 py-4 gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 py-4 gap-5">
                       <CustomInputBox
                         label="Product name"
                         name="name"
@@ -277,6 +277,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                           )
                         }
                       />
+                      <div className="grid grid-cols-2 gap-2 md:gap-5">
                       <CustomInputBox
                         label="Product Price"
                         name="unitPrice"
@@ -319,6 +320,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                           }
                         }}
                       />
+                      </div>
                       <div className="flex gap-x-3 w-full">
                         <CustomInputBox
                           label="Length (CM)"
@@ -409,6 +411,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                           name="divisor"
                         />
                       </div>
+                      <div className="grid grid-cols-2 gap-2 md:gap-5">
                       <CustomInputBox
                         label="Weight (Kg)"
                         name="deadWeight"
@@ -442,6 +445,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                           )
                         }
                       />
+                      </div>
 
                       {/* <div className="grid col-span-2">
                         <InputWithFileUpload

@@ -639,7 +639,6 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/billing/cod"
             element={
@@ -665,7 +664,6 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/billing/credit-notes"
             element={

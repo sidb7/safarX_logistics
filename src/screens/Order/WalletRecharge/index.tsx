@@ -23,6 +23,7 @@ import { paymentState } from "../../../redux/reducers/paymentReducer";
 import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 import { useMediaQuery } from "react-responsive";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
+import walletIcon from "../../../assets/Group.svg";
 import CustomCenterModal from "../../../components/CustomModal/customCenterModal";
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
@@ -44,6 +45,8 @@ import {
   SELLER_WEB_URL,
   SELLER_URL,
   GET_WALLET_BALANCE,
+  GET_PROFILE_URL,
+  WALLET_RECHARGE_USING_NEFT,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -67,6 +70,9 @@ import JusPay from "../../../components/JusPay/juspay";
 import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import TransactionModalContent from "../WalletRecharge/transactions/index";
+import OneButton from "../../../components/Button/OneButton";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import doneIcon from "../../../assets/Done .svg";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -84,16 +90,17 @@ const WalletRecharge = () => {
     phpAmount: 0,
     blazeAmount: 0,
   });
-  const [payment, setPayment] = useState(false);
-  const [isPhonePeOpen, setIsPhonePeOpen] = useState(false);
-  const [modal, setModal] = useState(false);
-  // const [toast, setToast] = useState(false);
-  const [placeOrder, setPlaceOrder] = useState(true);
+
+  const [bankDetails, setBankDetails]: any = useState({});
+  const [loaderForRechargeWalletNeft, setLoaderForRechargeWalletNeft] =
+    useState<any>(false);
+  const [loaderForFetchBankDetails, setLoaderForFetchBankDetails] =
+    useState<any>(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   // const [footer, setFooter] = useState(true);
   const [isLabelRightModal, setIsLabelRightModal] = useState(false);
-  const [isPostPaymentModal, setIsPostPaymentModal] = useState(false);
-  const [walletValue, setWalletValue] = useState<any>(0);
+  const [showNeft, setShowNeft] = useState(false);
+  const [walletValue, setWalletValue] = useState<any>("100");
   const [isEdit, setIsedit] = useState<any>();
   const [upiValue, setUpiValue] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
@@ -101,10 +108,11 @@ const WalletRecharge = () => {
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const [loading, setLoading] = useState(false);
   let myInterval: number | any;
-  //const [Razorpay] = useRazorpay();
   const userDetails = useSelector((state: any) => state.signin);
   const [isDisabled, setIsDisabled] = useState(true);
   const [openRightModal, setOpenRightModal] = useState(false);
+  const [showNeftSuccessFullMsg, setShowNeftSuccessFullMsg] = useState(false);
+
   const { isLgScreen } = ResponsiveState();
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -112,6 +120,11 @@ const WalletRecharge = () => {
     query: "(min-width: 1024px)",
   });
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
+  const [rechargeInfo, setRechargeInfo] = useState<any>({
+    amount: 0,
+    utrNo: "",
+  });
+
   const [dataFromSession, setDataFromSession] = useState<any>();
   const [balanceZeroOrNegative, setBalanceZeroOrNegative] = useState(false);
   console.log(
@@ -250,7 +263,6 @@ const WalletRecharge = () => {
 
   const placeOrderApi = async () => {
     const { data } = await POST(PLACE_ORDER, {});
-
     if (data?.success) {
       // toast.success(data?.message);
       setIsLabelRightModal(true);
@@ -386,6 +398,29 @@ const WalletRecharge = () => {
     }
   };
 
+  const SubmitHandler = async () => {
+    if (rechargeInfo?.amount < 1000) {
+      toast.error("Amount should be equal or greater than 1000");
+      return;
+    }
+
+    const payLoad = {
+      utrNo: rechargeInfo?.utrNo,
+      amount: +rechargeInfo?.amount,
+    };
+
+    setLoaderForRechargeWalletNeft(true);
+
+    const { data } = await POST(WALLET_RECHARGE_USING_NEFT, payLoad);
+    if (data?.success) {
+      setShowNeftSuccessFullMsg(true);
+      setLoaderForRechargeWalletNeft(false);
+    } else {
+      toast.error(data?.message);
+      setLoaderForRechargeWalletNeft(false);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -427,30 +462,28 @@ const WalletRecharge = () => {
     } else setIsDisabled(true);
   }, [walletValue]);
 
-  // useEffect(() => {
-  //   console.log(
-  //     "log for the before the function runs exactly the way it was intended"
-  //   );
+  const getbankDetailsOfSeller = async () => {
+    setLoaderForFetchBankDetails(true);
+    const { data } = await POST(GET_PROFILE_URL, {});
+    if (data?.success) {
+      setBankDetails(data?.data?.[0]?.bankDetails);
+      setLoaderForFetchBankDetails(false);
+    } else {
+      toast.error(data?.message);
+      setLoaderForFetchBankDetails(false);
+    }
+  };
 
-  //   const fetchData = async () => {
-  //     await userDetailsFromSession();
-  //     setUserDetailsLoaded(true);
-  //   };
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    if (showNeft) getbankDetailsOfSeller();
+  }, [showNeft]);
 
-  // useEffect(() => {
-  //   if (userDetailsLoaded) {
-  //     getWalletBalance();
-  //   }
-  // }, [userDetailsLoaded]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await userDetailsFromSession();
-  //   };
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      await userDetailsFromSession();
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -538,7 +571,7 @@ const WalletRecharge = () => {
                 </p>
               </div>
             </div> */}
-            <div className="mx-5 ">
+            <div className="mx-5">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
                 <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
@@ -565,24 +598,28 @@ const WalletRecharge = () => {
                       onChange={(e) => setWalletValue(e.target.value)}
                     />
                   </p> */}
-                  <div className="flex gap-4">
-                    <CustomDropDown
-                      heading="Select Amount"
-                      value={walletValue}
-                      options={walletMenu}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLSelectElement>
-                      ) => {
-                        setWalletValue(event.target.value);
-                      }}
-                      wrapperClass="w-[200px]"
-                      selectClassName="text-[12px] mt-6"
-                    />
-                    <JusPay
-                      isDisabled={isDisabled}
-                      amount={walletValue}
-                      callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
-                    />
+                  <div className="flex">
+                    <div>
+                      <CustomDropDown
+                        heading="Select Amount"
+                        value={walletValue}
+                        options={walletMenu}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLSelectElement>
+                        ) => {
+                          setWalletValue(event.target.value);
+                        }}
+                        wrapperClass="w-[120px] md:w-[200px]"
+                        selectClassName="text-[12px] mt-6"
+                      />
+                    </div>
+                    <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
+                      <JusPay
+                        isDisabled={isDisabled}
+                        amount={walletValue}
+                        callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                      />
+                    </div>
                   </div>
 
                   {/* <JusPay
@@ -744,6 +781,135 @@ const WalletRecharge = () => {
               <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
                 Add money to wallet with COD
               </p>
+
+              <div className="max-w-[900px] mb-[20px] ">
+                <div className="flex items-center">
+                  <div>
+                    <Checkbox
+                      checkboxClassName="gap-2"
+                      className="w-[22px] cursor-pointer h-[22px]"
+                      checked={showNeft}
+                      onChange={() => {
+                        if (showNeft) {
+                          setShowNeft(false);
+                        } else {
+                          setShowNeft(true);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="">NEFT/IMPS/RTGS</div>
+                </div>
+                {showNeft && (
+                  <>
+                    <div>
+                      <div className="flex flex-col my-2 gap-y-1">
+                        <p className=" text-[12px] text-[#BBBBBB] lg:font-normal">
+                          {"("} For ₹ 1,000 or above ₹ 1,000 only {")"}
+                        </p>
+                        <p className=" text-[12px] text-[#BBBBBB] italic lg:font-normal">
+                          {"("} Note: NEFT/INPS transactions gets approved in
+                          maximum 24-48 hrs after review {")"}
+                        </p>
+                      </div>
+                      <div className="flex justify-between mb-4 gap-x-6">
+                        <div
+                          className={`flex-1 ${
+                            loaderForFetchBankDetails &&
+                            "flex flex-col items-center justify-center "
+                          } p-4 h-[150px] rounded-lg bg-[#FDF6EA] shadow-md`}
+                        >
+                          {loaderForFetchBankDetails ? (
+                            <div className="flex justify-center items-center">
+                              <Spinner />
+                            </div>
+                          ) : (
+                            <>
+                              <div className="font-bold font-Open">
+                                AVN Bussiness Solution Pvt Ltd
+                              </div>
+                              <div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>Bank : AXIS Bank </div>
+                                  {/* <div className="ml-1 "> AXIS Bank</div> */}
+                                </div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>A/C No : 922020042413467</div>{" "}
+                                  {/* <div> 922020042413467</div> */}
+                                </div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>Branch : Kandivali, Mumbai, MH.</div>
+                                  {/* <div>Kandivali, Mumbai, MH. </div> */}
+                                </div>
+                                <div className="font-Open text-[14px] gap-x-2 flex">
+                                  <div>IFSC Code : UTIB0000201</div>
+                                  {/* <div> UTIB0000201</div> */}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        <div className="flex-1 flex items-center justify-center w-[100%]">
+                          <div className="flex w-[100%] flex-col gap-y-6">
+                            <div className="flex-1">
+                              <CustomInputBox
+                                label="Enter Amount"
+                                value={rechargeInfo?.amount}
+                                name="amount"
+                                onChange={(e: any) => {
+                                  if (!isNaN(e.target.value)) {
+                                    setRechargeInfo((prevState: any) => {
+                                      return {
+                                        ...prevState,
+                                        amount: e.target.value,
+                                      };
+                                    });
+                                  }
+                                }}
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <CustomInputBox
+                                label="Enter Ref/UTR No"
+                                name=""
+                                value={rechargeInfo?.utrNo}
+                                onChange={(e: any) => {
+                                  setRechargeInfo((prevState: any) => {
+                                    return {
+                                      ...prevState,
+                                      utrNo: e.target.value,
+                                    };
+                                  });
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-4 flex justify-center ">
+                        <div className="max-w-[400px]">
+                          {loaderForRechargeWalletNeft ? (
+                            <div className="flex justify-center">
+                              <Spinner />
+                            </div>
+                          ) : (
+                            <OneButton
+                              onClick={SubmitHandler}
+                              text={`SUBMIT`}
+                              variant="primary"
+                              disabled={
+                                !(rechargeInfo?.utrNo && rechargeInfo?.amount)
+                              }
+                              className="!w-[128px] font-extrabold"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
 
               {/* Available Offers Mobile */}
               {/* temp commented  */}
@@ -1043,15 +1209,48 @@ const WalletRecharge = () => {
                   setOpenRightModal(false);
                 }}
               />
-              {/* <BrandingModalContent
-                setBrandingModal={() => {
-                  setBrandingModal(false);
-                }}
-                brandingModalDetails={brandingModalDetails}
-                setBrandingModalDetails={setBrandingModalDetails}
-                updateBrandingDetails={updateBrandingDetails}
-              /> */}
             </RightSideModal>
+
+            <CenterModal
+              isOpen={showNeftSuccessFullMsg}
+              onRequestClose={() => setShowNeftSuccessFullMsg(false)}
+              className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
+            >
+              <>
+                <button
+                  className="flex j w-[100%] justify-end mx-8 px-4 items-center"
+                  onClick={() => {
+                    setRechargeInfo({
+                      amount: 0,
+                      utrNo: "",
+                    });
+                    setShowNeftSuccessFullMsg(false);
+                  }}
+                >
+                  <img src={WebCrossIcon} alt="" />
+                </button>
+                <div className="flex flex-col justify-center items-center">
+                  <div className="flex j w-[120px] h-[80px] items-center">
+                    <img src={doneIcon} alt="" />
+                  </div>
+                  <div className="max-w-[400px] flex flex-col justify-center text-center">
+                    <div>Congratulation!</div>
+                    <div>UTR submitted of ₹ {+rechargeInfo?.amount}</div>
+                  </div>
+
+                  <div className="mt-5">
+                    <OneButton
+                      onClick={() => {
+                        navigate(`/wallet/transaction-history`);
+                      }}
+                      text={`GO TO Transaction History`}
+                      variant="primary"
+                      className="!w-[228px]"
+                    />
+                  </div>
+                </div>
+              </>
+            </CenterModal>
           </div>
         )
       ) : (

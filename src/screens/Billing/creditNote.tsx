@@ -45,33 +45,35 @@ const CreditNote: React.FunctionComponent<ICreditNoteProps> = (props) => {
     <>
       <div>
         <Breadcrum label="Billing" />
-        <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-          <div>
-            <ScrollNav
-              arrayData={arrayData}
-              showNumber={false}
-              setScrollIndex={setScrollIndex}
-              defaultIndexValue={2}
-            />
-          </div>
-          <div>
+        <div className="customScroll">
+          <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              <ScrollNav
+                arrayData={arrayData}
+                showNumber={false}
+                setScrollIndex={setScrollIndex}
+                defaultIndexValue={2}
+              />
+            </div>
+            <div>
+              <div>
+                {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mx-4">
-          <CreditNoteData />
+          <div className="mx-4">
+            <CreditNoteData />
+          </div>
         </div>
 
-        {totalItemCount > 0 && (
+        {/* {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
             itemsPerPageOptions={[10, 20, 30, 50]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
           />
-        )}
+        )} */}
       </div>
     </>
   );

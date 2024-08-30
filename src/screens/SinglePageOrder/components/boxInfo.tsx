@@ -38,6 +38,7 @@ function BoxInfo({
   setIsOpen,
   setSortServiciblity,
   showDownloadLebal,
+  setHighLightField,
 }: any) {
   const [allProducts, setAllProducts]: any = useState([]);
   const [codInfo, setCodInfo]: any = useState({
@@ -250,11 +251,29 @@ function BoxInfo({
                           state: { id: index, data: data },
                         });
                         setSortServiciblity("");
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
                       }}
                     >
                       <img src={editIcon} alt="" className="w-[22px]" />
                     </button>
-                    <button onClick={() => removeBox(index)}>
+                    <button
+                      onClick={() => {
+                        removeBox(index);
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
+                      }}
+                    >
                       <img src={deleteIcon} alt="" className="w-[22px]" />
                     </button>
                   </div>
@@ -280,6 +299,7 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
+                    isDisabled={true}
                     labelClassName={`!text-black !bg-[${
                       colors[index % colors.length]
                     }]`}
@@ -288,6 +308,13 @@ function BoxInfo({
                       if (!isNaN(e.target.value)) {
                         OnChangeHandler(e);
                       }
+                      setHighLightField({
+                        addressDetails: false,
+                        packageDetails: true,
+                        shippingDetails: false,
+                        orderDetails: false,
+                        pickupTimeDetails: false,
+                      });
                     }}
                   />
                 </div>
@@ -308,6 +335,13 @@ function BoxInfo({
                         if (!isNaN(e.target.value)) {
                           OnChangeHandler(e);
                         }
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
                       }}
                     />
                   </div>
@@ -317,12 +351,19 @@ function BoxInfo({
                   order?.orderType === "B2C" && (
                     <button
                       className="text-[#004EFF] font-bold font-Open"
-                      onClick={() =>
+                      onClick={() => {
                         setIsOpen({
                           state: { id: index, data: data },
                           isOpen: true,
-                        })
-                      }
+                        });
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
+                      }}
                     >
                       EWAY BILL
                     </button>
@@ -349,6 +390,13 @@ function BoxInfo({
                           state: { id: index, data: data?.products },
                         });
                         setSortServiciblity("");
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
                       }}
                     >
                       <img src={editIcon} alt="" className="w-[20px]" />
@@ -400,6 +448,13 @@ function BoxInfo({
                               onClick={() => {
                                 removeUnit(i);
                                 setInvoiceValueWithProductPrice();
+                                setHighLightField({
+                                  addressDetails: false,
+                                  packageDetails: true,
+                                  shippingDetails: false,
+                                  orderDetails: false,
+                                  pickupTimeDetails: false,
+                                });
                               }}
                               data-cy={`remove-unit-${i}`}
                             />
@@ -417,6 +472,13 @@ function BoxInfo({
                               onClick={() => {
                                 addUnit(i);
                                 setInvoiceValueWithProductPrice();
+                                setHighLightField({
+                                  addressDetails: false,
+                                  packageDetails: true,
+                                  shippingDetails: false,
+                                  orderDetails: false,
+                                  pickupTimeDetails: false,
+                                });
                               }}
                               data-cy={`add-unit-${i}`}
                             />
@@ -429,7 +491,16 @@ function BoxInfo({
                                 : "cursor-pointer"
                             } `}
                             data-cy={`delete-product-${i}`}
-                            onClick={() => removeProduct(index, i)}
+                            onClick={() => {
+                              removeProduct(index, i);
+                              setHighLightField({
+                                addressDetails: false,
+                                packageDetails: true,
+                                shippingDetails: false,
+                                orderDetails: false,
+                                pickupTimeDetails: false,
+                              });
+                            }}
                             disabled={showDownloadLebal}
                           >
                             <img
@@ -440,14 +511,6 @@ function BoxInfo({
                           </button>
                         </div>
                       </div>
-
-                      {/* {arr.length === 1
-                        ? "hue-rotate-60 opacity-40 !cursor-not-allowed"
-                        : ""} */}
-                      {/* ${arr.length === 1 ? "fill-gray-600" : ""} */}
-                      {/* {allProducts.length - 1 !== i && (
-                        <hr data-cy={`hr-${i}`} />
-                      )} */}
                     </div>
                   );
                 })}
@@ -462,6 +525,13 @@ function BoxInfo({
                   onClick={() => {
                     setProductModal({ isOpen: true, id: index });
                     setSortServiciblity("");
+                    setHighLightField({
+                      addressDetails: false,
+                      packageDetails: true,
+                      shippingDetails: false,
+                      orderDetails: false,
+                      pickupTimeDetails: false,
+                    });
                   }}
                 >
                   ADD PRODUCT

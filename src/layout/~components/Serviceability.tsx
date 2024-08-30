@@ -249,12 +249,11 @@ const Serviceability = (props: ITypeProps) => {
         );
       },
       cell: (info: any) => {
-        console.log("EDT_Epoch", info.row?.original?.EDT_Epoch);
+        console.log("EDT_Epoch", info.row?.original?.EDT);
+        // date_DD_MMM_YYYY_HH_MM(info.row?.original?.EDT);
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row?.original?.EDT_Epoch
-              ? date_DD_MMM_YYYY_HH_MM(info.row?.original?.EDT_Epoch)
-              : "---"}
+            {info.row?.original?.EDT ? info.row?.original?.EDT : "---"}
           </div>
         );
       },

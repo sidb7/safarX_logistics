@@ -213,21 +213,11 @@ const tabs = [
     value: "PICKED UP",
     orderNumber: 0,
   },
-  // {
-  //   statusName: "Picked Up",
-  //   value: "PICKED UP",
-  //   orderNumber: 0,
-  // },
   {
     statusName: "In Transit",
     value: "IN TRANSIT",
     orderNumber: 0,
   },
-  // {
-  //   statusName: "Destination City",
-  //   value: "DESTINATION CITY",
-  //   orderNumber: 0,
-  // },
   {
     statusName: "Out For Delivery",
     value: "OUT OF DELIVERY",
@@ -253,6 +243,11 @@ const tabs = [
     value: "CANCELLED",
     orderNumber: 0,
   },
+  {
+    statusName: "All Orders",
+    value: "ALL",
+    orderNumber: 0,
+  },
 ];
 
 const Index = () => {
@@ -275,6 +270,8 @@ const Index = () => {
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
+
+  const scrollRef: any = useRef(null);
 
   let thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -430,6 +427,15 @@ const Index = () => {
     };
   }, []);
 
+  //Scrolling the orders data of the custom table
+  const handleScroll = (event: any) => {
+    if (scrollRef.current) {
+      event.preventDefault();
+      const scrollAmount = event.deltaY * 8;
+      scrollRef.current.scrollBy({ top: scrollAmount });
+    }
+  };
+
   const setInfoModalContentFunction = async (data: any) => {
     setInfoModalContent({
       isOpen: true,
@@ -446,7 +452,6 @@ const Index = () => {
   };
 
   const setInfoReverseSummaryModalFunction = async (data: any) => {
-    console.log("🚀 ~ setInfoReverseSummaryModalFunction ~ data:", data);
     setInfoReverseSummaryModalContent({
       isOpen: true,
       data: data,
@@ -573,28 +578,6 @@ const Index = () => {
       <div>
         <div className="flex justify-end mb-4">
           <div className="">
-            {/* <DatePicker
-              selectsRange={true}
-              startDate={startDate}
-              endDate={endDate}
-              onChange={(update: any) => {
-                setDateRange(update);
-                if (update[0] === null && update[1] === null) {
-                  // Explicitly set startDate and endDate to null when cleared
-                  setStartDate(null);
-                  setEndDate(null);
-                  // fetchCodRemittanceData();
-                } else {
-                  // Update startDate and endDate based on the selected range
-                  setStartDate(update[0]);
-                  setEndDate(update[1]);
-                }
-              }}
-              isClearable={true}
-              placeholderText="Select From & To Date"
-              className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
-              dateFormat="dd/MM/yyyy"
-            /> */}
             <DatePicker
               selectsRange={true}
               startDate={startDate}
@@ -841,12 +824,12 @@ const Index = () => {
           toast.success("Sync In Progress", {
             className: "custom-toast-success",
           });
-          setTimeout(() => {
-            window.location.href = "/orders/view-orders?activeTab=draft";
-            window.onload = () => {
-              window.location.reload();
-            };
-          }, 18000);
+          // setTimeout(() => {
+          //   window.location.href = "/orders/view-orders?activeTab=draft";
+          //   window.onload = () => {
+          //     window.location.reload();
+          //   };
+          // }, 18000);
         }
       } else {
         // toast.error(data?.message || "Please Integrate A Channel First");
@@ -936,14 +919,14 @@ const Index = () => {
             showIcon={true}
             icon={AddOrderIcon}
           /> */}
-          <OneButton
+          {/* <OneButton
             text=" TEST ORDER"
             onClick={() => navigate("/orders/add-order/pickup")}
             variant="primary"
             showIcon={true}
             icon={AddOrderIcon}
             className="text-[14px] font-semibold"
-          />
+          /> */}
         </div>
         {/* 
         <div
@@ -1140,6 +1123,7 @@ const Index = () => {
     // let fileName = "";
     let awbs = {
       awbs: payload?.awbs,
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1151,27 +1135,50 @@ const Index = () => {
     };
 
     if (actionType === "download_label") {
-      const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
-        method: "POST",
-        headers: header,
-        body: JSON.stringify(awbs),
-      });
+      try {
+        const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+          method: "POST",
+          headers: header,
+          body: JSON.stringify(awbs),
+        });
+        console.log(data);
+        if (!data.ok) {
+          const contentType = data.headers.get("Content-Type");
 
-      const resdata: any = await data?.blob();
-      const blob = new Blob([resdata], { type: resdata?.type });
-      let filename: any;
-      if (resdata?.type === "image/png") {
-        filename = "Label_Report.png";
-      } else {
-        filename = "Label_Report.pdf";
+          // Check if the Content-Type indicates JSON
+          if (contentType && contentType.includes("application/json")) {
+            const jsonData = await data.json();
+            console.log("JSON Data:", jsonData);
+
+            if (!jsonData?.success) {
+              toast.error(jsonData?.message);
+            }
+          } else {
+            // Handle other types of responses or errors
+            toast.error("An unexpected error occurred.");
+          }
+
+          return; // Exit the function to avoid further processing
+        }
+
+        const resdata: any = await data?.blob();
+        const blob = new Blob([resdata], { type: resdata?.type });
+        let filename: any;
+        if (resdata?.type === "image/png") {
+          filename = "Label_Report.png";
+        } else {
+          filename = "Label_Report.pdf";
+        }
+
+        var url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        return true;
+      } catch (error) {
+        console.log(error);
       }
-
-      var url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      return true;
     } else {
       const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
         method: "POST",
@@ -1547,13 +1554,11 @@ const Index = () => {
       const { data } = await POST(GET_STATUS_COUNT, payload);
       allOrdersCount = data?.data?.[0]?.count;
       const { status: isStatus, data: statusList } = data;
+      console.log("isStatus");
       if (isStatus) {
-        // return data?.data;
-
         if (dateFilter) {
           setStatusCount(statusList, currentStatus, undefined, dateFilter);
         }
-
         setStatusCount(statusList, currentStatus);
       }
     } catch (error) {
@@ -1823,6 +1828,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1832,6 +1838,7 @@ const Index = () => {
       )}`,
       "Content-Type": "application/json",
     };
+
     const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
       method: "POST",
       headers: header,
@@ -1842,6 +1849,25 @@ const Index = () => {
       isLoading: false,
       identifier: "",
     });
+
+    if (!data.ok) {
+      const contentType = data.headers.get("Content-Type");
+
+      // Check if the Content-Type indicates JSON
+      if (contentType && contentType.includes("application/json")) {
+        const jsonData = await data.json();
+        console.log("JSON Data:", jsonData);
+
+        if (!jsonData?.success) {
+          toast.error(jsonData?.message);
+        }
+      } else {
+        // Handle other types of responses or errors
+        toast.error("An unexpected error occurred.");
+      }
+
+      return; // Exit the function to avoid further processing
+    }
 
     const resdata: any = await data.blob();
 
@@ -1882,6 +1908,7 @@ const Index = () => {
 
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
+      source: "WEBSITE",
     };
 
     let header = {
@@ -1901,6 +1928,25 @@ const Index = () => {
       isLoading: false,
       identifier: "",
     });
+
+    if (!data.ok) {
+      const contentType = data.headers.get("Content-Type");
+
+      // Check if the Content-Type indicates JSON
+      if (contentType && contentType.includes("application/json")) {
+        const jsonData = await data.json();
+        console.log("JSON Data:", jsonData);
+
+        if (!jsonData?.success) {
+          toast.error(jsonData?.message);
+        }
+      } else {
+        // Handle other types of responses or errors
+        toast.error("An unexpected error occurred.");
+      }
+
+      return; // Exit the function to avoid further processing
+    }
 
     const resdata: any = await data.blob();
 
@@ -2112,6 +2158,23 @@ const Index = () => {
     }
   };
 
+  //for scrolling the customTable
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+
+    // Attach the wheel event listener, wheel event is the javascript
+    if (scrollElement) {
+      scrollElement.addEventListener("wheel", handleScroll);
+    }
+
+    // Clean up the event listener on component unmount
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener("wheel", handleScroll);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     (async () => {
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
@@ -2140,6 +2203,18 @@ const Index = () => {
   useEffect(() => {
     if (channelReduxData?.length > 0) {
       setIsSyncModalLoading(false);
+      if (
+        channelReduxData?.[0]?.TotalOrderCount -
+          channelReduxData?.[0]?.syncedOrder <=
+        8
+      ) {
+        setTimeout(() => {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }, 4000);
+      }
     }
   }, [channelReduxData]);
 
@@ -2218,7 +2293,7 @@ const Index = () => {
           {!isLgScreen && MobileButtons()}
 
           <div className="px-4 md:pl-5 md:pr-6 h-[calc(100vh-80px)]">
-            <div className=" bg-white">
+            <div className="bg-white">
               <OrderStatus
                 filterId={filterId}
                 orders={orders}
@@ -2247,11 +2322,13 @@ const Index = () => {
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
+                isLoading={isLoading}
               />
             </div>
             <div
               // h-[calc(100%-150px)]
-              className="overflow-y-auto my-6 h-[calc(100%-180px)]"
+              ref={scrollRef}
+              className="overflow-y-auto my-0 h-[calc(100%-180px)] scroll-smooth"
               // style={{ border: "2px solid yellow" }}
             >
               {isLoading ? (
@@ -2311,22 +2388,25 @@ const Index = () => {
                       />
                     ) : (
                       <>
-                        <CustomTable
-                          data={orders || []}
-                          columns={columnHelper || []}
-                          setRowSelectedData={setSelectedRowData}
-                          sticky={isSticky}
-                        />
+                        <div>
+                          <CustomTable
+                            data={orders || []}
+                            columns={columnHelper || []}
+                            setRowSelectedData={setSelectedRowData}
+                            sticky={isSticky}
+                          />
+                        </div>
+                        {/* As this pagination should not scroll with the table */}
 
-                        {totalCount > 0 && (
+                        {/* {totalCount > 0 && (
                           <Pagination
                             totalItems={totalCount}
-                            itemsPerPageOptions={[10, 50, 100, 500, 1000]}
+                            itemsPerPageOptions={[10, 50, 100]}
                             onPageChange={onPageIndexChange}
                             onItemsPerPageChange={onPerPageItemChange}
                             initialItemsPerPage={itemsPerPage}
                           />
-                        )}
+                        )} */}
                       </>
                     )
                   ) : (
@@ -2349,6 +2429,18 @@ const Index = () => {
                     </div>
                   )}
                 </div>
+              )}
+            </div>
+            <div>
+              {totalCount > 0 && (
+                <Pagination
+                  totalItems={totalCount}
+                  itemsPerPageOptions={[10, 50, 100]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  initialItemsPerPage={itemsPerPage}
+                  className="pb-6"
+                />
               )}
             </div>
           </div>

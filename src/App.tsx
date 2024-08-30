@@ -27,6 +27,7 @@ import {
 // import { Integrations } from "@sentry/tracing";
 import * as Sentry from "@sentry/react";
 import "./styles/index.css";
+import MyWidget from "./Widget";
 
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter } from "react-router-dom";
@@ -386,17 +387,24 @@ const App = () => {
 
   return (
     <>
-      <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
-        <MyRoutes />
-        <CheckIsOnline />
-        <Toaster
-          position="top-center"
-          reverseOrder={true}
-          gutter={8}
-          containerClassName=""
-          containerStyle={{}}
-        />
-      </Sentry.ErrorBoundary>
+      <div className="relative  min-h-screen">
+        <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
+          <MyRoutes />
+
+          <CheckIsOnline />
+          {/* <div className="absolute bottom-6 right-6">
+            <MyWidget title="Help" content="" bgColor="bg-white" />
+          </div> */}
+
+          <Toaster
+            position="top-center"
+            reverseOrder={true}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
+          />
+        </Sentry.ErrorBoundary>
+      </div>
     </>
   );
 };

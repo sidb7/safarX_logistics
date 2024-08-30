@@ -172,7 +172,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           <img
             src={rightIcon}
             alt=""
-            className={`${imageClassName} absolute z-20  right-6  top-[30%] cursor-pointer w-[16px] h-[20px]`}
+            className={`${imageClassName} absolute z-15  right-6  top-[30%] cursor-pointer w-[16px] h-[20px]`}
             onClick={() => {
               setVisibility(!visibility);
               onClick();
