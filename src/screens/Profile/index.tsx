@@ -105,8 +105,8 @@ export const Profile = () => {
           <ProfileKycCard KycDetails={profileData?.kycDetails} />
 
           {/* documents  */}
-
-          <DocumentCard />
+          {/* code commented for international orders */}
+          {/* <DocumentCard /> */}
 
           <ProfileBankCard BankDetails={profileData?.bankDetails} />
           <ProfileBrandingDetails
