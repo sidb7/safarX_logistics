@@ -417,7 +417,7 @@ const BusinessType = (props: ITypeProps) => {
                         <CustomInputWithFileUpload
                           label="Upload logo"
                           className="font-Open "
-                          inputClassName="  lg:!w-[370px]"
+                          inputClassName="!w-[320px] md:!w-[370px]"
                           type="file"
                           onChange={handleImageChange}
                           isRequired={false}
