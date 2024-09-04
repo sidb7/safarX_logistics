@@ -24,6 +24,8 @@ import Checkbox from "../../../components/CheckBox";
 import CustomInputBox from "../../../components/Input";
 import { Environment } from "../../../utils/ApiUrls";
 import OneButton from "../../../components/Button/OneButton";
+import { useMediaQuery } from "react-responsive";
+import Accordian from "./accordian";
 
 function BoxInfo({
   index,
@@ -58,6 +60,8 @@ function BoxInfo({
     const volume = length * breadth * height;
     return volume / 5000;
   };
+
+  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const colors = ["#E5EDFF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
   const getColorByIndex = (index: any) => {
@@ -229,19 +233,35 @@ function BoxInfo({
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2 border rounded-lg`}
+        className={`px-3 pt-2 pb-4 my-2 rounded-lg`}
         style={{ backgroundColor: colors[index % colors.length] }}
       >
         <div className="gap-y-4">
           <div className="flex justify-start  items-center">
             <div className=" flex w-[100%] flex-col">
-              <div className="flex items-center justify-between">
+              <div
+                className={`flex items-center ${
+                  !isLgScreen ? "my-1" : "my-2"
+                } justify-between`}
+              >
                 <div className=" flex justify-start items-center">
-                  <div className="text-[18px] my-2 font-bold font-Open">
+                  <div className="text-[18px] font-bold font-Open">
                     {capitalizeFirstLetter(data?.name)}
                   </div>
+
+                  {!isLgScreen && (
+                    <div className="rounded-lg mx-2 py-[0.5px] text-[15px] bg-[#ffffff] px-2">
+                      {" "}
+                      Final Weight :{" "}
+                      {`${
+                        data?.appliedWeight
+                          ? +data?.appliedWeight.toFixed(2) + "Kg"
+                          : "0 Kg"
+                      }`}
+                    </div>
+                  )}
                 </div>
-                {!showDownloadLebal && (
+                {!showDownloadLebal && isLgScreen && (
                   <div className="flex gap-x-4">
                     <button
                       className=""
@@ -280,15 +300,21 @@ function BoxInfo({
                 )}
               </div>
 
-              <div className="flex text-[16px] items-center ">
+              <div
+                className={`${
+                  !isLgScreen ? "text-[15px] font-light" : "text-[16px]"
+                } flex items-center `}
+              >
                 {data?.length} X {data?.breadth} X {data?.height} cm | V:{" "}
                 {+data?.volumetricWeight.toFixed(2)} Kg | D:{" "}
-                {+data?.deadWeight.toFixed(2)} Kg | Final Weight :{" "}
-                {`${
-                  data?.appliedWeight
-                    ? +data?.appliedWeight.toFixed(2) + "Kg"
-                    : "0 Kg"
-                }`}
+                {+data?.deadWeight.toFixed(2)} Kg{" "}
+                {isLgScreen && "| Final Weight :"}
+                {isLgScreen &&
+                  `${
+                    data?.appliedWeight
+                      ? +data?.appliedWeight.toFixed(2) + "Kg"
+                      : "0 Kg"
+                  }`}
               </div>
 
               <div className="flex gap-x-4 mt-5">
@@ -303,7 +329,9 @@ function BoxInfo({
                     labelClassName={`!text-black !bg-[${
                       colors[index % colors.length]
                     }]`}
-                    className={`!bg-transparent !w-[110px] !h-[36px]`}
+                    className={`!bg-transparent ${
+                      isLgScreen ? "!h-[36px]" : "!h-[29px]"
+                    } !w-[110px] !h-[36px]`}
                     onChange={(e: any) => {
                       if (!isNaN(e.target.value)) {
                         OnChangeHandler(e);
@@ -330,7 +358,9 @@ function BoxInfo({
                       labelClassName={`!text-black  !bg-[${
                         colors[index % colors.length]
                       }]`}
-                      className={`!bg-transparent !w-[150px] !h-[36px]`}
+                      className={`!bg-transparent ${
+                        isLgScreen ? "!h-[36px]" : "!h-[29px]"
+                      } !w-[150px]`}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           OnChangeHandler(e);
@@ -350,7 +380,9 @@ function BoxInfo({
                 {codInfo?.codInfo?.invoiceValue >= 50000 &&
                   order?.orderType === "B2C" && (
                     <button
-                      className="text-[#004EFF] font-bold font-Open"
+                      className={`text-[#004EFF] ${
+                        isLgScreen ? "" : "text-[14px]"
+                      } font-bold font-Open`}
                       onClick={() => {
                         setIsOpen({
                           state: { id: index, data: data },
@@ -372,7 +404,7 @@ function BoxInfo({
             </div>
           </div>
 
-          <div className="mt-5 ml-6">
+          <div className={`${!isLgScreen ? "mt-3" : "mt-5 ml-6"}`}>
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <div className="text-[18px] font-Open font-bold">
@@ -406,8 +438,10 @@ function BoxInfo({
               </div>
             </div>
             <div
-              className={`!transition-all gap-y-1 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
-                allProducts.length > 0 && " border-x-[#E8E8E8]"
+              className={`!transition-all gap-y-1 my-1 ${
+                !isLgScreen ? "mx-1 w-[100%]" : "min-w-[500px]"
+              } max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
+                allProducts.length > 0 && "border-x-[#E8E8E8]"
               } shadow-none`}
               data-cy="product-list"
             >
@@ -416,7 +450,9 @@ function BoxInfo({
                   return (
                     <div key={i} data-cy={`product-item-${i}`}>
                       <div
-                        className="flex justify-between  gap-x-4 items-center"
+                        className={`flex justify-between ${
+                          isLgScreen && "gap-x-4"
+                        } items-center`}
                         key={i}
                       >
                         <ProductDetails
@@ -432,11 +468,21 @@ function BoxInfo({
                           breadth={e?.breadth || 0}
                           length={e?.length || 0}
                           height={e?.height || 0}
-                          dimensionClassName="!font-light"
-                          className="!border-none !shadow-none !min-h-[70px]"
+                          dimensionClassName={`!font-light ${
+                            !isLgScreen && "text-[14px]"
+                          }`}
+                          className={`!border-none !shadow-none ${
+                            !isLgScreen ? "!min-h-[50px]" : "!min-h-[70px]"
+                          } border-[#000000]`}
                           data-cy={`product-box-${i}`}
                         />
-                        <div className="flex items-center p-1 lg:p-2 w-[100px]  gap-2 !mr-2 rounded-lg">
+                        <div
+                          className={`flex items-center p-1 lg:p-2 ${
+                            isLgScreen
+                              ? "!mr-2 gap-2 w-[100px] border"
+                              : "justify-center gap-1"
+                          }  rounded-lg`}
+                        >
                           <button
                             className="bg-transparent"
                             disabled={showDownloadLebal}
@@ -444,7 +490,7 @@ function BoxInfo({
                             <img
                               src={subtractIcon}
                               alt=""
-                              className="cursor-pointer w-[15px]"
+                              className={`cursor-pointer w-[15px] h-[15px]`}
                               onClick={() => {
                                 removeUnit(i);
                                 setInvoiceValueWithProductPrice();
@@ -467,7 +513,7 @@ function BoxInfo({
                           <button disabled={showDownloadLebal}>
                             <img
                               src={addIcon}
-                              className="cursor-pointer"
+                              className={`cursor-pointer w-[15px] h-[15px]`}
                               alt=""
                               onClick={() => {
                                 addUnit(i);
@@ -484,31 +530,33 @@ function BoxInfo({
                             />
                           </button>
 
-                          <button
-                            className={` ml-2 ${
-                              showDownloadLebal
-                                ? "cursor-not-allowed"
-                                : "cursor-pointer"
-                            } `}
-                            data-cy={`delete-product-${i}`}
-                            onClick={() => {
-                              removeProduct(index, i);
-                              setHighLightField({
-                                addressDetails: false,
-                                packageDetails: true,
-                                shippingDetails: false,
-                                orderDetails: false,
-                                pickupTimeDetails: false,
-                              });
-                            }}
-                            disabled={showDownloadLebal}
-                          >
-                            <img
-                              src={DeleteIcon}
-                              className={`!h-4 !w-4 `}
-                              alt=""
-                            />
-                          </button>
+                          {isLgScreen && (
+                            <button
+                              className={` ml-2 ${
+                                showDownloadLebal
+                                  ? "cursor-not-allowed"
+                                  : "cursor-pointer"
+                              } `}
+                              data-cy={`delete-product-${i}`}
+                              onClick={() => {
+                                removeProduct(index, i);
+                                setHighLightField({
+                                  addressDetails: false,
+                                  packageDetails: true,
+                                  shippingDetails: false,
+                                  orderDetails: false,
+                                  pickupTimeDetails: false,
+                                });
+                              }}
+                              disabled={showDownloadLebal}
+                            >
+                              <img
+                                src={DeleteIcon}
+                                className={`!h-4 !w-4 `}
+                                alt=""
+                              />
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

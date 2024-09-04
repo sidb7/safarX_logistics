@@ -60,7 +60,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const [currentEditType, setCurrentEditType] = useState<
     "pickup" | "delivery" | null
   >(null);
-  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
+  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const [pickupAddress, setPickupAddress] =
     useState<IPickupDetails>(pickupDetails);
@@ -119,8 +119,16 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
       <div>
         <div className="flex justify-between ">
           <div className="flex gap-x-[6px] items-center text-center">
-            <img src={WebLocationIcon} alt="locationIcon" />
-            <p className="font-Open font-semibold text-[18px] text-[#1C1C1C] leading-5 capitalize">
+            <img
+              src={WebLocationIcon}
+              alt="locationIcon"
+              className={`${!isLgScreen && "w-[18px]"}`}
+            />
+            <p
+              className={`font-Open font-semibold text-[#1C1C1C] leading-5 capitalize ${
+                !isLgScreen ? "text-[16px]" : "text-[18px]"
+              }`}
+            >
               {type} Details
             </p>
           </div>
@@ -138,47 +146,70 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 });
               }}
             >
-              <img src={EditIcon} alt="edit" className="cursor-pointer" />
+              <img
+                src={EditIcon}
+                alt="edit"
+                className={`cursor-pointer ${!isLgScreen && "w-[18px]"}`}
+              />
             </div>
           )}
         </div>
         <div className="flex flex-col p-3 gap-y-2">
-          <div className="flex gap-x-5">
+          <div className={`flex gap-x-5 ${!isLgScreen && "flex-wrap"}`}>
             <div className="flex gap-x-[6px] items-center">
               <img
                 src={ProfileIcon}
                 alt="profile"
                 className="w-[15px] h-[15px]"
               />
-              <span className="font-Open font-semibold ml-1 text-[14px] text-[#323232] leading-[18px]">
+              <span
+                className={`${
+                  !isLgScreen ? "text-[14px]" : "font-Open font-semibold"
+                }  ml-1 text-[#323232] leading-[18px]`}
+              >
                 {details.contact.name}
               </span>
             </div>
-            <div className="flex gap-x-[6px] items-center">
+            <div className={`flex gap-x-[6px] items-center`}>
               <img
                 src={ContactIcon}
                 alt="phone icon"
                 className="w-[15px] h-[15px]"
               />
-              <p className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+              <p
+                className={`${
+                  !isLgScreen ? "" : "font-Open font-semibold"
+                }  text-[14px] text-[#323232] leading-[18px]`}
+              >
                 +91{" "}
-                <span className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+                <span
+                  className={`${
+                    !isLgScreen ? "" : "font-Open font-semibold"
+                  }  text-[14px] text-[#323232] leading-[18px]`}
+                >
                   {details.contact.mobileNo}
                 </span>
               </p>
             </div>
             {details.gstNumber && (
-              <div className="flex gap-x-[6px] items-center">
+              <div
+                className={`flex gap-x-[6px] items-center ${
+                  !isLgScreen && "my-1"
+                }`}
+              >
                 <img
                   src={gstIcon}
                   alt="phone icon"
                   className="w-[15px] h-[15px]"
                 />
-                <p className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
-                  <span className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
-                    {details.gstNumber}
-                  </span>
-                </p>
+
+                <span
+                  className={`${
+                    isLgScreen && "font-Open font-semibold"
+                  } text-[14px] text-[#323232] leading-[18px]`}
+                >
+                  {details.gstNumber}
+                </span>
               </div>
             )}
           </div>
@@ -189,7 +220,11 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
               className="w-[15px] h-[15px]"
             />
             <div className="">
-              <p className="font-Open font-semibold ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
+              <p
+                className={`${
+                  !isLgScreen ? "" : "font-Open font-semibold"
+                } ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize`}
+              >
                 {details.fullAddress}
               </p>
             </div>
@@ -240,8 +275,18 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
         {isPickupAddressEmpty ? (
           <div>
             <div className="flex gap-x-[6px] items-center text-center">
-              <img src={WebLocationIcon} alt="locationIcon" />
-              <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+              <img
+                src={WebLocationIcon}
+                alt="locationIcon"
+                className={`${isLgScreen ? "" : "w-[16px]"}`}
+              />
+              <p
+                className={`${
+                  isLgScreen
+                    ? "font-Open font-semibold text-base"
+                    : " text-[15px]"
+                } text-[#1C1C1C] leading-5 capitalize`}
+              >
                 Pickup Details
               </p>
             </div>
@@ -262,6 +307,8 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 variant="quad"
                 showIcon={true}
                 icon={PlusIcon}
+                className="text-[14px]"
+                iconClass="w-[14px]"
                 textTransform="capitalize"
               />
             </div>
@@ -270,13 +317,23 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
           renderAddressDetails(pickupAddress, "Pickup", pickupLandmark)
         )}
 
-        <div className="border-[1px] mt-[8px] mb-6"></div>
+        {isLgScreen && <div className="border-[1px] mt-[8px] mb-6"></div>}
 
         {isDeliveryAddressEmpty ? (
           <div>
             <div className="flex gap-x-[6px] items-center text-center">
-              <img src={WebLocationIcon} alt="locationIcon" />
-              <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+              <img
+                src={WebLocationIcon}
+                alt="locationIcon"
+                className={`${isLgScreen ? "" : "w-[16px]"}`}
+              />
+              <p
+                className={`${
+                  isLgScreen
+                    ? "font-Open font-semibold text-base"
+                    : " text-[15px]"
+                } text-[#1C1C1C] leading-5 capitalize`}
+              >
                 Delivery Details
               </p>
             </div>
@@ -297,6 +354,8 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 variant="quad"
                 showIcon={true}
                 icon={PlusIcon}
+                className="text-[14px]"
+                iconClass="w-[14px]"
                 textTransform="capitalize"
               />
             </div>
@@ -309,9 +368,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
       <RightSideModal
         isOpen={isPickupRightModal}
         onClose={() => setIsPickupRightModal(false)}
-        className={`w-full ${
-          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
-        }`}
+        className={`w-full md:!w-[450px]`}
       >
         <PickupDetailsContent
           details={pickupAddress}
@@ -325,9 +382,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
       <RightSideModal
         isOpen={isDeliveryRightModal}
         onClose={() => setIsDeliveryRightModal(false)}
-        className={`w-full ${
-          isLgScreen ? "md:!w-[450px]" : "mobile-modal-styles"
-        }`}
+        className={`w-full md:!w-[450px]`}
       >
         <DeliveryDetailsContent
           details={deliveryAddress}
