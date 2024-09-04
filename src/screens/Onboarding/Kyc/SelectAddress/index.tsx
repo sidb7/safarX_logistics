@@ -53,7 +53,7 @@ const BusinessType = (props: ITypeProps) => {
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
-    console.log("Fillee", file);
+    // console.log("Fillee", file);
     if (file) {
       const url: any = URL.createObjectURL(file) || null;
       setBrandingDetails({
@@ -83,6 +83,9 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitForm = async () => {
     try {
+      let formData = new FormData();
+      formData.append("brandName", brandingDetails.brandName);
+      formData.append("file", brandingDetails?.file);
       if (
         brandingDetails?.brandName === "" ||
         brandingDetails?.brandName === undefined
@@ -91,6 +94,9 @@ const BusinessType = (props: ITypeProps) => {
         return;
       } else if (defaultAddressSelect.hasOwnProperty("addressId") !== true) {
         toast.error("Please Select Address");
+        return;
+      } else if (brandingDetails?.file === null) {
+        toast.error("Please Upload Logo");
         return;
       }
 
@@ -131,10 +137,6 @@ const BusinessType = (props: ITypeProps) => {
       } else {
         toast.error("Something Went Wrong!");
       }
-
-      let formData = new FormData();
-      formData.append("brandName", brandingDetails.brandName);
-      formData.append("file", brandingDetails?.file);
 
       let img: any = new Image();
       img.src = brandingDetails?.imageUrl;

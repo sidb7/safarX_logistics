@@ -42,6 +42,7 @@ import { parse } from "date-fns";
 import SelectDateModalForSinglePageOrder from "./components/scheduleTimeModale";
 import Accordian from "./components/accordian";
 import MyTable from "./ShippingDetails/components/customeTableForSummary";
+import InternationalOrders from "./InternationalOrder";
 
 interface IIndexProps {}
 
@@ -305,7 +306,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
               <input
                 type="radio"
                 name="type"
-                disabled={true}
                 value={order?.orderType}
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 checked={order?.orderType === "INTERNATIONAL"}
@@ -314,8 +314,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     return {
                       ...prevState,
                       orderType: "INTERNATIONAL",
+                      transit: "FORWARD",
                     };
                   });
+                  setResetOtherAddressDetails(true);
+                  setPaymentMode("PREPAID");
                 }}
               />
               <div className="text-[15px]">International</div>
@@ -865,25 +868,32 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           component={Buttons()}
           componentClass="!px-0"
         />
-        <div
-          className={`flex flex-col lg:flex-row ${
-            !isLgScreen ? "gap-y-4" : "gap-5"
-          } mx-5`}
-        >
-          <div className={`flex-1 ${!isLgScreen && "h-fit"}`}>
+
+        {order?.orderType === "INTERNATIONAL" ? (
+          <>
+            <InternationalOrders />
+          </>
+        ) : (
+          <>
             <div
-              className={`flex flex-col gap-y-4 ${
-                isLgScreen && "!h-[calc(100vh-180px)]"
-              } customScroll`}
+              className={`flex flex-col lg:flex-row ${
+                !isLgScreen ? "gap-y-4" : "gap-5"
+              } mx-5`}
             >
-              <div
-                className={`!max-h-[450px] border-[1px] rounded-lg ${
-                  highLightField?.addressDetails
-                    ? "border-[#004EFF]"
-                    : "border-[#E8E8E8]"
-                } overflow-auto scroll-smooth  `}
-              >
-                {/* {!isLgScreen && (
+              <div className={`flex-1 ${!isLgScreen && "h-fit"}`}>
+                <div
+                  className={`flex flex-col gap-y-4 ${
+                    isLgScreen && "!h-[calc(100vh-180px)]"
+                  } customScroll`}
+                >
+                  <div
+                    className={`!max-h-[450px] border-[1px] rounded-lg ${
+                      highLightField?.addressDetails
+                        ? "border-[#004EFF]"
+                        : "border-[#E8E8E8]"
+                    } overflow-auto scroll-smooth  `}
+                  >
+                    {/* {!isLgScreen && (
                   <div
                     className="flex border-b items-center p-2 bg-[#F6F6F6] justify-between top-0"
                     style={{ position: "sticky" }}
@@ -896,57 +906,59 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     </button>
                   </div>
                 )} */}
-                <Accordian
-                  headerChild={
-                    <div className="flex w-[100%] items-center justify-between">
-                      <div>
-                        <span className="mx-2 font-bold font-Open">
-                          {"Address Details"}
-                        </span>
-                      </div>
-                      <div>
-                        <button className="mx-2">
-                          <img src={downArrow} />
-                        </button>
-                      </div>
-                    </div>
-                  }
-                >
-                  <AddressCardDetails
-                    pickupDetails={order?.pickupDetails}
-                    deliveryDetails={order?.deliveryDetails}
-                    onPickupDetailsChange={handlePickupDetailsChange}
-                    onDeliveryDetailsChange={handleDeliveryDetailsChange}
-                    order={order}
-                    setSortServiciblity={setSortServiciblity}
-                    showDownloadLebal={showDownloadLebal}
-                    resetOtherAddressDetails={resetOtherAddressDetails}
-                    setResetOtherAddressDetails={setResetOtherAddressDetails}
-                    setHighLightField={setHighLightField}
-                  />
-                </Accordian>
-              </div>
-              <div
-                className={`border 
+                    <Accordian
+                      headerChild={
+                        <div className="flex w-[100%] items-center justify-between">
+                          <div>
+                            <span className="mx-2 font-bold font-Open">
+                              {"Address Details"}
+                            </span>
+                          </div>
+                          <div>
+                            <button className="mx-2">
+                              <img src={downArrow} />
+                            </button>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <AddressCardDetails
+                        pickupDetails={order?.pickupDetails}
+                        deliveryDetails={order?.deliveryDetails}
+                        onPickupDetailsChange={handlePickupDetailsChange}
+                        onDeliveryDetailsChange={handleDeliveryDetailsChange}
+                        order={order}
+                        setSortServiciblity={setSortServiciblity}
+                        showDownloadLebal={showDownloadLebal}
+                        resetOtherAddressDetails={resetOtherAddressDetails}
+                        setResetOtherAddressDetails={
+                          setResetOtherAddressDetails
+                        }
+                        setHighLightField={setHighLightField}
+                      />
+                    </Accordian>
+                  </div>
+                  <div
+                    className={`border 
                   ${
                     highLightField?.packageDetails
                       ? "border-[#004EFF]"
                       : "border-[#E8E8E8]"
                   }
                   rounded-lg !max-h-[450px] w-full`}
-              >
-                <PackageDetails
-                  packageDetails={order?.boxInfo}
-                  order={order}
-                  setOrder={setOrder}
-                  setSortServiciblity={setSortServiciblity}
-                  showDownloadLebal={showDownloadLebal}
-                  setHighLightField={setHighLightField}
-                />
-              </div>
+                  >
+                    <PackageDetails
+                      packageDetails={order?.boxInfo}
+                      order={order}
+                      setOrder={setOrder}
+                      setSortServiciblity={setSortServiciblity}
+                      showDownloadLebal={showDownloadLebal}
+                      setHighLightField={setHighLightField}
+                    />
+                  </div>
 
-              <div
-                className={`border 
+                  <div
+                    className={`border 
                   ${
                     highLightField?.orderDetails
                       ? "border-[#004EFF]"
@@ -963,92 +975,124 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     ? "flex-col overflow-auto scroll-smooth "
                     : " items-center"
                 }`}
-              >
-                <Accordian
-                  headerChild={
-                    <div className="flex w-[100%] items-center justify-between">
-                      <div>
-                        <span className="mx-2 font-bold font-Open">
-                          {"Order Details"}
-                        </span>
-                      </div>
-                      <div>
-                        <button className="mx-2">
-                          <img src={downArrow} />
-                        </button>
-                      </div>
-                    </div>
-                  }
-                >
-                  <div
-                    className={`p-4 gap-4 flex w-[100%] ${
-                      !isLgScreen && "flex-col"
-                    }`}
                   >
-                    <div className={` flex-1`}>
-                      <CustomInputBox
-                        isRightIcon={true}
-                        containerStyle=""
-                        rightIcon={AutoGenerateIcon}
-                        className={`w-full !text-base !font-semibold`}
-                        imageClassName="!h-[12px] !z-0 !w-[113px] !top-[40%] "
-                        value={order?.orderId || ""}
-                        maxLength={12}
-                        label="Order ID"
-                        onChange={(e) => {
-                          setOrder((prevState: any) => {
-                            return { ...prevState, orderId: e.target.value };
-                          });
-                          setSortServiciblity("");
-                          setHighLightField({
-                            addressDetails: false,
-                            packageDetails: false,
-                            shippingDetails: false,
-                            orderDetails: true,
-                            pickupTimeDetails: false,
-                          });
-                        }}
-                        isDisabled={showDownloadLebal}
-                        onClick={() => {
-                          const orderId = generateUniqueCode(8, 12);
-                          setOrder((prevState: any) => {
-                            return { ...prevState, orderId: orderId };
-                          });
-                          setSortServiciblity("");
-                          setHighLightField({
-                            addressDetails: false,
-                            packageDetails: false,
-                            shippingDetails: false,
-                            orderDetails: true,
-                            pickupTimeDetails: false,
-                          });
-                        }}
-                        visibility={true}
-                        setVisibility={() => {}}
-                        name="orderId"
-                        data-cy="auto-generate-order-id"
-                      />
-                    </div>
-
-                    <div
-                      className={`flex gap-x-4 items-center flex-1 ${
-                        !isLgScreen && " overflow-auto scroll-smooth"
-                      }`}
+                    <Accordian
+                      headerChild={
+                        <div className="flex w-[100%] items-center justify-between">
+                          <div>
+                            <span className="mx-2 font-bold font-Open">
+                              {"Order Details"}
+                            </span>
+                          </div>
+                          <div>
+                            <button className="mx-2">
+                              <img src={downArrow} />
+                            </button>
+                          </div>
+                        </div>
+                      }
                     >
-                      {order?.orderType === "B2C" &&
-                        order?.transit === "FORWARD" && (
-                          <div className="flex justify-center items-center">
+                      <div
+                        className={`p-4 gap-4 flex w-[100%] ${
+                          !isLgScreen && "flex-col"
+                        }`}
+                      >
+                        <div className={` flex-1`}>
+                          <CustomInputBox
+                            isRightIcon={true}
+                            containerStyle=""
+                            rightIcon={AutoGenerateIcon}
+                            className={`w-full !text-base !font-semibold`}
+                            imageClassName="!h-[12px] !z-0 !w-[113px] !top-[40%] "
+                            value={order?.orderId || ""}
+                            maxLength={12}
+                            label="Order ID"
+                            onChange={(e) => {
+                              setOrder((prevState: any) => {
+                                return {
+                                  ...prevState,
+                                  orderId: e.target.value,
+                                };
+                              });
+                              setSortServiciblity("");
+                              setHighLightField({
+                                addressDetails: false,
+                                packageDetails: false,
+                                shippingDetails: false,
+                                orderDetails: true,
+                                pickupTimeDetails: false,
+                              });
+                            }}
+                            isDisabled={showDownloadLebal}
+                            onClick={() => {
+                              const orderId = generateUniqueCode(8, 12);
+                              setOrder((prevState: any) => {
+                                return { ...prevState, orderId: orderId };
+                              });
+                              setSortServiciblity("");
+                              setHighLightField({
+                                addressDetails: false,
+                                packageDetails: false,
+                                shippingDetails: false,
+                                orderDetails: true,
+                                pickupTimeDetails: false,
+                              });
+                            }}
+                            visibility={true}
+                            setVisibility={() => {}}
+                            name="orderId"
+                            data-cy="auto-generate-order-id"
+                          />
+                        </div>
+
+                        <div
+                          className={`flex gap-x-4 items-center flex-1 ${
+                            !isLgScreen && " overflow-auto scroll-smooth"
+                          }`}
+                        >
+                          {order?.orderType === "B2C" &&
+                            order?.transit === "FORWARD" && (
+                              <div className="flex justify-center items-center">
+                                <input
+                                  type="radio"
+                                  name="paymentMode"
+                                  value="COD"
+                                  disabled={
+                                    (Array.isArray(order?.boxInfo) &&
+                                      order?.boxInfo.length === 0) ||
+                                    showDownloadLebal
+                                  }
+                                  className=" mr-2 w-[15px] cursor-pointer h-[15px]"
+                                  checked={paymentMode === "COD"}
+                                  onChange={(e: any) => {
+                                    paymentModeToggle(e.target.value);
+                                    setHighLightField({
+                                      addressDetails: false,
+                                      packageDetails: false,
+                                      shippingDetails: false,
+                                      orderDetails: true,
+                                      pickupTimeDetails: false,
+                                    });
+                                  }}
+                                />
+                                <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                                  COD
+                                </span>
+                              </div>
+                            )}
+
+                          <div className={`flex justify-center items-center `}>
                             <input
                               type="radio"
                               name="paymentMode"
-                              value="COD"
+                              value="PREPAID"
                               disabled={
                                 (Array.isArray(order?.boxInfo) &&
                                   order?.boxInfo.length === 0) ||
                                 showDownloadLebal
                               }
                               className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                              checked={paymentMode === "COD"}
+                              checked={paymentMode === "PREPAID"}
                               onChange={(e: any) => {
                                 paymentModeToggle(e.target.value);
                                 setHighLightField({
@@ -1061,236 +1105,213 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                               }}
                             />
                             <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
-                              COD
+                              PREPAID
                             </span>
                           </div>
-                        )}
-
-                      <div className={`flex justify-center items-center `}>
-                        <input
-                          type="radio"
-                          name="paymentMode"
-                          value="PREPAID"
-                          disabled={
-                            (Array.isArray(order?.boxInfo) &&
-                              order?.boxInfo.length === 0) ||
-                            showDownloadLebal
-                          }
-                          className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                          checked={paymentMode === "PREPAID"}
-                          onChange={(e: any) => {
-                            paymentModeToggle(e.target.value);
-                            setHighLightField({
-                              addressDetails: false,
-                              packageDetails: false,
-                              shippingDetails: false,
-                              orderDetails: true,
-                              pickupTimeDetails: false,
-                            });
-                          }}
-                        />
-                        <span className="font-semibold text-sm font-Open leading-[18px] text-[#323232]">
-                          PREPAID
-                        </span>
-                      </div>
-                    </div>
-
-                    {["B2B"].includes(order?.orderType) &&
-                      sumInvoiceValue >= 50000 && (
-                        <div className="md:!w-[35%] flex-1">
-                          <CustomInputBox
-                            inputType="text"
-                            label="Enter Eway Bill No."
-                            name="eWayBillNo"
-                            isDisabled={showDownloadLebal}
-                            value={order?.ewaybillNumber}
-                            onChange={(e) => {
-                              setOrder((prevState: any) => {
-                                return {
-                                  ...prevState,
-                                  eWayBillNo: e.target.value,
-                                };
-                              });
-                              setSortServiciblity("");
-                              setHighLightField({
-                                addressDetails: false,
-                                packageDetails: false,
-                                shippingDetails: false,
-                                orderDetails: true,
-                                pickupTimeDetails: false,
-                              });
-                            }}
-                          />
                         </div>
-                      )}
+
+                        {["B2B"].includes(order?.orderType) &&
+                          sumInvoiceValue >= 50000 && (
+                            <div className="md:!w-[35%] flex-1">
+                              <CustomInputBox
+                                inputType="text"
+                                label="Enter Eway Bill No."
+                                name="eWayBillNo"
+                                isDisabled={showDownloadLebal}
+                                value={order?.ewaybillNumber}
+                                onChange={(e) => {
+                                  setOrder((prevState: any) => {
+                                    return {
+                                      ...prevState,
+                                      eWayBillNo: e.target.value,
+                                    };
+                                  });
+                                  setSortServiciblity("");
+                                  setHighLightField({
+                                    addressDetails: false,
+                                    packageDetails: false,
+                                    shippingDetails: false,
+                                    orderDetails: true,
+                                    pickupTimeDetails: false,
+                                  });
+                                }}
+                              />
+                            </div>
+                          )}
+                      </div>
+                    </Accordian>
                   </div>
-                </Accordian>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className={`flex-1 ${!isLgScreen && "h-fit"}`}>
-            <div className={`flex flex-col gap-y-5`}>
-              <div>
-                <ShippingDetails
-                  order={order}
-                  setOrder={setOrder}
-                  setSortServiciblity={setSortServiciblity}
-                  sortServiceiblity={sortServiceiblity}
-                  showDownloadLebal={showDownloadLebal}
-                  setShowPickupDate={setShowPickupDate}
-                  resetOtherAddressDetails={resetOtherAddressDetails}
-                  setResetOtherAddressDetails={setResetOtherAddressDetails}
-                  setHighLightField={setHighLightField}
-                  highLightField={highLightField}
-                />
-              </div>
+              <div className={`flex-1 ${!isLgScreen && "h-fit"}`}>
+                <div className={`flex flex-col gap-y-5`}>
+                  <div>
+                    <ShippingDetails
+                      order={order}
+                      setOrder={setOrder}
+                      setSortServiciblity={setSortServiciblity}
+                      sortServiceiblity={sortServiceiblity}
+                      showDownloadLebal={showDownloadLebal}
+                      setShowPickupDate={setShowPickupDate}
+                      resetOtherAddressDetails={resetOtherAddressDetails}
+                      setResetOtherAddressDetails={setResetOtherAddressDetails}
+                      setHighLightField={setHighLightField}
+                      highLightField={highLightField}
+                    />
+                  </div>
 
-              {order?.courierPartner && (
-                <div
-                  className={`border flex justify-between ${
-                    highLightField?.pickupTimeDetails
-                      ? "border-[#004EFF]"
-                      : "border-[#E8E8E8]"
-                  } items-center rounded-lg`}
-                >
-                  <Accordian
-                    headerChild={
-                      <div className="flex w-[100%] items-center justify-between">
-                        <div>
-                          <span className="mx-2 font-bold font-Open">
-                            {"Pickup Details"}
-                          </span>
-                        </div>
-                        <div>
-                          <button className="mx-2">
-                            <img src={downArrow} />
-                          </button>
-                        </div>
-                      </div>
-                    }
-                  >
-                    <div className="flex justify-between items-center p-4">
-                      {showPickupDate && !isLgScreen ? (
-                        <></>
-                      ) : (
-                        <div className="text-[#1C1C1C] font-Open font-semibold text-[16px] leading-[20px] ">
-                          Pickup Details
-                        </div>
-                      )}
-
-                      <div>
-                        {showPickupDate ? (
-                          <div
-                            className={`flex gap-x-2 ${
-                              !isLgScreen ? "text-[13px]" : "text-[15px]"
-                            }`}
-                          >
-                            <div>Pickup On :</div>{" "}
-                            <div
-                              className={`${
-                                isLgScreen ? "" : ""
-                              } text-[#1C1C1C] flex justify-center items-center font-Open font-bold leading-[20px] `}
-                            >
-                              <span>{showPickupDate}</span>
-                              <button
-                                className="ml-2 w-[20px] h-[20px] cursor-pointer"
-                                onClick={() => setShowDateAndTimeModal(true)}
-                              >
-                                <img src={editIcon} alt="" />
+                  {order?.courierPartner && (
+                    <div
+                      className={`border flex justify-between ${
+                        highLightField?.pickupTimeDetails
+                          ? "border-[#004EFF]"
+                          : "border-[#E8E8E8]"
+                      } items-center rounded-lg`}
+                    >
+                      <Accordian
+                        headerChild={
+                          <div className="flex w-[100%] items-center justify-between">
+                            <div>
+                              <span className="mx-2 font-bold font-Open">
+                                {"Pickup Details"}
+                              </span>
+                            </div>
+                            <div>
+                              <button className="mx-2">
+                                <img src={downArrow} />
                               </button>
                             </div>
                           </div>
-                        ) : (
-                          <OneButton
-                            onClick={() => {
-                              setShowDateAndTimeModal(true);
-                              setHighLightField({
-                                addressDetails: false,
-                                packageDetails: false,
-                                shippingDetails: false,
-                                orderDetails: false,
-                                pickupTimeDetails: true,
-                              });
-                            }}
-                            text={`SELECT`}
-                            variant="primary"
-                            className="!w-[128px] font-extrabold"
-                            // disabled={}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </Accordian>
-                </div>
-              )}
+                        }
+                      >
+                        <div className="flex justify-between items-center p-4">
+                          {showPickupDate && !isLgScreen ? (
+                            <></>
+                          ) : (
+                            <div className="text-[#1C1C1C] font-Open font-semibold text-[16px] leading-[20px] ">
+                              Pickup Details
+                            </div>
+                          )}
 
-              {order?.boxInfo?.length > 0 &&
-                order?.courierPartner &&
-                order?.pickupDate && (
-                  <>
-                    <div>{summaryDetails()}</div>
-                    {showDownloadLebal && (
-                      <div className="border-[1px] rounded-md border-[#E8E8E8]">
-                        <div className="flex justify-between items-center px-4 py-3">
-                          <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
-                            Ready to place a new order? Click here!
-                          </span>
-                          <OneButton
-                            onClick={() => {
-                              window.location.reload();
-                              sessionStorage.clear();
-                            }}
-                            text={`CREATE NEW ORDER`}
-                            variant="primary"
-                          />
+                          <div>
+                            {showPickupDate ? (
+                              <div
+                                className={`flex gap-x-2 ${
+                                  !isLgScreen ? "text-[13px]" : "text-[15px]"
+                                }`}
+                              >
+                                <div>Pickup On :</div>{" "}
+                                <div
+                                  className={`${
+                                    isLgScreen ? "" : ""
+                                  } text-[#1C1C1C] flex justify-center items-center font-Open font-bold leading-[20px] `}
+                                >
+                                  <span>{showPickupDate}</span>
+                                  <button
+                                    className="ml-2 w-[20px] h-[20px] cursor-pointer"
+                                    onClick={() =>
+                                      setShowDateAndTimeModal(true)
+                                    }
+                                  >
+                                    <img src={editIcon} alt="" />
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <OneButton
+                                onClick={() => {
+                                  setShowDateAndTimeModal(true);
+                                  setHighLightField({
+                                    addressDetails: false,
+                                    packageDetails: false,
+                                    shippingDetails: false,
+                                    orderDetails: false,
+                                    pickupTimeDetails: true,
+                                  });
+                                }}
+                                text={`SELECT`}
+                                variant="primary"
+                                className="!w-[128px] font-extrabold"
+                                // disabled={}
+                              />
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </Accordian>
+                    </div>
+                  )}
+
+                  {order?.boxInfo?.length > 0 &&
+                    order?.courierPartner &&
+                    order?.pickupDate && (
+                      <>
+                        <div>{summaryDetails()}</div>
+                        {showDownloadLebal && (
+                          <div className="border-[1px] rounded-md border-[#E8E8E8]">
+                            <div className="flex justify-between items-center px-4 py-3">
+                              <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
+                                Ready to place a new order? Click here!
+                              </span>
+                              <OneButton
+                                onClick={() => {
+                                  window.location.reload();
+                                  sessionStorage.clear();
+                                }}
+                                text={`CREATE NEW ORDER`}
+                                variant="primary"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-            </div>
-          </div>
-        </div>
-
-        <RightSideModal
-          className={`w-full md:!w-[400px]`}
-          wrapperClassName="rounded-l-xl"
-          isOpen={showDateAndTimeModal}
-          onClose={() => setShowDateAndTimeModal(false)}
-        >
-          <SelectDateModalForSinglePageOrder
-            onClick={() => setShowDateAndTimeModal(false)}
-            onPickupTimeSelected={handlePickupTimeSelected}
-          />
-        </RightSideModal>
-
-        <CenterModal
-          isOpen={showAlertBox}
-          onRequestClose={() => setShowAlertBox(false)}
-          className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
-        >
-          <>
-            <div>
-              <div className="flex justify-center items-center mb-4">
-                <img src={walletIcon} alt="" />
-              </div>
-              <div className="max-w-[400px] flex justify-center text-center">
-                {" "}
-                Your wallet balance is too low to complete this transaction.
-                Please Recharge Your Wallet
+                </div>
               </div>
 
-              <div className="mt-5">
-                <OneButton
-                  onClick={() => navigate(`/wallet/view-wallet`)}
-                  text={`RECHARGE WALLET`}
-                  variant="primary"
-                  className="!w-[228px]"
+              <RightSideModal
+                className={`w-full ${
+                  isLgScreen ? "md:!w-[400px]" : "mobile-modal-styles"
+                }`}
+                wrapperClassName="rounded-l-xl"
+                isOpen={showDateAndTimeModal}
+                onClose={() => setShowDateAndTimeModal(false)}
+              >
+                <SelectDateModalForSinglePageOrder
+                  onClick={() => setShowDateAndTimeModal(false)}
+                  onPickupTimeSelected={handlePickupTimeSelected}
                 />
-              </div>
+              </RightSideModal>
+
+              <CenterModal
+                isOpen={showAlertBox}
+                onRequestClose={() => setShowAlertBox(false)}
+                className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
+              >
+                <>
+                  <div>
+                    <div className="flex justify-center items-center mb-4">
+                      <img src={walletIcon} alt="" />
+                    </div>
+                    <div className="max-w-[400px] flex justify-center text-center">
+                      {" "}
+                      Your wallet balance is too low to complete this
+                      transaction. Please Recharge Your Wallet
+                    </div>
+
+                    <div className="mt-5">
+                      <OneButton
+                        onClick={() => navigate(`/wallet/view-wallet`)}
+                        text={`RECHARGE WALLET`}
+                        variant="primary"
+                        className="!w-[228px]"
+                      />
+                    </div>
+                  </div>
+                </>
+              </CenterModal>
             </div>
           </>
-        </CenterModal>
+        )}
       </div>
     </>
   );
