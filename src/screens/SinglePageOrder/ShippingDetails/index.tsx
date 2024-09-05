@@ -85,7 +85,11 @@ const Index: React.FunctionComponent<IIndexProps> = ({
           <div className={`px-3 py-4`}>
             <div className={`flex justify-between`}>
               <div className="flex gap-x-2 items-center">
-                <img src={CourierIcon} alt="courierIcon" />
+                <img
+                  src={CourierIcon}
+                  alt="courierIcon"
+                  className={`${!isLgScreen && "w-[20px] h-[20px]"}`}
+                />
                 <p
                   className={`${
                     !isLgScreen ? "text-[14px]" : "text-[16px]"
@@ -105,7 +109,6 @@ const Index: React.FunctionComponent<IIndexProps> = ({
                     name="partners"
                     value="Cheapest"
                     className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                    disabled={true}
                     checked={sortServiceiblity === "Cheapest"}
                     onChange={(e: any) => {
                       setSortServiciblity(e.target.value);
