@@ -79,11 +79,6 @@ const Index: React.FunctionComponent<IIndexProps> = ({
                   {"Courier Options"}
                 </span>
               </div>
-              <div>
-                <button className="mx-2">
-                  <img src={downArrow} />
-                </button>
-              </div>
             </div>
           }
         >
@@ -110,7 +105,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
                     name="partners"
                     value="Cheapest"
                     className=" mr-2 w-[15px] cursor-pointer h-[15px]"
-                    // disabled={true}
+                    disabled={true}
                     checked={sortServiceiblity === "Cheapest"}
                     onChange={(e: any) => {
                       setSortServiciblity(e.target.value);
