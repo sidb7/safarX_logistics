@@ -479,7 +479,7 @@ function BoxInfo({
                         <div
                           className={`flex items-center p-1 lg:p-2 ${
                             isLgScreen
-                              ? "!mr-2 gap-2 w-[100px] border"
+                              ? "!mr-2 gap-2 w-[100px]"
                               : "justify-center gap-1"
                           }  rounded-lg`}
                         >
@@ -566,10 +566,16 @@ function BoxInfo({
 
             {!showDownloadLebal && (
               <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
-                <img src={ButtonIcon} alt="Add Product" width="px" />
+                <img
+                  src={ButtonIcon}
+                  alt="Add Product"
+                  width={`${!isLgScreen && "w-[16px]"}`}
+                />
 
                 <button
-                  className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
+                  className={`ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open ${
+                    !isLgScreen ? "!text-[15px]" : "!text-[16px]"
+                  }`}
                   onClick={() => {
                     setProductModal({ isOpen: true, id: index });
                     setSortServiciblity("");
