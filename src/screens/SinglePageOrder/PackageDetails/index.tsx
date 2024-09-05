@@ -142,11 +142,6 @@ function PackageDetails({
                       <img src={addIcon} alt="" />
                     </button>
                   )}
-                  {!isLgScreen && (
-                    <button className="mx-2">
-                      <img src={downArrow} />
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
