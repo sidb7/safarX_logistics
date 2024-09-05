@@ -673,11 +673,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 <div>
                   <span className="mx-2 font-bold font-Open">{"Summary"}</span>
                 </div>
-                <div>
-                  <button className="mx-2">
-                    <img src={downArrow} />
-                  </button>
-                </div>
               </div>
             }
           >
@@ -1142,11 +1137,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                               <span className="mx-2 font-bold font-Open">
                                 {"Pickup Details"}
                               </span>
-                            </div>
-                            <div>
-                              <button className="mx-2">
-                                <img src={downArrow} />
-                              </button>
                             </div>
                           </div>
                         }
