@@ -149,10 +149,10 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
 
   return (
     <div className="flex flex-col gap-y-4 px-1 h-screen w-full py-5 ">
-      <div className="flex justify-between lg:mb-10 lg:px-5">
+      <div className="flex justify-between mb-10 px-5">
         <div className="flex gap-x-2 lg:gap-x-3">
           <img src={ClockIcon} alt="" />
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232]">
+          <h3 className="font-Lato text-2xl text-[#323232]">
             Schedule pick up
           </h3>
         </div>
@@ -166,8 +166,8 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:mb-9 lg:px-5 ">
-        <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Day</p>
+      <div className="flex flex-col mb-9 px-5 ">
+        <p className="font-bold font-Lato text-xl mb-5 ">Day</p>
         <DynamicButtonScrollComponentForDay
           items={dummyDayData}
           onClick={handleDayButtonClicked}
@@ -176,12 +176,12 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
       </div>
 
       {showDatePicker ? (
-        <div className=" lg:block border flex justify-center items-center lg:mx-5">
+        <div className=" lg:block border flex justify-center items-center mx-5">
           <CustomDatePicker onSelect={handleScheduleDateTimeChange} />
         </div>
       ) : (
-        <div className="flex flex-col lg:px-5">
-          <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Time</p>
+        <div className="flex flex-col px-5">
+          <p className="font-bold font-Lato text-xl mb-5 ">Time</p>
           <DynamicButtonScrollComponentForTime
             items={filteredTimeData}
             selectedTime={selectedTime}
@@ -191,8 +191,8 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
         </div>
       )}
 
-      <div className="lg:hidden ">
-        <Button text="Save" onClick={onClick} type="submit" />
+      <div className="lg:hidden  mx-5">
+        <Button text="Save" onClick={onSaveHandler} type="submit" />
       </div>
 
       <div
