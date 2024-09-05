@@ -207,6 +207,8 @@ const PHONEPE_TRANSACTION_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRecha
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
 const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWalletTransaction`;
 const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRechargeUsingNeft`;
+const GET_CODREMITTANCE_AMOUNT = `${SELLER_URL}/api/v1/wallet/getEligibleCodRemittanceAmount`;
+const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalance`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -646,4 +648,6 @@ export {
   CREATE_UPDATE_ADVANCE_RULE_ENGINE,
   RTO_REATTEMPT,
   WALLET_RECHARGE_USING_NEFT,
+  GET_CODREMITTANCE_AMOUNT,
+  POST_UPDATE_WALLETBALANCE,
 };
