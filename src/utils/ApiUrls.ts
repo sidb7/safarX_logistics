@@ -193,6 +193,9 @@ const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const ACTIVATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/activatePickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
+const GET_ALL_ADDRESSS = `${SELLER_BASE_URL}/pickupAddress/getAllAddress`;
+const UPDATE_ALL_ADDRESS = `${SELLER_BASE_URL}/order/bulkUpdateAddress`;
+const UPDATE_ALL_BOXES = `${SELLER_BASE_URL}/order/updateBoxOfMultipleOrders`;
 
 // PAYMENT GATEWAYS
 // Paytm
@@ -650,4 +653,7 @@ export {
   WALLET_RECHARGE_USING_NEFT,
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
+  GET_ALL_ADDRESSS,
+  UPDATE_ALL_ADDRESS,
+  UPDATE_ALL_BOXES,
 };
