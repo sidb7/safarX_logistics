@@ -19,6 +19,9 @@ import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../components/Button";
 import CouponScreen from "../../../components/Coupons/index";
 import OneButton from "../../../components/Button/OneButton";
+import NoDataGif from "../../../assets/no data.gif";
+import PlusIcon from "../../../assets/plusIcon.svg";
+import AnalyticsIcon from "../../../assets/analytics.svg";
 
 interface IOverview {
   ordersArr?: any;
@@ -38,6 +41,28 @@ export const Overview = (props: IOverview) => {
     addressCountOrder,
   } = props;
   const [userData, setUserData] = React.useState<any>();
+  const emptyOrdersArr = [
+    {
+      count: 0,
+      text: "Orders need to be proceed",
+      img: "",
+    },
+    {
+      count: 0,
+      text: "Orders delayed for Pickup",
+      img: "",
+    },
+    {
+      count: 0,
+      text: "RTO Orders",
+      img: "",
+    },
+    {
+      count: 0,
+      text: "Orders in Weight Descripancy",
+      img: "",
+    },
+  ];
 
   const orderArr = [
     {
@@ -157,6 +182,223 @@ export const Overview = (props: IOverview) => {
       value: "today",
     },
   ];
+
+  const dashboardForNewUser = () => {
+    return (
+      <>
+        {/* <div className="flex flex-col justify-center items-center mt-[255px]">
+          <OneButton
+            className="!w-[150px]"
+            text="ADD ORDER"
+            onClick={() => navigate("/orders/add-order/pickup")}
+            showIcon={true}
+            icon={AddOrderIcon}
+            variant="primary"
+          />
+          <p className="text-[12px] mt-1 text-[#2f3e46] text-opacity-30 font-Open">
+            Let's place your first Order!
+          </p>
+        </div> */}
+        <div className="">
+          <div className="flex gap-2 mt-6 lg:mt-7">
+            <img src={CalenderIcon} alt="CalenderIcon" />
+            <span className="text-[1rem] font-semibold font-Open leading-[22px] lg:text-[18px] lg:leading-6">
+              Important Today
+            </span>
+          </div>
+          <div className="flex gap-x-6 flex-wrap">
+            {emptyOrdersArr?.map((order: any, i: number) => (
+              <div
+                className="border-[#E8E8E8] border-[1px] rounded-lg shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] mt-4 flex-1 w-[273px] p-4"
+                key={i}
+              >
+                <div className="flex flex-col">
+                  <div className="font-bold font-Lato mb-2 lg:mb-3 text-[#1C1C1C] lg:text-[#F57960] text-[22px] lg:text-[2rem] leading-7">
+                    {order?.count}
+                  </div>
+                  <p className="lg:text-[#1C1C1C] font-normal lg:text-base font-Open text-sm text-[#494949] leading-5 lg:leading-[22px]">
+                    {order?.text}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="border border-[#E8E8E8] mt-6 h-[550px] flex  rounded-xl !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)]">
+            <div className="w-full h-full pr-2">
+              <div className="rounded-tr-xl rounded-tl-xl px-4  h-[50px] bg-[#F6F6F6]">
+                <div className="flex justify-between">
+                  <div className="flex pt-3">
+                    <img src={AnalyticsIcon} className="px-2" alt="" />
+                    <span className="text-lg flex  font-Lato leading-6 font-medium">
+                      Revenue
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center items-center mt-20">
+                <img
+                  src={NoDataGif}
+                  alt="no data found"
+                  width={178}
+                  height={180}
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center ml-10">
+                <OneButton
+                  text={"ADD ORDER"}
+                  className="!w-[120px]"
+                  onClick={() => navigate("/orders/add-order/pickup")}
+                  variant="quad"
+                  showIcon={true}
+                  icon={PlusIcon}
+                />
+              </div>
+            </div>
+            <div className="border-r-[#E8E8E8] w-[500px] flex flex-col  h-full p-4">
+              <div className="flex-1 w-full">
+                <div className="h-full flex items-center w-full">
+                  <div className="w-full">
+                    <div className="text-2xl font-bold leading-7 text-[#1C1C1C] font-Lato flex w-full justify-between ">
+                      {/* {commaSeparator(
+                        getValidNumber(
+                          redashOperationalMetricsData?.[0]?.current_totalOrders
+                        )
+                      ) || "-"} */}
+                      ₹0
+                      {/* <div className="py-1">
+                        <img
+                          src={
+                            getValidNumber(
+                              redashOperationalMetricsData?.[0]
+                                ?.percentageDifference_totalOrders
+                            ) < 0
+                              ? RedEllipse
+                              : GreenEllipse
+                          }
+                          alt="orders growth for profit or loss"
+                        />
+                      </div> */}
+                    </div>
+                    <div className="flex justify-between">
+                      <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
+                        Highest Order Value
+                      </span>
+                      <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
+                        {/* {getValidNumber(
+                          redashOperationalMetricsData?.[0]
+                            ?.percentageDifference_totalOrders
+                        ) !== 0
+                          ? `(${commaSeparator(
+                              getValidNumber(
+                                redashOperationalMetricsData?.[0]
+                                  ?.percentageDifference_totalOrders
+                              ).toFixed(0)
+                            )}%)`
+                          : "-"} */}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 ">
+                <div className="h-full flex items-center w-full">
+                  <div className="w-full">
+                    <div className="text-2xl font-bold leading-7 text-[#1C1C1C] font-Lato flex justify-between w-full">
+                      {/* {inrValueFormatter(
+                        getValidNumber(
+                          parseFloat(
+                            redashOperationalMetricsData?.[0]
+                              ?.current_totalRevenue || 0
+                          )
+                        )
+                      )} */}
+                      ₹0
+                      {/* <div className="py-1">
+                        <img
+                          src={
+                            getValidNumber(
+                              redashOperationalMetricsData?.[0]
+                                ?.percentageDifference_totalRevenue
+                            ) < 0
+                              ? RedEllipse
+                              : GreenEllipse
+                          }
+                          alt="revenue growth for profit or loss"
+                        />
+                      </div> */}
+                    </div>
+                    <div className="flex justify-between">
+                      <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
+                        Avg Order Value
+                      </span>
+                      <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
+                        {/* {getValidNumber(
+                          redashOperationalMetricsData?.[0]
+                            ?.percentageDifference_totalRevenue
+                        ) !== 0
+                          ? `(${commaSeparator(
+                              getValidNumber(
+                                redashOperationalMetricsData?.[0]
+                                  ?.percentageDifference_totalRevenue
+                              ).toFixed(0)
+                            )}%)`
+                          : "-"} */}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 ">
+                <div className="h-full flex items-center w-full">
+                  <div className="w-full">
+                    <div className="text-2xl font-bold leading-7 text-[#1C1C1C] font-Lato flex justify-between w-full">
+                      {/* {commaSeparator(
+                        getValidNumber(
+                          redashOperationalMetricsData?.[0]?.current_totalWeight?.toFixed(
+                            0
+                          ) || 0
+                        )
+                      )} */}
+                      ₹0
+                      {/* <div className="py-1">
+                        <img
+                          src={
+                            getValidNumber(
+                              redashOperationalMetricsData?.[0]
+                                ?.percentageDifference_totalWeight
+                            ) < 0
+                              ? RedEllipse
+                              : GreenEllipse
+                          }
+                          alt="total weight growth for profit or loss"
+                        />
+                      </div> */}
+                    </div>
+                    <div className="flex justify-between">
+                      <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
+                        Today’s Revenue
+                      </span>
+                      <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
+                        {/* {getValidNumber(
+                          redashOperationalMetricsData?.[0]
+                            ?.percentageDifference_totalWeight
+                        ) !== 0
+                          ? `(${getValidNumber(
+                              redashOperationalMetricsData?.[0]
+                                ?.percentageDifference_totalWeight
+                            ).toFixed(0)}%)`
+                          : "-"} */}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   React.useEffect(() => {
     let data = localStorage.getItem("userInfo") as any;
@@ -312,26 +554,7 @@ export const Overview = (props: IOverview) => {
           {/* <div className="mt-[100px]">
             <CouponScreen />
           </div> */}
-          <div className="flex flex-col justify-center items-center mt-[255px]">
-            {/* <CustomButton
-              className="px-2 py-4 font-semibold text-[14px] !w-[150px]"
-              text="ADD ORDER"
-              onClick={() => navigate("/orders/add-order/pickup")}
-              showIcon={true}
-              icon={AddOrderIcon}
-            /> */}
-            <OneButton
-              className="!w-[150px]"
-              text="ADD ORDER"
-              onClick={() => navigate("/orders/add-order/pickup")}
-              showIcon={true}
-              icon={AddOrderIcon}
-              variant="primary"
-            />
-            <p className="text-[12px] mt-1 text-[#2f3e46] text-opacity-30 font-Open">
-              Let's place your first Order!
-            </p>
-          </div>
+          {dashboardForNewUser()}
         </>
       )}
     </>
