@@ -373,7 +373,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <></>
             ) : (
               <span className="font-Open text-[10px] font-normal leading-4  text-[#1C1C1C]">
-                ₹ {channel?.price}
+                {channel?.price > 0 ? `₹${channel.price}` : "-"}
               </span>
             )}
           </div>
@@ -401,7 +401,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         return (
           <div className="flex justify-center">
             <span className="font-Open text-[10px] font-normal leading-4  text-[#1C1C1C]">
-              ₹ {channel?.price}
+              {channel?.price > 0 ? `₹${channel.price}` : "-"}
             </span>
           </div>
         );
@@ -428,7 +428,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
         return (
           <div className="flex justify-center">
             <span className="font-Open text-[10px] font-normal leading-4  text-[#1C1C1C]">
-              ₹ {channel?.price}
+              {channel?.price > 0 ? `₹${channel.price}` : "-"}
             </span>
           </div>
         );
