@@ -11,9 +11,6 @@ function Accordian({
 }: any) {
   const [accordianOpen, setAccordianOpen] = useState(false);
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-
-  console.log("accordian-comdition", !accordianOpen && !isLgScreen);
-
   return (
     <div className={`${className} items-center scroll-smooth w-[100%]`}>
       {(!isLgScreen || showHeaderForDesktop) && (
