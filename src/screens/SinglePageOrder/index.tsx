@@ -850,16 +850,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSelectedOrderType(orderTypeForDropdown);
   }, [order?.orderType, order?.transit]);
 
-  // useEffect(() => {
-  //   setColumns((prevColumns) => [
-  //     ...prevColumns,
-  //     {
-  //       accessorKey: "age",
-  //       header: "Age",
-  //     },
-  //   ]);
-  // }, []);
-
   return (
     <>
       <div className="mb-10">
@@ -893,19 +883,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         : "border-[#E8E8E8]"
                     } overflow-auto scroll-smooth  `}
                   >
-                    {/* {!isLgScreen && (
-                  <div
-                    className="flex border-b items-center p-2 bg-[#F6F6F6] justify-between top-0"
-                    style={{ position: "sticky" }}
-                  >
-                    <span className="mx-2 font-bold font-Open">
-                      Address Details
-                    </span>
-                    <button className="mx-2">
-                      <img src={downArrow} />
-                    </button>
-                  </div>
-                )} */}
                     <Accordian
                       headerChild={
                         <div className="flex w-[100%] items-center justify-between">
@@ -913,11 +890,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             <span className="mx-2 font-bold font-Open">
                               {"Address Details"}
                             </span>
-                          </div>
-                          <div>
-                            <button className="mx-2">
-                              <img src={downArrow} />
-                            </button>
                           </div>
                         </div>
                       }
@@ -983,11 +955,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             <span className="mx-2 font-bold font-Open">
                               {"Order Details"}
                             </span>
-                          </div>
-                          <div>
-                            <button className="mx-2">
-                              <img src={downArrow} />
-                            </button>
                           </div>
                         </div>
                       }

@@ -15,17 +15,23 @@ function Accordian({
     <div className={`${className} items-center scroll-smooth w-[100%]`}>
       {(!isLgScreen || showHeaderForDesktop) && (
         <div
-          className={`flex rounded-tl-lg rounded-tr-lg  ${
-            accordianOpen
-              ? "border-b"
-              : "border-none rounded-bl-lg rounded-br-lg"
+          className={`flex rounded-tl-lg rounded-tr-lg ${
+            accordianOpen ? "border-b" : "rounded-bl-lg rounded-br-lg"
           } items-center z-10  top-0  p-2 ${
             !isLgScreen ? "bg-[#F6F6F6] " : "bg-[#ffffff] border-b"
           } bg-[#F6F6F6] top-0`}
           style={{ position: "sticky" }}
-          onClick={() => setAccordianOpen(!accordianOpen)}
         >
           {headerChild}
+
+          {!isLgScreen && (
+            <button
+              className="mx-2 w-[25px] h-[25px] flex justify-center items-center rounded-full hover:bg-[#e7e7e7] transition duration-300 ease-in-out"
+              onClick={() => setAccordianOpen(!accordianOpen)}
+            >
+              <img src={downArrow} />
+            </button>
+          )}
         </div>
       )}
       {!isLgScreen ? (
