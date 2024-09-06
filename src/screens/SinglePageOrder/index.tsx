@@ -283,6 +283,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 type="radio"
                 name="type"
                 value={order?.orderType}
+                disabled={showDownloadLebal}
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 checked={
                   order?.orderType === "B2C" && order?.transit === "REVERSE"
@@ -307,6 +308,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 type="radio"
                 name="type"
                 value={order?.orderType}
+                disabled={true}
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 checked={order?.orderType === "INTERNATIONAL"}
                 onChange={(e) => {
@@ -661,8 +663,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     }
   };
 
-  console.log("order--->", order);
-
   const summaryDetails = () => {
     return (
       <>
@@ -777,7 +777,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     }
                     textTransform="capitalize"
                     className={`${
-                      isLgScreen ? "!w-[120px]" : "!w-[100px]"
+                      isLgScreen ? "!w-[120px]" : "!w-[80px] text-[14px]"
                     } !bg-transparent`}
                   />
                   <OneButton
@@ -792,7 +792,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       isDownloadLoading?.identifier === "Download_Multi_Tax"
                     }
                     className={`${
-                      isLgScreen ? "!w-[120px]" : "!w-[100px] "
+                      isLgScreen ? "!w-[120px]" : "!w-[80px] text-[14px]"
                     } !bg-transparent`}
                   />
                   <OneButton
@@ -807,7 +807,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       isDownloadLoading?.identifier === "downloadManifest"
                     }
                     className={`${
-                      isLgScreen ? "!w-[120px]" : "!w-[100px]"
+                      isLgScreen ? "!w-[120px]" : "!w-[90px] text-[14px]"
                     }  !bg-transparent`}
                   />
                 </div>
@@ -876,7 +876,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       highLightField?.addressDetails
                         ? "border-[#004EFF]"
                         : "border-[#E8E8E8]"
-                    } overflow-auto scroll-smooth  `}
+                    } overflow-auto scroll-smooth`}
                   >
                     <Accordian
                       headerChild={
@@ -1122,7 +1122,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     />
                   </div>
 
-                  {order?.courierPartner && (
+                  {/* {order?.courierPartner && (
                     <div
                       className={`border flex justify-between ${
                         highLightField?.pickupTimeDetails
@@ -1196,39 +1196,35 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         </div>
                       </Accordian>
                     </div>
-                  )}
+                  )} */}
 
-                  {order?.boxInfo?.length > 0 &&
-                    order?.courierPartner &&
-                    order?.pickupDate && (
-                      <>
-                        <div>{summaryDetails()}</div>
-                        {showDownloadLebal && (
-                          <div className="border-[1px] rounded-md border-[#E8E8E8]">
-                            <div className="flex justify-between items-center px-4 py-3">
-                              <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
-                                Ready to place a new order? Click here!
-                              </span>
-                              <OneButton
-                                onClick={() => {
-                                  window.location.reload();
-                                  sessionStorage.clear();
-                                }}
-                                text={`CREATE NEW ORDER`}
-                                variant="primary"
-                              />
-                            </div>
+                  {order?.boxInfo?.length > 0 && order?.courierPartner && (
+                    <>
+                      <div>{summaryDetails()}</div>
+                      {showDownloadLebal && (
+                        <div className="border-[1px] rounded-md border-[#E8E8E8]">
+                          <div className="flex justify-between items-center px-4 py-3">
+                            <span className="font-Open font-semibold leading-[22px] text-base text-[#1C1C1C]">
+                              Ready to place a new order? Click here!
+                            </span>
+                            <OneButton
+                              onClick={() => {
+                                window.location.reload();
+                                sessionStorage.clear();
+                              }}
+                              text={`CREATE NEW ORDER`}
+                              variant="primary"
+                            />
                           </div>
-                        )}
-                      </>
-                    )}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
 
               <RightSideModal
-                className={`w-full ${
-                  isLgScreen ? "md:!w-[400px]" : "mobile-modal-styles"
-                }`}
+                className={`w-full md:!w-[400px]`}
                 wrapperClassName="rounded-l-xl"
                 isOpen={showDateAndTimeModal}
                 onClose={() => setShowDateAndTimeModal(false)}
