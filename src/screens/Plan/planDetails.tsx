@@ -39,6 +39,8 @@ import OneButton from "../../components/Button/OneButton";
 import infoIcon from "../../assets/info.svg";
 import CustomCenterModal from "../../components/CustomModal/customCenterModal";
 import ZoneMappingModal from "./ZoneMappingModal";
+import FeatureRateCard from "./featureRateCard";
+import { Spinner } from "../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -53,6 +55,7 @@ const PlanDetails = (props: ITypeProps) => {
   const [allPlans, setAllPlans] = useState<any>([]);
   const [pendingPlan, setPendingPlan] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [LoaderForAssignValue, setLoaderForAssignValue] = useState(false);
   const [renderingComponents, setRenderingComponents] = useState<any>(0);
 
   // State to hold logistics rate card data
@@ -62,6 +65,8 @@ const PlanDetails = (props: ITypeProps) => {
   const [codData, setCodData] = useState<any>([]);
   const [modeSelect, setModeSelect] = useState("B2C");
   const [modalShowZoneMapping, setModalShowZoneMapping] = useState(false);
+  const [featureRateCardData, setFeatureRateCardData] = useState<any>([]);
+  // console.log("🚀 ~ PlanDetails ~ featureRateCardData:", featureRateCardData);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,6 +76,7 @@ const PlanDetails = (props: ITypeProps) => {
     { index: 0, label: "Courier Pricing" },
     // { index: 1, label: "VAS Pricing" },
     { index: 1, label: "COD Pricing" },
+    { index: 2, label: "Features" },
   ];
   let pricingData = [
     {
@@ -713,16 +719,20 @@ const PlanDetails = (props: ITypeProps) => {
   };
 
   const assignPlan = async () => {
+    setLoaderForAssignValue(true);
     let payload = { planId: pendingPlan?.planId };
     try {
       const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
       if (responseV4?.success) {
-        console.log("responseV4", responseV4?.message.includes("Approve"));
+        // console.log("responseV4", responseV4?.message.includes("Approve"));
         if (responseV4?.message.includes("Approve")) {
           toast.success(responseV4?.message);
           setIsModalOpen(false);
+          setLoaderForAssignValue(false);
         } else {
           setIsModalOpen(false);
+          setLoaderForAssignValue(false);
+
           toast.success(responseV4?.message);
           window.location.reload();
         }
@@ -743,6 +753,7 @@ const PlanDetails = (props: ITypeProps) => {
       const { data } = await POST(GET_PLANS_PREVIEW, payload);
       if (data?.success && data?.data?.length > 0) {
         let rateCards: any = data.data[0].rateCards;
+        // console.log("🚀 ~ planPreview ~ rateCards:", rateCards);
 
         // Filter and set logistics data
         const filteredLogisticsData: any = rateCards
@@ -755,6 +766,14 @@ const PlanDetails = (props: ITypeProps) => {
           .filter((card: any) => card.type === "COD")
           .map((card: any) => card.data);
         setCodData(filteredCodData);
+        setIsLoading(false);
+
+        // Filter and set feature rate card data
+        const filteredFeatureRateCardData = rateCards
+          .filter((card: any) => card.type === "FEATURE_RATE_CARD")
+          .map((card: any) => card.data);
+
+        setFeatureRateCardData(filteredFeatureRateCardData || []);
         setIsLoading(false);
       } else {
         setIsLoading(false);
@@ -910,6 +929,10 @@ const PlanDetails = (props: ITypeProps) => {
           )}
 
           {renderingComponents === 1 && <CodPricing codData={codData} />}
+
+          {renderingComponents === 2 && (
+            <FeatureRateCard featureRateCard={featureRateCardData} />
+          )}
 
           {/* Info Cards */}
           {/* <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-6 mx-5 lg:ml-[30px] ">
@@ -1120,11 +1143,17 @@ const PlanDetails = (props: ITypeProps) => {
                         }}
                         className="lg:!w-[184px] lg:!h-[54px] !bg-[white] !border-[1px] !border-[#A4A4A4] !text-[black] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
                       />
-                      <CustomButton
-                        text="yes"
-                        onClick={assignPlan}
-                        className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
-                      />
+                      {LoaderForAssignValue ? (
+                        <div className="flex justify-center items-center lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <CustomButton
+                          text="yes"
+                          onClick={assignPlan}
+                          className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

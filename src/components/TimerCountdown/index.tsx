@@ -23,8 +23,8 @@ const TimerCounter = (props: IProps) => {
   const [clickedOnce, setClickedOnce] = useState<any>(false);
 
   useEffect(() => {
-    let btype = localStorage.getItem("businessType");
     let atype = localStorage.getItem("aadharNumber");
+    let btype = localStorage.getItem("businessType");
     let gtype = localStorage.getItem("gstNumber");
 
     setBusinessType(btype);
@@ -68,6 +68,7 @@ const TimerCounter = (props: IProps) => {
         setClientId(response.data.data.client_id);
         localStorage.setItem("client_id", response.data[0].data.client_id);
       } else {
+        setClickedOnce(false);
         toast.error("Aadhar OTP Resent Failed!");
       }
     } catch (error) {
@@ -89,6 +90,7 @@ const TimerCounter = (props: IProps) => {
         setMinutes(0);
         setSeconds(sec);
       } else {
+        setClickedOnce(false);
         toast.error("GST Verification Failed!");
       }
     } catch (error) {

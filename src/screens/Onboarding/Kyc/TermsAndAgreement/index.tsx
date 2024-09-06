@@ -59,7 +59,7 @@ export const ServiceComponent = (props: ITypeProps) => {
 
   const BottomButton = () => {
     return (
-      <div className="flex flex-col items-center px-5 md:px-0 pb-4  bg-white">
+      <div className="flex flex-col  px-5 md:px-0 pb-4  bg-white">
         {/* <div className="flex items-center md:px-9  self-start my-1 mx-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
@@ -82,7 +82,29 @@ export const ServiceComponent = (props: ITypeProps) => {
           />
         </div>
 
-        <div className="w-[100%] md:w-[320px] md:pb-5">
+        <div className="mt-6 flex gap-x-2 px-4">
+          <div className=" w-full">
+            <OneButton
+              variant="secondary"
+              onClick={() => navigate(-1)}
+              text="BACK"
+              className=" flex-1"
+            />
+          </div>
+
+          <div className=" w-full">
+            <OneButton
+              text="ACCEPT AND CONTINUE"
+              onClick={() => {
+                acceptService();
+              }}
+              disabled={!checkbox}
+              variant="primary"
+            />
+          </div>
+        </div>
+
+        {/* <div className="w-[100%] md:w-[320px] md:pb-5">
           <OneButton
             text="ACCEPT AND CONTINUE"
             onClick={() => {
@@ -91,7 +113,7 @@ export const ServiceComponent = (props: ITypeProps) => {
             disabled={!checkbox}
             variant="primary"
           />
-        </div>
+        </div> */}
 
         {/* <ServiceButton
           text="ACCEPT AND CONTINUE"

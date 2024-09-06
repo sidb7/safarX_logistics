@@ -150,6 +150,7 @@ const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
+const RTO_REATTEMPT = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -194,6 +195,7 @@ const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddr
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
 const GET_ALL_ADDRESSS = `${SELLER_BASE_URL}/pickupAddress/getAllAddress`;
 const UPDATE_ALL_ADDRESS = `${SELLER_BASE_URL}/order/bulkUpdateAddress`;
+const UPDATE_ALL_BOXES = `${SELLER_BASE_URL}/order/updateBoxOfMultipleOrders`;
 
 // PAYMENT GATEWAYS
 // Paytm
@@ -207,6 +209,11 @@ const PHONEPE_TRANSACTION_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRecha
 // Wallet
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
 const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWalletTransaction`;
+const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRechargeUsingNeft`;
+const GET_CODREMITTANCE_AMOUNT = `${SELLER_URL}/api/v1/wallet/getEligibleCodRemittanceAmount`;
+const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalance`;
+
+// wallet / manualWalletRechargeUsingNeft;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
@@ -314,7 +321,7 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 
 //Tracking
 const TRACKING = `${SELLER_URL}/api/v1/tracking/getTracking`;
-const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTrackingforSystem`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -384,6 +391,8 @@ const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
 const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
 const DOWNLOAD_INVOICE_FROM_S3 = `${SELLER_BASE_URL}/billing/downloadInvoiceFromS3`;
 const DOWNLOAD_MISREPORT_FROM_S3 = `${SELLER_BASE_URL}/billing/downloadMisReportFromS3`;
+const GET_BILLED_ORDERS = `${SELLER_BASE_URL}/billing/getBilledOrders`;
+const DOWNLOAD_ORDER_BILLED_CSV = `${SELLER_BASE_URL}/billing/downloadBilledAwbCSV`;
 
 // RuleEngine
 const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPartner`;
@@ -418,6 +427,11 @@ const UPDATE_COMMUNICATION_RATE_CARD = `${SELLER_BASE_URL}/rateCards/updateCommu
 const FETCH_ZONE_MATRIX = `${SELLER_BASE_URL}/order/zoneMatrix`;
 
 // order / getAvailableServicesingleOrderPage;
+
+// Advance Rule Engine
+
+const FETCH_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/fetchAdvanceRuleEngine`;
+const CREATE_UPDATE_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/createAdvanceRuleEngine`;
 
 export {
   ADMIN_URL,
@@ -627,10 +641,19 @@ export {
   GET_ALLPARTNERS_OF_RULEENGINE,
   FETCH_ZONE_MATRIX,
   // DUPLICATE_ORDER,
-  GET_ALL_ADDRESSS,
-  UPDATE_ALL_ADDRESS,
   GET_COMMUNICATION_RATE_CARD,
   UPDATE_COMMUNICATION_RATE_CARD,
   DOWNLOAD_INVOICE_FROM_S3,
   DOWNLOAD_MISREPORT_FROM_S3,
+  GET_BILLED_ORDERS,
+  DOWNLOAD_ORDER_BILLED_CSV,
+  FETCH_ADVANCE_RULE_ENGINE,
+  CREATE_UPDATE_ADVANCE_RULE_ENGINE,
+  RTO_REATTEMPT,
+  WALLET_RECHARGE_USING_NEFT,
+  GET_CODREMITTANCE_AMOUNT,
+  POST_UPDATE_WALLETBALANCE,
+  GET_ALL_ADDRESSS,
+  UPDATE_ALL_ADDRESS,
+  UPDATE_ALL_BOXES,
 };

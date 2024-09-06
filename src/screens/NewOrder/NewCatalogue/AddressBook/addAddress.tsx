@@ -20,7 +20,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   const navigate = useNavigate();
   const { activeTab } = useLocation().state;
   const [isDisabled, setIsDisabled] = useState(false);
-  const [addressType, setAddressType] = useState();
+  const [addressType, setAddressType] = useState("Pickup Address");
   const [addAddress, setAddAddress] = useState<any>({
     flatNo: "",
     locality: "",

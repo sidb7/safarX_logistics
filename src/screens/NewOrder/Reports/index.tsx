@@ -21,7 +21,7 @@ const Reports = () => {
     null,
   ]); // Explicitly type dateRange
   const [startDate, endDate] = dateRange;
-  const [reportValue, setReportValue] = useState<any>();
+  const [reportValue, setReportValue] = useState<any>("SHIPMENTSTATUS");
   const [isActive, setIsActive] = useState<any>(false);
   const [isLoading, setIsLoading] = useState<any>(false);
 
@@ -61,7 +61,7 @@ const Reports = () => {
 
   const fetchReport = async () => {
     // console.log("startandenddate", startDate, endDate);
-
+    console.log("hello triggered");
     if (reportValue === "" || reportValue === undefined) {
       toast.error("Please Select Report Type");
     } else {

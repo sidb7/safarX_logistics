@@ -10,15 +10,19 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import CrossIcon from "../../../assets/cross.svg";
+import AddBoxIcon from "../../../assets/add-circle.svg";
 import {
   FETCH_ALL_PARTNER,
   FETCH_MANIFEST_DATA,
   GET_ORDER_BY_ID,
   GET_ORDER_ERRORS,
+  GET_SELLER_BOX,
   GET_SELLER_ORDER,
   POST_PLACE_ALL_ORDERS,
   GET_ALL_ADDRESSS,
   UPDATE_ALL_ADDRESS,
+  RTO_REATTEMPT,
+  UPDATE_ALL_BOXES,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-hot-toast";
@@ -41,6 +45,10 @@ import WebLocationIcon from "../../../assets/PickUp/Location.svg";
 import CustomInputBox from "../../../components/Input";
 import InfoCircle from "../../../assets/info-circle.svg";
 import BulkActionIcon from "../../../assets/Bulk_Action.svg";
+import RTOicon from "../../../assets/RTO.svg";
+import ReattemptIcon from "../../../assets/reattempt.svg";
+import BoxIcon from "../../../assets/layer.svg";
+import InputBox from "../../../components/Input";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -70,6 +78,7 @@ interface IOrderstatusProps {
   getErrors: any;
   selectedDateRange: any;
   filterPayLoad: any;
+  isLoading: any;
   bulkActionObject: any;
   setBulkActionObject: any;
 }
@@ -92,6 +101,7 @@ const statusBar = (statusName: string, orderNumber: string) => {
 };
 
 let insertFirst = true;
+let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
 
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId = 0,
@@ -121,6 +131,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   getErrors,
   selectedDateRange,
   filterPayLoad,
+  isLoading,
   bulkActionObject,
   setBulkActionObject,
 }) => {
@@ -155,6 +166,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   activeTab = activeTab?.toUpperCase();
   const stateValue = useSelector((state: any) => state?.paginationSlice);
   const [pageToOpen, setPageToOpen] = useState<any>("Home");
+
   const getIndexFromActiveTab = (arr: any, tabName: any) => {
     let tabIndex = arr.findIndex((e: any) => e.value === tabName);
     if (tabIndex > -1) {
@@ -180,13 +192,24 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       fullAddress: null,
       landMark: null,
     },
+    box: {
+      name: null,
+      length: null,
+      breadth: null,
+      height: null,
+      weight: null,
+      volumetricWeight: null,
+      appliedWeight: null,
+    },
   });
   const [allAddresses, setAllAddresses]: any = useState([]);
   const [selectedTempOrderIds, setSelectedTempOrderIds]: any = useState([]);
+  const [allBoxes, setAllBoxes]: any = useState([]);
+  const [boxBoolean, setBoxBoolean]: any = useState(false);
 
   const setScrollIndex = (id: number) => {
-    // handleTabChange(id);
     const tabName = statusData[id].value;
+    console.log("tabName", tabName);
     navigate(`/orders/view-orders?activeTab=${tabName?.toLowerCase()}`);
   };
 
@@ -217,6 +240,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     },
   ]);
 
+  //
   const actionsObject: any = {
     DRAFT: [
       {
@@ -264,14 +288,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "Download Invoice",
       },
     ],
-    // "IN TRANSIT": [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
+    "IN TRANSIT": [
+      {
+        icon: RTOicon,
+        hovertext: "Rto Orders",
+        identifier: "Rto",
+        buttonName: "RTO ORDERS",
+      },
+    ],
     // "OUT OF DELIVERY": [
     //   {
     //     icon: CrossIcon,
@@ -296,14 +320,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     //     buttonName: "CANCEL ORDERS",
     //   },
     // ],
-    // EXCEPTION: [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
+    EXCEPTION: [
+      {
+        icon: RTOicon,
+        hovertext: "Rto Orders",
+        identifier: "Rto",
+        buttonName: "RTO ORDERS",
+      },
+      {
+        icon: ReattemptIcon,
+        hovertext: "Re-Attempt Orders",
+        identifier: "Re-Attempt",
+        buttonName: "RE-ATTEMPT ORDERS",
+      },
+    ],
     "READY TO PICK": [
       // {
       //   icon: CrossIcon,
@@ -336,9 +366,50 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     return actionsObject[currentStatus];
   };
 
+  const rtoReattempt = async (awbArray: string[], type: string) => {
+    let payload = {
+      awbs: awbArray,
+      requestType: type,
+    };
+    // setIsLoadingManifest({
+    //   isLoading: true,
+    //   identifier: "Rto",
+    // });
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    try {
+      const response = await fetch(RTO_REATTEMPT, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message);
+      } else {
+        const data = await response.json();
+        toast.success("RTO Reattempt initiated successfully", data);
+      }
+    } catch (error) {
+      console.error("Error in RTO Reattempt:", error);
+      toast.error("An error occurred during RTO Reattempt");
+    } finally {
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
+    }
+  };
+
   const fetchManifest = async (awbArray?: any) => {
     let payload = {
       awbs: awbArray,
+      source: "WEBSITE",
     };
     setIsLoadingManifest({
       isLoading: true,
@@ -437,6 +508,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
           const { data } = await POST(GET_ALL_ADDRESSS, {});
 
+          const { data: boxData } = await POST(GET_SELLER_BOX, {});
+
+          let boxes = [{ name: "Select Box" }, ...boxData?.data];
+
+          setAllBoxes(boxes);
+
           const tempOrderIds = selectedRowdata.map(
             (data: any, index: any) => data.original.tempOrderId
           );
@@ -495,7 +572,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             });
           }
         }
-        // handleTabChange(1);
+
         break;
       }
       case "BOOKED":
@@ -565,21 +642,107 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         // }
         break;
       }
-      case "IN TRANSIT":
+      case "IN TRANSIT": {
+        // if (selectedRowdata.length > 0) {
+        if (identifier === "Rto") {
+          if (selectedRowdata.length > 0) {
+            const awbNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
+            rtoReattempt(awbNo, "RTO");
+          } else {
+            toast.error("Please select atleast one order for Cancellation");
+            return;
+          }
+        } else {
+          toast.error("Please select atleast one order for Download Invoice");
+          return;
+        }
+
+        // } else {
+        //   toast.error("Please select atleast one order for tax Invoice");
+        // }
+        break;
+      }
       case "OUT OF DELIVERY":
       case "DELIVERED":
       case "RETURN":
       case "EXCEPTION": {
+        // if (selectedRowdata.length > 0) {
+        //   if (identifier === "Cancel") {
+        //     const awbNo = selectedRowdata.map((data: any, index: any) => {
+        //       return data.original.awb;
+        //     });
+        //     setCancellationModal &&
+        //       setCancellationModal({ isOpen: true, payload: awbNo });
+        //   }
+        // } else if (identifier === "Download_menifest_report") {
+        //   if (selectedRowdata.length > 0) {
+        //     const awbsNo = selectedRowdata.map((data: any, index: any) => {
+        //       return data.original.awb;
+        //     });
+
+        //     fetchManifest(awbsNo);
+        //   } else {
+        //     toast.error(
+        //       "Please select atleast one order for Download Manifest"
+        //     );
+        //     return;
+        //   }
+        // }else if (identifier === "Rto") {
+        //   if (selectedRowdata.length > 0) {
+        //     const awbNo = selectedRowdata.map((data: any, index: any) => {
+        //       return data.original.awb;
+        //     });
+        //     console.log("AWBNO>>>>>>>>>",awbNo)
+        //     rtoReattempt(awbNo, "RTO");
+        //   } else {
+        //     toast.error(
+        //       "Please select atleast one order for TESTING"
+        //     );
+        //     return;
+        //   }
+        // } else {
+        //   toast.error("Please select atleast one order");
+        // }
         if (selectedRowdata.length > 0) {
-          if (identifier === "Cancel") {
-            const awbNo = selectedRowdata.map((data: any, index: any) => {
-              return data.original.awb;
-            });
-            setCancellationModal &&
-              setCancellationModal({ isOpen: true, payload: awbNo });
+          const awbNo = selectedRowdata.map((data: any) => data.original.awb);
+
+          switch (identifier) {
+            case "Cancel":
+              setCancellationModal?.({ isOpen: true, payload: awbNo });
+              break;
+            case "Download_menifest_report":
+              fetchManifest(awbNo);
+              break;
+            case "Rto":
+              rtoReattempt(awbNo, "RTO");
+              break;
+            case "Re-Attempt":
+              rtoReattempt(awbNo, "REATTEMPT");
+              break;
+            default:
+              toast.error("Invalid identifier");
           }
         } else {
-          toast.error("Please select atleast one order");
+          switch (identifier) {
+            case "Cancel":
+              toast.error("Please select at least one order for cancellation");
+              break;
+            case "Download_menifest_report":
+              toast.error(
+                "Please select at least one order for Download Manifest"
+              );
+              break;
+            case "Rto":
+              toast.error("Please select at least one order for RTO");
+              break;
+            case "Re-Attempt":
+              toast.error("Please select at least one order for Re-Attempt");
+              break;
+            default:
+              toast.error("Please select at least one order");
+          }
         }
         break;
       }
@@ -801,6 +964,94 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 Filter
               </span>
             </div> */}
+          </div>
+        );
+      } else if (currentStatus === "IN TRANSIT") {
+        // buttons and the logic to here for "IN TRANSIT"
+        return (
+          <div className="grid grid-cols-4 lg:flex ">
+            {getActionsIcon()?.length > 0 && manifestButton && (
+              <div className="rounded-md flex mx-3 gap-x-3">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <button
+                        key={index}
+                        className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } rounded-l-md rounded-r-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
+                        }
+                      >
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+                        <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
+                      </button>
+                    </>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      } else if (currentStatus === "EXCEPTION") {
+        // buttons and the logic to here for "EXCEPTION"
+        return (
+          <div className="grid grid-cols-4 lg:flex ">
+            {getActionsIcon()?.length > 0 && manifestButton && (
+              <div className="rounded-md flex mx-3 gap-x-3">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <button
+                        key={index}
+                        className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } rounded-l-md rounded-r-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
+                        }
+                      >
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+                        <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
+                      </button>
+                    </>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
       } else {
@@ -1076,117 +1327,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  // const getErrors = async () => {
-  //   setIsErrorListLoading(true);
-  //   const { data } = await POST(GET_ORDER_ERRORS);
-  //   if (data?.status) {
-  //     const result = [];
-
-  //     for (const [key, value] of Object.entries(data?.data?.[0])) {
-  //       const currentObject = {
-  //         errorName: key,
-  //         value: value,
-  //       };
-  //       result.push(currentObject);
-  //     }
-  //     setErrorData(result);
-  //     setIsErrorListLoading(false);
-  //   } else {
-  //     setIsErrorListLoading(false);
-  //   }
-  // };
-
-  // function getObjectWithIsActiveTrue(data: any, name: any) {
-  //   const tempArrTwo = filterPayLoad?.filterArrTwo;
-  //   const tempArrOne = filterPayLoad?.filterArrOne;
-
-  //   const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
-  //     const index = arr.findIndex(
-  //       (findArr: any) => Object.keys(findArr)[0] === key
-  //     );
-
-  //     if (index > -1) {
-  //       arr[index][key][subKey] = data;
-  //     } else {
-  //       const newObj = { [key]: { [subKey]: [...data] } };
-  //       arr.push(newObj);
-  //     }
-  //   };
-
-  //   switch (name) {
-  //     case "Delivery Pincode":
-  //       updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
-  //       break;
-  //     case "Pickup Pincode":
-  //       updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
-  //       break;
-  //     case "PaymentType":
-  //       updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
-  //       break;
-  //     case "Partners":
-  //       updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
-  //       break;
-  //     case "Order Type":
-  //       updateFilterArr(tempArrOne, "orderType", "$in", data);
-  //       break;
-  //     case "Sources":
-  //       updateFilterArr(tempArrOne, "source", "$in", data);
-  //       break;
-  //     case "Seller Id":
-  //       updateFilterArr(tempArrOne, "sellerId", "$in", data);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  //   setFilterPayLoad({
-  //     ...filterPayLoad,
-  //     filterArrTwo: [...tempArrTwo],
-  //     filterArrOne: [...tempArrOne],
-  //   });
-  // }
-
-  // const applyFilterforOrders = async () => {
-  //   try {
-  //     setIsFilterLoading(true);
-  //     let payload = {
-  //       skip: 0,
-  //       limit: 10,
-  //       pageNo: 1,
-  //       sort: { _id: -1 },
-  //       currentStatus,
-  //       filterArrOne: filterPayLoad?.filterArrOne || [],
-  //       filterArrTwo: filterPayLoad?.filterArrTwo || [],
-  //     };
-  //     const { data } = await POST(GET_SELLER_ORDER, payload);
-  //     const { OrderData, orderCount } = data?.data?.[0];
-  //     setStatusCount("", currentStatus, orderCount);
-  //     setTotalcount(orderCount ? orderCount : 0);
-
-  //     console.log("filterState----------------1 filterApi", filterState);
-
-  //     if (data?.status) {
-  //       setIsFilterLoading(false);
-  //       setOrders(OrderData);
-  //       setFilterModal(false);
-  //     } else {
-  //       setIsFilterLoading(false);
-  //       setFilterModal(false);
-  //       throw new Error(data?.meesage);
-  //     }
-  //   } catch (error: any) {
-  //     setIsFilterLoading(false);
-  //     toast.error(error);
-  //     return false;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (filterState?.menu?.length > 0) {
-  //     getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
-  //   }
-  // }, [filterState]);
-
   const handleSearchedAddress = (index: number, typeOfAddress: string) => {
     if (index === 0)
       setBulkActionObject({
@@ -1296,17 +1436,180 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
+  const updateBoxOfMultipleOrders = async () => {
+    try {
+      let checkIfArray = Object.values(validationErrors?.box);
+      console.log(
+        "🚀 ~ updateBoxOfMultipleOrders ~ checkIfArray:",
+        checkIfArray
+      );
+      if (checkIfArray.some((item: any) => item != null))
+        return toast.error("Please Check You Details First");
+      else {
+        const payload = {
+          tempOrderIds: selectedTempOrderIds,
+          boxDetails: bulkActionObject?.box,
+        };
+
+        const { data } = await POST(UPDATE_ALL_BOXES, payload);
+
+        if (data?.success) {
+          return toast.success(data?.message);
+        } else {
+          return toast.error(data?.message);
+        }
+      }
+
+      // setIsBulkModalOpen(false);
+      // getAllOrders("", stateValue);
+    } catch (error: any) {
+      return toast.error(error?.message);
+    }
+  };
+
+  const handleBoxUpdates = (label: string, value: string) => {
+    if (!isNaN(+value) || value == "") {
+      if (label === "length" || label === "breadth" || label === "height") {
+        dummyCalculativeObject = {
+          ...dummyCalculativeObject,
+          length: label === "length" ? +value : dummyCalculativeObject?.length,
+          breadth:
+            label === "breadth" ? +value : dummyCalculativeObject?.breadth,
+          height: label === "height" ? +value : dummyCalculativeObject?.height,
+        };
+      }
+
+      setBulkActionObject({
+        ...bulkActionObject,
+        box: {
+          ...bulkActionObject.box,
+          [label]: value,
+          volumetricWeight: +(
+            (+dummyCalculativeObject?.length *
+              +dummyCalculativeObject?.breadth *
+              +dummyCalculativeObject?.height) /
+            5000
+          ).toFixed(2),
+        },
+      });
+    }
+
+    if (label === "name") {
+      setBulkActionObject({
+        ...bulkActionObject,
+        box: { ...bulkActionObject.box, name: value },
+      });
+      if (!value)
+        setValidationErrors({
+          ...validationErrors,
+          box: {
+            ...validationErrors.box,
+            [label]: capitalizeFirstLetter("name Cannot be empty"),
+          },
+        });
+      else
+        setValidationErrors({
+          ...validationErrors,
+          box: {
+            ...validationErrors.box,
+            [label]: null,
+          },
+        });
+    } else {
+      if (!value)
+        if (label === "weight")
+          setValidationErrors({
+            ...validationErrors,
+            box: {
+              ...validationErrors.box,
+              [label]: capitalizeFirstLetter(
+                `${
+                  +value == 0
+                    ? `${label} cannot be equal to 0`
+                    : `${label} cannot be empty`
+                }`
+              ),
+            },
+          });
+        else
+          setValidationErrors({
+            ...validationErrors,
+            box: {
+              ...validationErrors.box,
+              [label]: capitalizeFirstLetter(` `),
+            },
+          });
+      else
+        setValidationErrors({
+          ...validationErrors,
+          box: {
+            ...validationErrors.box,
+            [label]: null,
+          },
+        });
+    }
+  };
+
+  const handleSelectBox = (boxId: any) => {
+    let boxDetails = allBoxes.filter((box: any) => box.boxId === boxId);
+    if (boxDetails.length > 0) {
+      setValidationErrors({
+        ...validationErrors,
+        box: {
+          ...validationErrors.box,
+          name: null,
+          length: null,
+          breadth: null,
+          height: null,
+          weight: null,
+          volumetricWeight: null,
+          appliedWeight: null,
+        },
+      });
+      setBoxBoolean(true);
+      setBulkActionObject({
+        ...bulkActionObject,
+        box: {
+          ...bulkActionObject.box,
+          name: boxDetails?.[0]?.name,
+          length: boxDetails?.[0]?.length,
+          height: boxDetails?.[0]?.height,
+          breadth: boxDetails?.[0]?.breadth,
+          weight: boxDetails?.[0]?.deadWeight,
+          volumetricWeight: boxDetails?.[0]?.volumetricWeight,
+        },
+      });
+    }
+  };
+
+  const handleAddYourBox = () => {
+    setBoxBoolean(false);
+    setBulkActionObject({
+      ...bulkActionObject,
+      box: {
+        name: "Box",
+        length: "1",
+        breadth: "1",
+        height: "1",
+        weight: "1",
+        volumetricWeight: "0",
+        appliedWeight: "1",
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col pt-7">
       <div className="flex font-medium customScroll whitespace-nowrap mt-2 ">
         {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
           return (
-            <div
+            <button
               key={index}
               style={{ borderBottomWidth: "3px" }}
               className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
                 tabIndex === index ? "!border-[#004EFF]" : ""
               }`}
+              disabled={isLoading}
               onClick={() => setScrollIndex(index)}
             >
               <span
@@ -1323,7 +1626,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               >
                 {orderNumber}
               </span>
-            </div>
+            </button>
           );
         })}
       </div>
@@ -1336,9 +1639,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center text-[22px] ">
                 {currentStatus === "DRAFT" && `${draftOrderCount.all} Orders`}
-                {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
-              00 Order
-              </span> */}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}
@@ -1406,6 +1706,17 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                     <img src={WebLocationIcon} />
                   </span>{" "}
                   Delivery Address
+                </div>
+                <div
+                  onClick={() => setPageToOpen("Box")}
+                  className={`cursor-pointer flex mt-5 flex-row select-none gap-x-[0.5rem] p-3 h-[52px] border-[1px] border-[#E8E8E8]
+                             " text-[black] rounded-lg "
+                        `}
+                >
+                  <span>
+                    <img src={BoxIcon} />
+                  </span>{" "}
+                  Box
                 </div>
               </>
             ) : pageToOpen === "Pickup" ? (
@@ -1877,75 +2188,242 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   />
                 </div>
               </>
+            ) : pageToOpen === "Box" ? (
+              <>
+                <div className="flex border-2 p-[1rem] rounded-md  flex-col gap-y-2 mt-1 ">
+                  <CustomDropDown
+                    onChange={(e: any) => {
+                      handleSelectBox(e.target.value);
+                    }}
+                    wrapperClass="h-[2.6rem] !text-[14px]"
+                    selectClassName="h-[2.6rem] !text-[14px]"
+                    // value={}
+                    // value={pickupAddress.state}
+                    // onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    // }}
+                    options={allBoxes.map((item: any) => {
+                      return { label: item.name, value: item.boxId };
+                    })}
+                  />
+                  <div
+                    onClick={handleAddYourBox}
+                    className="cursor-pointer h-[2.6rem] font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center my-1 py-1 px-2 rounded-md border-[1px] border-black-600"
+                  >
+                    <span>
+                      <img
+                        src={AddBoxIcon}
+                        alt="boxImage"
+                        className="w-4 h-4"
+                      />
+                    </span>
+                    <span className="font-open">Add Your Box</span>
+                  </div>
+                  <div
+                    className="items-center flex flex-col gap-y-[1rem] justify-between my-2 w-[100%]"
+                    style={{
+                      boxShadow:
+                        "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                    }}
+                    // onClick={() => handleProductsDetails(index)}
+                  >
+                    <div className="w-[100%]">
+                      <InputBox
+                        label="Box Name"
+                        value={bulkActionObject?.box?.name}
+                        isDisabled={boxBoolean ? true : false}
+                        name="boxName"
+                        inputType="text"
+                        // inputMode="numeric"
+                        onChange={(e: any) => {
+                          handleBoxUpdates("name", e.target.value);
+                        }}
+                        // inputError={inputError}
+                      />
+                      {validationErrors.box.name && (
+                        <div className="flex items-center gap-x-1 mt-1">
+                          <img
+                            src={InfoCircle}
+                            alt="info"
+                            width={10}
+                            height={10}
+                          />
+                          <span className="font-normal text-[#F35838] text-xs leading-3">
+                            {validationErrors.box.name}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-between w-[100%] gap-x-[2rem] ">
+                      <div className="flex flex-col w-[50%]">
+                        <InputBox
+                          label="Dead Weight (Kg)"
+                          value={bulkActionObject?.box?.weight}
+                          isDisabled={boxBoolean ? true : false}
+                          name="deadWeight"
+                          inputType="text"
+                          inputMode="numeric"
+                          onChange={(e: any) => {
+                            handleBoxUpdates("weight", e.target.value);
+                          }}
+                          // inputError={inputError}
+                        />
+                        {validationErrors.box.weight && (
+                          <div className="flex items-center gap-x-1 mt-1">
+                            <img
+                              src={InfoCircle}
+                              alt="info"
+                              width={10}
+                              height={10}
+                            />
+                            <span className="font-normal text-[#F35838] text-xs leading-3">
+                              {validationErrors.box.weight}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="w-[50%]">
+                        <InputBox
+                          label="Volumetric Weight"
+                          value={bulkActionObject?.box?.volumetricWeight}
+                          name="volumetricWeight"
+                          // onChange={(e: any) => {
+                          //   handleBoxUpdates("weight", e.target.value);
+                          // }}
+                          inputType="number"
+                          isDisabled={true}
+                          // inputError={inputError}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-between w-[100%] gap-x-[2rem] ">
+                      <div className="w-[50%]">
+                        <CustomDropDown
+                          onChange={() => {}}
+                          options={[{ label: "Cm", value: "cm" }]}
+                        />
+                      </div>
+                      <div className="flex w-[50%] gap-x-4">
+                        <div className="flex flex-col items-center">
+                          <InputBox
+                            label="L"
+                            inputType="text"
+                            inputMode="numeric"
+                            name="length"
+                            value={bulkActionObject?.box?.length}
+                            onChange={(e: any) => {
+                              handleBoxUpdates("length", e.target.value);
+                            }}
+                            isDisabled={boxBoolean ? true : false}
+                          />
+                          {validationErrors.box.length && (
+                            <div className="flex items-center gap-x-1 mt-1">
+                              <img
+                                src={InfoCircle}
+                                alt="info"
+                                width={10}
+                                height={10}
+                              />
+                              <span className="font-normal text-[#F35838] text-xs leading-3">
+                                {validationErrors.box.length}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <InputBox
+                            label="B"
+                            value={bulkActionObject?.box?.breadth}
+                            isDisabled={boxBoolean ? true : false}
+                            name="breadth"
+                            inputType="text"
+                            inputMode="numeric"
+                            onChange={(e: any) => {
+                              handleBoxUpdates("breadth", e.target.value);
+                            }}
+                          />
+                          {validationErrors.box.breadth && (
+                            <div className="flex items-center gap-x-1 mt-1">
+                              <img
+                                src={InfoCircle}
+                                alt="info"
+                                width={10}
+                                height={10}
+                              />
+                              <span className="font-normal text-[#F35838] text-xs leading-3">
+                                {validationErrors.box.breadth}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <InputBox
+                            label="H"
+                            // value={
+                            value={bulkActionObject?.box?.height}
+                            isDisabled={boxBoolean ? true : false}
+                            name="height"
+                            inputType="text"
+                            inputMode="numeric"
+                            onChange={(e: any) => {
+                              handleBoxUpdates("height", e.target.value);
+                            }}
+                          />
+                          {validationErrors.box.height && (
+                            <div className="flex items-center gap-x-1 mt-1">
+                              <img
+                                src={InfoCircle}
+                                alt="info"
+                                width={10}
+                                height={10}
+                              />
+                              <span className="font-normal text-[#F35838] text-xs leading-3">
+                                {validationErrors.box.height}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
+                  style={{
+                    marginLeft: "-1.25rem",
+                    width: "-webkit-fill-available",
+                  }}
+                >
+                  <OneButton
+                    text={"Back"}
+                    // disabled={errorsArray.length > 0 ? true : false}
+                    variant="secondary"
+                    onClick={() => {
+                      setPageToOpen("Home");
+                      setSearchedText("");
+                      setSearchResult([]);
+                    }}
+                    //   onClick={() => handleServices(placeOrderButton)}
+                    className="!w-[160px]"
+                  />
+
+                  <OneButton
+                    text={"Update Order"}
+                    // disabled={errorsArray.length > 0 ? true : false}
+                    variant="primary"
+                    onClick={() => {
+                      updateBoxOfMultipleOrders();
+                    }}
+                    //   onClick={() => handleServices(placeOrderButton)}
+                    className="!w-[160px]"
+                  />
+                </div>
+              </>
             ) : (
               ""
             )}
           </div>
         </div>
       </RightSideModal>
-
-      {/* filter modal */}
-
-      {/* {isLgScreen && (
-        <RightSideModal
-          isOpen={filterModal}
-          onClose={() => {
-            setFilterModal(false);
-          }}
-          className="w-[30%] !justify-between !items-stretch !hidden lg:!block"
-        >
-          <div>
-            <div className="flex justify-between mt-5 mx-5">
-              <div>
-                <p className="text-2xl font-normal">Filter</p>
-              </div>
-              <div>
-                <img
-                  src={CloseIcon}
-                  alt="close button"
-                  onClick={() => {
-                    setFilterModal(false);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="mx-5 ">
-              <FilterScreen
-                filterState={filterState}
-                setFilterState={setFilterState}
-                setFilterPayLoad={setFilterPayLoad}
-                filterPayLoad={filterPayLoad}
-                filterModal={filterModal}
-              />
-            </div>
-
-            <div
-              className="hidden lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
-              style={{ width: "-webkit-fill-available" }}
-            >
-              <ServiceButton
-                text="RESET ALL"
-                onClick={() => {
-                  setFilterModal(false);
-                  handleTabChange(statusId);
-                }}
-                className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-              />
-              {isFilterLoading ? (
-                <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
-                  <Spinner />
-                </div>
-              ) : (
-                <ServiceButton
-                  text="APPLY"
-                  onClick={applyFilterforOrders}
-                  className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-                />
-              )}
-            </div>
-          </div>
-        </RightSideModal>
-      )} */}
     </div>
   );
 };

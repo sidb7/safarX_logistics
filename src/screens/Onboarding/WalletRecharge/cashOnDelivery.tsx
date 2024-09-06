@@ -56,7 +56,8 @@ const Cashondelivery = () => {
         );
 
         if (response?.success) {
-          navigate("/dashboard/overview");
+          // navigate("/dashboard/overview");
+          navigate("/orders/quick-order-place");
         } else {
           toast.error(response?.message);
         }

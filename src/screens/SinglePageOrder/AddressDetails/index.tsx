@@ -10,6 +10,8 @@ import DeliveryDetailsContent from "./deliveryDetailsContent";
 import EditIcon from "../../../assets/editIcon.svg";
 import ProfileIcon from "../../../assets/Catalogue/profileIcon.svg";
 import ContactIcon from "../../../assets/ReturningUser/phoneIcon.svg";
+import gstIcon from "../../../assets/gstIcon.svg";
+import { v4 as uuidv4 } from "uuid";
 import AddressLocationIcon from "../../../assets/serv/location.svg";
 
 interface IContact {
@@ -32,6 +34,12 @@ interface IAddressCardDetailsProps {
   deliveryDetails: IDeliveryDetails;
   onPickupDetailsChange: (newPickupDetails: IPickupDetails) => void;
   onDeliveryDetailsChange: (newDeliveryDetails: IDeliveryDetails) => void;
+  order: any;
+  setSortServiciblity: any;
+  showDownloadLebal: boolean;
+  resetOtherAddressDetails: boolean;
+  setResetOtherAddressDetails: any;
+  setHighLightField: any;
 }
 
 const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
@@ -39,25 +47,35 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   deliveryDetails,
   onPickupDetailsChange,
   onDeliveryDetailsChange,
+  order,
+  setSortServiciblity,
+  showDownloadLebal,
+  resetOtherAddressDetails,
+  setResetOtherAddressDetails,
+  setHighLightField,
 }) => {
+  console.log("🚀 ~ order:", order);
   const [isPickupRightModal, setIsPickupRightModal] = useState<boolean>(false);
   const [isDeliveryRightModal, setIsDeliveryRightModal] =
     useState<boolean>(false);
   const [currentEditType, setCurrentEditType] = useState<
     "pickup" | "delivery" | null
   >(null);
-  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
+  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const [pickupAddress, setPickupAddress] =
     useState<IPickupDetails>(pickupDetails);
   const [deliveryAddress, setDeliveryAddress] =
     useState<IDeliveryDetails>(deliveryDetails);
 
-  const [pickupLandmark, setPickupLandmark] = useState<any>("");
-  const [deliveryLandmark, setDeliveryLandmark] = useState<any>({});
-
-  console.log("pickupLandmark", pickupLandmark);
-  console.log("deliveryLandmark", deliveryLandmark);
+  const [pickupLandmark, setPickupLandmark] = useState<any>(() => {
+    const storedValue = sessionStorage.getItem("pickupOtherAddressDetails");
+    return storedValue !== null ? JSON.parse(storedValue) : {};
+  });
+  const [deliveryLandmark, setDeliveryLandmark] = useState<any>(() => {
+    const storedValue = sessionStorage.getItem("DeliveryOtherAddressDetails");
+    return storedValue !== null ? JSON.parse(storedValue) : {};
+  });
 
   useEffect(() => {
     setPickupAddress(pickupDetails);
@@ -69,7 +87,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
 
   const handlePickupDetailsSave = (
     newDetails: IPickupDetails,
-    landmark: string
+    landmark: any
   ) => {
     setPickupAddress(newDetails);
     setPickupLandmark(landmark);
@@ -79,7 +97,7 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
 
   const handleDeliveryDetailsSave = (
     newDetails: IDeliveryDetails,
-    landmark: string
+    landmark: any
   ) => {
     setDeliveryAddress(newDetails);
     setDeliveryLandmark(landmark);
@@ -97,52 +115,104 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
     }
   };
 
-  console.log("pickupAddress", pickupAddress);
-
   const renderAddressDetails = (details: any, type: string, landmark: any) => {
-    const otherDetails = `${landmark?.landmark}, ${landmark?.city}, ${landmark?.state} , ${details?.pincode}`;
     return (
       <div>
-        <div className="flex justify-between">
+        <div className="flex justify-between ">
           <div className="flex gap-x-[6px] items-center text-center">
-            <img src={WebLocationIcon} alt="locationIcon" />
-            <p className="font-Open font-semibold text-[18px] text-[#1C1C1C] leading-5 capitalize">
+            <img
+              src={WebLocationIcon}
+              alt="locationIcon"
+              className={`${!isLgScreen && "w-[18px]"}`}
+            />
+            <p
+              className={`font-Open font-semibold text-[#1C1C1C] leading-5 capitalize ${
+                !isLgScreen ? "text-[16px]" : "text-[18px]"
+              }`}
+            >
               {type} Details
             </p>
           </div>
-          <div
-            onClick={() =>
-              handleEditClick(type === "Pickup" ? "pickup" : "delivery")
-            }
-          >
-            <img src={EditIcon} alt="edit" className="cursor-pointer" />
-          </div>
+          {!showDownloadLebal && (
+            <div
+              onClick={() => {
+                handleEditClick(type === "Pickup" ? "pickup" : "delivery");
+                setSortServiciblity("");
+                setHighLightField({
+                  addressDetails: true,
+                  packageDetails: false,
+                  shippingDetails: false,
+                  orderDetails: false,
+                  pickupTimeDetails: false,
+                });
+              }}
+            >
+              <img
+                src={EditIcon}
+                alt="edit"
+                className={`cursor-pointer ${!isLgScreen && "w-[18px]"}`}
+              />
+            </div>
+          )}
         </div>
         <div className="flex flex-col p-3 gap-y-2">
-          <div className="flex gap-x-5">
+          <div className={`flex gap-x-5 ${!isLgScreen && "flex-wrap"}`}>
             <div className="flex gap-x-[6px] items-center">
               <img
                 src={ProfileIcon}
                 alt="profile"
                 className="w-[15px] h-[15px]"
               />
-              <span className="font-Open font-semibold ml-1 text-[14px] text-[#323232] leading-[18px]">
+              <span
+                className={`${
+                  !isLgScreen ? "text-[14px]" : "font-Open font-semibold"
+                }  ml-1 text-[#323232] leading-[18px]`}
+              >
                 {details.contact.name}
               </span>
             </div>
-            <div className="flex gap-x-[6px] items-center">
+            <div className={`flex gap-x-[6px] items-center`}>
               <img
                 src={ContactIcon}
                 alt="phone icon"
                 className="w-[15px] h-[15px]"
               />
-              <p className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+              <p
+                className={`${
+                  !isLgScreen ? "" : "font-Open font-semibold"
+                }  text-[14px] text-[#323232] leading-[18px]`}
+              >
                 +91{" "}
-                <span className="font-Open font-semibold text-[14px] text-[#323232] leading-[18px]">
+                <span
+                  className={`${
+                    !isLgScreen ? "" : "font-Open font-semibold"
+                  }  text-[14px] text-[#323232] leading-[18px]`}
+                >
                   {details.contact.mobileNo}
                 </span>
               </p>
             </div>
+            {details.gstNumber && (
+              <div
+                className={`flex gap-x-[6px] items-center ${
+                  !isLgScreen && "my-1"
+                }`}
+              >
+                <img
+                  src={gstIcon}
+                  alt="phone icon"
+                  className="w-[15px] h-[15px]"
+                />
+
+                <span
+                  className={`${
+                    isLgScreen && "font-Open font-semibold"
+                  } text-[14px] text-[#323232] leading-[18px]`}
+                >
+                  {details.gstNumber}
+                </span>
+              </div>
+            )}
           </div>
           <div className="flex gap-x-[6px]">
             <img
@@ -151,12 +221,12 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
               className="w-[15px] h-[15px]"
             />
             <div className="">
-              <p className="font-Open font-semibold ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
+              <p
+                className={`${
+                  !isLgScreen ? "" : "font-Open font-semibold"
+                } ml-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize`}
+              >
                 {details.fullAddress}
-                {/* {landmark?.landmark} - {details.pincode} */}
-              </p>
-              <p className="font-Open font-semibold ml-1 mt-1 max-w-[600px] text-[14px] text-[#323232] leading-[18px] capitalize">
-                {otherDetails}
               </p>
             </div>
           </div>
@@ -176,21 +246,48 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
 
-  // ${
-  //       isPickupAddressEmpty || isDeliveryAddressEmpty
-  //         ? "border-[1px] border-[#004EFF] rounded-md "
-  //         : "border-[1px] border-[#E8E8E8] rounded-md "}
+  useEffect(() => {
+    if (resetOtherAddressDetails) {
+      setPickupLandmark({});
+      setDeliveryLandmark({});
+      const timer = setTimeout(() => {
+        setResetOtherAddressDetails(false);
+      }, 3000);
+
+      // Clean up the timer if the component unmounts or dependencies change
+      return () => clearTimeout(timer);
+    }
+  }, [order?.orderType, order?.transit]);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "pickupOtherAddressDetails",
+      JSON.stringify(pickupLandmark)
+    );
+    sessionStorage.setItem(
+      "DeliveryOtherAddressDetails",
+      JSON.stringify(deliveryLandmark)
+    );
+  }, [pickupLandmark, deliveryLandmark]);
 
   return (
     <>
-      <div
-        className={`border-[1px] border-[#E8E8E8] max-h-[100%] customScroll rounded-md px-3 py-[12px]`}
-      >
+      <div className={`max-h-[100%] px-3 py-[12px]`}>
         {isPickupAddressEmpty ? (
           <div>
             <div className="flex gap-x-[6px] items-center text-center">
-              <img src={WebLocationIcon} alt="locationIcon" />
-              <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+              <img
+                src={WebLocationIcon}
+                alt="locationIcon"
+                className={`${isLgScreen ? "" : "w-[16px]"}`}
+              />
+              <p
+                className={`${
+                  isLgScreen
+                    ? "font-Open font-semibold text-base"
+                    : " text-[15px]"
+                } text-[#1C1C1C] leading-5 capitalize`}
+              >
                 Pickup Details
               </p>
             </div>
@@ -200,10 +297,19 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 onClick={() => {
                   setCurrentEditType("pickup");
                   setIsPickupRightModal(true);
+                  setHighLightField({
+                    addressDetails: true,
+                    packageDetails: false,
+                    shippingDetails: false,
+                    orderDetails: false,
+                    pickupTimeDetails: false,
+                  });
                 }}
                 variant="quad"
                 showIcon={true}
                 icon={PlusIcon}
+                className="text-[14px]"
+                iconClass="w-[14px]"
                 textTransform="capitalize"
               />
             </div>
@@ -212,13 +318,23 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
           renderAddressDetails(pickupAddress, "Pickup", pickupLandmark)
         )}
 
-        <div className="border-[1px] mt-[8px] mb-6"></div>
+        {isLgScreen && <div className="border-[1px] mt-[8px] mb-6"></div>}
 
         {isDeliveryAddressEmpty ? (
           <div>
             <div className="flex gap-x-[6px] items-center text-center">
-              <img src={WebLocationIcon} alt="locationIcon" />
-              <p className="font-Open font-semibold text-base text-[#1C1C1C] leading-5 capitalize">
+              <img
+                src={WebLocationIcon}
+                alt="locationIcon"
+                className={`${isLgScreen ? "" : "w-[16px]"}`}
+              />
+              <p
+                className={`${
+                  isLgScreen
+                    ? "font-Open font-semibold text-base"
+                    : " text-[15px]"
+                } text-[#1C1C1C] leading-5 capitalize`}
+              >
                 Delivery Details
               </p>
             </div>
@@ -228,10 +344,19 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
                 onClick={() => {
                   setCurrentEditType("delivery");
                   setIsDeliveryRightModal(true);
+                  setHighLightField({
+                    addressDetails: true,
+                    packageDetails: false,
+                    shippingDetails: false,
+                    orderDetails: false,
+                    pickupTimeDetails: false,
+                  });
                 }}
                 variant="quad"
                 showIcon={true}
                 icon={PlusIcon}
+                className="text-[14px]"
+                iconClass="w-[14px]"
                 textTransform="capitalize"
               />
             </div>
@@ -244,30 +369,28 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
       <RightSideModal
         isOpen={isPickupRightModal}
         onClose={() => setIsPickupRightModal(false)}
-        className={`w-full ${
-          isLgScreen ? "md:!w-[389px]" : "mobile-modal-styles"
-        }`}
+        className={`w-full md:!w-[450px]`}
       >
         <PickupDetailsContent
           details={pickupAddress}
           landmark={pickupLandmark}
           setIsPickupRightModal={setIsPickupRightModal}
           onSave={handlePickupDetailsSave}
+          order={order}
         />
       </RightSideModal>
 
       <RightSideModal
         isOpen={isDeliveryRightModal}
         onClose={() => setIsDeliveryRightModal(false)}
-        className={`w-full ${
-          isLgScreen ? "md:!w-[389px]" : "mobile-modal-styles"
-        }`}
+        className={`w-full md:!w-[450px]`}
       >
         <DeliveryDetailsContent
           details={deliveryAddress}
           landmark={deliveryLandmark}
           setIsDeliveryRightModal={setIsDeliveryRightModal}
           onSave={handleDeliveryDetailsSave}
+          order={order}
         />
       </RightSideModal>
     </>

@@ -1,6 +1,7 @@
 import React from "react";
 import EditIcon from "../../../assets/Product/Edit.svg";
 import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
+import { useMediaQuery } from "react-responsive";
 
 interface IPackageBoxProps {
   image?: any;
@@ -55,6 +56,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
   productNameClass,
   filterId,
 }) => {
+  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   return (
     <div
       className={` ${className} items-center product-box  flex w-fit itisActiveChannelems-center border-2 rounded-md min-w-[200px] relative ${
@@ -70,7 +72,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
       <span
         className={`${
           label !== "" ? "" : "hidden"
-        } bg-[#6695FF] text-white absolute -top-4 ml-2 rounded-md w-[91px] flex justify-center `}
+        } bg-[#6695FF] text-white absolute top-4 ml-2 rounded-md w-[91px] flex justify-center `}
       >
         {label}
       </span>
@@ -78,7 +80,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
       <div className="flex flex-col w-full ">
         <div className="flex justify-between ">
           <span
-            className={`!${productNameClass} max-w-[660px] rounded-md text-[14px] text-[#000000] flex-wrap font-bold font-Open`}
+            className={`!${productNameClass} max-w-[660px] rounded-md text-[16px] text-[#000000] flex-wrap font-bold font-Open`}
           >
             {productName}
           </span>
@@ -113,7 +115,9 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
             )}
           </div>
         </div>
-        <span className="flex text-[12px] !font-normal lg:text-[14px] ">
+        <span
+          className={`flex text-[12px] font-normal lg:text-[14px] ${dimensionClassName}`}
+        >
           {` ${length} x ${breadth} x ${height} cm`} | V: {volumetricWeight}| D:{" "}
           {deadWeight} Kg | Final Weight : {`${appliedWeight}`} | ₹ :{" "}
           {`${unitPrice}`}

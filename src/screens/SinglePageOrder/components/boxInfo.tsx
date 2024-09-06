@@ -24,6 +24,8 @@ import Checkbox from "../../../components/CheckBox";
 import CustomInputBox from "../../../components/Input";
 import { Environment } from "../../../utils/ApiUrls";
 import OneButton from "../../../components/Button/OneButton";
+import { useMediaQuery } from "react-responsive";
+import Accordian from "./accordian";
 
 function BoxInfo({
   index,
@@ -36,6 +38,9 @@ function BoxInfo({
   setEditBoxModal,
   setEditProductModal,
   setIsOpen,
+  setSortServiciblity,
+  showDownloadLebal,
+  setHighLightField,
 }: any) {
   const [allProducts, setAllProducts]: any = useState([]);
   const [codInfo, setCodInfo]: any = useState({
@@ -56,9 +61,11 @@ function BoxInfo({
     return volume / 5000;
   };
 
+  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  const colors = ["#E5EDFF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
   const getColorByIndex = (index: any) => {
-    const colors = ["#E5EDFF", "#FDF6EA", "#f7e8e8", "#dee1ec", "#f0f0f0"];
-    return colors[index % colors.length];
+    return colors[index];
   };
 
   const setInvoiceValueWithProductPrice = () => {
@@ -110,13 +117,11 @@ function BoxInfo({
     } else {
       originalUnitPrice = +obj.boxInfo[index].products[productIndex].unitPrice;
     }
-    // set unitPrice-------------------------------------------------------------------
+
     obj.boxInfo[index].products[productIndex].unitPrice = +(
       originalUnitPrice * +obj.boxInfo[index].products[productIndex].qty
     ).toFixed(2);
-    //-------------------------------------------------------------------
 
-    //
     obj.boxInfo[index].products[productIndex].appliedWeight =
       baseProductAppliedWeight * +obj.boxInfo[index].products[productIndex].qty;
 
@@ -136,6 +141,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const removeUnit = (productIndex: number) => {
@@ -192,6 +198,7 @@ function BoxInfo({
     obj.boxInfo[index].appliedWeight = updateBoxAppliedWeight;
 
     setOrder({ ...obj });
+    setSortServiciblity("");
   };
 
   const OnChangeHandler = (e: any) => {
@@ -204,6 +211,7 @@ function BoxInfo({
         boxInfo: updatedBoxInfo,
       };
     });
+    setSortServiciblity("");
   };
 
   useEffect(() => {
@@ -221,49 +229,102 @@ function BoxInfo({
   useEffect(() => {
     setAllProducts(data.products);
   }, [data.products]);
+
   return (
     <>
       <div
-        className={`px-4 pt-2 pb-4 my-2  rounded`}
-        style={{ backgroundColor: getColorByIndex(index) }}
+        className={`px-3 pt-2 pb-4 my-2 rounded-lg`}
+        style={{ backgroundColor: colors[index % colors.length] }}
       >
         <div className="gap-y-4">
           <div className="flex justify-start  items-center">
             <div className=" flex w-[100%] flex-col">
-              <div className="flex items-center justify-between">
+              <div
+                className={`flex items-center ${
+                  !isLgScreen ? "my-1" : "my-2"
+                } justify-between`}
+              >
                 <div className=" flex justify-start items-center">
-                  <div className="text-[18px] my-2 font-bold font-Open">
+                  <div className="text-[18px] font-bold font-Open">
                     {capitalizeFirstLetter(data?.name)}
                   </div>
-                </div>
 
-                <div className="flex gap-x-4">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditBoxModal({
-                        isOpen: true,
-                        state: { id: index, data: data },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[22px]" />
-                  </button>
-                  <button onClick={() => removeBox(index)}>
-                    <img src={deleteIcon} alt="" className="w-[22px]" />
-                  </button>
+                  {!isLgScreen && (
+                    <div className="rounded-lg mx-2 py-[0.5px] text-[15px] bg-[#ffffff] px-2">
+                      {" "}
+                      Final Weight :{" "}
+                      {`${
+                        data?.appliedWeight
+                          ? +data?.appliedWeight.toFixed(2) + "Kg"
+                          : "0 Kg"
+                      }`}
+                    </div>
+                  )}
                 </div>
+                {!showDownloadLebal && (
+                  <div
+                    className={`flex  ${!isLgScreen ? "gap-x-2" : "gap-x-4"}`}
+                  >
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditBoxModal({
+                          isOpen: true,
+                          state: { id: index, data: data },
+                        });
+                        setSortServiciblity("");
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
+                      }}
+                    >
+                      <img
+                        src={editIcon}
+                        alt=""
+                        className={`${!isLgScreen ? "w-[18px]" : "w-[22px]"}`}
+                      />
+                    </button>
+                    <button
+                      onClick={() => {
+                        removeBox(index);
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
+                      }}
+                    >
+                      <img
+                        src={deleteIcon}
+                        alt=""
+                        className={`${!isLgScreen ? "w-[18px]" : "w-[22px]"}`}
+                      />
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <div className="flex text-[16px] items-center ">
+              <div
+                className={`${
+                  !isLgScreen ? "text-[15px] font-light" : "text-[16px]"
+                } flex items-center `}
+              >
                 {data?.length} X {data?.breadth} X {data?.height} cm | V:{" "}
                 {+data?.volumetricWeight.toFixed(2)} Kg | D:{" "}
-                {+data?.deadWeight.toFixed(2)} Kg | Final Weight :{" "}
-                {`${
-                  data?.appliedWeight
-                    ? +data?.appliedWeight.toFixed(2) + "Kg"
-                    : "0 Kg"
-                }`}
+                {+data?.deadWeight.toFixed(2)} Kg{" "}
+                {isLgScreen && "| Final Weight :"}
+                {isLgScreen &&
+                  `${
+                    data?.appliedWeight
+                      ? +data?.appliedWeight.toFixed(2) + "Kg"
+                      : "0 Kg"
+                  }`}
               </div>
 
               <div className="flex gap-x-4 mt-5">
@@ -274,15 +335,24 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    labelClassName={`!text-black  !bg-[${getColorByIndex(
-                      index
-                    )}]`}
                     isDisabled={true}
-                    className={`!bg-transparent !w-[110px] !h-[36px]`}
+                    labelClassName={`!text-black !bg-[${
+                      colors[index % colors.length]
+                    }]`}
+                    className={`!bg-transparent ${
+                      isLgScreen ? "!h-[36px]" : "!h-[29px]"
+                    } !w-[110px] !h-[36px]`}
                     onChange={(e: any) => {
                       if (!isNaN(e.target.value)) {
                         OnChangeHandler(e);
                       }
+                      setHighLightField({
+                        addressDetails: false,
+                        packageDetails: true,
+                        shippingDetails: false,
+                        orderDetails: false,
+                        pickupTimeDetails: false,
+                      });
                     }}
                   />
                 </div>
@@ -295,37 +365,56 @@ function BoxInfo({
                       name="collectableAmount"
                       inputType="text"
                       inputMode="numeric"
-                      labelClassName={`!text-black  !bg-[${getColorByIndex(
-                        index
-                      )}]`}
-                      className={`!bg-transparent !w-[150px] !h-[36px]`}
+                      labelClassName={`!text-black  !bg-[${
+                        colors[index % colors.length]
+                      }]`}
+                      className={`!bg-transparent ${
+                        isLgScreen ? "!h-[36px]" : "!h-[29px]"
+                      } !w-[150px]`}
                       onChange={(e: any) => {
                         if (!isNaN(e.target.value)) {
                           OnChangeHandler(e);
                         }
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
                       }}
                     />
                   </div>
                 )}
 
-                {codInfo?.codInfo?.invoiceValue >= 50000 && (
-                  <button
-                    className="text-[#004EFF] font-bold font-Open"
-                    onClick={() =>
-                      setIsOpen({
-                        state: { id: index, data: data },
-                        isOpen: true,
-                      })
-                    }
-                  >
-                    EWAY BILL
-                  </button>
-                )}
+                {codInfo?.codInfo?.invoiceValue >= 50000 &&
+                  order?.orderType === "B2C" && (
+                    <button
+                      className={`text-[#004EFF] ${
+                        isLgScreen ? "" : "text-[14px]"
+                      } font-bold font-Open`}
+                      onClick={() => {
+                        setIsOpen({
+                          state: { id: index, data: data },
+                          isOpen: true,
+                        });
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
+                      }}
+                    >
+                      EWAY BILL
+                    </button>
+                  )}
               </div>
             </div>
           </div>
 
-          <div className="mt-5 ml-6">
+          <div className={`${!isLgScreen ? "mt-3" : "mt-5 ml-6"}`}>
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <div className="text-[18px] font-Open font-bold">
@@ -333,24 +422,36 @@ function BoxInfo({
                   {allProducts.length}
                   {")"}
                 </div>
-                <div className="flex justify-center items-center ml-6">
-                  <button
-                    className=""
-                    onClick={() =>
-                      setEditProductModal({
-                        isOpen: true,
-                        state: { id: index, data: data?.products },
-                      })
-                    }
-                  >
-                    <img src={editIcon} alt="" className="w-[20px]" />
-                  </button>
-                </div>
+                {allProducts.length > 0 && !showDownloadLebal && (
+                  <div className="flex justify-center items-center ml-6">
+                    <button
+                      className=""
+                      onClick={() => {
+                        setEditProductModal({
+                          isOpen: true,
+                          state: { id: index, data: data?.products },
+                        });
+                        setSortServiciblity("");
+                        setHighLightField({
+                          addressDetails: false,
+                          packageDetails: true,
+                          shippingDetails: false,
+                          orderDetails: false,
+                          pickupTimeDetails: false,
+                        });
+                      }}
+                    >
+                      <img src={editIcon} alt="" className="w-[20px]" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div
-              className={`!transition-all gap-y-2 mx-4 my-1 min-w-[500px] max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
-                allProducts.length > 0 && " border-x-[#E8E8E8]"
+              className={`!transition-all gap-y-1 my-1 ${
+                !isLgScreen ? "mx-1 w-[100%]" : "min-w-[500px]"
+              } max-w-fit !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg ${
+                allProducts.length > 0 && "border-x-[#E8E8E8]"
               } shadow-none`}
               data-cy="product-list"
             >
@@ -359,7 +460,9 @@ function BoxInfo({
                   return (
                     <div key={i} data-cy={`product-item-${i}`}>
                       <div
-                        className="flex justify-between  gap-x-4 items-center"
+                        className={`flex justify-between ${
+                          isLgScreen && "gap-x-4"
+                        } items-center`}
                         key={i}
                       >
                         <ProductDetails
@@ -375,74 +478,138 @@ function BoxInfo({
                           breadth={e?.breadth || 0}
                           length={e?.length || 0}
                           height={e?.height || 0}
-                          dimensionClassName="!font-light"
-                          className="!border-none !shadow-none !min-h-[70px]"
+                          dimensionClassName={`!font-light ${
+                            !isLgScreen && "text-[14px]"
+                          }`}
+                          className={`!border-none !shadow-none ${
+                            !isLgScreen ? "!min-h-[50px]" : "!min-h-[70px]"
+                          } border-[#000000]`}
                           data-cy={`product-box-${i}`}
                         />
-                        <div className="flex items-center p-1 lg:p-2 w-[100px]  gap-2 !mr-2 rounded-lg">
-                          <div className="bg-transparent">
-                            <img
-                              src={subtractIcon}
-                              alt=""
-                              className="cursor-pointer w-[15px]"
-                              onClick={() => {
-                                removeUnit(i);
-                                setInvoiceValueWithProductPrice();
-                              }}
-                              data-cy={`remove-unit-${i}`}
-                            />
-                          </div>
-                          <div>
-                            <p>{e.qty}</p>
-                          </div>
-                          <div>
-                            <img
-                              src={addIcon}
-                              className="cursor-pointer"
-                              alt=""
-                              onClick={() => {
-                                addUnit(i);
-                                setInvoiceValueWithProductPrice();
-                              }}
-                              data-cy={`add-unit-${i}`}
-                            />
+                        <div
+                          className={`flex items-center p-1 flex-col ml-2 sm:flex-row ${
+                            isLgScreen
+                              ? "!mr-2 gap-2 w-[100px]"
+                              : "justify-center gap-1"
+                          }  rounded-lg`}
+                        >
+                          <div
+                            className={`flex items-center ${
+                              isLgScreen
+                                ? "gap-2 w-[100px]"
+                                : "justify-center gap-1"
+                            }`}
+                          >
+                            <button
+                              className="bg-transparent"
+                              disabled={showDownloadLebal}
+                            >
+                              <img
+                                src={subtractIcon}
+                                alt=""
+                                className={`cursor-pointer w-[15px] h-[15px]`}
+                                onClick={() => {
+                                  removeUnit(i);
+                                  setInvoiceValueWithProductPrice();
+                                  setHighLightField({
+                                    addressDetails: false,
+                                    packageDetails: true,
+                                    shippingDetails: false,
+                                    orderDetails: false,
+                                    pickupTimeDetails: false,
+                                  });
+                                }}
+                                data-cy={`remove-unit-${i}`}
+                              />
+                            </button>
+
+                            <div>
+                              <p>{e.qty}</p>
+                            </div>
+
+                            <button disabled={showDownloadLebal}>
+                              <img
+                                src={addIcon}
+                                className={`cursor-pointer w-[15px] h-[15px]`}
+                                alt=""
+                                onClick={() => {
+                                  addUnit(i);
+                                  setInvoiceValueWithProductPrice();
+                                  setHighLightField({
+                                    addressDetails: false,
+                                    packageDetails: true,
+                                    shippingDetails: false,
+                                    orderDetails: false,
+                                    pickupTimeDetails: false,
+                                  });
+                                }}
+                                data-cy={`add-unit-${i}`}
+                              />
+                            </button>
                           </div>
 
                           <button
-                            className={` ml-2 cursor-pointer `}
+                            className={`${
+                              showDownloadLebal
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } `}
                             data-cy={`delete-product-${i}`}
-                            onClick={() => removeProduct(index, i)}
+                            onClick={() => {
+                              removeProduct(index, i);
+                              setHighLightField({
+                                addressDetails: false,
+                                packageDetails: true,
+                                shippingDetails: false,
+                                orderDetails: false,
+                                pickupTimeDetails: false,
+                              });
+                            }}
+                            disabled={showDownloadLebal}
                           >
                             <img
                               src={DeleteIcon}
-                              className={`!h-4 !w-4 `}
+                              className={`${
+                                !isLgScreen ? "!h-4 !w-4" : "!h-6 !w-6"
+                              }`}
                               alt=""
                             />
                           </button>
                         </div>
                       </div>
-
-                      {/* {arr.length === 1
-                        ? "hue-rotate-60 opacity-40 !cursor-not-allowed"
-                        : ""} */}
-                      {/* ${arr.length === 1 ? "fill-gray-600" : ""} */}
-                      {/* {allProducts.length - 1 !== i && (
-                        <hr data-cy={`hr-${i}`} />
-                      )} */}
                     </div>
                   );
                 })}
             </div>
-            <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
-              <img src={ButtonIcon} alt="Add Product" width="px" />
 
-              <button
-                className="ml-2 text-[#004EFF] text-sm !text-[16px] font-semibold leading-5 font-Open"
-                onClick={() => setProductModal({ isOpen: true, id: index })}
-              >
-                ADD PRODUCT
+            {!showDownloadLebal && (
+              <button className="inline-flex mx-4 mt-2 w-fit cursor-pointer bg-transparant rounded-[4px] p-2 justify-center items-center ">
+                <img
+                  src={ButtonIcon}
+                  alt="Add Product"
+                  width={`${!isLgScreen && "w-[16px]"}`}
+                />
+
+                <button
+                  className={`ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open ${
+                    !isLgScreen ? "!text-[15px]" : "!text-[16px]"
+                  }`}
+                  onClick={() => {
+                    setProductModal({ isOpen: true, id: index });
+                    setSortServiciblity("");
+                    setHighLightField({
+                      addressDetails: false,
+                      packageDetails: true,
+                      shippingDetails: false,
+                      orderDetails: false,
+                      pickupTimeDetails: false,
+                    });
+                  }}
+                >
+                  ADD PRODUCT
+                </button>
               </button>
-            </button>
+            )}
           </div>
         </div>
       </div>

@@ -78,6 +78,7 @@ const CustomDropDown = (props: IDropDownProps) => {
             <option
               value={""}
               className="text-[12px] text-[#777777] absolute leading-4 font-Open"
+              disabled
             >
               {heading}
             </option>
@@ -87,6 +88,7 @@ const CustomDropDown = (props: IDropDownProps) => {
               key={index}
               value={option.value}
               className="text-[12px] text-[#1C1C1C] absolute leading-4 font-Open"
+              disabled={option?.disabled || false}
             >
               {option.label}
             </option>

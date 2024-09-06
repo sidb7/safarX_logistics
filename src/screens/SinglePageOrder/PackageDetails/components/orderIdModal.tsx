@@ -13,13 +13,13 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 
 function OrderIdModal({ onClose, state, setOrder }: any) {
   const [ewayBillDetails, setEwayBillDetails] = useState({
-    ewaybillNumber: "",
+    eWayBillNo: "",
     transporterNo: "",
   });
 
   const ValidationEwayBillNumber = () => {
     if (
-      ewayBillDetails.ewaybillNumber.trim() === "" ||
+      ewayBillDetails.eWayBillNo.trim() === "" ||
       ewayBillDetails.transporterNo.trim() === ""
     ) {
       return true;
@@ -65,7 +65,7 @@ function OrderIdModal({ onClose, state, setOrder }: any) {
       const updatedBoxInfo = [...prevOrder.boxInfo];
       updatedBoxInfo[state?.id] = {
         ...updatedBoxInfo[state?.id],
-        ewaybillNumber: ewayBillDetails?.ewaybillNumber,
+        eWayBillNo: ewayBillDetails?.eWayBillNo,
         transporterNo: ewayBillDetails?.transporterNo,
       };
       return { ...prevOrder, boxInfo: updatedBoxInfo };
@@ -74,13 +74,12 @@ function OrderIdModal({ onClose, state, setOrder }: any) {
   };
 
   useEffect(() => {
-    console.log(state?.data, state?.data);
     if (
-      state?.data?.ewaybillNumber?.trim() !== "" ||
+      state?.data?.eWayBillNo?.trim() !== "" ||
       state?.data?.transporterNo?.trim() !== ""
     ) {
       setEwayBillDetails({
-        ewaybillNumber: state?.data?.ewaybillNumber,
+        eWayBillNo: state?.data?.eWayBillNo,
         transporterNo: state?.data?.transporterNo,
       });
     }
@@ -104,13 +103,13 @@ function OrderIdModal({ onClose, state, setOrder }: any) {
               <CustomInputBox
                 inputType="text"
                 label="Enter Eway Bill No."
-                name="ewaybillNumber"
-                value={ewayBillDetails?.ewaybillNumber}
+                name="eWayBillNo"
+                value={ewayBillDetails?.eWayBillNo}
                 onChange={(e) => {
                   setEwayBillDetails((prevState: any) => {
                     return {
                       ...prevState,
-                      ewaybillNumber: e.target.value,
+                      eWayBillNo: e.target.value,
                     };
                   });
                 }}

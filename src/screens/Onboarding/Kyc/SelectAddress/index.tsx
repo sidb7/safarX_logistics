@@ -53,7 +53,7 @@ const BusinessType = (props: ITypeProps) => {
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
-    console.log("Fillee", file);
+    // console.log("Fillee", file);
     if (file) {
       const url: any = URL.createObjectURL(file) || null;
       setBrandingDetails({
@@ -83,6 +83,9 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitForm = async () => {
     try {
+      let formData = new FormData();
+      formData.append("brandName", brandingDetails.brandName);
+      formData.append("file", brandingDetails?.file);
       if (
         brandingDetails?.brandName === "" ||
         brandingDetails?.brandName === undefined
@@ -91,6 +94,9 @@ const BusinessType = (props: ITypeProps) => {
         return;
       } else if (defaultAddressSelect.hasOwnProperty("addressId") !== true) {
         toast.error("Please Select Address");
+        return;
+      } else if (brandingDetails?.file === null) {
+        toast.error("Please Upload Logo");
         return;
       }
 
@@ -132,28 +138,49 @@ const BusinessType = (props: ITypeProps) => {
         toast.error("Something Went Wrong!");
       }
 
-      let formData = new FormData();
-      formData.append("brandName", brandingDetails.brandName);
-      formData.append("file", brandingDetails?.file);
-
       let img: any = new Image();
       img.src = brandingDetails?.imageUrl;
 
-      setLoading(true);
-      const { data } = await POST(LOGO_AND_BRAND, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      img.onload = async function () {
+        // Access the natural height and width of the image
+        var height = img.naturalHeight;
+        var width = img.naturalWidth;
 
-      if (data?.success) {
-        setLoading(false);
-        toast.success(data?.message);
-        navigate("/onboarding/wallet-main");
-      } else {
-        setLoading(false);
-        toast.error(data?.message);
-      }
+        if (height > 200 || width > 700) {
+          return toast.error(
+            "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+          );
+        } else {
+          // const { data } = await POST(LOGO_AND_BRAND, formData, {
+          //   headers: {
+          //     "Content-Type": "multipart/form-data",
+          //   },
+          // });
+
+          // if (data?.success) {
+          //   toast.success(data?.message);
+          //   setBrandingModal(false);
+          //   getProfileData();
+          // } else {
+          //   toast.error(data?.message);
+          // }
+          setLoading(true);
+          const { data } = await POST(LOGO_AND_BRAND, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (data?.success) {
+            setLoading(false);
+            toast.success(data?.message);
+            navigate("/onboarding/wallet-main");
+          } else {
+            setLoading(false);
+            toast.error(data?.message);
+          }
+        }
+      };
     } catch (error) {
       return error;
     }
@@ -390,7 +417,7 @@ const BusinessType = (props: ITypeProps) => {
                         <CustomInputWithFileUpload
                           label="Upload logo"
                           className="font-Open "
-                          inputClassName="  lg:!w-[370px]"
+                          inputClassName="!w-[320px] md:!w-[370px]"
                           type="file"
                           onChange={handleImageChange}
                           isRequired={false}

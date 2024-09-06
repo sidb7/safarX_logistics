@@ -14,6 +14,7 @@ import ProfileBrandingDetails from "./BrandingDetails";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import { ResponsiveState } from "../../utils/responsiveState";
 import BrandingModalContent from "./BrandingDetails/brandingModalContent";
+import DocumentCard from "./DocumentsForInternational/DocumentsCard";
 
 export const Profile = () => {
   const { isLgScreen } = ResponsiveState();
@@ -58,7 +59,9 @@ export const Profile = () => {
       var width = img.naturalWidth;
 
       if (height > 200 || width > 700) {
-        return toast.error("Image size should be maximum 200x700");
+        return toast.error(
+          "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+        );
       } else {
         const { data } = await POST(LOGO_AND_BRAND, formData, {
           headers: {
@@ -69,7 +72,8 @@ export const Profile = () => {
         if (data?.success) {
           toast.success(data?.message);
           setBrandingModal(false);
-          getProfileData();
+          window.location.reload();
+          // getProfileData();
         } else {
           toast.error(data?.message);
         }
@@ -99,6 +103,11 @@ export const Profile = () => {
             getProfileData={getProfileData}
           />
           <ProfileKycCard KycDetails={profileData?.kycDetails} />
+
+          {/* documents  */}
+          {/* code commented for international orders */}
+          {/* <DocumentCard /> */}
+
           <ProfileBankCard BankDetails={profileData?.bankDetails} />
           <ProfileBrandingDetails
             setBrandingModal={() => {
