@@ -356,8 +356,8 @@ function PincodeFilterAccordian({
             </div>
 
             {!isLoading && searchPincodedata?.menu?.length === 0 && (
-              <div className="py-4 border border-t-0  border-r-1 border-l-1 border-b-1 rounded flex justify-center it text-center font-Open w-[100%] font-semibold">
-                Search For Pincode
+              <div className="py-4 border border-t-0  border-r-1 border-l-1 cursor-not-allowed border-b-1 rounded flex justify-center it text-center font-Open w-[100%] font-semibold">
+                No Pincode Found
               </div>
             )}
           </>

@@ -663,8 +663,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     }
   };
 
-  console.log("order--->", order);
-
   const summaryDetails = () => {
     return (
       <>
@@ -779,7 +777,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     }
                     textTransform="capitalize"
                     className={`${
-                      isLgScreen ? "!w-[120px]" : "!w-[100px]"
+                      isLgScreen ? "!w-[120px]" : "!w-[80px] text-[14px]"
                     } !bg-transparent`}
                   />
                   <OneButton
@@ -794,7 +792,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       isDownloadLoading?.identifier === "Download_Multi_Tax"
                     }
                     className={`${
-                      isLgScreen ? "!w-[120px]" : "!w-[100px] "
+                      isLgScreen ? "!w-[120px]" : "!w-[80px] text-[14px]"
                     } !bg-transparent`}
                   />
                   <OneButton
@@ -809,7 +807,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       isDownloadLoading?.identifier === "downloadManifest"
                     }
                     className={`${
-                      isLgScreen ? "!w-[120px]" : "!w-[100px]"
+                      isLgScreen ? "!w-[120px]" : "!w-[90px] text-[14px]"
                     }  !bg-transparent`}
                   />
                 </div>
