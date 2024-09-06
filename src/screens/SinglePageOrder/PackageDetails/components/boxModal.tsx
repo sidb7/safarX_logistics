@@ -242,7 +242,7 @@ function BoxModal({ onClose, setOrder, order }: any) {
                   />
                 </div>
                 {(isnewData || isAutoPopulateData) && (
-                  <div className="flex flex-col gap-y-[1rem] ">
+                  <div className="flex flex-col gap-y-[1rem] w-[100%] ">
                     <div className="flex flex-col gap-y-4 mt-1 w-[100%] px-[1rem]">
                       <div>
                         <InputBox
