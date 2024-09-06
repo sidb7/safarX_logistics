@@ -1359,10 +1359,10 @@ const WalletRecharge = () => {
                     <div className="w-full flex flex-col items-center mt-[54px]">
                       <div>
                         <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C] md:w-[100px] lg:w-full">
-                          Wallet Amount
+                          Wallet Balance
                         </p>
                         <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C]  md:w-[100px] lg:w-full text-center">
-                          ₹ 0
+                          ₹ {codData?.walletAmount || 0}
                         </p>
                       </div>
 
