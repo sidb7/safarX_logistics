@@ -321,7 +321,7 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 
 //Tracking
 const TRACKING = `${SELLER_URL}/api/v1/tracking/getTracking`;
-const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTrackingforSystem`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
