@@ -243,11 +243,11 @@ const tabs = [
     value: "CANCELLED",
     orderNumber: 0,
   },
-  {
-    statusName: "All Orders",
-    value: "ALL",
-    orderNumber: 0,
-  },
+  // {
+  //   statusName: "All Orders",
+  //   value: "ALL",
+  //   orderNumber: 0,
+  // },
 ];
 
 const Index = () => {
