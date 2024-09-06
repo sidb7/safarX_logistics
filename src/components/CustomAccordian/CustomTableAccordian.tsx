@@ -7435,35 +7435,85 @@ const Accordion = (props: ICustomTableAccordion) => {
   //   }
   // };
 
+  // const placeOrder = async () => {
+  //   const payload = {
+  //     orders: [orderPayload],
+  //   };
+  //   const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, payload);
+  //   let promisePlaceOrder = new Promise(function (resolve, reject) {
+  //     resolve(placeOrderPromise);
+  //   });
+
+  //   // if (placeOrderPromise?.data?.success) {
+  //   //   toast.success(placeOrderPromise?.data?.message);
+  //   //   //   navigate("/orders/view-orders?activeTab=booked");
+  //   // } else {
+  //   //   toast.error(placeOrderPromise?.data?.message);
+  //   // }
+
+  //   promisePlaceOrder
+  //     .then((orderPlaceResponse: any) => {
+  //       if (orderPlaceResponse?.status) {
+  //         toast.success(orderPlaceResponse?.data?.message);
+  //         //   navigate("/orders/view-orders?activeTab=booked");
+  //       } else {
+  //         toast.error(orderPlaceResponse?.data?.message);
+  //       }
+  //     })
+  //     .catch(function (errorResponse) {
+  //       toast.error(errorResponse?.data?.message);
+  //     });
+  // };
   const placeOrder = async () => {
-    const payload = {
-      orders: [orderPayload],
-    };
-    const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, payload);
-    // console.log("🚀 ~ placeOrder ~ placeOrderPromise:", placeOrderPromise);
-    let promisePlaceOrder = new Promise(function (resolve, reject) {
-      resolve(placeOrderPromise);
-    });
+    try {
+      // Set Services Info API call first
+      const servicePayload = {
+        partnerServiceId: serviceList[serviceIndex]?.partnerServiceId,
+        partnerServiceName: serviceList[serviceIndex]?.partnerServiceName,
+        companyServiceId: serviceList[serviceIndex]?.companyServiceId,
+        companyServiceName: serviceList[serviceIndex]?.companyServiceName,
+        tempOrderId: boxProductDetails?.tempOrderId,
+        source: boxProductDetails?.source,
+        category: "Service",
+      };
 
-    // if (placeOrderPromise?.data?.success) {
-    //   toast.success(placeOrderPromise?.data?.message);
-    //   //   navigate("/orders/view-orders?activeTab=booked");
-    // } else {
-    //   toast.error(placeOrderPromise?.data?.message);
-    // }
+      const { data: serviceResponse } = await POST(
+        SET_SERVICE_INFO,
+        servicePayload
+      );
 
-    promisePlaceOrder
-      .then((orderPlaceResponse: any) => {
-        if (orderPlaceResponse?.status) {
-          toast.success(orderPlaceResponse?.data?.message);
-          //   navigate("/orders/view-orders?activeTab=booked");
+      // If setServicesInfo API is successful, run the placeOrder API
+      if (serviceResponse?.success) {
+        toast.success(
+          serviceResponse?.message || "Updated Service Successfully"
+        );
+
+        // Now trigger placeOrder API
+        const placeOrderPayload = {
+          orders: [orderPayload],
+        };
+        const { data: placeOrderResponse } = await POST(
+          POST_PLACE_ALL_ORDERS,
+          placeOrderPayload
+        );
+
+        // Handle placeOrder response
+        if (placeOrderResponse?.success) {
+          toast.success(
+            placeOrderResponse?.message || "Order placed successfully!"
+          );
         } else {
-          toast.error(orderPlaceResponse?.data?.message);
+          toast.error(
+            placeOrderResponse?.message || "Failed to place the order."
+          );
         }
-      })
-      .catch(function (errorResponse) {
-        toast.error(errorResponse?.data?.message);
-      });
+      } else {
+        toast.error(serviceResponse?.message || "Failed to update service.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Something went wrong.");
+    }
   };
 
   const handleBoxInputUpdation = (
