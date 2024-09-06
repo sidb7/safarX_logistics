@@ -261,8 +261,10 @@ function BoxInfo({
                     </div>
                   )}
                 </div>
-                {!showDownloadLebal && isLgScreen && (
-                  <div className="flex gap-x-4">
+                {!showDownloadLebal && (
+                  <div
+                    className={`flex  ${!isLgScreen ? "gap-x-2" : "gap-x-4"}`}
+                  >
                     <button
                       className=""
                       onClick={() => {
@@ -280,7 +282,11 @@ function BoxInfo({
                         });
                       }}
                     >
-                      <img src={editIcon} alt="" className="w-[22px]" />
+                      <img
+                        src={editIcon}
+                        alt=""
+                        className={`${!isLgScreen ? "w-[18px]" : "w-[22px]"}`}
+                      />
                     </button>
                     <button
                       onClick={() => {
@@ -294,7 +300,11 @@ function BoxInfo({
                         });
                       }}
                     >
-                      <img src={deleteIcon} alt="" className="w-[22px]" />
+                      <img
+                        src={deleteIcon}
+                        alt=""
+                        className={`${!isLgScreen ? "w-[18px]" : "w-[22px]"}`}
+                      />
                     </button>
                   </div>
                 )}
@@ -477,86 +487,94 @@ function BoxInfo({
                           data-cy={`product-box-${i}`}
                         />
                         <div
-                          className={`flex items-center p-1 lg:p-2 ${
+                          className={`flex items-center p-1 flex-col ml-2 sm:flex-row ${
                             isLgScreen
                               ? "!mr-2 gap-2 w-[100px]"
                               : "justify-center gap-1"
                           }  rounded-lg`}
                         >
-                          <button
-                            className="bg-transparent"
-                            disabled={showDownloadLebal}
+                          <div
+                            className={`flex items-center ${
+                              isLgScreen
+                                ? "gap-2 w-[100px]"
+                                : "justify-center gap-1"
+                            }`}
                           >
-                            <img
-                              src={subtractIcon}
-                              alt=""
-                              className={`cursor-pointer w-[15px] h-[15px]`}
-                              onClick={() => {
-                                removeUnit(i);
-                                setInvoiceValueWithProductPrice();
-                                setHighLightField({
-                                  addressDetails: false,
-                                  packageDetails: true,
-                                  shippingDetails: false,
-                                  orderDetails: false,
-                                  pickupTimeDetails: false,
-                                });
-                              }}
-                              data-cy={`remove-unit-${i}`}
-                            />
-                          </button>
-
-                          <div>
-                            <p>{e.qty}</p>
-                          </div>
-
-                          <button disabled={showDownloadLebal}>
-                            <img
-                              src={addIcon}
-                              className={`cursor-pointer w-[15px] h-[15px]`}
-                              alt=""
-                              onClick={() => {
-                                addUnit(i);
-                                setInvoiceValueWithProductPrice();
-                                setHighLightField({
-                                  addressDetails: false,
-                                  packageDetails: true,
-                                  shippingDetails: false,
-                                  orderDetails: false,
-                                  pickupTimeDetails: false,
-                                });
-                              }}
-                              data-cy={`add-unit-${i}`}
-                            />
-                          </button>
-
-                          {isLgScreen && (
                             <button
-                              className={` ml-2 ${
-                                showDownloadLebal
-                                  ? "cursor-not-allowed"
-                                  : "cursor-pointer"
-                              } `}
-                              data-cy={`delete-product-${i}`}
-                              onClick={() => {
-                                removeProduct(index, i);
-                                setHighLightField({
-                                  addressDetails: false,
-                                  packageDetails: true,
-                                  shippingDetails: false,
-                                  orderDetails: false,
-                                  pickupTimeDetails: false,
-                                });
-                              }}
+                              className="bg-transparent"
                               disabled={showDownloadLebal}
                             >
                               <img
-                                src={DeleteIcon}
-                                className={`!h-4 !w-4 `}
+                                src={subtractIcon}
                                 alt=""
+                                className={`cursor-pointer w-[15px] h-[15px]`}
+                                onClick={() => {
+                                  removeUnit(i);
+                                  setInvoiceValueWithProductPrice();
+                                  setHighLightField({
+                                    addressDetails: false,
+                                    packageDetails: true,
+                                    shippingDetails: false,
+                                    orderDetails: false,
+                                    pickupTimeDetails: false,
+                                  });
+                                }}
+                                data-cy={`remove-unit-${i}`}
                               />
                             </button>
-                          )}
+
+                            <div>
+                              <p>{e.qty}</p>
+                            </div>
+
+                            <button disabled={showDownloadLebal}>
+                              <img
+                                src={addIcon}
+                                className={`cursor-pointer w-[15px] h-[15px]`}
+                                alt=""
+                                onClick={() => {
+                                  addUnit(i);
+                                  setInvoiceValueWithProductPrice();
+                                  setHighLightField({
+                                    addressDetails: false,
+                                    packageDetails: true,
+                                    shippingDetails: false,
+                                    orderDetails: false,
+                                    pickupTimeDetails: false,
+                                  });
+                                }}
+                                data-cy={`add-unit-${i}`}
+                              />
+                            </button>
+                          </div>
+
+                          <button
+                            className={`${
+                              showDownloadLebal
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } `}
+                            data-cy={`delete-product-${i}`}
+                            onClick={() => {
+                              removeProduct(index, i);
+                              setHighLightField({
+                                addressDetails: false,
+                                packageDetails: true,
+                                shippingDetails: false,
+                                orderDetails: false,
+                                pickupTimeDetails: false,
+                              });
+                            }}
+                            disabled={showDownloadLebal}
+                          >
+                            <img
+                              src={DeleteIcon}
+                              className={`${
+                                !isLgScreen ? "!h-4 !w-4" : "!h-6 !w-6"
+                              }`}
+                              alt=""
+                            />
+                          </button>
                         </div>
                       </div>
                     </div>
