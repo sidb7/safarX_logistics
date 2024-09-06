@@ -307,6 +307,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 type="radio"
                 name="type"
                 value={order?.orderType}
+                disabled={true}
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 checked={order?.orderType === "INTERNATIONAL"}
                 onChange={(e) => {
