@@ -1428,6 +1428,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         toast.success(data?.message);
         setIsBulkModalOpen(false);
         getAllOrders("", stateValue);
+        setPageToOpen("Home");
       } else {
         toast.error(data?.message || "Failed While Updating Address");
       }
@@ -1439,10 +1440,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const updateBoxOfMultipleOrders = async () => {
     try {
       let checkIfArray = Object.values(validationErrors?.box);
-      console.log(
-        "🚀 ~ updateBoxOfMultipleOrders ~ checkIfArray:",
-        checkIfArray
-      );
+
       if (checkIfArray.some((item: any) => item != null))
         return toast.error("Please Check You Details First");
       else {
@@ -1454,6 +1452,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         const { data } = await POST(UPDATE_ALL_BOXES, payload);
 
         if (data?.success) {
+          setIsBulkModalOpen(false);
+          getAllOrders("", stateValue);
+          setPageToOpen("Home");
           return toast.success(data?.message);
         } else {
           return toast.error(data?.message);
