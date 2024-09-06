@@ -548,7 +548,6 @@ function BoxInfo({
                             </button>
                           </div>
 
-                          {/* {isLgScreen && ( */}
                           <button
                             className={`${
                               showDownloadLebal
@@ -576,7 +575,6 @@ function BoxInfo({
                               alt=""
                             />
                           </button>
-                          {/* )} */}
                         </div>
                       </div>
                     </div>
