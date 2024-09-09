@@ -166,7 +166,7 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col mb-9 px-5 ">
+      <div className="flex flex-col mb-9 px-5">
         <p className="font-bold font-Lato text-xl mb-5 ">Day</p>
         <DynamicButtonScrollComponentForDay
           items={dummyDayData}
@@ -176,7 +176,7 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
       </div>
 
       {showDatePicker ? (
-        <div className=" lg:block border flex justify-center items-center mx-5">
+        <div className=" lg:block flex justify-center items-center mx-5">
           <CustomDatePicker onSelect={handleScheduleDateTimeChange} />
         </div>
       ) : (
@@ -196,7 +196,7 @@ const SelectDateModalForSinglePageOrder = (props: ITypeProps) => {
       </div>
 
       <div
-        className="hidden lg:flex justify-end shadow-lg border-[1px]  bg-[#FFFFFF] p-6  rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+        className="hidden lg:flex justify-end shadow-lg border-[1px]  bg-[#FFFFFF] p-6  rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0 "
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
