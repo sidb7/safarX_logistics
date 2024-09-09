@@ -863,14 +863,14 @@ const WalletRecharge = () => {
                 {/* <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
                   INSTANT RECHARGE WITH COD
                 </p> */}
-                <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
+                {/* <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
                   INSTANT RECHARGE WITH COD
-                </p>
+                </p> */}
               </div>
 
-              <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
+              {/* <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
                 Add money to wallet with COD
-              </p>
+              </p> */}
 
               <div className="max-w-[900px] mb-[20px] ">
                 <div className="flex items-center">
