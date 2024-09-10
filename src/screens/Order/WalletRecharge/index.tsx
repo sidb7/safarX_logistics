@@ -131,10 +131,6 @@ const WalletRecharge = () => {
 
   const [dataFromSession, setDataFromSession] = useState<any>();
   const [balanceZeroOrNegative, setBalanceZeroOrNegative] = useState(false);
-  console.log(
-    "🚀 ~ WalletRecharge ~ balanceZeroOrNegative:",
-    balanceZeroOrNegative
-  );
 
   const [instantRecharge, setInstantRecharge] = useState<any>(false);
 
@@ -154,8 +150,8 @@ const WalletRecharge = () => {
   const [updateWalletLoader, setUpdateWalletLoader] = useState<any>(false);
   //setting enter amount data
   const [enterAmount, setEnterAmount] = useState<any>(0);
-
-  console.log("enterAmount", enterAmount);
+  const [congratulationModalAmount, setCongratulationsModalAmount] =
+    useState<any>(0);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -286,27 +282,33 @@ const WalletRecharge = () => {
     }
   };
 
-  console.log("rechargeWithCod", rechargeWithCOD);
-
   const handleUpdateWallet = async (amount: any) => {
     try {
       if (enterAmount > codData?.eligibleAmount) {
-        toast.error(`Amount cannot be greater than ${codData?.eligibleAmount}`);
+        toast.error(
+          `Amount cannot be greater than Eligible Amount ₹${codData?.eligibleAmount}`
+        );
         setCongratulationsModal(false);
       } else {
-        setCongratulationsModal(true);
         const payload = {
           amount: Number(enterAmount),
         };
         try {
           setUpdateWalletLoader(true);
-          const data = await POST(POST_UPDATE_WALLETBALANCE, payload);
 
-          if (data?.data?.success) {
-            setUpdateWalletLoader(false);
-            setRechargeWithCOD(false);
+          if (payload?.amount === 0 || !payload?.amount) {
+            toast.error("Please Select The Amount Greater Than Zero");
           } else {
-            setUpdateWalletLoader(false);
+            setCongratulationsModalAmount(payload?.amount);
+            const data = await POST(POST_UPDATE_WALLETBALANCE, payload);
+            if (data?.data?.success) {
+              setCongratulationsModal(true);
+              setUpdateWalletLoader(false);
+              setRechargeWithCOD(false);
+              setEnterAmount("");
+            } else {
+              setUpdateWalletLoader(false);
+            }
           }
         } catch (error: any) {
           console.log(error.message);
@@ -381,14 +383,6 @@ const WalletRecharge = () => {
       toast.error(options.message);
       return;
     }
-
-    // const rzp1: any = new Razorpay(options);
-
-    // rzp1.on("payment.failed", (response: any) => {
-    //   console.log("response: ", response);
-    // });
-
-    // rzp1.open();
   };
 
   const userDetailsFromSession = () => {
@@ -482,6 +476,7 @@ const WalletRecharge = () => {
     setRechargeWithCOD(false);
   };
 
+  console.log("updateWalletLoader", updateWalletLoader);
   useEffect(() => {
     (async () => {
       try {
@@ -1400,6 +1395,7 @@ const WalletRecharge = () => {
                         </p>
                         <CustomInputBox
                           label="Enter Amount"
+                          inputType="number"
                           isDisabled={false}
                           value={enterAmount}
                           onChange={(e: any) => {
@@ -1453,7 +1449,8 @@ const WalletRecharge = () => {
                             Congratulations!
                           </p>
                           <p className="text-center font-bold text-[12px] md:text-[16px] text-[#1C1C1C] font-Open leading-[22px] my-1">
-                            We have processed your payment for ₹ {enterAmount}
+                            We have processed your payment for ₹{" "}
+                            {congratulationModalAmount}
                           </p>
                         </div>
 
