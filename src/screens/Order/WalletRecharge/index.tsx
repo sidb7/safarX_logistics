@@ -155,6 +155,8 @@ const WalletRecharge = () => {
   //setting enter amount data
   const [enterAmount, setEnterAmount] = useState<any>(0);
 
+  console.log("enterAmount", enterAmount);
+
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -284,6 +286,8 @@ const WalletRecharge = () => {
     }
   };
 
+  console.log("rechargeWithCod", rechargeWithCOD);
+
   const handleUpdateWallet = async (amount: any) => {
     try {
       if (enterAmount > codData?.eligibleAmount) {
@@ -297,9 +301,10 @@ const WalletRecharge = () => {
         try {
           setUpdateWalletLoader(true);
           const data = await POST(POST_UPDATE_WALLETBALANCE, payload);
-          if (data?.success) {
+
+          if (data?.data?.success) {
             setUpdateWalletLoader(false);
-            setEnterAmount("");
+            setRechargeWithCOD(false);
           } else {
             setUpdateWalletLoader(false);
           }
@@ -595,31 +600,31 @@ const WalletRecharge = () => {
 
     fetchData();
   }, []);
-  //commented as instructed
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       if (instantRecharge) {
-  //         setGetCodLoader(true);
-  //         const { data } = await POST(GET_CODREMITTANCE_AMOUNT);
 
-  //         if (data?.status) {
-  //           setGetCodLoader(false);
-  //           setCodData((prevCodData: any) => ({
-  //             ...prevCodData,
-  //             eligibleAmount: data?.data?.eligibleAmount,
-  //             walletAmount: data?.data?.walletAmount,
-  //           }));
-  //         } else {
-  //           setGetCodLoader(false);
-  //           toast.error(data?.message);
-  //         }
-  //       }
-  //     } catch (error: any) {
-  //       console.log(error.message);
-  //     }
-  //   })();
-  // }, [instantRecharge]);
+  useEffect(() => {
+    (async () => {
+      try {
+        if (instantRecharge) {
+          setGetCodLoader(true);
+          const { data } = await POST(GET_CODREMITTANCE_AMOUNT);
+
+          if (data?.status) {
+            setGetCodLoader(false);
+            setCodData((prevCodData: any) => ({
+              ...prevCodData,
+              eligibleAmount: data?.data?.eligibleAmount,
+              walletAmount: data?.data?.walletAmount,
+            }));
+          } else {
+            setGetCodLoader(false);
+            toast.error(data?.message);
+          }
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    })();
+  }, [instantRecharge]);
 
   return (
     <>
@@ -863,14 +868,14 @@ const WalletRecharge = () => {
                 {/* <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
                   INSTANT RECHARGE WITH COD
                 </p> */}
-                {/* <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
+                <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
                   INSTANT RECHARGE WITH COD
-                </p> */}
+                </p>
               </div>
 
-              {/* <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
+              <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
                 Add money to wallet with COD
-              </p> */}
+              </p>
 
               <div className="max-w-[900px] mb-[20px] ">
                 <div className="flex items-center">
@@ -1308,7 +1313,7 @@ const WalletRecharge = () => {
             >
               <>
                 <button
-                  className="flex j w-[100%] justify-end mx-8 px-4 items-center"
+                  className="flex  w-[100%] justify-end mx-8 px-4 items-center"
                   onClick={() => {
                     setRechargeInfo({
                       amount: 0,
@@ -1342,11 +1347,11 @@ const WalletRecharge = () => {
               </>
             </CenterModal>
 
-            {/* {rechargeWithCOD && (
+            {rechargeWithCOD && (
               <CenterModal
                 isOpen={true}
                 onRequestClose={() => setRechargeWithCOD(false)}
-                className="min-w-0 max-w-[1024px] min-h-0 max-h-[33%] p-4 sm:p-6"
+                className="min-w-0 max-w-[500px] min-h-0 max-h-[40%] xl:max-h-[36%] p-4 sm:p-6"
               >
                 {getCodLoader ? (
                   <div>
@@ -1364,13 +1369,34 @@ const WalletRecharge = () => {
                         <img src={CloseIcon} alt="close" />
                       </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row justify-between mt-6 gap-4">
-                      <div className="w-full flex flex-col items-center">
+                    <div className="flex flex-col mt-4 gap-4">
+                      <div className="w-full">
+                        <div>
+                          <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C] md:w-[100px] lg:w-full">
+                            Wallet Balance
+                          </p>
+                          <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C]  md:w-[100px] lg:w-full">
+                            ₹ {codData?.walletAmount?.toFixed(2) || 0}
+                          </p>
+                        </div>
+
+                        {/* <div className="w-full mt-4 sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]">
+                          <CustomDropDown
+                            onChange={function (
+                              event: React.ChangeEvent<HTMLSelectElement>
+                            ): void {
+                              throw new Error("Function not implemented.");
+                            }}
+                            placeHolder="Select Coupon"
+                          />
+                        </div> */}
+                      </div>
+                      <div className="w-full flex flex-col">
                         <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C]">
                           Eligible COD Amount
                         </p>
-                        <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C]">
-                          ₹ {codData?.eligibleAmount || 0}
+                        <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C] mb-2 md:mb-4">
+                          ₹ {codData?.eligibleAmount?.toFixed(2) || 0}
                         </p>
                         <CustomInputBox
                           label="Enter Amount"
@@ -1379,32 +1405,12 @@ const WalletRecharge = () => {
                           onChange={(e: any) => {
                             setEnterAmount(e.target.value);
                           }}
-                          className="mt-2 w-full sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+                          className="w-full sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
                         />
-                      </div>
-                      <div className="w-full flex flex-col items-center mt-[54px]">
-                        <div>
-                          <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C] md:w-[100px] lg:w-full">
-                            Wallet Balance
-                          </p>
-                          <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C]  md:w-[100px] lg:w-full text-center">
-                            ₹ {codData?.walletAmount || 0}
-                          </p>
-                        </div>
-
-                        <div className="w-full mt-2 sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]">
-                        <CustomDropDown
-                          onChange={function (
-                            event: React.ChangeEvent<HTMLSelectElement>
-                          ): void {
-                            throw new Error("Function not implemented.");
-                          }}
-                        />
-                      </div>
                       </div>
                     </div>
 
-                    <div className="flex justify-end mt-6">
+                    <div className="flex justify-center md:justify-end mt-6 lg:mt-12">
                       <OneButton
                         disabled={codData?.eligibleAmount === 0 ? true : false}
                         onClick={(e: any) => handleUpdateWallet(e)}
@@ -1416,39 +1422,37 @@ const WalletRecharge = () => {
                   </div>
                 )}
               </CenterModal>
-            )} */}
-            {/* {congratulationsModal && (
+            )}
+
+            {congratulationsModal && (
               <CenterModal
                 isOpen={congratulationsModal}
                 onRequestClose={() => setOpenCongratulationsModal(false)}
-                className="min-w-0 max-w-[1024px] min-h-0 max-h-[35%]"
+                className="min-w-0 max-w-[500px] min-h-0 max-h-[35%]"
               >
                 {updateWalletLoader ? (
                   <div>
                     <Spinner />
                   </div>
                 ) : (
-                  <div>
-                    <div className="w-full flex justify-end">
+                  <div className="w-full">
+                    <div className="w-full flex justify-end mt-3 lg:mt-0">
                       <img
                         src={CloseIcon}
                         alt="close"
-                        className="mr-4 mt-1"
-                        // onClick={() => {
-                        //   setCongratulationsModal(false), setRechargeWithCOD(false);
-                        // }}
+                        className="mr-4"
                         onClick={() => handleCongratulationsModal()}
                       />
                     </div>
 
-                    <div className="flex justify-center items-center ">
+                    <div className="flex justify-center items-center">
                       <div className="flex flex-col items-center justify-center">
                         <img src={Done} alt="tick" className="h-30 w-30" />
                         <div className="flex flex-col items-center mb-6">
-                          <p className="font-bold text-[16px] text-[#1C1C1C] font-Open leading-[22px]">
+                          <p className="font-bold text-[12px] md:text-[16px] text-[#1C1C1C] font-Open leading-[22px]">
                             Congratulations!
                           </p>
-                          <p className="font-bold text-[16px] text-[#1C1C1C] font-Open leading-[22px] my-1">
+                          <p className="text-center font-bold text-[12px] md:text-[16px] text-[#1C1C1C] font-Open leading-[22px] my-1">
                             We have processed your payment for ₹ {enterAmount}
                           </p>
                         </div>
@@ -1460,14 +1464,14 @@ const WalletRecharge = () => {
 
                             navigate(`/orders/view-orders?activeTab=draft`);
                           }}
-                          className="bg-[#1C1C1C] text-white py-2 px-4  font-Open text-base font-semibold leading-5"
+                          className="bg-[#1C1C1C] text-white text-[12px] md:text-[16px] py-2 px-4  font-Open  font-semibold leading-5"
                         />
                       </div>
                     </div>
                   </div>
                 )}
               </CenterModal>
-            )} */}
+            )}
           </div>
         )
       ) : (
