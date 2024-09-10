@@ -131,10 +131,6 @@ const WalletRecharge = () => {
 
   const [dataFromSession, setDataFromSession] = useState<any>();
   const [balanceZeroOrNegative, setBalanceZeroOrNegative] = useState(false);
-  console.log(
-    "🚀 ~ WalletRecharge ~ balanceZeroOrNegative:",
-    balanceZeroOrNegative
-  );
 
   const [instantRecharge, setInstantRecharge] = useState<any>(false);
 
@@ -154,8 +150,8 @@ const WalletRecharge = () => {
   const [updateWalletLoader, setUpdateWalletLoader] = useState<any>(false);
   //setting enter amount data
   const [enterAmount, setEnterAmount] = useState<any>(0);
-
-  console.log("enterAmount", enterAmount);
+  const [congratulationModalAmount, setCongratulationsModalAmount] =
+    useState<any>(0);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -286,27 +282,33 @@ const WalletRecharge = () => {
     }
   };
 
-  console.log("rechargeWithCod", rechargeWithCOD);
-
   const handleUpdateWallet = async (amount: any) => {
     try {
       if (enterAmount > codData?.eligibleAmount) {
-        toast.error(`Amount cannot be greater than ${codData?.eligibleAmount}`);
+        toast.error(
+          `Amount cannot be greater than Eligible Amount ₹${codData?.eligibleAmount}`
+        );
         setCongratulationsModal(false);
       } else {
-        setCongratulationsModal(true);
         const payload = {
           amount: Number(enterAmount),
         };
         try {
           setUpdateWalletLoader(true);
-          const data = await POST(POST_UPDATE_WALLETBALANCE, payload);
 
-          if (data?.data?.success) {
-            setUpdateWalletLoader(false);
-            setRechargeWithCOD(false);
+          if (payload?.amount === 0 || !payload?.amount) {
+            toast.error("Please Select The Amount Greater Than Zero");
           } else {
-            setUpdateWalletLoader(false);
+            setCongratulationsModalAmount(payload?.amount);
+            const data = await POST(POST_UPDATE_WALLETBALANCE, payload);
+            if (data?.data?.success) {
+              setCongratulationsModal(true);
+              setUpdateWalletLoader(false);
+              setRechargeWithCOD(false);
+              setEnterAmount("");
+            } else {
+              setUpdateWalletLoader(false);
+            }
           }
         } catch (error: any) {
           console.log(error.message);
@@ -381,14 +383,6 @@ const WalletRecharge = () => {
       toast.error(options.message);
       return;
     }
-
-    // const rzp1: any = new Razorpay(options);
-
-    // rzp1.on("payment.failed", (response: any) => {
-    //   console.log("response: ", response);
-    // });
-
-    // rzp1.open();
   };
 
   const userDetailsFromSession = () => {
@@ -601,30 +595,30 @@ const WalletRecharge = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (instantRecharge) {
-          setGetCodLoader(true);
-          const { data } = await POST(GET_CODREMITTANCE_AMOUNT);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       if (instantRecharge) {
+  //         setGetCodLoader(true);
+  //         const { data } = await POST(GET_CODREMITTANCE_AMOUNT);
 
-          if (data?.status) {
-            setGetCodLoader(false);
-            setCodData((prevCodData: any) => ({
-              ...prevCodData,
-              eligibleAmount: data?.data?.eligibleAmount,
-              walletAmount: data?.data?.walletAmount,
-            }));
-          } else {
-            setGetCodLoader(false);
-            toast.error(data?.message);
-          }
-        }
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    })();
-  }, [instantRecharge]);
+  //         if (data?.status) {
+  //           setGetCodLoader(false);
+  //           setCodData((prevCodData: any) => ({
+  //             ...prevCodData,
+  //             eligibleAmount: data?.data?.eligibleAmount,
+  //             walletAmount: data?.data?.walletAmount,
+  //           }));
+  //         } else {
+  //           setGetCodLoader(false);
+  //           toast.error(data?.message);
+  //         }
+  //       }
+  //     } catch (error: any) {
+  //       console.log(error.message);
+  //     }
+  //   })();
+  // }, [instantRecharge]);
 
   return (
     <>
@@ -868,14 +862,14 @@ const WalletRecharge = () => {
                 {/* <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
                   INSTANT RECHARGE WITH COD
                 </p> */}
-                <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
+                {/* <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
                   INSTANT RECHARGE WITH COD
-                </p>
+                </p> */}
               </div>
 
-              <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
+              {/* <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
                 Add money to wallet with COD
-              </p>
+              </p> */}
 
               <div className="max-w-[900px] mb-[20px] ">
                 <div className="flex items-center">
@@ -1347,7 +1341,7 @@ const WalletRecharge = () => {
               </>
             </CenterModal>
 
-            {rechargeWithCOD && (
+            {/* {rechargeWithCOD && (
               <CenterModal
                 isOpen={true}
                 onRequestClose={() => setRechargeWithCOD(false)}
@@ -1380,7 +1374,7 @@ const WalletRecharge = () => {
                           </p>
                         </div>
 
-                        {/* <div className="w-full mt-4 sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]">
+                        <div className="w-full mt-4 sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]">
                           <CustomDropDown
                             onChange={function (
                               event: React.ChangeEvent<HTMLSelectElement>
@@ -1389,7 +1383,7 @@ const WalletRecharge = () => {
                             }}
                             placeHolder="Select Coupon"
                           />
-                        </div> */}
+                        </div>
                       </div>
                       <div className="w-full flex flex-col">
                         <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C]">
@@ -1400,6 +1394,7 @@ const WalletRecharge = () => {
                         </p>
                         <CustomInputBox
                           label="Enter Amount"
+                          inputType="number"
                           isDisabled={false}
                           value={enterAmount}
                           onChange={(e: any) => {
@@ -1422,9 +1417,9 @@ const WalletRecharge = () => {
                   </div>
                 )}
               </CenterModal>
-            )}
+            )} */}
 
-            {congratulationsModal && (
+            {/* {congratulationsModal && (
               <CenterModal
                 isOpen={congratulationsModal}
                 onRequestClose={() => setOpenCongratulationsModal(false)}
@@ -1453,7 +1448,8 @@ const WalletRecharge = () => {
                             Congratulations!
                           </p>
                           <p className="text-center font-bold text-[12px] md:text-[16px] text-[#1C1C1C] font-Open leading-[22px] my-1">
-                            We have processed your payment for ₹ {enterAmount}
+                            We have processed your payment for ₹{" "}
+                            {congratulationModalAmount}
                           </p>
                         </div>
 
@@ -1471,7 +1467,7 @@ const WalletRecharge = () => {
                   </div>
                 )}
               </CenterModal>
-            )}
+            )} */}
           </div>
         )
       ) : (
