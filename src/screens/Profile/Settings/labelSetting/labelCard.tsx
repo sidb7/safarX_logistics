@@ -128,7 +128,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 checked={labelData?.inputs?.sellerDetails?.mobile || false}
               />
               <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] capitalize pt-1 md:pt-2">
-                Note: Hide The Seller's Mobile Number.
+                Note: Hide the Seller's Mobile Number.
               </p>
             </div>
             {/* <div>
