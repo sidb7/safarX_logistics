@@ -217,7 +217,10 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                   <p className="text-[15px] text-[#777777] leading-4 font-Open">
                     {`${item?.name} : ${capitalizeFirstLetter(
                       item?.serviceMode
-                    )}`}
+                    )} `}
+                    <span className="text-[13px]">{` - ${capitalizeFirstLetter(
+                      item?.partnerServiceName?.replace(/_/g, " ") || ""
+                    )} [${capitalizeFirstLetter(item?.zoneName || "")}]`}</span>
                   </p>
                   <p className="text-[15px] text-[#777777] leading-4 font-Open">
                     ₹ {item?.total.toFixed(2)}
