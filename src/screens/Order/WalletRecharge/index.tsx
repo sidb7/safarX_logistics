@@ -136,8 +136,6 @@ const WalletRecharge = () => {
 
   const [rechargeWithCOD, setRechargeWithCOD] = useState<any>(false);
   const [congratulationsModal, setCongratulationsModal] = useState<any>(false);
-  const [openCongratulationsModal, setOpenCongratulationsModal] =
-    useState<any>(false);
 
   //GET_CODREMITTANCE_AMOUNT response data is setting here
   const [codData, setCodData] = useState<any>({
@@ -149,7 +147,7 @@ const WalletRecharge = () => {
   const [getCodLoader, setGetCodLoader] = useState<any>(false);
   const [updateWalletLoader, setUpdateWalletLoader] = useState<any>(false);
   //setting enter amount data
-  const [enterAmount, setEnterAmount] = useState<any>(0);
+  const [enterAmount, setEnterAmount] = useState<any>("");
   const [congratulationModalAmount, setCongratulationsModalAmount] =
     useState<any>(0);
 
@@ -1356,7 +1354,11 @@ const WalletRecharge = () => {
             {rechargeWithCOD && (
               <CenterModal
                 isOpen={true}
-                onRequestClose={() => setRechargeWithCOD(false)}
+                onRequestClose={() => {
+                  setRechargeWithCOD(false);
+                  setErrorMessage("");
+                  setEnterAmount("");
+                }}
                 className="min-w-0 max-w-[500px] min-h-0 max-h-[44%] md:max-h-[42%] xl:max-h-[38%] p-4 sm:p-6"
               >
                 {getCodLoader ? (
@@ -1372,7 +1374,11 @@ const WalletRecharge = () => {
                         </p>
                       </div>
                       <div onClick={() => setRechargeWithCOD(false)}>
-                        <img src={CloseIcon} alt="close" />
+                        <img
+                          src={CloseIcon}
+                          alt="close"
+                          className="cursor-pointer"
+                        />
                       </div>
                     </div>
                     <div className="flex flex-col mt-4 gap-4">
@@ -1440,9 +1446,15 @@ const WalletRecharge = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-center md:justify-end mt-6 lg:mt-12">
+                    <div className="flex justify-center mt-4 lg:mt-12">
                       <OneButton
-                        disabled={codData?.eligibleAmount === 0 ? true : false}
+                        disabled={
+                          codData?.eligibleAmount === 0 ||
+                          enterAmount === "0" ||
+                          enterAmount === ""
+                            ? true
+                            : false
+                        }
                         onClick={(e: any) => handleUpdateWallet(e)}
                         text="ADD MONEY TO WALLET"
                         variant="primary"
@@ -1457,7 +1469,7 @@ const WalletRecharge = () => {
             {congratulationsModal && (
               <CenterModal
                 isOpen={congratulationsModal}
-                onRequestClose={() => setOpenCongratulationsModal(false)}
+                onRequestClose={() => setCongratulationsModal(false)}
                 className="min-w-0 max-w-[500px] min-h-0 max-h-[35%]"
               >
                 {updateWalletLoader ? (
@@ -1466,7 +1478,7 @@ const WalletRecharge = () => {
                   </div>
                 ) : (
                   <div className="w-full">
-                    <div className="w-full flex justify-end mt-3 lg:mt-0">
+                    <div className="w-full flex justify-end mt-3 lg:mt-0 cursor-pointer">
                       <img
                         src={CloseIcon}
                         alt="close"
@@ -1491,7 +1503,7 @@ const WalletRecharge = () => {
                         <OneButton
                           text="GO TO ORDER"
                           onClick={() => {
-                            setOpenCongratulationsModal(false);
+                            setCongratulationsModal(false);
 
                             navigate(`/orders/view-orders?activeTab=draft`);
                           }}
