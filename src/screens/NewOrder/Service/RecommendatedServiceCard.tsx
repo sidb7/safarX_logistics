@@ -150,9 +150,14 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                     "en-IN"
                   )}{" "}
                 </p>
-                <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
-                  ETA: {cheapestService.text?.EDT || "N/A"}{" "}
-                </p>
+                <div className="flex justify-between">
+                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
+                    ETA: {cheapestService.text?.EDT || "N/A"}{" "}
+                  </p>
+                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open pl-4">
+                    {cheapestService.text?.zoneName || ""}
+                  </p>
+                </div>
               </div>
               {/* <TooltipContent option={cheapestService} /> */}
             </div>
@@ -203,9 +208,14 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                     "en-IN"
                   )}{" "}
                 </p>
-                <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
-                  ETA: {fastestService.text?.EDT || "N/A"}{" "}
-                </p>
+                <div className="flex justify-between">
+                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
+                    ETA: {fastestService.text?.EDT || "N/A"}{" "}
+                  </p>
+                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open ml-4">
+                    {fastestService.text?.zoneName || ""}
+                  </p>
+                </div>
               </div>
               {/* <TooltipContent option={fastestService} /> */}
             </div>
@@ -258,9 +268,14 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                     "en-IN"
                   )}{" "}
                 </p>
-                <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
-                  ETA: {balancedService.text?.EDT || "N/A"}{" "}
-                </p>
+                <div className="flex justify-between">
+                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
+                    ETA: {balancedService.text?.EDT || "N/A"}{" "}
+                  </p>
+                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open min-w-0 pl-4">
+                    {balancedService.text?.zoneName || ""}
+                  </p>
+                </div>
               </div>
               {/* <TooltipContent option={balancedService} /> */}
             </div>
