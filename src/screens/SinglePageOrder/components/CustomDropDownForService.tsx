@@ -48,7 +48,6 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [filterData, setFilterData] = useState([]);
-  console.log("🚀 ~ filterData:", filterData);
   const [searchInput, setSearchInput] = useState<any>("");
   const dropdownRef = useRef(null);
 
