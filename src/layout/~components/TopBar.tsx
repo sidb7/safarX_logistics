@@ -326,7 +326,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             ) : (
               <div className="hidden lg:block">
                 <div
-                  className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
+                  className="flex items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
                   onClick={() => navigate("/wallet/view-wallet")}
                 >
                   <img src={WalletIcon} width={35} alt="" />
@@ -340,7 +340,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
             {localStorage.getItem("sellerId") && (
               <div className="hidden lg:block">
-                <div className="flex items-center max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]">
+                <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
                   <img src={ProfileIcon} width={16} alt="" />
                   <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                     <div>Seller ID: </div>
