@@ -22,6 +22,15 @@ import OneButton from "../../../components/Button/OneButton";
 import NoDataGif from "../../../assets/no data.gif";
 import PlusIcon from "../../../assets/plusIcon.svg";
 import AnalyticsIcon from "../../../assets/analytics.svg";
+import { capitalizeFirstLetter, kFormatter } from "../../../utils/utility";
+import PerformanceCard from "./OrderDetails/PerformanceCard";
+import RevenueSection from "./RevenueDetails/RevenueSection";
+import TatPerformance from "./ShipmentDetails/TatPerformance";
+import ShipmentStatusReport from "./ShipmentDetails/OverallShipmentDetails";
+import OverallShipmentDetails from "./ShipmentDetails/OverallShipmentDetails";
+import OrderCount from "./OrderDetails/orderCount";
+import CodIcon from "../../../assets/codIcon.svg";
+import ComingSoonGif from "../../../assets/Coming Soon.gif";
 
 interface IOverview {
   ordersArr?: any;
@@ -200,20 +209,20 @@ export const Overview = (props: IOverview) => {
           </p>
         </div> */}
         <div className="">
-          <div className="flex gap-2 mt-6 lg:mt-7">
+          <div className="flex gap-2 mt-6 lg:mt-2">
             <img src={CalenderIcon} alt="CalenderIcon" />
             <span className="text-[1rem] font-semibold font-Open leading-[22px] lg:text-[18px] lg:leading-6">
               Important Today
             </span>
           </div>
-          <div className="flex gap-x-6 flex-wrap">
+          <div className="flex mt-4 gap-6 flex-wrap">
             {emptyOrdersArr?.map((order: any, i: number) => (
               <div
                 className="border-[#E8E8E8] border-[1px] rounded-lg shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] mt-4 flex-1 w-[273px] p-4"
                 key={i}
               >
-                <div className="flex flex-col">
-                  <div className="font-bold font-Lato mb-2 lg:mb-3 text-[#1C1C1C] lg:text-[#F57960] text-[22px] lg:text-[2rem] leading-7">
+                <div className="flex flex-col gap-y-3">
+                  <div className="font-bold font-Lato text-[#1C1C1C] lg:text-[#F57960] text-[22px] lg:text-[2rem] leading-7">
                     {order?.count}
                   </div>
                   <p className="lg:text-[#1C1C1C] font-normal lg:text-base font-Open text-sm text-[#494949] leading-5 lg:leading-[22px]">
@@ -281,7 +290,7 @@ export const Overview = (props: IOverview) => {
                     </div>
                     <div className="flex justify-between">
                       <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
-                        Highest Order Value
+                        Highest Invoice Value
                       </span>
                       <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
                         {/* {getValidNumber(
@@ -329,7 +338,7 @@ export const Overview = (props: IOverview) => {
                     </div>
                     <div className="flex justify-between">
                       <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
-                        Avg Order Value
+                        Total COD Value Earning
                       </span>
                       <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
                         {/* {getValidNumber(
@@ -376,7 +385,7 @@ export const Overview = (props: IOverview) => {
                     </div>
                     <div className="flex justify-between">
                       <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
-                        Today’s Revenue
+                        Total Prepaid Earning
                       </span>
                       <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
                         {/* {getValidNumber(
@@ -413,88 +422,59 @@ export const Overview = (props: IOverview) => {
     <>
       {userData?.isReturningUser ? (
         <div className="">
-          <div className="flex gap-2 mt-6 lg:mt-7">
+          <div className="flex gap-2 mt-6 lg:mt-2">
             <img src={CalenderIcon} alt="CalenderIcon" />
             <span className="text-[1rem] font-semibold font-Open leading-[22px] lg:text-[18px] lg:leading-6">
               Important Today
             </span>
           </div>
-          <div className="flex justify-between mt-6 lg:mt-[26px] gap-4 mb-10 customScroll">
-            {ordersArr?.map((order: any, i: number) => (
-              <div
-                className="w-[17rem] rounded-lg border-2 lg:overflow-hidden"
-                key={i}
-              >
-                <div className="p-4 flex flex-col w-[226px] lg:w-auto">
-                  <div className="font-bold font-Lato mb-2 lg:mb-3 text-[#1C1C1C] lg:text-[#F57960] text-[22px] lg:text-[2rem] leading-7">
-                    {order?.count}
-                  </div>
-                  <p className="lg:text-[#1C1C1C] font-normal lg:text-base font-Open text-sm text-[#494949] leading-5 lg:leading-[22px]">
-                    {order?.text}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div>
+            <PerformanceCard ordersArr={ordersArr} />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-0 lg:gap-4  mt-4 rounded-lg">
-            <SimpleChart
-              yearArr={yearArr}
-              revenue={true}
-              revenueDetails={revenueDetails}
-            />
-            <div className="mt-0 lg:mt-[3.125rem] p-4 space-y-[60px] hidden lg:block">
-              <div>
-                <div className="flex justify-between">
-                  <h1 className="text-[2rem] font-bold font-Lato">
-                    &#8377;
-                    {Math.round(
-                      revenueDetails?.charges?.HighestOrderValue
-                    )?.toLocaleString("en-IN") || 0}
-                  </h1>
-                  <img src={GreenEllipse} alt="GreenEllipse" />
+          <div>
+            <RevenueSection />
+          </div>
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
+            <div className="h-full">
+              <div className="h-full flex flex-col">
+                <div className="rounded-tr-xl rounded-tl-xl px-4  h-[50px] bg-[#F6F6F6] ">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <img src={Box} className="px-2" alt="" />
+                      <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
+                        {"Order Details"}
+                      </span>
+                    </div>
+                    <div className="pt-2">
+                      <div className="!h-9"></div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={ComingSoonGif}
+                      alt="Feature Coming Soon"
+                      width={250}
+                      height={250}
+                    />
+                  </div>
                 </div>
-                <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
-                  Highest Order Value
-                </p>
-              </div>
-              <div>
-                <div className="flex justify-between">
-                  <h1 className="text-[2rem] font-bold font-Lato">
-                    &#8377;
-                    {Math.round(
-                      revenueDetails?.charges?.AvgOrderValue
-                    )?.toLocaleString("en-IN") || 0}{" "}
-                  </h1>
-                  <img src={RedEllipse} alt="RedEllipse" />
-                </div>
-                <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
-                  Avg Order Value
-                </p>
-              </div>
-              <div>
-                <div className="flex justify-between">
-                  <h1 className="text-[2rem] font-bold font-Lato">
-                    &#8377;
-                    {Math.round(
-                      revenueDetails?.charges?.TodaysRevenue
-                    )?.toLocaleString("en-IN") || 0}{" "}
-                  </h1>
-                  <img src={GreenEllipse} alt="GreenEllipse" />
-                </div>
-                <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
-                  Today's Revenue
-                </p>
+                <div className=" h-full flex-1  border-[#E8E8E8] border-x-[1px] border-b-[1px] rounded-b-xl pr-2 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] "></div>
               </div>
             </div>
+            <OrderCount />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
-            {/* <BarChart
+            <TatPerformance />
+            <OverallShipmentDetails />
+          </div> */}
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg"> */}
+          {/* <BarChart
               text="Order Details"
               img={Box}
               data={orderArr}
               yearArr={yearArr}
             /> */}
-            <BarChart
+          {/* <BarChart
               text="Order Count"
               img={Box}
               data={orderCount?.data}
@@ -506,16 +486,64 @@ export const Overview = (props: IOverview) => {
               data={codCountOrder?.data}
               yearArr={yearArr}
             />
-          </div>
-          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
-            <BarChart
-              text="Weight Discrenpancy"
-              img={Box}
-              data={orderArr}
-              yearArr={yearArr}
-            />
-            <BarChart text="COD" img={Box} data={orderArr} yearArr={yearArr} />
           </div> */}
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
+            <div className="h-full">
+              <div className="h-full flex flex-col ">
+                <div className="rounded-tr-xl rounded-tl-xl px-4  h-[50px] bg-[#F6F6F6] ">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <img src={Box} className="px-2" alt="" />
+                      <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
+                        {"Weight Discrepancy"}
+                      </span>
+                    </div>
+                    <div className="pt-2">
+                      <div className="!h-9"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className=" h-full flex-1  border-[#E8E8E8] border-x-[1px] border-b-[1px] rounded-b-xl pr-2 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] ">
+                  {/* <div className="h-[450px]"></div> */}
+          {/* <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={ComingSoonGif}
+                      alt="no data found"
+                      width={250}
+                      height={250}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="h-full">
+              <div className="h-full flex flex-col ">
+                <div className="rounded-tr-xl rounded-tl-xl px-4  h-[50px] bg-[#F6F6F6] ">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <img src={CodIcon} className="px-2" alt="" />
+                      <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
+                        {"COD"}
+                      </span>
+                    </div>
+                    <div className="pt-2">
+                      <div className="!h-9"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className=" h-full flex-1  border-[#E8E8E8] border-x-[1px] border-b-[1px] rounded-b-xl pr-2 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] ">
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={ComingSoonGif}
+                      alt="no data found"
+                      width={250}
+                      height={250}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  */}
           {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
             <BarChart2
               text="TAT Performance"
@@ -525,7 +553,8 @@ export const Overview = (props: IOverview) => {
             />
             <PieChart text="COD" img={Box} data={piedata} yearArr={yearArr} />
           </div> */}
-          <div className="border-1 gap-4 mt-4 rounded-lg">
+          {/* location with its state type data points  */}
+          {/* <div className="border-1 gap-4 mt-4 rounded-lg">
             <Locations
               text="Location"
               img={Box}
@@ -533,7 +562,8 @@ export const Overview = (props: IOverview) => {
               yearArr={yearArr}
               addressCountOrder={addressCountOrder}
             />
-          </div>
+          </div> */}
+          {/* inovices and locations cards type single point data  */}
           {/* <div className="grid grid-cols-1 lg:grid-cols-2  gap-4 mt-4 rounded-lg">
             <Invoices
               text="Invoices"
