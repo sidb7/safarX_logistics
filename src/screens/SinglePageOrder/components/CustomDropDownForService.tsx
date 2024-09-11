@@ -48,6 +48,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [filterData, setFilterData] = useState([]);
+  console.log("🚀 ~ filterData:", filterData);
   const [searchInput, setSearchInput] = useState<any>("");
   const dropdownRef = useRef(null);
 
@@ -214,16 +215,21 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                   }}
                   data-cy={`dropdown-item-${index}`}
                 >
-                  <p className="text-[15px] text-[#777777] leading-4 font-Open">
+                  <p className="text-[14px] text-[#494949] leading-[18px] font-semibold font-Open">
                     {`${item?.name} : ${capitalizeFirstLetter(
                       item?.serviceMode
                     )} `}
-                    <span className="text-[13px]">{` - ${capitalizeFirstLetter(
-                      item?.partnerServiceName?.replace(/_/g, " ") || ""
-                    )} [${capitalizeFirstLetter(item?.zoneName || "")}]`}</span>
                   </p>
-                  <p className="text-[15px] text-[#777777] leading-4 font-Open">
-                    ₹ {item?.total.toFixed(2)}
+                  <p className="text-[14px] text-[#494949] leading-[18px] font-light font-Open">
+                    ₹ {item?.total.toFixed(2)} |{" "}
+                    <span>{`${capitalizeFirstLetter(
+                      item?.zoneName || ""
+                    )}`}</span>
+                    {item?.EDT && (
+                      <span>{` | ${item.EDT} ${
+                        item.EDT > 1 ? "Days" : "Day"
+                      }`}</span>
+                    )}
                   </p>
                 </div>
               ))
