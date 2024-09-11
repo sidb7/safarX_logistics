@@ -620,6 +620,7 @@ const WalletRecharge = () => {
               eligibleAmount: data?.data?.eligibleAmount,
               walletAmount: data?.data?.walletAmount,
             }));
+            setInstantRecharge(false);
           } else {
             setGetCodLoader(false);
             toast.error(data?.message);
@@ -1401,7 +1402,10 @@ const WalletRecharge = () => {
                           Eligible COD Amount
                         </p>
                         <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C] mb-2 md:mb-4">
-                          ₹ {codData?.eligibleAmount?.toFixed(2) || 0}
+                          ₹{" "}
+                          {codData?.eligibleAmount <= 0
+                            ? 0
+                            : codData?.eligibleAmount?.toFixed(2) || 0}
                         </p>
                         {/* <CustomInputBox
                           label="Enter Amount"
