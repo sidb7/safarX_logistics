@@ -25,7 +25,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Hide Customer's Mobile Number"
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px]"
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -61,7 +61,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Hide Seller's Address."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px]"
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -86,7 +86,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Seller Footer Logo."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px]"
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -112,7 +112,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Hide Seller's Mobile Number."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -136,7 +136,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Seller's Names (In case of Multiple Shippers)"
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -164,7 +164,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Seller's Customer Service Contact on Address"
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -192,7 +192,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Individual Shipper's Logos (In case of Multiple Shippers)"
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -221,7 +221,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Individual Shipper's Order Id (In case of Multiple Shippers)"
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -249,7 +249,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Seller's Names (In case of Multiple Shippers)."
-                labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -275,7 +275,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show Individual Shipper's Logos (In case of Multiple Shippers)."
-                labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -311,7 +311,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Hide the Package Weight."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -337,7 +337,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Hide the Package Dimensions."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -363,7 +363,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Show the Billable Weight on the Label."
-                labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] "
               />
               <p className="font-Open text-base font-normal leading-[22px] text-[#777777]  pt-2">
                 Note: By default, product weight and package dimensions are
@@ -385,7 +385,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName=" gap-x-2 !h-6 "
                 label="Hide the Order Value for Prepaid Orders."
-                labelClassName="!font-Open !text-[14px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[14px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
@@ -410,7 +410,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
                 label="Hide The Product Name."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
