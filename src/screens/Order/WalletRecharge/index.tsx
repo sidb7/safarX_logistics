@@ -153,6 +153,8 @@ const WalletRecharge = () => {
   const [congratulationModalAmount, setCongratulationsModalAmount] =
     useState<any>(0);
 
+  const [errorMessage, setErrorMessage] = useState<any>("");
+
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -476,6 +478,16 @@ const WalletRecharge = () => {
     setRechargeWithCOD(false);
   };
 
+  const handleCODAmountInput = (value: any) => {
+    setEnterAmount(value);
+
+    if (value === "0" || value === 0 || value === "") {
+      setErrorMessage("Amount Should be greater than zero");
+    } else {
+      setErrorMessage("");
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -585,7 +597,6 @@ const WalletRecharge = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.error("Error fetching data:", error);
         toast.error("Failed to fetch data!");
       } finally {
         setLoading(false);
@@ -1345,7 +1356,7 @@ const WalletRecharge = () => {
               <CenterModal
                 isOpen={true}
                 onRequestClose={() => setRechargeWithCOD(false)}
-                className="min-w-0 max-w-[500px] min-h-0 max-h-[40%] xl:max-h-[36%] p-4 sm:p-6"
+                className="min-w-0 max-w-[500px] min-h-0 max-h-[44%] md:max-h-[42%] xl:max-h-[38%] p-4 sm:p-6"
               >
                 {getCodLoader ? (
                   <div>
@@ -1392,16 +1403,36 @@ const WalletRecharge = () => {
                         <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C] mb-2 md:mb-4">
                           ₹ {codData?.eligibleAmount?.toFixed(2) || 0}
                         </p>
+                        {/* <CustomInputBox
+                          label="Enter Amount"
+                          inputMode="decimal"
+                          isDisabled={false}
+                          value={enterAmount}
+                          // onChange={(e: any) => {
+                          //   if (!isNaN(e.target.value)) {
+                          //     handleCODAmountInput(+e.target.value);
+                          //   }
+                          // }}
+                         
+                          className="w-full sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+                        /> */}
                         <CustomInputBox
                           label="Enter Amount"
-                          inputType="number"
+                          inputMode="decimal" // inputMode set to "decimal" to allow decimal values
                           isDisabled={false}
                           value={enterAmount}
                           onChange={(e: any) => {
-                            setEnterAmount(e.target.value);
+                            // Allowing numbers and decimal points
+                            const value = e.target.value;
+                            if (/^\d*\.?\d*$/.test(value)) {
+                              handleCODAmountInput(value); // Keeping it as string to handle decimals
+                            }
                           }}
                           className="w-full sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
                         />
+                        <p className="text-[12px] md:text-[14px] text-red-600">
+                          {errorMessage}
+                        </p>
                       </div>
                     </div>
 
