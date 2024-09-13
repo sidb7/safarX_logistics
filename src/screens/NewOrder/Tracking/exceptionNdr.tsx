@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import CustomRightModal from "../../../components/CustomModal/customRightModal";
 import NdrFollowUp from "./NdrFollowUp";
 import EditAction from "./EditAction";
-import { GET_NDR_ORDERS , POST_ACTION_REMARKS} from "../../../utils/ApiUrls";
+import { GET_NDR_ORDERS, POST_ACTION_REMARKS } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import SelleractionModal from "./sellerActionModal";
 
@@ -30,45 +30,71 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   } | null>(null);
   const [ndrData, setNdrData] = useState<any>([]);
   const [rightModalSellerAction, setRightModalSellerAction] = useState(false);
-  const [selectedPackages, setSelectedPackages] = useState<Record<string, boolean>>({});
+  const [selectedPackages, setSelectedPackages] = useState<
+    Record<string, boolean>
+  >({});
   const [selectedRowIds, setSelectedRowIds] = useState<{
     [key: string]: boolean;
   }>({});
-  const [currentAttemptsReasons, setCurrentAttemptsReasons] = useState<any[]>([]);
+  const [currentAttemptsReasons, setCurrentAttemptsReasons] = useState<any[]>(
+    []
+  );
   const [currentSellerRemark, setCurrentSellerRemark] = useState<any[]>([]);
   const [actionModalRemark, setActionModalRemark] = useState<any[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [activeTab, setActiveTab] = useState("ALL");
+  const [tabCount, setTabCount] = useState<any>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const itemsPerPageOptions = [10, 20, 30, 50];
+
+  // ... (code for pagination)
+
+  const onPageChange = ({ currentPage, itemsPerPage }: { currentPage: number, itemsPerPage: number }) => {
+    setCurrentPage(currentPage);
+    getNdrOrders(searchText, activeTab, currentPage, itemsPerPage);
+  };
+
+  const onItemsPerPageChange = ({ currentPage, itemsPerPage }: { currentPage: number, itemsPerPage: number }) => {
+    setItemsPerPage(itemsPerPage);
+    setCurrentPage(1);
+    getNdrOrders(searchText, activeTab, 1, itemsPerPage);
+  };
 
 
+  const tabs = [
+    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount },
+    { name: "PENDING_ACTION", count: tabCount?.pendingCount?.[0]?.action_pending  },
+    { name: "ACTION_TAKEN", count: tabCount?.takenCount?.[0]?.action_taken  },
+  ];
 
-  
-// get modal data from tabels
-const handleNdrFollowUpClick = (attemptsReasons: any[]) => {
-  setCurrentAttemptsReasons(attemptsReasons);
-};
+  // get modal data from tabels
+  const handleNdrFollowUpClick = (attemptsReasons: any[]) => {
+    setCurrentAttemptsReasons(attemptsReasons);
+  };
 
-const handleSellerActionClick = (sellerRemark: any[]) => {
-  setCurrentSellerRemark(sellerRemark);
-};
+  const handleSellerActionClick = (sellerRemark: any[]) => {
+    setCurrentSellerRemark(sellerRemark);
+  };
 
-const handleActionModalClick = (actionModalRemark: any[]) => {
-  setActionModalRemark(actionModalRemark);
-};
-
-
+  const handleActionModalClick = (actionModalRemark: any[]) => {
+    setActionModalRemark(actionModalRemark);
+  };
 
   useEffect(() => {
     // Initialize selectedPackages based on dummyData
     const initialSelectedPackages: Record<string, boolean> = {};
-    dummyData.forEach(item => {
+    dummyData.forEach((item) => {
       initialSelectedPackages[item.packageDetails] = false;
     });
     setSelectedPackages(initialSelectedPackages);
   }, []);
 
   const handleSelectAllPackages = (checked: boolean) => {
-    setSelectedPackages(prevSelected => {
+    setSelectedPackages((prevSelected) => {
       const newSelected = { ...prevSelected };
-      dummyData.forEach(item => {
+      dummyData.forEach((item) => {
         newSelected[item.packageDetails] = checked;
       });
       return newSelected;
@@ -76,14 +102,11 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
   };
 
   const handleSelectPackage = (packageDetails: string, checked: boolean) => {
-    setSelectedPackages(prevSelected => ({
+    setSelectedPackages((prevSelected) => ({
       ...prevSelected,
-      [packageDetails]: checked
+      [packageDetails]: checked,
     }));
   };
-
-  
-
 
   const arrayData = [{ label: "Exception NDR" }, { label: "RTO" }];
 
@@ -169,18 +192,36 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
     },
   ];
 
-  const getNdrOrders = async () => {
+  const getTotalItemsCount = () => {
+    switch (activeTab) {
+      case "ALL":
+        return tabCount?.allCount?.[0]?.TotalCount || 0;
+      case "PENDING_ACTION":
+        return tabCount?.pendingCount?.[0]?.action_pending || 0;
+      case "ACTION_TAKEN":
+        return tabCount?.takenCount?.[0]?.action_taken || 0;
+      default:
+        return 0;
+    }
+  };
+
+  const getNdrOrders = async (search = "", subStatus = activeTab,page = currentPage, perPage = itemsPerPage) => {
     try {
       const requestBody = {
         tabStatus: "EXCEPTION",
-        subStatus: "ALL",
+        subStatus: subStatus,
+        searchText: search,
+        skip: (page - 1) * perPage,
+        limit: perPage,
+        pageNo: page
       };
 
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
+      setTabCount(response?.data?.data[0] || []);
       // setNdrData(undefined);
-
-      console.log("dataforme>>>", response?.data?.data?.[0]?.data);
+      console.log("allCount",tabCount      )
+      // console.log("dataforme>>>", response?.data?.data[0]);
     } catch (error: any) {
       console.log(error.message);
     }
@@ -188,18 +229,60 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
 
   useEffect(() => {
     getNdrOrders();
-  }, []);
+  }, [activeTab]);
 
-  const handleEditActionSubmit = (data: {
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
+  // const handleEditActionSubmit = (data: {
+  //   action: string;
+  //   remark: string;
+  // }): void => {
+  //   setEditActionData(data);
+  //   // Here you can perform any necessary actions with the submitted data
+
+  //   console.log("Edit action submitted:", data);
+  //   console.log("awb",actionModalRemark)
+  //   setRightModalEdit(false);
+  // };
+
+  const handleEditActionSubmit = async (data: {
     action: string;
     remark: string;
-  }): void => {
+  }): Promise<void> => {
     setEditActionData(data);
-    // Here you can perform any necessary actions with the submitted data
-    
+
+    try {
+      const requestBody = {
+        awbs: [actionModalRemark],
+        requestType: data.action,
+        comments: data.remark,
+      };
+
+      const response = await POST(POST_ACTION_REMARKS, requestBody);
+      console.log("API response:", response);
+
+      // Here you can handle the API response as needed
+      // For example, you might want to update some state or show a success message
+    } catch (error: any) {
+      console.error("Error submitting action:", error.message);
+      // Handle the error appropriately, e.g., show an error message to the user
+    }
+
     console.log("Edit action submitted:", data);
-    console.log("awb",actionModalRemark)
+    console.log("awb", actionModalRemark);
     setRightModalEdit(false);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setSearchText(newValue);
+    getNdrOrders(newValue);
+  };
+  const handleGetFullContent = () => {
+    setSearchText("");
+    getNdrOrders("");
   };
 
   return (
@@ -217,10 +300,17 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
           </div>
         </div>
 
-        <div className="flex flex-row-reverse items-center flex-grow">
+        {/* <div className="flex flex-row-reverse items-center flex-grow">
+          
+         
           <div className="flex mr-4">
             <div className=" px-2">
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              <SearchBox
+                label="Search"
+                value={searchText}
+                onChange={handleSearchChange}
+                getFullContent={handleGetFullContent}
+              />
             </div>
             <ServiceButton
               text="NDR REPORT"
@@ -231,7 +321,60 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
             />
           </div>
+
+          <div className="inline-flex rounded-lg bg-gray-200 p-1 ">
+            {tabs.map((tab) => (
+              <button
+                key={tab.name}
+                className={`${
+                  activeTab === tab.name
+                    ? "bg-white shadow"
+                    : "text-gray-600 hover:bg-gray-300"
+                } rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none`}
+                onClick={() => handleTabChange(tab.name)}
+              >
+                {tab.name} ({tab.count.toString().padStart(2, "0")})
+              </button>
+            ))}
+          </div>
+        </div> */}
+
+<div className="flex justify-between items-center w-full px-4 py-2 ">
+      <div className="inline-flex rounded-lg bg-white file:p-1 border border-gray-300">
+        {tabs.map((tab) => (
+          <button
+            key={tab.name}
+            className={`${
+              activeTab === tab.name
+                ? "bg-gray-300 shadow"
+                : "text-gray-600 hover:bg-gray-100"
+            } rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none`}
+            onClick={() => handleTabChange(tab?.name)}
+          >
+            {tab.name} ({tab?.count?.toString().padStart(2, "0")})
+          </button>
+        ))}
+      </div>
+
+      <div className="flex items-center">
+        <div className="px-2">
+          <SearchBox
+            label="Search"
+            value={searchText}
+            onChange={handleSearchChange}
+            getFullContent={handleGetFullContent}
+          />
         </div>
+        <ServiceButton
+          text="NDR REPORT"
+          className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
+        />
+        <ServiceButton
+          text="NDR REMARKS"
+          className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
+        />
+      </div>
+    </div>
 
         <div className="mx-4">
           <OrderData
@@ -247,18 +390,18 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
             onNdrFollowUpClick={handleNdrFollowUpClick}
             onSellerActionClick={handleSellerActionClick}
             onActionModalClick={handleActionModalClick}
-            
-
-            
           />
         </div>
 
         {isLgScreen && totalItemCount > 0 && (
           <PaginationComponent
-            totalItems={totalItemCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
-            onPageChange={() => {}}
-            onItemsPerPageChange={() => {}}
+            // totalItems={totalItemCount}
+            totalItems={getTotalItemsCount()}
+            itemsPerPageOptions={itemsPerPageOptions}
+            onPageChange={onPageChange}
+            onItemsPerPageChange={onItemsPerPageChange}
+            pageNo={currentPage}
+            initialItemsPerPage={itemsPerPage}
           />
         )}
       </div>
@@ -307,4 +450,3 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
 };
 
 export default ExceptionNdr;
-
