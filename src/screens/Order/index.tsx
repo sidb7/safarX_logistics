@@ -243,11 +243,11 @@ const tabs = [
     value: "CANCELLED",
     orderNumber: 0,
   },
-  {
-    statusName: "All Orders",
-    value: "ALL",
-    orderNumber: 0,
-  },
+  // {
+  //   statusName: "All Orders",
+  //   value: "ALL",
+  //   orderNumber: 0,
+  // },
 ];
 
 const Index = () => {
@@ -386,6 +386,31 @@ const Index = () => {
     useState<any>(false);
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
+  const [bulkActionObject, setBulkActionObject] = useState({
+    pickupAddress: {
+      name: "",
+      mobileNo: "",
+      fullAddress: "",
+      pincode: "",
+      landMark: "",
+    },
+    deliveryAddress: {
+      name: "",
+      mobileNo: "",
+      fullAddress: "",
+      pincode: "",
+      landMark: "",
+    },
+    box: {
+      name: "Box",
+      length: "1",
+      breadth: "1",
+      height: "1",
+      weight: "1",
+      volumetricWeight: "0",
+      appliedWeight: "1",
+    },
+  });
   // const [isMasked, setIsMasked] = useState(false);
 
   // useEffect(() => {
@@ -2323,6 +2348,8 @@ const Index = () => {
                 selectedDateRange={{ startDate, endDate }}
                 filterPayLoad={filterPayLoad}
                 isLoading={isLoading}
+                bulkActionObject={bulkActionObject}
+                setBulkActionObject={setBulkActionObject}
               />
             </div>
             <div

@@ -74,7 +74,7 @@ export const GSTComponent = (props: ITypeProps) => {
 
   const BottomButton = () => {
     return (
-      <div className="flex flex-col items-center px-0 md:px-0 pb-4  bg-white">
+      <div className="flex flex-col px-0 md:px-0 pb-4  bg-white">
         {/* <div className="flex items-center  md:px-9 self-start my-1 mx-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)} 
@@ -96,7 +96,29 @@ export const GSTComponent = (props: ITypeProps) => {
             checkboxClassName="gap-2"
           />
         </div>
-        <div className="w-[70%] pt-4">
+        <div className="mt-6 flex gap-x-2 px-4">
+          <div className=" w-full">
+            <OneButton
+              variant="secondary"
+              onClick={() => navigate(-1)}
+              text="BACK"
+              className=" flex-1"
+            />
+          </div>
+
+          <div className=" w-full">
+            <OneButton
+              text="ACCEPT & CONTINUE"
+              disabled={!checkbox}
+              onClick={() => {
+                acceptStatus();
+              }}
+              variant="primary"
+              className="w-full  mb-1 mt-0 mx-0 font-Open"
+            />
+          </div>
+        </div>
+        {/* <div className="w-[70%] pt-4">
           <OneButton
             text="ACCEPT AND CONTINUE"
             disabled={!checkbox}
@@ -106,7 +128,7 @@ export const GSTComponent = (props: ITypeProps) => {
             variant="primary"
             className="w-full  mb-1 mt-0 mx-0 font-Open"
           />
-        </div>
+        </div> */}
         {/* <ServiceButton
           text="ACCEPT AND CONTINUE"
           disabled={!checkbox}

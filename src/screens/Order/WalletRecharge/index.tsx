@@ -34,6 +34,7 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import GiftIcon from "../../../assets/Gift.svg";
 import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
 import CustomButton from "../../../components/Button";
+import Done from "../../../assets/Done .svg";
 import { POST } from "../../../utils/webService";
 import {
   ADD_PICKUP_LOCATION,
@@ -47,6 +48,8 @@ import {
   GET_WALLET_BALANCE,
   GET_PROFILE_URL,
   WALLET_RECHARGE_USING_NEFT,
+  GET_CODREMITTANCE_AMOUNT,
+  POST_UPDATE_WALLETBALANCE,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -73,6 +76,7 @@ import TransactionModalContent from "../WalletRecharge/transactions/index";
 import OneButton from "../../../components/Button/OneButton";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import doneIcon from "../../../assets/Done .svg";
+import CloseIcon from "../../../assets/CloseIcon.svg";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -127,10 +131,27 @@ const WalletRecharge = () => {
 
   const [dataFromSession, setDataFromSession] = useState<any>();
   const [balanceZeroOrNegative, setBalanceZeroOrNegative] = useState(false);
-  console.log(
-    "🚀 ~ WalletRecharge ~ balanceZeroOrNegative:",
-    balanceZeroOrNegative
-  );
+
+  const [instantRecharge, setInstantRecharge] = useState<any>(false);
+
+  const [rechargeWithCOD, setRechargeWithCOD] = useState<any>(false);
+  const [congratulationsModal, setCongratulationsModal] = useState<any>(false);
+
+  //GET_CODREMITTANCE_AMOUNT response data is setting here
+  const [codData, setCodData] = useState<any>({
+    eligibleAmount: 0,
+    walletAmount: 0,
+  });
+
+  //COD Loader- get cod loader
+  const [getCodLoader, setGetCodLoader] = useState<any>(false);
+  const [updateWalletLoader, setUpdateWalletLoader] = useState<any>(false);
+  //setting enter amount data
+  const [enterAmount, setEnterAmount] = useState<any>("");
+  const [congratulationModalAmount, setCongratulationsModalAmount] =
+    useState<any>(0);
+
+  const [errorMessage, setErrorMessage] = useState<any>("");
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -261,6 +282,43 @@ const WalletRecharge = () => {
     }
   };
 
+  const handleUpdateWallet = async (amount: any) => {
+    try {
+      if (enterAmount > codData?.eligibleAmount) {
+        toast.error(
+          `Amount cannot be greater than Eligible Amount ₹${codData?.eligibleAmount}`
+        );
+        setCongratulationsModal(false);
+      } else {
+        const payload = {
+          amount: Number(enterAmount),
+        };
+        try {
+          setUpdateWalletLoader(true);
+
+          if (payload?.amount <= 0 || !payload?.amount) {
+            toast.error("Please Select The Amount Greater Than Zero");
+          } else {
+            setCongratulationsModalAmount(payload?.amount);
+            const data = await POST(POST_UPDATE_WALLETBALANCE, payload);
+            if (data?.data?.success) {
+              setCongratulationsModal(true);
+              setUpdateWalletLoader(false);
+              setRechargeWithCOD(false);
+              setEnterAmount("");
+            } else {
+              setUpdateWalletLoader(false);
+            }
+          }
+        } catch (error: any) {
+          console.log(error.message);
+        }
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
   const placeOrderApi = async () => {
     const { data } = await POST(PLACE_ORDER, {});
     if (data?.success) {
@@ -325,14 +383,6 @@ const WalletRecharge = () => {
       toast.error(options.message);
       return;
     }
-
-    // const rzp1: any = new Razorpay(options);
-
-    // rzp1.on("payment.failed", (response: any) => {
-    //   console.log("response: ", response);
-    // });
-
-    // rzp1.open();
   };
 
   const userDetailsFromSession = () => {
@@ -418,6 +468,21 @@ const WalletRecharge = () => {
     } else {
       toast.error(data?.message);
       setLoaderForRechargeWalletNeft(false);
+    }
+  };
+
+  const handleCongratulationsModal = () => {
+    setCongratulationsModal(false);
+    setRechargeWithCOD(false);
+  };
+
+  const handleCODAmountInput = (value: any) => {
+    setEnterAmount(value);
+
+    if (value === "0" || value === 0 || value === "") {
+      setErrorMessage("Amount Should be greater than zero");
+    } else {
+      setErrorMessage("");
     }
   };
 
@@ -530,7 +595,6 @@ const WalletRecharge = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.error("Error fetching data:", error);
         toast.error("Failed to fetch data!");
       } finally {
         setLoading(false);
@@ -539,6 +603,32 @@ const WalletRecharge = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (instantRecharge) {
+          setGetCodLoader(true);
+          const { data } = await POST(GET_CODREMITTANCE_AMOUNT);
+
+          if (data?.status) {
+            setGetCodLoader(false);
+            setCodData((prevCodData: any) => ({
+              ...prevCodData,
+              eligibleAmount: data?.data?.eligibleAmount,
+              walletAmount: data?.data?.walletAmount,
+            }));
+            setInstantRecharge(false);
+          } else {
+            setGetCodLoader(false);
+            toast.error(data?.message);
+          }
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    })();
+  }, [instantRecharge]);
 
   return (
     <>
@@ -771,9 +861,18 @@ const WalletRecharge = () => {
                 </div>
               </div>
 
-              <div className="flex items-center lg:mb-2">
-                <Checkbox checkboxClassName="gap-2" />
-                <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
+              <div
+                className="flex items-center lg:mb-2"
+                onClick={() => {
+                  setRechargeWithCOD(true);
+                  setInstantRecharge(true);
+                }}
+              >
+                {/* <Checkbox checkboxClassName="gap-2" /> */}
+                {/* <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
+                  INSTANT RECHARGE WITH COD
+                </p> */}
+                <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
                   INSTANT RECHARGE WITH COD
                 </p>
               </div>
@@ -1218,7 +1317,7 @@ const WalletRecharge = () => {
             >
               <>
                 <button
-                  className="flex j w-[100%] justify-end mx-8 px-4 items-center"
+                  className="flex  w-[100%] justify-end mx-8 px-4 items-center"
                   onClick={() => {
                     setRechargeInfo({
                       amount: 0,
@@ -1251,6 +1350,171 @@ const WalletRecharge = () => {
                 </div>
               </>
             </CenterModal>
+
+            {rechargeWithCOD && (
+              <CenterModal
+                isOpen={true}
+                onRequestClose={() => {
+                  setRechargeWithCOD(false);
+                  setErrorMessage("");
+                  setEnterAmount("");
+                }}
+                className="min-w-0 max-w-[500px] min-h-0 max-h-[44%] md:max-h-[42%] xl:max-h-[38%] p-4 sm:p-6"
+              >
+                {getCodLoader ? (
+                  <div>
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="h-full w-full">
+                    <div className="flex justify-between w-full">
+                      <div>
+                        <p className="mt-7 md:mt-0 font-Lato text-[14px] sm:text-[18px] font-semibold text-[#1C1C1C]">
+                          Recharge Wallet With COD
+                        </p>
+                      </div>
+                      <div onClick={() => setRechargeWithCOD(false)}>
+                        <img
+                          src={CloseIcon}
+                          alt="close"
+                          className="cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col mt-4 gap-4">
+                      <div className="w-full">
+                        <div>
+                          <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C] md:w-[100px] lg:w-full">
+                            Wallet Balance
+                          </p>
+                          <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C]  md:w-[100px] lg:w-full">
+                            ₹ {codData?.walletAmount?.toFixed(2) || 0}
+                          </p>
+                        </div>
+
+                        {/* <div className="w-full mt-4 sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]">
+                          <CustomDropDown
+                            onChange={function (
+                              event: React.ChangeEvent<HTMLSelectElement>
+                            ): void {
+                              throw new Error("Function not implemented.");
+                            }}
+                            placeHolder="Select Coupon"
+                          />
+                        </div> */}
+                      </div>
+                      <div className="w-full flex flex-col">
+                        <p className="font-openSans text-[14px] sm:text-[16px]  font-semibold text-[#1C1C1C]">
+                          Eligible COD Amount
+                        </p>
+                        <p className="font-openSans text-[14px] sm:text-[16px] font-semibold text-[#1C1C1C] mb-2 md:mb-4">
+                          ₹{" "}
+                          {codData?.eligibleAmount <= 0
+                            ? 0
+                            : codData?.eligibleAmount?.toFixed(2) || 0}
+                        </p>
+                        {/* <CustomInputBox
+                          label="Enter Amount"
+                          inputMode="decimal"
+                          isDisabled={false}
+                          value={enterAmount}
+                          // onChange={(e: any) => {
+                          //   if (!isNaN(e.target.value)) {
+                          //     handleCODAmountInput(+e.target.value);
+                          //   }
+                          // }}
+                         
+                          className="w-full sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+                        /> */}
+                        <CustomInputBox
+                          label="Enter Amount"
+                          inputMode="decimal" // inputMode set to "decimal" to allow decimal values
+                          isDisabled={false}
+                          value={enterAmount}
+                          onChange={(e: any) => {
+                            // Allowing numbers and decimal points
+                            const value = e.target.value;
+                            if (/^\d*\.?\d*$/.test(value)) {
+                              handleCODAmountInput(value); // Keeping it as string to handle decimals
+                            }
+                          }}
+                          className="w-full sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+                        />
+                        <p className="text-[12px] md:text-[14px] text-red-600">
+                          {errorMessage}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center mt-4 lg:mt-12">
+                      <OneButton
+                        disabled={
+                          codData?.eligibleAmount === 0 ||
+                          enterAmount === "0" ||
+                          enterAmount === ""
+                            ? true
+                            : false
+                        }
+                        onClick={(e: any) => handleUpdateWallet(e)}
+                        text="ADD MONEY TO WALLET"
+                        variant="primary"
+                        className="!w-full sm:!w-[168px] md:!w-[200px] lg:!w-[250px] xl:!w-[300px] 2xl:!w-[350px] font-extrabold text-[10px]"
+                      />
+                    </div>
+                  </div>
+                )}
+              </CenterModal>
+            )}
+
+            {congratulationsModal && (
+              <CenterModal
+                isOpen={congratulationsModal}
+                onRequestClose={() => setCongratulationsModal(false)}
+                className="min-w-0 max-w-[500px] min-h-0 max-h-[35%]"
+              >
+                {updateWalletLoader ? (
+                  <div>
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="w-full">
+                    <div className="w-full flex justify-end mt-3 lg:mt-0 cursor-pointer">
+                      <img
+                        src={CloseIcon}
+                        alt="close"
+                        className="mr-4"
+                        onClick={() => handleCongratulationsModal()}
+                      />
+                    </div>
+
+                    <div className="flex justify-center items-center">
+                      <div className="flex flex-col items-center justify-center">
+                        <img src={Done} alt="tick" className="h-30 w-30" />
+                        <div className="flex flex-col items-center mb-6">
+                          <p className="font-bold text-[12px] md:text-[16px] text-[#1C1C1C] font-Open leading-[22px]">
+                            Congratulations!
+                          </p>
+                          <p className="text-center font-bold text-[12px] md:text-[16px] text-[#1C1C1C] font-Open leading-[22px] my-1">
+                            We have processed your payment for ₹{" "}
+                            {congratulationModalAmount}
+                          </p>
+                        </div>
+
+                        <OneButton
+                          text="GO TO ORDER"
+                          onClick={() => {
+                            setCongratulationsModal(false);
+
+                            navigate(`/orders/view-orders?activeTab=draft`);
+                          }}
+                          className="bg-[#1C1C1C] text-white text-[12px] md:text-[16px] py-2 px-4  font-Open  font-semibold leading-5"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CenterModal>
+            )}
           </div>
         )
       ) : (

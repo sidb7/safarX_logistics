@@ -193,6 +193,9 @@ const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const ACTIVATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/activatePickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
+const GET_ALL_ADDRESSS = `${SELLER_BASE_URL}/pickupAddress/getAllAddress`;
+const UPDATE_ALL_ADDRESS = `${SELLER_BASE_URL}/order/bulkUpdateAddress`;
+const UPDATE_ALL_BOXES = `${SELLER_BASE_URL}/order/updateBoxOfMultipleOrders`;
 
 // PAYMENT GATEWAYS
 // Paytm
@@ -207,6 +210,8 @@ const PHONEPE_TRANSACTION_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRecha
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
 const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWalletTransaction`;
 const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRechargeUsingNeft`;
+const GET_CODREMITTANCE_AMOUNT = `${SELLER_URL}/api/v1/wallet/getEligibleCodRemittanceAmount`;
+const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalance`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -316,7 +321,7 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 
 //Tracking
 const TRACKING = `${SELLER_URL}/api/v1/tracking/getTracking`;
-const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTrackingforSystem`;
 const GET_NDR_ORDERS = `${SELLER_BASE_URL}/ndr/getNdrOrders`;
 const POST_ACTION_REMARKS = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 
@@ -650,4 +655,9 @@ export {
   WALLET_RECHARGE_USING_NEFT,
   GET_NDR_ORDERS,
   POST_ACTION_REMARKS,
+  GET_CODREMITTANCE_AMOUNT,
+  POST_UPDATE_WALLETBALANCE,
+  GET_ALL_ADDRESSS,
+  UPDATE_ALL_ADDRESS,
+  UPDATE_ALL_BOXES,
 };
