@@ -21,7 +21,7 @@ const EditAction = (props: IPROPS) => {
 
   const options = [
     { value: "RTO", label: "RTO" },
-    { value: "Re-attempt", label: "Re-attempt" },
+    { value: "REATTEMPT", label: "REATTEMPT" },
   ];
 
   return (
