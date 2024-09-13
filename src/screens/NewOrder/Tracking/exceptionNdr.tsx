@@ -28,6 +28,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CustomUploadButton from "../Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import NdrRemarksContent from "./NdrRemarksContent";
+import { Spinner } from "../../../components/Spinner";
 
 interface IOrdersProps {}
 
@@ -408,7 +409,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               arrayData={arrayData}
               showNumber={true}
               setScrollIndex={setScrollIndex}
-              defaultIndexValue={1}
+              defaultIndexValue={0}
             />
           </div>
         </div>
@@ -497,8 +498,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
         <div className="mx-4">
           {isLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <Spinner />
             </div>
           ) : (
             <OrderData
