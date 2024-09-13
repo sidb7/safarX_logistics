@@ -322,6 +322,8 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 //Tracking
 const TRACKING = `${SELLER_URL}/api/v1/tracking/getTracking`;
 const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTrackingforSystem`;
+const GET_NDR_ORDERS = `${SELLER_BASE_URL}/ndr/getNdrOrders`;
+const POST_ACTION_REMARKS = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -651,6 +653,8 @@ export {
   CREATE_UPDATE_ADVANCE_RULE_ENGINE,
   RTO_REATTEMPT,
   WALLET_RECHARGE_USING_NEFT,
+  GET_NDR_ORDERS,
+  POST_ACTION_REMARKS,
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
   GET_ALL_ADDRESSS,
