@@ -324,6 +324,8 @@ const TRACKING = `${SELLER_URL}/api/v1/tracking/getTracking`;
 const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTrackingforSystem`;
 const GET_NDR_ORDERS = `${SELLER_BASE_URL}/ndr/getNdrOrders`;
 const POST_ACTION_REMARKS = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
+const DOWNLOAD_NDR_ORDERS = `${SELLER_BASE_URL}/ndr/downloadNdrOrders`;
+const UPLOAD_NDR_REMARKS = `${SELLER_BASE_URL}/ndr/uploadBulkNdrOrders`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -660,4 +662,6 @@ export {
   GET_ALL_ADDRESSS,
   UPDATE_ALL_ADDRESS,
   UPDATE_ALL_BOXES,
+  DOWNLOAD_NDR_ORDERS,
+  UPLOAD_NDR_REMARKS,
 };
