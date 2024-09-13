@@ -10,9 +10,24 @@ import { useNavigate } from "react-router-dom";
 import CustomRightModal from "../../../components/CustomModal/customRightModal";
 import NdrFollowUp from "./NdrFollowUp";
 import EditAction from "./EditAction";
-import { GET_NDR_ORDERS , POST_ACTION_REMARKS} from "../../../utils/ApiUrls";
+import {
+  DOWNLOAD_NDR_ORDERS,
+  GET_NDR_ORDERS,
+  POST_ACTION_REMARKS,
+} from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import SelleractionModal from "./sellerActionModal";
+import toast from "react-hot-toast";
+import { capitalizeFirstLetter } from "../../../utils/utility";
+import whiteDownloadIcon from "../../../assets/whiteDownloadIcon.svg";
+import DownloadIconWhite from "../../../assets/downloadIconWhite.svg";
+import { convertXMLToXLSX } from "../../../utils/helper";
+import { SELLER_URL } from "../../../utils/ApiUrls";
+import { tokenKey } from "../../../utils/utility";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import CustomUploadButton from "../Product/CustomUploadButton";
+import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
+import NdrRemarksContent from "./NdrRemarksContent";
 
 interface IOrdersProps {}
 
@@ -30,45 +45,46 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   } | null>(null);
   const [ndrData, setNdrData] = useState<any>([]);
   const [rightModalSellerAction, setRightModalSellerAction] = useState(false);
-  const [selectedPackages, setSelectedPackages] = useState<Record<string, boolean>>({});
+  const [selectedPackages, setSelectedPackages] = useState<
+    Record<string, boolean>
+  >({});
   const [selectedRowIds, setSelectedRowIds] = useState<{
     [key: string]: boolean;
   }>({});
-  const [currentAttemptsReasons, setCurrentAttemptsReasons] = useState<any[]>([]);
+  const [currentAttemptsReasons, setCurrentAttemptsReasons] = useState<any[]>(
+    []
+  );
   const [currentSellerRemark, setCurrentSellerRemark] = useState<any[]>([]);
   const [actionModalRemark, setActionModalRemark] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
 
+  // get modal data from tabels
+  const handleNdrFollowUpClick = (attemptsReasons: any[]) => {
+    setCurrentAttemptsReasons(attemptsReasons);
+  };
 
+  const handleSellerActionClick = (sellerRemark: any[]) => {
+    setCurrentSellerRemark(sellerRemark);
+  };
 
-  
-// get modal data from tabels
-const handleNdrFollowUpClick = (attemptsReasons: any[]) => {
-  setCurrentAttemptsReasons(attemptsReasons);
-};
-
-const handleSellerActionClick = (sellerRemark: any[]) => {
-  setCurrentSellerRemark(sellerRemark);
-};
-
-const handleActionModalClick = (actionModalRemark: any[]) => {
-  setActionModalRemark(actionModalRemark);
-};
-
-
+  const handleActionModalClick = (actionModalRemark: any[]) => {
+    setActionModalRemark(actionModalRemark);
+  };
 
   useEffect(() => {
     // Initialize selectedPackages based on dummyData
     const initialSelectedPackages: Record<string, boolean> = {};
-    dummyData.forEach(item => {
+    dummyData.forEach((item) => {
       initialSelectedPackages[item.packageDetails] = false;
     });
     setSelectedPackages(initialSelectedPackages);
   }, []);
 
   const handleSelectAllPackages = (checked: boolean) => {
-    setSelectedPackages(prevSelected => {
+    setSelectedPackages((prevSelected) => {
       const newSelected = { ...prevSelected };
-      dummyData.forEach(item => {
+      dummyData.forEach((item) => {
         newSelected[item.packageDetails] = checked;
       });
       return newSelected;
@@ -76,14 +92,11 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
   };
 
   const handleSelectPackage = (packageDetails: string, checked: boolean) => {
-    setSelectedPackages(prevSelected => ({
+    setSelectedPackages((prevSelected) => ({
       ...prevSelected,
-      [packageDetails]: checked
+      [packageDetails]: checked,
     }));
   };
-
-  
-
 
   const arrayData = [{ label: "Exception NDR" }, { label: "RTO" }];
 
@@ -196,10 +209,108 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
   }): void => {
     setEditActionData(data);
     // Here you can perform any necessary actions with the submitted data
-    
+
     console.log("Edit action submitted:", data);
-    console.log("awb",actionModalRemark)
+    console.log("awb", actionModalRemark);
     setRightModalEdit(false);
+  };
+
+  // download data in xl sheet func
+  // const downloadXlData = async () => {
+  //   setIsLoading(true);
+  //   const { data: response } = await POST(DOWNLOAD_NDR_ORDERS, {
+  //     tabStatus: "EXCEPTION",
+  //   });
+  //   if (response?.success) {
+  //     const date: any = JSON.stringify(new Date());
+  //     const result = await convertXMLToXLSX(
+  //       response?.data,
+  //       `${capitalizeFirstLetter("weight dispute")}_${date
+  //         .substr(1, 10)
+  //         .split("-")
+  //         .reverse()
+  //         .join("-")}.xlsx`
+  //     );
+  //     if (result) {
+  //       toast.success(response?.message);
+  //       setIsLoading(false);
+  //     }
+  //   } else {
+  //     setIsLoading(false);
+  //     toast.error(response?.message);
+  //   }
+  // };
+
+  const downloadNdrReport = async () => {
+    const payload = {
+      tabStatus: "EXCEPTION",
+    };
+    try {
+      setIsLoading(true); // Start the loader
+      let sellerId = localStorage.getItem("sellerId");
+
+      const response = await fetch(DOWNLOAD_NDR_ORDERS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem(
+            `${sellerId}_${tokenKey}`
+          )}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // Stop the loader regardless of the response status
+      setIsLoading(false);
+
+      if (!response.ok) {
+        const contentType = response.headers.get("Content-Type");
+
+        // Check if the Content-Type indicates JSON
+        if (contentType && contentType.includes("application/json")) {
+          const jsonData = await response.json();
+          console.log("JSON Data:", jsonData);
+
+          if (!jsonData?.success) {
+            toast.error(jsonData?.message);
+          }
+        } else {
+          // Handle other types of responses or errors
+          toast.error("An unexpected error occurred.");
+        }
+
+        return; // Exit the function to avoid further processing
+      }
+      const blob = await response.blob();
+      const date: any = JSON.stringify(new Date());
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `${capitalizeFirstLetter("EXCEPTION")}_${date
+          .substr(1, 10)
+          .split("-")
+          .reverse()
+          .join("-")}.xlsx`
+      ); // Specify the filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      toast.success("Downloaded Sucessfully");
+
+      setIsLoading(false);
+      return;
+      // Handle successful response here
+      // Example: process the downloaded file, etc.
+    } catch (error: any) {
+      // Handle network errors or exceptions
+      console.error("Fetch error:", error);
+
+      toast.error(error.message);
+      setIsLoading(false); // Stop the loader if an error occurs
+      return;
+    }
   };
 
   return (
@@ -223,11 +334,17 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
               <SearchBox label="Search" value="" onChange={() => {}} />
             </div>
             <ServiceButton
+              icon={whiteDownloadIcon}
+              showIcon={true}
               text="NDR REPORT"
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
+              onClick={downloadNdrReport}
             />
             <ServiceButton
+              showIcon={true}
+              icon={DownloadIconWhite}
               text="NDR REMARKS"
+              onClick={() => setOpenUploadModal(true)}
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
             />
           </div>
@@ -247,9 +364,6 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
             onNdrFollowUpClick={handleNdrFollowUpClick}
             onSellerActionClick={handleSellerActionClick}
             onActionModalClick={handleActionModalClick}
-            
-
-            
           />
         </div>
 
@@ -262,6 +376,17 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
           />
         )}
       </div>
+
+      <CenterModal
+        isOpen={openUploadModal}
+        onRequestClose={() => setOpenUploadModal(false)}
+        className="lg:!h:1/3 lg:!w-2/3 xl:!h-1/2 xl:!w-1/3"
+      >
+        <NdrRemarksContent
+          openUploadModal={openUploadModal}
+          setOpenUploadModal={setOpenUploadModal}
+        />
+      </CenterModal>
 
       {/* ndr follow up right modal  */}
       <CustomRightModal
@@ -307,4 +432,3 @@ const handleActionModalClick = (actionModalRemark: any[]) => {
 };
 
 export default ExceptionNdr;
-
