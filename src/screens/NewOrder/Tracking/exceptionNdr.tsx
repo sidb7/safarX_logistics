@@ -46,27 +46,42 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [tabCount, setTabCount] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
 
   const itemsPerPageOptions = [10, 20, 30, 50];
 
   // ... (code for pagination)
 
-  const onPageChange = ({ currentPage, itemsPerPage }: { currentPage: number, itemsPerPage: number }) => {
+  const onPageChange = ({
+    currentPage,
+    itemsPerPage,
+  }: {
+    currentPage: number;
+    itemsPerPage: number;
+  }) => {
     setCurrentPage(currentPage);
     getNdrOrders(searchText, activeTab, currentPage, itemsPerPage);
   };
 
-  const onItemsPerPageChange = ({ currentPage, itemsPerPage }: { currentPage: number, itemsPerPage: number }) => {
+  const onItemsPerPageChange = ({
+    currentPage,
+    itemsPerPage,
+  }: {
+    currentPage: number;
+    itemsPerPage: number;
+  }) => {
     setItemsPerPage(itemsPerPage);
     setCurrentPage(1);
     getNdrOrders(searchText, activeTab, 1, itemsPerPage);
   };
 
-
   const tabs = [
     { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount },
-    { name: "PENDING_ACTION", count: tabCount?.pendingCount?.[0]?.action_pending  },
-    { name: "ACTION_TAKEN", count: tabCount?.takenCount?.[0]?.action_taken  },
+    {
+      name: "PENDING_ACTION",
+      count: tabCount?.pendingCount?.[0]?.action_pending,
+    },
+    { name: "ACTION_TAKEN", count: tabCount?.takenCount?.[0]?.action_taken },
   ];
 
   // get modal data from tabels
@@ -108,7 +123,10 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     }));
   };
 
-  const arrayData = [{ label: "Exception NDR" }, { label: "RTO" }];
+  const arrayData = [
+    { label: "Exception NDR", number: tabCount?.allCount?.[0]?.TotalCount },
+    { label: "RTO" },
+  ];
 
   const render = (id: any) => {
     if (id === 0) {
@@ -205,7 +223,13 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     }
   };
 
-  const getNdrOrders = async (search = "", subStatus = activeTab,page = currentPage, perPage = itemsPerPage) => {
+  const getNdrOrders = async (
+    search = "",
+    subStatus = activeTab,
+    page = currentPage,
+    perPage = itemsPerPage
+  ) => {
+    setIsLoading(true);
     try {
       const requestBody = {
         tabStatus: "EXCEPTION",
@@ -213,17 +237,19 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         searchText: search,
         skip: (page - 1) * perPage,
         limit: perPage,
-        pageNo: page
+        pageNo: page,
       };
 
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
       setTabCount(response?.data?.data[0] || []);
       // setNdrData(undefined);
-      console.log("allCount",tabCount      )
+      console.log("allCount", tabCount);
       // console.log("dataforme>>>", response?.data?.data[0]);
     } catch (error: any) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -295,7 +321,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               arrayData={arrayData}
               showNumber={true}
               setScrollIndex={setScrollIndex}
-              defaultIndexValue={0}
+              defaultIndexValue={1}
             />
           </div>
         </div>
@@ -339,58 +365,64 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
           </div>
         </div> */}
 
-<div className="flex justify-between items-center w-full px-4 py-2 ">
-      <div className="inline-flex rounded-lg bg-white file:p-1 border border-gray-300">
-        {tabs.map((tab) => (
-          <button
-            key={tab.name}
-            className={`${
-              activeTab === tab.name
-                ? "bg-gray-300 shadow"
-                : "text-gray-600 hover:bg-gray-100"
-            } rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none`}
-            onClick={() => handleTabChange(tab?.name)}
-          >
-            {tab.name} ({tab?.count?.toString().padStart(2, "0")})
-          </button>
-        ))}
-      </div>
+        <div className="flex justify-between items-center w-full px-4 py-2 ">
+          <div className="inline-flex rounded-lg bg-white file:p-1 border border-gray-300">
+            {tabs.map((tab) => (
+              <button
+                key={tab.name}
+                className={`${
+                  activeTab === tab.name
+                    ? "bg-gray-300 shadow"
+                    : "text-gray-600 hover:bg-gray-100"
+                } rounded-md px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none`}
+                onClick={() => handleTabChange(tab?.name)}
+              >
+                {tab.name} ({tab?.count?.toString().padStart(2, "0")})
+              </button>
+            ))}
+          </div>
 
-      <div className="flex items-center">
-        <div className="px-2">
-          <SearchBox
-            label="Search"
-            value={searchText}
-            onChange={handleSearchChange}
-            getFullContent={handleGetFullContent}
-          />
+          <div className="flex items-center">
+            <div className="px-2">
+              <SearchBox
+                label="Search"
+                value={searchText}
+                onChange={handleSearchChange}
+                getFullContent={handleGetFullContent}
+              />
+            </div>
+            <ServiceButton
+              text="NDR REPORT"
+              className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
+            />
+            <ServiceButton
+              text="NDR REMARKS"
+              className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
+            />
+          </div>
         </div>
-        <ServiceButton
-          text="NDR REPORT"
-          className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
-        />
-        <ServiceButton
-          text="NDR REMARKS"
-          className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
-        />
-      </div>
-    </div>
 
         <div className="mx-4">
-          <OrderData
-            data={ndrData}
-            setRightModalNdr={setRightModalNdr}
-            setRightModalEdit={setRightModalEdit}
-            setRightModalSellerAction={setRightModalSellerAction}
-            selectedPackages={selectedPackages}
-            onSelectAllPackages={handleSelectAllPackages}
-            onSelectPackage={handleSelectPackage}
-            selectedRowIds={selectedRowIds}
-            setSelectedRowIds={setSelectedRowIds}
-            onNdrFollowUpClick={handleNdrFollowUpClick}
-            onSellerActionClick={handleSellerActionClick}
-            onActionModalClick={handleActionModalClick}
-          />
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          ) : (
+            <OrderData
+              data={ndrData}
+              setRightModalNdr={setRightModalNdr}
+              setRightModalEdit={setRightModalEdit}
+              setRightModalSellerAction={setRightModalSellerAction}
+              selectedPackages={selectedPackages}
+              onSelectAllPackages={handleSelectAllPackages}
+              onSelectPackage={handleSelectPackage}
+              selectedRowIds={selectedRowIds}
+              setSelectedRowIds={setSelectedRowIds}
+              onNdrFollowUpClick={handleNdrFollowUpClick}
+              onSellerActionClick={handleSellerActionClick}
+              onActionModalClick={handleActionModalClick}
+            />
+          )}
         </div>
 
         {isLgScreen && totalItemCount > 0 && (
