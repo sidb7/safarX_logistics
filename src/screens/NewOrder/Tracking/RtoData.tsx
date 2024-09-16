@@ -9,56 +9,32 @@ interface IOrderDataProps {
   data: any[];
   setRightModalNdr: (value: boolean) => void;
   setRightModalEdit: (value: boolean) => void;
+  onNdrFollowUpClick: (attemptsReasons: any[]) => void;
+  setRightModalSellerAction: (value: boolean) => void;
+  onSellerActionClick: (sellerRemark: any[]) => void;
+
 }
 
-const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalNdr,setRightModalEdit }) => {
+  const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalNdr,setRightModalEdit,onNdrFollowUpClick,setRightModalSellerAction, onSellerActionClick}) => {
+
+  const getOrdinalSuffix = (number:any) => {
+    const j = number % 10;
+    const k = number % 100;
+    if (j === 1 && k !== 11) {
+      return 'st';
+    }
+    if (j === 2 && k !== 12) {
+      return 'nd';
+    }
+    if (j === 3 && k !== 13) {
+      return 'rd';
+    }
+    return 'th';
+  };
+  
   const columnsHelper = createColumnHelper<any>();
 
   const columns = [
-    columnsHelper.accessor("packageDetails", {
-      header: () => {
-        return (
-          <div className="font-sans font-semibold text-sm leading-5">
-            Package Details
-          </div>
-        );
-      },
-      cell: (info) => (
-        <div className="flex items-start">
-          <input type="checkbox" className="mt-1 mr-3 " />
-          <div>
-            <div className="font-sans font-normal text-sm leading-5">
-              {info.getValue()}
-            </div>
-            <div className="font-sans font-normal text-sm leading-5 text-black">
-              Dimension:{" "}
-              <span className="font-semibold">
-                {info.row.original.dimension}
-              </span>{" "}
-            </div>
-            <div className="font-sans font-normal text-sm leading-5 text-black">
-              SKU:{" "}
-              <span className="font-semibold">{info.row.original.sku}</span>
-            </div>
-          </div>
-        </div>
-      ),
-    }),
-    columnsHelper.accessor("rtoInitiated", {
-        header: "RTO Initiated",
-        cell: (info) => (
-            <>
-            <div className="font-sans font-normal text-sm leading-5 mb-4">
-              {info.row.original.rtoDate}
-            </div>
-            
-            <div className="font-sans font-normal text-sm leading-5 text-black">
-        Delivery Partner:{" "}
-            <span className="font-semibold">{info.row.original.deliveryPartner}</span>
-          </div>
-          </>
-        ),
-      }),
     columnsHelper.accessor("ids", {
       header: "IDs",
       cell: (info) => (
@@ -68,7 +44,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalN
               Order:
             </span>
             <span className=" font-sans text-sm leading-5 text-black font-semibold">
-              {info.row.original.order}
+              {info.row?.original?.orderId}
             </span>
             <img
               src={copyIcon}
@@ -76,13 +52,13 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalN
               className="ml-1 w-4 h-4 cursor-pointer"
             />
           </div>
-          {info.row.original.tracking && (
+          {info.row?.original?.awb && (
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
                 Tracking:
               </span>
               <span className="font-sans  text-sm leading-5 text-black font-semibold">
-                {info.row.original.tracking}
+                {info.row?.original?.awb}
               </span>
               <img
                 src={copyIcon}
@@ -96,7 +72,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalN
               Shipyaari:
             </span>
             <span className="font-sans  text-sm leading-5 text-black  font-semibold">
-              {info.row.original.shipyaari}
+              {info.row?.original?.tempOrderId}
             </span>
             <img
               src={copyIcon}
@@ -107,11 +83,28 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalN
         </div>
       ),
     }),
+    columnsHelper.accessor("rtoInitiated", {
+      header: "RTO Initiated",
+      cell: (info) => (
+          <>
+          <div className="font-sans font-normal text-sm leading-5 mb-4">
+            {info.row.original.shipmentStatus.rtoInitiDate}
+          </div>
+          
+          <div className="font-sans font-normal text-sm leading-5 text-black">
+      Delivery Partner:{" "}
+          <span className="font-semibold">{info.row.original.courierPartnerName}</span>
+        </div>
+        </>
+      ),
+    }),
     columnsHelper.accessor("payment", {
       header: "Payment",
       cell: (info) => (
         <div className="font-sans  text-sm leading-5 text-black font-semibold">
-          {info.getValue()}
+          ₹{info.row?.original?.codInfo?.invoiceValue}
+          <br />
+          {info.row?.original?.codInfo?.isCod ? "COD" : "Prepaid"}
         </div>
       ),
     }),
@@ -119,18 +112,120 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalN
       header: "Customer Details",
       cell: (info) => (
         <div className="space-y-1">
-          <div className="font-sans  text-sm leading-5 text-black font-semibold">
-            {info.getValue().name}
+          <div className="font-sans  text-sm leading-5 text-black font-normal">
+            {info.row?.original?.deliveryAddress?.fullAddress}
           </div>
           <div className="font-sans  text-sm leading-5 text-black font-normal">
-            {info.getValue().address}
+            {info.row?.original?.deliveryAddress?.contact?.mobileNo}
           </div>
           <div className="font-sans  text-sm leading-5 text-black font-normal">
-            {info.getValue().contact}
+            {info.row?.original?.deliveryAddress?.contact?.name}
           </div>
         </div>
       ),
     }),
+    columnsHelper.accessor("currentStatus", {
+      header: "Current Status",
+      cell :(info) => {
+        const attemptCount = info.row.original.shipmentStatus.attemptsReasons.length;
+        const ordinalSuffix = getOrdinalSuffix(attemptCount);
+      
+        return (
+          <div className="flex flex-col items-center">
+            <div className="flex items-center space-x-1 border border-[#F0A22E] p-1 bg-[#FDF6EA]">
+              <span>
+                <img
+                  src={failureIcon}
+                  alt="failureIcon"
+                  className="ml-1 w-4 h-4 cursor-pointer"
+                />
+              </span>
+              <span className="text-[#F0A22E] font-sans text-xs leading-5 font-normal">
+                {info.row.original.currentStatus}
+              </span>
+            </div>
+            
+            <div className=" font-sans text-xs leading-4 text-black font-normal mt-3">
+              {attemptCount}<sup>{ordinalSuffix}</sup> Attempt
+            </div>
+          </div>
+        );
+      }
+      
+    }),
+   
+    // columnsHelper.accessor("ids", {
+    //   header: "IDs",
+    //   cell: (info) => (
+    //     <div className="space-y-2">
+    //       <div className="flex items-center">
+    //         <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+    //           Order:
+    //         </span>
+    //         <span className=" font-sans text-sm leading-5 text-black font-semibold">
+    //           {info.row.original.order}
+    //         </span>
+    //         <img
+    //           src={copyIcon}
+    //           alt="Copy"
+    //           className="ml-1 w-4 h-4 cursor-pointer"
+    //         />
+    //       </div>
+    //       {info.row.original.tracking && (
+    //         <div className="flex items-center">
+    //           <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+    //             Tracking:
+    //           </span>
+    //           <span className="font-sans  text-sm leading-5 text-black font-semibold">
+    //             {info.row.original.tracking}
+    //           </span>
+    //           <img
+    //             src={copyIcon}
+    //             alt="Copy"
+    //             className="ml-1 w-4 h-4 cursor-pointer"
+    //           />
+    //         </div>
+    //       )}
+    //       <div className="flex items-center">
+    //         <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+    //           Shipyaari:
+    //         </span>
+    //         <span className="font-sans  text-sm leading-5 text-black  font-semibold">
+    //           {info.row.original.shipyaari}
+    //         </span>
+    //         <img
+    //           src={copyIcon}
+    //           alt="Copy"
+    //           className="ml-1 w-4 h-4 cursor-pointer"
+    //         />
+    //       </div>
+    //     </div>
+    //   ),
+    // }),
+    // columnsHelper.accessor("payment", {
+    //   header: "Payment",
+    //   cell: (info) => (
+    //     <div className="font-sans  text-sm leading-5 text-black font-semibold">
+    //       {info.getValue()}
+    //     </div>
+    //   ),
+    // }),
+    // columnsHelper.accessor("customerDetails", {
+    //   header: "Customer Details",
+    //   cell: (info) => (
+    //     <div className="space-y-1">
+    //       <div className="font-sans  text-sm leading-5 text-black font-semibold">
+    //         {info.getValue().name}
+    //       </div>
+    //       <div className="font-sans  text-sm leading-5 text-black font-normal">
+    //         {info.getValue().address}
+    //       </div>
+    //       <div className="font-sans  text-sm leading-5 text-black font-normal">
+    //         {info.getValue().contact}
+    //       </div>
+    //     </div>
+    //   ),
+    // }),
     // columnsHelper.accessor("pickupDate", {
     //   header: "Pickup/NDR Date",
     //   cell: (info) => (
@@ -156,35 +251,57 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalN
     //     </div>
     //   ),
     // }),
-    columnsHelper.accessor("currentStatus", {
-      header: "Current Status",
-      cell: (info) => (
-        <div className="flex justify-center">
-          <div className="flex items-center space-x-1 border border-[#F0A22E] p-1 bg-[#FDF6EA]">
-            <span > <img
-                src={failureIcon}
-                alt="failureIcon"
-                className="ml-1 w-4 h-4 cursor-pointer"
-              /></span>
-            <span className="text-[#F0A22E] font-sans  text-sm leading-5 font-normal ">
-              {info.getValue()}
-            </span>
-          </div>
-        </div>
-      ),
-    }),
+    // columnsHelper.accessor("currentStatus", {
+    //   header: "Current Status",
+    //   cell: (info) => (
+    //     <div className="flex justify-center">
+    //       <div className="flex items-center space-x-1 border border-[#F0A22E] p-1 bg-[#FDF6EA]">
+    //         <span > <img
+    //             src={failureIcon}
+    //             alt="failureIcon"
+    //             className="ml-1 w-4 h-4 cursor-pointer"
+    //           /></span>
+    //         <span className="text-[#F0A22E] font-sans  text-sm leading-5 font-normal ">
+    //           {info.getValue()}
+    //         </span>
+    //       </div>
+    //     </div>
+    //   ),
+    // }),
     columnsHelper.accessor("rtoReason", {
         header: "RTO Reason",
-        cell: (info) => (
+        cell: (info) => {
+          const hasAttemptReasons =
+          info.row.original?.shipmentStatus?.attemptsReasons?.length;
+        const sellerRemarks = info.row.original?.sellerRemark?.length;
+        const hasAttemptReasonsArr =
+          info.row.original?.shipmentStatus?.attemptsReasons;
+        const sellerRemarksArr = info.row.original?.sellerRemark;
+        // console.log("partner",hasAttemptReasons)
+        // console.log("seller",sellerRemarksArr)
+
+          return(
           <div className="space-y-1">
-            <div className="font-sans text-sm leading-5 text-black font-normal">
-              {info.row.original.clientRemark}
-            </div>
-            <div className="font-sans text-sm leading-5 text-black font-normal">
-              {info.row.original.courierRemark}
-            </div>
+          <div 
+            className="font-sans text-sm leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
+            onClick={() => {
+              setRightModalNdr(true);
+              onNdrFollowUpClick(hasAttemptReasonsArr);
+            }}
+          >
+            Partner Remarks ({hasAttemptReasons || 0})
           </div>
-        ),
+          <div 
+            className="font-sans text-sm   leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
+            onClick={() => {
+              setRightModalSellerAction(true);
+              onSellerActionClick(sellerRemarksArr);
+            }}
+          >
+            Seller Remarks ({sellerRemarks || 0})
+          </div>
+        </div>
+        )},
       }),
   ];
 
