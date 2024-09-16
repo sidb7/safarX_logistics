@@ -6,6 +6,8 @@ import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
 import Checkbox from "../../../components/CheckBox";
 import OneButton from "../../../components/Button/OneButton";
+import { Tooltip } from "react-tooltip";
+import CopyTooltip from "../../../components/CopyToClipboard";
 
 interface IOrderDataProps {
   data: any[];
@@ -20,6 +22,8 @@ interface IOrderDataProps {
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
   onSellerActionClick: (sellerRemark: any[]) => void;
   onActionModalClick: (actionModalRemark: any[]) => void;
+  openRightModalForTracking?: any;
+  setOpenRightModalForTracking?: any;
 }
 
 const OrderData: React.FunctionComponent<IOrderDataProps> = ({
@@ -35,6 +39,8 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
   onNdrFollowUpClick,
   onSellerActionClick,
   onActionModalClick,
+  openRightModalForTracking,
+  setOpenRightModalForTracking,
 }) => {
   const columnsHelper = createColumnHelper<any>();
 
@@ -91,28 +97,16 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
     // }),
     columnsHelper.accessor("ids", {
       header: "IDs",
-      cell: (info) => (
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-              Order:
-            </span>
-            <span className=" font-sans text-sm leading-5 text-black font-semibold">
-              {info.row?.original?.orderId}
-            </span>
-            <img
-              src={copyIcon}
-              alt="Copy"
-              className="ml-1 w-4 h-4 cursor-pointer"
-            />
-          </div>
-          {info.row?.original?.awb && (
+      cell: (info) => {
+        const awb = info?.row?.original?.awb || "";
+        return (
+          <div className="space-y-2">
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-                Tracking:
+                Order:
               </span>
-              <span className="font-sans  text-sm leading-5 text-black font-semibold">
-                {info.row?.original?.awb}
+              <span className=" font-sans text-sm leading-5 text-black font-semibold">
+                {info.row?.original?.orderId}
               </span>
               <img
                 src={copyIcon}
@@ -120,22 +114,70 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                 className="ml-1 w-4 h-4 cursor-pointer"
               />
             </div>
-          )}
-          <div className="flex items-center">
-            <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-              Shipyaari:
-            </span>
-            <span className="font-sans  text-sm leading-5 text-black  font-semibold">
-              {info.row?.original?.tempOrderId}
-            </span>
-            <img
-              src={copyIcon}
-              alt="Copy"
-              className="ml-1 w-4 h-4 cursor-pointer"
-            />
+            {info.row?.original?.awb && (
+              <div className="flex items-center">
+                <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+                  Tracking:
+                </span>
+                <span
+                  // className="font-sans  text-sm leading-5 text-black font-semibold"
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Track"
+                  onClick={
+                    // on going work temporary currently commented
+
+                    () => {
+                      setOpenRightModalForTracking({
+                        ...openRightModalForTracking,
+                        isOpen: true,
+                        awbNo: awb,
+                      });
+                    }
+
+                    // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                    // navigate({
+                    //   pathname: "/tracking",
+                    //   search: `?trackingNo=${awb}`,
+                    // })
+                  }
+                >
+                  {info.row?.original?.awb}
+                </span>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
+                {/* <CopyTooltip stringToBeCopied={awb} /> */}
+                <img
+                  src={copyIcon}
+                  alt="Copy"
+                  className="ml-1 w-4 h-4 cursor-pointer"
+                />
+              </div>
+            )}
+            <div className="flex items-center">
+              <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+                Shipyaari:
+              </span>
+              <span className="font-sans  text-sm leading-5 text-black  font-semibold">
+                {info.row?.original?.tempOrderId}
+              </span>
+              <img
+                src={copyIcon}
+                alt="Copy"
+                className="ml-1 w-4 h-4 cursor-pointer"
+              />
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
     }),
     columnsHelper.accessor("payment", {
       header: "Payment",
