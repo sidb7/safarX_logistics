@@ -12,23 +12,51 @@ import {
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import toast from "react-hot-toast";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import InvoiceCardMobile from "./InvoiceCardMobile";
+import PaginationComponent from "../../../components/Pagination/PaginationMobile";
 
 interface IInvoiceDataProps {
   invoiceData: any;
+  fetchInvoices: any;
 }
 
 const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
   invoiceData,
+  fetchInvoices,
 }) => {
   const columnsHelper = createColumnHelper<any>();
   const navigate = useNavigate();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [loading, setLoading]: any = useState({
     invoice: { isLoading: false, key: "" },
     mis: { isLoading: false, key: "" },
   });
+  const [totalItemCount, setTotalItemCount] = useState<any>(10);
 
   const openInvoice = (id: any) => {
     navigate(`/billing/invoice/${id}`);
+  };
+
+  // on page change index
+  let onPageIndexChange = (data: any) => {
+    const payload: any = {
+      skip: 0,
+      limit: 0,
+      pageNo: 0,
+    };
+
+    if (data?.currentPage === 1) {
+      payload.skip = 0;
+      payload.limit = data?.itemsPerPage;
+      payload.pageNo = 1;
+    } else {
+      payload.skip = (data?.currentPage - 1) * data?.itemsPerPage;
+      payload.limit = data?.itemsPerPage;
+      payload.pageNo = data?.currentPage || 0;
+    }
+
+    fetchInvoices(payload);
   };
 
   const downloadInvoices = async (
@@ -46,13 +74,11 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
     };
 
     try {
-      console.log("identifier", identifier, index);
       setLoading({ ...loading, [identifier]: { isLoading: true, key: index } });
 
       const { data: response }: any = await POST(api, payload);
 
       if (response?.success) {
-        console.log("true");
         toast.success(response.message);
         const url = response?.url;
         window.open(url, "_blank");
@@ -69,8 +95,6 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
       setLoading({ ...loading, [identifier]: { isLoading: false, key: "" } });
     }
   };
-
-  console.log("loading", loading);
 
   // old data
   const billingOrdersHeading = [
@@ -269,11 +293,26 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
 
   return (
     <div>
-      <CustomTable
-        columns={billingOrdersHeading}
-        data={invoiceData}
-        thclassName={" bg-white"}
-      />
+      {isLgScreen ? (
+        <CustomTable
+          columns={billingOrdersHeading}
+          data={invoiceData}
+          thclassName={"bg-white"}
+        />
+      ) : (
+        <InvoiceCardMobile invoiceData={invoiceData} />
+      )}
+
+      <div className="w-full fixed bottom-0 left-0">
+        {totalItemCount > 0 && (
+          <PaginationComponent
+            totalItems={totalItemCount}
+            itemsPerPageOptions={[10, 20, 30, 40]}
+            onPageChange={onPageIndexChange}
+            onItemsPerPageChange={undefined}
+          />
+        )}
+      </div>
     </div>
   );
 };
