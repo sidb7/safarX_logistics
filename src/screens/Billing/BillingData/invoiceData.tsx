@@ -303,7 +303,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
         <InvoiceCardMobile invoiceData={invoiceData} />
       )}
 
-      <div className="w-full fixed bottom-0 left-0">
+      {/* <div className="w-full fixed bottom-0 left-0">
         {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
@@ -312,7 +312,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
             onItemsPerPageChange={undefined}
           />
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
