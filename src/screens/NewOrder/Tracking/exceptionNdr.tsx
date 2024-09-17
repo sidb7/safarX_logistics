@@ -94,10 +94,10 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const tabs = [
     { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount },
     {
-      name: "PENDING_ACTION",
+      name: "PENDING ACTION",
       count: tabCount?.pendingCount?.[0]?.action_pending,
     },
-    { name: "ACTION_TAKEN", count: tabCount?.takenCount?.[0]?.action_taken },
+    { name: "ACTION TAKEN", count: tabCount?.takenCount?.[0]?.action_taken },
   ];
 
   // get modal data from tabels
@@ -249,7 +249,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     try {
       const requestBody = {
         tabStatus: "EXCEPTION",
-        subStatus: subStatus,
+        subStatus: subStatus.replace(" ", "_"),
         searchText: search,
         skip: (page - 1) * perPage,
         limit: perPage,
