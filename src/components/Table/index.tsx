@@ -9,7 +9,7 @@ import "../../styles/tableStyle.css";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 interface ITablePropTypes {
-  data: any;
+  data: any[];
   columns: any;
   tdclassName?: any;
   thclassName?: any;
@@ -21,7 +21,7 @@ interface ITablePropTypes {
 export const CustomTable = (props: ITablePropTypes) => {
   const [rowSelection, setRowSelection]: any = useState([]);
   const {
-    data,
+    data = [],
     columns,
     tdclassName,
     thclassName,
@@ -37,22 +37,22 @@ export const CustomTable = (props: ITablePropTypes) => {
       rowSelection,
     },
     onRowSelectionChange: setRowSelection,
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel: getCoreRowModel()
   });
 
-  const { rows } = table.getRowModel();
+  const { rows } = table?.getRowModel();
 
   //The virtualizer needs to know the scrollable container element
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const rowVirtualizer = useVirtualizer({
-    count: rows.length,
+    count: rows?.length,
     estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
-    getScrollElement: () => tableContainerRef.current,
+    getScrollElement: () => tableContainerRef?.current,
     //measure dynamic row height, except in firefox because it measures table border height incorrectly
     measureElement:
       typeof window !== "undefined" &&
-      navigator.userAgent.indexOf("Firefox") === -1
+      navigator?.userAgent?.indexOf("Firefox") === -1
         ? (element) => element?.getBoundingClientRect().height
         : undefined,
     overscan: 10,
@@ -71,16 +71,16 @@ export const CustomTable = (props: ITablePropTypes) => {
           <thead className={`border-b border-[#E8E8E8] `}>
             {table.getHeaderGroups()?.map((headerGroup: any) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers?.map((header: any) => (
+                {headerGroup?.headers?.map((header: any) => (
                   <th
-                    key={header.id}
+                    key={header?.id}
                     className={`px-4 sticky top-0 bg-white z-10 font-semibold text-[14px] text-[#1C1C1C] border-b-[1px] border-b-[#E8E8E8] ${thclassName}`}
                   >
-                    {header.isPlaceholder
+                    {header?.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
+                          header?.column?.columnDef?.header,
+                          header?.getContext()
                         )}
                   </th>
                 ))}
@@ -139,7 +139,7 @@ export const CustomTable = (props: ITablePropTypes) => {
           </tbody>
         </table>
         <div>
-          {table.getRowModel().rows?.length === 0 && (
+          {table?.getRowModel().rows?.length === 0 && (
             <div className="w-full h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
               No Data Found
             </div>

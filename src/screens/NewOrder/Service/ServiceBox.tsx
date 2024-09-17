@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TooltipContent from "./TooltipContent";
 import FilterIcon from "../../../assets/serv/filter.svg";
 import FilterItems from "../../../components/FilterItemsScroll";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 interface IServiceOption {
   value: string;
@@ -11,6 +12,8 @@ interface IServiceOption {
     total: number;
     serviceMode: string;
     EDT: string;
+    partnerServiceName: string;
+    zoneName: string;
   };
 }
 
@@ -147,51 +150,65 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         />
       </div> */}
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {options.map((option) => (
-          <div
-            key={option?.value}
-            className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
-              selectedOption?.value === option?.value
-                ? "border-[#004EFF] border-2"
-                : "border-[#c1c1c1]"
-            }`}
-            onClick={() => handleOnChange(option)}
-            data-cy={`filter-option-${option?.value}`}
-            // data-tooltip-id={`my-tooltip-inline-${option.value}`}
-          >
-            <div className="self-start px-2">
-              <input
-                type="radio"
-                name={name}
-                value={option?.value}
-                className="!w-4 !p-0 !m-0"
-                readOnly={true}
-                checked={selectedOption?.value === option?.value}
-                onChange={() => handleOnChange(option)}
-              />
+        {options.map((option) => {
+          return (
+            <div
+              key={option?.value}
+              className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
+                selectedOption?.value === option?.value
+                  ? "border-[#004EFF] border-2"
+                  : "border-[#c1c1c1]"
+              }`}
+              onClick={() => handleOnChange(option)}
+              data-cy={`filter-option-${option?.value}`}
+              // data-tooltip-id={`my-tooltip-inline-${option.value}`}
+            >
+              <div className="self-start px-2">
+                <input
+                  type="radio"
+                  name={name}
+                  value={option?.value}
+                  className="!w-4 !p-0 !m-0"
+                  readOnly={true}
+                  checked={selectedOption?.value === option?.value}
+                  onChange={() => handleOnChange(option)}
+                />
+              </div>
+              <div className=" ">
+                <p className="text-[16px] font-semibold font-Open pt-2">
+                  {isMasked
+                    ? "Shipyaari"
+                    : `${toPascalCase(
+                        option.text?.partnerName
+                      )}: ${toPascalCase(option.text?.companyServiceName)}`}
+                </p>
+                <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open pt-1">
+                  {`\u20B9`}{" "}
+                  {Math.round(option.text?.total)?.toLocaleString("en-IN")}{" "}
+                  <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
+                    {`${toPascalCase(option.text?.serviceMode)} `}
+                  </span>
+                </p>
+                <div className="flex justify-between text-center space-x-2 w-[191px]">
+                  <p className="text-[#004EFF] text-[14px] pt-2 font-semibold font-Open flex-shrink-0">
+                    ETA: {option.text?.EDT || "N/A"}
+                  </p>
+                  <p
+                    className="text-[#004EFF] text-[14px] pt-2 font-semibold font-Open whitespace-nowrap text-ellipsis overflow-hidden min-w-0"
+                    title={`${capitalizeFirstLetter(
+                      option?.text?.partnerServiceName
+                    )?.replace(/_/g, " ")} [${option?.text?.zoneName}]`}
+                  >{` - ${capitalizeFirstLetter(
+                    option?.text?.partnerServiceName?.replace(/_/g, " ") || ""
+                  )} [${capitalizeFirstLetter(
+                    option?.text?.zoneName || ""
+                  )}]`}</p>
+                </div>
+              </div>
+              {/* <TooltipContent option={option} /> */}
             </div>
-            <div className=" ">
-              <p className="text-[16px] font-semibold font-Open pt-2">
-                {isMasked
-                  ? "Shipyaari"
-                  : `${toPascalCase(option.text?.partnerName)}: ${toPascalCase(
-                      option.text?.companyServiceName
-                    )}`}
-              </p>
-              <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
-                {`\u20B9`}{" "}
-                {Math.round(option.text?.total)?.toLocaleString("en-IN")}{" "}
-                <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
-                  {`${toPascalCase(option.text?.serviceMode)}`}
-                </span>
-              </p>
-              <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
-                ETA: {option.text?.EDT || "N/A"}{" "}
-              </p>
-            </div>
-            {/* <TooltipContent option={option} /> */}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
