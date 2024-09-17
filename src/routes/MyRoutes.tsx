@@ -1139,7 +1139,7 @@ const MyRoutes: React.FC = () => {
           />
 
           <Route
-            path="/tracking/Exception-ndr"
+            path="/tracking/exception-ndr"
             element={
               <ProtectedRoute>
                 <ExceptionNdr />

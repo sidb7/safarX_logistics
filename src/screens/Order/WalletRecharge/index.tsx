@@ -876,10 +876,10 @@ const WalletRecharge = () => {
                   INSTANT RECHARGE WITH COD
                 </p>
               </div>
-
-              <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
-                Add money to wallet with COD
-              </p>
+              {/* 
+              // <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
+              //   Add money to wallet with COD
+              // </p> */}
 
               <div className="max-w-[900px] mb-[20px] ">
                 <div className="flex items-center">
