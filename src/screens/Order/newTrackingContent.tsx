@@ -1,4 +1,3 @@
-import { Spinner } from "flowbite-react";
 import React, { useEffect, useMemo, useState } from "react";
 import WebCloseIcon from "../../assets/CloseIcon.svg";
 import DeliveryIcon from "../../assets/Delivery Icon.svg";
@@ -18,6 +17,7 @@ import AccordianCloseIcon from "../../assets/AccordianCloseIcon.svg";
 import AccordianOpenIcon from "../../assets/AccordianOpen.svg";
 import RefreshIcon from "../../assets/refreshIcon.svg";
 import { isNumber } from "lodash";
+import { Spinner } from "../../components/Spinner";
 interface INewTrackingContentProps {
   setOpenRightModalForTracking?: any;
   openRightModalForTracking?: any;
@@ -214,7 +214,6 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
       );
 
       if (response?.success && response?.data[0]?.trackingInfo?.length > 0) {
-        toast.success(response.message);
         setTrackingData(response?.data?.[0]?.trackingInfo?.[0]);
         //edd datatypes are different so based on data type of it
         if (isNumber(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD)) {
@@ -259,6 +258,7 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
         });
         setOrderSteps([...trackingOrderSteps]);
         setLoading(false);
+        toast.success(response.message);
       } else {
         // navigate("/weight-management/import-weight/upload-file");
         setLoading(false);
