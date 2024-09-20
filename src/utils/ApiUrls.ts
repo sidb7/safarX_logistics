@@ -326,6 +326,7 @@ const GET_NDR_ORDERS = `${SELLER_BASE_URL}/ndr/getNdrOrders`;
 const POST_ACTION_REMARKS = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 const DOWNLOAD_NDR_ORDERS = `${SELLER_BASE_URL}/ndr/downloadNdrOrders`;
 const UPLOAD_NDR_REMARKS = `${SELLER_BASE_URL}/ndr/uploadBulkNdrOrders`;
+const GET_NDR_SELLER_ACTION_REMARKS = `${SELLER_BASE_URL}/ndr/getSellerActionRemark`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -664,4 +665,5 @@ export {
   UPDATE_ALL_BOXES,
   DOWNLOAD_NDR_ORDERS,
   UPLOAD_NDR_REMARKS,
+  GET_NDR_SELLER_ACTION_REMARKS,
 };
