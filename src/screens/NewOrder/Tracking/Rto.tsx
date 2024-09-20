@@ -21,6 +21,8 @@ import SelleractionModal from "./sellerActionModal";
 import { tokenKey } from "../../../utils/utility";
 import toast from "react-hot-toast";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+import AccordionRightModal from "./accordianRightModal";
+
 
 
 
@@ -52,6 +54,10 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
    const [currentPage, setCurrentPage] = useState(1);
    const [itemsPerPage, setItemsPerPage] = useState(10);
 
+   const [rightModalAccordian, setRightModalAccordian] = useState(false);
+   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
+
+
   // get modal data from tabels
   const handleNdrFollowUpClick = (attemptsReasons: any[]) => {
     setCurrentAttemptsReasons(attemptsReasons);
@@ -59,6 +65,11 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
 
   const handleSellerActionClick = (sellerRemark: any[]) => {
     setCurrentSellerRemark(sellerRemark);
+  };
+
+  const handleInfoIconClick = (awb: string) => {
+    setSelectedAWB(awb);
+    console.log("awb from tabel", selectedAWB)
   };
 
   const arrayData = [{ label: "Exception NDR" }, { label: "RTO",number:totalItemsCount.toString() }];
@@ -285,6 +296,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
             setRightModalSellerAction={setRightModalSellerAction}
             onNdrFollowUpClick={handleNdrFollowUpClick}
             onSellerActionClick={handleSellerActionClick}
+            onInfoIconClick={handleInfoIconClick}
+            setRightModalAccordian={setRightModalAccordian}
 
 
           />
@@ -328,6 +341,18 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
             onClose={() => setRightModalSellerAction(false)}
           />
         </>
+      </CustomRightModal>
+
+       {/* Accordian right modal  */}
+       <CustomRightModal
+        isOpen={rightModalAccordian}
+        onClose={() => setRightModalAccordian(false)}
+        className={""}
+      >
+        <AccordionRightModal
+        awb={selectedAWB}
+          onClose={() => setRightModalAccordian(false)}
+        />
       </CustomRightModal>
     </>
   );

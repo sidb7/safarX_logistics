@@ -6,11 +6,14 @@ import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
 import Checkbox from "../../../components/CheckBox";
 import OneButton from "../../../components/Button/OneButton";
+import infoIcon from "../../../assets/info.svg";
 
 interface IOrderDataProps {
   data: any[];
   setRightModalNdr: (value: boolean) => void;
   setRightModalEdit: (value: boolean) => void;
+  setRightModalAccordian: (value: boolean) => void;
+
   setRightModalSellerAction: (value: boolean) => void;
   selectedPackages: Record<string, boolean>;
   onSelectAllPackages: (checked: boolean) => void;
@@ -20,6 +23,7 @@ interface IOrderDataProps {
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
   onSellerActionClick: (sellerRemark: any[]) => void;
   onActionModalClick: (actionModalRemark: any[]) => void;
+  onInfoIconClick: (awb: string) => void;
 }
 
 const OrderData: React.FunctionComponent<IOrderDataProps> = ({
@@ -27,6 +31,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
   setRightModalNdr,
   setRightModalEdit,
   setRightModalSellerAction,
+  setRightModalAccordian,
   selectedPackages,
   onSelectAllPackages,
   onSelectPackage,
@@ -35,6 +40,8 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
   onNdrFollowUpClick,
   onSellerActionClick,
   onActionModalClick,
+  onInfoIconClick,
+
 }) => {
   const columnsHelper = createColumnHelper<any>();
 
@@ -91,28 +98,17 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
     // }),
     columnsHelper.accessor("ids", {
       header: "IDs",
-      cell: (info) => (
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-              Order:
-            </span>
-            <span className=" font-sans text-sm leading-5 text-black font-semibold">
-              {info.row?.original?.orderId}
-            </span>
-            <img
-              src={copyIcon}
-              alt="Copy"
-              className="ml-1 w-4 h-4 cursor-pointer"
-            />
-          </div>
-          {info.row?.original?.awb && (
+      cell: (info) => {
+        const awb = info?.row?.original?.awb;
+        // console.log("my awb number>>>>>>>>>>>>",awb)
+        return (
+          <div className="space-y-2">
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-                Tracking:
+                Order:
               </span>
-              <span className="font-sans  text-sm leading-5 text-black font-semibold">
-                {info.row?.original?.awb}
+              <span className=" font-sans text-sm leading-5 text-black font-semibold">
+                {info.row?.original?.orderId}
               </span>
               <img
                 src={copyIcon}
@@ -120,22 +116,44 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                 className="ml-1 w-4 h-4 cursor-pointer"
               />
             </div>
-          )}
-          <div className="flex items-center">
-            <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-              Shipyaari:
-            </span>
-            <span className="font-sans  text-sm leading-5 text-black  font-semibold">
-              {info.row?.original?.tempOrderId}
-            </span>
-            <img
-              src={copyIcon}
-              alt="Copy"
-              className="ml-1 w-4 h-4 cursor-pointer"
-            />
+            {info.row?.original?.awb && (
+              <div className="flex items-center">
+                <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+                  Tracking:
+                </span>
+                <span className="font-sans  text-sm leading-5 text-black font-semibold">
+                  {info.row?.original?.awb}
+                </span>
+                <img
+                  src={copyIcon}
+                  alt="Copy"
+                  className="ml-1 w-4 h-4 cursor-pointer"
+                />
+
+                <img
+                  src={infoIcon}
+                  alt="Info"
+                  className="ml-3 w-4 h-4 cursor-pointer"
+                  onClick={() =>{ onInfoIconClick(awb);  setRightModalAccordian(true)}}
+                />
+              </div>
+            )}
+            <div className="flex items-center">
+              <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+                Shipyaari:
+              </span>
+              <span className="font-sans  text-sm leading-5 text-black  font-semibold">
+                {info.row?.original?.tempOrderId}
+              </span>
+              <img
+                src={copyIcon}
+                alt="Copy"
+                className="ml-1 w-4 h-4 cursor-pointer"
+              />
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
     }),
     columnsHelper.accessor("payment", {
       header: "Payment",
@@ -145,6 +163,21 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
           <br />
           {info.row?.original?.codInfo?.isCod ? "COD" : "Prepaid"}
         </div>
+      ),
+    }),
+    columnsHelper.accessor("partner", {
+      header: "Partner",
+      cell: (info) => (
+        <>
+         
+
+          <div className="font-sans font-normal text-sm leading-5 text-black">
+            Delivery Partner:{" "}
+            <span className="font-semibold">
+              {info.row.original.courierPartnerName || "N/A"}
+            </span>
+          </div>
+        </>
       ),
     }),
     columnsHelper.accessor("customerDetails", {

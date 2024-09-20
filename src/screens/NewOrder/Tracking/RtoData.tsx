@@ -2,8 +2,9 @@ import React from "react";
 import { CustomTable } from "../../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import copyIcon from "../../../assets/copy.svg";
-import failureIcon from "../../../assets/failure.svg"
-import EditIcon from "../../../assets/Edit.svg"
+import failureIcon from "../../../assets/failure.svg";
+import EditIcon from "../../../assets/Edit.svg";
+import infoIcon from "../../../assets/info.svg";
 
 interface IOrderDataProps {
   data: any[];
@@ -12,53 +13,51 @@ interface IOrderDataProps {
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
   setRightModalSellerAction: (value: boolean) => void;
   onSellerActionClick: (sellerRemark: any[]) => void;
-
+  setRightModalAccordian: (value: boolean) => void;
+  onInfoIconClick: (awb: string) => void;
 }
 
-  const RtoData: React.FunctionComponent<IOrderDataProps> = ({ data,setRightModalNdr,setRightModalEdit,onNdrFollowUpClick,setRightModalSellerAction, onSellerActionClick}) => {
-
-  const getOrdinalSuffix = (number:any) => {
+const RtoData: React.FunctionComponent<IOrderDataProps> = ({
+  data,
+  setRightModalNdr,
+  setRightModalEdit,
+  onNdrFollowUpClick,
+  setRightModalSellerAction,
+  onSellerActionClick,
+  setRightModalAccordian,
+  onInfoIconClick,
+}) => {
+  const getOrdinalSuffix = (number: any) => {
     const j = number % 10;
     const k = number % 100;
     if (j === 1 && k !== 11) {
-      return 'st';
+      return "st";
     }
     if (j === 2 && k !== 12) {
-      return 'nd';
+      return "nd";
     }
     if (j === 3 && k !== 13) {
-      return 'rd';
+      return "rd";
     }
-    return 'th';
+    return "th";
   };
-  
+
   const columnsHelper = createColumnHelper<any>();
 
   const columns = [
     columnsHelper.accessor("ids", {
       header: "IDs",
-      cell: (info) => (
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-              Order:
-            </span>
-            <span className=" font-sans text-sm leading-5 text-black font-semibold">
-              {info.row?.original?.orderId}
-            </span>
-            <img
-              src={copyIcon}
-              alt="Copy"
-              className="ml-1 w-4 h-4 cursor-pointer"
-            />
-          </div>
-          {info.row?.original?.awb && (
+      cell: (info) => {
+        const awb = info?.row?.original?.awb;
+
+        return (
+          <div className="space-y-2">
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-                Tracking:
+                Order:
               </span>
-              <span className="font-sans  text-sm leading-5 text-black font-semibold">
-                {info.row?.original?.awb}
+              <span className=" font-sans text-sm leading-5 text-black font-semibold">
+                {info.row?.original?.orderId}
               </span>
               <img
                 src={copyIcon}
@@ -66,35 +65,62 @@ interface IOrderDataProps {
                 className="ml-1 w-4 h-4 cursor-pointer"
               />
             </div>
-          )}
-          <div className="flex items-center">
-            <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-              Shipyaari:
-            </span>
-            <span className="font-sans  text-sm leading-5 text-black  font-semibold">
-              {info.row?.original?.tempOrderId}
-            </span>
-            <img
-              src={copyIcon}
-              alt="Copy"
-              className="ml-1 w-4 h-4 cursor-pointer"
-            />
+            {info.row?.original?.awb && (
+              <div className="flex items-center">
+                <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+                  Tracking:
+                </span>
+                <span className="font-sans  text-sm leading-5 text-black font-semibold">
+                  {info.row?.original?.awb}
+                </span>
+                <img
+                  src={copyIcon}
+                  alt="Copy"
+                  className="ml-1 w-4 h-4 cursor-pointer"
+                />
+
+                <img
+                  src={infoIcon}
+                  alt="Info"
+                  className="ml-3 w-4 h-4 cursor-pointer"
+                  onClick={() => {
+                    onInfoIconClick(awb);
+                    setRightModalAccordian(true);
+                  }}
+                />
+              </div>
+            )}
+            <div className="flex items-center">
+              <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
+                Shipyaari:
+              </span>
+              <span className="font-sans  text-sm leading-5 text-black  font-semibold">
+                {info.row?.original?.tempOrderId}
+              </span>
+              <img
+                src={copyIcon}
+                alt="Copy"
+                className="ml-1 w-4 h-4 cursor-pointer"
+              />
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
     }),
     columnsHelper.accessor("rtoInitiated", {
       header: "RTO Initiated",
       cell: (info) => (
-          <>
+        <>
           <div className="font-sans font-normal text-sm leading-5 mb-4">
             {info.row.original.shipmentStatus.rtoInitiDate}
           </div>
-          
+
           <div className="font-sans font-normal text-sm leading-5 text-black">
-      Delivery Partner:{" "}
-          <span className="font-semibold">{info.row.original.courierPartnerName}</span>
-        </div>
+            Delivery Partner:{" "}
+            <span className="font-semibold">
+              {info.row.original.courierPartnerName}
+            </span>
+          </div>
         </>
       ),
     }),
@@ -126,10 +152,11 @@ interface IOrderDataProps {
     }),
     columnsHelper.accessor("currentStatus", {
       header: "Current Status",
-      cell :(info) => {
-        const attemptCount = info.row.original.shipmentStatus.attemptsReasons.length;
+      cell: (info) => {
+        const attemptCount =
+          info.row.original.shipmentStatus.attemptsReasons.length;
         const ordinalSuffix = getOrdinalSuffix(attemptCount);
-      
+
         return (
           <div className="flex flex-col items-center">
             <div className="flex items-center space-x-1 border border-[#F0A22E] p-1 bg-[#FDF6EA]">
@@ -144,16 +171,16 @@ interface IOrderDataProps {
                 {info.row.original.currentStatus}
               </span>
             </div>
-            
+
             <div className=" font-sans text-xs leading-4 text-black font-normal mt-3">
-              {attemptCount}<sup>{ordinalSuffix}</sup> Attempt
+              {attemptCount}
+              <sup>{ordinalSuffix}</sup> Attempt
             </div>
           </div>
         );
-      }
-      
+      },
     }),
-   
+
     // columnsHelper.accessor("ids", {
     //   header: "IDs",
     //   cell: (info) => (
@@ -269,9 +296,9 @@ interface IOrderDataProps {
     //   ),
     // }),
     columnsHelper.accessor("rtoReason", {
-        header: "RTO Reason",
-        cell: (info) => {
-          const hasAttemptReasons =
+      header: "RTO Reason",
+      cell: (info) => {
+        const hasAttemptReasons =
           info.row.original?.shipmentStatus?.attemptsReasons?.length;
         const sellerRemarks = info.row.original?.sellerRemark?.length;
         const hasAttemptReasonsArr =
@@ -280,29 +307,30 @@ interface IOrderDataProps {
         // console.log("partner",hasAttemptReasons)
         // console.log("seller",sellerRemarksArr)
 
-          return(
+        return (
           <div className="space-y-1">
-          <div 
-            className="font-sans text-sm leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
-            onClick={() => {
-              setRightModalNdr(true);
-              onNdrFollowUpClick(hasAttemptReasonsArr);
-            }}
-          >
-            Partner Remarks ({hasAttemptReasons || 0})
+            <div
+              className="font-sans text-sm leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
+              onClick={() => {
+                setRightModalNdr(true);
+                onNdrFollowUpClick(hasAttemptReasonsArr);
+              }}
+            >
+              Partner Remarks ({hasAttemptReasons || 0})
+            </div>
+            <div
+              className="font-sans text-sm   leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
+              onClick={() => {
+                setRightModalSellerAction(true);
+                onSellerActionClick(sellerRemarksArr);
+              }}
+            >
+              Seller Remarks ({sellerRemarks || 0})
+            </div>
           </div>
-          <div 
-            className="font-sans text-sm   leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
-            onClick={() => {
-              setRightModalSellerAction(true);
-              onSellerActionClick(sellerRemarksArr);
-            }}
-          >
-            Seller Remarks ({sellerRemarks || 0})
-          </div>
-        </div>
-        )},
-      }),
+        );
+      },
+    }),
   ];
 
   return (
