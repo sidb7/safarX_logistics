@@ -15,6 +15,7 @@ import {
   DOWNLOAD_NDR_ORDERS,
   GET_NDR_ORDERS,
   POST_ACTION_REMARKS,
+  GET_NDR_SELLER_ACTION_REMARKS,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import SelleractionModal from "./sellerActionModal";
@@ -62,6 +63,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
 
    const [rightModalAccordian, setRightModalAccordian] = useState(false);
    const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
+   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
+
 
 
   // get modal data from tabels
@@ -69,8 +72,23 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     setCurrentAttemptsReasons(attemptsReasons);
   };
 
-  const handleSellerActionClick = (sellerRemark: any[]) => {
+  const handleSellerActionClick = async(sellerRemark: any[]) => {
     setCurrentSellerRemark(sellerRemark);
+    try {
+      const requestBody = {
+        awb: currentSellerRemark,
+        // Add any other necessary fields here
+      };
+
+      const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+      
+      // Handle the response here
+      console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
+      setSellerActionData(response?.data?.data)
+    
+    } catch (error: any) {
+      console.error("Error fetching seller action remarks:", error.message);
+    }
   };
 
   const handleInfoIconClick = (awb: string) => {
@@ -78,7 +96,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     console.log("awb from tabel", selectedAWB)
   };
 
-  const arrayData = [{ label: "Exception NDR" }, { label: "RTO",number:totalItemsCount.toString() }];
+  const arrayData = [{ label: "Exception NDR" }, { label: "RTO",number:totalItemsCount?.toString() }];
 
   const render = (id: number) => {
     if (id === 0) {
@@ -271,6 +289,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     }
   };
 
+  console.log("seller remarks data", currentSellerRemark )
+
   return (
     <>
       <div>
@@ -348,7 +368,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
       >
         <>
           <SelleractionModal
-            followUpData={currentSellerRemark || []}
+            followUpData={sellerActionData|| []}
             onClose={() => setRightModalSellerAction(false)}
           />
         </>
