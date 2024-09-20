@@ -473,7 +473,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         isInsured: selectInsurance.isInsurance ? true : false,
         amount: 0,
       },
-      tempOrderId: +shipyaari_id,
+      tempOrderId: shipyaari_id,
       source: orderSource,
     };
 
@@ -482,15 +482,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     //   return;
     // }
 
-    const { data } = await POST(ADD_BOX_INFO, payload);
-    if (data?.success) {
-      toast.success(data?.message);
-      navigate(
-        `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
-      );
-    } else {
-      toast.error(data?.message);
-    }
+    // const { data } = await POST(ADD_BOX_INFO, payload);
+    // if (data?.success) {
+    //   toast.success(data?.message);
+    //   navigate(
+    //     `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
+    //   );
+    // } else {
+    //   toast.error(data?.message);
+    // }
   };
 
   const getInvoiceValue = (arr: any = []) => {
