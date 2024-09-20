@@ -9,6 +9,8 @@ import OneButton from "../../../components/Button/OneButton";
 import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
 import CopyTooltip from "../../../components/CopyToClipboard";
+import { formatDate } from '../../../utils/dateUtils';
+
 
 interface IOrderDataProps {
   data: any[];
@@ -23,7 +25,7 @@ interface IOrderDataProps {
   setSelectedRowIds: any;
   selectedRowIds: any;
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
-  onSellerActionClick: (sellerRemark: any[]) => void;
+  onSellerActionClick: (sellerRemark: any) => void;
   onActionModalClick: (actionModalRemark: any[]) => void;
   onInfoIconClick: (awb: string) => void;
   openRightModalForTracking?: any;
@@ -246,21 +248,21 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             ? sellerRemarks?.[sellerRemarks?.length - 1].time
             : null;
 
-        const formatDate = (dateInput: any) => {
-          if (!dateInput) return "";
+        // const formatDate = (dateInput: any) => {
+        //   if (!dateInput) return "";
 
-          if (typeof dateInput === "string") return dateInput;
+        //   if (typeof dateInput === "string") return dateInput;
 
-          if (typeof dateInput === "number") {
-            const date = new Date(dateInput);
-            const day = date.getDate().toString().padStart(2, "0");
-            const month = date.toLocaleString("default", { month: "short" });
-            const year = date.getFullYear();
-            return `${day} ${month} ${year}`;
-          }
+        //   if (typeof dateInput === "number") {
+        //     const date = new Date(dateInput);
+        //     const day = date.getDate().toString().padStart(2, "0");
+        //     const month = date.toLocaleString("default", { month: "short" });
+        //     const year = date.getFullYear();
+        //     return `${day} ${month} ${year}`;
+        //   }
 
-          return "";
-        };
+        //   return "";
+        // };
 
         return (
           <div className="font-sans text-sm leading-5 text-black font-normal space-y-1">
@@ -276,11 +278,13 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
       header: "Follow-up",
       cell: (info) => {
         const hasAttemptReasons =
-          info.row.original?.shipmentStatus?.attemptsReasons?.length;
+          info?.row?.original?.shipmentStatus?.attemptsReasons?.length;
         const sellerRemarks = info.row.original?.sellerRemark?.length;
         const hasAttemptReasonsArr =
-          info.row.original?.shipmentStatus?.attemptsReasons;
-        const sellerRemarksArr = info.row.original?.sellerRemark;
+          info?.row?.original?.shipmentStatus?.attemptsReasons;
+        const sellerRemarksArr = info?.row?.original?.sellerRemark;
+        const awb = info?.row?.original?.awb;
+        // console.log("awb_from_sellerremarks",awb)
 
         return (
           <>
@@ -299,14 +303,10 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             </button>
 
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal ${
-                sellerRemarks > 0
-                  ? "hover:bg-blue-50"
-                  : "opacity-50 cursor-not-allowed"
-              }`}
+              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal `}
               onClick={() => {
                 setRightModalSellerAction(true);
-                onSellerActionClick(sellerRemarksArr);
+                onSellerActionClick(awb);
               }}
             >
               Seller action

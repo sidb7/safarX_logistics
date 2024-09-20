@@ -6,6 +6,8 @@ import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
 import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
+import { formatDate } from '../../../utils/dateUtils';
+
 
 interface IOrderDataProps {
   data: any[];
@@ -13,7 +15,7 @@ interface IOrderDataProps {
   setRightModalEdit: (value: boolean) => void;
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
   setRightModalSellerAction: (value: boolean) => void;
-  onSellerActionClick: (sellerRemark: any[]) => void;
+  onSellerActionClick: (sellerRemark: any) => void;
   setRightModalAccordian: (value: boolean) => void;
   onInfoIconClick: (awb: string) => void;
   openRightModalForTracking?: any;
@@ -152,7 +154,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       cell: (info) => (
         <>
           <div className="font-sans font-normal text-sm leading-5 mb-4">
-            {info.row.original.shipmentStatus.rtoInitiDate}
+            {formatDate(info.row.original.shipmentStatus.rtoInitiDate)}
           </div>
 
           <div className="font-sans font-normal text-sm leading-5 text-black">
@@ -340,13 +342,13 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       cell: (info) => {
         const hasAttemptReasons =
           info.row.original?.shipmentStatus?.attemptsReasons?.length;
-        const sellerRemarks = info.row.original?.sellerRemark?.length;
+        const sellerRemarks = info.row.original?.sellerRemarkActionCount;
         const hasAttemptReasonsArr =
           info.row.original?.shipmentStatus?.attemptsReasons;
         const sellerRemarksArr = info.row.original?.sellerRemark;
         // console.log("partner",hasAttemptReasons)
-        // console.log("seller",sellerRemarksArr)
-
+        // console.log("seller remarks count ",sellerRemarks)
+        const awb = info?.row?.original?.awb; 
         return (
           <div className="space-y-1">
             <div
@@ -362,7 +364,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
               className="font-sans text-sm   leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
               onClick={() => {
                 setRightModalSellerAction(true);
-                onSellerActionClick(sellerRemarksArr);
+                onSellerActionClick(awb);
               }}
             >
               Seller Remarks ({sellerRemarks || 0})

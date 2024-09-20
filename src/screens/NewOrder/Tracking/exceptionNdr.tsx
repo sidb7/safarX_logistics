@@ -14,6 +14,7 @@ import {
   DOWNLOAD_NDR_ORDERS,
   GET_NDR_ORDERS,
   POST_ACTION_REMARKS,
+  GET_NDR_SELLER_ACTION_REMARKS,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import SelleractionModal from "./sellerActionModal";
@@ -75,6 +76,13 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     });
   const itemsPerPageOptions = [10, 20, 30, 50];
   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
+  const [sellerActionData, setSellerActionData] = useState<any[]>([]);
+  const [exceptionCount, setExceptionCount] = useState<any>([]);
+  const [rtoCount, setRtoCount] = useState<any>([]);
+
+
+
+
 
 
   // ... (code for pagination)
@@ -116,8 +124,23 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     setCurrentAttemptsReasons(attemptsReasons);
   };
 
-  const handleSellerActionClick = (sellerRemark: any[]) => {
+  const handleSellerActionClick = async (sellerRemark: any[]) => {
     setCurrentSellerRemark(sellerRemark);
+    try {
+      const requestBody = {
+        awb: currentSellerRemark,
+        // Add any other necessary fields here
+      };
+
+      const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+      
+      // Handle the response here
+      console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
+      setSellerActionData(response?.data?.data)
+    
+    } catch (error: any) {
+      console.error("Error fetching seller action remarks:", error.message);
+    }
   };
 
   const handleActionModalClick = (actionModalRemark: any[]) => {
@@ -191,20 +214,20 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   ];
 
   //dummy data for seller action
-  const sellerActionData = [
-    {
-      "Latest Shipyaari Action Date": "N/A",
-      "Latest Shipyaari Remarks": "-",
-      "Seller Action Date": "Sep 01, 2024",
-      "Seller Action Remark": "Reattempt",
-    },
-    {
-      "Latest Shipyaari Action Date": "N/A",
-      "Latest Shipyaari Remarks": "-",
-      "Seller Action Date": "Sep 01, 2024",
-      "Seller Action Remark": "Reattempt",
-    },
-  ];
+  // const sellerActionData = [
+  //   {
+  //     "Latest Shipyaari Action Date": "N/A",
+  //     "Latest Shipyaari Remarks": "-",
+  //     "Seller Action Date": "Sep 01, 2024",
+  //     "Seller Action Remark": "Reattempt",
+  //   },
+  //   {
+  //     "Latest Shipyaari Action Date": "N/A",
+  //     "Latest Shipyaari Remarks": "-",
+  //     "Seller Action Date": "Sep 01, 2024",
+  //     "Seller Action Remark": "Reattempt",
+  //   },
+  // ];
 
   const dummyData = [
     {
@@ -247,14 +270,15 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     switch (activeTab) {
       case "ALL":
         return tabCount?.allCount?.[0]?.TotalCount || 0;
-      case "PENDING_ACTION":
+      case "PENDING ACTION":
         return tabCount?.pendingCount?.[0]?.action_pending || 0;
-      case "ACTION_TAKEN":
+      case "ACTION TAKEN":
         return tabCount?.takenCount?.[0]?.action_taken || 0;
       default:
         return 0;
     }
   };
+
 
   const getNdrOrders = async (
     search = "",
@@ -276,6 +300,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
       setTabCount(response?.data?.data[0] || []);
+
       // setNdrData(undefined);
       console.log("allCount", tabCount);
       // console.log("dataforme>>>", response?.data?.data[0]);
@@ -415,6 +440,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       return;
     }
   };
+
+  console.log(`current seller remarks >>> ${currentSellerRemark || "n/a"}`)
 
   return (
     <>
@@ -588,7 +615,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       >
         <>
           <SelleractionModal
-            followUpData={currentSellerRemark}
+            followUpData={sellerActionData}
             onClose={() => setRightModalSellerAction(false)}
           />
         </>
