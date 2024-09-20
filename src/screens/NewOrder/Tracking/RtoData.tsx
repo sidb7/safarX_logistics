@@ -4,6 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import copyIcon from "../../../assets/copy.svg";
 import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
+import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
 
 interface IOrderDataProps {
@@ -13,6 +14,8 @@ interface IOrderDataProps {
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
   setRightModalSellerAction: (value: boolean) => void;
   onSellerActionClick: (sellerRemark: any[]) => void;
+  setRightModalAccordian: (value: boolean) => void;
+  onInfoIconClick: (awb: string) => void;
   openRightModalForTracking?: any;
   setOpenRightModalForTracking?: any;
 }
@@ -24,6 +27,8 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
   onNdrFollowUpClick,
   setRightModalSellerAction,
   onSellerActionClick,
+  setRightModalAccordian,
+  onInfoIconClick,
   openRightModalForTracking,
   setOpenRightModalForTracking,
 }) => {
@@ -48,7 +53,8 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
     columnsHelper.accessor("ids", {
       header: "IDs",
       cell: (info) => {
-        const awb = info?.row?.original?.awb || "";
+        const awb = info?.row?.original?.awb;
+
         return (
           <div className="space-y-2">
             <div className="flex items-center">
@@ -68,6 +74,9 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
               <div className="flex items-center">
                 <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
                   Tracking:
+                </span>
+                <span className="font-sans  text-sm leading-5 text-black font-semibold">
+                  {info.row?.original?.awb}
                 </span>
                 <span
                   // className="font-sans  text-sm leading-5 text-black font-semibold"
@@ -108,6 +117,16 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                   src={copyIcon}
                   alt="Copy"
                   className="ml-1 w-4 h-4 cursor-pointer"
+                />
+
+                <img
+                  src={infoIcon}
+                  alt="Info"
+                  className="ml-3 w-4 h-4 cursor-pointer"
+                  onClick={() => {
+                    onInfoIconClick(awb);
+                    setRightModalAccordian(true);
+                  }}
                 />
               </div>
             )}
