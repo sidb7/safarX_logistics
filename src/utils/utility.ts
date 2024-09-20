@@ -54,6 +54,207 @@ export const maskMobileNumber = (mobileNumber: any) => {
   return mobileNumber;
 };
 
+export function BaseOptionChart({ useDatetime = false } = {}) {
+  // useStyles();
+  // const theme = useTheme();
+
+  const LABEL_TOTAL = {
+    show: true,
+    label: "Total",
+    color: "red",
+    // ...theme.typography.subtitle2,
+  };
+
+  const LABEL_VALUE = {
+    offsetY: 8,
+    color: "grey",
+    // ...theme.typography.h3,
+  };
+
+  return {
+    // Colors
+    colors: [
+      "#3371FF",
+      "#52e389",
+      "#5ab8eb",
+      // theme.palette.primary.main,
+      // theme.palette.chart.yellow[0],
+      // theme.palette.chart.blue[0],
+      // theme.palette.chart.violet[0],
+      // theme.palette.chart.green[0],
+      // theme.palette.chart.red[0],
+    ],
+
+    // Chart
+    chart: {
+      toolbar: {
+        show: true,
+        tools: { download: false },
+        offsetX: 0,
+        offsetY: 0,
+      },
+      zoom: { enabled: true },
+      animations: { enabled: true },
+      foreColor: "grey",
+      fontFamily: "Lato",
+    },
+
+    // States
+    states: {
+      hover: {
+        filter: {
+          type: "lighten",
+          value: 0.04,
+        },
+      },
+      active: {
+        filter: {
+          type: "darken",
+          value: 0.88,
+        },
+      },
+    },
+
+    // Fill
+    fill: {
+      opacity: 1,
+      gradient: {
+        type: "vertical",
+        shadeIntensity: 0,
+        opacityFrom: 0.4,
+        opacityTo: 0,
+        stops: [0, 100],
+      },
+    },
+
+    // Datalabels
+    dataLabels: { enabled: false },
+
+    // Stroke
+    stroke: {
+      width: 3,
+      curve: "smooth",
+      lineCap: "round",
+    },
+
+    // Grid
+    grid: {
+      strokeDashArray: 3,
+      borderColor: "#b1b1b19b",
+    },
+
+    // Xaxis
+    xaxis: {
+      axisBorder: { show: true },
+      axisTicks: { show: true },
+      // type: "datetime",
+      ...(useDatetime && { type: "datetime" }),
+    },
+
+    // Markers
+    markers: {
+      size: 3,
+      strokeColors: "#3371FF",
+    },
+
+    // Tooltip
+    tooltip: {
+      x: {
+        show: true,
+        format: "dd MMM yyyy",
+      },
+    },
+
+    // Legend
+    legend: {
+      show: true,
+      fontSize: 13,
+      position: "top",
+      horizontalAlign: "right",
+      markers: {
+        radius: 12,
+      },
+      fontWeight: 500,
+      itemMargin: { horizontal: 12 },
+      labels: {
+        colors: "#3371FF",
+      },
+    },
+
+    // plotOptions
+    plotOptions: {
+      // Bar
+      bar: {
+        columnWidth: "40%",
+        borderRadius: 4,
+      },
+      // Pie + Donut
+      pie: {
+        customScale: 10,
+        donut: {
+          labels: {
+            show: true,
+            value: LABEL_VALUE,
+            total: LABEL_TOTAL,
+          },
+        },
+      },
+      // Radialbar
+      // radialBar: {
+      //   track: {
+      //     strokeWidth: "100%",
+      //     background: "white",
+      //   },
+      //   dataLabels: {
+      //     value: LABEL_VALUE,
+      //     total: LABEL_TOTAL,
+      //   },
+      // },
+      // Radar
+      // radar: {
+      //   polygons: {
+      //     fill: { colors: ["transparent"] },
+      //     strokeColors: "grey",
+      //     connectorColors: "grey",
+      //   },
+      // },
+      // polarArea
+      // polarArea: {
+      //   rings: {
+      //     strokeColor: "grey",
+      //   },
+      //   spokes: {
+      //     connectorColors: "grey",
+      //   },
+      // },
+    },
+
+    // Responsive
+    responsive: [
+      {
+        // sm
+        breakpoint: 800,
+        options: {
+          plotOptions: { bar: { columnWidth: "40%" } },
+        },
+      },
+      {
+        // md
+        breakpoint: 1000,
+        options: {
+          plotOptions: { bar: { columnWidth: "32%" } },
+        },
+      },
+    ],
+  };
+}
+
+export function kFormatter(num: number) {
+  return Math.abs(num) > 999
+    ? (Math.sign(num) * (Math.abs(num) / 1000)).toFixed(1) + "k"
+    : Math.sign(num) * Math.abs(num);
+}
+
 export const capitalizeFirstLetter = (str: string) => {
   if (typeof str !== "string") {
     return "";

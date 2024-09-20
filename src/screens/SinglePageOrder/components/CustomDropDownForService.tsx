@@ -214,13 +214,21 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                   }}
                   data-cy={`dropdown-item-${index}`}
                 >
-                  <p className="text-[15px] text-[#777777] leading-4 font-Open">
+                  <p className="text-[14px] text-[#494949] leading-[18px] font-semibold font-Open">
                     {`${item?.name} : ${capitalizeFirstLetter(
                       item?.serviceMode
-                    )}`}
+                    )} `}
                   </p>
-                  <p className="text-[15px] text-[#777777] leading-4 font-Open">
-                    ₹ {item?.total.toFixed(2)}
+                  <p className="text-[14px] text-[#494949] leading-[18px] font-light font-Open">
+                    ₹ {item?.total.toFixed(2)} |{" "}
+                    <span>{`${capitalizeFirstLetter(
+                      item?.zoneName || ""
+                    )}`}</span>
+                    {item?.EDT && (
+                      <span>{` | ${item.EDT} ${
+                        item.EDT > 1 ? "Days" : "Day"
+                      }`}</span>
+                    )}
                   </p>
                 </div>
               ))
