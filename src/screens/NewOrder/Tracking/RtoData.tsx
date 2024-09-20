@@ -5,6 +5,7 @@ import copyIcon from "../../../assets/copy.svg";
 import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
 import infoIcon from "../../../assets/info.svg";
+import { Tooltip } from "react-tooltip";
 
 interface IOrderDataProps {
   data: any[];
@@ -15,6 +16,8 @@ interface IOrderDataProps {
   onSellerActionClick: (sellerRemark: any[]) => void;
   setRightModalAccordian: (value: boolean) => void;
   onInfoIconClick: (awb: string) => void;
+  openRightModalForTracking?: any;
+  setOpenRightModalForTracking?: any;
 }
 
 const RtoData: React.FunctionComponent<IOrderDataProps> = ({
@@ -26,6 +29,8 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
   onSellerActionClick,
   setRightModalAccordian,
   onInfoIconClick,
+  openRightModalForTracking,
+  setOpenRightModalForTracking,
 }) => {
   const getOrdinalSuffix = (number: any) => {
     const j = number % 10;
@@ -73,6 +78,41 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 <span className="font-sans  text-sm leading-5 text-black font-semibold">
                   {info.row?.original?.awb}
                 </span>
+                <span
+                  // className="font-sans  text-sm leading-5 text-black font-semibold"
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Track"
+                  onClick={
+                    // on going work temporary currently commented
+
+                    () => {
+                      setOpenRightModalForTracking({
+                        ...openRightModalForTracking,
+                        isOpen: true,
+                        awbNo: awb,
+                      });
+                    }
+
+                    // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                    // navigate({
+                    //   pathname: "/tracking",
+                    //   search: `?trackingNo=${awb}`,
+                    // })
+                  }
+                >
+                  {info.row?.original?.awb}
+                </span>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
                 <img
                   src={copyIcon}
                   alt="Copy"

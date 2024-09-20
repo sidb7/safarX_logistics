@@ -26,6 +26,7 @@ import AccordionRightModal from "./accordianRightModal";
 
 
 
+import NewTrackingContent from "../../Order/newTrackingContent";
 
 interface IOrdersProps {}
 
@@ -47,12 +48,17 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
   const [currentAttemptsReasons, setCurrentAttemptsReasons] = useState<any[]>(
     []
   );
+  const [openRightModalForTracking, setOpenRightModalForTracking] =
+    useState<any>({
+      isOpen: false,
+      awbNo: "",
+    });
   const [currentSellerRemark, setCurrentSellerRemark] = useState<any[]>([]);
-  const [totalItemsCount,setTotalItemsCount] = useState(0)
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
 
-   // New state for pagination
-   const [currentPage, setCurrentPage] = useState(1);
-   const [itemsPerPage, setItemsPerPage] = useState(10);
+  // New state for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
    const [rightModalAccordian, setRightModalAccordian] = useState(false);
    const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
@@ -92,15 +98,14 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
       const requestBody = {
         tabStatus: "RTO",
         page: page,
-    perPage: perPage
+        perPage: perPage,
       };
 
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setRtoData(response?.data?.data?.[0]?.data || []);
       // setNdrData(undefined);
       // console.log("allCount", tabCount);
-      setTotalItemsCount(response?.data?.data?.[0]?.allCount?.[0]?.TotalCount)
-      console.log("dataforRTO>>>", response?.data?.data?.[0]?.allCount?.[0]?.TotalCount || []);
+      setTotalItemsCount(response?.data?.data?.[0]?.allCount?.[0]?.TotalCount);
     } catch (error: any) {
       console.log(error.message);
     } finally {
@@ -174,8 +179,12 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
   const handlePageChange = ({ currentPage }: { currentPage: number }) => {
     setCurrentPage(currentPage);
   };
-  
-  const handleItemsPerPageChange = ({ itemsPerPage }: { itemsPerPage: number }) => {
+
+  const handleItemsPerPageChange = ({
+    itemsPerPage,
+  }: {
+    itemsPerPage: number;
+  }) => {
     setItemsPerPage(itemsPerPage);
     setCurrentPage(1);
   };
@@ -300,23 +309,25 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
             setRightModalAccordian={setRightModalAccordian}
 
 
+            openRightModalForTracking={openRightModalForTracking}
+            setOpenRightModalForTracking={setOpenRightModalForTracking}
           />
         </div>
 
         {isLgScreen && totalItemsCount > 0 && (
           <PaginationComponent
-          totalItems={totalItemsCount}
-          itemsPerPageOptions={[10, 20, 30, 50]}
-          onPageChange={handlePageChange}
-          onItemsPerPageChange={handleItemsPerPageChange}
-          pageNo={currentPage}
-          initialItemsPerPage={itemsPerPage}
+            totalItems={totalItemsCount}
+            itemsPerPageOptions={[10, 20, 30, 50]}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            pageNo={currentPage}
+            initialItemsPerPage={itemsPerPage}
           />
         )}
       </div>
 
-       {/* ndr follow up right modal  */}
-       <CustomRightModal
+      {/* ndr follow up right modal  */}
+      <CustomRightModal
         isOpen={rightModalNdr}
         onClose={() => setRightModalNdr(false)}
         className={""}
@@ -352,6 +363,23 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
         <AccordionRightModal
         awb={selectedAWB}
           onClose={() => setRightModalAccordian(false)}
+          />
+
+          </CustomRightModal>
+      {/* new Tracking Screen with right modal  */}
+      <CustomRightModal
+        isOpen={openRightModalForTracking?.isOpen}
+        onClose={() =>
+          setOpenRightModalForTracking({
+            ...openRightModalForTracking,
+            isOpen: false,
+          })
+        }
+        className=""
+      >
+        <NewTrackingContent
+          setOpenRightModalForTracking={setOpenRightModalForTracking}
+          openRightModalForTracking={openRightModalForTracking}
         />
       </CustomRightModal>
     </>

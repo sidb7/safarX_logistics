@@ -30,6 +30,7 @@ import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUplo
 import NdrRemarksContent from "./NdrRemarksContent";
 import { Spinner } from "../../../components/Spinner";
 import AccordionRightModal from "./accordianRightModal";
+import NewTrackingContent from "../../Order/newTrackingContent";
 
 interface IOrdersProps {}
 
@@ -67,6 +68,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
+  const [openRightModalForTracking, setOpenRightModalForTracking] =
+    useState<any>({
+      isOpen: false,
+      awbNo: "",
+    });
   const itemsPerPageOptions = [10, 20, 30, 50];
   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
 
@@ -530,6 +536,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               setRightModalAccordian={setRightModalAccordian}
 
 
+              openRightModalForTracking={openRightModalForTracking}
+              setOpenRightModalForTracking={setOpenRightModalForTracking}
             />
           )}
         </div>
@@ -614,6 +622,22 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       
 
 
+      {/* new Tracking Screen with right modal  */}
+      <CustomRightModal
+        isOpen={openRightModalForTracking?.isOpen}
+        onClose={() =>
+          setOpenRightModalForTracking({
+            ...openRightModalForTracking,
+            isOpen: false,
+          })
+        }
+        className=""
+      >
+        <NewTrackingContent
+          setOpenRightModalForTracking={setOpenRightModalForTracking}
+          openRightModalForTracking={openRightModalForTracking}
+        />
+      </CustomRightModal>
     </>
   );
 };
