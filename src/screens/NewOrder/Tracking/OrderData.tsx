@@ -6,6 +6,7 @@ import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
 import Checkbox from "../../../components/CheckBox";
 import OneButton from "../../../components/Button/OneButton";
+import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
 import CopyTooltip from "../../../components/CopyToClipboard";
 
@@ -13,6 +14,8 @@ interface IOrderDataProps {
   data: any[];
   setRightModalNdr: (value: boolean) => void;
   setRightModalEdit: (value: boolean) => void;
+  setRightModalAccordian: (value: boolean) => void;
+
   setRightModalSellerAction: (value: boolean) => void;
   selectedPackages: Record<string, boolean>;
   onSelectAllPackages: (checked: boolean) => void;
@@ -22,6 +25,7 @@ interface IOrderDataProps {
   onNdrFollowUpClick: (attemptsReasons: any[]) => void;
   onSellerActionClick: (sellerRemark: any[]) => void;
   onActionModalClick: (actionModalRemark: any[]) => void;
+  onInfoIconClick: (awb: string) => void;
   openRightModalForTracking?: any;
   setOpenRightModalForTracking?: any;
 }
@@ -31,6 +35,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
   setRightModalNdr,
   setRightModalEdit,
   setRightModalSellerAction,
+  setRightModalAccordian,
   selectedPackages,
   onSelectAllPackages,
   onSelectPackage,
@@ -39,6 +44,8 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
   onNdrFollowUpClick,
   onSellerActionClick,
   onActionModalClick,
+  onInfoIconClick,
+
   openRightModalForTracking,
   setOpenRightModalForTracking,
 }) => {
@@ -108,20 +115,23 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
               <span className=" font-sans text-sm leading-5 text-black font-semibold">
                 {info.row?.original?.orderId}
               </span>
-              <img
+              {/* <img
                 src={copyIcon}
                 alt="Copy"
                 className="ml-1 w-4 h-4 cursor-pointer"
-              />
+              /> */}
             </div>
             {info.row?.original?.awb && (
               <div className="flex items-center">
                 <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
                   Tracking:
                 </span>
+                <span className="font-sans  text-sm leading-5 text-black font-semibold">
+                  {/* {info.row?.original?.awb} */}
+                </span>
                 <span
                   // className="font-sans  text-sm leading-5 text-black font-semibold"
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer font-sans  text-sm leading-5 text-black font-semibold"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                   onClick={
@@ -155,10 +165,17 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                   }}
                 />
                 {/* <CopyTooltip stringToBeCopied={awb} /> */}
-                <img
+                {/* <img
                   src={copyIcon}
                   alt="Copy"
                   className="ml-1 w-4 h-4 cursor-pointer"
+                /> */}
+
+                <img
+                  src={infoIcon}
+                  alt="Info"
+                  className="ml-3 w-4 h-4 cursor-pointer"
+                  onClick={() =>{ onInfoIconClick(awb);  setRightModalAccordian(true)}}
                 />
               </div>
             )}
@@ -169,11 +186,11 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
               <span className="font-sans  text-sm leading-5 text-black  font-semibold">
                 {info.row?.original?.tempOrderId}
               </span>
-              <img
+              {/* <img
                 src={copyIcon}
                 alt="Copy"
                 className="ml-1 w-4 h-4 cursor-pointer"
-              />
+              /> */}
             </div>
           </div>
         );
@@ -187,6 +204,21 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
           <br />
           {info.row?.original?.codInfo?.isCod ? "COD" : "Prepaid"}
         </div>
+      ),
+    }),
+    columnsHelper.accessor("partner", {
+      header: "Partner",
+      cell: (info) => (
+        <>
+         
+
+          <div className="font-sans font-normal text-sm leading-5 text-black">
+            Delivery Partner:{" "}
+            <span className="font-semibold">
+              {info.row.original.courierPartnerName || "N/A"}
+            </span>
+          </div>
+        </>
       ),
     }),
     columnsHelper.accessor("customerDetails", {

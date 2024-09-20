@@ -29,6 +29,7 @@ import CustomUploadButton from "../Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import NdrRemarksContent from "./NdrRemarksContent";
 import { Spinner } from "../../../components/Spinner";
+import AccordionRightModal from "./accordianRightModal";
 import NewTrackingContent from "../../Order/newTrackingContent";
 
 interface IOrdersProps {}
@@ -41,6 +42,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [rightModalNdr, setRightModalNdr] = useState(false);
   const [rightModalEdit, setRightModalEdit] = useState(false);
+  const [rightModalAccordian, setRightModalAccordian] = useState(false);
+
   const [editActionData, setEditActionData] = useState<{
     action: string;
     remark: string;
@@ -71,6 +74,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       awbNo: "",
     });
   const itemsPerPageOptions = [10, 20, 30, 50];
+  const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
+
 
   // ... (code for pagination)
 
@@ -117,6 +122,12 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   const handleActionModalClick = (actionModalRemark: any[]) => {
     setActionModalRemark(actionModalRemark);
+  };
+
+  const handleInfoIconClick = (awb: string) => {
+    setSelectedAWB(awb);
+    // You can add additional logic here, such as opening a modal or fetching more details
+    console.log("awb from tabel", selectedAWB)
   };
 
   useEffect(() => {
@@ -489,7 +500,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               icon={whiteDownloadIcon}
               showIcon={true}
               text="NDR REPORT"
-              className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
+              className="bg-[#1C1C1C] text-[#FFFFFF] w-[150px] mr-2 [&_p]:!uppercase"
               onClick={downloadNdrReport}
             />
             <ServiceButton
@@ -497,7 +508,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               icon={DownloadIconWhite}
               text="NDR REMARKS"
               onClick={() => setOpenUploadModal(true)}
-              className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
+              className="bg-[#1C1C1C] text-[#FFFFFF] w-[150px] [&_p]:!uppercase"
             />
           </div>
         </div>
@@ -521,6 +532,10 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               onNdrFollowUpClick={handleNdrFollowUpClick}
               onSellerActionClick={handleSellerActionClick}
               onActionModalClick={handleActionModalClick}
+              onInfoIconClick={handleInfoIconClick}
+              setRightModalAccordian={setRightModalAccordian}
+
+
               openRightModalForTracking={openRightModalForTracking}
               setOpenRightModalForTracking={setOpenRightModalForTracking}
             />
@@ -590,6 +605,22 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
           onSubmit={handleEditActionSubmit}
         />
       </CustomRightModal>
+
+
+       {/* Accordian right modal  */}
+       <CustomRightModal
+        isOpen={rightModalAccordian}
+        onClose={() => setRightModalAccordian(false)}
+        className={""}
+      >
+        <AccordionRightModal
+        awb={selectedAWB}
+          onClose={() => setRightModalAccordian(false)}
+        />
+      </CustomRightModal>
+
+      
+
 
       {/* new Tracking Screen with right modal  */}
       <CustomRightModal
