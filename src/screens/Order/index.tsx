@@ -243,11 +243,11 @@ const tabs = [
     value: "CANCELLED",
     orderNumber: 0,
   },
-  {
-    statusName: "All Orders",
-    value: "ALL",
-    orderNumber: 0,
-  },
+  // {
+  //   statusName: "All Orders",
+  //   value: "ALL",
+  //   orderNumber: 0,
+  // },
 ];
 
 const Index = () => {
@@ -2421,6 +2421,7 @@ const Index = () => {
                             columns={columnHelper || []}
                             setRowSelectedData={setSelectedRowData}
                             sticky={isSticky}
+                            tdclassName={"py-4"}
                           />
                         </div>
                         {/* As this pagination should not scroll with the table */}

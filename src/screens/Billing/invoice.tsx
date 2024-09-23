@@ -61,8 +61,8 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
+  const fetchInvoices = async () => {
+    try {
       setIsLoading(true);
       const { data } = await POST(GET_ALL_INVOICES, {});
       if (data?.success) {
@@ -72,7 +72,13 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
         toast.error(data?.message);
         setIsLoading(false);
       }
-    })();
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvoices();
   }, []);
 
   //on page change index
@@ -115,7 +121,10 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
               </div>
             ) : (
               <>
-                <InvoiceData invoiceData={invoiceArray} />
+                <InvoiceData
+                  invoiceData={invoiceArray}
+                  fetchInvoices={fetchInvoices}
+                />
               </>
             )}
           </div>

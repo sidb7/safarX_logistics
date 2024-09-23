@@ -133,6 +133,8 @@ import UsersList from "../screens/Profile/Settings/roleManagement/usersList";
 import { Home } from "../screens/Home";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
+import ExceptionNdr from "../screens/NewOrder/Tracking/exceptionNdr";
+import Rto from "../screens/NewOrder/Tracking/Rto";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
@@ -1136,6 +1138,24 @@ const MyRoutes: React.FC = () => {
             }
           />
 
+          <Route
+            path="/tracking/exception-ndr"
+            element={
+              <ProtectedRoute>
+                <ExceptionNdr />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tracking/rto"
+            element={
+              <ProtectedRoute>
+                <Rto/>
+              </ProtectedRoute>
+            }
+          />
+
           {/* <Route path="/tracking/shipyaari" element={<Tracking />} /> */}
           <Route
             path="/tracking/clientTracking"
@@ -1146,6 +1166,7 @@ const MyRoutes: React.FC = () => {
             }
           />
         </Route>
+
         <Route>
           <Route path="notifications" element={<Notifications />} />
         </Route>

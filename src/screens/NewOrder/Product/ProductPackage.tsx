@@ -473,7 +473,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         isInsured: selectInsurance.isInsurance ? true : false,
         amount: 0,
       },
-      tempOrderId: +shipyaari_id,
+      tempOrderId: shipyaari_id,
       source: orderSource,
     };
 
