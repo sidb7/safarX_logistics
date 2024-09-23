@@ -63,7 +63,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [currentSellerRemark, setCurrentSellerRemark] = useState<any[]>([]);
   const [actionModalRemark, setActionModalRemark] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
-  const [activeTab, setActiveTab] = useState("ALL");
+  const [activeTab, setActiveTab] = useState("PENDING ACTION");
   const [tabCount, setTabCount] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -180,15 +180,15 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const arrayData = [
-    { label: "Exception NDR", number: tabCount?.allCount?.[0]?.TotalCount },
-    { label: "RTO" },
+    { label: "Exception NDR", number: exceptionCount },
+    { label: "RTO",number:rtoCount },
   ];
 
   const render = (id: any) => {
     if (id === 0) {
-      navigate("tracking/Exception-ndr");
+      navigate("/tracking/exception-ndr");
     } else if (id === 1) {
-      navigate("/tracking/Rto");
+      navigate("/tracking/rto");
     }
   };
 
@@ -300,10 +300,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
       setTabCount(response?.data?.data[0] || []);
-
+      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount || [])
+      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
       // setNdrData(undefined);
-      console.log("allCount", tabCount);
-      // console.log("dataforme>>>", response?.data?.data[0]);
+      // console.log("allCount", response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount);
+      console.log("dataforme>>>", response?.data?.data[0]);
     } catch (error: any) {
       console.log(error.message);
     } finally {
@@ -313,7 +314,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   useEffect(() => {
     getNdrOrders();
-  }, [activeTab]);
+  }, [activeTab,editActionData]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
