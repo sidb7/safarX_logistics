@@ -77,12 +77,12 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
                   Tracking:
                 </span>
-                <span className="font-sans  text-sm leading-5 text-black font-semibold">
+                {/* <span className="font-sans  text-sm leading-5 text-black font-semibold">
                   {info.row?.original?.awb}
-                </span>
+                </span> */}
                 <span
                   // className="font-sans  text-sm leading-5 text-black font-semibold"
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer font-sans  text-sm leading-5 text-black font-semibold"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                   onClick={

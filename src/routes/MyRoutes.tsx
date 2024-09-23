@@ -1148,7 +1148,7 @@ const MyRoutes: React.FC = () => {
           />
 
           <Route
-            path="/tracking/Rto"
+            path="/tracking/rto"
             element={
               <ProtectedRoute>
                 <Rto/>

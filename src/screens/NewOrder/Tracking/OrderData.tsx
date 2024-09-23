@@ -248,6 +248,11 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             ? sellerRemarks?.[sellerRemarks?.length - 1].time
             : null;
 
+        const pickupDate = info.row?.original?.shipmentStatus.attemptsReasons  ;
+        const pickUpDateTime = pickupDate && pickupDate?.length > 0
+        ? pickupDate?.[pickupDate?.length - 1].time
+        : null;
+
         // const formatDate = (dateInput: any) => {
         //   if (!dateInput) return "";
 
@@ -269,7 +274,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             <div>
               P: {formatDate(info.row?.original?.shipmentStatus?.pickUpDate)}
             </div>
-            <div>N: {formatDate(lastRemarkTime)}</div>
+            <div>N: {formatDate(pickUpDateTime)}</div>
           </div>
         );
       },
