@@ -64,6 +64,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
    const [rightModalAccordian, setRightModalAccordian] = useState(false);
    const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
    const [sellerActionData, setSellerActionData] = useState<any[]>([]);
+   const [exceptionCount, setExceptionCount] = useState<any>([]);
+  const [rtoCount, setRtoCount] = useState<any>([]);
 
 
 
@@ -96,13 +98,13 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     console.log("awb from tabel", selectedAWB)
   };
 
-  const arrayData = [{ label: "Exception NDR" }, { label: "RTO",number:totalItemsCount?.toString() }];
+  const arrayData = [{ label: "Exception NDR",number: exceptionCount }, { label: "RTO",number:rtoCount}];
 
   const render = (id: number) => {
     if (id === 0) {
-      navigate("/tracking/Exception-ndr");
+      navigate("/tracking/exception-ndr");
     } else if (id === 1) {
-      navigate("/tracking/Rto");
+      navigate("/tracking/rto");
     }
   };
   const setScrollIndex = (id: number) => {
@@ -124,6 +126,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
       // setNdrData(undefined);
       // console.log("allCount", tabCount);
       setTotalItemsCount(response?.data?.data?.[0]?.allCount?.[0]?.TotalCount);
+      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount || [])
+      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
     } catch (error: any) {
       console.log(error.message);
     } finally {
