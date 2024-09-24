@@ -13,11 +13,14 @@ import { Spinner } from "../../../components/Spinner";
 interface INdrRemarksContentProps {
   openUploadModal: boolean;
   setOpenUploadModal: any;
+  onUploadSuccess: () => void; // New callback prop
+
 }
 
 const NdrRemarksContent: React.FunctionComponent<INdrRemarksContentProps> = ({
   setOpenUploadModal,
   openUploadModal,
+  onUploadSuccess,
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -49,6 +52,7 @@ const NdrRemarksContent: React.FunctionComponent<INdrRemarksContentProps> = ({
 
       if (response?.success) {
         toast.success(response?.message);
+        onUploadSuccess(); // Call the callback function after successful upload
       } else {
         toast.error("Failed To Upload!" || response?.message);
       }
