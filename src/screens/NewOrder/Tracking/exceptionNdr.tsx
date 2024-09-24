@@ -347,7 +347,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-  };
+  };            
 
   // const handleEditActionSubmit = (data: {
   //   action: string;
@@ -621,6 +621,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         <NdrRemarksContent
           openUploadModal={openUploadModal}
           setOpenUploadModal={setOpenUploadModal}
+          onUploadSuccess={getNdrOrders} // Pass the getNdrOrders function as a callback
         />
       </CenterModal>
 
