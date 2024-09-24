@@ -66,6 +66,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
    const [sellerActionData, setSellerActionData] = useState<any[]>([]);
    const [exceptionCount, setExceptionCount] = useState<any>([]);
   const [rtoCount, setRtoCount] = useState<any>([]);
+  const [isLoadingSellerAction, setIsLoadingSellerAction] = useState<boolean>(false);
 
 
 
@@ -76,22 +77,47 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
 
   const handleSellerActionClick = async(sellerRemark: any[]) => {
     setCurrentSellerRemark(sellerRemark);
-    try {
-      const requestBody = {
-        awb: currentSellerRemark,
-        // Add any other necessary fields here
-      };
+    setIsLoadingSellerAction(true);  // Start loading
 
-      const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+    // try {
+    //   const requestBody = {
+    //     awb: currentSellerRemark,
+    //     // Add any other necessary fields here
+    //   };
+
+    //   const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
       
-      // Handle the response here
-      console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
-      setSellerActionData(response?.data?.data)
+    //   // Handle the response here
+    //   console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
+    //   setSellerActionData(response?.data?.data)
     
-    } catch (error: any) {
-      console.error("Error fetching seller action remarks:", error.message);
-    }
+    // } catch (error: any) {
+    //   console.error("Error fetching seller action remarks:", error.message);
+    // }
   };
+
+  useEffect(() => {
+    // Only make the API call if there are seller remarks available
+    if (currentSellerRemark.length > 0) {
+      const fetchSellerActionRemarks = async () => {
+        try {
+          const requestBody = {
+            awb: currentSellerRemark,
+          };
+  
+          const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+          console.log("Seller action remarks:", response?.data?.data);
+          setSellerActionData(response?.data?.data);
+        } catch (error: any) {
+          console.error("Error fetching seller action remarks:", error.message);
+        }finally {
+          setIsLoadingSellerAction(false);  // Stop loading
+        }
+      };
+  
+      fetchSellerActionRemarks();
+    }
+  }, [currentSellerRemark]);
 
   const handleInfoIconClick = (awb: string) => {
     setSelectedAWB(awb);
@@ -374,6 +400,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
           <SelleractionModal
             followUpData={sellerActionData|| []}
             onClose={() => setRightModalSellerAction(false)}
+            isLoadingSellerAction={isLoadingSellerAction}
+
           />
         </>
       </CustomRightModal>
