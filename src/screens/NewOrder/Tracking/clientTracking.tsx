@@ -211,12 +211,13 @@ const Tracking = () => {
         setTrackingState([]);
         return toast.error("Please Enter Tracking Number");
       }
+      const result = trackingNo.replace(/[\/, ]+/g, ',');
       setTrackingState([]);
       setLoading(true);
       setOrderSteps(steps);
       setCancelledOrder(false);
       const { data: response } = await GET(
-        `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`
+        `${GET_CLIENTTRACKING_INFO}?trackingNo=${result}`
       );
 
       //edd datatypes are different so based on data type of it
@@ -233,7 +234,7 @@ const Tracking = () => {
         window.history.replaceState(
           {},
           "",
-          `/tracking?trackingNo=${trackingNo}`
+          `/tracking?trackingNo=${result}`
         );
 
         const { trackingInfo } = response?.data[0];
@@ -426,13 +427,13 @@ const Tracking = () => {
                                             </span>
                                             <span className="font-bold text-[14px]">
                                               {" "}
-                                              {trackingState[0]?.currentStatus}
+                                              {each?.currentStatus}
                                             </span>
                                           </div>
                                           <div className="flex gap-x-6">
-                                            {trackingState[0]?.shipmentStatus
+                                            {each?.shipmentStatus
                                               ?.EDD === "" ||
-                                            trackingState[0]?.shipmentStatus
+                                            each?.shipmentStatus
                                               ?.EDD === undefined ? (
                                               ""
                                             ) : (
