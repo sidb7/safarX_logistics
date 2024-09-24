@@ -308,7 +308,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             </button>
 
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal `}
+              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
               onClick={() => {
                 setRightModalSellerAction(true);
                 onSellerActionClick(awb);
@@ -347,8 +347,8 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
         const dataForAction = info?.row?.original?.awb;
         // console.log("awb",dataForAction)
         return (
-          <div className="w-5 flex items-center justify-center">
-            <button className="">
+          <div className="">
+            {/* <button className="">
               <img
                 src={EditIcon}
                 alt="EditIcon"
@@ -358,6 +358,16 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                   onActionModalClick(dataForAction);
                 }}
               />
+            </button> */}
+
+            <button
+              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
+              onClick={() => {
+                setRightModalEdit(true);
+                onActionModalClick(dataForAction);
+              }}
+            >
+            Mark RTO/Re-Attempt
             </button>
           </div>
         );
