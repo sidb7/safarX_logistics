@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { ScrollNav } from "../../../components/ScrollNav";
 import { SearchBox } from "../../../components/SearchBox";
@@ -79,6 +79,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
   const [exceptionCount, setExceptionCount] = useState<any>([]);
   const [rtoCount, setRtoCount] = useState<any>([]);
+  const [isLoadingSellerAction, setIsLoadingSellerAction] = useState<boolean>(false);
+
 
 
 
@@ -125,23 +127,50 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const handleSellerActionClick = async (sellerRemark: any[]) => {
-    setCurrentSellerRemark(sellerRemark);
-    try {
-      const requestBody = {
-        awb: currentSellerRemark,
-        // Add any other necessary fields here
-      };
+    if (isLoadingSellerAction) return;
 
-      const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+    setCurrentSellerRemark(sellerRemark);
+    setIsLoadingSellerAction(true);  // Start loading
+
+    // try {
+    //   const requestBody = {
+    //     awb: currentSellerRemark,
+    //     // Add any other necessary fields here
+    //   };
+
+    //   const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
       
-      // Handle the response here
-      console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
-      setSellerActionData(response?.data?.data)
+    //   // Handle the response here
+    //   console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
+    //   setSellerActionData(response?.data?.data)
     
-    } catch (error: any) {
-      console.error("Error fetching seller action remarks:", error.message);
-    }
+    // } catch (error: any) {
+    //   console.error("Error fetching seller action remarks:", error.message);
+    // }
   };
+
+  useEffect(() => {
+    // Only make the API call if there are seller remarks available
+    if (currentSellerRemark.length > 0) {
+      const fetchSellerActionRemarks = async () => {
+        try {
+          const requestBody = {
+            awb: currentSellerRemark,
+          };
+  
+          const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+          console.log("Seller action remarks:", response?.data?.data);
+          setSellerActionData(response?.data?.data);
+        } catch (error: any) {
+          console.error("Error fetching seller action remarks:", error.message);
+        }finally {
+          setIsLoadingSellerAction(false);  // Stop loading
+        }
+      };
+  
+      fetchSellerActionRemarks();
+    }
+  }, [currentSellerRemark,isLoadingSellerAction]);
 
   const handleActionModalClick = (actionModalRemark: any[]) => {
     setActionModalRemark(actionModalRemark);
@@ -318,7 +347,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-  };
+  };            
 
   // const handleEditActionSubmit = (data: {
   //   action: string;
@@ -522,6 +551,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
                 value={searchText}
                 onChange={handleSearchChange}
                 getFullContent={handleGetFullContent}
+                customPlaceholder="Order, Tracking or Shipyaari ID"
               />
             </div>
             <ServiceButton
@@ -570,7 +600,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
           )}
         </div>
 
-        {isLgScreen && totalItemCount > 0 && (
+        {isLgScreen && totalItemCount > 0 && !isLoading &&(
           <PaginationComponent
             // totalItems={totalItemCount}
             totalItems={getTotalItemsCount()}
@@ -591,6 +621,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         <NdrRemarksContent
           openUploadModal={openUploadModal}
           setOpenUploadModal={setOpenUploadModal}
+          onUploadSuccess={getNdrOrders} // Pass the getNdrOrders function as a callback
         />
       </CenterModal>
 
@@ -617,7 +648,10 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         <>
           <SelleractionModal
             followUpData={sellerActionData}
-            onClose={() => setRightModalSellerAction(false)}
+            onClose={() => setRightModalSellerAction(false)}  
+            isLoadingSellerAction={isLoadingSellerAction}
+
+
           />
         </>
       </CustomRightModal>
