@@ -367,7 +367,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                 onActionModalClick(dataForAction);
               }}
             >
-            Mark RTO/Re-Attempt
+            RTO/Re-Attempt
             </button>
           </div>
         );
