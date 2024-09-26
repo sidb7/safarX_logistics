@@ -76,9 +76,7 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
   };
   return (
     <div>
-      <div
-        className="flex customScroll whitespace-nowrap mt-2 h-[34px] cursor-pointer"
-      >
+      <div className="flex customScroll whitespace-nowrap mt-2 h-[34px] cursor-pointer">
         {arrayData?.map((singleData, index) => (
           <div
             key={index}
@@ -101,7 +99,7 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
                   selectedId === index ? "!bg-[#004EFF]" : ""
                 }`}
               >
-                {singleData.number}
+                {singleData.number !== undefined || [] ? singleData.number : "0"}
               </span>
             )}
           </div>
