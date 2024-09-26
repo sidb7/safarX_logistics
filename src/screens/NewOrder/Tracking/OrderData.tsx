@@ -217,7 +217,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
           <div className="font-sans font-normal text-sm leading-5 text-black">
             Delivery Partner:{" "}
             <span className="font-semibold">
-              {info.row.original.courierPartnerName || "N/A"}
+              {info.row?.original?.courierPartnerName || "N/A"}
             </span>
           </div>
         </>
@@ -242,13 +242,13 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
     columnsHelper.accessor("pickupDate", {
       header: "Pickup/NDR Date",
       cell: (info) => {
-        const sellerRemarks = info.row.original?.sellerRemark;
+        const sellerRemarks = info?.row?.original?.sellerRemark;
         const lastRemarkTime =
           sellerRemarks && sellerRemarks?.length > 0
             ? sellerRemarks?.[sellerRemarks?.length - 1].time
             : null;
 
-        const pickupDate = info.row?.original?.shipmentStatus.attemptsReasons  ;
+        const pickupDate = info?.row?.original?.shipmentStatus?.attemptsReasons  ;
         const pickUpDateTime = pickupDate && pickupDate?.length > 0
         ? pickupDate?.[pickupDate?.length - 1].time
         : null;
@@ -284,7 +284,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
       cell: (info) => {
         const hasAttemptReasons =
           info?.row?.original?.shipmentStatus?.attemptsReasons?.length;
-        const sellerRemarks = info.row.original?.sellerRemark?.length;
+        const sellerRemarks = info.row?.original?.sellerRemark?.length;
         const hasAttemptReasonsArr =
           info?.row?.original?.shipmentStatus?.attemptsReasons;
         const sellerRemarksArr = info?.row?.original?.sellerRemark;
@@ -334,7 +334,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
               />
             </span>
             <span className="text-[#F0A22E] font-sans  text-sm leading-5 font-normal ">
-              {info.row.original.currentStatus}
+              {info?.row?.original?.currentStatus}
             </span>
           </div>
         </div>
