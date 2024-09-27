@@ -99,7 +99,7 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
                   selectedId === index ? "!bg-[#004EFF]" : ""
                 }`}
               >
-                {singleData.number !== undefined || [] ? singleData.number : "0"}
+                {singleData?.number !== undefined  ? singleData.number : "0"}
               </span>
             )}
           </div>
