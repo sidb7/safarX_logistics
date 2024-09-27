@@ -113,12 +113,12 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const tabs = [
-    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount },
+    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount || 0},
     {
       name: "PENDING ACTION",
-      count: tabCount?.pendingCount?.[0]?.action_pending,
+      count: tabCount?.pendingCount?.[0]?.action_pending || 0
     },
-    { name: "ACTION TAKEN", count: tabCount?.takenCount?.[0]?.action_taken },
+    { name: "ACTION TAKEN", count: tabCount?.takenCount?.[0]?.action_taken || 0},
   ];
 
   // get modal data from tabels
@@ -209,8 +209,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const arrayData = [
-    { label: "Exception NDR", number: exceptionCount },
-    { label: "RTO",number:rtoCount },
+    { label: "Exception NDR", number: exceptionCount || 0 },
+    { label: "RTO",number:rtoCount || 0 },
   ];
 
   const render = (id: any) => {
@@ -294,7 +294,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       followUp: ["NDR Follow-up", "Seller Action"],
     },
   ];
-
+  
+  console.log("exception count ",rtoCount)
   const getTotalItemsCount = () => {
     switch (activeTab) {
       case "ALL":
@@ -329,7 +330,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
       setTabCount(response?.data?.data[0] || []);
-      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount || [])
+      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount )
       setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
       // setNdrData(undefined);
       // console.log("allCount", response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount);
@@ -600,7 +601,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
           )}
         </div>
 
-        {isLgScreen && totalItemCount > 0 && !isLoading &&(
+        {isLgScreen && getTotalItemsCount() > 0 && !isLoading &&(
           <PaginationComponent
             // totalItems={totalItemCount}
             totalItems={getTotalItemsCount()}

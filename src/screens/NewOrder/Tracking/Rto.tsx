@@ -124,7 +124,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     console.log("awb from tabel", selectedAWB)
   };
 
-  const arrayData = [{ label: "Exception NDR",number: exceptionCount }, { label: "RTO",number:rtoCount}];
+  const arrayData = [{ label: "Exception NDR",number: exceptionCount || 0}, { label: "RTO",number:rtoCount || 0}];
 
   const render = (id: number) => {
     if (id === 0) {
@@ -152,7 +152,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
       // setNdrData(undefined);
       // console.log("allCount", tabCount);
       setTotalItemsCount(response?.data?.data?.[0]?.allCount?.[0]?.TotalCount);
-      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount || [])
+      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount )
       setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
     } catch (error: any) {
       console.log(error.message);
