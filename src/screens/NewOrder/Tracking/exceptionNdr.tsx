@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { ScrollNav } from "../../../components/ScrollNav";
 import { SearchBox } from "../../../components/SearchBox";
@@ -14,6 +14,7 @@ import {
   DOWNLOAD_NDR_ORDERS,
   GET_NDR_ORDERS,
   POST_ACTION_REMARKS,
+  GET_NDR_SELLER_ACTION_REMARKS,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import SelleractionModal from "./sellerActionModal";
@@ -29,6 +30,7 @@ import CustomUploadButton from "../Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import NdrRemarksContent from "./NdrRemarksContent";
 import { Spinner } from "../../../components/Spinner";
+import AccordionRightModal from "./accordianRightModal";
 import NewTrackingContent from "../../Order/newTrackingContent";
 
 interface IOrdersProps {}
@@ -41,6 +43,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [rightModalNdr, setRightModalNdr] = useState(false);
   const [rightModalEdit, setRightModalEdit] = useState(false);
+  const [rightModalAccordian, setRightModalAccordian] = useState(false);
+
   const [editActionData, setEditActionData] = useState<{
     action: string;
     remark: string;
@@ -59,7 +63,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [currentSellerRemark, setCurrentSellerRemark] = useState<any[]>([]);
   const [actionModalRemark, setActionModalRemark] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
-  const [activeTab, setActiveTab] = useState("ALL");
+  const [activeTab, setActiveTab] = useState("PENDING ACTION");
   const [tabCount, setTabCount] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -71,6 +75,17 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       awbNo: "",
     });
   const itemsPerPageOptions = [10, 20, 30, 50];
+  const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
+  const [sellerActionData, setSellerActionData] = useState<any[]>([]);
+  const [exceptionCount, setExceptionCount] = useState<any>([]);
+  const [rtoCount, setRtoCount] = useState<any>([]);
+  const [isLoadingSellerAction, setIsLoadingSellerAction] = useState<boolean>(false);
+
+
+
+
+
+
 
   // ... (code for pagination)
 
@@ -98,12 +113,12 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const tabs = [
-    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount },
+    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount || 0},
     {
       name: "PENDING ACTION",
-      count: tabCount?.pendingCount?.[0]?.action_pending,
+      count: tabCount?.pendingCount?.[0]?.action_pending || 0
     },
-    { name: "ACTION TAKEN", count: tabCount?.takenCount?.[0]?.action_taken },
+    { name: "ACTION TAKEN", count: tabCount?.takenCount?.[0]?.action_taken || 0},
   ];
 
   // get modal data from tabels
@@ -111,12 +126,60 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     setCurrentAttemptsReasons(attemptsReasons);
   };
 
-  const handleSellerActionClick = (sellerRemark: any[]) => {
+  const handleSellerActionClick = async (sellerRemark: any[]) => {
+    if (isLoadingSellerAction) return;
+
     setCurrentSellerRemark(sellerRemark);
+    setIsLoadingSellerAction(true);  // Start loading
+
+    // try {
+    //   const requestBody = {
+    //     awb: currentSellerRemark,
+    //     // Add any other necessary fields here
+    //   };
+
+    //   const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+      
+    //   // Handle the response here
+    //   console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
+    //   setSellerActionData(response?.data?.data)
+    
+    // } catch (error: any) {
+    //   console.error("Error fetching seller action remarks:", error.message);
+    // }
   };
+
+  useEffect(() => {
+    // Only make the API call if there are seller remarks available
+    if (currentSellerRemark.length > 0) {
+      const fetchSellerActionRemarks = async () => {
+        try {
+          const requestBody = {
+            awb: currentSellerRemark,
+          };
+  
+          const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+          console.log("Seller action remarks:", response?.data?.data);
+          setSellerActionData(response?.data?.data);
+        } catch (error: any) {
+          console.error("Error fetching seller action remarks:", error.message);
+        }finally {
+          setIsLoadingSellerAction(false);  // Stop loading
+        }
+      };
+  
+      fetchSellerActionRemarks();
+    }
+  }, [currentSellerRemark,isLoadingSellerAction]);
 
   const handleActionModalClick = (actionModalRemark: any[]) => {
     setActionModalRemark(actionModalRemark);
+  };
+
+  const handleInfoIconClick = (awb: string) => {
+    setSelectedAWB(awb);
+    // You can add additional logic here, such as opening a modal or fetching more details
+    console.log("awb from tabel", selectedAWB)
   };
 
   useEffect(() => {
@@ -146,15 +209,15 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const arrayData = [
-    { label: "Exception NDR", number: tabCount?.allCount?.[0]?.TotalCount },
-    { label: "RTO" },
+    { label: "Exception NDR", number: exceptionCount || 0 },
+    { label: "RTO",number:rtoCount || 0 },
   ];
 
   const render = (id: any) => {
     if (id === 0) {
-      navigate("tracking/Exception-ndr");
+      navigate("/tracking/exception-ndr");
     } else if (id === 1) {
-      navigate("/tracking/Rto");
+      navigate("/tracking/rto");
     }
   };
 
@@ -180,20 +243,20 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   ];
 
   //dummy data for seller action
-  const sellerActionData = [
-    {
-      "Latest Shipyaari Action Date": "N/A",
-      "Latest Shipyaari Remarks": "-",
-      "Seller Action Date": "Sep 01, 2024",
-      "Seller Action Remark": "Reattempt",
-    },
-    {
-      "Latest Shipyaari Action Date": "N/A",
-      "Latest Shipyaari Remarks": "-",
-      "Seller Action Date": "Sep 01, 2024",
-      "Seller Action Remark": "Reattempt",
-    },
-  ];
+  // const sellerActionData = [
+  //   {
+  //     "Latest Shipyaari Action Date": "N/A",
+  //     "Latest Shipyaari Remarks": "-",
+  //     "Seller Action Date": "Sep 01, 2024",
+  //     "Seller Action Remark": "Reattempt",
+  //   },
+  //   {
+  //     "Latest Shipyaari Action Date": "N/A",
+  //     "Latest Shipyaari Remarks": "-",
+  //     "Seller Action Date": "Sep 01, 2024",
+  //     "Seller Action Remark": "Reattempt",
+  //   },
+  // ];
 
   const dummyData = [
     {
@@ -231,19 +294,21 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       followUp: ["NDR Follow-up", "Seller Action"],
     },
   ];
-
+  
+  console.log("exception count ",rtoCount)
   const getTotalItemsCount = () => {
     switch (activeTab) {
       case "ALL":
         return tabCount?.allCount?.[0]?.TotalCount || 0;
-      case "PENDING_ACTION":
+      case "PENDING ACTION":
         return tabCount?.pendingCount?.[0]?.action_pending || 0;
-      case "ACTION_TAKEN":
+      case "ACTION TAKEN":
         return tabCount?.takenCount?.[0]?.action_taken || 0;
       default:
         return 0;
     }
   };
+
 
   const getNdrOrders = async (
     search = "",
@@ -265,9 +330,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
       setTabCount(response?.data?.data[0] || []);
+      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount )
+      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
       // setNdrData(undefined);
-      console.log("allCount", tabCount);
-      // console.log("dataforme>>>", response?.data?.data[0]);
+      // console.log("allCount", response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount);
+      console.log("dataforme>>>", response?.data?.data[0]);
     } catch (error: any) {
       console.log(error.message);
     } finally {
@@ -277,11 +344,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   useEffect(() => {
     getNdrOrders();
-  }, [activeTab]);
+  }, [activeTab,editActionData]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-  };
+  };            
 
   // const handleEditActionSubmit = (data: {
   //   action: string;
@@ -405,6 +472,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     }
   };
 
+  console.log(`current seller remarks >>> ${currentSellerRemark || "n/a"}`)
+
   return (
     <>
       <div>
@@ -483,13 +552,14 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
                 value={searchText}
                 onChange={handleSearchChange}
                 getFullContent={handleGetFullContent}
+                customPlaceholder="Order, Tracking or Shipyaari ID"
               />
             </div>
             <ServiceButton
               icon={whiteDownloadIcon}
               showIcon={true}
               text="NDR REPORT"
-              className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
+              className="bg-[#1C1C1C] text-[#FFFFFF] w-[150px] mr-2 [&_p]:!uppercase"
               onClick={downloadNdrReport}
             />
             <ServiceButton
@@ -497,7 +567,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               icon={DownloadIconWhite}
               text="NDR REMARKS"
               onClick={() => setOpenUploadModal(true)}
-              className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px]"
+              className="bg-[#1C1C1C] text-[#FFFFFF] w-[150px] [&_p]:!uppercase"
             />
           </div>
         </div>
@@ -521,13 +591,17 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               onNdrFollowUpClick={handleNdrFollowUpClick}
               onSellerActionClick={handleSellerActionClick}
               onActionModalClick={handleActionModalClick}
+              onInfoIconClick={handleInfoIconClick}
+              setRightModalAccordian={setRightModalAccordian}
+
+
               openRightModalForTracking={openRightModalForTracking}
               setOpenRightModalForTracking={setOpenRightModalForTracking}
             />
           )}
         </div>
 
-        {isLgScreen && totalItemCount > 0 && (
+        {isLgScreen && getTotalItemsCount() > 0 && !isLoading &&(
           <PaginationComponent
             // totalItems={totalItemCount}
             totalItems={getTotalItemsCount()}
@@ -548,6 +622,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         <NdrRemarksContent
           openUploadModal={openUploadModal}
           setOpenUploadModal={setOpenUploadModal}
+          onUploadSuccess={getNdrOrders} // Pass the getNdrOrders function as a callback
         />
       </CenterModal>
 
@@ -573,8 +648,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       >
         <>
           <SelleractionModal
-            followUpData={currentSellerRemark}
-            onClose={() => setRightModalSellerAction(false)}
+            followUpData={sellerActionData}
+            onClose={() => setRightModalSellerAction(false)}  
+            isLoadingSellerAction={isLoadingSellerAction}
+
+
           />
         </>
       </CustomRightModal>
@@ -590,6 +668,22 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
           onSubmit={handleEditActionSubmit}
         />
       </CustomRightModal>
+
+
+       {/* Accordian right modal  */}
+       <CustomRightModal
+        isOpen={rightModalAccordian}
+        onClose={() => setRightModalAccordian(false)}
+        className={""}
+      >
+        <AccordionRightModal
+        awb={selectedAWB}
+          onClose={() => setRightModalAccordian(false)}
+        />
+      </CustomRightModal>
+
+      
+
 
       {/* new Tracking Screen with right modal  */}
       <CustomRightModal

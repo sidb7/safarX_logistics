@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
-// import { ChevronDown, ChevronUp } from 'lucide-react';
 import accordianCloseIcon from "../../assets/AccordianCloseIcon.svg"
 import accordianOpenIcon from "../../assets/AccordianOpen.svg"
+import downwardArrowIcon from "../../assets/downwardArrow.svg"
 
 interface AccordionItemProps {
   title: string;
@@ -12,15 +13,20 @@ interface AccordionItemProps {
 
 const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, isOpen, onToggle }) => {
   return (
-    <div className="border-b border-gray-200">
+    <div className="border border-gray-200 rounded-md mb-2">
       <button
         className="flex justify-between items-center w-full p-4 text-left"
         onClick={onToggle}
       >
-        <span className="font-medium">{title}</span>
-        {isOpen ? <img src={accordianOpenIcon} className='h-2 w-2' /> : <img src={accordianCloseIcon} className='h-2 w-2' />}
+        <span className="font-medium text-gray-800">{title}</span>
+        <img 
+          src={downwardArrowIcon} 
+          className='h-4 w-4 transition-transform duration-300'
+          style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          alt={isOpen ? "Open" : "Closed"}
+        />
       </button>
-      {isOpen && <div className="p-4">{children}</div>}
+      {isOpen && <div className="p-4 border border-gray-200">{children}</div>}
     </div>
   );
 };
@@ -30,11 +36,11 @@ interface AccordionItem {
   content: React.ReactNode;
 }
 
-interface AccordionProps {
+interface OneAccordionProps {
   items: AccordionItem[];
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items }) => {
+const OneAccordion: React.FC<OneAccordionProps> = ({ items }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleAccordion = (index: number) => {
@@ -42,7 +48,7 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full  mx-auto">
       {items.map((item, index) => (
         <AccordionItem
           key={index}
@@ -57,4 +63,4 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
   );
 };
 
-export default Accordion;
+export default OneAccordion;

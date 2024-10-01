@@ -892,29 +892,24 @@ export const columnHelperForNewOrder = (
                     Order ID :
                   </span>
                   <div className=" flex text-sm font-Open items-center font-semibold leading-5">
-                    <span className="">
-                      {source === "SHOPIFY" ||
-                      source === "ZOHO" ||
-                      source === "WOOCOMMERCE"
-                        ? otherDetails?.orderNumber
-                          ? `${otherDetails?.orderNumber}`
-                          : orderId
-                        : orderId}
-                    </span>
-                    <CopyTooltip
-                      stringToBeCopied={
-                        source === "SHOPIFY" ||
-                        source === "ZOHO" ||
-                        source === "WOOCOMMERCE"
-                          ? otherDetails?.orderNumber
-                            ? `${otherDetails?.orderNumber}`
-                            : orderId
-                          : orderId
-                      }
-                    />
+                    <span className="">{orderId}</span>
+                    <CopyTooltip stringToBeCopied={orderId} />
                   </div>
                 </div>
               )}
+
+              {(source === "UNICOMMERCE" || source === "SHOPIFY") &&
+                otherDetails?.orderNumber && (
+                  <div className="">
+                    <span className=" text-xs font-normal font-Open leading-4 ">
+                      Order Number :
+                    </span>
+                    <div className=" flex text-sm font-Open items-center font-semibold leading-5">
+                      {otherDetails?.orderNumber}
+                    </div>
+                  </div>
+                )}
+
               {awb && (
                 <div className="">
                   <span className=" text-sm font-light">Tracking :</span>
@@ -1567,38 +1562,21 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                 <div className="">
                   <span className=" text-sm font-light">Order ID :</span>
                   <div className=" flex text-base items-center font-medium">
-                    <span className="">
-                      {source === "SHOPIFY" ||
-                      source === "ZOHO" ||
-                      source === "WOOCOMMERCE"
-                        ? otherDetails?.orderNumber
-                          ? `${otherDetails?.orderNumber}`
-                          : orderId
-                        : orderId}
-                    </span>
-                    <CopyTooltip
-                      stringToBeCopied={
-                        source === "SHOPIFY" ||
-                        source === "ZOHO" ||
-                        source === "WOOCOMMERCE"
-                          ? otherDetails?.orderNumber
-                            ? `${otherDetails?.orderNumber}`
-                            : orderId
-                          : orderId
-                      }
-                    />
+                    <span className="">{orderId}</span>
+                    <CopyTooltip stringToBeCopied={orderId} />
                   </div>
                 </div>
               )}
 
-              {source === "UNICOMMERCE" && (
-                <div className="">
-                  <span className=" text-sm font-light">Order Number :</span>
-                  <div className=" flex text-base items-center font-medium">
-                    {otherDetails?.orderNumber}
+              {(source === "UNICOMMERCE" || source === "SHOPIFY") &&
+                otherDetails?.orderNumber && (
+                  <div className="">
+                    <span className=" text-sm font-light">Order Number :</span>
+                    <div className=" flex text-base items-center font-medium">
+                      {otherDetails?.orderNumber}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               <p className="">
                 {pickupAddress?.pickupDate
@@ -1845,38 +1823,21 @@ export const columnHelpersForRest = (
                 <div className="">
                   <span className=" text-sm font-light">Order ID :</span>
                   <div className=" flex text-base items-center font-medium">
-                    <span className="">
-                      {source === "SHOPIFY" ||
-                      source === "ZOHO" ||
-                      source === "WOOCOMMERCE"
-                        ? otherDetails?.orderNumber
-                          ? `${otherDetails?.orderNumber}`
-                          : orderId
-                        : orderId}
-                    </span>
-                    <CopyTooltip
-                      stringToBeCopied={
-                        source === "SHOPIFY" ||
-                        source === "ZOHO" ||
-                        source === "WOOCOMMERCE"
-                          ? otherDetails?.orderNumber
-                            ? `${otherDetails?.orderNumber}`
-                            : orderId
-                          : orderId
-                      }
-                    />
+                    <span className="">{orderId}</span>
+                    <CopyTooltip stringToBeCopied={orderId} />
                   </div>
                 </div>
               )}
 
-              {source === "UNICOMMERCE" && (
-                <div className="">
-                  <span className=" text-sm font-light">Order Number :</span>
-                  <div className=" flex text-base items-center font-medium">
-                    {otherDetails?.orderNumber}
+              {(source === "UNICOMMERCE" || source === "SHOPIFY") &&
+                otherDetails?.orderNumber && (
+                  <div className="">
+                    <span className=" text-sm font-light">Order Number :</span>
+                    <div className=" flex text-base items-center font-medium">
+                      {otherDetails?.orderNumber}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               <div className="py-2 flex flex-col">
                 <span className="text-sm font-light">Delivery Partner</span>
