@@ -8,13 +8,36 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { constructNavigationObject } from "../../../utils/utility";
-import { LARGE_LOGO } from "../../../utils/ApiUrls";
+import { LARGE_LOGO, POST_SKIP_FOR_NOW_TRACKER } from "../../../utils/ApiUrls";
 import OneButton from "../../../components/Button/OneButton";
+import { POST } from "../../../utils/webService";
+import toast from "react-hot-toast";
 
 const Index = () => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const navigate = useNavigate();
+
+  const handleSkipForNow = async () => {
+    try {
+      const payload = {
+        status: "ACCOUNT_SETUP_SKIPPED",
+      };
+
+      const { data: response }: any = await POST(
+        POST_SKIP_FOR_NOW_TRACKER,
+        payload
+      );
+
+      if (response?.success) {
+        navigate("/onboarding/kyc-welcome");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const modalTitle = () => {
     return (
@@ -61,7 +84,7 @@ const Index = () => {
               </p>
             </div>
 
-            <div className=" flex flex-col mx-4 md:mb-44 gap-y-6">
+            <div className=" flex flex-col mx-4 md:mb-24 gap-y-6">
               <div className="flex justify-center">
                 <img
                   className="h-[180px] w-[180px] "
@@ -91,6 +114,12 @@ const Index = () => {
                   navigate(navigationObject);
                 }}
                 text="SET UP MY ACCOUNT"
+              />
+              <OneButton
+                text="SKIP NOW"
+                variant="tertiary"
+                onClick={() => handleSkipForNow()}
+                className=""
               />
             </div>
           </div>

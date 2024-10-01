@@ -164,7 +164,7 @@ const WalletMain = () => {
                   </p>
                 </div> */}
                 <OneButton
-                  text={"SKIP FOR NOW"}
+                  text={"SKIP NOW"}
                   onClick={() => handleSkipForNow()}
                   variant="tertiary"
                   className="mt-2 mr-6"
