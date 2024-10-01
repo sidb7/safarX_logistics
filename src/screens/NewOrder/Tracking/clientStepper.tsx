@@ -1,22 +1,14 @@
 import React from "react";
 
-interface Step {
-  label: string;
-  isCompleted: boolean;
-  isActive: boolean;
-  imgSrc: any;
-  timeStatus: string;
-}
-
 interface StepperProps {
-  steps: Step[];
+  steps: any;
 }
 
-const Stepper: React.FC<StepperProps> = ({ steps }) => {
+const Stepper: React.FC<StepperProps> = ({ steps }: StepperProps) => {
   return (
     <div className="w-full ">
       <div className="flex">
-        {steps?.map((step, index) => (
+        {steps?.map((step: any, index: any) => (
           <div key={index} className="w-1/4">
             <div className="relative mb-2">
               {index !== 0 && (
@@ -54,8 +46,6 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
               }`}
             >
               <p className="text-[12px] font-normal">{step.label}</p>
-              {/**if it is needed uncomment this time */}
-              {/* <p className="text-[12px] font-normal">{step.timeStatus}</p> */}
             </div>
           </div>
         ))}
