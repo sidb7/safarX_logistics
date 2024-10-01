@@ -174,7 +174,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
               variant="primary"
             />
             <OneButton
-              text="SKIP FOR NOW"
+              text="SKIP NOW"
               variant="tertiary"
               onClick={() => handleSkipForNow()}
               className="mt-4"
