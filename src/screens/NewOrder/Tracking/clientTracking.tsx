@@ -32,8 +32,8 @@ const Tracking = () => {
   const [loading, setLoading] = useState(false);
   const [sellerId, setSellerId] = useState<any>();
   const [loggedIn, setLoggedIn] = useState<any>(false);
-
   const [isMasked, setIsMasked] = useState(false);
+
   useEffect(() => {
     let temp = JSON.parse(localStorage.getItem("userInfo") as any);
     if (temp) {
@@ -262,8 +262,9 @@ const Tracking = () => {
                                   <div className="border-l-[12px] md:border-l-[24px]  border-l-[#80A7FF] py-4 px-2 md:px-5 rounded-lg">
                                     {/*delhivery details */}
                                     <>
-                                      <div className="flex flex-col md:flex-row justify-between gap-y-1s md:gap-y-0">
-                                        <div>
+                                      <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-x-4 w-full">
+                                        {/* logo */}
+                                        <div className="flex items-center">
                                           <img
                                             src={
                                               isMasked
@@ -275,54 +276,31 @@ const Tracking = () => {
                                           />
                                         </div>
 
-                                        <div
-                                          className={`${
-                                            isMobileResponsive?.isMobileScreen
-                                              ? "flex mt-4"
-                                              : "flex"
-                                          }`}
-                                        >
-                                          <span
-                                            className={`text-[12px] font-Open leading-[16px] font-extrabold ${
-                                              isMobileResponsive?.isMobileScreen
-                                                ? "mt-0"
-                                                : "mt-0"
-                                            }`}
-                                          >
+                                        {/* status */}
+                                        <div className="flex items-center">
+                                          <p className="text-[12px] font-Open leading-[16px] font-extrabold">
                                             Status&nbsp;:&nbsp;
-                                          </span>
-                                          <span className="font-bold text-[12px]">
                                             {each?.currentStatus
                                               ? each?.currentStatus
                                               : "NA"}
-                                          </span>
+                                          </p>
                                         </div>
-                                        <div className="flex gap-x-6">
-                                          <div
-                                            className={` ${
-                                              isMobileResponsive?.isMobileScreen
-                                                ? "flex "
-                                                : "flex items-center"
-                                            }  gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap `}
-                                          >
-                                            <div className="text-[12px] font-semibold font-Open">
-                                              EDD&nbsp;:&nbsp;
-                                            </div>
-                                            <div>
-                                              {each?.shipmentStatus?.EDD
-                                                ? each?.shipmentStatus?.EDD
-                                                : "NA"}
-                                            </div>
-                                          </div>
+
+                                        {/* EDD */}
+                                        <div className="flex items-center gap-x-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap">
+                                          <p>
+                                            EDD&nbsp;:&nbsp;
+                                            {each?.shipmentStatus?.EDD
+                                              ? convertEpochToDateTime(
+                                                  each?.shipmentStatus?.EDD
+                                                )
+                                              : "NA"}
+                                          </p>
                                         </div>
-                                        <div>
-                                          <p
-                                            className={`${
-                                              isMobileResponsive?.isMobileScreen
-                                                ? "mt-1"
-                                                : ""
-                                            } text-xs font-bold font-Open flex gap-x-1`}
-                                          >
+
+                                        {/* TrackingID */}
+                                        <div className="flex items-center">
+                                          <p className="text-xs font-bold font-Open flex gap-x-1">
                                             Tracking ID&nbsp;:&nbsp;
                                             <span className="font-bold font-Open text-[#004EFF]">
                                               {each?.awb ? each?.awb : "NA"}
@@ -334,8 +312,8 @@ const Tracking = () => {
                                         </div>
                                       </div>
 
-                                      <div className="flex justify-between pt-1">
-                                        <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
+                                      <div className="flex justify-between pt-2 md:pt-0">
+                                        <div className="flex flex-col md:flex-row gap-y-2 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
                                           {each?.updatedAt === "" ||
                                           each?.updatedAt === undefined ? (
                                             <p className="text-xs font-Open font-bold md:pt-2">
@@ -355,9 +333,9 @@ const Tracking = () => {
 
                                           {each?.isRTO && (
                                             <div>
-                                              <p className="text-xs font-Open font-normal md:pt-2">
-                                                Order Type:
-                                                <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
+                                              <p className="text-xs font-Open font-bold md:pt-2">
+                                                Order Type&nbsp;:&nbsp;
+                                                <span className="text-[#004EFF] text-xs font-Open font-bold">
                                                   RTO
                                                 </span>
                                               </p>
@@ -366,9 +344,9 @@ const Tracking = () => {
 
                                           {each?.isRTO && (
                                             <div>
-                                              <p className="text-xs font-Open font-normal md:pt-2">
-                                                RTO AWB:
-                                                <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
+                                              <p className="text-xs font-Open font-bold md:pt-2">
+                                                RTO AWB&nbsp;:&nbsp;
+                                                <span className="text-[#004EFF] text-xs font-Open font-bold">
                                                   {each?.rtoInfo?.rtoAwb
                                                     ? each?.rtoInfo?.rtoAwb
                                                     : "NA"}
@@ -377,7 +355,7 @@ const Tracking = () => {
                                             </div>
                                           )}
 
-                                          <p className="text-xs font-bold font-Open flex gap-x-1">
+                                          <p className="text-xs font-bold font-Open flex">
                                             Order ID&nbsp;:&nbsp;
                                             <span className="font-bold font-Open text-[#004EFF]">
                                               {each?.otherDetails?.orderNumber
@@ -395,7 +373,7 @@ const Tracking = () => {
                                       {loggedIn && (
                                         <div className="flex  flex-col md:flex-row md:gap-x-2 w-full mt-1">
                                           <div className="md:flex-1 mt-2">
-                                            <p className="text-[14px] font-normal font-Open leading-[16px] ">
+                                            <p className="text-[14px] font-bold font-Open leading-[16px] ">
                                               From:
                                             </p>
                                             <p className="text-[12px] font-normal font-Open leading-[16px] mt-1  h-[50px] customScroll">
@@ -406,7 +384,7 @@ const Tracking = () => {
                                             </p>
                                           </div>
                                           <div className="md:flex-1 mt-2 ]">
-                                            <p className="text-[14px] font-normal font-Open leading-[16px]">
+                                            <p className="text-[14px] font-bold font-Open leading-[16px]">
                                               To:
                                             </p>
                                             <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
@@ -578,7 +556,13 @@ const Tracking = () => {
                                         {openOrderDetails === "product" && (
                                           <>
                                             <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
-                                              <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <div
+                                                className={`${
+                                                  isMobileResponsive?.isMobileScreen
+                                                    ? ""
+                                                    : "border-r-2 border-[#D9DBDD] pr-6"
+                                                } `}
+                                              >
                                                 <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                   Buyer's Name
                                                 </p>
@@ -588,7 +572,13 @@ const Tracking = () => {
                                                     "No Data Found"}
                                                 </p>
                                               </div>
-                                              <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <div
+                                                className={`${
+                                                  isMobileResponsive?.isMobileScreen
+                                                    ? ""
+                                                    : "border-r-2 border-[#D9DBDD] pr-6"
+                                                } `}
+                                              >
                                                 <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                   Phone Number
                                                 </p>
@@ -598,7 +588,13 @@ const Tracking = () => {
                                                     "No Data Found"}
                                                 </p>
                                               </div>
-                                              <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <div
+                                                className={`${
+                                                  isMobileResponsive?.isMobileScreen
+                                                    ? ""
+                                                    : "border-r-2 border-[#D9DBDD] pr-6"
+                                                } `}
+                                              >
                                                 <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                   Invoice
                                                 </p>
@@ -607,7 +603,13 @@ const Tracking = () => {
                                                     ?.invoiceValue || 0}
                                                 </p>
                                               </div>
-                                              <div className="">
+                                              <div
+                                                className={`${
+                                                  isMobileResponsive?.isMobileScreen
+                                                    ? ""
+                                                    : "border-r-2 border-[#D9DBDD] pr-6"
+                                                } `}
+                                              >
                                                 <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                   Payment Mode
                                                 </p>
