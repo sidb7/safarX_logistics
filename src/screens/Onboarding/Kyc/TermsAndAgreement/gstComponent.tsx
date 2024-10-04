@@ -163,7 +163,7 @@ export const GSTComponent = (props: ITypeProps) => {
             title={`Welcome to ${COMPANY_NAME}`}
             content="Terms & Agreement"
           />
-          < GstContent userNameForGst={userNameForGst} />
+          <GstContent userNameForGst={userNameForGst} />
           {BottomButton()}
         </div>
       </div>
