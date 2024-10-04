@@ -321,18 +321,18 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     //   },
     // ],
     EXCEPTION: [
-      {
-        icon: RTOicon,
-        hovertext: "Rto Orders",
-        identifier: "Rto",
-        buttonName: "RTO ORDERS",
-      },
-      {
-        icon: ReattemptIcon,
-        hovertext: "Re-Attempt Orders",
-        identifier: "Re-Attempt",
-        buttonName: "RE-ATTEMPT ORDERS",
-      },
+    //  {
+    //     icon: RTOicon,
+    //     hovertext: "Rto Orders",
+    //     identifier: "Rto",
+    //     buttonName: "RTO ORDERS",
+    //   },
+    //   {
+    //     icon: ReattemptIcon,
+    //     hovertext: "Re-Attempt Orders",
+    //     identifier: "Re -Attempt",
+    //     buttonName: "RE-ATTEMPT ORDERS",
+    //   },
     ],
     "READY TO PICK": [
       // {
