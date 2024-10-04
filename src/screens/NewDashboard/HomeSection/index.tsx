@@ -8,6 +8,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 // import WalletSection from "./walletSection";
 import successStatus from "../../../assets/success.svg";
 import { retrieveLocalStorageData } from "../../../utils/utility";
+import toast from "react-hot-toast";
 
 interface IHomeProps {}
 
@@ -118,6 +119,14 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       ? "0px 0px 0px 0px #7CCA62, 2.83px 0px 0px 0px #acf295 inset"
       : "0px 0px 0px 0px #A9D4FF, 2.83px 0px 0px 0px #A9D4FF inset";
     const handleClick = () => {
+      // Check if KYC is required and not completed
+      if (selectedSection === "bankDetails") {
+        if (!mandatoryCheck?.kyc) {
+          toast.error("KYC is not completed. Please complete KYC to proceed."); // Show error message
+          return; // Stop further execution
+        }
+      }
+
       const sectionRoute = sectionRoutes[section];
 
       if (sectionRoute) {
@@ -182,6 +191,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
               {/* {selectedSection === "kyc" && <KycSection />} */}
               {/* {selectedSection === "bankDetails" && <BankSection />} */}
               {/* {selectedSection === "walletRecharge" && <WalletSection />} */}
+
               <OneButton
                 text={"CLICK HERE"}
                 onClick={handleClick}
