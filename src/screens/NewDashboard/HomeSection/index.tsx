@@ -7,6 +7,8 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 // import BankSection from "./bankSection";
 // import WalletSection from "./walletSection";
 import successStatus from "../../../assets/success.svg";
+import { retrieveLocalStorageData } from "../../../utils/utility";
+import toast from "react-hot-toast";
 
 interface IHomeProps {}
 
@@ -26,16 +28,20 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [userData, setUserData] = useState<any>();
   // console.log("🚀 ~ userData:", userData);
-  // console.log("🚀 ~ userData:", userData);
+  const [mandatoryCheck, setMandatoryCheck] = useState<any>();
+  // console.log("🚀 ~ mandatoryCheck:", mandatoryCheck);
   const [completedStatus, setCompletedStatus] = useState<{
     [key: string]: boolean;
   }>({
     verifyAccount: true,
+    qna: false,
     kyc: false,
     bankDetails: false,
     walletRecharge: false,
     planDetails: false,
     customizeLabels: false,
+    returningUser: false,
+    channelIntegrated: false,
   });
   // console.log("🚀 ~ completedStatus:", completedStatus);
 
@@ -43,21 +49,21 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     {
       title: "Verify Your Account",
       content:
-        "Verify your account to unlock all features of Shipyaari. Follow this quick guide to complete the verification process and start managing your shipments seamlessly.",
+        "Verify your account to unlock all features of Shipyaari. Complete this step of verification process and start managing your shipments seamlessly.",
       section: "verifyAccount",
       completed: false,
     },
     {
       title: "Complete Your KYC",
       content:
-        "Complete your KYC to access Shipyaari's full range of services. Follow this guide for a quick and easy KYC process to ensure seamless shipping.",
+        "Complete your KYC to access Shipyaari's full range of services. Complete this step for a quick and easy KYC process to ensure seamless shipping.",
       section: "kyc",
       completed: false,
     },
     {
-      title: "Verify your Bank Details",
+      title: "Become a COD Seller",
       content:
-        "Verify your bank details to enable smooth payouts. Follow this guide to quickly complete the verification and ensure hassle-free transactions with Shipyaari.",
+        "Get access to seamless COD payouts by verifying your bank Details.",
       section: "bankDetails",
       completed: false,
     },
@@ -88,7 +94,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const sectionRoutes: any = {
     verifyAccount: "/onboarding/get-started",
     kyc: "/onboarding/kyc-welcome",
-    bankDetails: "/onboarding/wallet-main",
+    bankDetails: "/onboarding/cash-on-delivery",
     planDetails: "/subscription/plans",
     customizeLabels: "/settings/label-settings",
   };
@@ -113,6 +119,14 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       ? "0px 0px 0px 0px #7CCA62, 2.83px 0px 0px 0px #acf295 inset"
       : "0px 0px 0px 0px #A9D4FF, 2.83px 0px 0px 0px #A9D4FF inset";
     const handleClick = () => {
+      // Check if KYC is required and not completed
+      if (selectedSection === "bankDetails") {
+        if (!mandatoryCheck?.kyc) {
+          toast.error("KYC is not completed. Please complete KYC to proceed."); // Show error message
+          return; // Stop further execution
+        }
+      }
+
       const sectionRoute = sectionRoutes[section];
 
       if (sectionRoute) {
@@ -177,6 +191,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
               {/* {selectedSection === "kyc" && <KycSection />} */}
               {/* {selectedSection === "bankDetails" && <BankSection />} */}
               {/* {selectedSection === "walletRecharge" && <WalletSection />} */}
+
               <OneButton
                 text={"CLICK HERE"}
                 onClick={handleClick}
@@ -214,26 +229,95 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   //     // setItemChaState(())
   //   }
   // }, []);
+
+  // useEffect(() => {
+  //   let data = localStorage.getItem("userInfo") as any;
+  //   data = JSON.parse(data);
+  //   // console.log("🚀 ~ useEffect ~ data:", data?.nextStep?.bank);
+  //   console.log("data", data);
+
+  //   if (data && data !== null) {
+  //     setUserData(data);
+
+  //     const updatedStatus = { ...completedStatus };
+
+  //     // if (data?.kycDetails?.isKYCDone) {
+  //     //   updatedStatus.kyc = true;
+  //     // }
+  //     // if (data?.nextStep?.bank) {
+  //     //   updatedStatus.bankDetails = true;
+  //     // }
+  //     if (data?.isWalletRechage) {
+  //       updatedStatus.walletRecharge = true;
+  //     }
+  //     // Update the status for other sections if needed
+
+  //     setCompletedStatus(updatedStatus);
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   let kycCheck = localStorage.getItem("kycValue") as any;
+  //   kycCheck = JSON.parse(kycCheck);
+  //   kycCheck = kycCheck?.nextStep?.kyc;
+
+  //   let bankCheck = localStorage.getItem("kycValue") as any;
+  //   bankCheck = JSON.parse(bankCheck);
+  //   bankCheck = bankCheck?.nextStep?.bank;
+
+  //   let majorityCheck = localStorage.getItem("kycValue") as any;
+  //   majorityCheck = JSON.parse(majorityCheck);
+  //   majorityCheck = majorityCheck?.nextStep;
+
+  //   if (majorityCheck && majorityCheck !== null) {
+  //     //  setUserData(data);
+  //     setMandatoryCheck(majorityCheck);
+
+  //     const updatedStatus = { ...completedStatus };
+
+  //     if (majorityCheck?.kyc) {
+  //       updatedStatus.kyc = true;
+  //     }
+  //     if (majorityCheck?.bank) {
+  //       updatedStatus.bankDetails = true;
+  //     }
+  //     // if (majorityCheck?.isWalletRechage) {
+  //     //   updatedStatus.walletRecharge = true;
+  //     // }
+  //     // Update the status for other sections if needed
+
+  //     setCompletedStatus(updatedStatus);
+  //   }
+
+  //   console.log("🚀 ~ kycCheck inside effect:", kycCheck);
+  //   console.log("🚀 ~ bankCheck inside effect:", bankCheck);
+  // }, []);
+
+  // useEffect(() => {
+  //   const data = retrieveLocalStorageData("userInfo");
+  //   if (data) {
+  //     setUserData(data);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    let data = localStorage.getItem("userInfo") as any;
-    data = JSON.parse(data);
-    // console.log("🚀 ~ useEffect ~ data:", data?.nextStep?.bank);
+    const kycValue = retrieveLocalStorageData("kycValue");
 
-    if (data && data !== null) {
-      setUserData(data);
+    if (kycValue?.nextStep) {
+      setMandatoryCheck(kycValue.nextStep);
 
-      const updatedStatus = { ...completedStatus };
+      const { kyc, bank, isChannelIntegrated, qna } = kycValue.nextStep;
 
-      if (data?.kycDetails?.isKYCDone) {
-        updatedStatus.kyc = true;
-      }
-      if (data?.nextStep?.bank) {
-        updatedStatus.bankDetails = true;
-      }
-      if (data?.isWalletRechage) {
-        updatedStatus.walletRecharge = true;
-      }
-      // Update the status for other sections if needed
+      const updatedStatus = {
+        ...completedStatus,
+
+        kyc: !!kyc,
+        bankDetails: !!bank,
+        qna: !!qna,
+        channelIntegrated: !!isChannelIntegrated,
+        walletRecharge: !!kycValue?.isWalletRechage,
+        returningUser: !!kycValue?.isReturningUser,
+      };
 
       setCompletedStatus(updatedStatus);
     }
@@ -254,21 +338,33 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
           <div className="flex flex-col gap-y-5 pt-5">
             <div className="  pl-[15px] pr-[21px]">
               <p className="font-Open text-base xl:text-[18px] leading-6 font-semibold xl:leading-8 text-[#1C1C1C]">
-                Let's get you started!
+                {completedStatus?.qna
+                  ? "You're all set!"
+                  : "Let's get you started!"}
               </p>
               <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                Set up your account for a personalized Shipyaari experience and
-                seamless logistics.
+                {completedStatus.qna
+                  ? "Your setup is complete. You can now enjoy a personalized Shipyaari experience."
+                  : "Set up your account for a personalized Shipyaari experience and seamless logistics."}
               </p>
             </div>
-            <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
-              <OneButton
-                text={"CLICK HERE"}
-                onClick={() => navigate("/onboarding/get-started")}
-                variant="tertiary"
-                className="!bg-transparent"
-              />
-            </div>
+            {!completedStatus?.qna ? (
+              <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
+                <OneButton
+                  text={"CLICK HERE"}
+                  onClick={() => navigate("/onboarding/get-started")}
+                  variant="tertiary"
+                  className="!bg-transparent"
+                />
+              </div>
+            ) : (
+              <div className="flex gap-x-1 items-center text-center  justify-end pr-[10px] pb-[20px] absolute bottom-0 right-0 ">
+                {/* <img src={successStatus} alt="successStatus" /> */}
+                <span className="text-[15px] font-bold font-Open leading-5 text-[#43be43] underline underline-offset-4">
+                  Your setup is complete!
+                </span>
+              </div>
+            )}
           </div>
         </div>
         {/* second card  */}
@@ -285,19 +381,30 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 Sync your Channel
               </p>
               <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                Integrate your channel for a seamless Shipping Experience.
+                {completedStatus?.channelIntegrated
+                  ? "Your channel has been successfully synced with Shipyaari."
+                  : "Integrate your channel for a seamless Shipping Experience."}
               </p>
             </div>
-            <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
-              <OneButton
-                text={"SYNC MY STORE"}
-                onClick={() => {
-                  navigate("/catalogues/channel-integration");
-                }}
-                variant="tertiary"
-                className="!bg-transparent"
-              />
-            </div>
+            {!completedStatus?.channelIntegrated ? (
+              <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
+                <OneButton
+                  text={"SYNC MY STORE"}
+                  onClick={() => {
+                    navigate("/catalogues/channel-integration");
+                  }}
+                  variant="tertiary"
+                  className="!bg-transparent"
+                />
+              </div>
+            ) : (
+              <div className="flex gap-x-2 items-center text-center  justify-end pr-[10px] pb-[20px] absolute bottom-0 right-0 ">
+                <img src={successStatus} alt="successStatus" />
+                <span className="text-[15px] font-bold font-Open leading-5 text-[#43be43]">
+                  Channel Synced!
+                </span>
+              </div>
+            )}
           </div>
         </div>
         {/* third card  */}
@@ -311,10 +418,14 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
           <div className="flex flex-col gap-y-5 pt-5">
             <div className="  pl-[15px] pr-[21px]">
               <p className="font-Open text-base xl:text-[18px] font-semibold leading-6 xl:leading-8 text-[#1C1C1C]">
-                Time to Fill the Wallet Tank
+                {completedStatus?.walletRecharge
+                  ? "Top up your Wallet"
+                  : "Time to Fill the Wallet Tank"}
               </p>
               <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                Time to Fill the Wallet Tank
+                {completedStatus?.walletRecharge
+                  ? "Enjoy hassle-free payments and quick access to your favorite services!"
+                  : "Fill up your wallet and speed up your business. Quick top-ups for smooth, unstoppable growth."}
               </p>
             </div>
             <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
@@ -338,17 +449,20 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
           <div className="flex flex-col gap-y-5 pt-5">
             <div className="pl-[15px] pr-[21px]">
               <p className="font-Open text-base xl:text-[18px] font-semibold leading-6 xl:leading-8 text-[#1C1C1C]">
-                Add Your First Order Manually
+                {completedStatus?.returningUser
+                  ? "Place a quick order!"
+                  : "Add Your First Order Manually"}
               </p>
               <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                Lets take a plunge and start our yaari. Add your first order
-                Manually.
+                {completedStatus?.returningUser
+                  ? "Your first order is just the beginning! Let's make shipping stress-free for you!"
+                  : "Lets take a plunge and start our yaari. Add your first order Manually."}
               </p>
             </div>
             <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
               <OneButton
                 text={"CREATE ORDER"}
-                onClick={() => navigate("/tracking")}
+                onClick={() => navigate("/orders/quick-order-place")}
                 variant="tertiary"
                 className=" !bg-transparent"
               />
