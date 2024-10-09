@@ -47,9 +47,9 @@ export const QuestionComponent3: React.FunctionComponent = () => {
     const { value = false } = element;
     let tempArr = questionsData;
 
-    tempArr[2]?.options?.forEach((e: any, index2: number) => {
-      e.isChecked = false;
-    });
+    // tempArr[2]?.options?.forEach((e: any, index2: number) => {
+    //   e.isChecked = false;
+    // });
     tempArr[2].options[index].isChecked = value;
     setQuestionsData([...tempArr]);
   }
