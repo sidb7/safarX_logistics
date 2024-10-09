@@ -189,6 +189,17 @@ const Tracking = () => {
                       <div className="w-full">
                         {trackingState?.map(
                           (each: any, indexTracking: number) => {
+                            const edd =
+                              each?.shipmentStatus?.EDD === "N/A" ||
+                              each?.shipmentStatus?.EDD === "" ||
+                              each?.shipmentStatus?.EDD === undefined ||
+                              each?.shipmentStatus?.EDD === null
+                                ? "NA"
+                                : convertEpochToDateTime(
+                                    each?.shipmentStatus?.EDD
+                                  );
+                            const dateOnly = edd.split(" ")[0];
+
                             let steps = [
                               {
                                 label: "Order Created",
@@ -290,11 +301,7 @@ const Tracking = () => {
                                         <div className="flex items-center gap-x-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap">
                                           <p>
                                             EDD&nbsp;:&nbsp;
-                                            {each?.shipmentStatus?.EDD
-                                              ? convertEpochToDateTime(
-                                                  each?.shipmentStatus?.EDD
-                                                )
-                                              : "NA"}
+                                            {dateOnly}
                                           </p>
                                         </div>
 
