@@ -47,6 +47,10 @@ const Reports = () => {
       label: "Product Wise Status",
       value: "PRODUCTWISESTATUS",
     },
+    {
+      label: "SERVICEABLE PINCODE",
+      value: "SERVICEABLE_PINCODE",
+    },
   ];
 
   const convertEpoch = (epochDate: any) => {
