@@ -1,7 +1,7 @@
 import React from "react";
-import Checkbox from "../../../components/CheckBox";
-import CustomInputBox from "../../../components/Input";
-import TimerCounter from "../../../components/TimerCountdown";
+import Checkbox from "../../../../components/CheckBox";
+import CustomInputBox from "../../../../components/Input";
+import TimerCounter from "../../../../components/TimerCountdown";
 
 interface IKycSectionProps {}
 
