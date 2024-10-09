@@ -47,7 +47,7 @@ const Cashondelivery = () => {
     const handleSkipForNow = async () => {
       try {
         const payload = {
-          status: "BANK_COD_ACCEPTANCE_SKIPPED",
+          status: "BANK_COD_ACCEPTANCE_SELECTED_NO",
         };
 
         const { data: response }: any = await POST(
@@ -56,8 +56,8 @@ const Cashondelivery = () => {
         );
 
         if (response?.success) {
-          // navigate("/dashboard/overview");
-          navigate("/orders/quick-order-place");
+          navigate("/dashboard/overview");
+          // navigate("/orders/quick-order-place");
         } else {
           toast.error(response?.message);
         }
@@ -130,7 +130,7 @@ const Cashondelivery = () => {
                 className="!bg-white !text-black border-solid border-2 border-[#A4A4A4]"
               /> */}
               <OneButton
-                text="Skip"
+                text="No"
                 onClick={() => handleSkipForNow()}
                 variant="secondary"
               />

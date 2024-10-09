@@ -581,3 +581,8 @@ export const calculateDaysAgoFromToday = (epochCreatedAt: any) => {
     return roundedDiffInDays;
   }
 };
+
+export const retrieveLocalStorageData = (key: string) => {
+  const item = localStorage.getItem(key);
+  return item ? JSON.parse(item) : null;
+};

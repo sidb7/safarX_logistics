@@ -115,7 +115,7 @@ const TimerCounter = (props: IProps) => {
   };
 
   const resendOtpTimer = () => {
-    console.log("resend timer");
+    // console.log("resend timer");
     const minute = minutes < 10 ? `0${minutes}` : minutes;
     const second = seconds < 10 ? `0${seconds}` : seconds;
 
@@ -137,7 +137,7 @@ const TimerCounter = (props: IProps) => {
       )}
 
       <div className="flex items-center gap-x-2 font-normal text-[12px] self-center">
-        <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+        <p className="text-[#494949] font-Open font-normal text-xs leading-7">
           {!clickedOnce && <span>Didn't Receive Code ?</span>}
           <span
             className={`mx-1 text-[#004EFF] text-[12px] font-extrabold leading-5  ${

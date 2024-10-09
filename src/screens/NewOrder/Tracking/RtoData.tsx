@@ -66,11 +66,11 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
               <span className=" font-sans text-sm leading-5 text-black font-semibold">
                 {info.row?.original?.orderId}
               </span>
-              <img
+              {/* <img
                 src={copyIcon}
                 alt="Copy"
                 className="ml-1 w-4 h-4 cursor-pointer"
-              />
+              /> */}
             </div>
             {info.row?.original?.awb && (
               <div className="flex items-center">
@@ -115,11 +115,11 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                     lineHeight: "16px",
                   }}
                 />
-                <img
+                {/* <img
                   src={copyIcon}
                   alt="Copy"
                   className="ml-1 w-4 h-4 cursor-pointer"
-                />
+                /> */}
 
                 <img
                   src={infoIcon}
@@ -139,11 +139,11 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
               <span className="font-sans  text-sm leading-5 text-black  font-semibold">
                 {info.row?.original?.tempOrderId}
               </span>
-              <img
+              {/* <img
                 src={copyIcon}
                 alt="Copy"
                 className="ml-1 w-4 h-4 cursor-pointer"
-              />
+              /> */}
             </div>
           </div>
         );

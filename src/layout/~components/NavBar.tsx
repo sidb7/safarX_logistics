@@ -95,6 +95,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   };
 
   const setIsActivePath = (index: number, childIndex: number, path: any) => {
+    if (path.startsWith('https://')) {
+      window.open(path, "_blank");
+      return;
+    }
     let tempArr = sideBarMenus;
     tempArr?.forEach((e: any) => {
       e.isActivePath = false;

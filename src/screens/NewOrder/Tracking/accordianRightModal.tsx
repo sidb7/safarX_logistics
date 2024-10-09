@@ -106,7 +106,7 @@ const AccordianRightModal: React.FC<AccordianRightModalProps> = ({
 
   const productItems =
     orderData?.boxInfo?.[0]?.products?.map((data: any, index: number) => ({
-      title: `Product (${data.title})`,
+      title: `Product (${data.name})`,
       content: (
         <div className="grid grid-cols-2 gap-4">
           <CustomInputBox

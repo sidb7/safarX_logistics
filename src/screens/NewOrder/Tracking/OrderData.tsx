@@ -217,7 +217,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
           <div className="font-sans font-normal text-sm leading-5 text-black">
             Delivery Partner:{" "}
             <span className="font-semibold">
-              {info.row.original.courierPartnerName || "N/A"}
+              {info.row?.original?.courierPartnerName || "N/A"}
             </span>
           </div>
         </>
@@ -242,13 +242,13 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
     columnsHelper.accessor("pickupDate", {
       header: "Pickup/NDR Date",
       cell: (info) => {
-        const sellerRemarks = info.row.original?.sellerRemark;
+        const sellerRemarks = info?.row?.original?.sellerRemark;
         const lastRemarkTime =
           sellerRemarks && sellerRemarks?.length > 0
             ? sellerRemarks?.[sellerRemarks?.length - 1].time
             : null;
 
-        const pickupDate = info.row?.original?.shipmentStatus.attemptsReasons  ;
+        const pickupDate = info?.row?.original?.shipmentStatus?.attemptsReasons  ;
         const pickUpDateTime = pickupDate && pickupDate?.length > 0
         ? pickupDate?.[pickupDate?.length - 1].time
         : null;
@@ -284,7 +284,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
       cell: (info) => {
         const hasAttemptReasons =
           info?.row?.original?.shipmentStatus?.attemptsReasons?.length;
-        const sellerRemarks = info.row.original?.sellerRemark?.length;
+        const sellerRemarks = info.row?.original?.sellerRemark?.length;
         const hasAttemptReasonsArr =
           info?.row?.original?.shipmentStatus?.attemptsReasons;
         const sellerRemarksArr = info?.row?.original?.sellerRemark;
@@ -308,7 +308,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             </button>
 
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal `}
+              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
               onClick={() => {
                 setRightModalSellerAction(true);
                 onSellerActionClick(awb);
@@ -334,7 +334,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
               />
             </span>
             <span className="text-[#F0A22E] font-sans  text-sm leading-5 font-normal ">
-              {info.row.original.currentStatus}
+              {info?.row?.original?.currentStatus}
             </span>
           </div>
         </div>
@@ -347,8 +347,8 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
         const dataForAction = info?.row?.original?.awb;
         // console.log("awb",dataForAction)
         return (
-          <div className="w-5 flex items-center justify-center">
-            <button className="">
+          <div className="">
+            {/* <button className="">
               <img
                 src={EditIcon}
                 alt="EditIcon"
@@ -358,6 +358,16 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                   onActionModalClick(dataForAction);
                 }}
               />
+            </button> */}
+
+            <button
+              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
+              onClick={() => {
+                setRightModalEdit(true);
+                onActionModalClick(dataForAction);
+              }}
+            >
+            RTO/Re-Attempt
             </button>
           </div>
         );
