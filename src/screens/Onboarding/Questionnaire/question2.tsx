@@ -39,6 +39,9 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   function handleCheckBox(element: any, index: any) {
     const { value = false } = element;
     let tempArr = questionsData;
+    tempArr[1]?.options?.forEach((e: any, index1: number) => {
+      e.isChecked = false;
+    });
     tempArr[1].options[index].isChecked = value;
     setQuestionsData([...tempArr]);
   }
