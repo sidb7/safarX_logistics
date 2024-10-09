@@ -633,6 +633,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         toast.error("Please Enter GST Number");
         return;
       }
+      payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
     }
 
     if (walletBalance < order?.totalPrice) {
