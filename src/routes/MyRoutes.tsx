@@ -493,7 +493,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/orders"
             element={
               <ProtectedRoute>
-                <NewDashboard />
+                <Home />
               </ProtectedRoute>
             }
           />
@@ -501,7 +501,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/exception"
             element={
               <ProtectedRoute>
-                <NewDashboard />
+                <Home />
               </ProtectedRoute>
             }
           />
@@ -509,7 +509,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/sy-performance"
             element={
               <ProtectedRoute>
-                <NewDashboard />
+                <Home />
               </ProtectedRoute>
             }
           />
