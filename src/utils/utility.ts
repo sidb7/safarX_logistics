@@ -447,7 +447,8 @@ export const loadRazorPayTransaction = async (
   redirectUrl?: any
 ) => {
   try {
-    let key = "rzp_test_03BJrYhr9s8YHM";
+    // let key = "rzp_test_03BJrYhr9s8YHM"; // dev mode
+    let key = "rzp_live_ielBjwfQcB6jUh"; // live mode
     if (Environment === "production") key = "rzp_live_ielBjwfQcB6jUh"; // rzp_live_ielBjwfQcB6jUh
     const payload = {
       paymentObject: {

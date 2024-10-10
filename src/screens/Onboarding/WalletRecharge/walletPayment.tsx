@@ -4,7 +4,7 @@ import {
   loadRazorPayTransaction,
   removeLocalStorage,
 } from "../../../utils/utility";
-//import useRazorpay from "react-razorpay";
+import { useRazorpay } from "react-razorpay";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
@@ -47,7 +47,7 @@ const WalletPayment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const navigate = useNavigate();
-  //const [Razorpay] = useRazorpay();
+  const { Razorpay } = useRazorpay();
   // const [walletValue, setMoney] = useState<any>(100);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isEdit, setIsedit] = useState<any>();
@@ -148,11 +148,11 @@ const WalletPayment = () => {
       return;
     }
 
-    // const rzp1: any = new Razorpay(options);
+    const rzp1: any = new Razorpay(options);
 
-    // rzp1.on("payment.failed", (response: any) => {});
+    rzp1.on("payment.failed", (response: any) => {});
 
-    // rzp1.open();
+    rzp1.open();
   };
 
   useEffect(() => {
@@ -291,7 +291,7 @@ const WalletPayment = () => {
                   amount={walletValue}
                   callbackUrl={`${SELLER_WEB_URL}/onboarding/wallet-payment`}
                 />
-                {/* <div className="flex flex-col items-center gap-y-2">
+                <div className="flex flex-col items-center gap-y-2">
                   <img
                     src={
                       "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
@@ -357,7 +357,7 @@ const WalletPayment = () => {
                       RazorPay
                     </p>
                   </button>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
