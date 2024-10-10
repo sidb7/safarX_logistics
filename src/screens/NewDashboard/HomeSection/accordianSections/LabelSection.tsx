@@ -3,15 +3,17 @@ import CustomRadioButton from "../../../../components/RadioButton/Index";
 import singlePageLabel from "../../../../assets/singlePageLabel.svg";
 import singlePageLabelSQ from "../../../../assets/singlePageLabelSQ.svg";
 import multiplePageLabel from "../../../../assets/multiplePageLabel.svg";
+import CustomInputBox from "../../../../components/Input";
+import OneButton from "../../../../components/Button/OneButton";
 
 interface ILabelSectionProps {}
 
 const LabelSection: React.FunctionComponent<ILabelSectionProps> = (props) => {
   return (
     <>
-      <div className="flex flex-col gap-y-4 pt-4">
+      <div className="flex flex-col gap-y-5 pt-5">
         {/* <div>hey this is label section</div> */}
-        <div className="flex">
+        <div className="flex flex-col md:flex md:flex-row">
           <div
             className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-start items-start cursor-pointer"
             // onClick={() => handleOptionChange("singlePage")}
@@ -72,6 +74,50 @@ const LabelSection: React.FunctionComponent<ILabelSectionProps> = (props) => {
               />
             </div>
           </div>
+        </div>
+        <p className="font-semibold font-Open leading-5 text-sm tracking-wide">
+          Fill the details of your Brand.
+        </p>
+        <div className="flex flex-col md:flex md:flex-row gap-5">
+          <div className="min-w-[240px] xl:min-w-[450px]">
+            <CustomInputBox
+              containerStyle={`lg:!w-full`}
+              //   value={accountName || ""}
+              inputMode="numeric"
+              label="Brand Name"
+              className="!w-full "
+              maxLength={50}
+              //   onChange={(e) => setAccountName(e.target.value)}
+              id="accountNumber"
+            />
+          </div>
+          <div className="min-w-[240px] xl:min-w-[450px]">
+            <CustomInputBox
+              label="Brand Logo"
+              containerStyle={`lg:!w-full`}
+              maxLength={11}
+              //   value={ifscCode}
+              inputType="text"
+              id="ifscCode"
+              className="!w-full"
+              //   onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
+            />
+          </div>
+        </div>
+        <div className="flex justify-between pt-5">
+          <OneButton
+            text={"Save"}
+            onClick={() => {}}
+            variant="tertiary"
+            className="!bg-transparent"
+          />
+
+          <OneButton
+            text={"Click Here To Know More"}
+            onClick={() => {}}
+            variant="tertiary"
+            className="!bg-transparent"
+          />
         </div>
       </div>
     </>

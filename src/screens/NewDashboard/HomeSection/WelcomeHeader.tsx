@@ -1,6 +1,7 @@
 import React from "react";
 import WelcomeGif from "../../../assets/WelcomePage.gif";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 interface IWelcomeHeaderProps {
   userName?: any;
@@ -9,6 +10,7 @@ interface IWelcomeHeaderProps {
 const WelcomeHeader: React.FunctionComponent<IWelcomeHeaderProps> = ({
   userName,
 }) => {
+  const { isLgScreen } = ResponsiveState();
   return (
     <>
       <div className="px-4 py-[10px] border-1 border-[#E8E8E8] rounded-2xl shadow-md bg-[#EBFCFF] mt-5 lg:mt-0">
@@ -22,16 +24,17 @@ const WelcomeHeader: React.FunctionComponent<IWelcomeHeaderProps> = ({
               your Success!
             </p>
           </div>
-
-          <div>
-            <img
-              src={WelcomeGif}
-              loading="lazy"
-              alt="welcome-gif"
-              height={134}
-              width={134}
-            />
-          </div>
+          {isLgScreen && (
+            <div>
+              <img
+                src={WelcomeGif}
+                loading="lazy"
+                alt="welcome-gif"
+                height={134}
+                width={134}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

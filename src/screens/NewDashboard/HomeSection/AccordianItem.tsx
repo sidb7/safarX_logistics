@@ -3,10 +3,10 @@ import OneButton from "../../../components/Button/OneButton";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import successStatus from "../../../assets/success.svg";
-import KycSection from "./accordianSections/kycSection";
-import BankSection from "./accordianSections/bankSection";
-import PlanSection from "./accordianSections/planSection";
-import LabelSection from "./accordianSections/labelSection";
+import KycSection from "./accordianSections/KycSection";
+import BankSection from "./accordianSections/BankSection";
+import PlanSection from "./accordianSections/PlanSection";
+import LabelSection from "./accordianSections/LabelSection";
 
 interface IAccordionItemProps {
   title: string;
@@ -109,7 +109,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
           }`}
         >
           <div>
-            <p className="font-Open text-[13px] lg:text-[15px] font-normal leading-8 lg:!leading-[26px] tracking-wider">
+            <p className="font-Open text-[13px] lg:text-[15px] font-normal leading-8 lg:!leading-[26px] tracking-wide">
               {content}
             </p>
           </div>

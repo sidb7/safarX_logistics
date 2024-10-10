@@ -4,6 +4,7 @@ import { POST_ADD_BANK_DETAILS } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import toast from "react-hot-toast";
 import OneButton from "../../../../components/Button/OneButton";
+import CustomRadioButton from "../../../../components/RadioButton/Index";
 
 interface IBankSectionProps {}
 
@@ -49,11 +50,41 @@ const BankSection: React.FunctionComponent<IBankSectionProps> = (props) => {
     <>
       <div className="flex flex-col gap-y-4">
         <div className="pt-4">
-          <p className="font-Open text-[15px] lg:text-base font-normal leading-8 lg:!leading-[26px]">
-            are you a COD Seller ?
+          <p className="font-Open text-[#323232] text-sm font-normal leading-[18px] tracking-wide">
+            Do you accept COD transactions for your orders?
           </p>
         </div>
-        <div className="flex gap-5">
+        <div className="flex">
+          <div className="flex items-center">
+            <CustomRadioButton
+              name="Yes"
+              value="yes"
+              // checked={checked === "singlePage"}
+              // defaultChecked=""
+              onChange={() => {}}
+              inputClassName="h-full m-2"
+              style={{ accentColor: "black" }}
+            />
+            <span className="font-Open text-sm font-normal leading-[18px] ">
+              Yes
+            </span>
+          </div>
+          <div className="flex items-center">
+            <CustomRadioButton
+              name="No"
+              value="no"
+              // checked={checked === "singlePage"}
+              // defaultChecked=""
+              onChange={() => {}}
+              inputClassName="h-full m-2"
+              style={{ accentColor: "black" }}
+            />
+            <span className="font-Open text-sm font-normal leading-[18px] ">
+              No
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex md:flex-row gap-5">
           <div className="min-w-[240px]">
             <CustomInputBox
               containerStyle={`lg:!w-full`}

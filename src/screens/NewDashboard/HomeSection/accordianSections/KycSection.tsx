@@ -72,7 +72,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
             checkboxClassName="gap-2"
           />
         </div>
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex md:flex-row gap-5">
           <div className="min-w-[240px]">
             <CustomInputBox
               containerStyle={`lg:!w-auto`}
