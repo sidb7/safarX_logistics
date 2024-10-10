@@ -34,9 +34,9 @@ const KycProtectedRoute = ({ children }: Props) => {
           navigate("/auth/login");
         } else {
           const { nextStep } = response?.data?.data[0];
-          const { kyc, bank } = nextStep;
+          const { kyc, bank, qna } = nextStep;
 
-          if (kyc === false || bank === false) {
+          if (kyc === false || bank === false || qna === false) {
             localStorage.setItem(
               "kycValue",
               JSON.stringify(response?.data?.data[0])

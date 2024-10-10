@@ -175,6 +175,7 @@ import ChangePasswordv2 from "../screens/Auth/PasswordChange";
 import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
 import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 import EditDocuments from "../screens/Profile/DocumentsForInternational/editDocuments";
+import NewDashboard from "../screens/NewDashboard/index";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -225,7 +226,9 @@ const MyRoutes: React.FC = () => {
           path="/onboarding/offers"
           element={
             <KycProtectedRoute>
+              {/* <ProtectedRoute> */}
               <OffersScreen />
+              {/* </ProtectedRoute> */}
             </KycProtectedRoute>
           }
         />
@@ -233,7 +236,9 @@ const MyRoutes: React.FC = () => {
           path="/onboarding/get-started"
           element={
             <KycProtectedRoute>
+              {/* <ProtectedRoute> */}
               <GetStartedScreen />
+              {/* </ProtectedRoute> */}
             </KycProtectedRoute>
           }
         />
@@ -480,7 +485,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/overview"
             element={
               <ProtectedRoute>
-                <Home />
+                <NewDashboard />
               </ProtectedRoute>
             }
           />
@@ -488,7 +493,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/orders"
             element={
               <ProtectedRoute>
-                <Home />
+                <NewDashboard />
               </ProtectedRoute>
             }
           />
@@ -496,7 +501,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/exception"
             element={
               <ProtectedRoute>
-                <Home />
+                <NewDashboard />
               </ProtectedRoute>
             }
           />
@@ -504,7 +509,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/sy-performance"
             element={
               <ProtectedRoute>
-                <Home />
+                <NewDashboard />
               </ProtectedRoute>
             }
           />
@@ -630,6 +635,37 @@ const MyRoutes: React.FC = () => {
             }
           />
         </Route>
+
+        {/* dashboard routes  */}
+
+        {/* <Route>
+          <Route
+            path="home"
+            element={
+              <ProtectedRoute>
+                <NewDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="overview"
+            element={
+              <ProtectedRoute>
+                <NewDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute>
+                <NewDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Route> */}
 
         {/* billing details Routes */}
         <Route>
@@ -1151,7 +1187,7 @@ const MyRoutes: React.FC = () => {
             path="/tracking/rto"
             element={
               <ProtectedRoute>
-                <Rto/>
+                <Rto />
               </ProtectedRoute>
             }
           />

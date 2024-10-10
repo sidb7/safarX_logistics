@@ -167,13 +167,13 @@ const Index = () => {
         // redirect based on qna and kyc done or not
         if (response?.data?.[0]?.nextStep?.qna === false) {
           const navigationObject = constructNavigationObject(
-            "/onboarding/questionnaire/question1",
+            "/onboarding/get-started",
             window.location.search
           );
           navigate(navigationObject);
         } else if (response?.data?.[0]?.nextStep?.kyc === false) {
           const navigationObject = constructNavigationObject(
-            "/onboarding/kyc-type",
+            "/onboarding/kyc-welcome",
             window.location.search
           );
           navigate(navigationObject);
