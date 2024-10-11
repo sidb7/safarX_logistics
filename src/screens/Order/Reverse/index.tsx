@@ -763,6 +763,21 @@ const ReverseIndex = (props: ReverseProps) => {
               {item?.isCollapse && item?.title === "Box" && (
                 <div className="m-5 h-[500]px gap-[10px] flex flex-col overflow-auto border p-[0.5rem]">
                   {boxArray?.map((ele: any, j: number) => {
+                    const boxHandler = (value: any, fieldName: any) => {
+                      let temp = [...boxArray];
+                      temp[j][fieldName] = value;
+
+                      if (fieldName !== "deadWeight") {
+                        // Recalculate volumetric weight based on the dimensions
+                        const { length, breadth, height } = temp[j];
+                        const volumetricWeight =
+                          (length * breadth * height) / 5000;
+                        temp[j].volumetricWeight = volumetricWeight;
+                      }
+
+                      setBoxArray(temp);
+                    };
+
                     return (
                       <div className="accordionContainerBoxStyle">
                         <div
@@ -810,7 +825,13 @@ const ReverseIndex = (props: ReverseProps) => {
                               <CustomInputBox
                                 label="Dead Weight"
                                 value={ele?.deadWeight}
-                                isDisabled={true}
+                                // isDisabled={true}
+                                onChange={(e) =>
+                                  boxHandler(
+                                    Number(e.target.value),
+                                    "deadWeight"
+                                  )
+                                }
                               />
                               <CustomInputBox
                                 label="Volumentric Weight"
@@ -821,24 +842,39 @@ const ReverseIndex = (props: ReverseProps) => {
                             <div className="flex gap-2">
                               <CustomInputBox
                                 label="Mesurement Unit"
-                                value={ele?.measureUnit}
+                                defaultValue={ele?.measureUnit}
                                 isDisabled={true}
                               />
                               <div className="flex gap-2">
                                 <CustomInputBox
                                   label="L"
-                                  value={ele?.length}
-                                  isDisabled={true}
+                                  defaultValue={ele?.length}
+                                  id="length"
+                                  // isDisabled={true}
+                                  onChange={(e) =>
+                                    boxHandler(Number(e.target.value), "length")
+                                  }
                                 />
                                 <CustomInputBox
                                   label="B"
-                                  value={ele?.breadth}
-                                  isDisabled={true}
+                                  defaultValue={ele?.breadth}
+                                  // isDisabled={true}
+                                  id="breadth"
+                                  onChange={(e) =>
+                                    boxHandler(
+                                      Number(e.target.value),
+                                      "breadth"
+                                    )
+                                  }
                                 />
                                 <CustomInputBox
                                   label="H"
-                                  value={ele?.height}
-                                  isDisabled={true}
+                                  defaultValue={ele?.height}
+                                  // isDisabled={true}
+                                  id="height"
+                                  onChange={(e) =>
+                                    boxHandler(Number(e.target.value), "height")
+                                  }
                                 />
                               </div>
                             </div>
