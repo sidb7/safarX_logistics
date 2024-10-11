@@ -1,6 +1,8 @@
 import {
   Environment,
   INITIAL_RECHARGE,
+  PAYMENT_KEY_DEV,
+  PAYMENT_KEY_PROD,
   RECHARGE_STATUS,
   SELLER_WEB_URL,
 } from "./ApiUrls";
@@ -447,9 +449,8 @@ export const loadRazorPayTransaction = async (
   redirectUrl?: any
 ) => {
   try {
-    // let key = "rzp_test_03BJrYhr9s8YHM"; // dev mode
-    let key = "rzp_live_ielBjwfQcB6jUh"; // live mode
-    if (Environment === "production") key = "rzp_live_ielBjwfQcB6jUh"; // rzp_live_ielBjwfQcB6jUh
+    let key = PAYMENT_KEY_DEV; // dev mode
+    if (Environment === "production") key = PAYMENT_KEY_PROD;
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),

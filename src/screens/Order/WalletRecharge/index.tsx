@@ -50,6 +50,7 @@ import {
   WALLET_RECHARGE_USING_NEFT,
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
+  PAYMENT_GATEWAY,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -704,11 +705,35 @@ const WalletRecharge = () => {
                       />
                     </div>
                     <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
-                      <JusPay
-                        isDisabled={isDisabled}
-                        amount={walletValue}
-                        callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
-                      />
+                      {console.log("PAYMENT_GATEWAY", PAYMENT_GATEWAY) as any}
+                      {PAYMENT_GATEWAY === "JUSPAY" ? (
+                        <JusPay
+                          isDisabled={isDisabled}
+                          amount={walletValue}
+                          callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-y-2">
+                          <div className="w-20 h-20 flex justify-center items-center">
+                            <img
+                              src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                              alt=""
+                              className="ml-0 object-contain"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            className={
+                              "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150 flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full"
+                            }
+                            onClick={handleRazorPayTransaction}
+                          >
+                            <p className="buttonClassName md:text-[14px] whitespace-nowrap">
+                              RazorPay
+                            </p>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
 
