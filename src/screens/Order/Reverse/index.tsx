@@ -772,7 +772,7 @@ const ReverseIndex = (props: ReverseProps) => {
                         const { length, breadth, height } = temp[j];
                         const volumetricWeight =
                           (length * breadth * height) / 5000;
-                        temp[j].volumetricWeight = volumetricWeight;
+                        temp[j].volumetricWeight = volumetricWeight.toFixed(2);
                       }
 
                       setBoxArray(temp);
