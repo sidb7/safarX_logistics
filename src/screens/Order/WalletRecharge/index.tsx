@@ -705,7 +705,6 @@ const WalletRecharge = () => {
                       />
                     </div>
                     <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
-                      {console.log("PAYMENT_GATEWAY", PAYMENT_GATEWAY) as any}
                       {PAYMENT_GATEWAY === "JUSPAY" ? (
                         <JusPay
                           isDisabled={isDisabled}
@@ -713,23 +712,13 @@ const WalletRecharge = () => {
                           callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
                         />
                       ) : (
-                        <div className="flex flex-col items-center gap-y-2">
-                          <div className="w-20 h-20 flex justify-center items-center">
-                            <img
-                              src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
-                              alt=""
-                              className="ml-0 object-contain"
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            className={
-                              "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150 flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full"
-                            }
-                            onClick={handleRazorPayTransaction}
-                          >
-                            <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-                              RazorPay
+                        <div
+                          onClick={handleRazorPayTransaction}
+                          className="flex flex-col items-center gap-y-2 "
+                        >
+                          <button type="button">
+                            <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
+                              PAY NOW
                             </p>
                           </button>
                         </div>
