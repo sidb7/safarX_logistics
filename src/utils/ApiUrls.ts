@@ -12,6 +12,9 @@ let ADMIN_URL = "";
 let SMALL_LOGO = "";
 let LARGE_LOGO = "";
 let COMPANY_NAME = "";
+let PAYMENT_KEY_DEV = "";
+let PAYMENT_KEY_PROD = "";
+let PAYMENT_GATEWAY = "JUSPAY";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -35,6 +38,9 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
+    PAYMENT_KEY_DEV = `${process.env.REACT_APP_PAYMENT_KEY_DEV}`;
+
     break;
 
   case "test":
@@ -53,6 +59,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
+    PAYMENT_KEY_DEV = `${process.env.REACT_APP_PAYMENT_KEY_DEV}`;
 
     break;
 
@@ -70,6 +78,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
+    PAYMENT_KEY_PROD = `${process.env.REACT_APP_PAYMENT_KEY_PROD}`;
 
     break;
 
@@ -87,6 +97,8 @@ switch (Environment) {
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
+    PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
+    PAYMENT_KEY_DEV = `${process.env.REACT_APP_PAYMENT_KEY_DEV}`;
     SELLER_WEB_URL = `http://localhost:3000`;
 
     break;
@@ -666,4 +678,7 @@ export {
   DOWNLOAD_NDR_ORDERS,
   UPLOAD_NDR_REMARKS,
   GET_NDR_SELLER_ACTION_REMARKS,
+  PAYMENT_GATEWAY,
+  PAYMENT_KEY_DEV,
+  PAYMENT_KEY_PROD,
 };
