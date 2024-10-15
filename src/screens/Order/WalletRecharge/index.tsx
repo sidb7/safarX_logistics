@@ -65,7 +65,7 @@ import {
   setLocalStorage,
 } from "../../../utils/utility";
 // import Razorpay from "razorpay";
-//import useRazorpay from "react-razorpay";
+import { useRazorpay } from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
@@ -81,6 +81,8 @@ import CloseIcon from "../../../assets/CloseIcon.svg";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
+  const { Razorpay } = useRazorpay();
+
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   const walletBalance = useSelector(
@@ -381,9 +383,15 @@ const WalletRecharge = () => {
       redirectUrl
     );
     if (!options?.success && !options?.amount) {
-      toast.error(options.message);
+      toast.error(options?.message);
       return;
     }
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {});
+
+    rzp1.open();
   };
 
   const userDetailsFromSession = () => {

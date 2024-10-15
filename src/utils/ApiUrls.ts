@@ -12,12 +12,14 @@ let ADMIN_URL = "";
 let SMALL_LOGO = "";
 let LARGE_LOGO = "";
 let COMPANY_NAME = "";
-let PAYMENT_KEY_DEV = "";
-let PAYMENT_KEY_PROD = "";
+let WALLETSHAREDIV = "";
+let WALLETSECRETKEY = "";
 let PAYMENT_GATEWAY = "JUSPAY";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
+WALLETSHAREDIV = `${process.env.REACT_APP_WALLETSHAREDIV}`;
+WALLETSECRETKEY = `${process.env.REACT_APP_WALLETSECRETKEY}`;
 
 // console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
 
@@ -39,7 +41,6 @@ switch (Environment) {
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
-    PAYMENT_KEY_DEV = `${process.env.REACT_APP_PAYMENT_KEY_DEV}`;
 
     break;
 
@@ -60,8 +61,6 @@ switch (Environment) {
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
-    PAYMENT_KEY_DEV = `${process.env.REACT_APP_PAYMENT_KEY_DEV}`;
-
     break;
 
   case "production":
@@ -79,7 +78,6 @@ switch (Environment) {
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
-    PAYMENT_KEY_PROD = `${process.env.REACT_APP_PAYMENT_KEY_PROD}`;
 
     break;
 
@@ -98,7 +96,6 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
     PAYMENT_GATEWAY = `${process.env.REACT_APP_PAYMENT_GATEWAY}`;
-    PAYMENT_KEY_DEV = `${process.env.REACT_APP_PAYMENT_KEY_DEV}`;
     SELLER_WEB_URL = `http://localhost:3000`;
 
     break;
@@ -679,6 +676,6 @@ export {
   UPLOAD_NDR_REMARKS,
   GET_NDR_SELLER_ACTION_REMARKS,
   PAYMENT_GATEWAY,
-  PAYMENT_KEY_DEV,
-  PAYMENT_KEY_PROD,
+  WALLETSHAREDIV,
+  WALLETSECRETKEY,
 };
