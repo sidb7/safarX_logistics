@@ -460,7 +460,6 @@ export const loadRazorPayTransaction = async (
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
     let key = await decryptedString(data?.data?.[0]?.razorpayApiKey);
-    console.log("🚀 ~ key:", key);
 
     if (!data?.success) {
       return data;
@@ -595,7 +594,6 @@ export async function decryptedString(encryptedData: string) {
   const secretKey = WALLETSECRETKEY;
   const ivHex = WALLETSHAREDIV;
   // Parse IV from Hex format
-  console.log("encryptedData:1", encryptedData);
 
   const iv = CryptoJS.enc.Hex.parse(ivHex);
   const decryptedBytes = await CryptoJS.AES.decrypt(
