@@ -51,6 +51,10 @@ const Reports = () => {
       label: "SERVICEABLE PINCODE",
       value: "SERVICEABLE_PINCODE",
     },
+    {
+      label: "NEW NPR REPORT",
+      value: "NEW_NPR_REPORT"
+    },
   ];
 
   const convertEpoch = (epochDate: any) => {
