@@ -50,7 +50,6 @@ import {
   WALLET_RECHARGE_USING_NEFT,
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
-  PAYMENT_GATEWAY,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -155,6 +154,7 @@ const WalletRecharge = () => {
     useState<any>(0);
 
   const [errorMessage, setErrorMessage] = useState<any>("");
+  const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -528,6 +528,9 @@ const WalletRecharge = () => {
       }
     })();
     userDetailsFromSession();
+    let tempPaymentArr: any = sessionStorage.getItem("paymentGateway");
+    tempPaymentArr = JSON.parse(tempPaymentArr);
+    setPaymentGatewayArr(tempPaymentArr);
   }, []);
 
   useEffect(() => {
@@ -713,24 +716,28 @@ const WalletRecharge = () => {
                       />
                     </div>
                     <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
-                      {PAYMENT_GATEWAY === "JUSPAY" ? (
-                        <JusPay
-                          isDisabled={isDisabled}
-                          amount={walletValue}
-                          callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
-                        />
-                      ) : (
-                        <div
-                          onClick={handleRazorPayTransaction}
-                          className="flex flex-col items-center gap-y-2 "
-                        >
-                          <button type="button">
-                            <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
-                              PAY NOW
-                            </p>
-                          </button>
-                        </div>
-                      )}
+                      {paymentGatewayArr &&
+                        paymentGatewayArr?.length >= 1 &&
+                        paymentGatewayArr?.map((el: any, i: number) => {
+                          return el?.paymentId === "RAZORPE" ? (
+                            <div
+                              onClick={handleRazorPayTransaction}
+                              className="flex flex-col items-center gap-y-2 "
+                            >
+                              <button type="button">
+                                <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
+                                  PAY NOW
+                                </p>
+                              </button>
+                            </div>
+                          ) : (
+                            <JusPay
+                              isDisabled={isDisabled}
+                              amount={walletValue}
+                              callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                            />
+                          );
+                        })}
                     </div>
                   </div>
 
