@@ -44,6 +44,10 @@ export const getRoles: any = createAsyncThunk(
     try {
       const { data: response } = await POST(POST_FETCH_SELLER_ROLE, {});
       role = response?.data?.[0];
+      sessionStorage.setItem(
+        "paymentGateway",
+        JSON.stringify(response?.data?.[0]?.payments)
+      );
       return role;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
