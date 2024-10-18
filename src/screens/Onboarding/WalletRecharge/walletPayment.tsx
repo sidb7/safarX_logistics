@@ -17,7 +17,6 @@ import {
   SELLER_WEB_URL,
   LARGE_LOGO,
   COMPANY_NAME,
-  PAYMENT_GATEWAY,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -53,8 +52,9 @@ const WalletPayment = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isEdit, setIsedit] = useState<any>();
 
-  const [walletValue, setWalletValue] = useState<any>();
+  const [walletValue, setWalletValue] = useState<any>("100");
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
+  const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
 
   const walletMenu = [
     {
@@ -132,8 +132,6 @@ const WalletPayment = () => {
   //getting the sellerID
   const sellerId = localStorage.getItem("sellerId");
 
-  console.log("PAYMENT_GATEWAY", PAYMENT_GATEWAY);
-
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
     let redirectUrl = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
@@ -147,7 +145,7 @@ const WalletPayment = () => {
     );
 
     if (!options?.success && !options?.amount) {
-      toast.error(options.message);
+      toast.error(options?.message);
       return;
     }
 
@@ -195,6 +193,9 @@ const WalletPayment = () => {
       } catch (error) {
         console.error(error);
       }
+      let tempPaymentArr: any = sessionStorage.getItem("paymentGateway");
+      tempPaymentArr = JSON.parse(tempPaymentArr);
+      setPaymentGatewayArr(tempPaymentArr);
     })();
   }, []);
 
@@ -289,34 +290,29 @@ const WalletPayment = () => {
               </div>
 
               <div className="flex mt-1 mb-6 gap-x-[1rem] md:mb-0 ml-4 mr-5 ">
-                {PAYMENT_GATEWAY === "JUSPAY" ? (
-                  <JusPay
-                    isDisabled={isDisabled}
-                    amount={walletValue}
-                    callbackUrl={`${SELLER_WEB_URL}/onboarding/wallet-payment`}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center gap-y-2">
-                    <div className="w-20 h-20 flex justify-center items-center">
-                      <img
-                        src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
-                        alt=""
-                        className="ml-0 object-contain"
+                {paymentGatewayArr &&
+                  paymentGatewayArr?.length >= 1 &&
+                  paymentGatewayArr?.map((el: any, i: number) => {
+                    console.log("el", el);
+                    return el?.paymentId === "RAZORPE" ? (
+                      <div
+                        onClick={handleRazorPayTransaction}
+                        className="flex flex-col items-center gap-y-2 "
+                      >
+                        <button type="button">
+                          <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
+                            PAY NOW
+                          </p>
+                        </button>
+                      </div>
+                    ) : (
+                      <JusPay
+                        isDisabled={isDisabled}
+                        amount={walletValue}
+                        callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
                       />
-                    </div>
-                    <button
-                      type="button"
-                      className={
-                        "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150 flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full"
-                      }
-                      onClick={handleRazorPayTransaction}
-                    >
-                      <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-                        RazorPay
-                      </p>
-                    </button>
-                  </div>
-                )}
+                    );
+                  })}
 
                 {/* <div className="flex flex-col items-center gap-y-2">
                   <img
