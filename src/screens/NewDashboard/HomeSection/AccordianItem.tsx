@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import successStatus from "../../../assets/success.svg";
 import KycSection from "./accordianSections/KycSection";
 import BankSection from "./accordianSections/BankSection";
-import PlanSection from "./accordianSections/PlanSection";
-import LabelSection from "./accordianSections/LabelSection";
+// import PlanSection from "./accordianSections/PlanSection";
+// import LabelSection from "./accordianSections/LabelSection";
 
 interface IAccordionItemProps {
   title: string;
@@ -100,10 +100,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
       {!completed && isOpen && (
         <div
           className={`pt-3  ${
-            selectedSection === "kyc" ||
-            selectedSection === "bankDetails" ||
-            selectedSection === "planDetails" ||
-            selectedSection === "customizeLabels"
+            selectedSection === "kyc" || selectedSection === "bankDetails"
               ? "flex flex-col"
               : "flex justify-between items-center"
           }`}
@@ -119,10 +116,6 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
               <KycSection />
             ) : selectedSection === "bankDetails" ? (
               <BankSection />
-            ) : selectedSection === "planDetails" ? (
-              <PlanSection />
-            ) : selectedSection === "customizeLabels" ? (
-              <LabelSection />
             ) : (
               <div className=" items-end text-end">
                 <OneButton

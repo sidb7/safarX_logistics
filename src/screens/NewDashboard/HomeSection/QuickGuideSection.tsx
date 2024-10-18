@@ -8,6 +8,8 @@ interface IQuickGuideSectionProps {
   // setCompletedStatus: any;
   mandatoryCheck: any;
   // setMandatoryCheck: any;
+  accordianItems: any;
+  setAccordianItems: any;
 }
 
 const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
@@ -15,53 +17,11 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
   // setCompletedStatus,
   mandatoryCheck,
   // setMandatoryCheck,
+  accordianItems,
+  setAccordianItems,
 }) => {
   const { isLgScreen, isXlScreen } = ResponsiveState();
-  const items = [
-    {
-      title: "Verify Your Account",
-      content:
-        "Verify your account to unlock all features of Shipyaari. Complete this step of verification process and start managing your shipments seamlessly.",
-      section: "verifyAccount",
-      completed: false,
-    },
-    {
-      title: "Complete Your KYC",
-      content:
-        "Complete your KYC to access Shipyaari's full range of services. Complete this step for a quick and easy KYC process to ensure seamless shipping.",
-      section: "kyc",
-      completed: false,
-    },
-    {
-      title: "Become a COD Seller",
-      content:
-        "Get access to seamless COD payouts by verifying your bank Details.",
-      section: "bankDetails",
-      completed: false,
-    },
-    // {
-    //   title: "Top up your Wallet for the first time",
-    //   content:
-    //     "Easily view your plan details to manage your shipping services. This guide will help you access and understand your plan information with Shipyaari.",
-    //   section: "walletRecharge",
-    //   completed: false,
-    // },
-    {
-      title: "View your Plan Details",
-      content:
-        "Easily view your plan details to manage your shipping services. This guide will help you access and understand your plan information with Shipyaari.",
-      section: "planDetails",
-      completed: false,
-    },
-    {
-      title: "Customize your Labels",
-      content:
-        "Personalize your shipping labels by adding your brand's logo and details. This guide will help you create professional, customized labels for a seamless shipping experience.",
-      section: "customizeLabels",
-      completed: false,
-    },
-  ];
-  // const [accordianItems, setAccordianItems]: any = useState(items);
+
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
@@ -109,7 +69,7 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
 
           <div className="flex-1">
             <div className=" ">
-              {items?.map((item, index) => (
+              {accordianItems?.map((item: any, index: number) => (
                 <AccordionItem
                   key={index}
                   title={item?.title}
