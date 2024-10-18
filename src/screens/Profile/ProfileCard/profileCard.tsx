@@ -55,13 +55,12 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const activePlanExpiry = props?.ProfileDetails?.activePlanExpiry;
   const planStartDate = props?.ProfileDetails?.planStartDate;
   const AccDetailsContactNo =
-    props?.ProfileDetails.privateCompany?.accountDetails?.contactNumber;
-  const AccDetailsEmail =
-    props?.ProfileDetails.privateCompany.accountDetails.email;
+    props?.ProfileDetails?.privateCompany?.accountDetails?.contactNumber;
+  const AccDetailsEmail =props?.ProfileDetails?.privateCompany?.accountDetails?.email;
   const OpDetailsContactNo =
-    props?.ProfileDetails.privateCompany.operationDetails.contactNumber;
+    props?.ProfileDetails?.privateCompany?.operationDetails?.contactNumber;
   const OpDetailsEmail =
-    props?.ProfileDetails.privateCompany.operationDetails.email;
+    props?.ProfileDetails?.privateCompany?.operationDetails?.email;
   const { getProfileData } = props;
 
   const [kycValue, setKycValue] = useState();
