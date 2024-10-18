@@ -351,7 +351,9 @@ ding-6">
         onClose={() => {
           setShowModal(false);
         }}
-        className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
+        // className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
+         className="w-full sm:w-[400px] md:w-[450px] lg:w-[500px] !justify-between !items-stretch"
+  wrapperClassName="overflow-y-auto"
       >
         <EditProfile
           onClose={setShowModal}
