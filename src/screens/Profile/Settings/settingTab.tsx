@@ -183,6 +183,32 @@ export const SettingTab = () => {
               </div>
             </div>
 
+            {/* /////////// ---- Impersonation Logs ----- */}
+
+
+            <div
+              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+              onClick={() => navigate(`impersonation-logs`)}
+              style={{
+                boxShadow:
+                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+              }}
+            >
+              <div className={`flex justify-between items-center h-[44px]`}>
+                <div className="flex">
+                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
+                  Impersonation Logs
+                  </span>
+                </div>
+                <div className="mr-4">
+                  <img src={RightArrowIcon} alt="" className="ml-4" />
+                </div>
+              </div>
+            </div>
+
+
+            {/* ///////////// */}
+
             <div
               className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
               onClick={() => navigate(`/settings/label-settings`)}
