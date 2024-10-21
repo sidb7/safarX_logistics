@@ -144,6 +144,7 @@ import Invoice from "../screens/Billing/invoice";
 import CreditNote from "../screens/Billing/creditNote";
 import WeightFreeze from "../screens/WeightManagement";
 import SystemLog from "../screens/SystemLog";
+import ImpersonationLog from "../screens/Profile/Settings/ImpersonationLog/ImpersonationLog";
 import DeliveryLocation from "../screens/NewOrder/NewDelivery";
 import BulkUpload from "../screens/Order/BulkUpload/BulkUpload";
 import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
@@ -838,6 +839,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <SystemLog />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/settings/impersonation-logs"
+            element={
+              <ProtectedRoute>
+                <ImpersonationLog />
               </ProtectedRoute>
             }
           />
