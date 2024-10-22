@@ -1,5 +1,5 @@
 import MappingFilter from "../../utils/Helper/MappingFilter.json";
-import { GET } from "../../utils/webService";
+import { GET, POST } from "../../utils/webService";
 
 // Custom validation function to ensure input is not empty
 const validateInputData = (inputData: string) => {
@@ -7,19 +7,26 @@ const validateInputData = (inputData: string) => {
 };
 
 // Custom regex for input box filtration
-export const inputRegexFilter = async (inputData: any, path: any) => {
+export const inputRegexFilter = async (
+  inputData: any,
+  path: any,
+  payload?: any
+) => {
+  // console.log("🚀 ~ inputData:", inputData, path, payload);
   const filteredInput = inputData.replace(/[\s,]+/g, ",").trim();
   const mapper: any = MappingFilter;
 
   // Perform input validation
   const isValid = validateInputData(filteredInput);
-  if (!isValid) {
+  if (!isValid && inputData?.length !== 0) {
     return "Please Enter Tracking ID";
   }
 
   // Read JSON file
   const reqObj = mapper[path];
+  // console.log("🚀 ~ reqObj:");
   const reqType = reqObj["req_type"];
+  // console.log("🚀 ~ reqType:", reqType);
   const responseKey = reqObj["response_key"];
 
   switch (reqType) {
@@ -29,6 +36,23 @@ export const inputRegexFilter = async (inputData: any, path: any) => {
         const apiCall = await GET(apiUrlWithParams);
         if (apiCall?.data?.success) {
           const result = apiCall?.data;
+          return result;
+        } else {
+          return apiCall?.data?.message;
+        }
+      } catch (error: any) {
+        console.log("Error during API call:", error.message);
+      }
+      break;
+    case "POST":
+      try {
+        const apiUrl = `${reqObj["api"]}`;
+        const searchKey = reqObj["query_key"];
+        let mappingPayload: any = { ...payload };
+
+        const apiCall = await POST(apiUrl, mappingPayload);
+        if (apiCall?.data?.success || apiCall?.data?.status) {
+          const result = apiCall;
           return result;
         } else {
           return apiCall?.data?.message;
