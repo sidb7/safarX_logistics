@@ -193,10 +193,7 @@ export const PassbookColumns = (setSortOrder: any) => {
               {info.row.original.transactionId}
             </div>
             <div className="cursor-pointer">
-              <CopyTooltip
-                stringToBeCopied={`${info.row.original.transactionId}
-               `}
-              />
+              <CopyTooltip stringToBeCopied={info.row.original.transactionId} />
             </div>
           </div>
         );
@@ -248,10 +245,7 @@ export const PassbookColumns = (setSortOrder: any) => {
               {info?.row?.original?.orderId}
             </div>
             <div className="cursor-pointer">
-              <CopyTooltip
-                stringToBeCopied={`${info?.row?.original?.orderId}
-               `}
-              />
+              <CopyTooltip stringToBeCopied={info?.row?.original?.orderId} />
             </div>
           </div>
         );

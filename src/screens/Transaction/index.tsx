@@ -35,6 +35,9 @@ import {
   date_DD_MMM_YYYY_HH_MM_IST,
   date_DD_MMM_YYYY_HH_MM_SS,
 } from "../../utils/dateFormater";
+import { NewSearch } from "../../components/NewSearch/NewSearch";
+import { PathFinder } from "../../utils/Helper/PathFinder";
+import { inputRegexFilter } from "../../utils/Helper/Filter";
 
 const arrayData = [
   { label: "Passbook" },
@@ -48,9 +51,7 @@ export const Transaction = () => {
 
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("Transaction History");
-  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
@@ -60,10 +61,15 @@ export const Transaction = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
+  const [searchValue, setSearchValue]: any = useState("");
+  const currenturl = window.location.href;
+  const path = PathFinder(currenturl);
+
   useEffect(() => {
     if (renderingComponents === 0 || renderingComponents === 2) {
-      // setLoading(true);
-      (async () => {
+      setLoading(true);
+
+      const getData = setTimeout(async () => {
         const payload: any = {
           filter: {
             status: "",
@@ -74,35 +80,34 @@ export const Transaction = () => {
           limit: itemsPerPage,
           pageNo: currentPage,
           sort: { _id: sortOrder === "desc" ? -1 : 1 },
-          searchValue: debouncedSearchValue,
+          searchValue: searchValue,
         };
 
         if (renderingComponents === 2) {
           payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
         }
 
-        const { data } = await POST(GET_WALLET_TRANSACTION, payload);
+        const { data: response } = await inputRegexFilter(
+          searchValue,
+          path,
+          payload
+        );
+        console.log("🚀 ~ getData ~ data:", response);
 
-        if (data?.success) {
-          setData(data?.data || []);
-          setTotalItemCount(data.totalTransactions);
-          // throw new Error("Some Issue");
-          // setLoading(false);
+        if (response?.success) {
+          setData(response?.data || []);
+          setTotalItemCount(response.totalTransactions);
+          setLoading(false);
         } else {
-          toast.error(data?.message);
-          showBoundary(data?.message);
-          // throw new Error("Some Issue");
-          // setLoading(false);
+          toast.error(response?.message);
+          showBoundary(response?.message);
+          setLoading(false);
         }
-      })();
+      }, 500);
+
+      return () => clearTimeout(getData);
     }
-  }, [
-    renderingComponents,
-    itemsPerPage,
-    currentPage,
-    sortOrder,
-    debouncedSearchValue,
-  ]);
+  }, [renderingComponents, itemsPerPage, currentPage, sortOrder, searchValue]);
 
   function formatDate(dateString: any) {
     const date = new Date(dateString);
@@ -347,9 +352,6 @@ export const Transaction = () => {
       },
       cell: ({ row }: any) => {
         let rowData = row.original;
-
-        console.log("rowData", rowData);
-
         return (
           <div className="flex cursor-pointer">
             <div
@@ -394,12 +396,15 @@ export const Transaction = () => {
   };
 
   let debounceTimer: any;
-  const handleSearch = (value: string) => {
-    setDebouncedSearchValue(value);
+  // const handleSearch = (value: string) => {
+  //   setDebouncedSearchValue(value);
+  // };
+
+  const handleSearch = async (value: string) => {
+    setSearchValue(value);
   };
-  const clearSearchValue = () => {
-    setDebouncedSearchValue("");
-  };
+
+  let params = ["transactionId"];
 
   const filterButton = () => {
     const actionHandler = () => {
@@ -421,13 +426,22 @@ export const Transaction = () => {
             /> */}
             <SearchBox
               label="Search"
-              value={debouncedSearchValue}
+              value={searchValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleSearch(e.target.value);
               }}
               customPlaceholder="Search By Transaction Id"
-              getFullContent={clearSearchValue}
+              getFullContent={() => setSearchValue("")}
             />
+
+            {/* <NewSearch
+              page="/wallet/transaction-history"
+              params={params}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleSearch(e.target.value)
+              }
+              value={searchValue}
+            /> */}
           </div>
           {rowSelectedData.length > 0 && (
             <div className=" flex items-center ">
@@ -496,29 +510,24 @@ export const Transaction = () => {
   return (
     <>
       {isActive ? (
-        loading ? (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <Spinner />
+        <>
+          <div>
+            <Breadcrum label="Transaction History" />
           </div>
-        ) : (
-          <>
-            <div>
-              <Breadcrum label="Transaction History" />
-            </div>
-            <div className="flex flex-col">
-              <div className="mx-4">
-                <div className="lg:flex justify-between lg:mt-2 lg:mb-4">
-                  <div>
-                    <ScrollNav
-                      arrayData={arrayData}
-                      showNumber={false}
-                      setScrollIndex={setScrollIndex}
-                    />
-                  </div>
-                  <div className="hidden lg:block">{filterButton()}</div>
+          <div className="flex flex-col">
+            <div className="mx-4">
+              <div className="lg:flex justify-between lg:mt-2 lg:mb-4">
+                <div>
+                  <ScrollNav
+                    arrayData={arrayData}
+                    showNumber={false}
+                    setScrollIndex={setScrollIndex}
+                  />
                 </div>
+                <div className="hidden lg:block">{filterButton()}</div>
+              </div>
 
-                {/* <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
+              {/* <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
                   <div className="flex items-center"></div>
                   <div className="flex items-center justify-end gap-x-2">
                     <div className="flex items-center justify-center border-[1px] py-2 px-4 rounded-md border-[#A4A4A4] col-span-2">
@@ -530,69 +539,75 @@ export const Transaction = () => {
                   </div>
                 </div> */}
 
-                <div className="lg:hidden">
-                  {data &&
-                    data?.length !== 0 &&
-                    data.map((passbookData: any, index: any) => (
-                      <div
-                        className="mt-4"
-                        key={`${index}_${passbookData?.transactionId}`}
-                      >
-                        <PassbookHistory
-                          data={{
-                            title: passbookData.transactionId,
-                            rupee: "500",
-                            date: "July 9, 2023",
-                            credited:
-                              passbookData?.type === "credit"
-                                ? passbookData.amount
-                                : "0",
-                            debited:
-                              passbookData?.type === "credit"
-                                ? "0"
-                                : passbookData.amount,
-                            balance: passbookData?.balance,
-                            status: passbookData?.status,
-                            paymentGatewayName:
-                              passbookData?.paymentGatewayName,
-                            privateCompanyId: passbookData?.privateCompanyId,
-                            remark: passbookData.remark,
-                            discription: passbookData.description,
-                            orderId: passbookData.orderId,
-                            amount: passbookData.amount,
-                            slabAmount: "0",
-                            redeemAmount: "0",
-                            redeemPoint: "0",
-                            type: passbookData?.type,
-                          }}
-                        />
-                      </div>
-                    ))}
+              {loading ? (
+                <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
+                  <Spinner />
                 </div>
-                <div>
-                  {isLgScreen && <div className="customScroll">{render()}</div>}
-                </div>
+              ) : (
+                <>
+                  <div className="lg:hidden">
+                    {data &&
+                      data?.length !== 0 &&
+                      data.map((passbookData: any, index: any) => (
+                        <div
+                          className="mt-4"
+                          key={`${index}_${passbookData?.transactionId}`}
+                        >
+                          <PassbookHistory
+                            data={{
+                              title: passbookData.transactionId,
+                              rupee: "500",
+                              date: "July 9, 2023",
+                              credited:
+                                passbookData?.type === "credit"
+                                  ? passbookData.amount
+                                  : "0",
+                              debited:
+                                passbookData?.type === "credit"
+                                  ? "0"
+                                  : passbookData.amount,
+                              balance: passbookData?.balance,
+                              status: passbookData?.status,
+                              paymentGatewayName:
+                                passbookData?.paymentGatewayName,
+                              privateCompanyId: passbookData?.privateCompanyId,
+                              remark: passbookData.remark,
+                              discription: passbookData.description,
+                              orderId: passbookData.orderId,
+                              amount: passbookData.amount,
+                              slabAmount: "0",
+                              redeemAmount: "0",
+                              redeemPoint: "0",
+                              type: passbookData?.type,
+                            }}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                  <div>
+                    {isLgScreen && (
+                      <div className="customScroll">{render()}</div>
+                    )}
+                  </div>
 
-                {/* {totalItemCount > 0 && ( */}
+                  {/* {totalItemCount > 0 && ( */}
 
-                {/* {(renderingComponents === 0 || renderingComponents === 2) && ( */}
-                <Pagination
-                  totalItems={totalItemCount}
-                  itemsPerPageOptions={[10, 20, 30, 50]}
-                  onPageChange={onPageIndexChange}
-                  onItemsPerPageChange={onPerPageItemChange}
-                  pageNo={currentPage}
-                  initialItemsPerPage={itemsPerPage}
-                  className="!mx-0"
-                  rightmodalPagination={true}
-                />
-                {/* )} */}
-
-                {/* )} */}
-              </div>
+                  {/* {(renderingComponents === 0 || renderingComponents === 2) && ( */}
+                  <Pagination
+                    totalItems={totalItemCount}
+                    itemsPerPageOptions={[10, 20, 30, 50]}
+                    onPageChange={onPageIndexChange}
+                    onItemsPerPageChange={onPerPageItemChange}
+                    pageNo={currentPage}
+                    initialItemsPerPage={itemsPerPage}
+                    className="!mx-0"
+                    rightmodalPagination={true}
+                  />
+                </>
+              )}
             </div>
-          </>
-        )
+          </div>
+        </>
       ) : (
         <div>
           <AccessDenied />
