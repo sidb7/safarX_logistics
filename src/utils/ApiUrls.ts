@@ -305,6 +305,9 @@ const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
+//impersonation logs
+const GET_IMPERSONATION_LOGS = `${SELLER_BASE_URL}/fileServices/log/IMPERSONATION-LOGS`
+
 //Channel Store
 const POST_CREATE_STORE = `${SELLER_BASE_URL}/channel/shopify/createShopifyStore`;
 const GET_ALL_STORES = `${SELLER_BASE_URL}/channel/getStores`;
@@ -672,4 +675,5 @@ export {
   GET_NDR_SELLER_ACTION_REMARKS,
   WALLETSHAREDIV,
   WALLETSECRETKEY,
+  GET_IMPERSONATION_LOGS,
 };
