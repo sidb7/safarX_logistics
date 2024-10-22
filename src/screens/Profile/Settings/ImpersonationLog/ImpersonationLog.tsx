@@ -10,7 +10,6 @@ import { convertEpochToDateTime } from "../../../../utils/utility";
 import { Spinner } from "../../../../components/Spinner";
 import JsonViewer from "./JsonViewer";
 
-
 const ImpersonationLog = () => {
   const columnsHelper = createColumnHelper<any>();
   const [logData, setLogData] = useState<any>([]);
@@ -36,14 +35,15 @@ const ImpersonationLog = () => {
       header: "API",
       cell: (info) => info?.getValue(),
     }),
-    columnsHelper.accessor("response", {
-      header: "Response",
-      cell: (info) => <JsonViewer jsonData={info?.getValue()} />
-    }),
     columnsHelper.accessor("request", {
       header: "Request",
-      cell: (info) => <JsonViewer jsonData={info?.getValue()} />
+      cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
     }),
+    columnsHelper.accessor("response", {
+      header: "Response",
+      cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
+    }),
+
   ];
 
   const fetchImpersonationLogs = async (page = 1, perPage = 10) => {
@@ -54,10 +54,7 @@ const ImpersonationLog = () => {
         limit: perPage,
         pageNo: page,
       };
-      const { data } = await POST(
-        `${GET_IMPERSONATION_LOGS}`,
-        payload
-      );
+      const { data } = await POST(`${GET_IMPERSONATION_LOGS}`, payload);
       if (data?.success) {
         setLogData(data?.data[0]?.data);
         setTotalItemCount(data?.data?.[0]?.metadata?.[0]?.totalCount);
@@ -77,11 +74,11 @@ const ImpersonationLog = () => {
   }, [currentPage, itemsPerPage]);
 
   const onPageChange = (pageIndex: any) => {
-    setCurrentPage(pageIndex.currentPage);
+    setCurrentPage(pageIndex?.currentPage);
   };
 
   const onItemsPerPageChange = (itemChange: any) => {
-    setItemsPerPage(itemChange.itemsPerPage);
+    setItemsPerPage(itemChange?.itemsPerPage);
     setCurrentPage(1); // Reset to first page when changing items per page
   };
   // console.log("tatal page count", totalItemCount)
@@ -100,12 +97,14 @@ const ImpersonationLog = () => {
           )}
         </div>
       </div>
-      {totalItemCount > 0 && !isLoading &&  (
+      {totalItemCount > 0 && !isLoading && (
         <PaginationComponent
           totalItems={totalItemCount}
           itemsPerPageOptions={[10, 20, 30, 50]}
           onPageChange={onPageChange}
           onItemsPerPageChange={onItemsPerPageChange}
+          pageNo={currentPage}
+          initialItemsPerPage={itemsPerPage}
         />
       )}
     </div>
