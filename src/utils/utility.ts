@@ -3,8 +3,11 @@ import {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   SELLER_WEB_URL,
+  WALLETSECRETKEY,
+  WALLETSHAREDIV,
 } from "./ApiUrls";
 import { POST } from "./webService";
+import CryptoJS from "crypto-js";
 
 export const crypt = (salt: any, text: any) => {
   const textToChars = (text: any) =>
@@ -447,8 +450,6 @@ export const loadRazorPayTransaction = async (
   redirectUrl?: any
 ) => {
   try {
-    let key = "rzp_test_03BJrYhr9s8YHM";
-    if (Environment === "production") key = "rzp_live_ielBjwfQcB6jUh"; // rzp_live_ielBjwfQcB6jUh
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),
@@ -457,6 +458,8 @@ export const loadRazorPayTransaction = async (
       paymentGateway: "RAZORPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
+
+    let key = await decryptedString(data?.data?.[0]?.razorpayApiKey);
 
     if (!data?.success) {
       return data;
@@ -504,7 +507,7 @@ export const loadRazorPayTransaction = async (
     };
     return options;
   } catch (error: any) {
-    console.error("RazorPay Error: ", error.message);
+    console.error("RazorPay Error: ", error?.message);
     return null;
   }
 };
@@ -586,3 +589,39 @@ export const retrieveLocalStorageData = (key: string) => {
   const item = localStorage.getItem(key);
   return item ? JSON.parse(item) : null;
 };
+
+export async function decryptedString(encryptedData: string) {
+  const secretKey = WALLETSECRETKEY;
+  const ivHex = WALLETSHAREDIV;
+  // Parse IV from Hex format
+
+  const iv = CryptoJS.enc.Hex.parse(ivHex);
+  const decryptedBytes = await CryptoJS.AES.decrypt(
+    encryptedData,
+    CryptoJS.enc.Utf8.parse(secretKey),
+    { iv: iv, mode: CryptoJS.mode.CTR }
+  );
+
+  const decryptedBase64 = await decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+  // Decode the Base64 string
+  const originalData = decodeBase64(decryptedBase64);
+
+  return originalData;
+}
+
+function decodeBase64(base64: any) {
+  // Decode Base64 string to a binary string
+  const binaryString = window.atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+
+  // Convert binary string to byte array
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  // Use TextDecoder to convert byte array back to UTF-8 string
+  const decoder = new TextDecoder("utf-8");
+  return decoder.decode(bytes);
+}
