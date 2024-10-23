@@ -22,12 +22,16 @@ import { SearchBox } from "../../components/SearchBox";
 import DatePicker from "react-datepicker";
 import OneButton from "../../components/Button/OneButton";
 import { ResponsiveState } from "../../utils/responsiveState";
+import { inputRegexFilter } from "../../utils/Helper/Filter";
+import { PathFinder } from "../../utils/Helper/PathFinder";
 
 const WeightFreeze: React.FunctionComponent = () => {
   const roles = useSelector((state: any) => state?.roles);
 
   let thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const currenturl = window.location.href;
+  const path = PathFinder(currenturl);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   const [weightManagementData, setWeightManagementdata] = useState([]);
@@ -302,7 +306,11 @@ const WeightFreeze: React.FunctionComponent = () => {
     }
 
     try {
-      const { data: responseData } = await POST(GET_WRIGHT_DISPUTE, payload);
+      const { data: responseData } = await inputRegexFilter(
+        searchedText,
+        path,
+        payload
+      );
       if (responseData?.status) {
         setIsLoading(false);
 
@@ -325,7 +333,7 @@ const WeightFreeze: React.FunctionComponent = () => {
         setTotalItemCount(responseData?.totalCount);
       } else {
         setIsLoading(false);
-        toast.error(responseData?.message);
+        toast.error(responseData?.message || "Something Went Wrong");
       }
     } catch (error) {
       setIsLoading(false);
@@ -445,41 +453,43 @@ const WeightFreeze: React.FunctionComponent = () => {
             <div className="lg:mb-24">
               <div className="mt-4 px-5 ">
                 <div className="overflow-x-auto scrollbar-hide">
-                <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
-                  {listTab?.map(({ statusName, count }, index) => {
-                    return (
-                      <div
-                        className={` flex-shrink-0 flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
+                  <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
+                    {listTab?.map(({ statusName, count }, index) => {
+                      return (
+                        <div
+                          className={` flex-shrink-0 flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
                             ${
                               renderingComponents === index &&
                               "!border-[#004EFF]"
                             }`}
-                        onClick={() => {
-                          // localStorage.setItem("WeightTab", statusName);
-                          setScrollIndex(index);
-                        }}
-                        key={index}
-                      >
-                        <span
-                          className={`text-[#777777] text-[14px] lg:text-[18px]
+                          onClick={() => {
+                            // localStorage.setItem("WeightTab", statusName);
+                            setScrollIndex(index);
+                          }}
+                          key={index}
+                        >
+                          <span
+                            className={`text-[#777777] text-[14px] lg:text-[18px]
                            ${
                              renderingComponents === index &&
                              "!text-[#004EFF] lg:text-[18px]"
                            }`}
-                        >
-                          {statusName}
-                        </span>
-                        <span
-                          className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] px-1 h-5 ${
-                            renderingComponents === index ? "!bg-[#004EFF]" : ""
-                          }`}
-                        >
-                          {count}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
+                          >
+                            {statusName}
+                          </span>
+                          <span
+                            className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] px-1 h-5 ${
+                              renderingComponents === index
+                                ? "!bg-[#004EFF]"
+                                : ""
+                            }`}
+                          >
+                            {count}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div className="mt-4 flex justify-between text-[18px] font-Open font-semibold items-center">
                   <div className="ml-2 flex">
