@@ -54,6 +54,14 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const companyDisplayName = props?.ProfileDetails?.privateCompany?.name;
   const activePlanExpiry = props?.ProfileDetails?.activePlanExpiry;
   const planStartDate = props?.ProfileDetails?.planStartDate;
+  const AccDetailsContactNo =
+    props?.ProfileDetails?.privateCompany?.accountDetails?.contactNumber;
+  const AccDetailsEmail =
+    props?.ProfileDetails?.privateCompany?.accountDetails?.email;
+  const OpDetailsContactNo =
+    props?.ProfileDetails?.privateCompany?.operationDetails?.contactNumber;
+  const OpDetailsEmail =
+    props?.ProfileDetails?.privateCompany?.operationDetails?.email;
   const { getProfileData } = props;
 
   const [kycValue, setKycValue] = useState();
@@ -73,7 +81,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="md:grid md:grid-cols-2">
+        {/* <div className="md:grid md:grid-cols-2">
           <div className="grid grid-cols-6 border-[1px] border-[#E8E8E8] rounded-lg">
             <div className="flex flex-col col-span-1 items-start py-2 pr-4 pl-3 ">
               <div
@@ -128,7 +136,8 @@ export const ProfileCard = (props: ProfileCardProps) => {
                   <img src={editIcon} alt="" />
                 </button>
               </div>
-              <span className="flex font-Lato text-[16px] font-normal leading-6">
+              <span className="flex font-Lato text-[16px] font-normal leaimport RightSideModal from "./RightSideModal";
+ding-6">
                 <img src={EmailIcon} alt="Email" className="w-[16px] mr-2" />
                 {email}
               </span>
@@ -145,6 +154,101 @@ export const ProfileCard = (props: ProfileCardProps) => {
                 {companyDisplayName}
               </span>
             </div>
+
+
+          </div>
+        </div> */}
+        <div className="md:grid md:grid-cols-1">
+          <div className="grid grid-cols-1 md:grid-cols-12 border-[1px] border-[#E8E8E8] rounded-lg p-4 gap-4 relative">
+            {/* Profile Image and Seller ID */}
+            <div className="md:col-span-2 flex flex-col items-center md:items-start">
+              <div
+                className="w-20 h-20 overflow-hidden rounded-full mb-2 border border-gray-100"
+                style={{
+                  mask: "",
+                }}
+              >
+                <img
+                  src={`${
+                    profileImageUrl &&
+                    profileImageUrl !== "N/A" &&
+                    profileImageUrl !== ""
+                      ? profileImageUrl
+                      : ProfileIcon
+                  }`}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="text-sm font-Lato font-normal leading-5 text-[#1C1C1C]">
+                Seller ID: {sellerId}
+              </span>
+            </div>
+
+            {/* Main Profile Information */}
+            <div className="md:col-span-4 flex flex-col space-y-2">
+              <span className="font-Lato font-semibold text-xl leading-7 capitalize">
+                {`${firstName} ${lastName}`}
+              </span>
+              <span className="flex items-center font-Lato text-base font-normal leading-6">
+                <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
+                {email}
+              </span>
+              <span className="flex items-center font-Lato text-base font-normal leading-6">
+                <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
+                {`+91 ${contactNumber}`}
+              </span>
+              <span className="flex items-center font-Lato text-base font-normal leading-6 capitalize">
+                <img src={WebsiteIcon} alt="Website" className="w-4 mr-2" />
+                {companyDisplayName}
+              </span>
+            </div>
+
+            {/* Account Details Section */}
+            <div className="md:col-span-3 flex flex-col space-y-2">
+              <h3 className="font-Lato font-semibold text-lg mb-2">
+                Account Details
+              </h3>
+              <span className="flex items-center font-Lato text-base font-normal leading-6">
+                <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
+                {AccDetailsEmail ? (
+                  AccDetailsEmail
+                ) : (
+                  <span className="text-gray-400  text-sm">Not Available</span>
+                )}
+              </span>
+              <span className="flex items-center font-Lato text-base font-normal leading-6">
+                <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
+                {AccDetailsContactNo ? (
+                  `+91 ${AccDetailsContactNo}`
+                ) : (
+                  <span className="text-gray-400  text-sm">Not Available</span>
+                )}
+              </span>
+            </div>
+
+            {/* Operations Details Section */}
+            <div className="md:col-span-3 flex flex-col space-y-2">
+              <h3 className="font-Lato font-semibold text-lg mb-2">
+                Operations Details
+              </h3>
+              <span className="flex items-center font-Lato text-base font-normal leading-6">
+                <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
+                {OpDetailsEmail ? OpDetailsEmail :  <span className="text-gray-400  text-sm">Not Available</span> }
+              </span>
+              <span className="flex items-center font-Lato text-base font-normal leading-6">
+                <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
+                {OpDetailsContactNo ?`+91 ${OpDetailsContactNo}`: <span className="text-gray-400  text-sm">Not Available</span>}
+              </span>
+            </div>
+
+            {/* Edit Button */}
+            <button
+              className="absolute top-4 right-4 cursor-pointer w-5 h-5"
+              onClick={() => setShowModal(true)}
+            >
+              <img src={editIcon} alt="Edit" className="w-full h-full" />
+            </button>
           </div>
         </div>
 
@@ -258,9 +362,15 @@ export const ProfileCard = (props: ProfileCardProps) => {
         onClose={() => {
           setShowModal(false);
         }}
-        className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
+        // className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
+        className="w-full sm:w-[400px] md:w-[450px] lg:w-[500px] !justify-between !items-stretch"
+        wrapperClassName="overflow-y-auto"
       >
-        <EditProfile onClose={setShowModal} getProfileData={getProfileData} />
+        <EditProfile
+          onClose={setShowModal}
+          getProfileData={getProfileData}
+          ProfileDetails={props.ProfileDetails}
+        />
       </RightSideModal>
     </>
   );

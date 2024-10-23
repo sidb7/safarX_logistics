@@ -4,7 +4,7 @@ import {
   loadRazorPayTransaction,
   removeLocalStorage,
 } from "../../../utils/utility";
-//import useRazorpay from "react-razorpay";
+import { useRazorpay } from "react-razorpay";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
@@ -47,13 +47,14 @@ const WalletPayment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const navigate = useNavigate();
-  //const [Razorpay] = useRazorpay();
+  const { Razorpay } = useRazorpay();
   // const [walletValue, setMoney] = useState<any>(100);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isEdit, setIsedit] = useState<any>();
 
-  const [walletValue, setWalletValue] = useState<any>();
+  const [walletValue, setWalletValue] = useState<any>("100");
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
+  const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
 
   const walletMenu = [
     {
@@ -144,15 +145,15 @@ const WalletPayment = () => {
     );
 
     if (!options?.success && !options?.amount) {
-      toast.error(options.message);
+      toast.error(options?.message);
       return;
     }
 
-    // const rzp1: any = new Razorpay(options);
+    const rzp1: any = new Razorpay(options);
 
-    // rzp1.on("payment.failed", (response: any) => {});
+    rzp1.on("payment.failed", (response: any) => {});
 
-    // rzp1.open();
+    rzp1.open();
   };
 
   useEffect(() => {
@@ -192,6 +193,9 @@ const WalletPayment = () => {
       } catch (error) {
         console.error(error);
       }
+      let tempPaymentArr: any = sessionStorage.getItem("paymentGateway");
+      tempPaymentArr = JSON.parse(tempPaymentArr);
+      setPaymentGatewayArr(tempPaymentArr);
     })();
   }, []);
 
@@ -286,11 +290,30 @@ const WalletPayment = () => {
               </div>
 
               <div className="flex mt-1 mb-6 gap-x-[1rem] md:mb-0 ml-4 mr-5 ">
-                <JusPay
-                  isDisabled={isDisabled}
-                  amount={walletValue}
-                  callbackUrl={`${SELLER_WEB_URL}/onboarding/wallet-payment`}
-                />
+                {paymentGatewayArr &&
+                  paymentGatewayArr?.length >= 1 &&
+                  paymentGatewayArr?.map((el: any, i: number) => {
+                    console.log("el", el);
+                    return el?.paymentId === "RAZORPE" ? (
+                      <div
+                        onClick={handleRazorPayTransaction}
+                        className="flex flex-col items-center gap-y-2 "
+                      >
+                        <button type="button">
+                          <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
+                            PAY NOW
+                          </p>
+                        </button>
+                      </div>
+                    ) : (
+                      <JusPay
+                        isDisabled={isDisabled}
+                        amount={walletValue}
+                        callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                      />
+                    );
+                  })}
+
                 {/* <div className="flex flex-col items-center gap-y-2">
                   <img
                     src={
@@ -332,29 +355,6 @@ const WalletPayment = () => {
                   >
                     <p className="buttonClassName md:text-[14px] whitespace-nowrap">
                       PhonePe
-                    </p>
-                  </button>
-                </div>
-                <div className="flex flex-col items-center gap-y-2">
-                  <div className="w-20 h-20 flex justify-center items-center">
-                    <img
-                      src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
-                      alt=""
-                      className="ml-0 object-contain"
-                    />
-                  </div>
-                  <button
-                    disabled={isDisabled}
-                    type="button"
-                    className={` ${
-                      !isDisabled
-                        ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                        : "!bg-opacity-50"
-                    } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                    onClick={handleRazorPayTransaction}
-                  >
-                    <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-                      RazorPay
                     </p>
                   </button>
                 </div> */}

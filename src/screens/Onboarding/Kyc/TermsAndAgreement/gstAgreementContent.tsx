@@ -52,7 +52,7 @@ const GstContent = (userNameForGst: any) => {
                         ` ${userState?.firstName} ${userState?.lastName} `} */}
 
                   {/* {" " + userName + " "} */}
-                  {" " + userNameForGst?.userNameForGst + " " || "-"}
+                  {" " + userNameForGst + " " || "-"}
 
                   {/* {userState?.firstName + " " + userState?.lastName} */}
                   {/*This will work when user login but didn't work when user signup as the line 144 is commented */}

@@ -64,7 +64,7 @@ import {
   setLocalStorage,
 } from "../../../utils/utility";
 // import Razorpay from "razorpay";
-//import useRazorpay from "react-razorpay";
+import { useRazorpay } from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
@@ -80,6 +80,8 @@ import CloseIcon from "../../../assets/CloseIcon.svg";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
+  const { Razorpay } = useRazorpay();
+
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   const walletBalance = useSelector(
@@ -152,6 +154,7 @@ const WalletRecharge = () => {
     useState<any>(0);
 
   const [errorMessage, setErrorMessage] = useState<any>("");
+  const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -380,9 +383,15 @@ const WalletRecharge = () => {
       redirectUrl
     );
     if (!options?.success && !options?.amount) {
-      toast.error(options.message);
+      toast.error(options?.message);
       return;
     }
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {});
+
+    rzp1.open();
   };
 
   const userDetailsFromSession = () => {
@@ -519,6 +528,9 @@ const WalletRecharge = () => {
       }
     })();
     userDetailsFromSession();
+    let tempPaymentArr: any = sessionStorage.getItem("paymentGateway");
+    tempPaymentArr = JSON.parse(tempPaymentArr);
+    setPaymentGatewayArr(tempPaymentArr);
   }, []);
 
   useEffect(() => {
@@ -704,11 +716,28 @@ const WalletRecharge = () => {
                       />
                     </div>
                     <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
-                      <JusPay
-                        isDisabled={isDisabled}
-                        amount={walletValue}
-                        callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
-                      />
+                      {paymentGatewayArr &&
+                        paymentGatewayArr?.length >= 1 &&
+                        paymentGatewayArr?.map((el: any, i: number) => {
+                          return el?.paymentId === "RAZORPE" ? (
+                            <div
+                              onClick={handleRazorPayTransaction}
+                              className="flex flex-col items-center gap-y-2 "
+                            >
+                              <button type="button">
+                                <p className="flex p-2 h-[48px] cursor-pointer mt-6 justify-center items-center text-white bg-black rounded-md px-2 py-4 font-semibold text-[14px] !w-[150px] hover:bg-[#606060] hover:shadow-cardShadow2a">
+                                  PAY NOW
+                                </p>
+                              </button>
+                            </div>
+                          ) : (
+                            <JusPay
+                              isDisabled={isDisabled}
+                              amount={walletValue}
+                              callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                            />
+                          );
+                        })}
                     </div>
                   </div>
 
