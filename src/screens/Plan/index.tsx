@@ -351,12 +351,16 @@ const Index = (props: ITypeProps) => {
                   />
                 </div> */}
                 {/* feature rate card details */}
-                <div className="border-t-2 mt-20 p-6">
-                  <h1 className="font-Lato ml-4 text-[#1C1C1C] mb-2 text-[28px] font-semibold">
-                    Pricing Structure
-                  </h1>
-                  <FeatureRateCard featureRateCardData={featureRateCardPlan} />
-                </div>
+                {featureRateCardPlan?.length > 0 && (
+                  <div className="border-t-2 mt-20 p-6">
+                    <h1 className="font-Lato ml-4 text-[#1C1C1C] mb-2 text-[28px] font-semibold">
+                      Pricing Structure
+                    </h1>
+                    <FeatureRateCard
+                      featureRateCardData={featureRateCardPlan}
+                    />
+                  </div>
+                )}
                 {/* Table */}
                 {/* <div className="hidden lg:block">
                   <ComparePlans />
