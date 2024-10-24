@@ -317,7 +317,11 @@ const Index = (props: ITypeProps) => {
             ) : (
               <>
                 {/* Plan Cards */}
-                <div className="px-4 flex items-center  w-full gap-x-20 justify-center  overflow-x-auto">
+                <div
+                  className={`px-4 flex items-center  w-full gap-x-20 ${
+                    allPlans?.length <= 4 && "lg:justify-center"
+                  }  overflow-x-auto`}
+                >
                   {allPlans?.map((eachPlan: any, index: any) => {
                     return (
                       <>
