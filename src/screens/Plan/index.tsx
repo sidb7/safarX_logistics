@@ -4,6 +4,7 @@ import { Breadcrum } from "../../components/Layout/breadcrum";
 import "../../styles/plan.css";
 import {
   GET_ALL_PLANS,
+  GET_FEATURES_PLANS,
   POST_ASSIGN_PLANV3,
   POST_CREATE_PLAN,
 } from "../../utils/ApiUrls";
@@ -21,6 +22,7 @@ import { checkPageAuthorized } from "../../redux/reducers/role";
 import { Spinner } from "../../components/Spinner";
 import ToastCustom from "../toastCutom";
 import OneButton from "../../components/Button/OneButton";
+import FeatureRateCard from "./featureRateCardDetails";
 
 interface ITypeProps {}
 
@@ -36,6 +38,7 @@ const Index = (props: ITypeProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
   const [loading, setLoading] = useState(false);
+  const [featureRateCardPlan, setFeatureRateCardPlan] = useState([]);
 
   const ModalContent = () => {
     return (
@@ -112,6 +115,17 @@ const Index = (props: ITypeProps) => {
     return a.price - b.price;
   };
 
+  const callFeaturesRateCard = async () => {
+    try {
+      const { data: response }: any = await POST(GET_FEATURES_PLANS, {
+        limit: 1000000,
+      });
+      if (response?.success) {
+        setFeatureRateCardPlan(response?.data);
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -149,6 +163,7 @@ const Index = (props: ITypeProps) => {
           //   isSelected: false,
           // });
           setAllPlans(tempPlan);
+          callFeaturesRateCard();
         }
       } catch (error) {
         setLoading(false);
@@ -158,13 +173,140 @@ const Index = (props: ITypeProps) => {
     })();
   }, [activePlanId]);
 
+  // const featureRateCardData = [
+  //   {
+  //     rateCardName: "Bronze",
+  //     featureRateCard: [
+  //       {
+  //         featureTitle: "Pre-Shipment",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Catalog Management",
+  //             isActive: true,
+  //           },
+  //           {
+  //             featureSubTitle: "AI based Carrier allocation",
+  //             isActive: false,
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         featureTitle: "Order Creation",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Single dashboard for all orders",
+  //             isActive: true,
+  //           },
+  //           {
+  //             featureSubTitle: "Real-time serviceability check",
+  //             isActive: true,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     rateCardName: "Silver",
+  //     featureRateCard: [
+  //       {
+  //         featureTitle: "Pre-Shipment",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Catalog Management",
+  //             isActive: false,
+  //           },
+  //           {
+  //             featureSubTitle: "AI based Carrier allocation",
+  //             isActive: true,
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         featureTitle: "Order Creation",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Single dashboard for all orders",
+  //             isActive: true,
+  //           },
+  //           {
+  //             featureSubTitle: "Real-time serviceability check",
+  //             isActive: false,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     rateCardName: "Gold",
+  //     featureRateCard: [
+  //       {
+  //         featureTitle: "Pre-Shipment",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Catalog Management",
+  //             isActive: true,
+  //           },
+  //           {
+  //             featureSubTitle: "AI based Carrier allocation",
+  //             isActive: false,
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         featureTitle: "Order Creation",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Single dashboard for all orders",
+  //             isActive: true,
+  //           },
+  //           {
+  //             featureSubTitle: "Real-time serviceability check",
+  //             isActive: true,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     rateCardName: "Platium",
+  //     featureRateCard: [
+  //       {
+  //         featureTitle: "Pre-Shipment",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Catalog Management",
+  //             isActive: false,
+  //           },
+  //           {
+  //             featureSubTitle: "AI based Carrier allocation",
+  //             isActive: true,
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         featureTitle: "Order Creation",
+  //         featureSubMenu: [
+  //           {
+  //             featureSubTitle: "Single dashboard for all orders",
+  //             isActive: true,
+  //           },
+  //           {
+  //             featureSubTitle: "Real-time serviceability check",
+  //             isActive: false,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // ];
+
   return (
     <>
       {/* {<ToastCustom message="hello i am from plan" />} */}
       {isActive ? (
         <div>
-          <div className=" lg:mr-6">
-            <div className="lg:mb-6">
+          <div className="">
+            <div className="">
               <Breadcrum label="Plans" />
             </div>
 
@@ -175,7 +317,11 @@ const Index = (props: ITypeProps) => {
             ) : (
               <>
                 {/* Plan Cards */}
-                <div className="px-4 flex items-center  w-full gap-x-6   overflow-x-auto   ml-5  mb-8 lg:mb-[60px] ">
+                <div
+                  className={`px-4 flex items-center  w-full gap-x-20 ${
+                    allPlans?.length <= 4 && "lg:justify-center"
+                  }  overflow-x-auto`}
+                >
                   {allPlans?.map((eachPlan: any, index: any) => {
                     return (
                       <>
@@ -199,7 +345,7 @@ const Index = (props: ITypeProps) => {
                   })}
                 </div>
                 {/*Compare Button */}
-                <div className="flex justify-center ml-5  lg:hidden">
+                {/* <div className="flex justify-center ml-5  lg:hidden">
                   <ServiceButton
                     text="COMPARE"
                     className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
@@ -207,7 +353,18 @@ const Index = (props: ITypeProps) => {
                       navigate("/plans/compare-plans");
                     }}
                   />
-                </div>
+                </div> */}
+                {/* feature rate card details */}
+                {featureRateCardPlan?.length > 0 && (
+                  <div className="border-t-2 mt-20 p-6">
+                    <h1 className="font-Lato ml-4 text-[#1C1C1C] mb-2 text-[28px] font-semibold">
+                      Pricing Structure
+                    </h1>
+                    <FeatureRateCard
+                      featureRateCardData={featureRateCardPlan}
+                    />
+                  </div>
+                )}
                 {/* Table */}
                 {/* <div className="hidden lg:block">
                   <ComparePlans />

@@ -749,9 +749,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  useEffect(() => {
-    fetchPartnerList();
-  }, []);
+  // useEffect(() => {
+  //   fetchPartnerList();
+  // }, []);  // as asked by Ashish sir and Biswa
 
   const filterComponent = (className?: string) => {
     return (

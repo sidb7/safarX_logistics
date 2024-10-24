@@ -32,6 +32,7 @@ export const Profile = () => {
 
   const getProfileData = async () => {
     const { data } = await POST(GET_PROFILE_URL, {});
+    console.log("data from get api",data)
     if (data?.success) {
       setProfileData(data?.data?.[0]);
       setBrandingModalDetails({

@@ -193,7 +193,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
     ) => {
       if (actionType === "track_order") {
         window.open(
-          `${SELLER_WEB_URL}/shipyaari-tracking?trackingNo=${data?.awb}`,
+          `${SELLER_WEB_URL}/tracking?trackingNo=${data?.awb}`,
           "_blank"
         );
       } else {
@@ -369,7 +369,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
                       className={`flex`}
                       onClick={() =>
                         window.open(
-                          `${SELLER_WEB_URL}/shipyaari-tracking?trackingNo=${cartData?.awb}`,
+                          `${SELLER_WEB_URL}/tracking?trackingNo=${cartData?.awb}`,
                           "_blank"
                         )
                       }

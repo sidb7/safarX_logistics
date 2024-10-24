@@ -47,6 +47,18 @@ const Reports = () => {
       label: "Product Wise Status",
       value: "PRODUCTWISESTATUS",
     },
+    {
+      label: "SERVICEABLE PINCODE",
+      value: "SERVICEABLE_PINCODE",
+    },
+    {
+      label: "NEW NPR REPORT",
+      value: "NEW_NPR_REPORT"
+    },
+    {
+      label: "PIKCUP RECONCILATION",
+      value: "PIKCUP_RECONCILATION"
+    }
   ];
 
   const convertEpoch = (epochDate: any) => {

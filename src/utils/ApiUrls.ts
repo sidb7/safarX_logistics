@@ -12,9 +12,13 @@ let ADMIN_URL = "";
 let SMALL_LOGO = "";
 let LARGE_LOGO = "";
 let COMPANY_NAME = "";
+let WALLETSHAREDIV = "";
+let WALLETSECRETKEY = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
+WALLETSHAREDIV = `${process.env.REACT_APP_WALLETSHAREDIV}`;
+WALLETSECRETKEY = `${process.env.REACT_APP_WALLETSECRETKEY}`;
 
 // console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
 
@@ -35,6 +39,7 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+
     break;
 
   case "test":
@@ -53,7 +58,6 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
-
     break;
 
   case "production":
@@ -245,6 +249,7 @@ const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 const GET_PENDING_PLANS = `${SELLER_BASE_URL}/seller/pendingPlans`;
 const POST_ASSIGN_PLANV3 = `${SELLER_BASE_URL}/seller/assignPlanV4`;
 const GET_PLANS_PREVIEW = `${SELLER_BASE_URL}/sellerPlans/planPreview`;
+const GET_FEATURES_PLANS = `${SELLER_BASE_URL}/sellerPlans/allcompanyFeatureRateCard`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -300,6 +305,9 @@ const CHANGE_PASSWORD = `${SELLER_BASE_URL}/seller/changePasswordv2`;
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
+
+//impersonation logs
+const GET_IMPERSONATION_LOGS = `${SELLER_BASE_URL}/fileServices/log/IMPERSONATION-LOGS`;
 
 //Channel Store
 const POST_CREATE_STORE = `${SELLER_BASE_URL}/channel/shopify/createShopifyStore`;
@@ -666,4 +674,8 @@ export {
   DOWNLOAD_NDR_ORDERS,
   UPLOAD_NDR_REMARKS,
   GET_NDR_SELLER_ACTION_REMARKS,
+  WALLETSHAREDIV,
+  WALLETSECRETKEY,
+  GET_IMPERSONATION_LOGS,
+  GET_FEATURES_PLANS,
 };
