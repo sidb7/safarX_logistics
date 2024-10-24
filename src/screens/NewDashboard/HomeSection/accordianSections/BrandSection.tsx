@@ -1,0 +1,134 @@
+import React, { useState } from "react";
+import CustomInputBox from "../../../../components/Input";
+import CustomInputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
+import OneButton from "../../../../components/Button/OneButton";
+import toast from "react-hot-toast";
+import { POST } from "../../../../utils/webService";
+import { LOGO_AND_BRAND } from "../../../../utils/ApiUrls";
+
+interface IBrandSectionProps {
+  setBrandLoadingState: any;
+}
+
+const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
+  setBrandLoadingState,
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [brandingDetails, setBrandingDetails] = useState<any>({
+    image: "",
+    imageUrl: "",
+    brandName: "",
+    file: null,
+  });
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const url: any = URL.createObjectURL(file) || null;
+      setBrandingDetails({
+        ...brandingDetails,
+        image: event.target.files[0].name,
+        imageUrl: url,
+        file: file,
+      });
+    }
+  };
+
+  const isFormValid = () => {
+    return (
+      brandingDetails.brandName.trim() !== "" && brandingDetails.file !== null
+    );
+  };
+
+  const updateBrandingDetails = async () => {
+    if (!isFormValid()) {
+      return toast.error("Both fields are required.");
+    }
+
+    let formData = new FormData();
+    formData.append("brandName", brandingDetails.brandName);
+    formData.append("file", brandingDetails?.file);
+
+    let img: any = new Image();
+    img.src = brandingDetails?.imageUrl;
+
+    img.onload = async function () {
+      // Access the natural height and width of the image
+      var height = img.naturalHeight;
+      var width = img.naturalWidth;
+
+      if (height > 200 || width > 700) {
+        return toast.error(
+          "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+        );
+      } else {
+        const { data } = await POST(LOGO_AND_BRAND, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        setBrandLoadingState(true);
+        setLoading(true);
+        if (data?.success) {
+          toast.success(data?.message);
+          setLoading(false);
+          setBrandLoadingState(false);
+          localStorage.setItem("brandDetails", "true");
+          //   setBrandingModal(false);
+          //   window.location.reload();
+          // getProfileData();
+        } else {
+          toast.error(data?.message);
+        }
+      }
+    };
+  };
+  return (
+    <>
+      <div className="flex flex-col gap-y-5">
+        <p className="font-Open font-normal text-base text-[#1C1C1C] leading-4 pt-4 tracking-wide">
+          Fill details of your Brand
+        </p>
+        <div className="flex  flex-col md:flex md:flex-row gap-5">
+          <div className="min-w-[240px]">
+            <CustomInputBox
+              label="Brand Name"
+              containerStyle={`lg:!w-auto`}
+              //   className="font-Open !w-[320px] md:!w-[370px]"
+              labelClassName="!font-Open"
+              onChange={(e: any) =>
+                setBrandingDetails({
+                  ...brandingDetails,
+                  brandName: e.target.value,
+                })
+              }
+              value={brandingDetails.brandName}
+            />
+          </div>
+          <div className="min-w-[240px]">
+            <CustomInputWithFileUpload
+              label="Upload logo"
+              className="!font-Open "
+              //   inputClassName="!w-[320px] md:!w-[370px]"
+              type="file"
+              onChange={handleImageChange}
+              isRequired={false}
+            />
+          </div>
+        </div>
+        <div className="flex justify-start">
+          <OneButton
+            text={loading ? "SUBMITTING..." : "SUBMIT"}
+            onClick={updateBrandingDetails}
+            // onClick={() => {}}
+            variant="tertiary"
+            className="!bg-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!isFormValid() || loading}
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default BrandSection;

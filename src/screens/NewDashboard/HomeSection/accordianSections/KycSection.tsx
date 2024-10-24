@@ -9,7 +9,9 @@ import ErrorIcon from "../../../../assets/common/info-circle.svg";
 import toast from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import {
+  COMPANY_NAME,
   GST_AGREEMENTS,
+  LARGE_LOGO,
   POST_ACCEPT_AGREEMENTS,
   POST_BUSINESS_TYPE_URL,
   POST_VERIFY_AADHAR_OTP_URL,
@@ -18,26 +20,35 @@ import {
   POST_VERIFY_GST_URL,
   POST_VERIFY_PAN_URL,
 } from "../../../../utils/ApiUrls";
+import InfoIcon from "../../../../assets/info.svg";
+import { ResponsiveState } from "../../../../utils/responsiveState";
+import { Tooltip } from "react-tooltip";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
+import Card from "../../../Onboarding/Kyc/TermsAndAgreement/Card";
+import WelcomeHeader from "../../../Onboarding/Kyc/welcomeHeader";
+import CloseIcon from "../../../../assets/CloseIcon.svg";
+import GstContent from "../../../Onboarding/Kyc/TermsAndAgreement/gstAgreementContent";
 
-interface IKycSectionProps {}
+interface IKycSectionProps {
+  loadingState?: boolean;
+  setLoadingState?: any;
+}
 
-const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
+const KycSection: React.FunctionComponent<IKycSectionProps> = ({
+  loadingState,
+  setLoadingState,
+}) => {
   const [userState, setIsUserState] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState<any>({
     individual: true,
     company: false,
   });
-  console.log("🚀 ~ checked:", checked);
   const [checkbox, setCheckbox] = useState();
   const [businessType, setBusinessType] = useState("individual");
-  console.log("🚀 ~ businessType:", businessType);
   const [aadharNumber, setAadharNumber] = useState<any>("");
-  console.log("🚀 ~ aadharNumber:", aadharNumber);
   const [panNumber, setPanNumber] = useState<any>("");
-  console.log("🚀 ~ panNumber:", panNumber);
   const [gstNumber, setGSTNumber] = useState<any>("");
-  console.log("🚀 ~ gstNumber:", gstNumber);
   const [aadharNumberError, setAadharNumberError] = useState<any>();
   const [panNumberError, setPanNumberError] = useState<any>();
   const [gstError, setgstError] = useState<any>("");
@@ -52,6 +63,12 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
   const [acceptTnC, setAcceptTnC] = useState<any>();
   const [isBusinessVerified, setIsBusinessVerified] = useState(false);
   const sellerId = localStorage.getItem("sellerId");
+  const [isModalOpenForServiceAgreement, setIsModalOpenForServiceAgreement] =
+    useState<any>(false);
+  const [isModalOpenForNonGstAgreement, setIsModalOpenForNonGstAgreement] =
+    useState<any>(false);
+  const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
+  const userNameForGst = localStorage.getItem("userName");
 
   // Handle selection change
   const handleSelect = (type: any) => {
@@ -206,6 +223,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
 
       if (response?.success) {
         setOtpSuccess(true);
+        setLoadingState(true);
         setLoading(false);
         toast.success(response?.message);
         setShowAaddharOtpBox(true);
@@ -216,7 +234,6 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
         localStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response?.data?.data?.client_id);
         let clientIdSession = localStorage.getItem("client_id");
-        console.log("clientIdSe", clientIdSession);
       } else {
         setLoading(false);
 
@@ -235,6 +252,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
 
       if (response?.success) {
         setOtpSuccess(true);
+        setLoadingState(true);
         setLoading(false);
         localStorage.setItem("gstNumber", value);
         localStorage.setItem("panNumber", panNumber);
@@ -282,6 +300,13 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
     }
   };
 
+  const handlePostBusinessVerification = async () => {
+    if (isBusinessVerified && businessType === "business") {
+      await getAadharOtp(aadharNumber); // Business case
+      return;
+    }
+  };
+
   const verifyPAN = async (value: any) => {
     try {
       const payload = { pan_no: value };
@@ -289,10 +314,13 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
 
       localStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
-        // setTimeout(() => {
-        //   console.log("Delayed for 1 second.");
-        //   // toast.success(response?.message);
-        // }, 1000);
+        setVerifyOTP(false);
+        if (businessType === "company") {
+          setLoadingState(false);
+          window.location.reload();
+        }
+        setShowAaddharOtpBox(false);
+        setShowgstOtpBox(false);
 
         window?.dataLayer?.push({
           event: "kyc_verification",
@@ -305,8 +333,8 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
         if (businessType === "business") {
           // navigate("/onboarding/kyc-aadhar-form");
           setIsBusinessVerified(true);
-        } else {
-          // navigate("/onboarding/kyc");
+          setVerifyOTP(false);
+          setShowAaddharOtpBox(false);
         }
       } else {
         setLoading(false);
@@ -318,7 +346,6 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
   };
 
   const onVerifyOtp = async () => {
-    console.log("onVerifyOtp", verifyOTP, businessType);
     try {
       if (Number(otpNumber) !== 0) {
         let clientId_session = localStorage.getItem("client_id");
@@ -333,6 +360,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
             payload
           );
           if (response?.success) {
+            setOTPNumber("");
             try {
               const payload = { pan_no: panNumber };
               const { data: response } = await POST(
@@ -345,14 +373,19 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
                 response?.data?.data?.full_name_split
               );
               if (response?.success) {
+                setVerifyOTP(false);
+                setShowAaddharOtpBox(false);
+                setShowgstOtpBox(false);
+                setLoadingState(false);
                 setLoading(false);
-
+                toast.success("KYC Successfully Verified");
                 window?.dataLayer?.push({
                   event: "kyc_verification",
                   sellerId: sellerId,
                   business_type: businessType,
                   kyc_verified: true,
                 });
+                window.location.reload();
                 // navigate("/onboarding/kyc");
               } else {
                 setLoading(false);
@@ -368,7 +401,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
             toast.error(response?.message);
             setLoading(false);
           }
-        } else if (businessType === "company" || businessType === "business") {
+        } else if (businessType === "company") {
           setLoading(true);
           const payload = {
             gstIn: gstNumber,
@@ -377,7 +410,9 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
           };
           const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
           if (response?.success) {
+            setOTPNumber("");
             // setLoading(false);
+
             verifyPAN(panNumber);
             //gtm
             window?.dataLayer?.push({
@@ -388,9 +423,54 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
             });
           } else {
             setLoading(false);
+            setOTPNumber("");
             toast.error(response?.message);
           }
-        }
+        } else if (businessType === "business")
+          if (!isBusinessVerified) {
+            setLoading(true);
+            const payload = {
+              gstIn: gstNumber,
+              client_id: clientId_session,
+              otp: otpNumber,
+            };
+            const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+            if (response?.success) {
+              setOTPNumber("");
+              // setLoading(false);
+
+              verifyPAN(panNumber);
+              //gtm
+              window?.dataLayer?.push({
+                event: "kyc_verification",
+                sellerId: sellerId,
+                business_type: businessType,
+                kyc_verified: true,
+              });
+            } else {
+              // setLoading(false);
+              setOTPNumber("");
+              toast.error(response?.message);
+            }
+          } else {
+            const payload = {
+              client_id: clientId_session,
+              otp: otpNumber,
+            };
+            setLoading(true);
+            const { data: response } = await POST(
+              POST_VERIFY_AADHAR_OTP_URL,
+              payload
+            );
+            if (response?.success) {
+              // setLoading(false);
+              setLoadingState(false);
+              window.location.reload();
+            } else {
+              toast.error(response?.message);
+              setLoadingState(true);
+            }
+          }
       } else {
         toast.error("Enter OTP");
       }
@@ -439,7 +519,6 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
     }
   }, [otpNumber]);
 
-  const userNameForGst = localStorage.getItem("userName");
   useEffect(() => {
     let data = localStorage.getItem("userInfo") as any;
     data = JSON.parse(data);
@@ -513,7 +592,10 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
             <div className="py-3">
               {checked?.individual ? (
                 <>
-                  <span className="font-Open text-[13px] lg:text-base font-normal leading-8 text-[#004EFF] cursor-pointer">
+                  <span
+                    className="font-Open text-[13px] lg:text-base font-normal leading-8 text-[#004EFF] cursor-pointer"
+                    onClick={() => setIsModalOpenForNonGstAgreement(true)}
+                  >
                     [Declaration of GST Non-Enrolment]{" "}
                   </span>
                   <span className="text-[#697586] px-[2px]"> &</span>{" "}
@@ -522,7 +604,10 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
                 <></>
               )}
 
-              <span className="font-Open text-[13px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer">
+              <span
+                className="font-Open text-[13px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer"
+                onClick={() => setIsModalOpenForServiceAgreement(true)}
+              >
                 [Service Agreement]
               </span>
             </div>
@@ -783,9 +868,9 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
                 {verifyOTP ? (
                   <>
                     <OneButton
-                      text={"Submit"}
+                      text={loading ? "Submitting..." : "Submit"}
                       onClick={onVerifyOtp}
-                      disabled={!checkbox || !otpFormBtnStatus}
+                      disabled={!checkbox || !otpFormBtnStatus || loading}
                       variant="tertiary"
                       className="!bg-transparent"
                     />
@@ -793,9 +878,9 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
                 ) : (
                   <>
                     <OneButton
-                      text={"Send OTP"}
+                      text={loading ? "Sending OTP..." : "Send OTP"}
                       onClick={handleSubmit}
-                      disabled={!checkbox || !otpFormBtnStatus}
+                      disabled={!checkbox || !otpFormBtnStatus || loading}
                       variant="tertiary"
                       className="!bg-transparent"
                     />
@@ -806,17 +891,212 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = (props) => {
           </>
         ) : (
           <>
-            <div className="py-3 flex px-4">
-              <p>
-                GST Number : <span>{gstNumber}</span>{" "}
+            <div className="flex gap-y-4 pt-4">
+              <p className="font-Open text-sm font-normal leading-4 text-[#1C1C1C]">
+                GST Number :{" "}
+                <span className="font-Open text-[15px] font-semibold leading-4 text-[#1C1C1C] mr-9">
+                  {gstNumber}
+                </span>{" "}
               </p>
-              <p>
-                GST Number : <span>{gstNumber}</span>{" "}
+              <p className="font-Open text-sm font-normal leading-4 text-[#1C1C1C]">
+                GST Number :{" "}
+                <span className="font-Open text-[15px] font-semibold leading-4 text-[#1C1C1C]">
+                  {gstNumber}
+                </span>{" "}
               </p>
+            </div>
+
+            <div className="flex flex-col  md:flex md:flex-row gap-5 pt-4">
+              {/* aadhaar details */}
+              <div className="min-w-[240px]">
+                <CustomInputBox
+                  containerStyle={`lg:!w-auto`}
+                  label="Aadhar Number"
+                  id={"aadharNumber"}
+                  inputType="text"
+                  inputMode="numeric"
+                  value={aadharNumber}
+                  maxLength={12}
+                  labelClassName="!font-Open"
+                  className={` ${
+                    aadharNumberError !== "" &&
+                    aadharNumberError !== undefined &&
+                    "!border-[#F35838]"
+                  }
+                      md:!w-[320px]   !font-Open`}
+                  onChange={(e: any) => {
+                    if (aadharRegex.test(e.target.value)) {
+                      setAadharNumberError("");
+                    } else {
+                      setAadharNumberError("Enter Valid Aadhar Number");
+                    }
+                    setAadharNumber(e.target.value);
+                  }}
+                  // isDisabled={otpSuccess}
+                />
+
+                {/* To display error */}
+
+                {aadharNumberError !== "" &&
+                  aadharNumberError !== undefined && (
+                    <div className="flex items-center gap-x-1 mt-1 ">
+                      <img src={ErrorIcon} alt="" width={10} height={10} />
+
+                      <span className="font-normal font-Open  text-[#F35838] text-[10px]">
+                        {aadharNumberError}
+                      </span>
+                    </div>
+                  )}
+              </div>
+              {isMdScreen && (
+                <>
+                  <img
+                    src={InfoIcon}
+                    alt="tooltip-icon"
+                    className={`${"cursor-pointer"}`}
+                    data-tooltip-id="my-tooltip-aadhar-info-for-business"
+                    data-tooltip-content={`${"Verify your Aadhaar for identity authentication and GST compliance."}`}
+                  />
+
+                  <Tooltip
+                    id="my-tooltip-aadhar-info-for-business"
+                    style={{
+                      zIndex: 10,
+                      backgroundColor: "#4D83FF",
+                      borderRadius: "6px",
+                      position: "absolute",
+                      color: "#FFFFFF",
+                      width: "280px",
+                      fontSize: "12px",
+                      lineHeight: "14px",
+                      fontFamily: "Open Sans",
+                      fontWeight: "500",
+                      letterSpacing: "1px",
+                      textTransform: "capitalize",
+                    }}
+                  />
+                </>
+              )}
+            </div>
+            {showAaddharOtpBox && (
+              <>
+                <div className="flex flex-col min-w-[240px] gap-5 pt-5">
+                  {/* <div className={`${!isMdScreen ? "w-full" : ""}`}> */}
+                  <div className="">
+                    <CustomInputBox
+                      label="Enter Aadhar OTP"
+                      inputType="text"
+                      id={"aadharOtp"}
+                      inputMode="numeric"
+                      containerStyle={`lg:!w-auto`}
+                      className="md:!w-[320px] !font-Open`"
+                      labelClassName="!font-Open"
+                      maxLength={6}
+                      value={otpNumber || ""}
+                      onChange={(e: any) => {
+                        if (isNaN(e.target.value)) {
+                        } else {
+                          setOTPNumber(e.target.value);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <TimerCounter
+                      sec={59}
+                      // setOTPNumber={setOTPNumber}
+                      routeCheck={true}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* send otp  */}
+
+            <div
+              className={`flex justify-start ${
+                showAaddharOtpBox || showGstOtpBox ? "null" : "pt-4"
+              }`}
+            >
+              {verifyOTP ? (
+                <>
+                  <OneButton
+                    text={loading ? "Submitting..." : "Submit"}
+                    onClick={onVerifyOtp}
+                    disabled={!checkbox || !otpFormBtnStatus || loading}
+                    variant="tertiary"
+                    className="!bg-transparent"
+                  />
+                </>
+              ) : (
+                <>
+                  <OneButton
+                    text={loading ? "sending OTP..." : "Send OTP"}
+                    onClick={handlePostBusinessVerification}
+                    disabled={!checkbox || !otpFormBtnStatus || loading}
+                    variant="tertiary"
+                    className="!bg-transparent"
+                  />
+                </>
+              )}
             </div>
           </>
         )}
       </div>
+      {/* service agreement  */}
+      <CenterModal
+        isOpen={isModalOpenForServiceAgreement}
+        onRequestClose={() => setIsModalOpenForServiceAgreement(false)}
+        className="!flex !justify-center !items-center w-[60%] lg:!w-3/4 lg:!h-3/4 xl:!w-[45%]  xl:!h-2/3"
+      >
+        <div className="product-box  bg-white flex justify-between items-center w-full h-[60px] top-0 px-5">
+          <img src={LARGE_LOGO} alt="" className="h-[25px]" />
+          <img
+            src={CloseIcon}
+            alt="close-icon"
+            onClick={() => setIsModalOpenForServiceAgreement(false)}
+            className="cursor-pointer"
+          />
+        </div>
+        <WelcomeHeader
+          className=""
+          title={`Welcome to ${COMPANY_NAME}`}
+          content="Terms & Agreement"
+        />
+        {/* <ServiceAgreementContent /> */}
+        <div className=" px-5 md:mb-5 md:mx-5 ">
+          <Card
+            title="SERVICE AGREEMENT"
+            subTitleOne="Forward delivery of the shipments"
+          />
+        </div>
+      </CenterModal>
+      {/* GST Non-Enrolment  */}
+      <CenterModal
+        isOpen={isModalOpenForNonGstAgreement}
+        onRequestClose={() => setIsModalOpenForNonGstAgreement(false)}
+        className="!flex !justify-center !items-center lg:!w-3/4 lg:!h-3/4 xl:!w-[45%]  xl:!h-2/3"
+      >
+        <div className="product-box  bg-white flex justify-between items-center w-full h-[60px] top-0 px-5">
+          <img src={LARGE_LOGO} alt="" className="h-[25px]" />
+          <img
+            src={CloseIcon}
+            alt="close-icon"
+            onClick={() => setIsModalOpenForNonGstAgreement(false)}
+            className="cursor-pointer"
+          />
+        </div>
+        <WelcomeHeader
+          className=""
+          title={`Welcome to ${COMPANY_NAME}`}
+          content="Terms & Agreement"
+        />
+        {/* <ServiceAgreementContent /> */}
+        <div className="md:mb-5">
+          <GstContent userNameForGst={userNameForGst} />
+        </div>
+      </CenterModal>
     </>
   );
 };

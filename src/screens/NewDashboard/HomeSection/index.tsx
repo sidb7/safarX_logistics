@@ -30,13 +30,13 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       section: "bankDetails",
       completed: false,
     },
-    // {
-    //   title: "Top up your Wallet for the first time",
-    //   content:
-    //     "Easily view your plan details to manage your shipping services. This guide will help you access and understand your plan information with Shipyaari.",
-    //   section: "walletRecharge",
-    //   completed: false,
-    // },
+    {
+      title: "Brand Profile Management",
+      content:
+        "Key your brand presence consistent and professional by updating your brand name and logo. This shall be updated in your shipping labels.",
+      section: "brandDetails",
+      completed: false,
+    },
     {
       title: "View your Plan Details",
       content:
@@ -63,15 +63,36 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     kyc: false,
     bankDetails: false,
     walletRecharge: false,
+    brandDetails: false,
     planDetails: false,
     customizeLabels: false,
     returningUser: false,
     channelIntegrated: false,
   });
 
+  // Function to update the `completed` status of a specific accordion item
+  const handleAccordionComplete = (index: number, { section }: any) => {
+    const updatedItems = [...accordianItems];
+    updatedItems[index].completed = true; // Mark the item as completed
+    setAccordianItems(updatedItems); // Update the state
+
+    if (
+      section === "kyc" ||
+      section === "bankDetails" ||
+      section === "brandDetails"
+    ) {
+      let obj = completedStatus;
+      obj[section] = true;
+      setCompletedStatus({ ...obj });
+    }
+  };
+
   useEffect(() => {
     const kycValue = retrieveLocalStorageData("kycValue");
     const userName = localStorage.getItem("userName");
+    const brandDetails = localStorage.getItem("brandDetails");
+    const companyName = kycValue?.privateCompany?.brandName;
+
     if (userName !== null && userName !== undefined) {
       setUserName(userName);
     }
@@ -80,16 +101,21 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       setMandatoryCheck(kycValue.nextStep);
 
       const { kyc, bank, isChannelIntegrated, qna } = kycValue.nextStep;
+      // Check if companyName is not an empty string or undefined
+      const isBrandDetailsValid =
+        companyName &&
+        companyName.trim() !== "" &&
+        companyName.trim().toUpperCase() !== "N/A";
 
       const updatedStatus = {
         ...completedStatus,
-
         kyc: !!kyc,
         bankDetails: !!bank,
         qna: !!qna,
         channelIntegrated: !!isChannelIntegrated,
         walletRecharge: !!kycValue?.isWalletRechage,
         returningUser: !!kycValue?.isReturningUser,
+        brandDetails: isBrandDetailsValid || !!brandDetails,
       };
 
       setCompletedStatus(updatedStatus);
@@ -99,7 +125,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   return (
     <>
       {/* welcome message */}
-      <WelcomeHeader userName={userName} />
+      <WelcomeHeader userName={userName} completedStatus={completedStatus} />
       {/* top reroute section  */}
       <TopCardSection completedStatus={completedStatus} />
       {/* the center accordian part  */}
@@ -108,6 +134,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         mandatoryCheck={mandatoryCheck}
         accordianItems={accordianItems}
         setAccordianItems={setAccordianItems}
+        onAccordionComplete={handleAccordionComplete}
       />
       {/* packaging guidelines container  */}
       <GuidelinesSection />

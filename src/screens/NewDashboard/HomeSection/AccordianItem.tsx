@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import successStatus from "../../../assets/success.svg";
 import KycSection from "./accordianSections/KycSection";
 import BankSection from "./accordianSections/BankSection";
+import BrandSection from "./accordianSections/BrandSection";
 // import PlanSection from "./accordianSections/PlanSection";
 // import LabelSection from "./accordianSections/LabelSection";
 
@@ -18,6 +19,12 @@ interface IAccordionItemProps {
   selectedSection?: any;
   mandatoryCheck?: any;
   sectionRoutes?: any;
+  loadingState?: any;
+  setLoadingState?: any;
+  bankLoadingState?: any;
+  setBankLoadingState?: any;
+  brandLoadingState?: any;
+  setBrandLoadingState?: any;
 }
 
 const AccordionItem: React.FC<IAccordionItemProps> = ({
@@ -25,11 +32,17 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
   content,
   isOpen,
   onClick,
-  completed,
+  completed = false,
   section,
   selectedSection,
   mandatoryCheck,
   sectionRoutes,
+  loadingState,
+  setLoadingState,
+  bankLoadingState,
+  setBankLoadingState,
+  brandLoadingState,
+  setBrandLoadingState,
 }) => {
   const navigate = useNavigate();
   const boxShadowStyle = completed
@@ -54,6 +67,12 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
     }
   };
 
+  const handleAccordionClose = () => {
+    if (onClick) {
+      onClick(); // This will close the accordion
+    }
+  };
+
   return (
     <div
       className={`border-b  rounded-[3.475px]  my-5 p-6 ${
@@ -63,7 +82,10 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
         boxShadow: boxShadowStyle,
       }}
     >
-      <div className="flex justify-between items-center">
+      <div
+        className="flex justify-between items-center cursor-pointer"
+        onClick={!completed ? onClick : undefined}
+      >
         <h2 className="font-Open text-[14px] lg:text-[18px] font-semibold leading-4 lg:!leading-8 tracking-wider xl:tracking-widest">
           {title}
         </h2>
@@ -75,10 +97,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
             </span>
           </div>
         ) : (
-          <div
-            className="cursor-pointer"
-            onClick={!completed ? onClick : undefined}
-          >
+          <div className="cursor-pointer">
             <svg
               className={`w-5 h-5 transform transition-transform ${
                 isOpen ? "rotate-180" : ""
@@ -100,7 +119,9 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
       {!completed && isOpen && (
         <div
           className={`pt-3  ${
-            selectedSection === "kyc" || selectedSection === "bankDetails"
+            selectedSection === "kyc" ||
+            selectedSection === "bankDetails" ||
+            selectedSection === "brandDetails"
               ? "flex flex-col"
               : "flex justify-between items-center"
           }`}
@@ -113,9 +134,18 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
 
           <div>
             {selectedSection === "kyc" ? (
-              <KycSection />
+              <KycSection
+                loadingState={loadingState}
+                setLoadingState={setLoadingState}
+              />
             ) : selectedSection === "bankDetails" ? (
-              <BankSection />
+              <BankSection
+                onNoSelected={handleAccordionClose}
+                bankLoadingState={bankLoadingState}
+                setBankLoadingState={setBankLoadingState}
+              />
+            ) : selectedSection === "brandDetails" ? (
+              <BrandSection setBrandLoadingState={setBrandLoadingState} />
             ) : (
               <div className=" items-end text-end">
                 <OneButton
