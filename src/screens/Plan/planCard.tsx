@@ -42,56 +42,61 @@ const PlanCard = (props: ITypeProps) => {
       )}
 
       <div
-        className={`flex flex-col  items-center   ${
+        className={`${
           planName?.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
         } ${
           isSelected && "!border-[#004EFF] rounded-t-none rounded-b-lg"
         } py-5 px-4 shadow-sm border-[1px]   border-[#E8E8E8] bg-[#FFFFFF] w-[288px] lg:w-[273px]`}
         // h-[504px] relative  ---- remove css for new changes
       >
-        <img
-          src={CargoRatingGif}
-          alt="CargoRating"
-          width={isLgScreen ? 180 : 220}
-          height={isLgScreen ? 180 : 220}
-          className="mb-6 lg:mb-4"
-        />
+        <div className="flex flex-col  items-center">
+          <img
+            src={CargoRatingGif}
+            alt="CargoRating"
+            width={isLgScreen ? 180 : 220}
+            height={isLgScreen ? 180 : 220}
+            className="mb-6 lg:mb-4"
+          />
 
-        <p className="text-[#004EFF] font-Lato text-[22px]  font-semibold leading-7 uppercase mb-2 ">
-          {planName}
-        </p>
+          <p className="text-[#004EFF] font-Lato text-[22px]  font-semibold leading-7 uppercase mb-2 ">
+            {planName}
+          </p>
 
-        {planName?.toUpperCase() === "FREEMIUM" ||
-        planName?.toUpperCase() === "PLATINUM" ? (
-          <div className="flex items-center mb-8">
-            <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
-              <span className="font-Open text-[12px] font-semibold leading-4 ">
-                ₹
-              </span>
-              {`${planName === "FREEMIUM" ? "Free" : "Price On Request"}`}
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center  mb-8">
-            <div className="flex items-end gap-x-1">
+          {planName?.toUpperCase() === "FREEMIUM" ||
+          planName?.toUpperCase() === "PLATINUM" ? (
+            <div className="flex items-center mb-8">
               <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
-                <span className="font-Open text-[12px] font-semibold leading-4 text-[#777777] ">
+                <span className="font-Open text-[12px] font-semibold leading-4 ">
                   ₹
                 </span>
-                {`${price}`}
-              </p>
-              <p className=" font-Open text-[12px] font-semibold  text-[#777777] leading-4">
-                {`/${validity}`}
+                {`${planName === "FREEMIUM" ? "Free" : "Price On Request"}`}
               </p>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="flex flex-col items-center  mb-8">
+              <div className="flex items-end gap-x-1">
+                <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
+                  <span className="font-Open text-[12px] font-semibold leading-4 text-[#777777] ">
+                    ₹
+                  </span>
+                  {`${price}`}
+                </p>
+                <p className=" font-Open text-[12px] font-semibold  text-[#777777] leading-4">
+                  {`/${validity}`}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
 
         <p
           className="font-Open text-sm font-normal leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4"
-          style={{ width: "-webkit-fill-available", paddingLeft: "12px" }}
+          style={{
+            width: "-webkit-fill-available",
+            paddingLeft: "12px",
+            wordWrap: "break-word",
+          }}
         >
-          {/* {description} */}
           <ul>
             {descriptionArray.map((feature, index) => (
               <li className="list-disc" key={index}>
