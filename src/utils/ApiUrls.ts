@@ -249,6 +249,7 @@ const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 const GET_PENDING_PLANS = `${SELLER_BASE_URL}/seller/pendingPlans`;
 const POST_ASSIGN_PLANV3 = `${SELLER_BASE_URL}/seller/assignPlanV4`;
 const GET_PLANS_PREVIEW = `${SELLER_BASE_URL}/sellerPlans/planPreview`;
+const GET_FEATURES_PLANS = `${SELLER_BASE_URL}/sellerPlans/allcompanyFeatureRateCard`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -306,7 +307,7 @@ const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
 //impersonation logs
-const GET_IMPERSONATION_LOGS = `${SELLER_BASE_URL}/fileServices/log/IMPERSONATION-LOGS`
+const GET_IMPERSONATION_LOGS = `${SELLER_BASE_URL}/fileServices/log/IMPERSONATION-LOGS`;
 
 //Channel Store
 const POST_CREATE_STORE = `${SELLER_BASE_URL}/channel/shopify/createShopifyStore`;
@@ -676,4 +677,5 @@ export {
   WALLETSHAREDIV,
   WALLETSECRETKEY,
   GET_IMPERSONATION_LOGS,
+  GET_FEATURES_PLANS,
 };

@@ -4,6 +4,39 @@
     "req_type": "GET",
     "api": "/api/v1/tracking/getTrackingforSystem",
     "data_type": [],
-    "response_key": "trackingInfo"
+    "response_key": "trackingInfo",
+    "error_msg": "Please Enter Tracking ID"
+  },
+  "transaction-history": {
+    "query_key": "searchValue",
+    "req_type": "POST",
+    "api": "/api/v1/walletTransaction/getWalletTransaction",
+    "data_type": [],
+    "response_key": "data",
+    "error_msg": "Please Enter Transaction ID"
+  },
+  "new-discrepancy": {
+    "query_key": "searchText",
+    "req_type": "POST",
+    "api": "/api/v1/weightDispute/getDisputeInfo",
+    "data_type": [],
+    "response_key": "data",
+    "error_msg": "Please Enter Order Id"
+  },
+  "raise-dispute": {
+    "query_key": "searchText",
+    "req_type": "POST",
+    "api": "/api/v1/weightDispute/getDisputeInfo",
+    "data_type": [],
+    "response_key": "data",
+    "error_msg": "Please Enter Order Id"
+  },
+  "dispute-closed": {
+    "query_key": "searchText",
+    "req_type": "POST",
+    "api": "/api/v1/weightDispute/getDisputeInfo",
+    "data_type": [],
+    "response_key": "data",
+    "error_msg": "Please Enter Order Id"
   }
 }
