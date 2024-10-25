@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import BackArrowIcon from "../../assets/backArrow.svg";
 import { ReactElement } from "react";
@@ -20,6 +20,7 @@ export const Breadcrum = ({
   state,
 }: IBreadcrumProps) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route
 
   const GetCurrentPath = () => {
     const currentUrl = window.location.href;
@@ -47,13 +48,21 @@ export const Breadcrum = ({
   kycCheck = JSON.parse(kycCheck);
   kycCheck = kycCheck?.nextStep?.kyc;
 
+  // Check if current route is the same as "/onboarding/kyc-type"
+  const isKycRoute = location.pathname === "/dashboard/overview";
+
   return (
     <>
       <div>
-        {!kycCheck && (
+        {!isKycRoute && !kycCheck && (
           <div
             className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
-            onClick={() => navigate("/onboarding/kyc-type")}
+            // onClick={() => navigate("/onboarding/kyc-type")}
+            onClick={() => {
+              navigate("/dashboard/overview", {
+                state: { openSection: "kyc" }, // Pass the section you want to open
+              });
+            }}
           >
             <div className="flex gap-x-2 w-[150px]">
               <img src={infoIcon} alt="" />

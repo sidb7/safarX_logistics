@@ -10,6 +10,7 @@ interface IRadioButtonProps {
   label?: string;
   style?: any;
   checked?: boolean;
+  disabled?: any;
 }
 
 const Index = (props: IRadioButtonProps) => {
@@ -23,6 +24,7 @@ const Index = (props: IRadioButtonProps) => {
     labelClassName,
     style,
     checked,
+    disabled,
   } = props;
 
   return (
@@ -36,7 +38,9 @@ const Index = (props: IRadioButtonProps) => {
         id={id}
         style={style}
         checked={checked}
+        disabled={disabled}
       />
+
       <label htmlFor={id} className={`${labelClassName} cursor-pointer  `}>
         {label}
       </label>
