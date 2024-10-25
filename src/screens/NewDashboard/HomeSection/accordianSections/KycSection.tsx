@@ -361,6 +361,8 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
           );
           if (response?.success) {
             setOTPNumber("");
+            setShowAaddharOtpBox(false);
+            setVerifyOTP(false);
             try {
               const payload = { pan_no: panNumber };
               const { data: response } = await POST(
@@ -840,7 +842,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
                             containerStyle={`lg:!w-auto`}
                             className="md:!w-[320px] !font-Open`"
                             labelClassName="!font-Open"
-                            maxLength={6}
+                            maxLength={4}
                             value={otpNumber || ""}
                             onChange={(e: any) => {
                               if (isNaN(e.target.value)) {
