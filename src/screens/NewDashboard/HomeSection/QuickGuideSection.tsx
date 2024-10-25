@@ -4,6 +4,7 @@ import HomeGif from "../../../assets/girl doing research on app.gif";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface IQuickGuideSectionProps {
   completedStatus: any;
@@ -146,10 +147,10 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
       <div className="bg-[#F0F4FE] py-7 px-6 lg:py-[50px] lg:px-12">
         <div className="flex flex-col items-start gap-y-4">
           <h1 className="text-lg lg:text-2xl text-[#1C1C1C] font-Open font-semibold leading-5 lg:leading-8">
-            Your Quick Start Guide to Shipyaari
+            Your Quick Start Guide to {COMPANY_NAME}
           </h1>
           <p className="font-Open text-sm lg:text-base font-normal leading-6 text-[#697586]">
-            Quickly learn how to set up and use Shipyaari with this
+            Quickly learn how to set up and use {COMPANY_NAME} with this
             easy-to-follow guide. It covers everything you need to start
             managing your shipments efficiently and effectively.
           </p>
