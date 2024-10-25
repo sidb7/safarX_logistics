@@ -93,9 +93,10 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
 
   const handleGSTNumberChange = (e: any) => {
     const gstValue = e.target.value.toUpperCase(); // Convert to uppercase for consistency
-    // Validate GST number using regex
-    if (gstRegex.test(gstValue)) {
-      setGSTNumber(gstValue); // Set valid GST number
+    setGSTNumber(gstValue); // Allow input without validation
+
+    // Validate GST number only after the user has entered the full 15 characters
+    if (gstValue.length === 15 && gstRegex.test(gstValue)) {
       extractPANFromGST(gstValue); // Extract PAN from the valid GST number
       setgstError(""); // Clear any previous GST error
       setPanNumberError(""); // Clear PAN error
@@ -111,17 +112,13 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         setBusinessType("business");
         setChecked({ individual: false, company: true });
       }
-    } else {
-      // If GST number is invalid, show error and reset states
-      setGSTNumber(gstValue);
+    } else if (gstValue.length === 15) {
+      // If GST number is invalid, show error after the full input
       setgstError("Enter a valid GST Number");
       setPanNumber(""); // Clear PAN number on invalid GST
-
-      // Reset business type to "Individual" as a fallback
-      setBusinessType("individual");
-      setChecked({ individual: true, company: false });
     }
   };
+
   function extractPANFromGST(gstValue: any) {
     if (!gstValue || gstValue.length !== 15) {
       return null;
