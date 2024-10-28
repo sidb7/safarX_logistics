@@ -411,6 +411,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
           if (response?.success) {
             setOTPNumber("");
             // setLoading(false);
+            setShowgstOtpBox(false);
 
             verifyPAN(panNumber);
             //gtm
@@ -447,7 +448,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
                 kyc_verified: true,
               });
             } else {
-              // setLoading(false);
+              setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);
             }
@@ -466,6 +467,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
               setLoadingState(false);
               window.location.reload();
             } else {
+              setLoading(false);
               toast.error(response?.message);
               setLoadingState(true);
             }
@@ -894,13 +896,13 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
               <p className="font-Open text-sm font-normal leading-4 text-[#1C1C1C]">
                 GST Number :{" "}
                 <span className="font-Open text-[15px] font-semibold leading-4 text-[#1C1C1C] mr-9">
-                  {gstNumber}
+                  {gstNumber || "-"}
                 </span>{" "}
               </p>
               <p className="font-Open text-sm font-normal leading-4 text-[#1C1C1C]">
-                GST Number :{" "}
+                PAN Number :{" "}
                 <span className="font-Open text-[15px] font-semibold leading-4 text-[#1C1C1C]">
-                  {gstNumber}
+                  {panNumber || "-"}
                 </span>{" "}
               </p>
             </div>
@@ -1003,7 +1005,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
                   <div>
                     <TimerCounter
                       sec={59}
-                      // setOTPNumber={setOTPNumber}
+                      setOTPNumber={setOTPNumber}
                       routeCheck={true}
                     />
                   </div>
