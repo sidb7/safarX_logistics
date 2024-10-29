@@ -205,10 +205,10 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
               <div className="w-1/3 flex justify-center">
                 <CustomDropDown
                   options={[
-                    {
-                      label: "1 Label Per Page",
-                      value: "1",
-                    },
+                    // {
+                    //   label: "1 Label Per Page",
+                    //   value: "1",
+                    // },
                     {
                       label: "2 Label Per Page",
                       value: "2",
