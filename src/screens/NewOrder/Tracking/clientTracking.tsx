@@ -334,7 +334,10 @@ const Tracking = () => {
                                           </div>
 
                                           {/* TrackingID */}
-                                          <div className="flex items-center">
+                                          <div
+                                            className="flex items-center"
+                                            onClick={(e) => e.stopPropagation()}
+                                          >
                                             <p className="text-xs font-bold font-Open flex gap-x-1">
                                               Tracking ID&nbsp;:&nbsp;
                                               <span className="font-bold font-Open text-[#004EFF]">
