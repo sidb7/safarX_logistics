@@ -181,7 +181,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
   ) => {
     if (actionType === "track_order") {
       window.open(
-        `${SELLER_WEB_URL}/shipyaari-tracking?trackingNo=${data?.awb}`,
+        `${SELLER_WEB_URL}/tracking?trackingNo=${data?.awb}`,
         "_blank"
       );
     } else {

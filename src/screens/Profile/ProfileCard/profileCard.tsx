@@ -56,7 +56,8 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const planStartDate = props?.ProfileDetails?.planStartDate;
   const AccDetailsContactNo =
     props?.ProfileDetails?.privateCompany?.accountDetails?.contactNumber;
-  const AccDetailsEmail =props?.ProfileDetails?.privateCompany?.accountDetails?.email;
+  const AccDetailsEmail =
+    props?.ProfileDetails?.privateCompany?.accountDetails?.email;
   const OpDetailsContactNo =
     props?.ProfileDetails?.privateCompany?.operationDetails?.contactNumber;
   const OpDetailsEmail =
@@ -169,7 +170,9 @@ ding-6">
               >
                 <img
                   src={`${
-                    profileImageUrl && profileImageUrl !== "N/A" && profileImageUrl !== ""
+                    profileImageUrl &&
+                    profileImageUrl !== "N/A" &&
+                    profileImageUrl !== ""
                       ? profileImageUrl
                       : ProfileIcon
                   }`}
@@ -208,11 +211,19 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                {AccDetailsEmail}
+                {AccDetailsEmail ? (
+                  AccDetailsEmail
+                ) : (
+                  <span className="text-gray-400  text-sm">Not Available</span>
+                )}
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-                {`+91 ${AccDetailsContactNo}`}
+                {AccDetailsContactNo ? (
+                  `+91 ${AccDetailsContactNo}`
+                ) : (
+                  <span className="text-gray-400  text-sm">Not Available</span>
+                )}
               </span>
             </div>
 
@@ -223,11 +234,11 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                {OpDetailsEmail}
+                {OpDetailsEmail ? OpDetailsEmail :  <span className="text-gray-400  text-sm">Not Available</span> }
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-                {`+91 ${OpDetailsContactNo}`}
+                {OpDetailsContactNo ?`+91 ${OpDetailsContactNo}`: <span className="text-gray-400  text-sm">Not Available</span>}
               </span>
             </div>
 
@@ -352,8 +363,8 @@ ding-6">
           setShowModal(false);
         }}
         // className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
-         className="w-full sm:w-[400px] md:w-[450px] lg:w-[500px] !justify-between !items-stretch"
-  wrapperClassName="overflow-y-auto"
+        className="w-full sm:w-[400px] md:w-[450px] lg:w-[500px] !justify-between !items-stretch"
+        wrapperClassName="overflow-y-auto"
       >
         <EditProfile
           onClose={setShowModal}

@@ -1,177 +1,3 @@
-// import React, { useState } from "react";
-// import CustomInputBox from "../../../components/Input";
-// import { textRegex } from "../../../utils/regexCheck";
-// import InfoCircle from "../../../assets/info-circle.svg";
-// import OneButton from "../../../components/Button/OneButton";
-// import { Spinner } from "../../../components/Spinner";
-// import { POST } from "../../../utils/webService";
-// import {
-//   UPDATE_SELLER_NAME,
-//   UPDATE_SINGLE_SELLER,
-// } from "../../../utils/ApiUrls";
-// import toast from "react-hot-toast";
-
-// function EditProfile({ onClose, getProfileData }: any) {
-//   const [sellerData, setsellerData] = useState({
-//     firstName: "",
-//     lastName: "",
-//   });
-
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   const [signUpError, setSignUpError] = useState<any>({
-//     firstName: "",
-//     lastName: "",
-//   });
-
-//   const UpdateProfile = async () => {
-//     const payload = {
-//       firstName: sellerData.firstName,
-//       lastName: sellerData.lastName,
-//     };
-//     setIsLoading(true);
-//     try {
-//       const { data } = await POST(UPDATE_SELLER_NAME, payload);
-//       if (data?.success) {
-//         onClose(false);
-//         getProfileData();
-//       } else {
-//         toast.error(data?.message);
-//       }
-//       setIsLoading(false);
-//     } catch (err) {
-//       setIsLoading(false);
-//     }
-//   };
-//   //UPDATE_SINGLE_SELLER
-//   return (
-//     <div className="py-4">
-//       <div className="mt-2 mb-4 mx-4 text-[24px]">UPDATE PROFILE</div>
-//       <div className="flex flex-col mx-4 gap-y-6">
-//         <div>
-//           <CustomInputBox
-//             containerStyle=""
-//             // placeholder=""
-//             id="fName"
-//             //commented as by default placeholder text is getting top of the input box
-//             // tempLabel={true}
-//             label="First Name"
-//             maxLength={16}
-//             onChange={(e) => {
-//               setSignUpError({
-//                 ...signUpError,
-//                 firstName: "",
-//               });
-//               setsellerData({
-//                 ...sellerData,
-//                 firstName: e.target.value,
-//               });
-//             }}
-//             onBlur={(e) => {
-//               if (!sellerData?.firstName) {
-//                 setSignUpError({
-//                   ...signUpError,
-//                   firstName: "Please Enter Your First Name",
-//                 });
-//               } else if (!textRegex.test(e.target.value)) {
-//                 setSignUpError({
-//                   ...signUpError,
-//                   firstName:
-//                     "Enter Valid name(numbers, special characters not allowed) ",
-//                 });
-//               } else {
-//                 setSignUpError({
-//                   ...signUpError,
-//                   firstName: "",
-//                 });
-//               }
-//             }}
-//           />
-
-//           {signUpError.firstName !== "" && (
-//             <div className="flex items-center gap-x-1 mt-1">
-//               <img src={InfoCircle} alt="" width={10} height={10} />
-//               <span className="font-normal text-[#F35838] text-xs leading-3">
-//                 {signUpError.firstName}
-//               </span>
-//             </div>
-//           )}
-//         </div>
-//         <div>
-//           <CustomInputBox
-//             containerStyle=""
-//             //commented as by default placeholder text is getting top of the input box
-//             // tempLabel={true}
-//             label="Last Name"
-//             id="lName"
-//             maxLength={16}
-//             // placeholder=""
-//             onChange={(e) => {
-//               setSignUpError({
-//                 ...signUpError,
-//                 lastName: "",
-//               });
-//               setsellerData({
-//                 ...sellerData,
-//                 lastName: e.target.value,
-//               });
-//             }}
-//             onBlur={(e) => {
-//               if (!sellerData?.lastName) {
-//                 setSignUpError({
-//                   ...signUpError,
-//                   lastName: "Please Enter Your Last Name",
-//                 });
-//               } else if (!textRegex.test(e.target.value)) {
-//                 setSignUpError({
-//                   ...signUpError,
-//                   lastName:
-//                     "Enter Valid name(numbers, special characters not allowed) ",
-//                 });
-//               } else {
-//                 setSignUpError({
-//                   ...signUpError,
-//                   lastName: "",
-//                 });
-//               }
-//             }}
-//           />
-//           {signUpError.lastName !== "" && (
-//             <div className="flex items-center gap-x-1 mt-1">
-//               <img src={InfoCircle} alt="" width={10} height={10} />
-//               <span className="font-normal text-[#F35838] text-xs leading-3">
-//                 {signUpError.lastName}
-//               </span>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//       <div
-//         className="lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
-//         style={{ width: "-webkit-fill-available" }}
-//       >
-//         {isLoading ? (
-//           <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
-//             <Spinner />
-//           </div>
-//         ) : (
-//           <>
-//             <OneButton
-//               text="Update"
-//               onClick={UpdateProfile}
-//               className=" px-5  "
-//               variant="primary"
-//             />
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default EditProfile;
-
-
 import React, { useState ,useRef} from 'react';
 import CustomInputBox from "../../../components/Input";
 import cameraIcon from "../../../assets/camera.svg";
@@ -226,21 +52,103 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
 
 
 
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   console.log('namesdsd',name, value);
+    
+  //   setProfileData(prevData => ({ ...prevData, [name]: value }));
+  //   if (name.includes('MailID') && !/\S+@\S+\.\S+/.test(value)) {
+  //     setErrors(prevErrors => ({ ...prevErrors, [name]: 'Please enter a valid email address 1' }));
+  //   }
+  //   if (name.includes('ContactNo') && !/\S+@\S+\.\S+/.test(value)) {
+  //     setErrors(prevErrors => ({ ...prevErrors, [name]: 'Please enter a valid 10 digit contact number' }));
+  //   }
+      
+  // };
+
+  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    
+    // For contact number fields, only allow numbers
+    if (name.includes('ContactNo')) {
+      // Remove any non-digit characters and limit to 10 digits
+      const numbersOnly = value.replace(/\D/g, '').slice(0, 10);
+      
+      setProfileData(prevData => ({ ...prevData, [name]: numbersOnly }));
+      
+      // Validate the number
+      if (numbersOnly.length > 0) {
+        const validStartDigits = /^[6-9]\d{9}$/;
+        if (!validStartDigits.test(numbersOnly)) {
+          setErrors(prevErrors => ({ 
+            ...prevErrors, 
+            [name]: 'Please enter a valid 10 digit number' 
+          }));
+        } else {
+          setErrors(prevErrors => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[name];
+            return newErrors;
+          });
+        }
+      } else {
+        setErrors(prevErrors => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
+      return;
+    }
+
+    // For non-contact number fields, handle normally
     setProfileData(prevData => ({ ...prevData, [name]: value }));
-    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+  
+    // Clear error when field is empty
+    if (value.trim() === '') {
+      setErrors(prevErrors => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[name];
+        return newErrors;
+      });
+      return;
+    }
+  
+    // Validate email fields
+    if (name.includes('MailID')) {
+      if (!emailRegex.test(value)) {
+        setErrors(prevErrors => ({ 
+          ...prevErrors, 
+          [name]: 'Please enter a valid email address' 
+        }));
+      } else {
+        setErrors(prevErrors => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
+    }
   };
 
+
   const validateField = (name: string, value: string) => {
-    if (!value) return `Please enter your ${name.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
-    if (name.includes('MailID') && !/\S+@\S+\.\S+/.test(value)) return 'Please enter a valid email address';
+    // if (!value) return `Please enter your ${name.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
+    if (value.trim() === '') return ''; // Don't show error for empty fields
+
+    if(name === "accountsMailID" && value===""){
+      return '';
+    }else if (name.includes('MailID') && !/\S+@\S+\.\S+/.test(value)) return 'Please enter a valid email address';
+
     if (name.includes('ContactNo') && !/^[6-9]\d{9}$/.test(value)) return 'Please enter a valid 10 digit contact number';
     return '';
   };
 
   const handleInputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    // console.log('name',name, value)
     const error = validateField(name, value);
     setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
   };
@@ -259,9 +167,27 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+  
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload only image files');
+      return;
+    }
+  
+    // Validate file size (5MB limit)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('Image size must be less than 5MB');
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onload = (event) => {
       const img = new Image();
+      
       img.onload = () => {
+        // Check image dimensions
         if (img.height > 200 || img.width > 700) {
           toast.error(
             "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
@@ -269,17 +195,83 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
           setShowUploadModal(false);
           return;
         }
+  
+        // Create canvas for maintaining aspect ratio
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setProfileData(prevData => ({ ...prevData, profileImageUrl: reader.result as string }));
-        };
-        reader.readAsDataURL(file);
+        if (!ctx) {
+          toast.error('Unable to process image');
+          return;
+        }
+  
+        // Determine the target dimensions while maintaining aspect ratio
+        let targetWidth = img.width;
+        let targetHeight = img.height;
+  
+        // Determine size of the square canvas for circular display
+        const size = Math.max(targetWidth, targetHeight);
+        canvas.width = size;
+        canvas.height = size;
+  
+        // Fill with transparency
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.fillRect(0, 0, size, size);
+  
+        // Calculate positioning to center the image
+        const offsetX = (size - targetWidth) / 2;
+        const offsetY = (size - targetHeight) / 2;
+  
+        // Draw image centered on canvas
+        ctx.drawImage(img, offsetX, offsetY, targetWidth, targetHeight);
+  
+        // Convert to base64
+        const resizedImage = canvas.toDataURL('image/png', 1.0);
+        
+        setProfileData(prevData => ({ ...prevData, profileImageUrl: resizedImage }));
         setShowUploadModal(false);
       };
-      img.src = URL.createObjectURL(file);
-    }
+  
+      img.onerror = () => {
+        toast.error('Error loading image');
+        setShowUploadModal(false);
+      };
+  
+      img.src = event.target?.result as string;
+    };
+  
+    reader.onerror = () => {
+      toast.error('Error reading file');
+      setShowUploadModal(false);
+    };
+  
+    reader.readAsDataURL(file);
   };
+
+
+  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     const img = new Image();
+  //     img.onload = () => {
+  //       if (img.height > 200 || img.width > 700) {
+  //         toast.error(
+  //           "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+  //         );
+  //         setShowUploadModal(false);
+  //         return;
+  //       }
+        
+  //       const reader = new FileReader();
+  //       reader.onloadend = () => {
+  //         setProfileData(prevData => ({ ...prevData, profileImageUrl: reader.result as string }));
+  //       };
+  //       reader.readAsDataURL(file);
+  //       setShowUploadModal(false);
+  //     };
+  //     img.src = URL.createObjectURL(file);
+  //   }
+  // };
 
   const handleSave = async () => {
     const newErrors: { [key: string]: string } = {};
@@ -290,6 +282,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      toast.error('Please fix the validation errors before saving');
       return;
     }
 
@@ -337,7 +330,16 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
         <div className="relative w-24 h-24 mx-auto mb-6">
           <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
             {profileData.profileImageUrl ? (
-              <img src={profileData.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
+              // <img src={profileData.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
+              <img 
+              src={profileData.profileImageUrl} 
+              alt="Profile" 
+              className="absolute w-full h-full object-cover"
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center'
+              }}
+            />
             ) : (
               <img src={cameraIcon} alt="Profile" />
             )}
@@ -370,11 +372,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             name="firstName"
             value={profileData.firstName}
             onChange={handleInputChange}
-            onBlur={handleInputBlur}
+            onBlur={()=>{}}
             containerStyle="mb-4"
             inputClassName="w-full"
             isRequired={true}
-            inputError={!!errors.firstName}
+            // inputError={!!errors.firstName}
             errorMessage={errors.firstName}
             isDisabled
           />accountsgmail
@@ -428,11 +430,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             name="accountsMailID"
             value={profileData.accountsMailID}
             onChange={handleInputChange}
-            onBlur={handleInputBlur}
+            onBlur={()=>{}}
             containerStyle="mb-4"
             inputClassName="w-full"
             isRequired={true}
-            inputError={!!errors.accountsMailID}
+            // inputError={!!errors.accountsMailID}
             errorMessage={errors.accountsMailID}
             inputType="email"
           />
@@ -442,11 +444,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             name="accountsContactNo"
             value={profileData.accountsContactNo}
             onChange={handleInputChange}
-            onBlur={handleInputBlur}
+            onBlur={()=>{}}
             containerStyle="mb-4"
             inputClassName="w-full"
             isRequired={true}
-            inputError={!!errors.accountsContactNo}
+            // inputError={!!errors.accountsContactNo}
             errorMessage={errors.accountsContactNo}
             inputType="tel"
           />
@@ -456,11 +458,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             name="operationsMailID"
             value={profileData.operationsMailID}
             onChange={handleInputChange}
-            onBlur={handleInputBlur}
+            onBlur={()=>{}}
             containerStyle="mb-4"
             inputClassName="w-full"
             isRequired={true}
-            inputError={!!errors.operationsMailID}
+            // inputError={!!errors.operationsMailID}
             errorMessage={errors.operationsMailID}
             inputType="email"
           />
@@ -470,11 +472,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             name="operationsContactNo"
             value={profileData.operationsContactNo}
             onChange={handleInputChange}
-            onBlur={handleInputBlur}
+            onBlur={()=>{}}
             containerStyle="mb-4"
             inputClassName="w-full"
             isRequired={true}
-            inputError={!!errors.operationsContactNo}
+            // inputError={!!errors.operationsContactNo}
             errorMessage={errors.operationsContactNo}
             inputType="tel"
           />
