@@ -21,20 +21,30 @@ const ImpersonationLog = () => {
   const columns = [
     columnsHelper.accessor("createdAt", {
       header: "Date",
-      cell: (info) => convertEpochToDateTime(info?.getValue()),
+      cell: (info) => (
+        <div className="flex justify-center">
+          {convertEpochToDateTime(info?.getValue())}
+        </div>
+      ),
     }),
+    //commented as raised a ticket in clickup
     // columnsHelper.accessor("adminName", {
     //   header: "Admin Name",
     //   cell: (info) => info?.getValue(),
     // }),
     columnsHelper.accessor("adminId", {
       header: "Admin ID",
-      cell: (info) => info?.getValue(),
+      cell: (info) => (
+        <div className="flex justify-center">{info?.getValue()}</div>
+      ),
     }),
     columnsHelper.accessor("api", {
       header: "API",
-      cell: (info) => info?.getValue(),
+      cell: (info) => (
+        <div className="flex justify-center">{info?.getValue()}</div>
+      ),
     }),
+    //commented as raised a ticket in clickup
     // columnsHelper.accessor("request", {
     //   header: "Request",
     //   cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
