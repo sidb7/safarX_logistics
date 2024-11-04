@@ -23,10 +23,10 @@ const ImpersonationLog = () => {
       header: "Date",
       cell: (info) => convertEpochToDateTime(info?.getValue()),
     }),
-    columnsHelper.accessor("adminName", {
-      header: "Admin Name",
-      cell: (info) => info?.getValue(),
-    }),
+    // columnsHelper.accessor("adminName", {
+    //   header: "Admin Name",
+    //   cell: (info) => info?.getValue(),
+    // }),
     columnsHelper.accessor("adminId", {
       header: "Admin ID",
       cell: (info) => info?.getValue(),
@@ -35,15 +35,14 @@ const ImpersonationLog = () => {
       header: "API",
       cell: (info) => info?.getValue(),
     }),
-    columnsHelper.accessor("request", {
-      header: "Request",
-      cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
-    }),
-    columnsHelper.accessor("response", {
-      header: "Response",
-      cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
-    }),
-
+    // columnsHelper.accessor("request", {
+    //   header: "Request",
+    //   cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
+    // }),
+    // columnsHelper.accessor("response", {
+    //   header: "Response",
+    //   cell: (info) => <JsonViewer jsonData={info?.getValue()} />,
+    // }),
   ];
 
   const fetchImpersonationLogs = async (page = 1, perPage = 10) => {
