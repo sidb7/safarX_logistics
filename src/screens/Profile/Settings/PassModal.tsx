@@ -136,7 +136,9 @@ function PassModal(props: PassModalProps) {
             inputType={viewPassword.oldPassword ? "text" : "password"}
             isRightIcon={true}
             visibility={viewPassword.oldPassword}
-            rightIcon={viewPassword.oldPassword ? CrossEyeIcon : EyeIcon}
+            //changed this as raised a ticket in clickup
+            // rightIcon={viewPassword.oldPassword ? CrossEyeIcon : EyeIcon}
+            rightIcon={viewPassword.oldPassword ? EyeIcon : CrossEyeIcon}
             setVisibility={() => togglePasswordVisibility("oldPassword")}
             onClick={() => {}}
             onChange={(e) =>
@@ -152,7 +154,9 @@ function PassModal(props: PassModalProps) {
             tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
             maxLength={16}
             visibility={viewPassword.newPassword}
-            rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+            //changed this as raised a ticket in clickup
+            // rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+            rightIcon={viewPassword.newPassword ? EyeIcon : CrossEyeIcon}
             setVisibility={() => togglePasswordVisibility("newPassword")}
             onClick={() => {}}
             onChange={(e) => {
@@ -193,7 +197,9 @@ function PassModal(props: PassModalProps) {
             informativeIcon={InformativeIcon}
             tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
             visibility={viewPassword.confirmNewPassword}
-            rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
+            //changed this as raised a ticket in clickup
+            // rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
+            rightIcon={viewPassword.confirmNewPassword ? EyeIcon : CrossEyeIcon}
             setVisibility={() => togglePasswordVisibility("confirmNewPassword")}
             onClick={() => {}}
             onChange={(e) =>
