@@ -533,52 +533,52 @@ const NewDiscrepancyTable = ({
         );
       },
     }),
-    columnsHelper.accessor("courierPhotos", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Courier Photos
-            </p>
-          </div>
-        );
-      },
+    // columnsHelper.accessor("courierPhotos", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+    //           Courier Photos
+    //         </p>
+    //       </div>
+    //     );
+    //   },
 
-      cell: ({ row }: any) => {
-        const rowData = row?.original;
-        let partnerWeightImages = rowData?.partnerPhoto || [];
+    //   cell: ({ row }: any) => {
+    //     const rowData = row?.original;
+    //     let partnerWeightImages = rowData?.partnerPhoto || [];
 
-        let sellerWeightImages = rowData?.sellerPhoto || [];
-        let awb = rowData?.awb || 0;
-        let id = rowData?.privateCompanyId || 0;
+    //     let sellerWeightImages = rowData?.sellerPhoto || [];
+    //     let awb = rowData?.awb || 0;
+    //     let id = rowData?.privateCompanyId || 0;
 
-        return (
-          <p
-            className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
-            onClick={() => {
-              if (partnerWeightImages.length > 0) {
-                getPartnerImages(partnerWeightImages);
-                setSideDrawer({
-                  isOpen: true,
-                  data: {
-                    awb: awb,
-                    privateCompanyId: id,
-                    name: "partner",
-                  },
-                });
-              } else {
-                toast.error("No Image Found");
-              }
-            }}
-          >
-            Uploaded Images
-            <span className="text-[#004EFF] mx-1">
-              ({rowData?.partnerPhoto?.length})
-            </span>
-          </p>
-        );
-      },
-    }),
+    //     return (
+    //       <p
+    //         className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
+    //         onClick={() => {
+    //           if (partnerWeightImages.length > 0) {
+    //             getPartnerImages(partnerWeightImages);
+    //             setSideDrawer({
+    //               isOpen: true,
+    //               data: {
+    //                 awb: awb,
+    //                 privateCompanyId: id,
+    //                 name: "partner",
+    //               },
+    //             });
+    //           } else {
+    //             toast.error("No Image Found");
+    //           }
+    //         }}
+    //       >
+    //         Uploaded Images
+    //         <span className="text-[#004EFF] mx-1">
+    //           ({rowData?.partnerPhoto?.length})
+    //         </span>
+    //       </p>
+    //     );
+    //   },
+    // }),
     columnsHelper.accessor("actions", {
       header: () => {
         return (
