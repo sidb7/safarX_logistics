@@ -289,9 +289,7 @@ ding-6">
                 <OneButton
                   text={"UPGRADE"}
                   className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]"
-                  onClick={() => {
-                    navigate("/plans");
-                  }}
+                  onClick={() => navigate("/subscription/plans")}
                   variant="primary"
                 />
               </div>
@@ -340,7 +338,7 @@ ding-6">
                   text={"UPGRADE"}
                   className=" "
                   onClick={() => {
-                    navigate("/plans");
+                    navigate("/subscription/plans");
                   }}
                   variant="primary"
                   textTransform="uppercase"
