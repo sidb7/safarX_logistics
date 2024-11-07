@@ -3,7 +3,7 @@ import EditIcon from "../../../assets/Profile/EditIcon.svg";
 import BlackEditIcon from "../../../assets/Profile/BlackEditIcon.svg";
 import EmailIcon from "../../../assets/Profile/EmailIcon.svg";
 import PhoneIcon from "../../../assets/Profile/PhoneIcon.svg";
-import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
+import WebsiteIcon from "../../../assets/Profile/companyNameLogo.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -234,11 +234,19 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                {OpDetailsEmail ? OpDetailsEmail :  <span className="text-gray-400  text-sm">Not Available</span> }
+                {OpDetailsEmail ? (
+                  OpDetailsEmail
+                ) : (
+                  <span className="text-gray-400  text-sm">Not Available</span>
+                )}
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-                {OpDetailsContactNo ?`+91 ${OpDetailsContactNo}`: <span className="text-gray-400  text-sm">Not Available</span>}
+                {OpDetailsContactNo ? (
+                  `+91 ${OpDetailsContactNo}`
+                ) : (
+                  <span className="text-gray-400  text-sm">Not Available</span>
+                )}
               </span>
             </div>
 
