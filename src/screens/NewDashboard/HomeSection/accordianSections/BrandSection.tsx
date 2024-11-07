@@ -47,10 +47,7 @@ const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
   };
 
   const isFormValid = () => {
-    return (
-      brandingDetails.brandName.trim() !== "" &&
-      brandingDetails.companyName.trim() !== ""
-    );
+    return brandingDetails.brandName.trim() !== "";
   };
 
   const updateBrandingDetails = async () => {
