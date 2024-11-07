@@ -44,6 +44,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
   brandLoadingState,
   setBrandLoadingState,
 }) => {
+  // console.log("completed", completed, section);
   const navigate = useNavigate();
   const boxShadowStyle = completed
     ? "0px 0px 0px 0px #7CCA62, 2.83px 0px 0px 0px #acf295 inset"
@@ -51,6 +52,13 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
   const handleClick = () => {
     // Check if KYC is required and not completed
     if (selectedSection === "bankDetails") {
+      if (!mandatoryCheck?.kyc) {
+        toast.error("KYC is not completed. Please complete KYC to proceed."); // Show error message
+        return; // Stop further execution
+      }
+    }
+
+    if (selectedSection === "brandDetails") {
       if (!mandatoryCheck?.kyc) {
         toast.error("KYC is not completed. Please complete KYC to proceed."); // Show error message
         return; // Stop further execution
@@ -71,6 +79,13 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
     if (onClick) {
       onClick(); // This will close the accordion
     }
+  };
+
+  const shouldRenderSectionContent = (sectionName: string) => {
+    if (sectionName === "bankDetails" || sectionName === "brandDetails") {
+      return mandatoryCheck?.kyc;
+    }
+    return true;
   };
 
   return (
@@ -116,7 +131,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
           </div>
         )}
       </div>
-      {!completed && isOpen && (
+      {!completed && isOpen && shouldRenderSectionContent(selectedSection) && (
         <div
           className={`pt-3  ${
             selectedSection === "kyc" ||

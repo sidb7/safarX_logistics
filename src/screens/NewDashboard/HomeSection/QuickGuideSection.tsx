@@ -27,6 +27,7 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
 }) => {
   const location = useLocation();
   const kycRef = useRef<HTMLDivElement | null>(null); // Ref for KYC section
+  // const brandDetailsRef = useRef<HTMLDivElement | null>(null); // Ref for brandDetails section
   const { isXlScreen } = ResponsiveState();
   const [loadingState, setLoadingState] = useState(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -54,6 +55,11 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
 
     // Check if the selected section is 'bankDetails' and KYC is not completed
     if (section === "bankDetails" && !mandatoryCheck?.kyc) {
+      toast.error("KYC is not completed. Please complete KYC to proceed.");
+      return; // Stop execution to prevent opening the bank section
+    }
+
+    if (section === "brandDetails" && !mandatoryCheck?.kyc) {
       toast.error("KYC is not completed. Please complete KYC to proceed.");
       return; // Stop execution to prevent opening the bank section
     }
@@ -94,6 +100,13 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
           ) {
             kycRef.current.scrollIntoView({ behavior: "smooth" });
           }
+          // if (
+          //   sectionToOpen === "brandDetails" &&
+          //   !completedStatus["brandDetails"] &&
+          //   brandDetailsRef.current
+          // ) {
+          //   brandDetailsRef.current.scrollIntoView({ behavior: "smooth" });
+          // }
         }, 300); // Delay of 300ms to ensure accordion opens first
       }
     }
@@ -172,7 +185,10 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
           <div className="flex-1" ref={kycRef}>
             <div className=" ">
               {accordianItems?.map((item: any, index: number) => (
-                <div key={index}>
+                <div
+                  key={index}
+                  // ref={item.section === "brandDetails" ? brandDetailsRef : null}
+                >
                   <AccordionItem
                     key={index}
                     title={item?.title}
