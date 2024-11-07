@@ -4,6 +4,8 @@ import WelcomeHeader from "./WelcomeHeader";
 import TopCardSection from "./TopCardSection";
 import QuickGuideSection from "./QuickGuideSection";
 import GuidelinesSection from "./GuidelinesSection";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import CompanyNameContent from "./accordianSections/CompanyNameContent";
 
 interface IHomeProps {}
 
@@ -24,17 +26,17 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       completed: false,
     },
     {
-      title: "Become a COD Seller",
-      content:
-        "Get access to seamless COD payouts by verifying your bank Details.",
-      section: "bankDetails",
-      completed: false,
-    },
-    {
       title: "Brand Profile Management",
       content:
         "Key your brand presence consistent and professional by updating your brand name and logo. This shall be updated in your shipping labels.",
       section: "brandDetails",
+      completed: false,
+    },
+    {
+      title: "Become a COD Seller",
+      content:
+        "Get access to seamless COD payouts by verifying your bank Details.",
+      section: "bankDetails",
       completed: false,
     },
     {
@@ -70,6 +72,8 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     channelIntegrated: false,
   });
 
+  const [openCentreModal, setOpenCentreModal] = useState(false);
+
   // Function to update the `completed` status of a specific accordion item
   const handleAccordionComplete = (index: number, { section }: any) => {
     const updatedItems = [...accordianItems];
@@ -91,7 +95,14 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     const kycValue = retrieveLocalStorageData("kycValue");
     const userName = localStorage.getItem("userName");
     const brandDetails = localStorage.getItem("brandDetails");
-    const companyName = kycValue?.privateCompany?.brandName;
+    const brandName = kycValue?.privateCompany?.brandName;
+    let privateCompanyName = kycValue?.privateCompany?.name;
+    console.log("🚀 ~ privateCompanyName:", privateCompanyName);
+    const isCompanyNameInvalid =
+      !privateCompanyName ||
+      privateCompanyName.trim() === "" ||
+      privateCompanyName === "N/A";
+    console.log("🚀 ~ isCompanyNameInvalid:", isCompanyNameInvalid);
 
     if (userName !== null && userName !== undefined) {
       setUserName(userName);
@@ -103,9 +114,9 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       const { kyc, bank, isChannelIntegrated, qna } = kycValue.nextStep;
       // Check if companyName is not an empty string or undefined
       const isBrandDetailsValid =
-        companyName &&
-        companyName.trim() !== "" &&
-        companyName.trim().toUpperCase() !== "N/A";
+        brandName &&
+        brandName.trim() !== "" &&
+        brandName.trim().toUpperCase() !== "N/A";
 
       const updatedStatus = {
         ...completedStatus,
@@ -119,6 +130,9 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       };
 
       setCompletedStatus(updatedStatus);
+    }
+    if (kycValue?.nextStep?.kyc && isCompanyNameInvalid) {
+      setOpenCentreModal(true);
     }
   }, []);
 
@@ -138,6 +152,13 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       />
       {/* packaging guidelines container  */}
       <GuidelinesSection />
+      <CenterModal
+        isOpen={openCentreModal}
+        onRequestClose={() => setOpenCentreModal(false)}
+        className="!flex !justify-start !items-center w-[60%] lg:!w-3/4 lg:!h-3/4 xl:!w-[45%]  xl:!h-2/3 "
+      >
+        <CompanyNameContent setOpenCentreModal={setOpenCentreModal} />
+      </CenterModal>
     </>
   );
 };
