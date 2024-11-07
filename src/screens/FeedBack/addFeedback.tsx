@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import feedBackIcon from "../../assets/feedback.svg";
 import closeIcon from "../../assets/CloseIcon.svg";
 import { Tooltip } from "react-tooltip";
@@ -56,17 +56,25 @@ const userExperienceExpression = [
 ];
 function AddFeedBack() {
   const [expresstion, setExpression] = useState(userExperienceExpression);
-  const [subModuleList, setSubModuleList] = useState([]);
+  const [subModuleList, setSubModuleList] = useState<any[]>([]);
   const [onHoverShowColorEmoji, setOnHoverShowColorEmoji]: any = useState(null);
 
   const navigate = useNavigate();
 
   const [feedbackState, setFeedBackState] = useState({
-    module: "",
-    subModule: "",
+    module: module[0]?.name || "", // Set initial module to first in list
+    subModule: module[0]?.menu?.[0]?.name || "", 
     comments: "",
     experience: "",
   });
+
+   // Set initial submodule list on component mount
+   useEffect(() => {
+    if (module.length > 0) {
+      const firstModule = module[0];
+      setSubModuleList(firstModule.menu || []);
+    }
+  }, []);
 
   const isSubmitDisabled = !Object.values(feedbackState).every(
     (value) => value

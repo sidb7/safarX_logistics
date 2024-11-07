@@ -5,6 +5,7 @@ import OneButton from "../../../../components/Button/OneButton";
 import toast from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import { LOGO_AND_BRAND } from "../../../../utils/ApiUrls";
+import { retrieveLocalStorageData } from "../../../../utils/utility";
 
 interface IBrandSectionProps {
   setBrandLoadingState: any;
@@ -13,11 +14,22 @@ interface IBrandSectionProps {
 const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
   setBrandLoadingState,
 }) => {
+  // const privateCompanyDetails = retrieveLocalStorageData("kycValue");
+
+  // let privateCompanyName = privateCompanyDetails?.privateCompany?.name;
+
+  // // Add a condition to check if the name is "N/A", an empty string, or undefined
+  // const isCompanyNameInvalid =
+  //   !privateCompanyName ||
+  //   privateCompanyName.trim() === "" ||
+  //   privateCompanyName === "N/A";
+
   const [loading, setLoading] = useState(false);
   const [brandingDetails, setBrandingDetails] = useState<any>({
     image: "",
     imageUrl: "",
     brandName: "",
+    // companyName: isCompanyNameInvalid ? "" : privateCompanyName,
     file: null,
   });
 
@@ -35,18 +47,17 @@ const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
   };
 
   const isFormValid = () => {
-    return (
-      brandingDetails.brandName.trim() !== "" && brandingDetails.file !== null
-    );
+    return brandingDetails.brandName.trim() !== "";
   };
 
   const updateBrandingDetails = async () => {
     if (!isFormValid()) {
-      return toast.error("Both fields are required.");
+      return toast.error("All the above fields are required.");
     }
 
     let formData = new FormData();
     formData.append("brandName", brandingDetails.brandName);
+    // formData.append("companyName", brandingDetails.companyName);
     formData.append("file", brandingDetails?.file);
 
     let img: any = new Image();
@@ -79,6 +90,8 @@ const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
           // getProfileData();
         } else {
           toast.error(data?.message);
+          setBrandLoadingState(null);
+          setLoading(false);
         }
       }
     };
@@ -86,10 +99,40 @@ const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
   return (
     <>
       <div className="flex flex-col gap-y-5">
-        <p className="font-Open font-normal text-base text-[#1C1C1C] leading-4 pt-4 tracking-wide">
-          Fill details of your Brand
-        </p>
-        <div className="flex  flex-col md:flex md:flex-row gap-5">
+        <div className="flex justify-start gap-x-5">
+          <p className="font-Open font-normal text-base text-[#1C1C1C] leading-4 pt-4 tracking-wide">
+            Fill details of your Brand
+          </p>
+          {/* {!isCompanyNameInvalid && (
+            <p className="font-Open font-normal text-base text-[#1C1C1C] leading-4 pt-4 tracking-wide">
+              Company Name :{" "}
+              <span className="font-Open font-bold text-base text-[#1C1C1C] leading-4 pt-4 tracking-wide">
+                {privateCompanyName}
+              </span>
+            </p>
+          )} */}
+        </div>
+
+        <div className="flex  flex-col xl:flex xl:flex-row gap-5">
+          {/* {isCompanyNameInvalid && (
+            <>
+              <div className="min-w-[240px]">
+                <CustomInputBox
+                  label="Company Name"
+                  containerStyle={`lg:!w-auto`}
+                  //   className="font-Open !w-[320px] md:!w-[370px]"
+                  labelClassName="!font-Open"
+                  onChange={(e: any) =>
+                    setBrandingDetails({
+                      ...brandingDetails,
+                      companyName: e.target.value,
+                    })
+                  }
+                  value={brandingDetails.companyName}
+                />
+              </div>
+            </>
+          )} */}
           <div className="min-w-[240px]">
             <CustomInputBox
               label="Brand Name"
