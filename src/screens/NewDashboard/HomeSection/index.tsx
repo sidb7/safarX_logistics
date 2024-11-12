@@ -74,6 +74,9 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
 
   const [openCentreModal, setOpenCentreModal] = useState(false);
 
+  // List of invalid company names
+  const invalidCompanyNames = [null, undefined, "", "N/A", "NA", "n/a", "na"];
+
   // Function to update the `completed` status of a specific accordion item
   const handleAccordionComplete = (index: number, { section }: any) => {
     const updatedItems = [...accordianItems];
@@ -97,12 +100,16 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     const brandDetails = localStorage.getItem("brandDetails");
     const brandName = kycValue?.privateCompany?.brandName;
     let privateCompanyName = kycValue?.privateCompany?.name;
-    console.log("🚀 ~ privateCompanyName:", privateCompanyName);
-    const isCompanyNameInvalid =
-      !privateCompanyName ||
-      privateCompanyName.trim() === "" ||
-      privateCompanyName === "N/A";
-    console.log("🚀 ~ isCompanyNameInvalid:", isCompanyNameInvalid);
+
+    // const isCompanyNameInvalid =
+    //   !privateCompanyName ||
+    //   privateCompanyName.trim() === "" ||
+    //   privateCompanyName === "N/A";
+
+    // Check if the company name is invalid
+    const isCompanyNameInvalid = invalidCompanyNames.includes(
+      privateCompanyName?.trim()
+    );
 
     if (userName !== null && userName !== undefined) {
       setUserName(userName);
