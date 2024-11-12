@@ -1591,7 +1591,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     className="w-full !text-base !font-semibold"
                     imageClassName="!h-[12px] !w-[113px] !top-[40%] "
                     value={otherErrorDetails?.newOrderId}
-                    maxLength={12}
+                    maxLength={40}
                     label="Order ID"
                     onChange={(e: any) => {
                       setOtherErrorDetails((prevState: any) => {
