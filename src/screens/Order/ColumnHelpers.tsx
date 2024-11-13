@@ -703,6 +703,7 @@ const idHelper = (
       });
 
       const handleInformativeModal = () => {
+        console.log("hiii");
         setInfoModalContentFunction({
           awb,
           orderId:

@@ -435,13 +435,13 @@ const BoxDetails = (props: IBoxdetails) => {
                 <div className="!w-full">
                   <CustomInputBox
                     label="Invoice Value"
-                    isDisabled={
-                      source === "WEBSITE" &&
-                      (sellerId == 103529 || sellerId == 129176) &&
-                      Environment === "production"
-                        ? false
-                        : true
-                    }
+                    // isDisabled={
+                    //   source === "WEBSITE" &&
+                    //   (sellerId == 103529 || sellerId == 129176) &&
+                    //   Environment === "production"
+                    //     ? false
+                    //     : true
+                    // } as discussed with gaurav and mahavir + anna + raja
                     onChange={(e: any) =>
                       handleCollectableAmmount(e, "invoiceValue")
                     }
