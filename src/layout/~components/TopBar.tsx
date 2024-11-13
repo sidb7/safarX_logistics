@@ -38,6 +38,9 @@ import { io, Socket } from "socket.io-client";
 import { GlobalToast } from "../../components/GlobalToast/GlobalToast";
 import { initSocket } from "../../Socket";
 import ProfileIcon from "../../assets/ProfileIconBlue.png";
+import SentryFeedback from "./SentryFeedback"; 
+import ReportAbugIcon from "../../assets/ReportABug.svg"
+
 
 let socket: Socket | null = null;
 
@@ -67,6 +70,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const [serviceabilityTableData, setServiceabilityTableData] = useState([]);
   const [serviceabilityTableLoader, setServiceabilityTableLoader] =
     useState(false);
+
+  // Add new state for Sentry feedback
+  const [isSentryOpen, setIsSentryOpen] = useState(false);
+
 
   const [serviceabilityData, setServiceabilityData] = useState<any>({
     pickupPincode: "",
@@ -102,6 +109,18 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
+
+  
+  // Handler for Report A Bug click
+  const handleReportBugClick = () => {
+    setIsSentryOpen(true);
+    setIsQuick(false); // Close the quick actions menu
+  };
+
+  // Handler for closing Sentry feedback
+  const handleSentryClose = () => {
+    setIsSentryOpen(false);
+  };
 
   const handleOutsideClick = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -573,17 +592,20 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       </a>
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/orders/add-bulk")}
+                        onClick={handleReportBugClick}
                       >
+                        
+                        <div className="h-7 w-7  pt-2 mb-3 md:ml-6 ml-3">
                         <img
-                          src={AddBulkIcon}
+                          src={ReportAbugIcon}
                           alt=""
                           className="self-center"
                           height={"40px"}
                           width={"40px"}
                         />
+                        </div>
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Add Bulk Order
+                          Report A Bug
                         </span>
                       </div>
                       <div
@@ -637,6 +659,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             loader={serviceabilityTableLoader}
           />
         </CenterModal>
+         {/* Add the SentryFeedback component */}
+         <SentryFeedback 
+          isOpen={isSentryOpen}
+          onClose={handleSentryClose}
+        />
       </nav>
     </>
   );
