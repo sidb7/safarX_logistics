@@ -898,7 +898,9 @@ export const columnHelperForNewOrder = (
                 </div>
               )}
 
-              {(source === "UNICOMMERCE" || source === "SHOPIFY") &&
+              {(source === "UNICOMMERCE" ||
+                source === "SHOPIFY" ||
+                source === "WOOCOMMERCE") &&
                 otherDetails?.orderNumber && (
                   <div className="">
                     <span className=" text-xs font-normal font-Open leading-4 ">
@@ -1568,7 +1570,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                 </div>
               )}
 
-              {(source === "UNICOMMERCE" || source === "SHOPIFY") &&
+              {(source === "UNICOMMERCE" ||
+                source === "SHOPIFY" ||
+                source === "WOOCOMMERCE") &&
                 otherDetails?.orderNumber && (
                   <div className="">
                     <span className=" text-sm font-light">Order Number :</span>
@@ -1829,7 +1833,9 @@ export const columnHelpersForRest = (
                 </div>
               )}
 
-              {(source === "UNICOMMERCE" || source === "SHOPIFY") &&
+              {(source === "UNICOMMERCE" ||
+                source === "SHOPIFY" ||
+                source === "WOOCOMMERCE") &&
                 otherDetails?.orderNumber && (
                   <div className="">
                     <span className=" text-sm font-light">Order Number :</span>
