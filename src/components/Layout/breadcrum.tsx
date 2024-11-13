@@ -53,15 +53,23 @@ export const Breadcrum = ({
 
   const privateCompanyDetails = retrieveLocalStorageData("kycValue");
 
+  // List of invalid company names
+  const invalidCompanyNames = [null, undefined, "", "N/A", "NA", "n/a", "na"];
+
   let privateCompanyName = privateCompanyDetails?.privateCompany?.name;
   // console.log("🚀 ~ privateCompanyName:", privateCompanyName);
 
-  // Add a condition to check if the name is "N/A", an empty string, or undefined
-  const isCompanyNameInvalid =
-    !privateCompanyName ||
-    privateCompanyName.trim() === "" ||
-    privateCompanyName === "N/A";
+  // // Add a condition to check if the name is "N/A", an empty string, or undefined
+  // const isCompanyNameInvalid =
+  //   !privateCompanyName ||
+  //   privateCompanyName.trim() === "" ||
+  //   privateCompanyName === "N/A";
   // console.log("🚀 ~ isCompanyNameInvalid:", isCompanyNameInvalid);
+
+  // Check if the company name is invalid
+  const isCompanyNameInvalid = invalidCompanyNames.includes(
+    privateCompanyName?.trim()
+  );
 
   // Check if current route is the same as "/onboarding/kyc-type"
   const isKycRoute = location.pathname === "/dashboard/overview";
