@@ -35,6 +35,7 @@ import {
   RECHARGE_STATUS,
   PAYMENT_ERRORS,
   DUPLICATE_ORDER,
+  COMPANY_NAME,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -251,6 +252,7 @@ const tabs = [
 ];
 
 const Index = () => {
+  const companyName = COMPANY_NAME;
   const [filterId, setFilterId]: any = useState(0);
   const [statusData, setStatusData]: any = useState(tabs);
   const [orders, setOrders]: any = useState([]);
@@ -418,8 +420,6 @@ const Index = () => {
   //  const fetchDataControllerRef = useRef<AbortController | null>(null);
   //  const currentTabRef = useRef<number>(renderingComponents);
 
-
-  
   // const [isMasked, setIsMasked] = useState(false);
 
   // useEffect(() => {
@@ -1171,7 +1171,6 @@ const Index = () => {
   //   try {
   //     setIsLoading(true);
 
-
   //     let firstFilterData = [];
   //     let secondFilterData = [];
 
@@ -1193,7 +1192,6 @@ const Index = () => {
   //         currentStatus,
   //       };
   //     }
-
 
   //     if (searchText?.length > 0) {
   //       payload.id = searchText;
@@ -1262,7 +1260,7 @@ const Index = () => {
   //       } else {
   //         setStatusCount("", currentStatus, orderCount);
   //       }
-        
+
   //       setTotalcount(orderCount ? orderCount : 0);
 
   //       if (payload.filterArrOne) {
@@ -1282,7 +1280,7 @@ const Index = () => {
   //       }
 
   //       setSelectedRowData([]);
-        
+
   //       if (data?.status || data?.success) {
   //         return data?.data[0];
   //       }
@@ -1299,8 +1297,6 @@ const Index = () => {
   //     }
   //   }
   // };
-
-  
 
   //  // Cleanup on unmount
   //  useEffect(() => {
@@ -1617,9 +1613,7 @@ const Index = () => {
     }
   };
 
-
-
-    // Modified handleTabChanges
+  // Modified handleTabChanges
   // const handleTabChanges = async (
   //   index?: any,
   //   dateFilter = false,
@@ -1635,7 +1629,7 @@ const Index = () => {
   //       fetchDataControllerRef.current.abort();
   //       fetchDataControllerRef.current = null;
   //     }
-      
+
   //     currentTabRef.current = index;
 
   //     // Create new controller
@@ -2821,7 +2815,7 @@ const Index = () => {
             )}
             <hr />
             <p className="mt-1">
-              <span>Shipyaari ID:</span>
+              <span>{capitalizeFirstLetter(companyName)} ID:</span>
               {infoModalContent?.data?.orderId?.split("T")?.[1] ||
                 infoModalContent?.data?.orderId ||
                 ""}

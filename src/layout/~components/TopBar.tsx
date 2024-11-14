@@ -24,7 +24,12 @@ import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
 import profileIcon from "../../assets/Contact.svg";
 import { toast } from "react-hot-toast";
-import { GET_PROFILE_URL, LOGOUT, LARGE_LOGO } from "../../utils/ApiUrls";
+import {
+  GET_PROFILE_URL,
+  LOGOUT,
+  LARGE_LOGO,
+  COMPANY_NAME,
+} from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
 import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
@@ -38,9 +43,8 @@ import { io, Socket } from "socket.io-client";
 import { GlobalToast } from "../../components/GlobalToast/GlobalToast";
 import { initSocket } from "../../Socket";
 import ProfileIcon from "../../assets/ProfileIconBlue.png";
-import SentryFeedback from "./SentryFeedback"; 
-import ReportAbugIcon from "../../assets/ReportABug.svg"
-
+import SentryFeedback from "./SentryFeedback";
+import ReportAbugIcon from "../../assets/ReportABug.svg";
 
 let socket: Socket | null = null;
 
@@ -73,7 +77,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   // Add new state for Sentry feedback
   const [isSentryOpen, setIsSentryOpen] = useState(false);
-
 
   const [serviceabilityData, setServiceabilityData] = useState<any>({
     pickupPincode: "",
@@ -110,7 +113,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
-  
   // Handler for Report A Bug click
   const handleReportBugClick = () => {
     setIsSentryOpen(true);
@@ -510,24 +512,31 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           ₹ {quickData?.walletBalance}
                         </span> */}
                       </div>
-                      <div
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/wallet/view-wallet")}
-                      >
-                        <img
-                          src={YaariIcon}
-                          alt=""
-                          className="self-center"
-                          width={"40px"}
-                          height={"40px"}
-                        />
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Yaari Points
-                        </span>
-                        <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
-                          {0}
-                        </span>
-                      </div>
+
+                      {COMPANY_NAME === "SHIPYAARI" ||
+                      COMPANY_NAME === "shipyaari" ||
+                      COMPANY_NAME === "Shipyaari" ? (
+                        <div
+                          className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                          onClick={() => navigate("/wallet/view-wallet")}
+                        >
+                          <img
+                            src={YaariIcon}
+                            alt=""
+                            className="self-center"
+                            width={"40px"}
+                            height={"40px"}
+                          />
+                          <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                            Yaari Points
+                          </span>
+                          <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
+                            {0}
+                          </span>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                         onClick={() => navigate("/tracking")}
@@ -573,36 +582,44 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Create an order
                         </span>
                       </div>
-                      <a
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={SyAppIcon}
-                          alt=""
-                          className="self-center"
-                          width={"40px"}
-                          height={"40px"}
-                        />
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Shipyaari App
-                        </span>
-                      </a>
+
+                      {COMPANY_NAME === "SHIPYAARI" ||
+                      COMPANY_NAME === "shipyaari" ||
+                      COMPANY_NAME === "Shipyaari" ? (
+                        <>
+                          <a
+                            className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                            href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={SyAppIcon}
+                              alt=""
+                              className="self-center"
+                              width={"40px"}
+                              height={"40px"}
+                            />
+                            <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                              Shipyaari App
+                            </span>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                         onClick={handleReportBugClick}
                       >
-                        
                         <div className="h-7 w-7  pt-2 mb-3 md:ml-6 ml-3">
-                        <img
-                          src={ReportAbugIcon}
-                          alt=""
-                          className="self-center"
-                          height={"40px"}
-                          width={"40px"}
-                        />
+                          <img
+                            src={ReportAbugIcon}
+                            alt=""
+                            className="self-center"
+                            height={"40px"}
+                            width={"40px"}
+                          />
                         </div>
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
                           Report A Bug
@@ -659,11 +676,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             loader={serviceabilityTableLoader}
           />
         </CenterModal>
-         {/* Add the SentryFeedback component */}
-         <SentryFeedback 
-          isOpen={isSentryOpen}
-          onClose={handleSentryClose}
-        />
+        {/* Add the SentryFeedback component */}
+        <SentryFeedback isOpen={isSentryOpen} onClose={handleSentryClose} />
       </nav>
     </>
   );

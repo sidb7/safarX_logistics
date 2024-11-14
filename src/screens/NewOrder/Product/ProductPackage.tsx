@@ -461,10 +461,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       }
     }
 
-    if (codData?.invoiceValue <= 0) {
-      toast.error("Invoice must be greater than zero");
-      return;
-    }
+    // if (codData?.invoiceValue <= 0) {
+    //   toast.error("Invoice must be greater than zero");
+    //   return;
+    // }
 
     let payload = {
       boxInfo: packages,
