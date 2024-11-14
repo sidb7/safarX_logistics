@@ -16,6 +16,8 @@ import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
 import cancelledicon from "../../../assets/Transaction/cancelledIcon.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import PendingIcon from "../../../assets/pendingRed.svg";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 interface IPassbookProps {
   data: {
@@ -201,11 +203,12 @@ export const PassbookColumns = (setSortOrder: any) => {
     }),
     columnsHelper.accessor("shipyaari_id", {
       header: () => {
+        const companyName = COMPANY_NAME;
         return (
           <div className="flex justify-between items-center ">
             <div>
               <h1 className="font-Open font-semibold leading-5 text-sm">
-                Shipyaari ID
+                {capitalizeFirstLetter(companyName)} ID
               </h1>
             </div>
           </div>
