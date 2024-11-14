@@ -465,7 +465,7 @@ const Index = () => {
                       text="TRACK ORDER"
                       onClick={() => {
                         window.open(
-                          "https://app.shipyaari.com/shipyaari-tracking",
+                          "https://app.shipyaari.com/tracking",
                           "_blank"
                         );
                       }}
