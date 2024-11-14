@@ -442,6 +442,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     //     ? false
                     //     : true
                     // } as discussed with gaurav and mahavir + anna + raja
+
                     isDisabled={transitType === "REVERSE" ? true : false}
                     onChange={(e: any) =>
                       handleCollectableAmmount(e, "invoiceValue")
