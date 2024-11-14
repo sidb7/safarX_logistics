@@ -379,7 +379,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             // inputError={!!errors.firstName}
             errorMessage={errors.firstName}
             isDisabled
-          />accountsgmail
+          />
 
           <CustomInputBox
             label="Last Name"
