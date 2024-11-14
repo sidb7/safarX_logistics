@@ -79,6 +79,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
         productDetails: false,
         productDimension: false,
         productWeight: false,
+        productValue: false,
       },
     },
   });
@@ -106,6 +107,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
     if (labelData.pageSize !== "") {
       try {
         const payload = { labelSetting: labelData };
+        console.log("🚀 ~ createLabel ~ payload:", payload);
         const { data: createLabelResponse }: any = await POST(
           POST_ADD_LABEL_DATA,
           payload
