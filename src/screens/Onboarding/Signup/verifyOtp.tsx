@@ -1,4 +1,3 @@
-import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 // import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import MobileGif from "../../../assets/OrderCard/MobileNumberScreen.gif";
 import CustomButton from "../../../components/Button/index";

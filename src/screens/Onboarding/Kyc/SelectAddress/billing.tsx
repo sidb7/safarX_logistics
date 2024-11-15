@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import AddButton from "../../../../components/Button/addButton";
 import PlusIcon from "../../../../assets/plusIcon.svg";
 import {
+  COMPANY_NAME,
   GET_DEFAULT_ADDRESS,
   POST_UPDATE_DEFAULT_ADDRESS,
 } from "../../../../utils/ApiUrls";
@@ -131,7 +132,7 @@ const Billing = (props: ITypeProps) => {
               </div>
               <WelcomeHeader
                 className="!mt-[44px] md:!mt-6"
-                title="Welcome to Shipyaari"
+                title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
                 content="Select your"
                 whichAddress="Billing"
                 Address="Address"

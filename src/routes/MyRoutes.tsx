@@ -177,6 +177,7 @@ import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question
 import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 import EditDocuments from "../screens/Profile/DocumentsForInternational/editDocuments";
 import NewDashboard from "../screens/NewDashboard/index";
+import { COMPANY_NAME } from "../utils/ApiUrls";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -215,7 +216,10 @@ const MyRoutes: React.FC = () => {
       />
 
       <Route>
-        <Route path="/shipyaari-tracking" element={<ClientTracking />} />
+        <Route
+          path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
+          element={<ClientTracking />}
+        />
       </Route>
 
       {/* onboarding routes  */}

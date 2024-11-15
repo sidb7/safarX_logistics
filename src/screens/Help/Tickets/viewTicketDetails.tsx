@@ -9,6 +9,7 @@ import { BottomNavBar } from "../../../components/BottomNavBar";
 
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { ResponsiveState } from "../../../utils/responsiveState";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface ITypesProps {
   ticketData?: any;
@@ -103,10 +104,14 @@ const ViewTicketDetails = (props: ITypesProps) => {
           <p className="mb-2 lg:mb-8">{`On Fri 20 May 10:00AM, Ritu Sen <abcd@gmail.com>
 wrote:`}</p>
           <div className="mb-12">
-            <p className="lg:mb-4 font-semibold">Hi Shipyaari Team,</p>
+            <p className="lg:mb-4 font-semibold">
+              Hi {COMPANY_NAME || "Shipyaari"} Team,
+            </p>
             <p className="lg:mb-4">Noted.</p>
           </div>
-          <p className="mb-2 lg:mb-6 ">{`On Fri 20 May 10:00AM, Shipyaari Support Team
+          <p className="mb-2 lg:mb-6 ">{`On Fri 20 May 10:00AM, ${
+            COMPANY_NAME || "Shipyaari"
+          } Support Team
 <technicalsupport@shipyaari.com> wrote:`}</p>
           <p className="mb-3 lg:mb-5 font-semibold">Hi Ritu Sen,</p>
           <p className="mb-3 lg:mb-5">Thankyou for contacting us.</p>
@@ -117,7 +122,7 @@ wrote:`}</p>
             packages formed in the past order.
           </p>
           <p className="lg:mb-3">Sincerely,</p>
-          <p>Team Shipyaari</p>
+          <p>Team {COMPANY_NAME}</p>
         </div>
       </div>
       <div className=" flex-col hidden lg:flex">

@@ -21,7 +21,7 @@ import {
 import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import ReverseIcon from "../../assets/reverseIcon.png";
-import { SELLER_WEB_URL } from "../../utils/ApiUrls";
+import { COMPANY_NAME, SELLER_WEB_URL } from "../../utils/ApiUrls";
 import { useEffect, useRef } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
@@ -474,7 +474,7 @@ const idHelper = (
           {tempOrderId && (
             <div className="">
               <span className="font-Open font-normal leading-4 text-xs">
-                Shipyaari ID :
+                {COMPANY_NAME || "Shipyaari"} ID :
               </span>
               <div className="flex  items-center font-Open font-semibold leading-5 text-sm">
                 <span
@@ -694,7 +694,7 @@ const idHelper = (
 
       rows.push({
         title: "Other Details",
-        "Shipyaari ID": rowsData?.tempOrderId,
+        [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
         "Order Id": rowsData?.orderId,
         "Tracking Id": awb,
         Source: capitalizeFirstLetter(rowsData?.source),
@@ -852,7 +852,7 @@ export const columnHelperForNewOrder = (
               {tempOrderId && (
                 <div className="">
                   <span className="text-xs font-normal mr-1 leading-4 font-Open">
-                    Shipyaari ID :
+                    {COMPANY_NAME} ID :
                   </span>
                   <div className="flex  text-sm items-center font-semibold leading-5 font-Open">
                     {source == "SHOPIFY" ||
@@ -1138,7 +1138,7 @@ export const columnHelperForNewOrder = (
 
         rows.push({
           title: "Other Details",
-          "Shipyaari ID": rowsData?.tempOrderId,
+          [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": rowsData?.awb,
           Source: capitalizeFirstLetter(rowsData?.source),
@@ -1445,7 +1445,7 @@ export const columnHelperForNewOrder = (
         const { AWB } = status[0] ?? "";
         const copyString = `
           Order Id: ${orderId} 
-          Shipyaari Id: ${tempOrderId}
+          ${COMPANY_NAME} ID: ${tempOrderId}
           Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
           (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
         }
@@ -1592,7 +1592,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                 <span className="text-sm font-light">Delivery Partner</span>
                 <div className="font-semibold">
                   {isMasked
-                    ? "Shipyaari"
+                    ? COMPANY_NAME
                     : capitalizeFirstLetter(service?.partnerName)}
                 </div>
               </div>
@@ -1684,7 +1684,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
 
         const copyString = `
           Order Id: ${orderId} 
-          Shipyaari Id: ${tempOrderId}
+        ${COMPANY_NAME} Id: ${tempOrderId}
           Tracking Id: ${awb}
           Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
           (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
@@ -1850,7 +1850,7 @@ export const columnHelpersForRest = (
                 <span className="text-sm font-light">Delivery Partner</span>
                 <div className="font-semibold">
                   {isMasked
-                    ? "Shipyaari"
+                    ? COMPANY_NAME
                     : capitalizeFirstLetter(service?.partnerName)}
                 </div>
               </div>
@@ -1976,7 +1976,7 @@ export const columnHelpersForRest = (
         const { AWB } = status[0] ?? "";
         const copyString = `
           Order Id: ${tempOrderId} 
-          Shipyaari Id: ${sellerId}
+          ${COMPANY_NAME} Id: ${sellerId}
           Tracking Id: ${AWB}
           Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
           (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""

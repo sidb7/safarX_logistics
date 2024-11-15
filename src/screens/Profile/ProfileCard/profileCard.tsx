@@ -281,9 +281,7 @@ ding-6">
                   classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
                 />
               </div> */}
-              {COMPANY_NAME === "SHIPYAARI" ||
-              COMPANY_NAME === "shipyaari" ||
-              COMPANY_NAME === "Shipyaari" ? (
+              {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
                 <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
                   <LabelComponent
                     label="Yaari Points"
@@ -330,9 +328,7 @@ ding-6">
         ) : (
           <div
             className={`grid mt-4 gap-4 ${
-              COMPANY_NAME === "SHIPYAARI" ||
-              COMPANY_NAME === "shipyaari" ||
-              COMPANY_NAME === "Shipyaari"
+              COMPANY_NAME?.toLowerCase() === "shipyaari"
                 ? "grid-cols-3"
                 : "grid-cols-2"
             }`}
@@ -345,9 +341,7 @@ ding-6">
                 classNameInfo="pl-3"
               />
             </div>
-            {COMPANY_NAME === "SHIPYAARI" ||
-            COMPANY_NAME === "shipyaari" ||
-            COMPANY_NAME === "Shipyaari" ? (
+            {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
               <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
                 <LabelComponent
                   label="Yaari Points"

@@ -8,6 +8,7 @@ import AddButton from "../../../components/Button/addButton";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
 import {
+  COMPANY_NAME,
   FORGOT_PASSWORD,
   POST_SEND_OTP_URL,
   POST_VERIFY_OTP,
@@ -52,7 +53,7 @@ const ForgotPassword = (props: ITypeProps) => {
   });
   const [formData, setFormData] = useState({
     email: "",
-    companyName: "SHIPYAARI",
+    companyName: COMPANY_NAME?.toUpperCase() || "SHIPYAARI",
   });
 
   const [password, setPassword] = useState({

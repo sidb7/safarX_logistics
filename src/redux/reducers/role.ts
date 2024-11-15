@@ -48,6 +48,10 @@ export const getRoles: any = createAsyncThunk(
         "paymentGateway",
         JSON.stringify(response?.data?.[0]?.payments)
       );
+      sessionStorage.setItem(
+        "companydetails",
+        JSON.stringify(response?.data?.[0]?.companydetails?.[0])
+      );
       return role;
     } catch (error) {
       return thunkApi.rejectWithValue(error);

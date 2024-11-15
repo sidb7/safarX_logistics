@@ -1,6 +1,7 @@
 // TooltipContent.tsx
 import React from "react";
 import { Tooltip } from "react-tooltip";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface ServiceTooltipProps {
   option: any;
@@ -45,7 +46,7 @@ const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
           Courier Partner: <span>{`${option.text?.partnerName}`}</span>
         </p>
         <p>
-          Shipyaari Service Name:{" "}
+          {COMPANY_NAME || "Shipyaari"} Service Name:{" "}
           <span>{`${option.text?.companyServiceName}`}</span>
         </p>
         <p className="">
