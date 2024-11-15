@@ -6,6 +6,7 @@ import QuickGuideSection from "./QuickGuideSection";
 import GuidelinesSection from "./GuidelinesSection";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CompanyNameContent from "./accordianSections/CompanyNameContent";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface IHomeProps {}
 
@@ -13,15 +14,17 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const items = [
     {
       title: "Verify Your Account",
-      content:
-        "Verify your account to unlock all features of Shipyaari. Complete this step of verification process and start managing your shipments seamlessly.",
+      content: `Verify your account to unlock all features of ${
+        COMPANY_NAME || "Shipyaari"
+      }. Complete this step of verification process and start managing your shipments seamlessly.`,
       section: "verifyAccount",
       completed: false,
     },
     {
       title: "Complete Your KYC",
-      content:
-        "Complete your KYC to access Shipyaari's full range of services. Complete this step for a quick and easy KYC process to ensure seamless shipping.",
+      content: `Complete your KYC to access ${
+        COMPANY_NAME || "Shipyaari"
+      }'s full range of services. Complete this step for a quick and easy KYC process to ensure seamless shipping.`,
       section: "kyc",
       completed: false,
     },
@@ -41,8 +44,9 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     },
     {
       title: "View your Plan Details",
-      content:
-        "Easily view your plan details to manage your shipping services. This guide will help you access and understand your plan information with Shipyaari.",
+      content: `Easily view your plan details to manage your shipping services. This guide will help you access and understand your plan information with ${
+        COMPANY_NAME || "Shipyaari"
+      }.`,
       section: "planDetails",
       completed: false,
     },

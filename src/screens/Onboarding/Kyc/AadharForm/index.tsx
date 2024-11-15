@@ -12,6 +12,7 @@ import {
   POST_VERIFY_GST_OTP,
   POST_VERIFY_PAN_URL,
   POST_VERIFY_GST_URL,
+  COMPANY_NAME,
 } from "../../../../utils/ApiUrls";
 import {
   setOnOtpClientId,
@@ -229,7 +230,7 @@ const Index = (props: ITypeProps) => {
 
             <WelcomeHeader
               className="!mt-[44px] md:!mt-6"
-              title="Welcome to Shipyaari"
+              title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
               content=""
             />
 

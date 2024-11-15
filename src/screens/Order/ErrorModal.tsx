@@ -35,6 +35,7 @@ import {
   UPDATE_TEMP_ORDER_ADDRESS,
   VERIFY_ADDRESS,
   GET_SELLER_BOX,
+  COMPANY_NAME,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -2011,7 +2012,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               {errorModalData?.error !== "Box And Product" && (
                 <div className="flex">
                   <p className="flex justify-center items-center text-[14px] font-medium">
-                    Shipyaari Id : {"("}
+                    {COMPANY_NAME} Id : {"("}
                     {errorModalData?.entityDetails?.tempOrderId}
                     {")"}
                   </p>

@@ -177,6 +177,7 @@ import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question
 import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 import EditDocuments from "../screens/Profile/DocumentsForInternational/editDocuments";
 import NewDashboard from "../screens/NewDashboard/index";
+import { COMPANY_NAME } from "../utils/ApiUrls";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -215,7 +216,10 @@ const MyRoutes: React.FC = () => {
       />
 
       <Route>
-        <Route path="/shipyaari-tracking" element={<ClientTracking />} />
+        <Route
+          path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
+          element={<ClientTracking />}
+        />
       </Route>
 
       {/* onboarding routes  */}
@@ -494,7 +498,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/orders"
             element={
               <ProtectedRoute>
-                <NewDashboard />
+                <Home />
               </ProtectedRoute>
             }
           />
@@ -502,7 +506,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/exception"
             element={
               <ProtectedRoute>
-                <NewDashboard />
+                <Home />
               </ProtectedRoute>
             }
           />
@@ -510,7 +514,7 @@ const MyRoutes: React.FC = () => {
             path="dashboard/sy-performance"
             element={
               <ProtectedRoute>
-                <NewDashboard />
+                <Home />
               </ProtectedRoute>
             }
           />

@@ -19,6 +19,7 @@ import { POST } from "../../utils/webService";
 import {
   CANCEL_TEMP_SELLER_ORDER,
   CANCEL_WAY_BILL,
+  COMPANY_NAME,
   GET_SELLER_ORDER,
   SELLER_WEB_URL,
 } from "../../utils/ApiUrls";
@@ -436,7 +437,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
                     <div className=" my-1 flex text-[14px]">
                       <div className="flex w-fit">
                         <img src={BoxSearchIcon} alt="" className="w-[14px]" />
-                        <div className="ml-2">Shipyaari ID :</div>
+                        <div className="ml-2">{COMPANY_NAME} ID :</div>
                       </div>
                       <div className="text-[14px] ml-2">
                         {cartData?.shipyaariId}

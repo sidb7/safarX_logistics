@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import OrdersData from "./BillingData/ordersData";
 import ServiceButton from "../../components/Button/ServiceButton";
 import {
+  COMPANY_NAME,
   DOWNLOAD_ORDER_BILLED_CSV,
   GET_BILLED_ORDERS,
 } from "../../utils/ApiUrls";
@@ -121,7 +122,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
       <div>
         <Breadcrum label="Billing" />
         <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-          <div >
+          <div>
             <ScrollNav
               arrayData={arrayData}
               showNumber={false}
@@ -130,11 +131,12 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
             />
           </div>
           <div>
-            <div className={`${!isLgScreen ? ' flex justify-end' : ''}`}>
+            <div className={`${!isLgScreen ? " flex justify-end" : ""}`}>
               <ServiceButton
                 text="Download"
-                className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${!isLgScreen ? 'mt-4' : ''}`}
-
+                className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${
+                  !isLgScreen ? "mt-4" : ""
+                }`}
                 onClick={handleDownloadOrderCSV}
               />
             </div>
@@ -160,7 +162,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
                   amount: order.totalOrders,
                   sku: order.SKU,
                   trackingId: order["Tracking Number"],
-                  shipyaariId: order["Shipyaari ID"],
+                  shipyaariId: order[`${COMPANY_NAME} ID`],
                   courierName: order["Courier Name"],
                   prodDimensions: order["Product Dimensions"],
                   VolumetricWeight: order["Dimension Weight"],

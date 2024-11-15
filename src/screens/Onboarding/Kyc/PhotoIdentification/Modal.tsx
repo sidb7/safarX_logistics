@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import PopUpModal from "../../../../components/CustomModal/customBottomModal";
 
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import { COMPANY_NAME } from "../../../../utils/ApiUrls";
 
 interface ITypesProps {
   showModal: boolean;
@@ -70,7 +71,7 @@ const Modal = (props: ITypesProps) => {
         <div className="flex flex-col ">
           <div className="flex flex-col items-center p-5">
             <p className="font-semibold text-[18px] text-[#616161] text-center mb-1">
-              Shipyaari would like to Access the Camera
+              {COMPANY_NAME || "Shipyaari"} would like to Access the Camera
             </p>
             <p className="font-normal text-[14px] text-[#9E9E9E]  text-center">
               To register with Shipyaari & keep things secure, we'll need to

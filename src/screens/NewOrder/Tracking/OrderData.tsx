@@ -9,8 +9,8 @@ import OneButton from "../../../components/Button/OneButton";
 import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
 import CopyTooltip from "../../../components/CopyToClipboard";
-import { formatDate } from '../../../utils/dateUtils';
-
+import { formatDate } from "../../../utils/dateUtils";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface IOrderDataProps {
   data: any[];
@@ -177,13 +177,16 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                   src={infoIcon}
                   alt="Info"
                   className="ml-3 w-4 h-4 cursor-pointer"
-                  onClick={() =>{ onInfoIconClick(awb);  setRightModalAccordian(true)}}
+                  onClick={() => {
+                    onInfoIconClick(awb);
+                    setRightModalAccordian(true);
+                  }}
                 />
               </div>
             )}
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-                Shipyaari:
+                {COMPANY_NAME || "Shipyaari"}:
               </span>
               <span className="font-sans  text-sm leading-5 text-black  font-semibold">
                 {info.row?.original?.tempOrderId}
@@ -212,8 +215,6 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
       header: "Partner",
       cell: (info) => (
         <>
-         
-
           <div className="font-sans font-normal text-sm leading-5 text-black">
             Delivery Partner:{" "}
             <span className="font-semibold">
@@ -248,10 +249,11 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             ? sellerRemarks?.[sellerRemarks?.length - 1].time
             : null;
 
-        const pickupDate = info?.row?.original?.shipmentStatus?.attemptsReasons  ;
-        const pickUpDateTime = pickupDate && pickupDate?.length > 0
-        ? pickupDate?.[pickupDate?.length - 1].time
-        : null;
+        const pickupDate = info?.row?.original?.shipmentStatus?.attemptsReasons;
+        const pickUpDateTime =
+          pickupDate && pickupDate?.length > 0
+            ? pickupDate?.[pickupDate?.length - 1].time
+            : null;
 
         // const formatDate = (dateInput: any) => {
         //   if (!dateInput) return "";
@@ -367,7 +369,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                 onActionModalClick(dataForAction);
               }}
             >
-            RTO/Re-Attempt
+              RTO/Re-Attempt
             </button>
           </div>
         );

@@ -9,7 +9,7 @@ import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
 import resolvedImage from "../../../assets/resolved.svg";
 import { POST } from "../../../utils/webService";
-import { GET_BILLED_ORDERS } from "../../../utils/ApiUrls";
+import { COMPANY_NAME, GET_BILLED_ORDERS } from "../../../utils/ApiUrls";
 
 interface IOrdersDataProps {
   data: any;
@@ -54,9 +54,9 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
-              Shipyaari:
+              {COMPANY_NAME}:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                {info?.row?.original?.["Shipyaari ID"]}{" "}
+                {info?.row?.original?.[`${COMPANY_NAME} ID`]}{" "}
                 <img src={copyIcon} alt="" />
               </p>
             </div>
