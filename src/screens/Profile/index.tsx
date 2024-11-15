@@ -84,7 +84,6 @@ export const Profile = () => {
   const isFormValid = () => {
     return brandingModalDetails.brandName.trim() !== "";
   };
-
   const updateBrandingDetails = async () => {
     if (!isFormValid()) {
       return toast.error("All the above fields are required.");

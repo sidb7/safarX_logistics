@@ -370,7 +370,7 @@ export const Home = (props: IOverview) => {
 
         <div>
           <div>
-            <Breadcrum label="Home" />
+            <Breadcrum label="Overview" />
           </div>
           <div className="mx-4 mb-4 ">
             <div className="flex justify-between">

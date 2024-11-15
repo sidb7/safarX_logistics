@@ -1260,7 +1260,6 @@ const Index = () => {
   //       } else {
   //         setStatusCount("", currentStatus, orderCount);
   //       }
-
   //       setTotalcount(orderCount ? orderCount : 0);
 
   //       if (payload.filterArrOne) {
@@ -1280,7 +1279,6 @@ const Index = () => {
   //       }
 
   //       setSelectedRowData([]);
-
   //       if (data?.status || data?.success) {
   //         return data?.data[0];
   //       }
@@ -1357,7 +1355,33 @@ const Index = () => {
           filename = "Label_Report.png";
         } else {
           filename = "Label_Report.pdf";
-        }
+        } // // Function to handle form submission
+        // const submitFormData = async (formData: any) => {
+        //   try {
+        //     setLoading(true);
+        //     setBrandLoadingState(true);
+        //     const { data } = await POST(LOGO_AND_BRAND, formData, {
+        //       headers: {
+        //         "Content-Type": "multipart/form-data",
+        //       },
+        //     });
+
+        //     if (data?.success) {
+        //       toast.success(data.message);
+        //       localStorage.setItem("brandDetails", "true");
+        //       // window.location.reload(); // Uncomment if needed
+        //       // getProfileData(); // Uncomment if needed
+        //     } else {
+        //       toast.error(data.message);
+        //     }
+        //   } catch (error) {
+        //     toast.error("An error occurred while updating branding details.");
+        //     console.error(error);
+        //   } finally {
+        //     setLoading(false);
+        //     setBrandLoadingState(false);
+        //   }
+        // };
 
         var url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -1629,7 +1653,6 @@ const Index = () => {
   //       fetchDataControllerRef.current.abort();
   //       fetchDataControllerRef.current = null;
   //     }
-
   //     currentTabRef.current = index;
 
   //     // Create new controller
