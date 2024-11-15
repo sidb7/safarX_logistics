@@ -20,6 +20,7 @@ import {
   LARGE_LOGO,
   COMPANY_NAME,
   AMAZON_REDIRECT_URL,
+  SELLER_WEB_URL,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -464,10 +465,7 @@ const Index = () => {
                     <OneButton
                       text="TRACK ORDER"
                       onClick={() => {
-                        window.open(
-                          "https://app.shipyaari.com/tracking",
-                          "_blank"
-                        );
+                        window.open(`${SELLER_WEB_URL}/tracking`, "_blank");
                       }}
                       variant="tertiary"
                       className=" ml-auto !p-4 "

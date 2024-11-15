@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import {
+  COMPANY_NAME,
   GET_COMPANY_SERVICE,
   POST_SERVICEABILITY,
 } from "../../../utils/ApiUrls";
@@ -190,7 +191,8 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
         if (isMasked) {
           let slice = filterData?.slice(0, 2);
           slice.forEach((element: any, i: number) => {
-            element.partnerName = "Shipyaari";
+            element.partnerName = COMPANY_NAME || "Shipyaari";
+
             if (i === 0) {
               element.companyServiceName = "Air";
             } else {
@@ -265,8 +267,8 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                     {completedStatus?.qna && completedStatus?.returningUser
                       ? "Stay updated on your order's progress and estimated delivery time with real-time tracking."
                       : completedStatus?.qna && !completedStatus?.returningUser
-                      ? "Your setup is complete. You can now enjoy a personalized Shipyaari experience."
-                      : "Set up your account for a personalized Shipyaari experience and seamless logistics."}
+                      ? `Your setup is complete. You can now enjoy a personalized ${COMPANY_NAME} experience.`
+                      : `Set up your account for a personalized ${COMPANY_NAME} experience and seamless logistics.`}
                   </p>
                 </div>
                 {!completedStatus?.qna ? (

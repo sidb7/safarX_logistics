@@ -4,6 +4,7 @@ import AddButton from "../../components/Button";
 import CustomInputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import {
+  COMPANY_NAME,
   GET_SERVICABLEV2_PINCODE,
   GET_SERVICABLE_PINCODE,
 } from "../../utils/ApiUrls";
@@ -69,7 +70,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         if (isMasked) {
           let slice = tempArray?.slice(0, 1);
           slice.forEach((element: any, i: number) => {
-            element.partnerServiceName = "Shipyaari";
+            element.partnerServiceName = COMPANY_NAME || "Shipyaari";
           });
           setResponse(slice);
         } else {

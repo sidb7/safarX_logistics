@@ -1,6 +1,7 @@
 import editIcon from "../../../assets/serv/edit.svg";
 import serviceIcon from "../../../assets/serv/service.svg";
 import { useNavigate } from "react-router-dom";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface ISummaryData {
   companyServiceName?: string;
@@ -79,7 +80,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
           {isMasked ? (
-            "Shipyaari"
+            COMPANY_NAME || "Shipyaari"
           ) : (
             <>
               <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] font-semibold">

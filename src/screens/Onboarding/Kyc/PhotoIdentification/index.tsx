@@ -8,6 +8,7 @@ import PhotoScreenIcon from "../../../../assets/KYC/PhotoScreen.svg";
 import ImageCenterIcon from "../../../../assets/KYC/PhotoCenter.svg";
 import Modal from "./Modal";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
+import { COMPANY_NAME } from "../../../../utils/ApiUrls";
 
 interface ITypeProps {}
 
@@ -67,7 +68,7 @@ const Index = (props: ITypeProps) => {
         </div>
         <WelcomeHeader
           className="!mt-[44px]"
-          title="Welcome to Shipyaari"
+          title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
           content="Kindly complete your KYC"
         />
 

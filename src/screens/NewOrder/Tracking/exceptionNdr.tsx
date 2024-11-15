@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { ScrollNav } from "../../../components/ScrollNav";
 import { SearchBox } from "../../../components/SearchBox";
@@ -15,6 +15,7 @@ import {
   GET_NDR_ORDERS,
   POST_ACTION_REMARKS,
   GET_NDR_SELLER_ACTION_REMARKS,
+  COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import SelleractionModal from "./sellerActionModal";
@@ -79,13 +80,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
   const [exceptionCount, setExceptionCount] = useState<any>([]);
   const [rtoCount, setRtoCount] = useState<any>([]);
-  const [isLoadingSellerAction, setIsLoadingSellerAction] = useState<boolean>(false);
-
-
-
-
-
-
+  const [isLoadingSellerAction, setIsLoadingSellerAction] =
+    useState<boolean>(false);
 
   // ... (code for pagination)
 
@@ -113,12 +109,15 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const tabs = [
-    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount || 0},
+    { name: "ALL", count: tabCount?.allCount?.[0]?.TotalCount || 0 },
     {
       name: "PENDING ACTION",
-      count: tabCount?.pendingCount?.[0]?.action_pending || 0
+      count: tabCount?.pendingCount?.[0]?.action_pending || 0,
     },
-    { name: "ACTION TAKEN", count: tabCount?.takenCount?.[0]?.action_taken || 0},
+    {
+      name: "ACTION TAKEN",
+      count: tabCount?.takenCount?.[0]?.action_taken || 0,
+    },
   ];
 
   // get modal data from tabels
@@ -130,7 +129,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     if (isLoadingSellerAction) return;
 
     setCurrentSellerRemark(sellerRemark);
-    setIsLoadingSellerAction(true);  // Start loading
+    setIsLoadingSellerAction(true); // Start loading
 
     // try {
     //   const requestBody = {
@@ -139,11 +138,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     //   };
 
     //   const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
-      
+
     //   // Handle the response here
     //   console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
     //   setSellerActionData(response?.data?.data)
-    
+
     // } catch (error: any) {
     //   console.error("Error fetching seller action remarks:", error.message);
     // }
@@ -157,20 +156,23 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
           const requestBody = {
             awb: currentSellerRemark,
           };
-  
-          const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+
+          const response = await POST(
+            GET_NDR_SELLER_ACTION_REMARKS,
+            requestBody
+          );
           console.log("Seller action remarks:", response?.data?.data);
           setSellerActionData(response?.data?.data);
         } catch (error: any) {
           console.error("Error fetching seller action remarks:", error.message);
-        }finally {
-          setIsLoadingSellerAction(false);  // Stop loading
+        } finally {
+          setIsLoadingSellerAction(false); // Stop loading
         }
       };
-  
+
       fetchSellerActionRemarks();
     }
-  }, [currentSellerRemark,isLoadingSellerAction]);
+  }, [currentSellerRemark, isLoadingSellerAction]);
 
   const handleActionModalClick = (actionModalRemark: any[]) => {
     setActionModalRemark(actionModalRemark);
@@ -179,7 +181,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const handleInfoIconClick = (awb: string) => {
     setSelectedAWB(awb);
     // You can add additional logic here, such as opening a modal or fetching more details
-    console.log("awb from tabel", selectedAWB)
+    console.log("awb from tabel", selectedAWB);
   };
 
   useEffect(() => {
@@ -210,7 +212,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   const arrayData = [
     { label: "Exception NDR", number: exceptionCount || 0 },
-    { label: "RTO",number:rtoCount || 0 },
+    { label: "RTO", number: rtoCount || 0 },
   ];
 
   const render = (id: any) => {
@@ -294,8 +296,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       followUp: ["NDR Follow-up", "Seller Action"],
     },
   ];
-  
-  console.log("exception count ",rtoCount)
+
+  console.log("exception count ", rtoCount);
   const getTotalItemsCount = () => {
     switch (activeTab) {
       case "ALL":
@@ -308,7 +310,6 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         return 0;
     }
   };
-
 
   const getNdrOrders = async (
     search = "",
@@ -330,8 +331,10 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       const response = await POST(GET_NDR_ORDERS, requestBody);
       setNdrData(response?.data?.data?.[0]?.data || []);
       setTabCount(response?.data?.data[0] || []);
-      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount )
-      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
+      setExceptionCount(
+        response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount
+      );
+      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount);
       // setNdrData(undefined);
       // console.log("allCount", response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount);
       console.log("dataforme>>>", response?.data?.data[0]);
@@ -344,11 +347,11 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
 
   useEffect(() => {
     getNdrOrders();
-  }, [activeTab,editActionData]);
+  }, [activeTab, editActionData]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-  };            
+  };
 
   // const handleEditActionSubmit = (data: {
   //   action: string;
@@ -472,7 +475,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     }
   };
 
-  console.log(`current seller remarks >>> ${currentSellerRemark || "n/a"}`)
+  console.log(`current seller remarks >>> ${currentSellerRemark || "n/a"}`);
 
   return (
     <>
@@ -552,7 +555,9 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
                 value={searchText}
                 onChange={handleSearchChange}
                 getFullContent={handleGetFullContent}
-                customPlaceholder="Order, Tracking or Shipyaari ID"
+                customPlaceholder={`Order, Tracking or ${
+                  COMPANY_NAME || "Shipyaari"
+                } ID`}
               />
             </div>
             <ServiceButton
@@ -593,15 +598,13 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
               onActionModalClick={handleActionModalClick}
               onInfoIconClick={handleInfoIconClick}
               setRightModalAccordian={setRightModalAccordian}
-
-
               openRightModalForTracking={openRightModalForTracking}
               setOpenRightModalForTracking={setOpenRightModalForTracking}
             />
           )}
         </div>
 
-        {isLgScreen && getTotalItemsCount() > 0 && !isLoading &&(
+        {isLgScreen && getTotalItemsCount() > 0 && !isLoading && (
           <PaginationComponent
             // totalItems={totalItemCount}
             totalItems={getTotalItemsCount()}
@@ -649,10 +652,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         <>
           <SelleractionModal
             followUpData={sellerActionData}
-            onClose={() => setRightModalSellerAction(false)}  
+            onClose={() => setRightModalSellerAction(false)}
             isLoadingSellerAction={isLoadingSellerAction}
-
-
           />
         </>
       </CustomRightModal>
@@ -669,21 +670,17 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
         />
       </CustomRightModal>
 
-
-       {/* Accordian right modal  */}
-       <CustomRightModal
+      {/* Accordian right modal  */}
+      <CustomRightModal
         isOpen={rightModalAccordian}
         onClose={() => setRightModalAccordian(false)}
         className={""}
       >
         <AccordionRightModal
-        awb={selectedAWB}
+          awb={selectedAWB}
           onClose={() => setRightModalAccordian(false)}
         />
       </CustomRightModal>
-
-      
-
 
       {/* new Tracking Screen with right modal  */}
       <CustomRightModal

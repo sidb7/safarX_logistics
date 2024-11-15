@@ -1,12 +1,8 @@
-import NavBar from "../../../layout/Old_NavBar";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
-import Checkbox from "../../../components/CheckBox";
-import CustomButton from "../../../components/Button";
+
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-import CenterModal from "../../../components/CustomModal/customCenterModal";
+
 import { getLocalStorage, removeLocalStorage } from "../../../utils/utility";
 import { POST } from "../../../utils/webService";
 import {

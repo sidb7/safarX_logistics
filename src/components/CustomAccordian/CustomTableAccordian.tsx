@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
+  COMPANY_NAME,
   GET_COURIER_PARTNER_SERVICE,
   GET_SELLER_ORDER_COMPLETE_DATA,
 } from "../../utils/ApiUrls";
@@ -514,7 +515,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           if (isMasked) {
             let slice: any = response?.data?.data.slice(0, 2);
             slice.forEach((element: any) => {
-              element.partnerName = "Shipyaari";
+              element.partnerName = COMPANY_NAME || "Shipyaari";
             });
             setServiceList(slice);
           } else {
@@ -1076,7 +1077,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         rows.push({
           title: "Order History",
-          "Shipyaari ID": rowsData?.tempOrderId,
+          [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": orderData?.awb,
           "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
@@ -3599,7 +3600,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               </p>
                                                               <p className="font-open">
                                                                 {isMasked
-                                                                  ? "Shipyaari"
+                                                                  ? COMPANY_NAME ||
+                                                                    "Shipyaari"
                                                                   : item[
                                                                       "Partner Name"
                                                                     ]}

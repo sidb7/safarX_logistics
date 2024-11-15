@@ -3,6 +3,7 @@ import TooltipContent from "./TooltipContent";
 import FilterIcon from "../../../assets/serv/filter.svg";
 import FilterItems from "../../../components/FilterItemsScroll";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface IServiceOption {
   value: string;
@@ -177,7 +178,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
               <div className=" ">
                 <p className="text-[16px] font-semibold font-Open pt-2">
                   {isMasked
-                    ? "Shipyaari"
+                    ? COMPANY_NAME || "Shipyaari"
                     : `${toPascalCase(
                         option.text?.partnerName
                       )}: ${toPascalCase(option.text?.companyServiceName)}`}

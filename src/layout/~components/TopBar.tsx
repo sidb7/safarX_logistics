@@ -174,7 +174,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
         if (isMasked) {
           let slice = filterData?.slice(0, 2);
           slice.forEach((element: any, i: number) => {
-            element.partnerName = "Shipyaari";
+            element.partnerName = COMPANY_NAME || "Shipyaari";
             if (i === 0) {
               element.companyServiceName = "Air";
             } else {
@@ -513,9 +513,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         </span> */}
                       </div>
 
-                      {COMPANY_NAME === "SHIPYAARI" ||
-                      COMPANY_NAME === "shipyaari" ||
-                      COMPANY_NAME === "Shipyaari" ? (
+                      {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
                         <div
                           className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                           onClick={() => navigate("/wallet/view-wallet")}
@@ -583,9 +581,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         </span>
                       </div>
 
-                      {COMPANY_NAME === "SHIPYAARI" ||
-                      COMPANY_NAME === "shipyaari" ||
-                      COMPANY_NAME === "Shipyaari" ? (
+                      {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
                         <>
                           <a
                             className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
