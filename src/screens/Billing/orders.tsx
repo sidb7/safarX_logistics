@@ -15,6 +15,7 @@ import { POST } from "../../utils/webService";
 import { downloadCSVFromString } from "../../utils/helper";
 import { ResponsiveState } from "../../utils/responsiveState";
 import BillingOrdersCard from "./BillingOrdersCard";
+import { Spinner } from "../../components/Spinner";
 
 interface IOrdersProps {}
 
@@ -24,6 +25,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [data, setData] = useState<any>([]);
   const { isLgScreen, isMdScreen } = ResponsiveState();
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   const arrayData = [
     { label: "Orders" },
@@ -46,7 +48,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   //on page change index
   let onPageIndexChange = (data: any) => {
-    console.log("data", data.data);
+    console.log("data", data);
     const payload: any = {
       skip: 0,
       limit: 0,
@@ -94,18 +96,19 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   const handleDownloadOrderCSV = async () => {
     try {
+      setDownloadLoading(true);
       const response = await POST(DOWNLOAD_ORDER_BILLED_CSV);
       downloadCSVFromString(response.data, "orderbilling_invoices.csv");
+      setDownloadLoading(false);
     } catch (error: any) {
       console.log(error.message);
     }
   };
 
-  const getBilledOrders = async (data?: any) => {
+  const getBilledOrders = async (payloads?: any) => {
     try {
-      const response = await POST(GET_BILLED_ORDERS);
+      const response = await POST(GET_BILLED_ORDERS, { payloads });
       setData(response?.data?.data);
-      console.log("dataforme>>>", response.data.data[0]);
 
       setTotalItemCount(response?.data?.total);
     } catch (error: any) {
@@ -114,7 +117,12 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
   };
 
   useEffect(() => {
-    getBilledOrders();
+    let payload = {
+      skip: 0,
+      limit: data?.itemsPerPage,
+      pageNo: 1,
+    };
+    getBilledOrders(payload);
   }, []);
 
   return (
@@ -132,13 +140,19 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
           </div>
           <div>
             <div className={`${!isLgScreen ? " flex justify-end" : ""}`}>
-              <ServiceButton
-                text="Download"
-                className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${
-                  !isLgScreen ? "mt-4" : ""
-                }`}
-                onClick={handleDownloadOrderCSV}
-              />
+              {downloadLoading ? (
+                <div className="border py-2 w-[100px] flex items-center justify-center ">
+                  <Spinner />
+                </div>
+              ) : (
+                <ServiceButton
+                  text="Download"
+                  className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${
+                    !isLgScreen ? "mt-4" : ""
+                  }`}
+                  onClick={handleDownloadOrderCSV}
+                />
+              )}
             </div>
             <div>
               {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
