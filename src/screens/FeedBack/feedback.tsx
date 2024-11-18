@@ -84,7 +84,7 @@ function Feedback() {
           <Breadcrum label="Feedback" component={renderHeaderComponent()} />
           <div className="flex flex-col pt-7 ">
             <div className="mx-5">
-              <div className="flex font-medium customScroll whitespace-nowrap mt-2 h-[34px] ">
+              <div className="flex font-medium customScroll whitespace-nowrap mt-2 h-[45px] ">
                 {feedbackTabs?.map(({ statusName }: any, index: number) => {
                   return (
                     <div

@@ -16,6 +16,7 @@ import {
   CREATE_UNICOMMERCE_STORE,
   UPDATE_EXPIRED_TOKEN,
   UPDATE_EXPIRED_WC_TOKEN,
+  COMPANY_NAME,
 } from "../../../../utils/ApiUrls";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
@@ -288,7 +289,9 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         // );
         let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
         const sellerId = localStorage.getItem("sellerId");
-        const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}?storeId=${storeId}`;
+        const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=${
+          COMPANY_NAME || "SHIPYAARI"
+        }&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}?storeId=${storeId}`;
         try {
           const { data } = await axios.get(reqUrl);
           console.log("data: ", data);

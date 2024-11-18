@@ -335,7 +335,7 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    isDisabled={true}
+                    // isDisabled={true}
                     labelClassName={`!text-black !bg-[${
                       colors[index % colors.length]
                     }]`}

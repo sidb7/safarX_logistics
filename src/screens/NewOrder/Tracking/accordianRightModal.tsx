@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import OneAccordion from "../../../components/OneAccordion/OneAccordion";
 import {
+  COMPANY_NAME,
   GET_COURIER_PARTNER_SERVICE,
   GET_SELLER_ORDER_COMPLETE_DATA,
 } from "../../../utils/ApiUrls";
@@ -433,7 +434,9 @@ const AccordianRightModal: React.FC<AccordianRightModalProps> = ({
         <div className="bg-white shadow-md rounded-lg p-6 max-w-md mx-auto">
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="font-semibold text-gray-700">Shipyaari ID</span>
+              <span className="font-semibold text-gray-700">
+                {COMPANY_NAME || "Shipyaari"} ID
+              </span>
               <span>{orderData?.tempOrderId || "N/A"}</span>
             </div>
             <div className="flex justify-between items-center">
@@ -489,7 +492,11 @@ const AccordianRightModal: React.FC<AccordianRightModalProps> = ({
         </div>
       </div>
       <div className="p-4">
-      {isLoading ? <p>Loading...</p> : <OneAccordion items={accordionItems} />}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <OneAccordion items={accordionItems} />
+        )}
       </div>
     </div>
   );

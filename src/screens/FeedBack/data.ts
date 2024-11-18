@@ -348,7 +348,7 @@ export const module = [
   },
   {
     id: "d",
-    name: "Plans",
+    name: "Subscription",
     pages: [],
     menu: [
       {
@@ -399,6 +399,104 @@ export const module = [
     icon: "Plans",
     isActive: true,
     sequence: 4,
+  },
+  {
+    id: "billing",
+    name: "Billing",
+    pages: [],
+    menu: [
+      {
+        id: "orders",
+        name: "Orders",
+        pages: [
+          {
+            id: "orders1",
+            name: "Orders",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "billing/orders",
+        isActive: true,
+      },
+      {
+        id: "invoices",
+        name: "Invoices",
+        pages: [
+          {
+            id: "invoices1",
+            name: "Invoices",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "billing/invoices",
+        isActive: true,
+      },
+      {
+        id: "creditnotes",
+        name: "Credit Notes",
+        pages: [
+          {
+            id: "creditnotes1",
+            name: "Credit Notes",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/billing/credit-notes",
+        isActive: true,
+      },
+      {
+        id: "cod",
+        name: "COD",
+        pages: [
+          {
+            id: "cod1",
+            name: "COD",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/billing/cod",
+        isActive: true,
+      },
+    ],
+    icon: "Billing",
+    isActive: true,
+    sequence: 6,
   },
   {
     id: "e",
@@ -826,18 +924,18 @@ export const tabs = [
     orderNumber: 0,
   },
   {
-    statusName: "Smart Shipyaari",
-    value: "SMART_SHIPYAARI",
+    statusName: "Dashboard",
+    value: "DASHBOARD",
     orderNumber: 0,
   },
   {
-    statusName: "Plan",
+    statusName: "Subscription",
     value: "PLANS",
     orderNumber: 0,
   },
   {
-    statusName: "Catalogue",
-    value: "CATALOGUE",
+    statusName: "Catalogues",
+    value: "CATALOGUES",
     orderNumber: 0,
   },
   {
@@ -871,8 +969,8 @@ export const tabs = [
     orderNumber: 0,
   },
   {
-    statusName: "Notification",
-    value: "NOTIFICATION",
+    statusName: "Notifications",
+    value: "NOTIFICATIONS",
     orderNumber: 0,
   },
   {

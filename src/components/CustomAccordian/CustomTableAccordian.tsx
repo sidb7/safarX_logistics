@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
+  COMPANY_NAME,
   GET_COURIER_PARTNER_SERVICE,
   GET_SELLER_ORDER_COMPLETE_DATA,
 } from "../../utils/ApiUrls";
@@ -301,6 +302,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         const payload = boxProductDetails;
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        console.log("11111");
 
         if (data?.status) {
           toast.success("Updated Product Successfully");
@@ -317,6 +319,43 @@ const Accordion = (props: ICustomTableAccordion) => {
       console.log(error.message);
     }
   };
+
+  //for updating payment details api
+  const handlePaymentDetails = async () => {
+    try {
+      if (!enabled) {
+        // const payload = boxProductDetails;
+        let invoiceVal: any = document.getElementById("invoiceValue");
+        invoiceVal = invoiceVal.value;
+        const payload = {
+          ...boxProductDetails,
+          codInfo: {
+            ...boxProductDetails.codInfo,
+            invoiceValue: invoiceVal,
+          },
+        };
+
+        console.log("🚀 ~ handlePaymentDetails ~ payload:", payload);
+
+        const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        console.log("5555");
+
+        if (data?.status) {
+          toast.success("Updated Product Successfully");
+          //calling the getSellerCompleteData api again to get the updated details for updating the error borders
+          getSellerOrderCompleteData(getAllSellerData?.data);
+          // getServiceList();
+          setServiceList([]);
+          setServiceRefresh(true);
+        } else {
+          toast.error("Something went wrong");
+        }
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
   const handleScheduleDateTimeChange = (selectedDate: Date) => {
     if (
       selectedDate.getHours() == 0 &&
@@ -476,7 +515,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           if (isMasked) {
             let slice: any = response?.data?.data.slice(0, 2);
             slice.forEach((element: any) => {
-              element.partnerName = "Shipyaari";
+              element.partnerName = COMPANY_NAME || "Shipyaari";
             });
             setServiceList(slice);
           } else {
@@ -594,6 +633,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         };
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        console.log("2222");
+
         if (data?.status) {
           toast.success("Updated Pickup Successfully");
           // getServiceList();
@@ -653,6 +694,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         };
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        console.log("3333");
+
         if (data?.status) {
           toast.success("Updated Delivery Successfully");
           setServiceList([]);
@@ -1034,7 +1077,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         rows.push({
           title: "Order History",
-          "Shipyaari ID": rowsData?.tempOrderId,
+          [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": orderData?.awb,
           "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
@@ -1210,6 +1253,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           payload?.boxInfo?.[0]?.breadth !== 0 &&
           payload?.boxInfo?.[0]?.height !== 0
         ) {
+          console.log("hiii");
           const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
           if (data?.status) {
             toast.success("Updated Box Successfully");
@@ -1875,6 +1919,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
+                            handlePaymentDetails();
                           } else if (e.target.textContent == "Event Logs") {
                             handleItemClick(index, e.target.textContent);
 
@@ -3555,7 +3600,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               </p>
                                                               <p className="font-open">
                                                                 {isMasked
-                                                                  ? "Shipyaari"
+                                                                  ? COMPANY_NAME ||
+                                                                    "Shipyaari"
                                                                   : item[
                                                                       "Partner Name"
                                                                     ]}
@@ -3738,10 +3784,17 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             {eachDetail[0]}
                                                           </p>
                                                           <p className="open-sans">
-                                                            {eachDetail[1] &&
-                                                              (+eachDetail?.[1])?.toFixed(
-                                                                2
-                                                              )}
+                                                            <input
+                                                              className="w-[44px] p-0 border"
+                                                              type="number"
+                                                              id="invoiceValue"
+                                                              defaultValue={
+                                                                eachDetail[1] &&
+                                                                (+eachDetail?.[1])?.toFixed(
+                                                                  2
+                                                                )
+                                                              }
+                                                            />
                                                           </p>
                                                         </div>
                                                       )

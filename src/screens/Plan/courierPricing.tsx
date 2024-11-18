@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { POST } from "../../utils/webService";
-import { COURIER_PRICING } from "../../utils/ApiUrls";
+import { COMPANY_NAME, COURIER_PRICING } from "../../utils/ApiUrls";
 import { ScrollNav } from "../../components/ScrollNav";
 import upArrowBlue from "../../assets/upArrorwBlue.svg";
 import UpArrowIcon from "../../assets/Filter/upArrow.svg";
@@ -749,7 +749,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 <div className="flex items-center gap-x-2">
                   <h1 className="self-center justify-start text-[16px] font-semibold font-Lato text-[#1C1C1C] whitespace-nowrap ">
                     {/* {capitalizeFirstLetter(firstB2CObject.partnerName)} */}
-                    {capitalizeFirstLetter("Shipyaari")}
+                    {capitalizeFirstLetter(COMPANY_NAME)}
                   </h1>
                 </div>
                 <div className="flex justify-end items-center gap-x-1">
@@ -929,7 +929,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 <div className="flex items-center gap-x-2">
                   <h1 className="self-center justify-start text-[16px] font-semibold font-Lato text-[#1C1C1C] whitespace-nowrap ">
                     {/* {capitalizeFirstLetter(firstB2BObject.partnerName)} */}
-                    {capitalizeFirstLetter("Shipyaari")}
+                    {capitalizeFirstLetter(COMPANY_NAME)}
                   </h1>
                 </div>
                 <div className="flex justify-end items-center gap-x-1">

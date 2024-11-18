@@ -30,9 +30,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       buyerDetails: {
-                        ...labelData.inputs.buyerDetails,
+                        ...labelData?.inputs?.buyerDetails,
                         mobile: e.value,
                       },
                     },
@@ -66,9 +66,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         address1: e.value,
                       },
                     },
@@ -91,9 +91,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         showfooterLogo: e.value,
                       },
                     },
@@ -117,9 +117,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         mobile: e.value,
                       },
                     },
@@ -141,9 +141,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         multipleShipperName: e.value,
                       },
                     },
@@ -169,9 +169,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         serviceContactOnAddress: e.value,
                       },
                     },
@@ -197,9 +197,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         multipleShipperIndividualLogos: e.value,
                       },
                     },
@@ -226,9 +226,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         multipleShipperIndividualOrderId: e.value,
                       },
                     },
@@ -254,9 +254,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         name: e.value,
                       },
                     },
@@ -280,9 +280,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       sellerDetails: {
-                        ...labelData.inputs.sellerDetails,
+                        ...labelData?.inputs?.sellerDetails,
                         sellerLogo: e.value,
                       },
                     },
@@ -316,9 +316,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       courierDetails: {
-                        ...labelData.inputs.courierDetails,
+                        ...labelData?.inputs?.courierDetails,
                         weight: e.value,
                       },
                     },
@@ -342,9 +342,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       courierDetails: {
-                        ...labelData.inputs.courierDetails,
+                        ...labelData?.inputs?.courierDetails,
                         dimension: e.value,
                       },
                     },
@@ -390,15 +390,40 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       orderDetails: {
-                        ...labelData.inputs.orderDetails,
+                        ...labelData?.inputs?.orderDetails,
                         paymentMode: e.value,
                       },
                     },
                   });
                 }}
                 checked={labelData?.inputs?.orderDetails?.paymentMode || false}
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777]  pt-1 md:pt-2">
+                Note: This is only for the Prepaid Orders. The Order Value will
+                be shown as Collectable Amount for COD Orders.
+              </p>
+            </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName=" gap-x-2 !h-6 "
+                label="Hide the Product Value for Prepaid Orders."
+                labelClassName="!font-Open !text-[14px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData?.inputs,
+                      orderDetails: {
+                        ...labelData?.inputs?.orderDetails,
+                        productValue: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={labelData?.inputs?.orderDetails?.productValue || false}
               />
               <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777]  pt-1 md:pt-2">
                 Note: This is only for the Prepaid Orders. The Order Value will
@@ -415,9 +440,9 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                   setLabelData({
                     ...labelData,
                     inputs: {
-                      ...labelData.inputs,
+                      ...labelData?.inputs,
                       orderDetails: {
-                        ...labelData.inputs.orderDetails,
+                        ...labelData?.inputs?.orderDetails,
                         productDetails: e.value,
                       },
                     },

@@ -7,7 +7,7 @@ import Location from "../../../assets/other.png";
 import Stepper from "../Tracking/clientStepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { Spinner } from "../../../components/Spinner";
-import { LARGE_LOGO } from "../../../utils/ApiUrls";
+import { COMPANY_NAME, LARGE_LOGO } from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { convertEpochToDateTime } from "../../../utils/utility";
 import { getQueryJson } from "../../../utils/utility";
@@ -152,7 +152,11 @@ const Tracking = () => {
       <div className="mx-5">
         {/*shipyaari icon */}
         <div className="flex  justify-center p-3">
-          <img className="w-40 mt-10" src={LARGE_LOGO} alt="Shipyaari" />
+          <img
+            className="w-40 mt-10"
+            src={LARGE_LOGO}
+            alt={COMPANY_NAME || "Shipyaari"}
+          />
         </div>
         <div className="flex justify-center items-center py-4">
           <div

@@ -1,4 +1,5 @@
 import React from "react";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 //Header file of the Order Updatation Modal
 const Header = (getIdData: any) => {
@@ -19,7 +20,7 @@ const Header = (getIdData: any) => {
                 <span>Order ID :</span> {OrderID}
               </p>
               <p>
-                <span>Shipyaari ID :</span>{" "}
+                <span>{COMPANY_NAME} ID :</span>{" "}
                 {ShipyaariID?.[0] === "T"
                   ? ShipyaariID?.split("T")[1]
                   : ShipyaariID}

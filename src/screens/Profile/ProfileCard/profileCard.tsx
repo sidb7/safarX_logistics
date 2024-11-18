@@ -12,6 +12,8 @@ import OneButton from "../../../components/Button/OneButton";
 import editIcon from "../../../assets/edit-black.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import EditProfile from "./editProfile";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
+console.log("🚀 ~ COMPANY_NAME:", COMPANY_NAME);
 
 interface ProfileCardProps {
   ProfileDetails?: any;
@@ -271,14 +273,26 @@ ding-6">
                   classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
                 />
               </div>
-              <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
+              {/* <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
                 <LabelComponent
                   label="Yaari Points"
                   className={"!text-[14px] !leading-5 pl-2 py-2"}
                   info={yaariPoints || "0"}
                   classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
                 />
-              </div>
+              </div> */}
+              {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+                <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
+                  <LabelComponent
+                    label="Yaari Points"
+                    className={"!text-[14px] !leading-5 pl-2 py-2"}
+                    info={yaariPoints || "0"}
+                    classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
 
             <div className="flex flex-col w-full font-semibold border-[1px] border-[#E8E8E8] rounded-md h-[86px] p-2 mt-4">
@@ -312,7 +326,13 @@ ding-6">
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-3 mt-4 gap-4">
+          <div
+            className={`grid mt-4 gap-4 ${
+              COMPANY_NAME?.toLowerCase() === "shipyaari"
+                ? "grid-cols-3"
+                : "grid-cols-2"
+            }`}
+          >
             <div className="flex flex-col justify-center rop-shadow-sm rounded-md bg-[#FDF6EA]">
               <LabelComponent
                 label="Wallet Balance"
@@ -321,14 +341,18 @@ ding-6">
                 classNameInfo="pl-3"
               />
             </div>
-            <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
-              <LabelComponent
-                label="Yaari Points"
-                className={"pl-3"}
-                info={yaariPoints || "0"}
-                classNameInfo="pl-3"
-              />
-            </div>
+            {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+              <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
+                <LabelComponent
+                  label="Yaari Points"
+                  className={"pl-3"}
+                  info={yaariPoints || "0"}
+                  classNameInfo="pl-3"
+                />
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="flex flex-col font-semibold border-[1px] border-[#E8E8E8] rounded-md p-4">
               <div className="flex justify-between">
                 <span className="text-[20px] font-semibold font-[#1C1C1C]">

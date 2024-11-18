@@ -24,7 +24,7 @@ const WelcomeHeader: React.FunctionComponent<IWelcomeHeaderProps> = ({
             </p>
             <p className="font-Open text-[13px] lg:text-base xl:text-lg text-[#606060] font-normal lg:font-semibold  leading-5 xl:leading-6 tracking-wide">
               {completedStatus?.returningUser
-                ? "We're glad to see you again and are committed to helping you achieve greater goals."
+                ? "We're glad to see you again and are committed to helping you achieve even greater goals."
                 : " We are excited to have you aboard and look forward to supporting your Success!"}
             </p>
           </div>

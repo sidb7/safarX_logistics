@@ -5,7 +5,11 @@ import { ReactElement } from "react";
 import infoIcon from "../../assets/info.svg";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import CompanyNameContent from "../../screens/NewDashboard/HomeSection/accordianSections/CompanyNameContent";
-import { retrieveLocalStorageData } from "../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  retrieveLocalStorageData,
+} from "../../utils/utility";
+import { COMPANY_NAME } from "../../utils/ApiUrls";
 
 interface IBreadcrumProps {
   label: string;
@@ -22,6 +26,7 @@ export const Breadcrum = ({
   setState,
   state,
 }: IBreadcrumProps) => {
+  const companyName = COMPANY_NAME;
   const navigate = useNavigate();
   const location = useLocation(); // Get current route
 
@@ -52,12 +57,14 @@ export const Breadcrum = ({
   kycCheck = kycCheck?.nextStep?.kyc;
 
   const privateCompanyDetails = retrieveLocalStorageData("kycValue");
+
   // List of invalid company names
   const invalidCompanyNames = [null, undefined, "", "N/A", "NA", "n/a", "na"];
 
   let privateCompanyName = privateCompanyDetails?.privateCompany?.name;
   // console.log("🚀 ~ privateCompanyName:", privateCompanyName);
 
+  // // Add a condition to check if the name is "N/A", an empty string, or undefined
   // Add a condition to check if the name is "N/A", an empty string, or undefined
   // const isCompanyNameInvalid =
   //   !privateCompanyName ||
@@ -118,7 +125,7 @@ export const Breadcrum = ({
               <div>
                 <p className="font-Lato text-base font-normal leading-5 tracking-wide">
                   We need your Company Name to enhance your experience with
-                  Shipyaari.
+                  {""} {capitalizeFirstLetter(companyName)}.
                 </p>
               </div>
             </div>

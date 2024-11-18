@@ -148,7 +148,6 @@ export const Profile = () => {
       // setBrandLoadingState(false);
     }
   };
-
   useEffect(() => {
     (async () => {
       getProfileData();
