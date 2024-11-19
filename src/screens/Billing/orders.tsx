@@ -15,6 +15,7 @@ import { POST } from "../../utils/webService";
 import { downloadCSVFromString } from "../../utils/helper";
 import { ResponsiveState } from "../../utils/responsiveState";
 import BillingOrdersCard from "./BillingOrdersCard";
+import { Spinner } from "../../components/Spinner";
 
 interface IOrdersProps {}
 
@@ -24,6 +25,10 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [data, setData] = useState<any>([]);
   const { isLgScreen, isMdScreen } = ResponsiveState();
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const arrayData = [
     { label: "Orders" },
@@ -45,46 +50,48 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
   };
 
   //on page change index
-  let onPageIndexChange = (data: any) => {
-    console.log("data", data.data);
-    const payload: any = {
-      skip: 0,
-      limit: 0,
-      pageNo: 0,
-    };
+  let onPageIndexChange = (paginationData: any) => {
+    setCurrentPage(paginationData.currentPage);
+    // const payload: any = {
+    //   skip: 0,
+    //   limit: 0,
+    //   pageNo: 0,
+    // };
 
-    if (data?.currentPage === 1) {
-      payload.skip = 0;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = 1;
-    } else {
-      payload.skip = (data?.currentPage - 1) * data?.itemsPerPage;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = data?.currentPage || 0;
-    }
+    // if (data?.currentPage === 1) {
+    //   payload.skip = 0;
+    //   payload.limit = data?.itemsPerPage;
+    //   payload.pageNo = 1;
+    // } else {
+    //   payload.skip = (data?.currentPage - 1) * data?.itemsPerPage;
+    //   payload.limit = data?.itemsPerPage;
+    //   payload.pageNo = data?.currentPage || 0;
+    // }
 
-    getBilledOrders(payload);
+    // getBilledOrders(payload);
   };
 
   // on per page item change
-  const onPerPageItemChange = () => {
-    const payload: any = {
-      skip: 0,
-      limit: 0,
-      pageNo: 0,
-    };
+  const onPerPageItemChange = (paginationData: any) => {
+    setItemsPerPage(paginationData.itemsPerPage);
+    setCurrentPage(1);
+    // const payload: any = {
+    //   skip: 0,
+    //   limit: 0,
+    //   pageNo: 0,
+    // };
 
-    if (data?.currentPage === 1) {
-      payload.skip = 0;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = 1;
-    } else {
-      payload.skip = 0;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = data?.currentPage || 0;
-    }
+    // if (data?.currentPage === 1) {
+    //   payload.skip = 0;
+    //   payload.limit = data?.itemsPerPage;
+    //   payload.pageNo = 1;
+    // } else {
+    //   payload.skip = 0;
+    //   payload.limit = data?.itemsPerPage;
+    //   payload.pageNo = data?.currentPage || 0;
+    // }
 
-    getBilledOrders(payload);
+    // getBilledOrders(payload);
   };
 
   const setScrollIndex = (id: number) => {
@@ -94,20 +101,30 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   const handleDownloadOrderCSV = async () => {
     try {
+      setDownloadLoading(true);
       const response = await POST(DOWNLOAD_ORDER_BILLED_CSV);
       downloadCSVFromString(response.data, "orderbilling_invoices.csv");
+      setDownloadLoading(false);
     } catch (error: any) {
       console.log(error.message);
     }
   };
 
-  const getBilledOrders = async (data?: any) => {
+  const getBilledOrders = async (payloads?: any) => {
     try {
-      const response = await POST(GET_BILLED_ORDERS);
-      setData(response?.data?.data);
-      console.log("dataforme>>>", response.data.data[0]);
+      setIsLoading(true);
+      const payload = {
+        skip: (currentPage - 1) * itemsPerPage,
+        limit: itemsPerPage,
+        pageNo: currentPage,
+      };
 
-      setTotalItemCount(response?.data?.total);
+      const { data: response } = await POST(GET_BILLED_ORDERS, { ...payload });
+      if (response?.success) {
+        setData(response?.data);
+        setTotalItemCount(response?.total);
+        setIsLoading(false);
+      }
     } catch (error: any) {
       console.log(error.message);
     }
@@ -115,7 +132,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   useEffect(() => {
     getBilledOrders();
-  }, []);
+  }, [itemsPerPage, currentPage]);
 
   return (
     <>
@@ -132,13 +149,19 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
           </div>
           <div>
             <div className={`${!isLgScreen ? " flex justify-end" : ""}`}>
-              <ServiceButton
-                text="Download"
-                className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${
-                  !isLgScreen ? "mt-4" : ""
-                }`}
-                onClick={handleDownloadOrderCSV}
-              />
+              {downloadLoading ? (
+                <div className="border py-2 w-[100px] flex items-center justify-center ">
+                  <Spinner />
+                </div>
+              ) : (
+                <ServiceButton
+                  text="Download"
+                  className={`bg-[#1C1C1C] text-[#FFFFFF] w-[100px] ${
+                    !isLgScreen ? "mt-4" : ""
+                  }`}
+                  onClick={handleDownloadOrderCSV}
+                />
+              )}
             </div>
             <div>
               {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
@@ -147,10 +170,24 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
         </div>
         {/* <p>table for orders </p> */}
 
-        {isLgScreen ? (
-          <div className="mx-4">
-            <OrdersData data={data} />
+        {isLoading ? (
+          <div className="py-4  flex items-center justify-center ">
+            <Spinner />
           </div>
+        ) : isLgScreen ? (
+          <>
+            <div className="mx-4">
+              <OrdersData data={data} />
+            </div>
+            {isLgScreen && totalItemCount > 0 && (
+              <PaginationComponent
+                totalItems={totalItemCount}
+                itemsPerPageOptions={[10, 20, 30, 50]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+              />
+            )}
+          </>
         ) : (
           <div className="mx-4">
             {data.map((order: any) => (
@@ -183,15 +220,6 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
               />
             ))}
           </div>
-        )}
-
-        {isLgScreen && totalItemCount > 0 && (
-          <PaginationComponent
-            totalItems={totalItemCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
-            onPageChange={onPageIndexChange}
-            onItemsPerPageChange={onPerPageItemChange}
-          />
         )}
       </div>
     </>
