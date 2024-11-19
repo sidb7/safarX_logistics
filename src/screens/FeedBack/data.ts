@@ -930,7 +930,7 @@ export const tabs = [
   },
   {
     statusName: "Subscription",
-    value: "PLANS",
+    value: "SUBSCRIPTION",
     orderNumber: 0,
   },
   {
