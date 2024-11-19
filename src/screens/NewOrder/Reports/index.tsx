@@ -58,7 +58,15 @@ const Reports = () => {
     {
       label: "PIKCUP RECONCILATION",
       value: "PIKCUP_RECONCILATION"
-    }
+    },
+    {
+      label: "RTO RECONCILIATION REPORT",
+      value: "RTO_RECONCILIATION_REPORT",
+    },
+    {
+      label: "WHATSAPP REPORT",
+      value: "WHATSAPP_REPORT",
+    },
   ];
 
   const convertEpoch = (epochDate: any) => {
