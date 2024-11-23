@@ -28,7 +28,10 @@ const GstContent = (userNameForGst: any) => {
             >
               <p>DECLARATION OF GST NON-ENROLMENT</p>
               <div className="w-[80%] flex justify-center items-center ">
-                <div className="break-words">{WHITE_COMPANYADDRESS}</div>
+                <div className="break-words">
+                  {WHITE_COMPANYADDRESS ||
+                    "12A, 3rd Floor, Techniplex - II, Techniplex Complex, S.V.Road, Off Veer Savarkar Flyover, Goregaon West,Mumbai, Maharashtra 400062"}
+                </div>
               </div>
               {/* <p>To AVN Business Solutions Pvt. Ltd.</p>
               <p>12A, 3rd Floor, Techniplex - II,</p>
@@ -114,7 +117,8 @@ const GstContent = (userNameForGst: any) => {
                   bill requirement.
                 </li>
                 <li>
-                  I/We hereby also confirm that {WHITE_COMPANYFULLNAME}
+                  I/We hereby also confirm that{" "}
+                  {WHITE_COMPANYFULLNAME || "AVN Business solutions PVT Ltd."}
                   or the carrier of the shipment/consignment shall not be liable
                   for any loss accrued to me/us, due to any registration /e-way
                   bill/e-invoice default with the GST or under any other law
