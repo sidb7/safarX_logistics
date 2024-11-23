@@ -16,13 +16,16 @@ const LogisticsServicesAgreement: React.FC = () => {
         You/User Company/Individual/Firm/Partnership/Body Corporate (hereinafter
         referred to as "Customer), and{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {WHITE_COMPANYFULLNAME}
+          {WHITE_COMPANYFULLNAME || "AVN Business solutions PVT Ltd."}
         </strong>
         , A company registered under the Companies Act, 1956, having its
-        corporate office at {WHITE_COMPANYADDRESS} (hereinafter referred to as
-        "Service Provider”), which means and include, unless repugnant to the
-        context or meaning thereof mean and include its affiliates, liquidators,
-        successors, receivers and permitted assigns) of the other part
+        corporate office at{" "}
+        {WHITE_COMPANYADDRESS ||
+          "12A, 3rd Floor, Techniplex - II, Techniplex Complex, S.V.Road, Off Veer Savarkar Flyover, Goregaon West, Mumbai, Maharashtra 400062"}{" "}
+        (hereinafter referred to as "Service Provider”), which means and
+        include, unless repugnant to the context or meaning thereof mean and
+        include its affiliates, liquidators, successors, receivers and permitted
+        assigns) of the other part
       </p>
       <br />
       <p className="font-Open text-base font-normal leading-5">
@@ -554,10 +557,13 @@ const LogisticsServicesAgreement: React.FC = () => {
         : <br />
         <strong className="font-Open text-base font-semibold leading-[22px]">
           <br />
-          {WHITE_COMPANYFULLNAME}
+          {WHITE_COMPANYFULLNAME || "AVN Business solutions PVT Ltd."}
           <br />
           <div>
-            <strong>{WHITE_COMPANYADDRESS}</strong>
+            <strong>
+              {WHITE_COMPANYADDRESS ||
+                "12A, 3rd Floor, Techniplex - II, Techniplex Complex, S.V.Road, Off Veer Savarkar Flyover, Goregaon West, Mumbai, Maharashtra 400062"}
+            </strong>
           </div>
         </strong>
         <br />
@@ -1047,7 +1053,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         This is to inform that I/User has approached{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {WHITE_COMPANYFULLNAME}{" "}
+          {WHITE_COMPANYFULLNAME || "AVN Business solutions PVT Ltd."}{" "}
         </strong>
         (Hereinafter Referred to as "
         <strong className="font-Open text-base font-semibold leading-[22px]">
