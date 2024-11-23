@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import {
   COMPANY_NAME,
   FORGOT_PASSWORD,
+  LARGE_LOGO,
   POST_SEND_OTP_URL,
   POST_VERIFY_OTP,
   VERIFY_FORGET_PASSWORD,
@@ -221,7 +222,7 @@ const ForgotPassword = (props: ITypeProps) => {
       <div className="product-box  z-10 bg-white flex justify-between w-full h-[60px] top-0">
         <img
           className="my-auto lg:ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
         <img
@@ -281,7 +282,7 @@ const ForgotPassword = (props: ITypeProps) => {
           <div className="product-box flex justify-between items-center lg:hidden">
             <img
               className="m-4 h-[25px] object-contain"
-              src={CompanyLogo}
+              src={LARGE_LOGO}
               alt="Company Logo"
             />
             <img
