@@ -389,6 +389,7 @@ const POST_PLACE_ALL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
 const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
+const PREVIEW_LABEL_DATA = `${SELLER_BASE_URL}/labels/previewLabelSetting`;
 
 //
 const UPDATE_PRODUCT_AND_BOX_DETAILS = `${SELLER_BASE_URL}/channel/updateProductAndBoxDetails`;
@@ -686,6 +687,7 @@ export {
   WALLETSECRETKEY,
   GET_IMPERSONATION_LOGS,
   GET_FEATURES_PLANS,
+  PREVIEW_LABEL_DATA,
   WHITE_COMPANYFULLNAME,
   WHITE_COMPANYADDRESS,
 };
