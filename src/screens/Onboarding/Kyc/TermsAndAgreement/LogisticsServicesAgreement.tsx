@@ -1,5 +1,9 @@
 import React from "react";
-import { COMPANY_NAME } from "../../../../utils/ApiUrls";
+import {
+  COMPANY_NAME,
+  WHITE_COMPANYADDRESS,
+  WHITE_COMPANYFULLNAME,
+} from "../../../../utils/ApiUrls";
 
 const LogisticsServicesAgreement: React.FC = () => {
   return (
@@ -12,15 +16,13 @@ const LogisticsServicesAgreement: React.FC = () => {
         You/User Company/Individual/Firm/Partnership/Body Corporate (hereinafter
         referred to as "Customer), and{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          AVN Business Solutions Private Limited{" "}
+          {WHITE_COMPANYFULLNAME}
         </strong>
         , A company registered under the Companies Act, 1956, having its
-        corporate office at 12 A, 3rd Floor, Techniplex–II, Off, Veer Savarkar
-        Flyover, Goregaon West, Mumbai, Maharashtra 400062, (hereinafter
-        referred to as "Service Provider”), which means and include, unless
-        repugnant to the context or meaning thereof mean and include its
-        affiliates, liquidators, successors, receivers and permitted assigns) of
-        the other part
+        corporate office at {WHITE_COMPANYADDRESS} (hereinafter referred to as
+        "Service Provider”), which means and include, unless repugnant to the
+        context or meaning thereof mean and include its affiliates, liquidators,
+        successors, receivers and permitted assigns) of the other part
       </p>
       <br />
       <p className="font-Open text-base font-normal leading-5">
@@ -30,7 +32,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         you register for or use on{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
           {COMPANY_NAME || "Shipyaari"}
-        </strong>
+        </strong>{" "}
         website or{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
           {COMPANY_NAME || "Shipyaari"}
@@ -49,7 +51,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <br />
 
       <p className="font-Open text-base font-normal leading-5">
-        Your access to use the Services will be solely at the discretion of
+        Your access to use the Services will be solely at the discretion of{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
           {COMPANY_NAME || "Shipyaari"}
         </strong>
@@ -551,20 +553,25 @@ const LogisticsServicesAgreement: React.FC = () => {
         </strong>
         : <br />
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          AVN Business Solutions Pvt Ltd,
           <br />
-          12 A, 3rd Floor, Techniplex–II ,<br />
-          Off, Veer Savarkar Flyover, Goregaon West,
+          {WHITE_COMPANYFULLNAME}
+          <br />
+          <div>
+            <strong>{WHITE_COMPANYADDRESS}</strong>
+          </div>
         </strong>
         <br />
-        Mumbai 400062 <br />
-        <a href="email:legal@<strong>Shipyaari</strong>.com">
-          legal@
-          <strong className="font-Open text-base font-semibold leading-[22px]">
-            {COMPANY_NAME || "Shipyaari"}
-          </strong>
-          .com
-        </a>
+        {COMPANY_NAME.toLowerCase() === "shipyaari" ? (
+          <a href="email:legal@<strong>Shipyaari</strong>.com">
+            legal@
+            <strong className="font-Open text-base font-semibold leading-[22px]">
+              {COMPANY_NAME.toLowerCase() || "Shipyaari"}
+            </strong>
+            .com
+          </a>
+        ) : (
+          ""
+        )}
       </p>
 
       <p className="font-Open text-base font-normal leading-5">
@@ -1040,7 +1047,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         This is to inform that I/User has approached{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          AVN Business Solutions Private Limited{" "}
+          {WHITE_COMPANYFULLNAME}{" "}
         </strong>
         (Hereinafter Referred to as "
         <strong className="font-Open text-base font-semibold leading-[22px]">

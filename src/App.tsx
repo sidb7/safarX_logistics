@@ -104,7 +104,9 @@ const App = () => {
     });
   }, [location]);
 
-  ReactGA.initialize(REACT_APP_GA4_ID);
+  if (REACT_APP_GA4_ID !== "" && REACT_APP_GA4_ID !== undefined) {
+    ReactGA.initialize(REACT_APP_GA4_ID);
+  }
 
   const [roomName, setRoomName] = useState<any>(
     `${localStorage.getItem("sellerId")}`
