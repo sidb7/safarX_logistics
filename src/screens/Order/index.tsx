@@ -413,6 +413,7 @@ const Index = () => {
       appliedWeight: "1",
     },
   });
+  const [isBulkCheckedBooked, setIsBulkCheckedBooked]: any = useState(false);
 
   //  // Add ref for the abort controller
   //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
@@ -2655,6 +2656,9 @@ const Index = () => {
                 isLoading={isLoading}
                 bulkActionObject={bulkActionObject}
                 setBulkActionObject={setBulkActionObject}
+                setIsBulkCheckedBooked={setIsBulkCheckedBooked}
+                isBulkCheckedBooked={isBulkCheckedBooked}
+                totalCount={totalCount}
               />
             </div>
             <div
