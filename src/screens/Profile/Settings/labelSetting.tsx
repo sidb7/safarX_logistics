@@ -196,6 +196,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
         {/* <BottomLayout callApi={(e: any) => createLabel(e)} /> */}
         <footer className="w-full fixed lg:-ml-2 bottom-0">
           <div className="grid grid-cols-2 shadow-lg border-[1px] bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
+            {/* <OneButton
             <OneButton
               text={
                 previewLoading ? (
@@ -210,7 +211,8 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
               variant="secondary"
               onClick={() => previewLabel()}
               size="medium"
-            />
+            /> */}
+
             <OneButton
               text={
                 loading ? (

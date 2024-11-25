@@ -163,6 +163,8 @@ const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
 const RTO_REATTEMPT = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
+const DOWNLOAD_FAIL_REPORT = `${SELLER_BASE_URL}/fileServices/download/ERRORDETAILS`;
+
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -367,6 +369,7 @@ const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
 const LEBEL_DOWNLOAD = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
 const FETCH_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabels`;
+const FETCH_BULK_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabelsV2`;
 const FETCH_MULTI_TAX_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchTaxInvoices`;
 
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
@@ -690,4 +693,6 @@ export {
   PREVIEW_LABEL_DATA,
   WHITE_COMPANYFULLNAME,
   WHITE_COMPANYADDRESS,
+  DOWNLOAD_FAIL_REPORT,
+  FETCH_BULK_LABELS_REPORT_DOWNLOAD,
 };
