@@ -3,6 +3,7 @@ import crossIcon from "../../../assets/cross.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../../components/Table";
 import PaginationComponent from "../../../components/Pagination";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 function ShipmentDetailModal({ onClick }: any) {
   const columnsHelper = createColumnHelper<any>();
@@ -27,7 +28,7 @@ function ShipmentDetailModal({ onClick }: any) {
         return (
           <div className="flex justify-between ">
             <h1 className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-              Shipyaari Id
+              {COMPANY_NAME} Id
             </h1>
           </div>
         );

@@ -35,6 +35,7 @@ import {
   RECHARGE_STATUS,
   PAYMENT_ERRORS,
   DUPLICATE_ORDER,
+  COMPANY_NAME,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -251,6 +252,7 @@ const tabs = [
 ];
 
 const Index = () => {
+  const companyName = COMPANY_NAME;
   const [filterId, setFilterId]: any = useState(0);
   const [statusData, setStatusData]: any = useState(tabs);
   const [orders, setOrders]: any = useState([]);
@@ -411,6 +413,13 @@ const Index = () => {
       appliedWeight: "1",
     },
   });
+
+  //  // Add ref for the abort controller
+  //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
+
+  //  const fetchDataControllerRef = useRef<AbortController | null>(null);
+  //  const currentTabRef = useRef<number>(renderingComponents);
+
   // const [isMasked, setIsMasked] = useState(false);
 
   // useEffect(() => {
@@ -1144,6 +1153,159 @@ const Index = () => {
     }
   };
 
+  //  // Modified getSellerOrderByStatus to use POST options
+  //  const getSellerOrderByStatus = async (
+  //   currentStatus = "DRAFT",
+  //   pageNo: number = 1,
+  //   sort: object = { _id: -1 },
+  //   skip: number = 0,
+  //   limit: number = 10,
+  //   dateFilter: any = false,
+  //   searchText?: any,
+  //   startDate?: any,
+  //   endDate?: any,
+  //   filterPayLoadData?: any,
+  //   signal?: AbortSignal
+  // ) => {
+  //   let payload: any;
+  //   try {
+  //     setIsLoading(true);
+
+  //     let firstFilterData = [];
+  //     let secondFilterData = [];
+
+  //     if (filterId === 1) {
+  //       payload = {
+  //         pageNo: 1, //temp
+  //         sort: { _id: -1 }, //temp
+  //         skip: 0, //temp
+  //         limit: limit, //temp
+  //         currentStatus,
+  //         subStatus: "DRAFT",
+  //       };
+  //     } else {
+  //       payload = {
+  //         pageNo: 1, //temp
+  //         sort: { _id: -1 }, //temp
+  //         skip: 0, //temp
+  //         limit: limit, //temp
+  //         currentStatus,
+  //       };
+  //     }
+
+  //     if (searchText?.length > 0) {
+  //       payload.id = searchText;
+  //     }
+
+  //     if (
+  //       filterPayLoadData?.filterArrOne?.length > 0 ||
+  //       filterPayLoadData?.filterArrTwo?.length > 0
+  //     ) {
+  //       const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
+  //         (obj: any) => !Object.keys(obj).includes("createdAt")
+  //       );
+
+  //       firstFilterData = newFilterArrOne;
+  //       secondFilterData = filterPayLoadData?.filterArrTwo;
+  //     }
+
+  //     if (startDate && endDate) {
+  //       let startEpoch = null;
+  //       let lastendEpoch = null;
+
+  //       if (startDate instanceof Date && endDate instanceof Date) {
+  //         startDate.setHours(0, 0, 0, 0);
+  //         startEpoch = startDate.getTime();
+
+  //         endDate.setHours(23, 59, 59, 999);
+  //         const endEpoch = endDate.getTime();
+  //         lastendEpoch = endEpoch;
+  //       }
+
+  //       firstFilterData.unshift(
+  //         {
+  //           createdAt: {
+  //             $gte: startEpoch,
+  //           },
+  //         },
+  //         {
+  //           createdAt: {
+  //             $lte: lastendEpoch,
+  //           },
+  //         }
+  //       );
+  //     }
+
+  //     if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
+  //       payload.filterArrOne = firstFilterData;
+  //       payload.filterArrTwo = secondFilterData;
+  //     }
+
+  //     // Use POST with signal in options
+  //     const { data } = await POST(GET_SELLER_ORDER, payload, { signal });
+
+  //     if (!signal?.aborted) {
+  //       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
+
+  //       if (dateFilter === true) {
+  //         getStatusCount(
+  //           currentStatus,
+  //           dateFilter,
+  //           searchText,
+  //           startDate,
+  //           endDate,
+  //           firstFilterData,
+  //           secondFilterData
+  //         );
+  //       } else {
+  //         setStatusCount("", currentStatus, orderCount);
+  //       }
+  //       setTotalcount(orderCount ? orderCount : 0);
+
+  //       if (payload.filterArrOne) {
+  //         setDraftOrderCount({
+  //           ...draftOrderCount,
+  //           all: allOrdersCount && orderCount ? Math.min(allOrdersCount, orderCount) : orderCount,
+  //           draft: draftCount || 0,
+  //           error: errorCount || 0,
+  //         });
+  //       } else {
+  //         setDraftOrderCount({
+  //           ...draftOrderCount,
+  //           all: allOrdersCount && orderCount ? Math.max(allOrdersCount, orderCount) : orderCount,
+  //           draft: draftCount || 0,
+  //           error: errorCount || 0,
+  //         });
+  //       }
+
+  //       setSelectedRowData([]);
+  //       if (data?.status || data?.success) {
+  //         return data?.data[0];
+  //       }
+  //     }
+  //   } catch (error: any) {
+  //     if (error.name !== 'AbortError') {
+  //       setIsLoading(false);
+  //       toast.error(error.message || "An error occurred");
+  //     }
+  //     return false;
+  //   } finally {
+  //     if (!signal?.aborted) {
+  //       setIsLoading(false);
+  //     }
+  //   }
+  // };
+
+  //  // Cleanup on unmount
+  //  useEffect(() => {
+  //   return () => {
+  //     if (fetchDataControllerRef.current) {
+  //       fetchDataControllerRef.current.abort();
+  //       fetchDataControllerRef.current = null;
+  //     }
+  //   };
+  // }, []);
+
   const getSingleFile = async (payload: any, actionType?: any) => {
     // let fileName = "";
     let awbs = {
@@ -1193,7 +1355,33 @@ const Index = () => {
           filename = "Label_Report.png";
         } else {
           filename = "Label_Report.pdf";
-        }
+        } // // Function to handle form submission
+        // const submitFormData = async (formData: any) => {
+        //   try {
+        //     setLoading(true);
+        //     setBrandLoadingState(true);
+        //     const { data } = await POST(LOGO_AND_BRAND, formData, {
+        //       headers: {
+        //         "Content-Type": "multipart/form-data",
+        //       },
+        //     });
+
+        //     if (data?.success) {
+        //       toast.success(data.message);
+        //       localStorage.setItem("brandDetails", "true");
+        //       // window.location.reload(); // Uncomment if needed
+        //       // getProfileData(); // Uncomment if needed
+        //     } else {
+        //       toast.error(data.message);
+        //     }
+        //   } catch (error) {
+        //     toast.error("An error occurred while updating branding details.");
+        //     console.error(error);
+        //   } finally {
+        //     setLoading(false);
+        //     setBrandLoadingState(false);
+        //   }
+        // };
 
         var url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -1448,6 +1636,123 @@ const Index = () => {
       console.error("An error occurred in handleTabChanges function:", error);
     }
   };
+
+  // Modified handleTabChanges
+  // const handleTabChanges = async (
+  //   index?: any,
+  //   dateFilter = false,
+  //   searchedText?: any,
+  //   startDate?: any,
+  //   endDate?: any,
+  //   filterPayLoad?: any,
+  //   itemsPerPage?: any
+  // ) => {
+  //   try {
+  //     // Abort previous request if exists and if we're changing tabs
+  //     if (index !== currentTabRef.current && fetchDataControllerRef.current) {
+  //       fetchDataControllerRef.current.abort();
+  //       fetchDataControllerRef.current = null;
+  //     }
+  //     currentTabRef.current = index;
+
+  //     // Create new controller
+  //     fetchDataControllerRef.current = new AbortController();
+  //     const signal = fetchDataControllerRef.current.signal;
+
+  //     const data = await getSellerOrderByStatus(
+  //       statusData[index].value,
+  //       1,
+  //       { _id: -1 },
+  //       0,
+  //       itemsPerPage,
+  //       dateFilter,
+  //       searchedText,
+  //       startDate,
+  //       endDate,
+  //       filterPayLoad,
+  //       signal
+  //     );
+
+  //     if (!signal.aborted && data) {
+  //       const { OrderData } = data;
+  //       setOrders(OrderData);
+  //       setAllOrders(OrderData);
+  //       setTotalOrders(OrderData);
+  //       setGlobalIndex(index);
+  //       setTabStatusId(index);
+  //       setRenderingComponents(index);
+
+  //       let currentStatus = tabs[index].value;
+  //       setCurrentTap(currentStatus);
+  //       setIsErrorPage(index > 0 && false);
+  //       index > 0 && setFilterId(0);
+
+  //       // Update column helpers based on status
+  //       switch (tabs[index].value) {
+  //         case "DRAFT":
+  //           setColumnhelper(
+  //             columnHelperForNewOrder(
+  //               navigate,
+  //               setDeleteModalDraftOrder,
+  //               setInfoModalContent,
+  //               currentStatus,
+  //               orderActions,
+  //               setInfoModalContentFunction
+  //             )
+  //           );
+  //           break;
+  //         case "BOOKED":
+  //           setColumnhelper(
+  //             ColumnHelperForBookedAndReadyToPicked(
+  //               navigate,
+  //               setCancellationModal,
+  //               setInfoModalContent,
+  //               setInfoModalContentFunction,
+  //               currentStatus,
+  //               orderActions,
+  //               setOpenRightModalForTracking,
+  //               openRightModalForTracking,
+  //               isMasked
+  //             )
+  //           );
+  //           break;
+  //         case "READYTOPICK":
+  //           setColumnhelper(
+  //             ColumnHelperForBookedAndReadyToPicked(
+  //               navigate,
+  //               setInfoModalContent,
+  //               setInfoModalContentFunction,
+  //               currentStatus,
+  //               orderActions,
+  //               setOpenRightModalForTracking,
+  //               openRightModalForTracking,
+  //               isMasked
+  //             )
+  //           );
+  //           break;
+  //         default:
+  //           setColumnhelper(
+  //             columnHelpersForRest(
+  //               navigate,
+  //               setInfoModalContent,
+  //               currentStatus,
+  //               orderActions,
+  //               setInfoModalContentFunction,
+  //               setInfoReverseModalFunction,
+  //               setOpenRightModalForTracking,
+  //               openRightModalForTracking,
+  //               isMasked
+  //             )
+  //           );
+  //       }
+  //     }
+  //   } catch (error: any) {
+  //     if (error.name !== 'AbortError') {
+  //       console.error("An error occurred in handleTabChanges function:", error);
+  //     }
+  //   }
+  // };
+
   const PersistFilterArr = (key: any, data: any) => {
     setPersistFilterData((prevData: any) => {
       return { ...prevData, [key]: [...data] };
@@ -2533,7 +2838,7 @@ const Index = () => {
             )}
             <hr />
             <p className="mt-1">
-              <span>Shipyaari ID:</span>
+              <span>{capitalizeFirstLetter(companyName)} ID:</span>
               {infoModalContent?.data?.orderId?.split("T")?.[1] ||
                 infoModalContent?.data?.orderId ||
                 ""}

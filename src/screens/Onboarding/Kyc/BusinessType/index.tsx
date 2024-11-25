@@ -12,6 +12,7 @@ import {
   POST_BUSINESS_TYPE_URL,
   POST_SKIP_FOR_NOW_TRACKER,
   LARGE_LOGO,
+  COMPANY_NAME,
 } from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { toast } from "react-hot-toast";
@@ -166,7 +167,7 @@ const BusinessType = (props: ITypeProps) => {
 
                 <WelcomeHeader
                   className="!mt-[44px] md:!mt-6"
-                  title="Welcome to Shipyaari"
+                  title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
                   content="Kindly complete your KYC"
                 />
 

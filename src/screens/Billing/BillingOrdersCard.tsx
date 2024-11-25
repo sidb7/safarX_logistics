@@ -7,6 +7,7 @@ import bookedIcon from "../../assets/Transaction/bookedIcon.svg";
 import downloadIcon from "../../assets/download.svg";
 import downArrowIcon from "../../assets/downwardArrow.svg";
 import { capitalizeFirstLetter } from "../../utils/utility";
+import { COMPANY_NAME } from "../../utils/ApiUrls";
 
 interface BillingOrdersCardProps {
   data: {
@@ -18,20 +19,20 @@ interface BillingOrdersCardProps {
     sku: string;
     courierName: string;
     prodDimensions: string;
-    VolumetricWeight:string;
-    DeadWeight:string;
-    BillableWeight:string;
-    Price:String;
-    FWD:String;
-    RTO:string;
-    TotalAmount:string;
-    GST:String;
-    ShippedValue:String;
-    WA:String;
-    SMS:String;
-    ExcessForward:String;
-    ExcessRTO:String;
-    ExcessTotal:String;
+    VolumetricWeight: string;
+    DeadWeight: string;
+    BillableWeight: string;
+    Price: String;
+    FWD: String;
+    RTO: string;
+    TotalAmount: string;
+    GST: String;
+    ShippedValue: String;
+    WA: String;
+    SMS: String;
+    ExcessForward: String;
+    ExcessRTO: String;
+    ExcessTotal: String;
   };
 }
 
@@ -83,7 +84,9 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
               <p className="font-semibold text-[#1C1C1C]">{data.trackingId}</p>
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-[#777]">Shipyaari ID:</p>
+              <p className="text-sm font-semibold text-[#777]">
+                {COMPANY_NAME} ID:
+              </p>
               <p className="font-semibold text-[#1C1C1C]">{data.shipyaariId}</p>
             </div>
           </div>
@@ -94,14 +97,20 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
             </div>
             <div className="flex-1">
               <p className="text-sm font-semibold text-[#777]">Courier Co.:</p>
-              <p className=" font-semibold text-[#1C1C1C]">{data.courierName}</p>
+              <p className=" font-semibold text-[#1C1C1C]">
+                {data.courierName}
+              </p>
             </div>
           </div>
           <div className="mb-4">
             <div className="flex flex-wrap gap-4 mb-4">
               <div className="flex-1">
-                <p className="text-sm text-[#777] font-semibold">Total Amount:</p>
-                <p className="font-semibold  text-[#1C1C1C]">₹{data.ShippedValue}</p>
+                <p className="text-sm text-[#777] font-semibold">
+                  Total Amount:
+                </p>
+                <p className="font-semibold  text-[#1C1C1C]">
+                  ₹{data.ShippedValue}
+                </p>
               </div>
               {/* <div className="mr-8 mt-6">
                 <div className="flex gap-2">
@@ -125,8 +134,12 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
                 <p className="font-semibold text-[#1C1C1C]">{data.sku}</p>
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#777]">Courier Co.:</p>
-                <p className="font-semibold text-[#1C1C1C]">{data.courierName}</p>
+                <p className="text-sm font-semibold text-[#777]">
+                  Courier Co.:
+                </p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  {data.courierName}
+                </p>
               </div>
             </div>
             <h3 className="font-semibold text-lg mt-4 mb-3">
@@ -137,23 +150,33 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
                 <p className="text-sm font-semibold text-[#777]">
                   Product Dimensions:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">{data.prodDimensions}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  {data.prodDimensions}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#777]">
                   Volumetric Weight:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">{data.VolumetricWeight}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  {data.VolumetricWeight}
+                </p>
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#777]">Dead Weight:</p>
-                <p className="font-semibold text-[#1C1C1C]">{data.DeadWeight}</p>
+                <p className="text-sm font-semibold text-[#777]">
+                  Dead Weight:
+                </p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  {data.DeadWeight}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#777]">
                   Billable Weight:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">{data.BillableWeight}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  {data.BillableWeight}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#777]">Price:</p>
@@ -174,7 +197,9 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
                 <p className="text-sm font-semibold text-[#777]">
                   Applied Total Amount:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">₹{data.TotalAmount}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  ₹{data.TotalAmount}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#777]">GST:</p>
@@ -184,7 +209,9 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
                 <p className="text-sm font-semibold text-[#777]">
                   Total Shipped Value:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">₹{data.ShippedValue}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  ₹{data.ShippedValue}
+                </p>
               </div>
             </div>
 
@@ -206,19 +233,25 @@ const BillingOrdersCard: React.FC<BillingOrdersCardProps> = ({ data }) => {
                 <p className="text-sm font-semibold text-[#777]">
                   Excess Forward amount:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">₹{data.ExcessForward}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  ₹{data.ExcessForward}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#777]">
                   Excess RTO amount:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">₹{data.ExcessRTO}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  ₹{data.ExcessRTO}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#777]">
                   Excess Total amount:
                 </p>
-                <p className="font-semibold text-[#1C1C1C]">₹{data.ExcessTotal}</p>
+                <p className="font-semibold text-[#1C1C1C]">
+                  ₹{data.ExcessTotal}
+                </p>
               </div>
             </div>
           </div>

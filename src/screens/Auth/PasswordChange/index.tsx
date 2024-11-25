@@ -5,7 +5,11 @@ import {
   constructNavigationObject,
   getQueryJson,
 } from "../../../utils/utility";
-import { CHANGE_PASSWORD, REACT_APP_GTM_ID } from "../../../utils/ApiUrls";
+import {
+  CHANGE_PASSWORD,
+  LARGE_LOGO,
+  REACT_APP_GTM_ID,
+} from "../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import InformativeIcon from "../../../assets/I icon.svg";
 import EyeIcon from "../../../assets/Login/eye.svg";
@@ -212,7 +216,7 @@ function ChangePasswordv2() {
             <div className="product-box  z-10 bg-white flex justify-between w-full h-[60px] top-0">
               <img
                 className="my-auto lg:ml-6  h-[25px] object-contain"
-                src={CompanyLogo}
+                src={LARGE_LOGO}
                 alt="Company Logo"
               />
             </div>

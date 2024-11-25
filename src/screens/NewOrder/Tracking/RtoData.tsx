@@ -6,8 +6,8 @@ import failureIcon from "../../../assets/failure.svg";
 import EditIcon from "../../../assets/Edit.svg";
 import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
-import { formatDate } from '../../../utils/dateUtils';
-
+import { formatDate } from "../../../utils/dateUtils";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 interface IOrderDataProps {
   data: any[];
@@ -134,7 +134,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
             )}
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-                Shipyaari:
+                {COMPANY_NAME || "Shipyaari"}:
               </span>
               <span className="font-sans  text-sm leading-5 text-black  font-semibold">
                 {info.row?.original?.tempOrderId}
@@ -348,7 +348,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
         const sellerRemarksArr = info.row.original?.sellerRemark;
         // console.log("partner",hasAttemptReasons)
         // console.log("seller remarks count ",sellerRemarks)
-        const awb = info?.row?.original?.awb; 
+        const awb = info?.row?.original?.awb;
         return (
           <div className="space-y-1">
             <div

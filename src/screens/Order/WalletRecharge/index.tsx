@@ -50,6 +50,7 @@ import {
   WALLET_RECHARGE_USING_NEFT,
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
+  COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -155,7 +156,9 @@ const WalletRecharge = () => {
 
   const [errorMessage, setErrorMessage] = useState<any>("");
   const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
-
+  const [companydetails, setcompanydetails] = useState<any>(
+    JSON.parse(sessionStorage.getItem("companydetails") as string)
+  );
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -377,7 +380,7 @@ const WalletRecharge = () => {
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
-      "SHIPYAARI",
+      COMPANY_NAME?.toUpperCase(),
       userDetails.name,
       userDetails.email,
       redirectUrl
@@ -954,23 +957,50 @@ const WalletRecharge = () => {
                           ) : (
                             <>
                               <div className="font-bold font-Open">
-                                AVN Bussiness Solution Pvt Ltd
+                                {
+                                  companydetails?.companyDetails?.bankDetails
+                                    ?.accountName
+                                }
                               </div>
                               <div>
                                 <div className="font-Open text-[14px] gap-x-2 flex">
-                                  <div>Bank : AXIS Bank </div>
+                                  <div>
+                                    Bank :{" "}
+                                    {
+                                      companydetails?.companyDetails
+                                        ?.bankDetails?.bankName
+                                    }{" "}
+                                  </div>
                                   {/* <div className="ml-1 "> AXIS Bank</div> */}
                                 </div>
                                 <div className="font-Open text-[14px] gap-x-2 flex">
-                                  <div>A/C No : 922020042413467</div>{" "}
+                                  <div>
+                                    A/C No :{" "}
+                                    {
+                                      companydetails?.companyDetails
+                                        ?.bankDetails?.accountNo
+                                    }
+                                  </div>{" "}
                                   {/* <div> 922020042413467</div> */}
                                 </div>
                                 <div className="font-Open text-[14px] gap-x-2 flex">
-                                  <div>Branch : Kandivali, Mumbai, MH.</div>
+                                  <div>
+                                    Branch :{" "}
+                                    {
+                                      companydetails?.companyDetails
+                                        ?.bankDetails?.branchName
+                                    }
+                                  </div>
                                   {/* <div>Kandivali, Mumbai, MH. </div> */}
                                 </div>
                                 <div className="font-Open text-[14px] gap-x-2 flex">
-                                  <div>IFSC Code : UTIB0000201</div>
+                                  <div>
+                                    IFSC Code :{" "}
+                                    {
+                                      companydetails?.companyDetails
+                                        ?.bankDetails?.ifscCode
+                                    }
+                                  </div>
                                   {/* <div> UTIB0000201</div> */}
                                 </div>
                               </div>

@@ -66,9 +66,44 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
       
   // };
 
+  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
+    // For contact number fields, only allow numbers
+    if (name.includes('ContactNo')) {
+      // Remove any non-digit characters and limit to 10 digits
+      const numbersOnly = value.replace(/\D/g, '').slice(0, 10);
+      
+      setProfileData(prevData => ({ ...prevData, [name]: numbersOnly }));
+      
+      // Validate the number
+      if (numbersOnly.length > 0) {
+        const validStartDigits = /^[6-9]\d{9}$/;
+        if (!validStartDigits.test(numbersOnly)) {
+          setErrors(prevErrors => ({ 
+            ...prevErrors, 
+            [name]: 'Please enter a valid 10 digit number' 
+          }));
+        } else {
+          setErrors(prevErrors => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[name];
+            return newErrors;
+          });
+        }
+      } else {
+        setErrors(prevErrors => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
+      return;
+    }
+
+    // For non-contact number fields, handle normally
     setProfileData(prevData => ({ ...prevData, [name]: value }));
   
     // Clear error when field is empty
@@ -96,23 +131,8 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
         });
       }
     }
-  
-    // Validate contact number fields
-    if (name.includes('ContactNo')) {
-      if (!mobileRegex.test(value)) {
-        setErrors(prevErrors => ({ 
-          ...prevErrors, 
-          [name]: 'Please enter a valid 10 digit contact number' 
-        }));
-      } else {
-        setErrors(prevErrors => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[name];
-          return newErrors;
-        });
-      }
-    }
   };
+
 
   const validateField = (name: string, value: string) => {
     // if (!value) return `Please enter your ${name.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
@@ -359,7 +379,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onClose, getProfileData, Prof
             // inputError={!!errors.firstName}
             errorMessage={errors.firstName}
             isDisabled
-          />accountsgmail
+          />
 
           <CustomInputBox
             label="Last Name"

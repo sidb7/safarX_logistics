@@ -14,6 +14,8 @@ let LARGE_LOGO = "";
 let COMPANY_NAME = "";
 let WALLETSHAREDIV = "";
 let WALLETSECRETKEY = "";
+let WHITE_COMPANYFULLNAME = "";
+let WHITE_COMPANYADDRESS = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -39,7 +41,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
-
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     break;
 
   case "test":
@@ -58,6 +61,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     break;
 
   case "production":
@@ -74,7 +79,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
-
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     break;
 
   default:
@@ -92,6 +98,8 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
     SELLER_WEB_URL = `http://localhost:3000`;
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
 
     break;
 }
@@ -381,6 +389,7 @@ const POST_PLACE_ALL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
 const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
+const PREVIEW_LABEL_DATA = `${SELLER_BASE_URL}/labels/previewLabelSetting`;
 
 //
 const UPDATE_PRODUCT_AND_BOX_DETAILS = `${SELLER_BASE_URL}/channel/updateProductAndBoxDetails`;
@@ -678,4 +687,7 @@ export {
   WALLETSECRETKEY,
   GET_IMPERSONATION_LOGS,
   GET_FEATURES_PLANS,
+  PREVIEW_LABEL_DATA,
+  WHITE_COMPANYFULLNAME,
+  WHITE_COMPANYADDRESS,
 };

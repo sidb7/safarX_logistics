@@ -32,7 +32,7 @@ export const Profile = () => {
 
   const getProfileData = async () => {
     const { data } = await POST(GET_PROFILE_URL, {});
-    console.log("data from get api",data)
+    // console.log("data from get api",data)
     if (data?.success) {
       setProfileData(data?.data?.[0]);
       setBrandingModalDetails({
@@ -46,42 +46,108 @@ export const Profile = () => {
     setIsLoading(false);
   };
 
+  // const updateBrandingDetails = async () => {
+  //   let formData = new FormData();
+  //   formData.append("brandName", brandingModalDetails.brandName);
+  //   formData.append("file", brandingModalDetails?.file);
+
+  //   let img: any = new Image();
+  //   img.src = brandingModalDetails?.imageUrl;
+
+  //   img.onload = async function () {
+  //     // Access the natural height and width of the image
+  //     var height = img.naturalHeight;
+  //     var width = img.naturalWidth;
+
+  //     if (height > 200 || width > 700) {
+  //       return toast.error(
+  //         "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+  //       );
+  //     } else {
+  //       const { data } = await POST(LOGO_AND_BRAND, formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       });
+
+  //       if (data?.success) {
+  //         toast.success(data?.message);
+  //         setBrandingModal(false);
+  //         window.location.reload();
+  //         // getProfileData();
+  //       } else {
+  //         toast.error(data?.message);
+  //       }
+  //     }
+  //   };
+  // };
+  const isFormValid = () => {
+    return brandingModalDetails.brandName.trim() !== "";
+  };
   const updateBrandingDetails = async () => {
+    if (!isFormValid()) {
+      return toast.error("All the above fields are required.");
+    }
+
     let formData = new FormData();
     formData.append("brandName", brandingModalDetails.brandName);
     formData.append("file", brandingModalDetails?.file);
 
-    let img: any = new Image();
-    img.src = brandingModalDetails?.imageUrl;
+    // Check if image URL is provided
+    if (brandingModalDetails?.imageUrl) {
+      const img = new Image();
+      img.src = brandingModalDetails.imageUrl;
 
-    img.onload = async function () {
-      // Access the natural height and width of the image
-      var height = img.naturalHeight;
-      var width = img.naturalWidth;
+      img.onload = async () => {
+        const { naturalHeight: height, naturalWidth: width } = img;
 
-      if (height > 200 || width > 700) {
-        return toast.error(
-          "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
-        );
-      } else {
-        const { data } = await POST(LOGO_AND_BRAND, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (data?.success) {
-          toast.success(data?.message);
-          setBrandingModal(false);
-          window.location.reload();
-          // getProfileData();
+        if (height > 200 || width > 700) {
+          return toast.error(
+            "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
+          );
         } else {
-          toast.error(data?.message);
+          await submitFormData(formData); // Call function to handle form submission
         }
-      }
-    };
+      };
+
+      img.onerror = () => {
+        toast.error("Failed to load the image. Please check the URL or file.");
+      };
+    } else {
+      // If no image URL, proceed directly to form submission
+      await submitFormData(formData);
+    }
   };
 
+  // Function to handle form submission
+  const submitFormData = async (formData: any) => {
+    try {
+      // setLoading(true);
+      // setBrandLoadingState(true);
+      const { data } = await POST(LOGO_AND_BRAND, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (data?.success) {
+        toast.success(data.message);
+        setBrandingModal(false);
+        window.location.reload();
+        // localStorage.setItem("brandDetails", "true"); // this is required while updating from accordian on home page
+        // window.location.reload(); // Uncomment if needed
+        // getProfileData(); // Uncomment if needed
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating branding details.");
+      console.error(error);
+    } finally {
+      // setLoading(false);
+      // setBrandLoadingState(false);
+    }
+  };
   useEffect(() => {
     (async () => {
       getProfileData();

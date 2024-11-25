@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  WHITE_COMPANYADDRESS,
+  WHITE_COMPANYFULLNAME,
+} from "../../../../utils/ApiUrls";
 
 const GstContent = (userNameForGst: any) => {
+  // const [companydetails, setcompanydetails] = useState<any>(
+  //   JSON.parse((sessionStorage?.getItem("companydetails") as string) ?? {})
+  // );
   return (
     <div className=" px-5 mb-3 md:mb-1 md:mx-5">
       <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8] overflow-x-auto  py-4">
@@ -17,14 +24,20 @@ const GstContent = (userNameForGst: any) => {
 
             <div
               style={{ textAlign: "center" }}
-              className="font-Open text-base font-semibold leading-[22px]"
+              className="flex justify-center items-center flex-col font-Open text-base font-semibold leading-[22px] w-full"
             >
               <p>DECLARATION OF GST NON-ENROLMENT</p>
-              <p>To AVN Business Solutions Pvt. Ltd.</p>
+              <div className="w-[80%] flex justify-center items-center ">
+                <div className="break-words">
+                  {WHITE_COMPANYADDRESS ||
+                    "12A, 3rd Floor, Techniplex - II, Techniplex Complex, S.V.Road, Off Veer Savarkar Flyover, Goregaon West,Mumbai, Maharashtra 400062"}
+                </div>
+              </div>
+              {/* <p>To AVN Business Solutions Pvt. Ltd.</p>
               <p>12A, 3rd Floor, Techniplex - II,</p>
               <p>Techniplex Complex, S.V.Road,</p>
               <p>Off Veer Savarkar Flyover, Goregaon West,</p>
-              <p>Mumbai, Maharashtra 400062</p>
+              <p>Mumbai, Maharashtra 400062</p> */}
             </div>
 
             <div
@@ -52,7 +65,7 @@ const GstContent = (userNameForGst: any) => {
                         ` ${userState?.firstName} ${userState?.lastName} `} */}
 
                   {/* {" " + userName + " "} */}
-                  {" " + userNameForGst + " " || "-"}
+                  {" " + userNameForGst?.userNameForGst + " " || "-"}
 
                   {/* {userState?.firstName + " " + userState?.lastName} */}
                   {/*This will work when user login but didn't work when user signup as the line 144 is commented */}
@@ -104,7 +117,8 @@ const GstContent = (userNameForGst: any) => {
                   bill requirement.
                 </li>
                 <li>
-                  I/We hereby also confirm that AVN Business Solutions Pvt Ltd
+                  I/We hereby also confirm that{" "}
+                  {WHITE_COMPANYFULLNAME || "AVN Business solutions PVT Ltd."}
                   or the carrier of the shipment/consignment shall not be liable
                   for any loss accrued to me/us, due to any registration /e-way
                   bill/e-invoice default with the GST or under any other law

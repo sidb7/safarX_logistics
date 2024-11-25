@@ -138,7 +138,7 @@ const WalletPayment = () => {
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
-      "SHIPYAARI",
+      COMPANY_NAME?.toUpperCase(),
       userDetails.name,
       userDetails.email,
       redirectUrl

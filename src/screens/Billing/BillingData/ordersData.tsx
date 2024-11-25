@@ -9,7 +9,8 @@ import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
 import resolvedImage from "../../../assets/resolved.svg";
 import { POST } from "../../../utils/webService";
-import { GET_BILLED_ORDERS } from "../../../utils/ApiUrls";
+import { COMPANY_NAME, GET_BILLED_ORDERS } from "../../../utils/ApiUrls";
+import CopyTooltip from "../../../components/CopyToClipboard";
 
 interface IOrdersDataProps {
   data: any;
@@ -43,21 +44,27 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (
               Order:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2 ">
                 {info?.row?.original?.["order id"]}{" "}
-                <img src={copyIcon} alt="" />
+                <CopyTooltip
+                  stringToBeCopied={info?.row?.original?.["order id"]}
+                />
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
               Tracking:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
                 {info?.row?.original?.["Tracking Number"]}{" "}
-                <img src={copyIcon} alt="" />
+                <CopyTooltip
+                  stringToBeCopied={info?.row?.original?.["Tracking Number"]}
+                />
               </p>
             </div>
             <div className="flex flex-col text-[12px] font-normal leading-4 font-Open">
-              Shipyaari:
+              {COMPANY_NAME}:
               <p className="flex gap-x-1 text-sm font-semibold leading-5 font-Open mb-2  ">
-                {info?.row?.original?.["Shipyaari ID"]}{" "}
-                <img src={copyIcon} alt="" />
+                {info?.row?.original?.[`${COMPANY_NAME} ID`]}{" "}
+                <CopyTooltip
+                  stringToBeCopied={info?.row?.original?.[`${COMPANY_NAME} ID`]}
+                />
               </p>
             </div>
           </div>
@@ -237,14 +244,14 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (
             <p className="text-[12px] font-semibold leading-4 font-Open flex">
               WA:{" "}
               <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
-                ₹{info.row.original.wa}{" "}
+                ₹{info.row.original.whatsappCharge || 0}{" "}
                 {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
               </span>
             </p>
             <p className="text-[12px] font-semibold leading-4 font-Open flex">
               SMS:{" "}
               <span className="text-[12px] font-normal leading-4 font-Open flex gap-x-2">
-                ₹{info.row.original.sms}{" "}
+                ₹{info.row.original.smsCharge || 0}{" "}
                 {/* <img className="cursor-pointer" src={infoIcon} alt="" />{" "} */}
               </span>
             </p>
@@ -289,26 +296,26 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (
         );
       },
     }),
-    columnsHelper.accessor("actions", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
-              Actions
-            </p>
-          </div>
-        );
-      },
+    // columnsHelper.accessor("actions", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+    //           Actions
+    //         </p>
+    //       </div>
+    //     );
+    //   },
 
-      cell: (info: any) => {
-        return (
-          <div className="flex gap-x-5 mt-[-60px]">
-            <img className="cursor-pointer" src={downloadIcon} alt="" />
-            <img className="cursor-pointer" src={exportIcon} alt="" />
-          </div>
-        );
-      },
-    }),
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="flex gap-x-5 mt-[-60px]">
+    //         <img className="cursor-pointer" src={downloadIcon} alt="" />
+    //         <img className="cursor-pointer" src={exportIcon} alt="" />
+    //       </div>
+    //     );
+    //   },
+    // }),
   ];
   return (
     <div>

@@ -1,8 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import BackArrowIcon from "../../assets/backArrow.svg";
 import { ReactElement } from "react";
 import infoIcon from "../../assets/info.svg";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import CompanyNameContent from "../../screens/NewDashboard/HomeSection/accordianSections/CompanyNameContent";
+import {
+  capitalizeFirstLetter,
+  retrieveLocalStorageData,
+} from "../../utils/utility";
+import { COMPANY_NAME } from "../../utils/ApiUrls";
 
 interface IBreadcrumProps {
   label: string;
@@ -19,7 +26,9 @@ export const Breadcrum = ({
   setState,
   state,
 }: IBreadcrumProps) => {
+  const companyName = COMPANY_NAME;
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route
 
   const GetCurrentPath = () => {
     const currentUrl = window.location.href;
@@ -47,17 +56,78 @@ export const Breadcrum = ({
   kycCheck = JSON.parse(kycCheck);
   kycCheck = kycCheck?.nextStep?.kyc;
 
+  const privateCompanyDetails = retrieveLocalStorageData("kycValue");
+
+  // List of invalid company names
+  const invalidCompanyNames = [null, undefined, "", "N/A", "NA", "n/a", "na"];
+
+  let privateCompanyName = privateCompanyDetails?.privateCompany?.name;
+  // console.log("🚀 ~ privateCompanyName:", privateCompanyName);
+
+  // // Add a condition to check if the name is "N/A", an empty string, or undefined
+  // Add a condition to check if the name is "N/A", an empty string, or undefined
+  // const isCompanyNameInvalid =
+  //   !privateCompanyName ||
+  //   privateCompanyName.trim() === "" ||
+  //   privateCompanyName === "N/A";
+  // console.log("🚀 ~ isCompanyNameInvalid:", isCompanyNameInvalid);
+
+  // Check if the company name is invalid
+  const isCompanyNameInvalid = invalidCompanyNames.includes(
+    privateCompanyName?.trim()
+  );
+
+  // Check if current route is the same as "/onboarding/kyc-type"
+  const isKycRoute = location.pathname === "/dashboard/overview";
+  // const isCompanyNameRoute = location.pathname === "/dashboard/overview";
+
+  const [openCentreModal, setOpenCentreModal] = useState(false);
+
   return (
     <>
       <div>
-        {!kycCheck && (
+        {!isKycRoute && !kycCheck && (
           <div
             className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
-            onClick={() => navigate("/onboarding/kyc-type")}
+            // onClick={() => navigate("/onboarding/kyc-type")}
+            onClick={() => {
+              navigate("/dashboard/overview", {
+                state: { openSection: "kyc" }, // Pass the section you want to open
+              });
+            }}
           >
             <div className="flex gap-x-2 w-[150px]">
               <img src={infoIcon} alt="" />
               <p className="font-Lato text-base font-normal">KYC Pending</p>
+            </div>
+
+            <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
+              Click Here
+            </p>
+          </div>
+        )}
+
+        {kycCheck && !isKycRoute && isCompanyNameInvalid && (
+          <div
+            className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
+            // onClick={() => navigate("/onboarding/kyc-type")}
+            // onClick={() => {
+            //   navigate("/dashboard/overview", {
+            //     state: { openSection: "brandDetails" }, // Pass the section you want to open
+            //   });
+            // }}
+            onClick={() => setOpenCentreModal(true)}
+          >
+            <div className="flex gap-x-2 items-center">
+              <div>
+                <img src={infoIcon} alt="" width={"16px"} height={"16px"} />
+              </div>
+              <div>
+                <p className="font-Lato text-base font-normal leading-5 tracking-wide">
+                  We need your Company Name to enhance your experience with
+                  {""} {capitalizeFirstLetter(companyName)}.
+                </p>
+              </div>
             </div>
 
             <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
@@ -146,6 +216,14 @@ export const Breadcrum = ({
           )}
         </div>
       </div>
+
+      <CenterModal
+        isOpen={openCentreModal}
+        onRequestClose={() => setOpenCentreModal(false)}
+        className="!flex !justify-start !items-center w-[60%] lg:!w-3/4 lg:!h-3/4 xl:!w-[45%]  xl:!h-2/3 "
+      >
+        <CompanyNameContent setOpenCentreModal={setOpenCentreModal} />
+      </CenterModal>
     </>
   );
 };
