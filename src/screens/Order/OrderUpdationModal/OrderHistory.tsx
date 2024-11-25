@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UpwardArrow from "../../../assets/AccordionUp.svg";
 import DownwardArrow from "../../../assets/downwardArrow.svg";
 import { login } from "../../../redux/reducers/userReducer";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 const OrderHistory = (completeData: any) => {
   const [accordianOpen, setOpenAccordian] = useState<any>(false);
@@ -44,7 +45,7 @@ const OrderHistory = (completeData: any) => {
         <div className="mb-4 border-l border-r border-b rounded-lg border-[#E8E8E8] px-4 py-4 ">
           <div className="flex flex-col gap-y-3 border border-black-200 px-4 rounded-lg bg-gray-50 py-4">
             <div className="flex justify-between">
-              <p>Shipyaari ID</p>
+              <p>{COMPANY_NAME} ID</p>
               <p>
                 {orderHistory?.shipyaariID === ""
                   ? "-"

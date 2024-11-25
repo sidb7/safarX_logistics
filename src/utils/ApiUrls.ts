@@ -14,6 +14,8 @@ let LARGE_LOGO = "";
 let COMPANY_NAME = "";
 let WALLETSHAREDIV = "";
 let WALLETSECRETKEY = "";
+let WHITE_COMPANYFULLNAME = "";
+let WHITE_COMPANYADDRESS = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -39,7 +41,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
-
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     break;
 
   case "test":
@@ -58,6 +61,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     break;
 
   case "production":
@@ -74,7 +79,8 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
-
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     break;
 
   default:
@@ -92,6 +98,8 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
     SELLER_WEB_URL = `http://localhost:3000`;
+    WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
+    WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
 
     break;
 }
@@ -155,6 +163,8 @@ const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
 const RTO_REATTEMPT = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
+const DOWNLOAD_FAIL_REPORT = `${SELLER_BASE_URL}/fileServices/download/ERRORDETAILS`;
+
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
@@ -359,6 +369,7 @@ const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
 const LEBEL_DOWNLOAD = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
 const FETCH_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabels`;
+const FETCH_BULK_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabelsV2`;
 const FETCH_MULTI_TAX_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchTaxInvoices`;
 
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
@@ -381,6 +392,7 @@ const POST_PLACE_ALL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
 const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
+const PREVIEW_LABEL_DATA = `${SELLER_BASE_URL}/labels/previewLabelSetting`;
 
 //
 const UPDATE_PRODUCT_AND_BOX_DETAILS = `${SELLER_BASE_URL}/channel/updateProductAndBoxDetails`;
@@ -678,4 +690,9 @@ export {
   WALLETSECRETKEY,
   GET_IMPERSONATION_LOGS,
   GET_FEATURES_PLANS,
+  PREVIEW_LABEL_DATA,
+  WHITE_COMPANYFULLNAME,
+  WHITE_COMPANYADDRESS,
+  DOWNLOAD_FAIL_REPORT,
+  FETCH_BULK_LABELS_REPORT_DOWNLOAD,
 };

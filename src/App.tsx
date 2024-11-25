@@ -10,11 +10,15 @@ import { setWalletBalance } from "./redux/reducers/userReducer";
 import { socketCallbacks } from "./Socket";
 import TagManager from "react-gtm-module";
 import ReactGA from "react-ga4";
+import { Helmet } from "react-helmet";
+
 import {
   ADMIN_URL,
+  COMPANY_NAME,
   Environment,
   REACT_APP_GA4_ID,
   REACT_APP_GTM_ID,
+  SMALL_LOGO,
 } from "./utils/ApiUrls";
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import { signInUser } from "./redux/reducers/signInReducer";
@@ -100,7 +104,9 @@ const App = () => {
     });
   }, [location]);
 
-  ReactGA.initialize(REACT_APP_GA4_ID);
+  if (REACT_APP_GA4_ID !== "" && REACT_APP_GA4_ID !== undefined) {
+    ReactGA.initialize(REACT_APP_GA4_ID);
+  }
 
   const [roomName, setRoomName] = useState<any>(
     `${localStorage.getItem("sellerId")}`
@@ -198,7 +204,6 @@ const App = () => {
         integrations: [
           // Sentry.feedbackIntegration({
           //   // Additional SDK configuration goes in here, for example:
-
           //   colorScheme: "light",
           //   isNameRequired: true,
           //   isEmailRequired: true,
@@ -388,6 +393,10 @@ const App = () => {
   return (
     <>
       <div className="relative  min-h-screen">
+        <Helmet>
+          <title>{COMPANY_NAME || "Shipaari"}</title>
+          <link rel="icon" href={SMALL_LOGO} type="image/png" />
+        </Helmet>
         <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
           <MyRoutes />
 

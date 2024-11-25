@@ -4,6 +4,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import CustomInputBox from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import Cross from "../../assets/cross.svg";
+import { COMPANY_NAME } from "../../utils/ApiUrls";
 
 const Index = (props: any) => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Index = (props: any) => {
 
       <div className="flex flex-col mt-7 mx-[70px] gap-y-2">
         <p className="text-center	 text-[22px] font-medium">
-          Welcome to Shipyaari
+          Welcome to {COMPANY_NAME}
         </p>
         <p className="text-center	 font-thin">
           Fast and Easy Shipping from your doorstep to your customer's.{" "}

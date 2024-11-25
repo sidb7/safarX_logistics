@@ -65,6 +65,7 @@ export const Breadcrum = ({
   // console.log("🚀 ~ privateCompanyName:", privateCompanyName);
 
   // // Add a condition to check if the name is "N/A", an empty string, or undefined
+  // Add a condition to check if the name is "N/A", an empty string, or undefined
   // const isCompanyNameInvalid =
   //   !privateCompanyName ||
   //   privateCompanyName.trim() === "" ||

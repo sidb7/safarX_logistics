@@ -19,6 +19,7 @@ import { Badge } from "../../../components/Badge";
 import SuccessIcon from "../../../assets/Badge/SuccessIcon.svg";
 import Collapsible from "react-collapsible";
 import { useState } from "react";
+import { COMPANY_NAME } from "../../../utils/ApiUrls";
 
 export const OrderDetails = () => {
   const [onOpen, setOnOpen] = useState(false);
@@ -44,7 +45,7 @@ export const OrderDetails = () => {
           </div>
           <div className="flex">
             <img src={ShipyaariIdIcon} alt="" width="16px" />
-            <span className="ml-1">Shipyaari ID: </span>
+            <span className="ml-1">{COMPANY_NAME} ID: </span>
             <span className="ml-1 font-medium">87832756185</span>
           </div>
           <div className="flex">

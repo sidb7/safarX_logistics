@@ -44,6 +44,7 @@ import {
   PHONEPE_TRANSACTION_STATUS,
   SELLER_WEB_URL,
   POST_PLACE_ALL_ORDERS,
+  COMPANY_NAME,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -374,7 +375,7 @@ const Payment = () => {
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
-      "SHIPYAARI",
+      COMPANY_NAME?.toUpperCase(),
       userDetails.name,
       userDetails.email,
       redirectUrl

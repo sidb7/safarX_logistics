@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import DownloadIcon from "../../../src/assets/download.svg";
 import { GET, POST } from "../../utils/webService";
 import {
+  COMPANY_NAME,
   FETCH_MANIFEST_REPORT_DATA,
   GET_ALL_INVOICES,
   GET_SINGLE_FILE,
+  LARGE_LOGO,
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import {
@@ -87,11 +89,7 @@ const InvoicePdf = () => {
         <div className=" px-[32px] flex justify-between mt-5">
           <div className="w-[60%]">
             <div className="mt-2">
-              <img
-                src="https://sy-seller.s3.ap-south-1.amazonaws.com/Shipyaari_RGB_full_color-512wpx+(8).png"
-                alt="shipyaari"
-                width={200}
-              />
+              <img src={LARGE_LOGO} alt={COMPANY_NAME} width={200} />
             </div>
             <p>
               <b>{capitalizeFirstLetter(invoicData?.companyInfo?.name)}</b>
@@ -229,7 +227,7 @@ const InvoicePdf = () => {
                 996812
               </td>
               <td className="pl-[60px] text-[0.875rem] font-normal p-3 text-left">
-                Shipyaari Freight*
+                {COMPANY_NAME} Freight*
               </td>
               <td className=" text-right text-[0.625rem] font-normal p-3 pr-[30px]">
                 ₹{invoicData?.charges?.frieghtCharge}

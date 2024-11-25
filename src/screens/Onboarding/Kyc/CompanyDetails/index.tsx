@@ -7,6 +7,7 @@ import CustomInputWithFileUpload from "../../../../components/InputBox/InputWith
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CrossLogo from "../../../../assets/cross.svg";
+import { COMPANY_NAME } from "../../../../utils/ApiUrls";
 
 type Props = {};
 
@@ -23,7 +24,7 @@ const Index = (props: Props) => {
         </div>
         <WelcomeHeader
           className="mt-[58px]"
-          title="Welcome to Shipyaari"
+          title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
           content="Tell us more about your company"
         />
         <div className="flex flex-col px-5 gap-y-5 mb-5">
@@ -57,7 +58,7 @@ const Index = (props: Props) => {
               </div>
               <WelcomeHeader
                 className="lg:!mt-[58px]"
-                title="Welcome to Shipyaari"
+                title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
                 content="Tell us more about your company"
               />
               <div className="flex flex-col gap-y-5 mb-5 mx-[90px]">
