@@ -23,6 +23,7 @@ import { DELETE_INTEGRATED_STORE } from "../../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
 import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
+import ClickpostIcon from "../../../../assets/Catalogue/clickpost.png";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -212,7 +213,9 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? ZohoIcon
                   : item.channel === "UNICOMMERCE"
                   ? UniCommerceIcon
-                  : AmazonPngIcon,
+                  : item.channel === "AMAZON"
+                  ? AmazonPngIcon
+                  : ClickpostIcon,
               iconLg:
                 item.channel === "SHOPIFY"
                   ? ShopifyLg
@@ -222,7 +225,9 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? ZohoIcon
                   : item.channel === "UNICOMMERCE"
                   ? UniCommerceIcon
-                  : AmazonPngIcon,
+                  : item.channel === "AMAZON"
+                  ? AmazonPngIcon
+                  : ClickpostIcon,
               integrated: true,
               storeId: item.storeId,
               channelName: item.channel,
