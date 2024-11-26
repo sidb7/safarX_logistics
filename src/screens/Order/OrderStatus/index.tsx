@@ -23,6 +23,8 @@ import {
   UPDATE_ALL_ADDRESS,
   RTO_REATTEMPT,
   UPDATE_ALL_BOXES,
+  DOWNLOAD_FAIL_REPORT,
+  FETCH_BULK_LABELS_REPORT_DOWNLOAD,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-hot-toast";
@@ -49,6 +51,7 @@ import RTOicon from "../../../assets/RTO.svg";
 import ReattemptIcon from "../../../assets/reattempt.svg";
 import BoxIcon from "../../../assets/layer.svg";
 import InputBox from "../../../components/Input";
+import { convertXMLToXLSX } from "../../../utils/helper";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -81,6 +84,9 @@ interface IOrderstatusProps {
   isLoading: any;
   bulkActionObject: any;
   setBulkActionObject: any;
+  setIsBulkCheckedBooked?: any;
+  isBulkCheckedBooked?: any;
+  totalCount?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -134,6 +140,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   isLoading,
   bulkActionObject,
   setBulkActionObject,
+  setIsBulkCheckedBooked,
+  isBulkCheckedBooked,
+  totalCount,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -206,6 +215,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [selectedTempOrderIds, setSelectedTempOrderIds]: any = useState([]);
   const [allBoxes, setAllBoxes]: any = useState([]);
   const [boxBoolean, setBoxBoolean]: any = useState(false);
+  const [showErrorReportBtn, setShowErrorReportBtn]: any = useState(false);
 
   const setScrollIndex = (id: number) => {
     const tabName = statusData[id].value;
@@ -321,18 +331,18 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     //   },
     // ],
     EXCEPTION: [
-    //  {
-    //     icon: RTOicon,
-    //     hovertext: "Rto Orders",
-    //     identifier: "Rto",
-    //     buttonName: "RTO ORDERS",
-    //   },
-    //   {
-    //     icon: ReattemptIcon,
-    //     hovertext: "Re-Attempt Orders",
-    //     identifier: "Re -Attempt",
-    //     buttonName: "RE-ATTEMPT ORDERS",
-    //   },
+      //  {
+      //     icon: RTOicon,
+      //     hovertext: "Rto Orders",
+      //     identifier: "Rto",
+      //     buttonName: "RTO ORDERS",
+      //   },
+      //   {
+      //     icon: ReattemptIcon,
+      //     hovertext: "Re-Attempt Orders",
+      //     identifier: "Re -Attempt",
+      //     buttonName: "RE-ATTEMPT ORDERS",
+      //   },
     ],
     "READY TO PICK": [
       // {
@@ -756,7 +766,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const filterComponent = (className?: string) => {
     return (
       <div
-        className={`w-[100%] flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] sm:w-[204px] lg:hidden ${className}`}
+        className={`flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
           let data = singleData?.label;
@@ -791,15 +801,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const handleFilterOrders = (index: any) => {
+    console.log("🚀 ~ handleFilterOrders ~ index:", index);
     setFilterId(index);
     setIsErrorPage(index === 2 ? true : false);
     switch (index) {
       case 0: {
+        setShowErrorReportBtn(false);
+
         getAllOrders();
         break;
       }
       case 1: {
         const subStatus = "DRAFT";
+        setShowErrorReportBtn(false);
+
         getAllOrders(subStatus, stateValue);
         break;
       }
@@ -810,6 +825,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       //   break;
       // }
       case 2: {
+        setShowErrorReportBtn(true);
         getErrors();
       }
     }
@@ -847,45 +863,206 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   //   }
   // };
 
+  const bulkLabelDownload = async () => {
+    let startEpoch = null;
+    let lastendEpoch = null;
+    const { startDate, endDate } = selectedDateRange;
+
+    if (startDate instanceof Date && endDate instanceof Date) {
+      startDate.setHours(0, 0, 0, 0);
+      startEpoch = startDate.getTime();
+
+      endDate.setHours(23, 59, 59, 999);
+      const endEpoch = endDate.getTime();
+
+      lastendEpoch = endEpoch;
+    }
+    let payload: any = {};
+    payload = {
+      filterArrOne: filterPayLoad.filterArrOne,
+      startDate: startEpoch,
+      endDate: lastendEpoch,
+    };
+    const { data: response } = await POST(
+      FETCH_BULK_LABELS_REPORT_DOWNLOAD,
+      payload
+    );
+    console.log("🚀 ~ bulkLabelDownload ~ response:", response);
+    if (response?.success) {
+      const resdata: any = await response.blob();
+
+      const blob = new Blob([resdata], { type: resdata?.type });
+      let filename: any;
+      if (resdata?.type === "image/png") {
+        filename = "Label_Report.png";
+      } else {
+        filename = "Label_Report.pdf";
+      }
+
+      var url = URL.createObjectURL(blob);
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      return true;
+    } else {
+      toast.error(response?.message);
+    }
+  };
+
+  const exportFailReport = async () => {
+    let value;
+    if (stateValue) {
+      value = stateValue.value;
+    }
+    let payload: any = {};
+
+    let firstFilterData: any = [];
+    let secondFilterData: any = [];
+
+    if (
+      filterPayLoad?.filterArrOne.length > 0 ||
+      filterPayLoad?.filterArrTwo.length > 0
+    ) {
+      const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
+        (obj: any) => !Object.keys(obj).includes("createdAt")
+      );
+
+      firstFilterData = newFilterArrOne;
+      secondFilterData = filterPayLoad?.filterArrTwo;
+    }
+
+    if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      const { startDate, endDate } = selectedDateRange;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+
+      payload.filterArrOne = [
+        {
+          createdAt: {
+            $gte: startEpoch,
+          },
+        },
+        {
+          createdAt: {
+            $lte: lastendEpoch,
+          },
+        },
+      ];
+      payload.filterArrTwo = [];
+    }
+
+    if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+      payload.filterArrOne = firstFilterData;
+      payload.filterArrTwo = secondFilterData;
+    }
+    const response = await POST(DOWNLOAD_FAIL_REPORT, payload);
+    if (!response?.data?.success) {
+      toast.error(response?.data?.message);
+      return;
+    }
+    const date: any = JSON.stringify(new Date());
+    const result = await convertXMLToXLSX(
+      response?.data?.data,
+      `${capitalizeFirstLetter("Fail Report")}${date
+        .substr(1, 10)
+        .split("-")
+        .reverse()
+        .join("-")}.xlsx`
+    );
+    if (result) {
+      toast.success(response?.data?.message);
+    }
+  };
+
   const filterButton = () => {
     if (isLgScreen) {
       if (currentStatus === "BOOKED" || "PICKED UP") {
         return (
-          <div className="grid grid-cols-4 lg:flex ">
-            {getActionsIcon()?.length > 0 && manifestButton && (
-              <div className="rounded-md flex mx-3 gap-x-3">
-                {getActionsIcon()?.map((data: any, index: any) => {
-                  return (
-                    <>
-                      <button
-                        key={index}
-                        className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
-                          index < getActionsIcon().length - 1 &&
-                          "border-r border-[#A4A4A4]"
-                        } rounded-l-md rounded-r-md cursor-pointer`}
-                        onClick={() =>
-                          handleActions(
-                            currentStatus,
-                            selectedRowdata,
-                            data?.identifier
-                          )
-                        }
-                      >
-                        {isLoadingManifest.isLoading &&
-                        isLoadingManifest.identifier === data.identifier ? (
-                          <div className="flex justify-center items-center">
-                            <Spinner
-                              className={"!w-[15px] !h-[15px] !border-2"}
-                            />
-                          </div>
-                        ) : (
-                          <img src={data.icon} alt="" className="w-[16px]" />
-                        )}
-                        <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
-                          {capitalizeFirstLetter(data?.buttonName)}
-                        </span>
-                      </button>
-                      {/* <button
+          <div
+            className={`flex justify-between ${
+              currentStatus !== "DRAFT" && "w-full"
+            }`}
+          >
+            {currentStatus === "DRAFT" && showErrorReportBtn && (
+              <button
+                onClick={() => exportFailReport()}
+                className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 border-r rounded-l-md rounded-r-md cursor-pointer`}
+              >
+                Export fail report
+              </button>
+            )}
+            {currentStatus === "BOOKED" && (
+              <div className="flex items-center gap-2">
+                <input
+                  className="w-[16px] cursor-pointer"
+                  type="checkbox"
+                  name="Select all label"
+                  value="all"
+                  onChange={(e) => setIsBulkCheckedBooked(e.target.checked)}
+                />
+                <span>Select All Label ({totalCount})</span>
+              </div>
+            )}
+            <div className="grid grid-cols-4 lg:flex ">
+              {currentStatus === "BOOKED" && isBulkCheckedBooked && (
+                <button
+                  onClick={() => bulkLabelDownload()}
+                  className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 border-r rounded-l-md rounded-r-md cursor-pointer`}
+                >
+                  Bulk Download
+                </button>
+              )}
+              {getActionsIcon()?.length > 0 && manifestButton && (
+                <div className="rounded-md flex mx-3 gap-x-3">
+                  {getActionsIcon()?.map((data: any, index: any) => {
+                    return (
+                      <>
+                        <button
+                          key={index}
+                          className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 ${
+                            index < getActionsIcon().length - 1 &&
+                            "border-r border-[#A4A4A4]"
+                          } rounded-l-md rounded-r-md cursor-pointer`}
+                          onClick={() =>
+                            handleActions(
+                              currentStatus,
+                              selectedRowdata,
+                              data?.identifier
+                            )
+                          }
+                        >
+                          {isLoadingManifest.isLoading &&
+                          isLoadingManifest.identifier === data.identifier ? (
+                            <div className="flex justify-center items-center">
+                              <Spinner
+                                className={"!w-[15px] !h-[15px] !border-2"}
+                              />
+                            </div>
+                          ) : (
+                            <img src={data.icon} alt="" className="w-[16px]" />
+                          )}
+                          <span className="md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap">
+                            {capitalizeFirstLetter(data?.buttonName)}
+                          </span>
+                        </button>
+                        {/* <button
                         key={index}
                         className={`${
                           index < getActionsIcon().length - 1 &&
@@ -915,7 +1092,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           {capitalizeFirstLetter(data?.buttonName)}
                         </span>
                       </button> */}
-                      {/* <OneButton
+                        {/* <OneButton
                         text={capitalizeFirstLetter(data?.buttonName)}
                         icon={data.icon}
                         showIcon
@@ -938,12 +1115,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         size="medium"
                         iconClass="w-[16px]"
                       /> */}
-                    </>
-                  );
-                })}
-              </div>
-            )}
-            {/* <div>
+                      </>
+                    );
+                  })}
+                </div>
+              )}
+              {/* <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
                 label="Search"
@@ -964,10 +1141,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 Filter
               </span>
             </div> */}
+            </div>
           </div>
         );
       } else if (currentStatus === "IN TRANSIT") {
         // buttons and the logic to here for "IN TRANSIT"
+
         return (
           <div className="grid grid-cols-4 lg:flex ">
             {getActionsIcon()?.length > 0 && manifestButton && (
@@ -1635,9 +1814,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       {isLgScreen && (
         <>
           <div
-            className={`grid lg:flex lg:justify-between mt-6 static h-[46px] `}
+            className={`flex mt-6 static h-[46px] ${
+              currentStatus === "DRAFT" ? "justify-between" : ""
+            }`}
           >
-            <div className="lg:flex lg:gap-x-4">
+            <div className="flex gap-x-4">
               <div className="flex items-center text-[22px] ">
                 {currentStatus === "DRAFT" && `${draftOrderCount.all} Orders`}
               </div>
@@ -1645,7 +1826,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 filterComponent("!hidden lg:!flex lg:!mt-0")}
             </div>
 
-            <div>{filterButton()}</div>
+            {filterButton()}
           </div>
 
           {currentStatus === "DRAFT" && filterComponent("")}
