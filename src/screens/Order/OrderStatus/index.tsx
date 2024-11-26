@@ -913,7 +913,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
       const a = document.createElement("a");
       a.href = url;
-      a.href = url;
       a.download = `Label_Report.pdf`;
       document.body.appendChild(a);
       a.click();
