@@ -905,12 +905,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         return;
       }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      const data = await response.blob();
+
+      const blob = new Blob([data], { type: "application/pdf" });
+
+      var url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "sample.zip"; // Desired file name
+      a.href = url;
+      a.download = `Manifest_Report.pdf`;
       document.body.appendChild(a);
       a.click();
 
