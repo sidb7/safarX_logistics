@@ -881,12 +881,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
 
     const payload = {
-      const endEpoch = endDate.getTime();
-
-      lastendEpoch = endEpoch;
-    }
-    let payload: any = {};
-    payload = {
       filterArrOne: filterPayLoad.filterArrOne,
       startDate: startEpoch,
       endDate: lastendEpoch,
@@ -926,35 +920,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       console.error("Error downloading the file:", error);
     } finally {
       setBulkReportDownloadLoading(false);
-    const { data: response } = await POST(
-      FETCH_BULK_LABELS_REPORT_DOWNLOAD,
-      payload
-    );
-    console.log("🚀 ~ bulkLabelDownload ~ response:", response);
-    if (response?.success) {
-      const resdata: any = await response.blob();
-
-      const blob = new Blob([resdata], { type: resdata?.type });
-      let filename: any;
-      if (resdata?.type === "image/png") {
-        filename = "Label_Report.png";
-      } else {
-        filename = "Label_Report.pdf";
-      }
-
-      var url = URL.createObjectURL(blob);
-      setIsLoadingManifest({
-        isLoading: false,
-        identifier: "",
-      });
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      return true;
-    } else {
-      toast.error(response?.message);
     }
   };
 
