@@ -186,6 +186,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
   const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
   const [searchResult, setSearchResult]: any = useState([]);
+  const [bulkReportDownloadLoading, setBulkReportDownloadLoading]: any =
+    useState(false);
   const [validationErrors, setValidationErrors] = useState<any>({
     pickupAddress: {
       name: null,
@@ -864,8 +866,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   // };
 
   const bulkLabelDownload = async () => {
+    setBulkReportDownloadLoading(true);
     let startEpoch = null;
     let lastendEpoch = null;
+
     const { startDate, endDate } = selectedDateRange;
 
     if (startDate instanceof Date && endDate instanceof Date) {
@@ -873,6 +877,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       startEpoch = startDate.getTime();
 
       endDate.setHours(23, 59, 59, 999);
+      lastendEpoch = endDate.getTime();
+    }
+
+    const payload = {
       const endEpoch = endDate.getTime();
 
       lastendEpoch = endEpoch;
@@ -883,6 +891,41 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       startDate: startEpoch,
       endDate: lastendEpoch,
     };
+
+    try {
+      let sellerId = localStorage.getItem("sellerId");
+
+      const response = await fetch(FETCH_BULK_LABELS_REPORT_DOWNLOAD, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem(
+            `${sellerId}_${tokenKey}`
+          )}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.error("Error:", response.statusText);
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "sample.zip"; // Desired file name
+      document.body.appendChild(a);
+      a.click();
+
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    } finally {
+      setBulkReportDownloadLoading(false);
     const { data: response } = await POST(
       FETCH_BULK_LABELS_REPORT_DOWNLOAD,
       payload
@@ -1026,6 +1069,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   onClick={() => bulkLabelDownload()}
                   className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 border-r rounded-l-md rounded-r-md cursor-pointer`}
                 >
+                  {bulkReportDownloadLoading && (
+                    <div className="flex justify-center items-center">
+                      <Spinner className={"!w-[15px] !h-[15px] !border-2"} />
+                    </div>
+                  )}
                   Bulk Download
                 </button>
               )}
