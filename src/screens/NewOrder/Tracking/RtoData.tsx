@@ -64,7 +64,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 Order:
               </span>
               <span className=" font-sans text-sm leading-5 text-black font-semibold">
-                {info.row?.original?.orderId}
+                {info?.row?.original?.orderId}
               </span>
               {/* <img
                 src={copyIcon}
@@ -72,7 +72,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 className="ml-1 w-4 h-4 cursor-pointer"
               /> */}
             </div>
-            {info.row?.original?.awb && (
+            {info?.row?.original?.awb && (
               <div className="flex items-center">
                 <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
                   Tracking:
@@ -103,7 +103,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                     // })
                   }
                 >
-                  {info.row?.original?.awb}
+                  {info?.row?.original?.awb}
                 </span>
                 <Tooltip
                   id="my-tooltip-inline"
@@ -137,7 +137,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 {COMPANY_NAME || "Shipyaari"}:
               </span>
               <span className="font-sans  text-sm leading-5 text-black  font-semibold">
-                {info.row?.original?.tempOrderId}
+                {info?.row?.original?.tempOrderId}
               </span>
               {/* <img
                 src={copyIcon}
@@ -154,13 +154,13 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       cell: (info) => (
         <>
           <div className="font-sans font-normal text-sm leading-5 mb-4">
-            {formatDate(info.row.original.shipmentStatus.rtoInitiDate)}
+            {formatDate(info?.row?.original?.shipmentStatus?.rtoInitiDate)}
           </div>
 
           <div className="font-sans font-normal text-sm leading-5 text-black">
             Delivery Partner:{" "}
             <span className="font-semibold">
-              {info.row.original.courierPartnerName}
+              {info?.row?.original?.courierPartnerName}
             </span>
           </div>
         </>
@@ -170,9 +170,9 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       header: "Payment",
       cell: (info) => (
         <div className="font-sans  text-sm leading-5 text-black font-semibold">
-          ₹{info.row?.original?.codInfo?.invoiceValue}
+          ₹{info?.row?.original?.codInfo?.invoiceValue}
           <br />
-          {info.row?.original?.codInfo?.isCod ? "COD" : "Prepaid"}
+          {info?.row?.original?.codInfo?.isCod ? "COD" : "Prepaid"}
         </div>
       ),
     }),
@@ -181,13 +181,13 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       cell: (info) => (
         <div className="space-y-1">
           <div className="font-sans  text-sm leading-5 text-black font-normal">
-            {info.row?.original?.deliveryAddress?.fullAddress}
+            {info?.row?.original?.deliveryAddress?.fullAddress}
           </div>
           <div className="font-sans  text-sm leading-5 text-black font-normal">
-            {info.row?.original?.deliveryAddress?.contact?.mobileNo}
+            {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
           </div>
           <div className="font-sans  text-sm leading-5 text-black font-normal">
-            {info.row?.original?.deliveryAddress?.contact?.name}
+            {info?.row?.original?.deliveryAddress?.contact?.name}
           </div>
         </div>
       ),
@@ -196,7 +196,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       header: "Current Status",
       cell: (info) => {
         const attemptCount =
-          info.row.original.shipmentStatus.attemptsReasons.length;
+          info?.row?.original?.shipmentStatus?.attemptsReasons?.length;
         const ordinalSuffix = getOrdinalSuffix(attemptCount);
 
         return (
@@ -210,7 +210,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 />
               </span>
               <span className="text-[#F0A22E] font-sans text-xs leading-5 font-normal">
-                {info.row.original.currentStatus}
+                {info?.row?.original?.currentStatus}
               </span>
             </div>
 
@@ -341,11 +341,11 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
       header: "RTO Reason",
       cell: (info) => {
         const hasAttemptReasons =
-          info.row.original?.shipmentStatus?.attemptsReasons?.length;
-        const sellerRemarks = info.row.original?.sellerRemarkActionCount;
+          info?.row?.original?.shipmentStatus?.attemptsReasons?.length;
+        const sellerRemarks = info?.row?.original?.sellerRemarkActionCount;
         const hasAttemptReasonsArr =
-          info.row.original?.shipmentStatus?.attemptsReasons;
-        const sellerRemarksArr = info.row.original?.sellerRemark;
+          info?.row?.original?.shipmentStatus?.attemptsReasons;
+        const sellerRemarksArr = info?.row?.original?.sellerRemark;
         // console.log("partner",hasAttemptReasons)
         // console.log("seller remarks count ",sellerRemarks)
         const awb = info?.row?.original?.awb;
