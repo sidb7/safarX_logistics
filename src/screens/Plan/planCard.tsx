@@ -122,7 +122,7 @@ const PlanCard = (props: ITypeProps) => {
           text={isSelected ? "SELECTED" : "SELECT"}
           onClick={onClick}
           variant={isSelected ? "primary" : "secondary"}
-          // disabled={isSelected}
+          disabled={planName?.toUpperCase() === "PLATINUM"}
           className={`!py-2 !px-4 !w-[272px] lg:!w-[209px] !font-Open !border-[1px] !border-black ${
             isSelected &&
             "!bg-[#1C1C1C] !text-[#FFFFFF] cursor-not-allowed pointer-events-none"
