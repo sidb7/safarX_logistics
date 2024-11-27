@@ -2536,7 +2536,7 @@ const Index = () => {
       if (
         channelReduxData?.[0]?.TotalOrderCount -
           channelReduxData?.[0]?.syncedOrder <=
-        8
+        5
       ) {
         setTimeout(() => {
           window.location.href = "/orders/view-orders?activeTab=draft";
