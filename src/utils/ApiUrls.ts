@@ -369,7 +369,9 @@ const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
 const LEBEL_DOWNLOAD = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
 const FETCH_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabels`;
-const FETCH_BULK_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabelsV2`;
+const FETCH_BULK_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabelsV3`;
+const FETCH_LABELS_REPORT_LIST = `${SELLER_BASE_URL}/labelDownload/getLabel`;
+const DOWNLOAD_S3_LABEL = `${SELLER_BASE_URL}/labelDownload/getSingleFile`;
 const FETCH_MULTI_TAX_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchTaxInvoices`;
 
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
@@ -699,4 +701,6 @@ export {
   WHITE_COMPANYADDRESS,
   DOWNLOAD_FAIL_REPORT,
   FETCH_BULK_LABELS_REPORT_DOWNLOAD,
+  FETCH_LABELS_REPORT_LIST,
+  DOWNLOAD_S3_LABEL,
 };
