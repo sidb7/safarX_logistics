@@ -518,6 +518,14 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="dashboard/dashboard"
+            element={
+              <ProtectedRoute>
+                <NewDashboard />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/coupon"
