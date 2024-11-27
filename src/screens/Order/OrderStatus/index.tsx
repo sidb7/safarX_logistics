@@ -889,36 +889,15 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     try {
       let sellerId = localStorage.getItem("sellerId");
 
-      const response = await fetch(FETCH_BULK_LABELS_REPORT_DOWNLOAD, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem(
-            `${sellerId}_${tokenKey}`
-          )}`,
-        },
-        body: JSON.stringify(payload),
+      const { data: response } = await POST(FETCH_BULK_LABELS_REPORT_DOWNLOAD, {
+        ...payload,
       });
 
-      if (!response.ok) {
-        console.error("Error:", response.statusText);
-        return;
+      if (response?.success) {
+        toast.success(response?.message);
+      } else {
+        toast.error(response?.message);
       }
-
-      const data = await response.blob();
-
-      const blob = new Blob([data], { type: "application/pdf" });
-
-      var url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Label_Report.pdf`;
-      document.body.appendChild(a);
-      a.click();
-
-      a.remove();
-      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading the file:", error);
     } finally {

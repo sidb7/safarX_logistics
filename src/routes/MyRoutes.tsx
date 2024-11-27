@@ -178,6 +178,7 @@ import RuleEngine from "../screens/Order/ruleEngine/ruleEngine";
 import EditDocuments from "../screens/Profile/DocumentsForInternational/editDocuments";
 import NewDashboard from "../screens/NewDashboard/index";
 import { COMPANY_NAME } from "../utils/ApiUrls";
+import BulkLabelList from "../screens/bulkLabelList/bulkLabelList";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -869,6 +870,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Label />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/settings/bulk-label-list"
+            element={
+              <ProtectedRoute>
+                <BulkLabelList />
               </ProtectedRoute>
             }
           />
