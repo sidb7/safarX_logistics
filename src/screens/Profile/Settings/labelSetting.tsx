@@ -211,6 +211,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
               onClick={() => previewLabel()}
               size="medium"
             />
+
             <OneButton
               text={
                 loading ? (

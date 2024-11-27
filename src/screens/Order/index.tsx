@@ -47,6 +47,7 @@ import BulkUpload from "./BulkUpload/BulkUpload";
 import { useSelector, useDispatch } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
+import OnePagination from "../../components/OnePagination/OnePagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
@@ -413,6 +414,7 @@ const Index = () => {
       appliedWeight: "1",
     },
   });
+  const [isBulkCheckedBooked, setIsBulkCheckedBooked]: any = useState(false);
 
   //  // Add ref for the abort controller
   //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
@@ -2655,6 +2657,9 @@ const Index = () => {
                 isLoading={isLoading}
                 bulkActionObject={bulkActionObject}
                 setBulkActionObject={setBulkActionObject}
+                setIsBulkCheckedBooked={setIsBulkCheckedBooked}
+                isBulkCheckedBooked={isBulkCheckedBooked}
+                totalCount={totalCount}
               />
             </div>
             <div
@@ -2766,14 +2771,22 @@ const Index = () => {
             </div>
             <div>
               {totalCount > 0 && (
-                <Pagination
-                  totalItems={totalCount}
-                  itemsPerPageOptions={[10, 50, 100]}
-                  onPageChange={onPageIndexChange}
-                  onItemsPerPageChange={onPerPageItemChange}
-                  initialItemsPerPage={itemsPerPage}
-                  className="pb-6"
-                />
+                // <Pagination
+                //   totalItems={totalCount}
+                //   itemsPerPageOptions={[10, 50, 100]}
+                //   onPageChange={onPageIndexChange}
+                //   onItemsPerPageChange={onPerPageItemChange}
+                //   initialItemsPerPage={itemsPerPage}
+                //   className="pb-6"
+                // />
+                <OnePagination
+                totalItems={totalCount}
+                itemsPerPageOptions={[10, 50, 100]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+                initialItemsPerPage={itemsPerPage}
+                className="pb-6"
+              />
               )}
             </div>
           </div>
