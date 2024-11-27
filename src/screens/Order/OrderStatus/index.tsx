@@ -186,6 +186,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
   const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
   const [searchResult, setSearchResult]: any = useState([]);
+  const [bulkReportDownloadLoading, setBulkReportDownloadLoading]: any =
+    useState(false);
   const [validationErrors, setValidationErrors] = useState<any>({
     pickupAddress: {
       name: null,
@@ -864,8 +866,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   // };
 
   const bulkLabelDownload = async () => {
+    setBulkReportDownloadLoading(true);
     let startEpoch = null;
     let lastendEpoch = null;
+
     const { startDate, endDate } = selectedDateRange;
 
     if (startDate instanceof Date && endDate instanceof Date) {
@@ -873,45 +877,52 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       startEpoch = startDate.getTime();
 
       endDate.setHours(23, 59, 59, 999);
-      const endEpoch = endDate.getTime();
-
-      lastendEpoch = endEpoch;
+      lastendEpoch = endDate.getTime();
     }
-    let payload: any = {};
-    payload = {
+
+    const payload = {
       filterArrOne: filterPayLoad.filterArrOne,
       startDate: startEpoch,
       endDate: lastendEpoch,
     };
-    const { data: response } = await POST(
-      FETCH_BULK_LABELS_REPORT_DOWNLOAD,
-      payload
-    );
-    console.log("🚀 ~ bulkLabelDownload ~ response:", response);
-    if (response?.success) {
-      const resdata: any = await response.blob();
 
-      const blob = new Blob([resdata], { type: resdata?.type });
-      let filename: any;
-      if (resdata?.type === "image/png") {
-        filename = "Label_Report.png";
-      } else {
-        filename = "Label_Report.pdf";
+    try {
+      let sellerId = localStorage.getItem("sellerId");
+
+      const response = await fetch(FETCH_BULK_LABELS_REPORT_DOWNLOAD, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem(
+            `${sellerId}_${tokenKey}`
+          )}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.error("Error:", response.statusText);
+        return;
       }
 
+      const data = await response.blob();
+
+      const blob = new Blob([data], { type: "application/pdf" });
+
       var url = URL.createObjectURL(blob);
-      setIsLoadingManifest({
-        isLoading: false,
-        identifier: "",
-      });
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = filename;
+      a.download = `Label_Report.pdf`;
+      document.body.appendChild(a);
       a.click();
-      return true;
-    } else {
-      toast.error(response?.message);
+
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    } finally {
+      setBulkReportDownloadLoading(false);
     }
   };
 
@@ -1026,6 +1037,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   onClick={() => bulkLabelDownload()}
                   className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 border-r rounded-l-md rounded-r-md cursor-pointer`}
                 >
+                  {bulkReportDownloadLoading && (
+                    <div className="flex justify-center items-center">
+                      <Spinner className={"!w-[15px] !h-[15px] !border-2"} />
+                    </div>
+                  )}
                   Bulk Download
                 </button>
               )}
