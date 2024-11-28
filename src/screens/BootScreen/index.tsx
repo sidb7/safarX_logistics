@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <div className="flex items-center justify-center h-screen">
       <img
-        className="animate-bounce object-contain"
+        className="animate-bounce object-contain w-[300px] h-[300px]"
         src={LARGE_LOGO}
         alt="bootscreen"
       />
