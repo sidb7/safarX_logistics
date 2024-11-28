@@ -156,7 +156,7 @@ function EditProductModal({ onClose, data, setOrder }: any) {
           </button>
         </div>
         <div>
-          <div className=" mt-4 max-h-[830px] customScroll ">
+          <div className="h-[calc(100vh_-_120px)] overflow-scroll customScroll ">
             {editProduct.length > 0 ? (
               <>
                 {editProduct.map((productList: any, i: number) => {
