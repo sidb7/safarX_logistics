@@ -1,0 +1,50 @@
+.select-container {
+  position: relative;
+}
+
+.select-label {
+  position: absolute;
+  top: 24px;
+  left: 0px;
+  pointer-events: none;
+  z-index: 1;
+  background-color: white;
+  transition: all 0.2s ease-out;
+}
+
+.select-dropdown:focus + .select-label,
+.select-dropdown:not(:valid) + .select-label {
+  font-size: 0.75rem;
+  transform: translateY(-2.05rem);
+  /* color: #333; */
+}
+
+.select-dropdown {
+  background-color: white;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  width: 100%;
+  transition: border-color 0.2s ease-out;
+  transition: border-color 0.2s ease-out;
+  padding-right: 2rem; /* Add padding-right for the arrow */
+  -webkit-appearance: none; /* Remove default arrow in Chrome/Safari */
+  background: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>')
+    no-repeat right 0.25rem center; /* Add a custom arrow icon */
+}
+
+.select-dropdown:focus {
+  border-color: #4a90e2;
+}
+
+/* .setLabel {
+  font-size: 0.75rem;
+  transform: translateY(-2.05rem);
+  width: auto;
+} */
+.valueFilled {
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+  /* color: #004eff; */
+  background-color: white;
+}
