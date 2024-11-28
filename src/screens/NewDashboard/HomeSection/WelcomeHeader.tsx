@@ -5,7 +5,6 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import { POST } from "../../../utils/webService";
 import { GET_TODAY_DATA_FOR_DASHBOARD } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
-
 // Improved Type Definitions
 interface IWelcomeHeaderProps {
   userName?: string;
@@ -13,34 +12,28 @@ interface IWelcomeHeaderProps {
     returningUser?: boolean;
   };
 }
-
 const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   userName = "",
   completedStatus,
 }) => {
   const { isLgScreen } = ResponsiveState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [todaysImportantData, setTodaysImportantData] = useState<any[]>([]);
-
   // Optimized count extraction with default fallback
-  const getCount = React.useCallback(
-    (status: string) => {
-      try {
-        return (
-          todaysImportantData[0]?.statusCounts.find(
-            (item: any) => item.status === status
-          )?.count || 0
-        );
-      } catch (error) {
-        console.error(`Error extracting count for ${status}:`, error);
-        return 0;
-      }
-    },
-    [todaysImportantData]
-  );
-
+  const getCount = (status: string) => {
+    try {
+      return (
+        todaysImportantData[0]?.statusCounts.find(
+          (item: any) => item.status === status
+        )?.count || 0
+      );
+    } catch (error) {
+      console.error(`Error extracting count for ${status}:`, error);
+      return 0;
+    }
+  };
   // Improved error handling in API call
-  const getEverydayShippingDetails = React.useCallback(async () => {
+  const getEverydayShippingDetails = async () => {
     try {
       setIsLoading(true);
       const payload = [
@@ -56,19 +49,15 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
           isActive: true,
         },
       ];
-
       const everydayShippingData = await POST(
         GET_TODAY_DATA_FOR_DASHBOARD,
         payload
       );
-
       if (everydayShippingData?.data?.success) {
         const quickResponse = everydayShippingData?.data;
-
         const filteredData = quickResponse.data.filter(
           (item: any) => item.tableId === 1 && item.tableName === "home"
         );
-
         if (filteredData.length > 0) {
           const relevantData = filteredData.map((item: any) => ({
             statusCounts: item.statusCounts,
@@ -76,7 +65,6 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
             tableId: item.tableId,
             tableName: item.tableName,
           }));
-
           setTodaysImportantData(relevantData);
           // toast.success(everydayShippingData?.data?.message);
         } else {
@@ -93,22 +81,19 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, []);
-
+  };
   useEffect(() => {
     if (completedStatus?.returningUser) {
       getEverydayShippingDetails();
     }
     // getEverydayShippingDetails();
-  }, [getEverydayShippingDetails]);
-
+  }, [completedStatus?.returningUser]);
   // Extracted count calculations
   const bookedCount = getCount("BOOKED");
   const inTransitCount = getCount("IN TRANSIT");
   const outForDeliveryCount = getCount("OUT FOR DELIVERY");
   const exceptionCount = getCount("EXCEPTION");
   const cancelledCount = getCount("CANCELLED");
-
   return (
     <>
       <div className="px-4 py-[10px] border-1 border-[#E8E8E8] rounded-2xl shadow-md bg-[#EBFCFF] mt-[35px] mb-6 md:mb-0">
@@ -214,5 +199,4 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
     </>
   );
 };
-
 export default WelcomeHeader;
