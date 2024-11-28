@@ -96,7 +96,10 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   }, []);
 
   useEffect(() => {
-    getEverydayShippingDetails();
+    if (completedStatus?.returningUser) {
+      getEverydayShippingDetails();
+    }
+    // getEverydayShippingDetails();
   }, [getEverydayShippingDetails]);
 
   // Extracted count calculations

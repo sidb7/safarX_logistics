@@ -9,12 +9,12 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [isMobileChannelPage, setIsMobileChannelPage] = useState(false);
   const [globalIndex, setGlobalIndex] = useState(-1);
   const [tabName, setTabName] = useState(
-    localStorage.getItem("DashboardTab") || "overview"
+    localStorage.getItem("DashboardTab") || "Overview"
   );
 
   const listTab = [
     {
-      statusName: "overview",
+      statusName: "Overview",
       active: true,
       //   icon: TaskSquareIcon,
     },
@@ -36,7 +36,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   };
 
   const renderComponent = () => {
-    if (tabName === "overview") {
+    if (tabName === "Overview") {
       return <Home />;
     } else if (tabName === "Dashboard") {
       return <Dashboard />;
