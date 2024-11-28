@@ -21,6 +21,7 @@ import {
   GET_PRODUCTS,
   DELETE_PRODUCT,
   DELETE_COMBO_PRODUCT,
+  COMPANY_NAME,
 } from "../../../../utils/ApiUrls";
 import ComboProductBox from "../../../../components/ComboProductBox";
 import { toast } from "react-hot-toast";
@@ -376,6 +377,8 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                                   ? WooCommerceRibbon
                                   : data?.source === "UNICOMMERCE"
                                   ? UniCommerceRibbon
+                                  : COMPANY_NAME.toLowerCase() !== "shipyaari"
+                                  ? ""
                                   : ShipyaariRibbon
                               }
                             />

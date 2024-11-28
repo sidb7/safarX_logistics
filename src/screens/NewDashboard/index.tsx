@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import Home from "./HomeSection";
-import Overview from "./OverviewSection";
 import Dashboard from "./DashboardSection";
 
 interface IIndexProps {}
@@ -10,20 +9,20 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [isMobileChannelPage, setIsMobileChannelPage] = useState(false);
   const [globalIndex, setGlobalIndex] = useState(-1);
   const [tabName, setTabName] = useState(
-    localStorage.getItem("DashboardTab") || "Home"
+    localStorage.getItem("DashboardTab") || "Overview"
   );
 
   const listTab = [
     {
-      statusName: "Home",
+      statusName: "Overview",
       active: true,
       //   icon: TaskSquareIcon,
     },
-    {
-      statusName: "Overview",
-      active: false,
-      //   icon: LocationIcon,
-    },
+    // {
+    //   statusName: "Overview",
+    //   active: false,
+    //   //   icon: LocationIcon,
+    // },
     {
       statusName: "Dashboard",
       active: false,
@@ -37,10 +36,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   };
 
   const renderComponent = () => {
-    if (tabName === "Home") {
+    if (tabName === "Overview") {
       return <Home />;
-    } else if (tabName === "Overview") {
-      return <Overview />;
     } else if (tabName === "Dashboard") {
       return <Dashboard />;
     }
@@ -59,7 +56,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         />
         <div className="">
           <div className="px-5 ">
-            {/* <div className="flex flex-row  customScroll whitespace-nowrap mt-2 lg:h-[34px]">
+            <div className="flex flex-row  customScroll whitespace-nowrap mt-2 lg:h-[34px]">
               {listTab?.map(({ statusName }, index) => {
                 return (
                   <div
@@ -85,10 +82,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   </div>
                 );
               })}
-            </div> */}
+            </div>
 
-            {/* {renderComponent()} */}
-            <Home />
+            {renderComponent()}
+            {/* <Home /> */}
           </div>
         </div>
       </div>

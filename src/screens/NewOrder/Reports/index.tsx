@@ -53,11 +53,11 @@ const Reports = () => {
     },
     {
       label: "NEW NPR REPORT",
-      value: "NEW_NPR_REPORT"
+      value: "NEW_NPR_REPORT",
     },
     {
       label: "PIKCUP RECONCILATION",
-      value: "PIKCUP_RECONCILATION"
+      value: "PIKCUP_RECONCILATION",
     },
     {
       label: "RTO RECONCILIATION REPORT",

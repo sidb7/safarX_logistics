@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import CompanyLogo from "../../assets/CompanyLogo/shipyaari icon.svg";
+import { LARGE_LOGO } from "../../utils/ApiUrls";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -11,8 +12,8 @@ const Index = () => {
   return (
     <div className="flex items-center justify-center h-screen">
       <img
-        className="animate-bounce object-contain"
-        src={CompanyLogo}
+        className="animate-bounce object-contain w-[300px] h-[300px]"
+        src={LARGE_LOGO}
         alt="bootscreen"
       />
     </div>
