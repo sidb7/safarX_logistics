@@ -99,6 +99,7 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
     // getEverydayShippingDetails();
   }, [completedStatus?.returningUser]);
 
+
   // Extracted count calculations
   const bookedCount = getCount("BOOKED");
   const inTransitCount = getCount("IN TRANSIT");
