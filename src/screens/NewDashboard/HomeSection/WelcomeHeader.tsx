@@ -19,28 +19,25 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   completedStatus,
 }) => {
   const { isLgScreen } = ResponsiveState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [todaysImportantData, setTodaysImportantData] = useState<any[]>([]);
 
   // Optimized count extraction with default fallback
-  const getCount = React.useCallback(
-    (status: string) => {
-      try {
-        return (
-          todaysImportantData[0]?.statusCounts.find(
-            (item: any) => item.status === status
-          )?.count || 0
-        );
-      } catch (error) {
-        console.error(`Error extracting count for ${status}:`, error);
-        return 0;
-      }
-    },
-    [todaysImportantData]
-  );
+  const getCount = (status: string) => {
+    try {
+      return (
+        todaysImportantData[0]?.statusCounts.find(
+          (item: any) => item.status === status
+        )?.count || 0
+      );
+    } catch (error) {
+      console.error(`Error extracting count for ${status}:`, error);
+      return 0;
+    }
+  };
 
   // Improved error handling in API call
-  const getEverydayShippingDetails = React.useCallback(async () => {
+  const getEverydayShippingDetails = async () => {
     try {
       setIsLoading(true);
       const payload = [
@@ -93,14 +90,14 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     if (completedStatus?.returningUser) {
       getEverydayShippingDetails();
     }
     // getEverydayShippingDetails();
-  }, [getEverydayShippingDetails]);
+  }, [completedStatus?.returningUser]);
 
   // Extracted count calculations
   const bookedCount = getCount("BOOKED");
