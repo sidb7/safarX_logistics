@@ -335,7 +335,7 @@ function BoxInfo({
                     name="invoiceValue"
                     inputType="text"
                     inputMode="numeric"
-                    // isDisabled={true}
+                    isDisabled={showDownloadLebal ? true : false}
                     labelClassName={`!text-black !bg-[${
                       colors[index % colors.length]
                     }]`}
@@ -368,6 +368,7 @@ function BoxInfo({
                       labelClassName={`!text-black  !bg-[${
                         colors[index % colors.length]
                       }]`}
+                      isDisabled={showDownloadLebal ? true : false}
                       className={`!bg-transparent ${
                         isLgScreen ? "!h-[36px]" : "!h-[29px]"
                       } !w-[150px]`}
