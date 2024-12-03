@@ -67,16 +67,16 @@ const Index = () => {
   });
 
   const signUpOnClick = async (value: any) => {
-    // if (
-    //   signUpError.email ||
-    //   signUpError.firstName ||
-    //   signUpError.lastName ||
-    //   signUpError.password ||
-    //   signUpError.referalCode
-    // ) {
-    //   toast.error("Please complete all the fields.");
-    //   return;
-    // }
+    if (
+      signUpError.email ||
+      signUpError.firstName ||
+      signUpError.lastName ||
+      signUpError.password ||
+      signUpError.referalCode
+    ) {
+      toast.error("Please resolved all the fields.");
+      return;
+    }
 
     try {
       let signupUtm = {
@@ -410,14 +410,21 @@ const Index = () => {
                       //commented as by default placeholder text is getting top of the input box
                       // tempLabel={true}
                       onChange={(e) => {
-                        setSignUpError({
-                          ...signUpError,
-                          email: "",
-                        });
-                        setsellerData({
-                          ...sellerData,
-                          email: e.target.value,
-                        });
+                        if (emailRegex.test(e.target.value)) {
+                          setSignUpError({
+                            ...signUpError,
+                            email: "",
+                          });
+                          setsellerData({
+                            ...sellerData,
+                            email: e.target.value,
+                          });
+                        } else {
+                          setSignUpError({
+                            ...signUpError,
+                            email: "Enter Valid Email",
+                          });
+                        }
                       }}
                       onBlur={(e) => {
                         if (!sellerData?.email) {
