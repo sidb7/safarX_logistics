@@ -1,5 +1,17 @@
 import MappingFilter from "../../utils/Helper/MappingFilter.json";
 import { GET, POST } from "../../utils/webService";
+import CryptoJS from "crypto-js";
+
+const ENCRYPTION_KEY = "MyStaticEncryptionKey123!@#"; // This should match the backend key
+
+const encryptData = (data: any) => {
+  return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
+};
+
+const decryptData = (encryptedData: any) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+  return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+};
 
 // Custom validation function to ensure input is not empty
 const validateInputData = (inputData: string) => {
@@ -53,6 +65,25 @@ export const inputRegexFilter = async (
         const apiCall = await POST(apiUrl, mappingPayload);
         if (apiCall?.data?.success || apiCall?.data?.status) {
           const result = apiCall;
+          return result;
+        } else {
+          return apiCall?.data?.message;
+        }
+      } catch (error: any) {
+        console.log("Error during API call:", error.message);
+      }
+      break;
+    case "GET_CUSTOM":
+      try {
+        const apiUrlWithParams = `${reqObj["api"]}?${reqObj["query_key"]}=${filteredInput}`;
+
+        const apiCall = await GET(apiUrlWithParams);
+
+        apiCall.data = decryptData(apiCall?.data?.encryptedData);
+        const tempData = decryptData(apiCall?.data?.encryptedData);
+
+        if (tempData?.success) {
+          const result = tempData;
           return result;
         } else {
           return apiCall?.data?.message;
