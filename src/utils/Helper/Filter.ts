@@ -79,7 +79,7 @@ export const inputRegexFilter = async (
 
         const apiCall = await GET(apiUrlWithParams);
 
-        apiCall.data = decryptData(apiCall?.data?.encryptedData);
+        // apiCall.data = decryptData(apiCall?.data?.encryptedData);
         const tempData = decryptData(apiCall?.data?.encryptedData);
 
         if (tempData?.success) {
