@@ -213,6 +213,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   const arrayData = [
     { label: "Exception NDR", number: exceptionCount || 0 },
     { label: "RTO", number: rtoCount || 0 },
+    { label: "Update Tracking", number: 0 },
   ];
 
   const render = (id: any) => {
@@ -220,6 +221,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       navigate("/tracking/exception-ndr");
     } else if (id === 1) {
       navigate("/tracking/rto");
+    } else if (id === 2) {
+      navigate("/tracking/update-tracking");
     }
   };
 

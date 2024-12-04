@@ -20,6 +20,14 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import { inputRegexFilter } from "../../../utils/Helper/Filter";
 import { PathFinder } from "../../../utils/Helper/PathFinder";
 import RefreshIcon from "../../../assets/refreshIcon.svg";
+import "react-datepicker/dist/react-datepicker.css";
+import "./datePicker.css";
+import LoginModal from "./LoginModal";
+import CancellationModal from "./CancellationModal";
+import Rescheduling from "./ReschedulingModal";
+import Powerbooster from "../../../assets/powerbooster.svg";
+import { UPDATETRACKINGBYBUYER } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
 
 const Tracking = () => {
   const isMobileResponsive = ResponsiveState();
@@ -35,13 +43,37 @@ const Tracking = () => {
   const [loggedIn, setLoggedIn] = useState<any>(false);
   const [isMasked, setIsMasked] = useState<any>(false);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [cancellationModalOpen, setCancellationModalOpen] =
+    useState<any>(false);
+  const [reschedulingModal, setReschedulingModal] = useState<any>(false);
+  const [selectedDate, setSelectedDate] = useState<any>();
+  const queryParams = new URLSearchParams(window.location.search);
+  const trackingNoFromURL = queryParams.get("trackingNo");
+  const [mobileNo, setMobileNo] = useState<any>();
+  const [alternateNumber, setAlternateNumber] = useState<any>();
+  const [alterMobileNoError, setAlternateMobileNumber] = useState<any>({
+    mobileNoError: "",
+  });
+  const [logginModal, setLogginModal] = useState<any>(false);
+
+  console.log("mobileNomobileNomobileNomobileNo", mobileNo);
+
+  const awb = trackingState?.[0]?.awb;
+
+  console.log("trackingStatetrackingState", trackingState?.[0]?.awb);
 
   useEffect(() => {
     let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+    let privateCompanyId = JSON.parse(localStorage.getItem("userInfo") as any);
+
     if (temp) {
       setIsMasked(temp?.isMaskedUser);
     }
   }, []);
+
+  const handleSelectDate = (date: any) => {
+    setSelectedDate(date);
+  };
 
   const toggleSectionOrderDetails = (section: string) => {
     setOpenOrderDetails((prevopenOrderDetails) =>
@@ -106,7 +138,19 @@ const Tracking = () => {
             orderStatus(currentStatus?.currentStatus);
           }
         );
+        console.log("result123578", result);
+        const resMobileNo =
+          result?.data?.[0]?.trackingInfo?.[0]?.deliveryAddress?.contact
+            ?.mobileNo;
 
+        console.log("resMobileNoresMobileNoresMobileNo", resMobileNo);
+
+        if (resMobileNo) {
+          setMobileNo(
+            result?.data?.[0]?.trackingInfo?.[0]?.deliveryAddress?.contact
+              ?.mobileNo
+          );
+        }
         window.history.replaceState(
           {},
           "",
@@ -139,13 +183,27 @@ const Tracking = () => {
     );
   };
 
+  const handleUpdateAlternateNumber = async () => {
+    try {
+      const payload = {
+        altno: alternateNumber,
+        rescheduleTime: "",
+        buyerRemark: "Alternate Number Updation",
+        requestType: "ALTMOBILENUMBER",
+        awb,
+      };
+      const data = await POST(UPDATETRACKINGBYBUYER, payload);
+      console.log("data123456789", data);
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
     if (trackingNo) {
       callTrackOrderFunction();
     }
   }, []);
-
-  console.log("trackingState", trackingState?.length);
 
   return (
     <>
@@ -380,16 +438,6 @@ const Tracking = () => {
                                                           each?.createdAt
                                                         )}
                                                       </p>
-                                                      {/* <img
-                                                        src={RefreshIcon}
-                                                        alt=""
-                                                        className="w-4 h-4 cursor-pointer"
-                                                        onClick={() =>
-                                                          handleTrackOrderClick()
-                                                        }
-                                                        width={6}
-                                                        height={6}
-                                                      /> */}
                                                     </div>
                                                   </>
                                                 ) : (
@@ -401,14 +449,6 @@ const Tracking = () => {
                                                           each?.updatedAt
                                                         )}
                                                       </p>
-                                                      {/* <img
-                                                        src={RefreshIcon}
-                                                        alt=""
-                                                        className="w-4 h-4 cursor-pointer"
-                                                        onClick={() =>
-                                                          handleTrackOrderClick()
-                                                        }
-                                                      /> */}
                                                     </div>
                                                   </>
                                                 )}
@@ -615,203 +655,344 @@ const Tracking = () => {
                                                 </div>
                                               )}
                                             </div>
-                                            <div className="py-3">
-                                              <hr />
-                                            </div>
-                                            {/* Order Details Part */}
-                                            {loggedIn && (
-                                              <div
-                                                className="flex justify-between cursor-pointer w-[280px] md:w-full"
-                                                onClick={() =>
-                                                  toggleSectionOrderDetails(
-                                                    "product"
-                                                  )
-                                                }
-                                              >
-                                                <div className="flex gap-x-1">
-                                                  <img src={Product} alt="" />
-                                                  <p className="text-sm font-Open font-semibold">
-                                                    Order Details
-                                                  </p>
-                                                </div>
-                                                {openOrderDetails ===
-                                                "product" ? (
-                                                  <div className="flex gap-x-1  items-center">
-                                                    <img
-                                                      src={
-                                                        openOrderDetails ===
-                                                        "product"
-                                                          ? UpwardArrow
-                                                          : DownwardArrow
-                                                      }
-                                                      alt=""
-                                                    />
-                                                  </div>
-                                                ) : (
-                                                  <div className="flex gap-x-1  items-center">
-                                                    <img
-                                                      src={
-                                                        openOrderDetails ===
-                                                        "product"
-                                                          ? UpwardArrow
-                                                          : DownwardArrow
-                                                      }
-                                                      alt=""
-                                                    />
-                                                  </div>
-                                                )}
-                                              </div>
-                                            )}
                                             <div>
-                                              {openOrderDetails ===
-                                                "product" && (
-                                                <>
-                                                  <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
-                                                    <div
-                                                      className={`${
-                                                        isMobileResponsive?.isMobileScreen
-                                                          ? ""
-                                                          : "border-r-2 border-[#D9DBDD] pr-6"
-                                                      } `}
-                                                    >
-                                                      <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
-                                                        Buyer's Name
-                                                      </p>
-                                                      <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
-                                                        {each?.deliveryAddress
-                                                          ?.contact?.name ||
-                                                          "No Data Found"}
-                                                      </p>
-                                                    </div>
-                                                    <div
-                                                      className={`${
-                                                        isMobileResponsive?.isMobileScreen
-                                                          ? ""
-                                                          : "border-r-2 border-[#D9DBDD] pr-6"
-                                                      } `}
-                                                    >
-                                                      <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
-                                                        Phone Number
-                                                      </p>
-                                                      <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
-                                                        {each?.deliveryAddress
-                                                          ?.contact?.mobileNo ||
-                                                          "No Data Found"}
-                                                      </p>
-                                                    </div>
-                                                    <div
-                                                      className={`${
-                                                        isMobileResponsive?.isMobileScreen
-                                                          ? ""
-                                                          : "border-r-2 border-[#D9DBDD] pr-6"
-                                                      } `}
-                                                    >
-                                                      <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
-                                                        Invoice
-                                                      </p>
-                                                      <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
-                                                        {each?.codInfo
-                                                          ?.invoiceValue || 0}
-                                                      </p>
-                                                    </div>
-                                                    <div
-                                                      className={`${
-                                                        isMobileResponsive?.isMobileScreen
-                                                          ? ""
-                                                          : "border-r-2 border-[#D9DBDD] pr-6"
-                                                      } `}
-                                                    >
-                                                      <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
-                                                        Payment Mode
-                                                      </p>
-                                                      <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
-                                                        {each?.codInfo?.isCod
-                                                          ? "COD"
-                                                          : "Prepaid"}
-                                                      </p>
-                                                    </div>
-                                                  </div>
-                                                  <div className="mt-2 ">
-                                                    <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
-                                                      Address
-                                                    </p>
-                                                    <p className=" font-normal font-Open text-[12px]  leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
-                                                      {each?.deliveryAddress
-                                                        ?.fullAddress || "NA"}
-                                                    </p>
-                                                  </div>
-                                                  <p className="mt-4 leading-4 font-Open text-[12px] font-bold">
-                                                    Product Details
-                                                  </p>
+                                              <div className="py-3">
+                                                <hr />
+                                              </div>
+                                              {/* Order Details Part */}
 
-                                                  {each?.products?.map(
-                                                    (
-                                                      each: any,
-                                                      index: number
-                                                    ) => {
-                                                      return (
-                                                        <p className="font-Open text-[12px] font-medium">
-                                                          {each?.breadth}
-                                                        </p>
+                                              <>
+                                                <div
+                                                  className="flex justify-between cursor-pointer w-[280px] md:w-full"
+                                                  onClick={() => {
+                                                    if (loggedIn) {
+                                                      toggleSectionOrderDetails(
+                                                        "product"
                                                       );
                                                     }
-                                                  )}
-                                                </>
-                                              )}
-                                            </div>
-                                            <div
-                                              className={
-                                                openOrderDetails === "product"
-                                                  ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
-                                                  : "grid grid-cols-2"
-                                              }
-                                            >
-                                              {/*mapping product details */}
+                                                  }}
+                                                >
+                                                  <div className="flex gap-x-1 items-center">
+                                                    <img src={Product} alt="" />
+                                                    <p className="text-sm font-Open font-semibold whitespace-nowrap w-full">
+                                                      Order Details
+                                                    </p>
+                                                  </div>
 
+                                                  {openOrderDetails ===
+                                                  "product" ? (
+                                                    <>
+                                                      <div className="flex  items-center">
+                                                        <img
+                                                          src={
+                                                            openOrderDetails ===
+                                                            "product"
+                                                              ? UpwardArrow
+                                                              : DownwardArrow
+                                                          }
+                                                          alt=""
+                                                          className="!w-4 !h-4"
+                                                        />
+                                                      </div>
+                                                    </>
+                                                  ) : (
+                                                    <div className="flex gap-x-6  items-center">
+                                                      {!loggedIn && (
+                                                        <p
+                                                          className="text-sm font-Open font-semibold text-[#004EFF] underline underline-offset-3 cursor-pointer"
+                                                          onClick={() =>
+                                                            setLogginModal(true)
+                                                          }
+                                                        >
+                                                          Verify OTP
+                                                        </p>
+                                                      )}
+                                                      <img
+                                                        src={
+                                                          openOrderDetails ===
+                                                          "product"
+                                                            ? UpwardArrow
+                                                            : DownwardArrow
+                                                        }
+                                                        alt=""
+                                                      />
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </>
+
+                                              <div>
+                                                {openOrderDetails ===
+                                                  "product" &&
+                                                  loggedIn && (
+                                                    <>
+                                                      <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
+                                                        <div
+                                                          className={`${
+                                                            isMobileResponsive?.isMobileScreen
+                                                              ? ""
+                                                              : "border-r-2 border-[#D9DBDD] pr-6"
+                                                          } `}
+                                                        >
+                                                          <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
+                                                            Buyer's Name
+                                                          </p>
+                                                          <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                            {each
+                                                              ?.deliveryAddress
+                                                              ?.contact?.name ||
+                                                              "No Data Found"}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          className={`${
+                                                            isMobileResponsive?.isMobileScreen
+                                                              ? ""
+                                                              : "border-r-2 border-[#D9DBDD] pr-6"
+                                                          } `}
+                                                        >
+                                                          <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
+                                                            Phone Number
+                                                          </p>
+                                                          <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                            {each
+                                                              ?.deliveryAddress
+                                                              ?.contact
+                                                              ?.mobileNo ||
+                                                              "No Data Found"}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          className={`${
+                                                            isMobileResponsive?.isMobileScreen
+                                                              ? ""
+                                                              : "border-r-2 border-[#D9DBDD] pr-6"
+                                                          } `}
+                                                        >
+                                                          <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
+                                                            Invoice
+                                                          </p>
+                                                          <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                            {each?.codInfo
+                                                              ?.invoiceValue ||
+                                                              0}
+                                                          </p>
+                                                        </div>
+                                                        <div
+                                                          className={`${
+                                                            isMobileResponsive?.isMobileScreen
+                                                              ? ""
+                                                              : "border-r-2 border-[#D9DBDD] pr-6"
+                                                          } `}
+                                                        >
+                                                          <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
+                                                            Payment Mode
+                                                          </p>
+                                                          <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                            {each?.codInfo
+                                                              ?.isCod
+                                                              ? "COD"
+                                                              : "Prepaid"}
+                                                          </p>
+                                                        </div>
+                                                      </div>
+                                                      <div className="mt-2 ">
+                                                        <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
+                                                          Address
+                                                        </p>
+                                                        <p className=" font-normal font-Open text-[12px]  leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
+                                                          {each?.deliveryAddress
+                                                            ?.fullAddress ||
+                                                            "NA"}
+                                                        </p>
+                                                      </div>
+                                                      <p className="mt-4 leading-4 font-Open text-[12px] font-bold">
+                                                        Product Details
+                                                      </p>
+
+                                                      {each?.products?.map(
+                                                        (
+                                                          each: any,
+                                                          index: number
+                                                        ) => {
+                                                          return (
+                                                            <p className="font-Open text-[12px] font-medium">
+                                                              {each?.breadth}
+                                                            </p>
+                                                          );
+                                                        }
+                                                      )}
+                                                    </>
+                                                  )}
+                                              </div>
+
+                                              <div
+                                                className={
+                                                  openOrderDetails === "product"
+                                                    ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
+                                                    : "grid grid-cols-2"
+                                                }
+                                              >
+                                                {/*mapping product details */}
+
+                                                {openOrderDetails ===
+                                                  "product" && (
+                                                  <>
+                                                    {each?.boxInfo?.[0]
+                                                      ?.products?.length > 0 ? (
+                                                      each?.boxInfo?.[0]?.products?.map(
+                                                        (
+                                                          each: any,
+                                                          index: number
+                                                        ) => (
+                                                          <div
+                                                            key={index}
+                                                            className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-18 overflow-auto rounded-lg"
+                                                          >
+                                                            <img
+                                                              src={
+                                                                each?.galleryImage
+                                                              }
+                                                              alt=""
+                                                            />
+                                                            <div>
+                                                              <p className="text-sm font-Open font-semibold">
+                                                                {each?.name ||
+                                                                  "NA"}
+                                                              </p>
+
+                                                              <p className="text-sm font-Open font-normal">
+                                                                ₹
+                                                                {(each?.unitPrice?.toFixed(
+                                                                  2
+                                                                ) || 0) *
+                                                                  (each?.qty ||
+                                                                    0)}
+                                                              </p>
+                                                            </div>
+                                                          </div>
+                                                        )
+                                                      )
+                                                    ) : (
+                                                      <p className="font-bold font-Open text-[14px] leading-5">
+                                                        No Products found
+                                                      </p>
+                                                    )}
+                                                  </>
+                                                )}
+                                              </div>
+
+                                              {/* rescheduling  and cancel and upadte alternate number */}
                                               {openOrderDetails ===
                                                 "product" && (
-                                                <>
-                                                  {each?.boxInfo?.[0]?.products
-                                                    ?.length > 0 ? (
-                                                    each?.boxInfo?.[0]?.products?.map(
-                                                      (
-                                                        each: any,
-                                                        index: number
-                                                      ) => (
-                                                        <div
-                                                          key={index}
-                                                          className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-18 overflow-auto rounded-lg"
-                                                        >
-                                                          <img
-                                                            src={
-                                                              each?.galleryImage
-                                                            }
-                                                            alt=""
-                                                          />
-                                                          <div>
-                                                            <p className="text-sm font-Open font-semibold">
-                                                              {each?.name ||
-                                                                "NA"}
-                                                            </p>
-
-                                                            <p className="text-sm font-Open font-normal">
-                                                              ₹
-                                                              {(each?.unitPrice?.toFixed(
-                                                                2
-                                                              ) || 0) *
-                                                                (each?.qty ||
-                                                                  0)}
-                                                            </p>
-                                                          </div>
-                                                        </div>
-                                                      )
-                                                    )
-                                                  ) : (
-                                                    <p className="font-bold font-Open text-[14px] leading-5">
-                                                      No Products found
+                                                <div className="mt-3">
+                                                  {/* <p className="my-4 font-open text-[14px] font-medium underline">
+                                                    Quick Actions for Your Order
+                                                  </p> */}
+                                                  <hr />
+                                                  <div className="flex gap-x-1 mt-3 mb-3 font-open text-[14px] font-medium">
+                                                    <img
+                                                      src={Powerbooster}
+                                                      alt=""
+                                                    />
+                                                    <p>
+                                                      Quick Actions for Your
+                                                      Order
                                                     </p>
-                                                  )}
-                                                </>
+                                                  </div>
+
+                                                  <div className="grid grid-cols-2 mt-4">
+                                                    <div className="flex gap-x-2 items-center">
+                                                      {/* alternate number */}
+
+                                                      <CustomInputBox
+                                                        label="Update Alternate Contact Number"
+                                                        inputType="number"
+                                                        onChange={(e: any) => {
+                                                          const value =
+                                                            e.target.value;
+
+                                                          const regex =
+                                                            /^[6-9]\d{0,9}$/;
+
+                                                          if (
+                                                            regex.test(value) ||
+                                                            value === ""
+                                                          ) {
+                                                            setAlternateNumber(
+                                                              value
+                                                            );
+                                                          }
+                                                        }}
+                                                        onBlur={() => {
+                                                          if (
+                                                            alternateNumber.length !==
+                                                            10
+                                                          ) {
+                                                            setAlternateMobileNumber(
+                                                              {
+                                                                ...alterMobileNoError,
+                                                                mobileNoError:
+                                                                  "Invalid Mobile Number",
+                                                              }
+                                                            );
+                                                          } else {
+                                                            setAlternateMobileNumber(
+                                                              {
+                                                                ...alterMobileNoError,
+                                                                mobileNoError:
+                                                                  "",
+                                                              }
+                                                            );
+                                                          }
+                                                        }}
+                                                        value={alternateNumber} // Bind the state to the input box
+                                                      />
+                                                      <OneButton
+                                                        text={"Submit"}
+                                                        onClick={() => {
+                                                          handleUpdateAlternateNumber();
+                                                        }}
+                                                        variant="new"
+                                                        className="!w-20 !h-12 !rounded-lg"
+                                                      />
+                                                      <p className="text-[12px] text-red-600 font-Open my-1">
+                                                        {
+                                                          alterMobileNoError?.mobileNoError
+                                                        }
+                                                      </p>
+                                                    </div>
+                                                    {/* <div className="flex ml-2 items-center">
+                                                  <p className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold">
+                                                    SUBMIT
+                                                  </p>
+                                                </div> */}
+                                                  </div>
+                                                  <div className="flex  items-center my-3">
+                                                    <p
+                                                      className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
+                                                      onClick={() => {
+                                                        setReschedulingModal(
+                                                          true
+                                                        );
+                                                      }}
+                                                    >
+                                                      RESCHEDULE DELIVERY
+                                                    </p>
+                                                  </div>
+                                                  <div className="flex  items-center my-3">
+                                                    <p
+                                                      className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
+                                                      onClick={() => {
+                                                        setCancellationModalOpen(
+                                                          true
+                                                        );
+                                                      }}
+                                                    >
+                                                      CANCEL ORDER
+                                                    </p>
+                                                  </div>
+                                                </div>
                                               )}
                                             </div>
                                           </div>
@@ -831,6 +1012,27 @@ const Tracking = () => {
               </div>
             </div>
           </div>
+
+          {/* This is for the center modal  */}
+
+          {/* login part  */}
+          <LoginModal
+            mobileNo={mobileNo}
+            awb={awb}
+            logginModal={logginModal}
+            setLogginModal={setLogginModal}
+          />
+
+          {/* cancellation part  */}
+          <CancellationModal
+            cancellationModalOpen={cancellationModalOpen}
+            setCancellationModalOpen={() => setCancellationModalOpen(false)}
+          />
+          {/*rescheduling part */}
+          <Rescheduling
+            reschedulingModal={reschedulingModal}
+            setReschedulingModal={() => setReschedulingModal(false)}
+          />
         </div>
       </div>
     </>

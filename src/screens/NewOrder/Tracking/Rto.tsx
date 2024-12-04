@@ -24,9 +24,6 @@ import toast from "react-hot-toast";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import AccordionRightModal from "./accordianRightModal";
 
-
-
-
 import NewTrackingContent from "../../Order/newTrackingContent";
 
 interface IOrdersProps {}
@@ -61,23 +58,22 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-   const [rightModalAccordian, setRightModalAccordian] = useState(false);
-   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
-   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
-   const [exceptionCount, setExceptionCount] = useState<any>([]);
+  const [rightModalAccordian, setRightModalAccordian] = useState(false);
+  const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
+  const [sellerActionData, setSellerActionData] = useState<any[]>([]);
+  const [exceptionCount, setExceptionCount] = useState<any>([]);
   const [rtoCount, setRtoCount] = useState<any>([]);
-  const [isLoadingSellerAction, setIsLoadingSellerAction] = useState<boolean>(false);
-
-
+  const [isLoadingSellerAction, setIsLoadingSellerAction] =
+    useState<boolean>(false);
 
   // get modal data from tabels
   const handleNdrFollowUpClick = (attemptsReasons: any[]) => {
     setCurrentAttemptsReasons(attemptsReasons);
   };
 
-  const handleSellerActionClick = async(sellerRemark: any[]) => {
+  const handleSellerActionClick = async (sellerRemark: any[]) => {
     setCurrentSellerRemark(sellerRemark);
-    setIsLoadingSellerAction(true);  // Start loading
+    setIsLoadingSellerAction(true); // Start loading
 
     // try {
     //   const requestBody = {
@@ -86,11 +82,11 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     //   };
 
     //   const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
-      
+
     //   // Handle the response here
     //   console.log("Seller action remarks:>>>>>>>>>>>>>>>>>>>>>>>>>>>", response?.data?.data);
     //   setSellerActionData(response?.data?.data)
-    
+
     // } catch (error: any) {
     //   console.error("Error fetching seller action remarks:", error.message);
     // }
@@ -104,35 +100,45 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
           const requestBody = {
             awb: currentSellerRemark,
           };
-  
-          const response = await POST(GET_NDR_SELLER_ACTION_REMARKS, requestBody);
+
+          const response = await POST(
+            GET_NDR_SELLER_ACTION_REMARKS,
+            requestBody
+          );
           console.log("Seller action remarks:", response?.data?.data);
           setSellerActionData(response?.data?.data);
         } catch (error: any) {
           console.error("Error fetching seller action remarks:", error.message);
-        }finally {
-          setIsLoadingSellerAction(false);  // Stop loading
+        } finally {
+          setIsLoadingSellerAction(false); // Stop loading
         }
       };
-  
+
       fetchSellerActionRemarks();
     }
   }, [currentSellerRemark]);
 
   const handleInfoIconClick = (awb: string) => {
     setSelectedAWB(awb);
-    console.log("awb from tabel", selectedAWB)
+    console.log("awb from tabel", selectedAWB);
   };
 
-  const arrayData = [{ label: "Exception NDR",number: exceptionCount || 0}, { label: "RTO",number:rtoCount || 0}];
+  const arrayData = [
+    { label: "Exception NDR", number: exceptionCount || 0 },
+    { label: "RTO", number: rtoCount || 0 },
+    { label: "Update Tracking", number: 0 },
+  ];
 
   const render = (id: number) => {
     if (id === 0) {
       navigate("/tracking/exception-ndr");
     } else if (id === 1) {
       navigate("/tracking/rto");
+    } else if (id === 2) {
+      navigate("/tracking/update-tracking");
     }
   };
+
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
     render(id);
@@ -152,8 +158,10 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
       // setNdrData(undefined);
       // console.log("allCount", tabCount);
       setTotalItemsCount(response?.data?.data?.[0]?.allCount?.[0]?.TotalCount);
-      setExceptionCount(response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount )
-      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount)
+      setExceptionCount(
+        response?.data?.tabCount?.[0]?.exceptionsCount?.[0]?.exceptionsCount
+      );
+      setRtoCount(response?.data?.tabCount?.[0]?.rtoCount?.[0]?.rtoCount);
     } catch (error: any) {
       console.log(error.message);
     } finally {
@@ -319,7 +327,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     }
   };
 
-  console.log("seller remarks data", currentSellerRemark )
+  console.log("seller remarks data", currentSellerRemark);
 
   return (
     <>
@@ -357,8 +365,6 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
             onSellerActionClick={handleSellerActionClick}
             onInfoIconClick={handleInfoIconClick}
             setRightModalAccordian={setRightModalAccordian}
-
-
             openRightModalForTracking={openRightModalForTracking}
             setOpenRightModalForTracking={setOpenRightModalForTracking}
           />
@@ -398,26 +404,24 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
       >
         <>
           <SelleractionModal
-            followUpData={sellerActionData|| []}
+            followUpData={sellerActionData || []}
             onClose={() => setRightModalSellerAction(false)}
             isLoadingSellerAction={isLoadingSellerAction}
-
           />
         </>
       </CustomRightModal>
 
-       {/* Accordian right modal  */}
-       <CustomRightModal
+      {/* Accordian right modal  */}
+      <CustomRightModal
         isOpen={rightModalAccordian}
         onClose={() => setRightModalAccordian(false)}
         className={""}
       >
         <AccordionRightModal
-        awb={selectedAWB}
+          awb={selectedAWB}
           onClose={() => setRightModalAccordian(false)}
-          />
-
-          </CustomRightModal>
+        />
+      </CustomRightModal>
       {/* new Tracking Screen with right modal  */}
       <CustomRightModal
         isOpen={openRightModalForTracking?.isOpen}

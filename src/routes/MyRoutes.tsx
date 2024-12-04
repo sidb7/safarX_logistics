@@ -135,6 +135,7 @@ import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import ExceptionNdr from "../screens/NewOrder/Tracking/exceptionNdr";
 import Rto from "../screens/NewOrder/Tracking/Rto";
+import NdrCancellationRequest from "../screens/NewOrder/Tracking/NdrCancellationRequest";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
@@ -1202,6 +1203,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Rto />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tracking/update-tracking"
+            element={
+              <ProtectedRoute>
+                <NdrCancellationRequest />
               </ProtectedRoute>
             }
           />
