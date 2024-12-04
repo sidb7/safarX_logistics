@@ -23,11 +23,10 @@ const Card = (props: any) => {
   const handleIntegration = (e: any) => {
     if (setModalData) {
       if (e.target.textContent === "Integrate" || channel.expiredToken)
-        if (channel.channel === 'AMAZON') {
-          const sellerId:any = localStorage.getItem("sellerId");
-          const encodedSellerId = btoa(sellerId);
-          const url = `https://sellercentral.amazon.in/apps/authorize/consent?application_id=amzn1.sp.solution.2539213c-5953-4a94-afc9-5008a8688ca7&version=beta&state=${encodedSellerId}`;
-          window.open(url, '_blank');
+        if (channel.channel === "AMAZON") {
+          const sellerId: any = localStorage.getItem("sellerId");
+          const url = `https://sellercentral.amazon.in/apps/authorize/consent?application_id=amzn1.sp.solution.10046c77-e1de-42ab-a2c6-3f9da56707e4&version=beta&state=${sellerId}`;
+          window.location.href = url;
         } else {
           setModalData({ isOpen: true, modalData: channel });
         }
@@ -43,7 +42,11 @@ const Card = (props: any) => {
       } rounded relative z-1  mt-5`}
       key={key}
     >
-      <div className={`py-[14px] px-[16px] w-[200px] `}>
+      <div
+        className={`py-[14px] px-[16px] w-[200px] flex h-[100%] flex-col ${
+          capitalizeFirstLetter(channel.name) === "" ? "justify-between" : ""
+        }`}
+      >
         <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-2 gap-x-6 mb-[1rem] lg:w-[170px] min-h-[45px]  ">
           <div className="flex items-center w-[100%] justify-between">
             <div>

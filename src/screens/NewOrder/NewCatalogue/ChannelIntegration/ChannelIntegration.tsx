@@ -23,6 +23,7 @@ import { DELETE_INTEGRATED_STORE } from "../../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
 import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
+import ClickpostIcon from "../../../../assets/Catalogue/clickpost.png";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -202,33 +203,37 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           let tempArr: any = [];
           response?.data?.forEach((item: any) => {
             tempArr.push({
-              name: item.storeName,
+              name: item?.storeName,
               icon:
-                item.channel === "SHOPIFY"
+                item?.channel === "SHOPIFY"
                   ? ShopifyIcon
-                  : item.channel === "WOOCOMMERCE"
+                  : item?.channel === "WOOCOMMERCE"
                   ? WooIcon
-                  : item.channel === "ZOHO"
+                  : item?.channel === "ZOHO"
                   ? ZohoIcon
-                  : item.channel === "UNICOMMERCE"
+                  : item?.channel === "UNICOMMERCE"
                   ? UniCommerceIcon
-                  : AmazonPngIcon,
+                  : item?.channel === "AMAZON"
+                  ? AmazonPngIcon
+                  : ClickpostIcon,
               iconLg:
-                item.channel === "SHOPIFY"
+                item?.channel === "SHOPIFY"
                   ? ShopifyLg
-                  : item.channel === "WOOCOMMERCE"
+                  : item?.channel === "WOOCOMMERCE"
                   ? WooLg
-                  : item.channel === "ZOHO"
+                  : item?.channel === "ZOHO"
                   ? ZohoIcon
-                  : item.channel === "UNICOMMERCE"
+                  : item?.channel === "UNICOMMERCE"
                   ? UniCommerceIcon
-                  : AmazonPngIcon,
+                  : item?.channel === "AMAZON"
+                  ? AmazonPngIcon
+                  : ClickpostIcon,
               integrated: true,
-              storeId: item.storeId,
-              channelName: item.channel,
-              createdAt: item.createdAt,
-              expiredToken: item.expiredToken,
-              storeUrl: item.storeUrl,
+              storeId: item?.storeId,
+              channelName: item?.channel,
+              createdAt: item?.createdAt,
+              expiredToken: item?.expiredToken,
+              storeUrl: item?.storeUrl,
             });
           });
           setChannelData({ channels: tempArr });

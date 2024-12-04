@@ -272,11 +272,14 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
           />
           <CustomInputBox
             label="Contact Name"
-            value={updateAddress.contactName}
+            value={updateAddress.contact.name}
             onChange={(e: any) => {
               setUpdateAddress({
                 ...updateAddress,
-                contactName: e.target.value,
+                contact: {
+                  ...contact,
+                  name: e.target.value,
+                },
               });
               // if (emptyOrFullTextRegex.test(e.target.value)) {
               //   const temp = updateAddress;
