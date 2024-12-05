@@ -8,16 +8,20 @@ import CrossIcon from "../../../assets/CloseIcon.svg";
 import ShipyaaroLogo from "../../../assets/Shipyaari_full_color rgb.svg";
 import OneButton from "../../../components/Button/OneButton";
 import CustomDropDown from "../../../components/DropDown";
-import { POST } from "../../../utils/webService";
+import { POSTHEADER } from "../../../utils/webService";
+import { UPDATETRACKINGBYBUYER } from "../../../utils/ApiUrls";
+import { toast } from "react-hot-toast";
 
 type Props = {
   cancellationModalOpen?: any;
   setCancellationModalOpen?: () => void;
+  awb?: any;
 };
 
 const CancellationModal = ({
   cancellationModalOpen,
   setCancellationModalOpen,
+  awb,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -70,6 +74,8 @@ const CancellationModal = ({
   };
 
   const handleSubmit = async () => {
+    const token = sessionStorage.getItem(`${awb}`);
+
     if (
       cancelSelectedOption === undefined ||
       cancelSelectedOption === "Select Reason" ||
@@ -88,12 +94,21 @@ const CancellationModal = ({
 
     try {
       const payload = {
-        awbs: [{ awb: "SPND02142596", privateCompanyId: 104739 }],
+        altno: "",
+        rescheduleTime: "",
+        buyerRemark: cancelSelectedOption || "",
+        requestType: "CANCEL",
+        awb,
       };
       setCancellationModalOpen && setCancellationModalOpen();
       navigate("/tracking");
-      const data = await POST("", payload);
-      console.log("data12345678", data);
+      const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });
+      if (data?.data?.success) {
+        toast.success(data?.data?.message);
+      } else {
+        toast.error(data?.data?.message);
+      }
+      console.log("data12345678", data?.data?.message);
     } catch (error: any) {
       console.log(error?.message);
     }

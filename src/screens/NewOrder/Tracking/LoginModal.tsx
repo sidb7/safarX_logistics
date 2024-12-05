@@ -7,13 +7,20 @@ import TrackingJson from "./tracking.json";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import ShipyaaroLogo from "../../../assets/Shipyaari_full_color rgb.svg";
 import OneButton from "../../../components/Button/OneButton";
-import InputwithOnclick from "../../../components/Input/InputwithOnclick";
 import { setOTPNumber } from "../../../redux/reducers/onboarding";
 import { POST } from "../../../utils/webService";
 import { TRACKING_SEND_VERIFY_OTP } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
 
-const LoginModal = ({ awb, mobileNo, logginModal, setLogginModal }: any) => {
+const LoginModal = ({
+  awb,
+  mobileNo,
+  logginModal,
+  setLogginModal,
+  loggedIn,
+  setLoggedIn,
+  setLoginSuccess,
+}: any) => {
   const navigate = useNavigate();
 
   const [sendOtp, setSendOtp] = useState<any>(false);
@@ -36,11 +43,12 @@ const LoginModal = ({ awb, mobileNo, logginModal, setLogginModal }: any) => {
         isVerified: false,
       };
       const data = await POST(TRACKING_SEND_VERIFY_OTP, payload);
-      console.log("dataqwertyu", data?.data?.success);
+
       if (data?.data?.success === false) {
         toast.error(data?.data?.message);
       }
       if (data?.data?.success) {
+        toast.success(data?.data?.message);
         setSendOtp(!sendOtp);
 
         setTimerActive(true);
@@ -57,18 +65,33 @@ const LoginModal = ({ awb, mobileNo, logginModal, setLogginModal }: any) => {
     if (sendOtp === false) {
       handleSendOtp();
     } else {
-      const payload = {
-        otp: otp,
-        awb: awb,
-        isVerified: true,
-      };
-      const data = await POST(TRACKING_SEND_VERIFY_OTP, payload);
-      console.log("data12345", data?.data?.success);
-      if (data?.data?.success) {
-        toast.success("Verified Successfully");
-        setLogginModal(false);
-        setOtp("");
-        setSendOtp(false);
+      try {
+        const payload = {
+          otp: otp,
+          awb: awb,
+          isVerified: true,
+        };
+        const data = await POST(TRACKING_SEND_VERIFY_OTP, payload);
+        console.log("data12345", data?.data?.message);
+        localStorage.setItem(awb, data?.data?.data?.[0]?.tempAccessToken);
+        sessionStorage.setItem(awb, data?.data?.data?.[0]?.tempAccessToken);
+        if (data?.data?.success) {
+          toast.success(data?.data?.message);
+          setLogginModal(false);
+          setOtp("");
+          setSendOtp(false);
+          setLoggedIn(true);
+          setLoginSuccess(true);
+        } else {
+          toast.error(data?.data?.message);
+          if (otp === undefined || otp?.length === 0) {
+            setInputError("Please Enter OTP");
+          } else {
+            setInputError("");
+          }
+        }
+      } catch (error: any) {
+        console.log(error.message);
       }
     }
   };
@@ -84,12 +107,13 @@ const LoginModal = ({ awb, mobileNo, logginModal, setLogginModal }: any) => {
         </>
       );
     }
-    return null; // return null if timer isnt active
+    return null;
   };
 
   const resendOtp = async () => {
     setSendOtp(true);
-    setClickedResend(true);
+    setIsButtonDisabled(true);
+    setOtp("");
     try {
       const payload = {
         otp: "",
@@ -121,11 +145,6 @@ const LoginModal = ({ awb, mobileNo, logginModal, setLogginModal }: any) => {
           console.log("isClickedResend", isClickedResend);
           clearInterval(interval);
           setIsButtonDisabled(false);
-          // setSendOtp(false);
-
-          if (isClickedResend) {
-            setSendOtp(false);
-          }
         } else {
           setSeconds(5);
           setMinutes(minutes - 1);
@@ -237,7 +256,6 @@ const LoginModal = ({ awb, mobileNo, logginModal, setLogginModal }: any) => {
                   }`}
                   onClick={() => {
                     if (!isButtonDisabled) {
-                      // handleSendOtp("resend"); // Resend OTP logic here
                       resendOtp();
                     }
                   }}

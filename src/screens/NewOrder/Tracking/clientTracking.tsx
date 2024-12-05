@@ -27,12 +27,17 @@ import CancellationModal from "./CancellationModal";
 import Rescheduling from "./ReschedulingModal";
 import Powerbooster from "../../../assets/powerbooster.svg";
 import { UPDATETRACKINGBYBUYER } from "../../../utils/ApiUrls";
-import { POST } from "../../../utils/webService";
+// import { POST } from "../../../utils/webService";
+import { POSTHEADER } from "../../../utils/webService";
 
 const Tracking = () => {
   const isMobileResponsive = ResponsiveState();
   //getting the path
   const currenturl = window.location.href;
+
+  const searchParams = new URL(currenturl).searchParams; // Parse query parameters
+  const trackingUrlCheck = searchParams.get("trackingNo");
+
   const path = PathFinder(currenturl);
   const [trackingState, setTrackingState] = useState<any[]>([]);
   const [openOrderDetails, setOpenOrderDetails] = useState<string | null>(null);
@@ -55,12 +60,10 @@ const Tracking = () => {
     mobileNoError: "",
   });
   const [logginModal, setLogginModal] = useState<any>(false);
-
-  console.log("mobileNomobileNomobileNomobileNo", mobileNo);
+  const [altContactNo, setAltContactNo] = useState<any>(false);
+  const [loginSuccess, setLoginSuccess] = useState<any>(false);
 
   const awb = trackingState?.[0]?.awb;
-
-  console.log("trackingStatetrackingState", trackingState?.[0]?.awb);
 
   useEffect(() => {
     let temp = JSON.parse(localStorage.getItem("userInfo") as any);
@@ -138,12 +141,10 @@ const Tracking = () => {
             orderStatus(currentStatus?.currentStatus);
           }
         );
-        console.log("result123578", result);
+
         const resMobileNo =
           result?.data?.[0]?.trackingInfo?.[0]?.deliveryAddress?.contact
             ?.mobileNo;
-
-        console.log("resMobileNoresMobileNoresMobileNo", resMobileNo);
 
         if (resMobileNo) {
           setMobileNo(
@@ -184,6 +185,15 @@ const Tracking = () => {
   };
 
   const handleUpdateAlternateNumber = async () => {
+    const token = sessionStorage.getItem(`${awb}`);
+    console.log("AWB:", awb);
+    console.log("Retrieved Token:", token);
+
+    if (!token) {
+      console.error("Token not found in sessionStorage!");
+      return;
+    }
+
     try {
       const payload = {
         altno: alternateNumber,
@@ -192,10 +202,18 @@ const Tracking = () => {
         requestType: "ALTMOBILENUMBER",
         awb,
       };
-      const data = await POST(UPDATETRACKINGBYBUYER, payload);
-      console.log("data123456789", data);
+
+      setAltContactNo(true);
+
+      const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });
+      if (data?.data?.success) {
+        toast.success(data?.data?.message);
+      } else {
+        toast.error(data?.data?.message);
+      }
+      console.log("Response:", data?.data?.message);
     } catch (error: any) {
-      console.log(error.message);
+      console.error("Error:", error.message);
     }
   };
 
@@ -272,7 +290,10 @@ const Tracking = () => {
                       <div className="w-full">
                         {trackingState?.map(
                           (each: any, indexTracking: number) => {
-                            console.log("indexTracking", indexTracking);
+                            console.log(
+                              "🚀 ~ Tracking ~ indexTracking:",
+                              indexTracking
+                            );
                             const edd =
                               each?.shipmentStatus?.EDD === "N/A" ||
                               each?.shipmentStatus?.EDD === "" ||
@@ -697,16 +718,21 @@ const Tracking = () => {
                                                     </>
                                                   ) : (
                                                     <div className="flex gap-x-6  items-center">
-                                                      {!loggedIn && (
-                                                        <p
-                                                          className="text-sm font-Open font-semibold text-[#004EFF] underline underline-offset-3 cursor-pointer"
-                                                          onClick={() =>
-                                                            setLogginModal(true)
-                                                          }
-                                                        >
-                                                          Verify OTP
-                                                        </p>
-                                                      )}
+                                                      {!loggedIn &&
+                                                        trackingUrlCheck !==
+                                                          null &&
+                                                        indexTracking === 0 && (
+                                                          <p
+                                                            className="text-sm font-Open font-semibold text-[#004EFF] underline underline-offset-3 cursor-pointer"
+                                                            onClick={() =>
+                                                              setLogginModal(
+                                                                true
+                                                              )
+                                                            }
+                                                          >
+                                                            Verify OTP
+                                                          </p>
+                                                        )}
                                                       <img
                                                         src={
                                                           openOrderDetails ===
@@ -836,164 +862,202 @@ const Tracking = () => {
                                                 {/*mapping product details */}
 
                                                 {openOrderDetails ===
-                                                  "product" && (
-                                                  <>
-                                                    {each?.boxInfo?.[0]
-                                                      ?.products?.length > 0 ? (
-                                                      each?.boxInfo?.[0]?.products?.map(
-                                                        (
-                                                          each: any,
-                                                          index: number
-                                                        ) => (
-                                                          <div
-                                                            key={index}
-                                                            className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-18 overflow-auto rounded-lg"
-                                                          >
-                                                            <img
-                                                              src={
-                                                                each?.galleryImage
-                                                              }
-                                                              alt=""
-                                                            />
-                                                            <div>
-                                                              <p className="text-sm font-Open font-semibold">
-                                                                {each?.name ||
-                                                                  "NA"}
-                                                              </p>
+                                                  "product" &&
+                                                  loggedIn && (
+                                                    <>
+                                                      {each?.boxInfo?.[0]
+                                                        ?.products?.length >
+                                                      0 ? (
+                                                        each?.boxInfo?.[0]?.products?.map(
+                                                          (
+                                                            each: any,
+                                                            index: number
+                                                          ) => (
+                                                            <div
+                                                              key={index}
+                                                              className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-18 overflow-auto rounded-lg"
+                                                            >
+                                                              <img
+                                                                src={
+                                                                  each?.galleryImage
+                                                                }
+                                                                alt=""
+                                                              />
+                                                              <div>
+                                                                <p className="text-sm font-Open font-semibold">
+                                                                  {each?.name ||
+                                                                    "NA"}
+                                                                </p>
 
-                                                              <p className="text-sm font-Open font-normal">
-                                                                ₹
-                                                                {(each?.unitPrice?.toFixed(
-                                                                  2
-                                                                ) || 0) *
-                                                                  (each?.qty ||
-                                                                    0)}
-                                                              </p>
+                                                                <p className="text-sm font-Open font-normal">
+                                                                  ₹
+                                                                  {(each?.unitPrice?.toFixed(
+                                                                    2
+                                                                  ) || 0) *
+                                                                    (each?.qty ||
+                                                                      0)}
+                                                                </p>
+                                                              </div>
                                                             </div>
-                                                          </div>
+                                                          )
                                                         )
-                                                      )
-                                                    ) : (
-                                                      <p className="font-bold font-Open text-[14px] leading-5">
-                                                        No Products found
-                                                      </p>
-                                                    )}
-                                                  </>
-                                                )}
+                                                      ) : (
+                                                        <p className="font-bold font-Open text-[14px] leading-5">
+                                                          No Products found
+                                                        </p>
+                                                      )}
+                                                    </>
+                                                  )}
                                               </div>
 
                                               {/* rescheduling  and cancel and upadte alternate number */}
-                                              {openOrderDetails ===
-                                                "product" && (
-                                                <div className="mt-3">
-                                                  {/* <p className="my-4 font-open text-[14px] font-medium underline">
-                                                    Quick Actions for Your Order
-                                                  </p> */}
-                                                  <hr />
-                                                  <div className="flex gap-x-1 mt-3 mb-3 font-open text-[14px] font-medium">
-                                                    <img
-                                                      src={Powerbooster}
-                                                      alt=""
-                                                    />
-                                                    <p>
-                                                      Quick Actions for Your
-                                                      Order
-                                                    </p>
-                                                  </div>
-
-                                                  <div className="grid grid-cols-2 mt-4">
-                                                    <div className="flex gap-x-2 items-center">
-                                                      {/* alternate number */}
-
-                                                      <CustomInputBox
-                                                        label="Update Alternate Contact Number"
-                                                        inputType="number"
-                                                        onChange={(e: any) => {
-                                                          const value =
-                                                            e.target.value;
-
-                                                          const regex =
-                                                            /^[6-9]\d{0,9}$/;
-
-                                                          if (
-                                                            regex.test(value) ||
-                                                            value === ""
-                                                          ) {
-                                                            setAlternateNumber(
-                                                              value
-                                                            );
-                                                          }
-                                                        }}
-                                                        onBlur={() => {
-                                                          if (
-                                                            alternateNumber.length !==
-                                                            10
-                                                          ) {
-                                                            setAlternateMobileNumber(
-                                                              {
-                                                                ...alterMobileNoError,
-                                                                mobileNoError:
-                                                                  "Invalid Mobile Number",
-                                                              }
-                                                            );
-                                                          } else {
-                                                            setAlternateMobileNumber(
-                                                              {
-                                                                ...alterMobileNoError,
-                                                                mobileNoError:
-                                                                  "",
-                                                              }
-                                                            );
-                                                          }
-                                                        }}
-                                                        value={alternateNumber} // Bind the state to the input box
+                                              {openOrderDetails === "product" &&
+                                                loginSuccess && (
+                                                  <div className="mt-3">
+                                                    <hr />
+                                                    <div className="flex gap-x-1 mt-3 mb-3 font-open text-[14px] font-medium">
+                                                      <img
+                                                        src={Powerbooster}
+                                                        alt=""
                                                       />
-                                                      <OneButton
-                                                        text={"Submit"}
-                                                        onClick={() => {
-                                                          handleUpdateAlternateNumber();
-                                                        }}
-                                                        variant="new"
-                                                        className="!w-20 !h-12 !rounded-lg"
-                                                      />
-                                                      <p className="text-[12px] text-red-600 font-Open my-1">
-                                                        {
-                                                          alterMobileNoError?.mobileNoError
-                                                        }
+                                                      <p>
+                                                        Quick Actions for Your
+                                                        Order
                                                       </p>
                                                     </div>
-                                                    {/* <div className="flex ml-2 items-center">
-                                                  <p className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold">
-                                                    SUBMIT
-                                                  </p>
-                                                </div> */}
+
+                                                    <div className="grid grid-cols-2 mt-4">
+                                                      <div className="flex gap-x-2 items-center">
+                                                        {/* alternate number */}
+                                                        <div className="flex flex-col">
+                                                          <CustomInputBox
+                                                            label="Update Alt Contact No"
+                                                            inputType="number"
+                                                            onChange={(
+                                                              e: any
+                                                            ) => {
+                                                              const value =
+                                                                e.target.value;
+
+                                                              // Regex for valid Indian mobile numbers starting with 6-9 and up to 10 digits
+                                                              const regex =
+                                                                /^[6-9]\d{0,9}$/;
+
+                                                              if (
+                                                                regex.test(
+                                                                  value
+                                                                ) ||
+                                                                value === ""
+                                                              ) {
+                                                                setAlternateNumber(
+                                                                  value
+                                                                );
+
+                                                                // Check for length and set error message dynamically
+                                                                if (
+                                                                  value.length ===
+                                                                  0
+                                                                ) {
+                                                                  setAlternateMobileNumber(
+                                                                    {
+                                                                      ...alterMobileNoError,
+                                                                      mobileNoError:
+                                                                        "Mobile number cannot be empty",
+                                                                    }
+                                                                  );
+                                                                } else if (
+                                                                  value.length !==
+                                                                  10
+                                                                ) {
+                                                                  setAlternateMobileNumber(
+                                                                    {
+                                                                      ...alterMobileNoError,
+                                                                      mobileNoError:
+                                                                        "Invalid Mobile Number",
+                                                                    }
+                                                                  );
+                                                                } else {
+                                                                  setAlternateMobileNumber(
+                                                                    {
+                                                                      ...alterMobileNoError,
+                                                                      mobileNoError:
+                                                                        "",
+                                                                    }
+                                                                  );
+                                                                }
+                                                              }
+                                                            }}
+                                                            onBlur={() => {
+                                                              // Validate again on blur
+                                                              if (
+                                                                alternateNumber?.length !==
+                                                                10
+                                                              ) {
+                                                                setAlternateMobileNumber(
+                                                                  {
+                                                                    ...alterMobileNoError,
+                                                                    mobileNoError:
+                                                                      "Invalid Mobile Number",
+                                                                  }
+                                                                );
+                                                              } else {
+                                                                setAlternateMobileNumber(
+                                                                  {
+                                                                    ...alterMobileNoError,
+                                                                    mobileNoError:
+                                                                      "",
+                                                                  }
+                                                                );
+                                                              }
+                                                            }}
+                                                            value={
+                                                              alternateNumber
+                                                            } // Bind the state to the input box
+                                                          />
+
+                                                          <p className="text-[12px] text-red-600 font-Open">
+                                                            {
+                                                              alterMobileNoError?.mobileNoError
+                                                            }
+                                                          </p>
+                                                        </div>
+
+                                                        <OneButton
+                                                          text={"Submit"}
+                                                          onClick={() => {
+                                                            handleUpdateAlternateNumber();
+                                                          }}
+                                                          variant="primary"
+                                                          className="!w-20 !h-12 !rounded-lg"
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                    <div className="flex  items-center my-3">
+                                                      <p
+                                                        className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
+                                                        onClick={() => {
+                                                          setReschedulingModal(
+                                                            true
+                                                          );
+                                                        }}
+                                                      >
+                                                        RESCHEDULE DELIVERY
+                                                      </p>
+                                                    </div>
+                                                    <div className="flex  items-center my-3">
+                                                      <p
+                                                        className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
+                                                        onClick={() => {
+                                                          setCancellationModalOpen(
+                                                            true
+                                                          );
+                                                        }}
+                                                      >
+                                                        CANCEL ORDER
+                                                      </p>
+                                                    </div>
                                                   </div>
-                                                  <div className="flex  items-center my-3">
-                                                    <p
-                                                      className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
-                                                      onClick={() => {
-                                                        setReschedulingModal(
-                                                          true
-                                                        );
-                                                      }}
-                                                    >
-                                                      RESCHEDULE DELIVERY
-                                                    </p>
-                                                  </div>
-                                                  <div className="flex  items-center my-3">
-                                                    <p
-                                                      className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
-                                                      onClick={() => {
-                                                        setCancellationModalOpen(
-                                                          true
-                                                        );
-                                                      }}
-                                                    >
-                                                      CANCEL ORDER
-                                                    </p>
-                                                  </div>
-                                                </div>
-                                              )}
+                                                )}
                                             </div>
                                           </div>
                                         )}
@@ -1021,17 +1085,23 @@ const Tracking = () => {
             awb={awb}
             logginModal={logginModal}
             setLogginModal={setLogginModal}
+            loggedIn={loggedIn}
+            setLoggedIn={setLoggedIn}
+            loginSuccess={loginSuccess}
+            setLoginSuccess={setLoginSuccess}
           />
 
           {/* cancellation part  */}
           <CancellationModal
             cancellationModalOpen={cancellationModalOpen}
             setCancellationModalOpen={() => setCancellationModalOpen(false)}
+            awb={awb}
           />
           {/*rescheduling part */}
           <Rescheduling
             reschedulingModal={reschedulingModal}
             setReschedulingModal={() => setReschedulingModal(false)}
+            awb={awb}
           />
         </div>
       </div>

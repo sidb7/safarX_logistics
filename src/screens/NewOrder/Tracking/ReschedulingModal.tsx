@@ -11,22 +11,47 @@ import "./datePicker.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dateIcon from "../../../assets/dateIcon.svg";
+import { POSTHEADER } from "../../../utils/webService";
+import { UPDATETRACKINGBYBUYER } from "../../../utils/ApiUrls";
+import { toast } from "react-hot-toast";
 
 type Props = {
   reschedulingModal?: any;
   setReschedulingModal?: () => void;
+  awb?: any;
 };
 
 const ReschedulingModal = ({
   reschedulingModal,
   setReschedulingModal,
+  awb,
 }: Props) => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState<any>(null);
 
-  const handleNavigationandModal = () => {
-    navigate("/tracking");
-    setReschedulingModal && setReschedulingModal();
+  const handleNavigationandModal = async () => {
+    const token = sessionStorage.getItem(`${awb}`);
+    try {
+      const payload = {
+        altno: "",
+        rescheduleTime: "",
+        buyerRemark: "Want to reschedule the order",
+        requestType: "CANCEL",
+        awb,
+      };
+
+      const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });
+      console.log("data12457", data?.data?.message);
+      if (data?.data?.success) {
+        toast.success(data?.data?.message);
+        navigate("/tracking");
+        setReschedulingModal && setReschedulingModal();
+      } else {
+        toast.error(data?.data?.message);
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   return (
