@@ -1,7 +1,7 @@
 {
   "tracking": {
     "query_key": "trackingNo",
-    "req_type": "GET",
+    "req_type": "GET_CUSTOM",
     "api": "/api/v1/tracking/getTrackingforSystem",
     "data_type": [],
     "response_key": "trackingInfo",
