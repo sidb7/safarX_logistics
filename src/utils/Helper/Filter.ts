@@ -8,7 +8,7 @@ const encryptData = (data: any) => {
   return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
 };
 
-const decryptData = (encryptedData: any) => {
+export const decryptData = (encryptedData: any) => {
   const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 };
@@ -25,7 +25,11 @@ export const inputRegexFilter = async (
   payload?: any
 ) => {
   // console.log("🚀 ~ inputData:", inputData, path, payload);
-  const filteredInput = inputData.replace(/[\s,]+/g, ",").trim();
+  // const filteredInput = inputData.replace(/[\s,]+/g, ",").trim();
+  const filteredInput = inputData
+    .replace(/[\s,]+/g, ",")
+    .trim()
+    .replace(/^,|,$/g, "");
   const mapper: any = MappingFilter;
 
   // Perform input validation
