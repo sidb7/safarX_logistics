@@ -96,8 +96,8 @@ const Tracking = () => {
     getJwtTokenForUser(getSellerId);
     try {
       setLoading(true);
-
       const result = await inputRegexFilter(trackingNo, path);
+      console.log("🚀 ~ handleTrackOrderClick ~ result:", result);
 
       //mapping the new data
       if (result?.data?.length !== 0) {
