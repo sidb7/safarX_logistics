@@ -18,6 +18,7 @@ import AccordianOpenIcon from "../../assets/AccordianOpen.svg";
 import RefreshIcon from "../../assets/refreshIcon.svg";
 import { isNumber } from "lodash";
 import { Spinner } from "../../components/Spinner";
+import { decryptData } from "../../utils/Helper/Filter";
 interface INewTrackingContentProps {
   setOpenRightModalForTracking?: any;
   openRightModalForTracking?: any;
@@ -209,9 +210,14 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
     try {
       setLoading(true);
 
-      const { data: response }: any = await GET(
+      const { data: newResponse }: any = await GET(
         `${GET_CLIENTTRACKING_INFO}?trackingNo=${openRightModalForTracking?.awbNo}`
       );
+
+      let response: any;
+      if (newResponse?.encryptedData) {
+        response = decryptData(newResponse?.encryptedData);
+      }
 
       if (response?.success && response?.data[0]?.trackingInfo?.length > 0) {
         setTrackingData(response?.data?.[0]?.trackingInfo?.[0]);
