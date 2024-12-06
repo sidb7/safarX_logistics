@@ -164,7 +164,7 @@ const LoginModal = ({
         onRequestClose={() => {
           setLogginModal(false);
         }}
-        className="h-[550px] w-[650px]"
+        className="h-[540px] md:h-[550px] lg:h-[550px]  w-[340px] md:w-[420px] lg:w-[650px] "
       >
         {/* <MobileNumberOtp /> */}
         <div className="relative h-full w-full">
@@ -187,7 +187,7 @@ const LoginModal = ({
 
           {/*Body Section */}
           <div className="flex flex-col items-center justify-center mt-20">
-            <p className="text-[22px] font-Lato  mx-28 text-center font-semibold">
+            <p className="text-[16px] lg:text-[22px] font-Lato  mx-28 text-center font-semibold">
               {`${
                 sendOtp
                   ? TrackingJson?.trackingJson?.login?.otp

@@ -7,12 +7,10 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import OrderData from "./OrderData";
 import { useNavigate } from "react-router-dom";
-
 import { POST } from "../../../utils/webService";
-
 import CancellationRequestTable from "./CancellationRequestTable";
-
-import NewTrackingContent from "../../Order/newTrackingContent";
+import { GETALLTRACKINGBUYERREQUEST } from "../../../utils/ApiUrls";
+import { Spinner } from "flowbite-react";
 
 interface IOrdersProps {}
 
@@ -23,7 +21,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   const { isLgScreen, isXlScreen } = ResponsiveState();
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [currentSellerRemark, setCurrentSellerRemark] = useState<any[]>([]);
-  const [totalItemsCount, setTotalItemsCount] = useState(10);
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
   // New state for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -32,136 +30,11 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   const [rtoCount, setRtoCount] = useState<any>(0);
   const [isLoadingSellerAction, setIsLoadingSellerAction] =
     useState<boolean>(false);
-  const [cancelRequestData, setCancelRequestData] = useState<any>([
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "NA",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "NA",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "NA",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "In Transit",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-    {
-      custContactDetail: 9959623900,
-      trackingNo: "SPN81903020001",
-      edd: "22-10-24",
-      currentStatus: "NA",
-      custRequest: "NA",
-      sellerAction: "NA",
-      remark: "A: Request raised to bluedart (Auto trigger)",
-      requestType: "Cancel",
-    },
-  ]);
+  const [cancelRequestData, setCancelRequestData] = useState<any>([]);
+  const [openRightSideModal, setOpenRightSideModal] = useState<any>(false);
+  const [searchText, setSearchText] = useState<any>("");
+  const [loading, setIsLoading] = useState<any>(false);
+
   const data = [{}];
 
   const handleSellerActionClick = async (sellerRemark: any[]) => {
@@ -177,7 +50,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   const arrayData = [
     { label: "Exception NDR", number: 0 },
     { label: "RTO", number: rtoCount || 0 },
-    { label: "Update Tracking", number: 0 },
+    { label: "Buyer Request", number: totalItemsCount },
   ];
 
   const render = (id: number) => {
@@ -191,6 +64,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   };
 
   const setScrollIndex = (id: number) => {
+    console.log("id12345678", id);
     setRenderingComponents(id);
     render(id);
   };
@@ -207,6 +81,34 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
     setItemsPerPage(itemsPerPage);
     setCurrentPage(1);
   };
+
+  useEffect(() => {
+    (async () => {
+      const payload = {
+        skip: (currentPage - 1) * itemsPerPage,
+        limit: itemsPerPage,
+        sort: { _id: -1 },
+        pageNo: currentPage,
+        searchText: searchText,
+      };
+
+      try {
+        setIsLoading(true);
+        const data = await POST(GETALLTRACKINGBUYERREQUEST, payload);
+
+        if (data?.data?.success) {
+          setIsLoading(false);
+          setCancelRequestData(data?.data?.data);
+          setTotalItemsCount(data?.data?.totalCount);
+        } else {
+          setIsLoading(false);
+          setCancelRequestData(data?.data?.data);
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    })();
+  }, [searchText, currentPage, itemsPerPage]);
 
   return (
     <>
@@ -227,15 +129,29 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
           <div className="flex mr-4">
             <SearchBox
               label="Search"
-              onChange={() => {}}
-              value={""}
+              onChange={(e: any) => {
+                setSearchText(e.target.value);
+              }}
+              value={searchText}
               customPlaceholder="Search"
             />
           </div>
         </div>
 
         <div className="mx-4">
-          <CancellationRequestTable cancelRequestData={cancelRequestData} />
+          <>
+            {loading ? (
+              <div className="flex w-full justify-center items-center h-[600px]">
+                <Spinner />
+              </div>
+            ) : (
+              <CancellationRequestTable
+                cancelRequestData={cancelRequestData}
+                openRightSideModal={openRightSideModal}
+                setOpenRightSideModal={setOpenRightSideModal}
+              />
+            )}
+          </>
         </div>
 
         {isLgScreen && totalItemsCount > 0 && (

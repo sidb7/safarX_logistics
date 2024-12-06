@@ -1010,6 +1010,7 @@ const Tracking = () => {
                                                                 );
                                                               }
                                                             }}
+                                                            className="!w-[150px] md:!w-[250px]"
                                                             value={
                                                               alternateNumber
                                                             } // Bind the state to the input box

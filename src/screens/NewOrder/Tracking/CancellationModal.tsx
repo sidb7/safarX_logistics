@@ -29,7 +29,9 @@ const CancellationModal = ({
   const [cancelSelectedOption, setCancelSelectedOption] = useState<any>();
   const [reasonError, setReasonError] = useState<any>({
     reason: "",
+    otherReasonError: "",
   });
+  const [otherReason, setOtherReason] = useState<any>();
 
   const cancellingArray = [
     {
@@ -76,11 +78,9 @@ const CancellationModal = ({
   const handleSubmit = async () => {
     const token = sessionStorage.getItem(`${awb}`);
 
-    if (
-      cancelSelectedOption === undefined ||
-      cancelSelectedOption === "Select Reason" ||
-      cancelSelectedOption === ""
-    ) {
+    if (!cancelSelectedOption || cancelSelectedOption === "Select Reason") {
+      toast.error("Please Select a reason");
+
       setReasonError({
         ...reasonError,
         reason: "Please select a option",
@@ -92,25 +92,42 @@ const CancellationModal = ({
       });
     }
 
-    try {
-      const payload = {
-        altno: "",
-        rescheduleTime: "",
-        buyerRemark: cancelSelectedOption || "",
-        requestType: "CANCEL",
-        awb,
-      };
-      setCancellationModalOpen && setCancellationModalOpen();
-      navigate("/tracking");
-      const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });
-      if (data?.data?.success) {
-        toast.success(data?.data?.message);
-      } else {
-        toast.error(data?.data?.message);
+    if (cancelSelectedOption === "Other" && !otherReason) {
+      setReasonError({
+        ...reasonError,
+        otherReasonError: "Please enter the reason",
+      });
+    } else {
+      setReasonError({
+        ...reasonError,
+        otherReasonError: "",
+      });
+      try {
+        const payload = {
+          altno: "",
+          rescheduleTime: "",
+          buyerRemark: cancelSelectedOption || "",
+          requestType: "CANCEL",
+          awb,
+        };
+        setCancellationModalOpen && setCancellationModalOpen();
+        navigate("/tracking");
+        const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
+          token,
+        });
+        if (data?.data?.success) {
+          toast.success(data?.data?.message);
+          setCancelSuccess(false);
+          setCancelSelectedOption("");
+        } else {
+          setCancelSuccess(false);
+          toast.error(data?.data?.message);
+          setCancelSelectedOption("");
+        }
+        console.log("data12345678", data?.data?.message);
+      } catch (error: any) {
+        console.log(error?.message);
       }
-      console.log("data12345678", data?.data?.message);
-    } catch (error: any) {
-      console.log(error?.message);
     }
   };
 
@@ -121,7 +138,8 @@ const CancellationModal = ({
         onRequestClose={() => {
           setCancellationModalOpen && setCancellationModalOpen();
         }}
-        className="h-[500px] w-[650px]"
+        // className="h-[500px] w-[650px]"
+        className="h-[500px] md:h-[500px] lg:h-[540px]  w-[340px] md:w-[520px] lg:w-[650px] "
       >
         {/* <MobileNumberOtp /> */}
         <div className="relative h-full w-full">
@@ -143,8 +161,8 @@ const CancellationModal = ({
           </div>
 
           {/*Body Section */}
-          <div className="flex flex-col items-center justify-center mt-20 w-[600px]">
-            <p className="text-[22px] font-Lato  mx-28 text-center font-semibold">
+          <div className="flex flex-col items-center justify-center mt-20 w-full">
+            <p className="text-[18px] md:text-[22px]  font-Lato  mx-28 text-center font-semibold w-full">
               {cancelSuccess
                 ? TrackingJson?.trackingJson?.cancelling?.message4
                 : TrackingJson?.trackingJson?.cancelling?.message1}
@@ -168,7 +186,27 @@ const CancellationModal = ({
               }
               {cancelSelectedOption === "Other" && (
                 <div className="mt-6">
-                  <CustomInputBox label="Please specify the reason" />
+                  <CustomInputBox
+                    label="Please specify the reason"
+                    onChange={(e: any) => {
+                      let value = e.target.value;
+                      setOtherReason(value);
+                      if (value === "") {
+                        setReasonError({
+                          ...reasonError,
+                          otherReasonError: "Plese enter the reason",
+                        });
+                      } else {
+                        setReasonError({
+                          ...reasonError,
+                          otherReasonError: "",
+                        });
+                      }
+                    }}
+                  />
+                  <p className="text-[14px] text-red-600 font-Open">
+                    {reasonError?.otherReasonError}
+                  </p>
                 </div>
               )}
               <OneButton
@@ -182,9 +220,9 @@ const CancellationModal = ({
             </div>
           ) : (
             <>
-              <div className="flex justify-center mx-24 my-10">
+              <div className="flex justify-center  my-12 ">
                 <p
-                  className="text-[#004EFF] underline underline-offset-4 font-Open font-semibold cursor-pointer"
+                  className="text-[16px] md:text-[18px] text-center text-[#004EFF] underline underline-offset-4 font-Open font-semibold cursor-pointer  whitespace-nowrap"
                   onClick={() => {
                     setCancelSuccess(true);
                   }}
@@ -199,7 +237,7 @@ const CancellationModal = ({
                 }}
               >
                 <p
-                  className="text-[#004EFF] underline underline-offset-4 font-Open font-semibold  cursor-pointer"
+                  className="text-[16px] md:text-[18px] text-[#004EFF] text-center underline underline-offset-4 font-Open font-semibold  cursor-pointer"
                   onClick={() => {
                     setCancellationModalOpen && setCancellationModalOpen();
                   }}

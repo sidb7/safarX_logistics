@@ -17,7 +17,7 @@ import { toast } from "react-hot-toast";
 
 type Props = {
   reschedulingModal?: any;
-  setReschedulingModal?: () => void;
+  setReschedulingModal?: (value: boolean) => void; // Allow a boolean argument
   awb?: any;
 };
 
@@ -45,9 +45,11 @@ const ReschedulingModal = ({
       if (data?.data?.success) {
         toast.success(data?.data?.message);
         navigate("/tracking");
-        setReschedulingModal && setReschedulingModal();
+        // setReschedulingModal && setReschedulingModal();
+        setReschedulingModal && setReschedulingModal(false);
       } else {
         toast.error(data?.data?.message);
+        setReschedulingModal && setReschedulingModal(false);
       }
     } catch (error: any) {
       console.log(error.message);
@@ -59,9 +61,11 @@ const ReschedulingModal = ({
       <CenterModal
         isOpen={reschedulingModal}
         onRequestClose={() => {
-          setReschedulingModal && setReschedulingModal();
+          // setReschedulingModal && setReschedulingModal();
+          setReschedulingModal && setReschedulingModal(false);
         }}
-        className="h-[550px] w-[650px]"
+        // className="h-[550px] w-[650px]"
+        className="h-[500px] md:h-[500px] lg:h-[540px]  w-[340px] md:w-[520px] lg:w-[650px] "
       >
         <div className="relative h-full w-full">
           {/* Header Section */}
@@ -76,14 +80,15 @@ const ReschedulingModal = ({
               src={CrossIcon}
               alt="Close"
               onClick={() => {
-                setReschedulingModal && setReschedulingModal();
+                // setReschedulingModal && setReschedulingModal();
+                setReschedulingModal && setReschedulingModal(false);
               }}
             />
           </div>
 
           {/*Body Section */}
-          <div className="flex flex-col items-center justify-center mt-20 w-[600px]">
-            <p className="text-[22px] font-Lato  mx-28 text-center font-semibold">
+          <div className="flex flex-col items-center justify-center mt-20 w-full">
+            <p className="text-[18px] md:text-[22px] font-Lato  mx-28 text-center font-semibold">
               {TrackingJson?.trackingJson?.reschedule?.message1}
             </p>
             <p className="text-[16px] open-sans mt-2  mx-28 text-center font-semibold">
@@ -98,7 +103,7 @@ const ReschedulingModal = ({
               customInput={
                 <button
                   type="button"
-                  className="flex items-center gap-2 px-4 py-2 h-12 rounded-md border border-gray-400 min-w-[226px] w-[412px]"
+                  className="flex items-center gap-2 px-4 py-2 h-12 rounded-md border border-gray-400 min-w-[226px] w-[260px] md:w-[300px] lg:w-[420px]"
                 >
                   <img src={dateIcon} alt="Calendar Icon" className="mr-2" />
 

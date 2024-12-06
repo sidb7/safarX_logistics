@@ -126,7 +126,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
   const arrayData = [
     { label: "Exception NDR", number: exceptionCount || 0 },
     { label: "RTO", number: rtoCount || 0 },
-    { label: "Update Tracking", number: 0 },
+    { label: "Buyer Request", number: 0 },
   ];
 
   const render = (id: number) => {
