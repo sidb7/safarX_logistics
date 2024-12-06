@@ -131,11 +131,11 @@ const Tracking = () => {
     getJwtTokenForUser(getSellerId);
     try {
       setLoading(true);
-
       const result = await inputRegexFilter(trackingNo, path);
+      console.log("🚀 ~ handleTrackOrderClick ~ result:", result);
 
       //mapping the new data
-      if (result?.success) {
+      if (result?.data?.length !== 0) {
         const res = result?.data?.[0]?.trackingInfo?.map(
           (currentStatus: any, index: any) => {
             orderStatus(currentStatus?.currentStatus);
@@ -165,7 +165,8 @@ const Tracking = () => {
 
         const flattenedLogs = allProcessedLogs.flat();
       } else {
-        toast.error(result);
+        setTrackingState(result?.data);
+        toast.error(result?.message);
       }
     } catch (error: any) {
     } finally {
