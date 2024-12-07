@@ -75,59 +75,120 @@ const CancellationModal = ({
     }
   };
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
+  //   const token = sessionStorage.getItem(`${awb}`);
+
+  //   if (!cancelSelectedOption || cancelSelectedOption === "Select Reason") {
+  //     toast.error("Please Select a reason");
+
+  //     setReasonError({
+  //       ...reasonError,
+  //       reason: "Please select a option",
+  //     });
+  //     setCancelSuccess(true);
+  //   } else {
+  //     setReasonError({
+  //       ...reasonError,
+  //       reason: "",
+  //     });
+  //   }
+
+  //   if (cancelSelectedOption === "Other" && !otherReason) {
+  //     setReasonError({
+  //       ...reasonError,
+  //       otherReasonError: "Please enter the reason",
+  //     });
+  //   } else {
+  //     setReasonError({
+  //       ...reasonError,
+  //       otherReasonError: "",
+  //     });
+  //     try {
+  //       const payload = {
+  //         altno: "",
+  //         rescheduleTime: "",
+  //         buyerRemark: cancelSelectedOption || "",
+  //         requestType: "CANCEL",
+  //         awb,
+  //       };
+  //       setCancellationModalOpen && setCancellationModalOpen();
+  //       navigate("/tracking");
+  //       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
+  //         token,
+  //       });
+  //       if (data?.data?.success) {
+  //         toast.success(data?.data?.message);
+  //         setCancelSuccess(false);
+  //         setCancelSelectedOption("");
+  //       } else {
+  //         setCancelSuccess(false);
+  //         toast.error(data?.data?.message);
+  //         setCancelSelectedOption("");
+  //       }
+  //       console.log("data12345678", data?.data?.message);
+  //     } catch (error: any) {
+  //       console.log(error?.message);
+  //     }
+  //   }
+  // };
+
+  const handleCancelApi = async () => {
     const token = sessionStorage.getItem(`${awb}`);
+    try {
+      const payload = {
+        altno: "",
+        rescheduleTime: "",
+        buyerRemark: cancelSelectedOption || "",
+        requestType: "CANCEL",
+        awb,
+      };
+      const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
+        token,
+      });
+      if (data?.data?.success) {
+        toast.success(data?.data?.message);
+        setOtherReason("");
+        setCancelSuccess(false);
+        setCancellationModalOpen && setCancellationModalOpen();
+        setCancelSelectedOption("");
+      } else {
+        setOtherReason("");
+        setCancelSuccess(false);
+        setCancellationModalOpen && setCancellationModalOpen();
+        toast.error(data?.data?.message);
+        setCancelSelectedOption("");
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
 
+  const handleSubmit = () => {
     if (!cancelSelectedOption || cancelSelectedOption === "Select Reason") {
-      toast.error("Please Select a reason");
-
+      toast.error("Please select a reason");
+      setCancelSuccess(true);
       setReasonError({
         ...reasonError,
         reason: "Please select a option",
       });
-    } else {
-      setReasonError({
-        ...reasonError,
-        reason: "",
-      });
-    }
-
-    if (cancelSelectedOption === "Other" && !otherReason) {
-      setReasonError({
-        ...reasonError,
-        otherReasonError: "Please enter the reason",
-      });
-    } else {
-      setReasonError({
-        ...reasonError,
-        otherReasonError: "",
-      });
-      try {
-        const payload = {
-          altno: "",
-          rescheduleTime: "",
-          buyerRemark: cancelSelectedOption || "",
-          requestType: "CANCEL",
-          awb,
-        };
-        setCancellationModalOpen && setCancellationModalOpen();
-        navigate("/tracking");
-        const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
-          token,
+    } else if (cancelSelectedOption === "Other") {
+      setCancelSuccess(true);
+      console.log("otherReasonotherReason", otherReason);
+      if (!otherReason) {
+        toast.error("Plese enter the reason");
+        setReasonError({
+          reasonError,
+          otherReasonError: "Please enter the reason",
         });
-        if (data?.data?.success) {
-          toast.success(data?.data?.message);
-          setCancelSuccess(false);
-          setCancelSelectedOption("");
-        } else {
-          setCancelSuccess(false);
-          toast.error(data?.data?.message);
-          setCancelSelectedOption("");
-        }
-        console.log("data12345678", data?.data?.message);
-      } catch (error: any) {
-        console.log(error?.message);
+      } else {
+        handleCancelApi();
+        setReasonError({
+          reasonError,
+          otherReasonError: "",
+        });
       }
+    } else {
+      handleCancelApi();
     }
   };
 
@@ -156,6 +217,14 @@ const CancellationModal = ({
               alt="Close"
               onClick={() => {
                 setCancellationModalOpen && setCancellationModalOpen();
+                setCancelSuccess(false);
+                setCancelSelectedOption("");
+                setReasonError({
+                  ...reasonError,
+                  reason: "",
+                  otherReasonError: "",
+                });
+                setOtherReason("");
               }}
             />
           </div>
