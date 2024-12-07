@@ -154,7 +154,7 @@ const CancellationRequestTable = (props: Props) => {
                 // onActionModalClick(dataForAction);
               }}
             >
-              RTO/Re-Attempt
+              Remarks
             </button>
           </p>
         );
