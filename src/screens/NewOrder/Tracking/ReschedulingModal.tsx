@@ -34,14 +34,14 @@ const ReschedulingModal = ({
     try {
       const payload = {
         altno: "",
-        rescheduleTime: "",
+        rescheduleTime: startDate,
         buyerRemark: "Want to reschedule the order",
-        requestType: "CANCEL",
+        requestType: "RESCHEDULE",
         awb,
       };
 
       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });
-      console.log("data12457", data?.data?.message);
+
       if (data?.data?.success) {
         toast.success(data?.data?.message);
         navigate("/tracking");

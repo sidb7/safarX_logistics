@@ -107,7 +107,7 @@ const CancellationRequestTable = (props: Props) => {
           <div className="flex flex-col space-y-2 w-[200px]">
             <div className="flex flex-col mt-1 items-center  gap-y-2">
               <p className=" text-[14px]">{`Mobile No: ${custContactDetail}`}</p>
-              <p className=" text-[14px]">{`Alt Mobile No: ${custContactDetail}`}</p>
+              <p className=" text-[14px]">{`Alt Mobile No: ${alternateMobileNo}`}</p>
             </div>
           </div>
         );
