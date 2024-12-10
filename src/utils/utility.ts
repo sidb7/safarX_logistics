@@ -1,3 +1,4 @@
+import { createSelector } from "@reduxjs/toolkit";
 import {
   Environment,
   INITIAL_RECHARGE,
@@ -8,6 +9,7 @@ import {
 } from "./ApiUrls";
 import { POST } from "./webService";
 import CryptoJS from "crypto-js";
+import { RootState } from "../redux/store";
 
 export const crypt = (salt: any, text: any) => {
   const textToChars = (text: any) =>
@@ -256,6 +258,24 @@ export function kFormatter(num: number) {
   return Math.abs(num) > 999
     ? (Math.sign(num) * (Math.abs(num) / 1000)).toFixed(1) + "k"
     : Math.sign(num) * Math.abs(num);
+}
+
+export function commaSeparator(num: any) {
+  return parseFloat(num).toLocaleString("en-IN");
+}
+
+export function inrValueFormatter(num: any) {
+  if (num == null) return "-"; // Handle null or undefined inputs early
+
+  // Round the number to the nearest whole number before formatting
+  const roundedNum = Math.round(num);
+
+  return roundedNum.toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0, // Do not show decimal places if not necessary
+    maximumFractionDigits: 0, // Do not show decimal places at all
+  });
 }
 
 export const capitalizeFirstLetter = (str: string) => {
@@ -625,3 +645,285 @@ function decodeBase64(base64: any) {
   const decoder = new TextDecoder("utf-8");
   return decoder.decode(bytes);
 }
+
+export const selectDataByTableIds = createSelector(
+  [
+    (state: RootState) => state.dashboardOrder?.data || [],
+    (_: RootState, tableIds: number[]) => tableIds,
+  ],
+  (data, tableIds) => {
+    if (!Array.isArray(data)) {
+      console.error("Dashboard data is not an array.");
+      return [];
+    }
+
+    if (!Array.isArray(tableIds) || tableIds.length === 0) {
+      console.warn("No valid tableIds provided.");
+      return [];
+    }
+
+    const results = data.filter((item) => tableIds.includes(item?.tableId));
+
+    if (results.length === 0) {
+      console.warn(`No data found for tableIds: ${tableIds.join(", ")}`);
+    }
+
+    return results;
+  }
+);
+
+export const dashboardPayloads: any = {
+  Order: [
+    {
+      tableId: 2,
+      tableName: "Order Count",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 3,
+      tableName: "Business Type",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 4,
+      tableName: "Overall Shipment Status",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 5,
+      tableName: "Top 5 Regions",
+      customFilter: {
+        state: false,
+      },
+      globalFilter: {
+        previousStartDate: 0,
+        previousEndDate: 0,
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 6,
+      tableName: "Order By Channels",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 7,
+      tableName: "Product Categories",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+  ],
+  Revenue: [
+    {
+      tableId: 8,
+      tableName: "Revenue Data",
+      customFilter: {},
+      globalFilter: {
+        previousStartDate: 0,
+        previousEndDate: 0,
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 9,
+      tableName: "Graph Chart",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 10,
+      tableName: "Payment Method",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 11,
+      tableName: "Cod Chart",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 12,
+      tableName: "Weight Dispute Chart",
+      customFilter: {},
+      globalFilter: {
+        startDate: 0,
+        endDate: 0,
+      },
+      data: [{}],
+      isActive: true,
+    },
+  ],
+  Exception: [
+    {
+      tableId: 13,
+      tableName: "Total Ndr Chart",
+      customFilter: {},
+      globalFilter: {
+        previousStartDate: 1731196800000,
+        previousEndDate: 1731801600000,
+        startDate: 1731888000000,
+        endDate: 1732492800000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 14,
+      tableName: "Total Ndr Graph Chart",
+      customFilter: {},
+      globalFilter: {
+        startDate: 1731888000000,
+        endDate: 1733134388000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 15,
+      tableName: "PartnerWise Chart",
+      customFilter: {
+        // "firstPartner":"DELHIVERY",
+        // "secondPartner":"EKART",
+        // "thirdPartner":"BLUEDART"
+      },
+      globalFilter: {
+        startDate: 1704099499000,
+        endDate: 1732352299000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 16,
+      tableName: "Ndr Resposne Chart",
+      customFilter: {},
+      globalFilter: {
+        startDate: 1704099499000,
+        endDate: 1729332788000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 17,
+      tableName: "PartnerWise RTO Chart",
+      customFilter: {
+        // "firstPartner":"ECOM EXPRESS",
+        // "secondPartner":"XPRESSBEES"
+        // "thirdPartner":"BLUEDART"
+      },
+      globalFilter: {
+        startDate: 1704099499000,
+        endDate: 1732352299000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 18,
+      tableName: "Courier And Attempts Chart",
+      customFilter: {},
+      globalFilter: {
+        startDate: 1704099499000,
+        endDate: 1732352299000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 19,
+      tableName: "Top RTO Customer",
+      customFilter: {},
+      globalFilter: {
+        startDate: 1704099499000,
+        endDate: 1732352299000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+    {
+      tableId: 20,
+      tableName: "Top Citites With RTO",
+      customFilter: {},
+      globalFilter: {
+        startDate: 1704099499000,
+        endDate: 1732352299000,
+      },
+      data: [{}],
+      isActive: true,
+    },
+  ],
+};
+
+export const getPayloadForTab = (
+  activeTab: string,
+  start: number | null,
+  end: number | null,
+  prevStart: number | null,
+  prevEnd: number | null
+) => {
+  const selectedPayload = dashboardPayloads[activeTab] || [];
+
+  // Update globalFilter dates dynamically
+  return selectedPayload.map((item: any) => ({
+    ...item,
+    globalFilter: {
+      ...item.globalFilter,
+      startDate: start,
+      endDate: end,
+      previousStartDate: prevStart,
+      previousEndDate: prevEnd,
+    },
+  }));
+};

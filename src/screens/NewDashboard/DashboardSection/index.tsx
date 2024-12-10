@@ -1,17 +1,40 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import DashboardNewUserIcon from "../../../assets/dashboardNewUser.svg";
 import ComingSoonIcon from "../../../assets/Coming Soon.svg";
 import OneButton from "../../../components/Button/OneButton";
 import { useNavigate } from "react-router-dom";
-import { retrieveLocalStorageData } from "../../../utils/utility";
+import {
+  getPayloadForTab,
+  retrieveLocalStorageData,
+} from "../../../utils/utility";
 import DatePicker from "react-datepicker";
 import CustomDateRangeDropDown from "../../../components/DateRangeDropdown/CustomDateRangeDropdown";
+import Orders from "./Orders/index";
+import toast from "react-hot-toast";
+import { POST } from "../../../utils/webService";
+import { GET_TODAY_DATA_FOR_DASHBOARD } from "../../../utils/ApiUrls";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import {
+  setLoading,
+  // clearLoading,
+  setData,
+  setError,
+} from "../../../redux/reducers/dashboardOrderReducer";
+import {
+  // setLoading,
+  // clearLoading,
+  setRevenueData,
+  // setError,
+} from "../../../redux/reducers/dashboardRevenueReducer";
+import {
+  // setLoading,
+  // clearLoading,
+  setExceptionData,
+  // setError,
+} from "../../../redux/reducers/dashboardExceptionReducer";
+
+import Revenue from "./Revenue/index";
 
 interface KycData {
   isReturningUser: boolean;
@@ -19,129 +42,77 @@ interface KycData {
 
 interface DateRange {
   period: string;
-  start: string;
-  end: string;
-  prevStart: string;
-  prevEnd: string;
+  start: number | null; // Change to accept numbers
+  end: number | null;
+  prevStart: number | null;
+  prevEnd: number | null;
 }
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [isReturningUser, setIsReturningUser] = useState<boolean | null>(null);
-  const [filterId, setFilterId] = useState(0);
-  const [activeTab, setActiveTab] = useState("order");
-  const [loading, setLoading] = useState(false);
+  const [filterId, setFilterId] = useState<any>(0);
+  const [activeTab, setActiveTab] = useState<any>("");
+  console.log("🚀 ~ activeTab:", activeTab);
+  // const [loading, setLoading] = useState(false);
   const [filterData, setFilterData] = useState([
     { label: "Order", isActive: false },
     { label: "Revenue", isActive: false },
     { label: "Exception", isActive: false },
   ]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
   const [dateRange, setDateRange]: any = useState([null, null]);
   const [customDateSelected, setCustomDateSelected] = useState<boolean>(false);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("lastSevenDays");
-  // const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const dispatch = useDispatch();
+  const { data, error, loading } = useSelector(
+    (state: RootState) => state.dashboardOrder
+  );
+  console.log("🚀 ~ loading:", loading);
+  console.log("🚀 ~ error:", error);
 
-  // search function
-  // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const query = e.target.value;
+  const { revenueData, revenueError, revenueLoading } = useSelector(
+    (state: RootState) => state.dashboardRevenue
+  );
 
-  //   // Clear the previous timer
-  //   if (debounceTimer.current) {
-  //     clearTimeout(debounceTimer.current);
-  //   }
+  const { exceptionData, ExceptionError, exceptionLoading } = useSelector(
+    (state: RootState) => state.dashboardException
+  );
 
-  //   // Set a new timer
-  //   debounceTimer.current = setTimeout(() => {
-  //     setSearchQuery(query);
-  //     // Set loading states to true when search starts
-  //     setIsLoadingTopCard(true);
-  //     setIsLoadingOperationalMetrics(true);
-  //     setIsLoadingTopPerformingClients(true);
-  //     setIsLoadingDecliningClients(true);
-  //     setIsLoadingOrdersPer7Days(true);
-  //     // Fetch the data with the new search query
-  //     fetchData(
-  //       start || "",
-  //       end || "",
-  //       prevStart || "",
-  //       prevEnd || "",
-  //       query ? query : "?"
-  //     );
-  //   }, 800);
-  // };
+  const formatDateToEpoch = (date: Date | null): number | null => {
+    if (!date) return null;
 
-  // // format the date in "yyyy-mm-dd" format
-  const formatDate = (
-    date: Date | null,
-    includeTime: boolean = false
-  ): string => {
-    if (!date) return "";
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
-    return includeTime
-      ? `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-      : `${year}-${month}-${day}`;
+    // Convert to seconds, then back to milliseconds
+    const seconds = Math.floor(date.getTime() / 1000);
+    return seconds * 1000 + (date.getTime() % 1000);
   };
 
-  // function to change the date range according to the filter selection
   const handleDateRangeChange = (update: [Date | null, Date | null]) => {
     setDateRange(update);
     const [start, end] = update;
 
-    let formattedStart = start ? formatDate(start) : "";
-    let formattedEnd = end ? formatDate(end) : "";
-
-    if (start && end && start.toDateString() === end.toDateString()) {
-      start.setHours(0, 0, 0, 0);
-      end.setHours(23, 59, 59, 999);
-      formattedStart = formatDate(start, true);
-      formattedEnd = formatDate(end, true);
-    }
+    const formattedStart = start ? formatDateToEpoch(start) : null;
+    const formattedEnd = end ? formatDateToEpoch(end) : null;
 
     setStartDate(start);
     setEndDate(end);
-
-    // Clear the states when the date selection process begins
-    // setRedashTopFourPerformingData([]);
-    // setRedashOperationalMetricsData([]);
-    // setRedashTopPerformingClientsData([]);
-    // setRedashDecliningClientsData([]);
-    // setOrdersPer7DaysGraphDataRedash([]);
-
-    // setIsLoadingTopCard(true);
-    // setIsLoadingOperationalMetrics(true);
-    // setIsLoadingTopPerformingClients(true);
-    // setIsLoadingDecliningClients(true);
-    // setIsLoadingOrdersPer7Days(true);
 
     if (start && end) {
       const days =
         (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) + 1;
       const prevPeriod = getPreviousPeriod(start, days);
 
-      let formattedPrevStart = prevPeriod.prevStart;
-      let formattedPrevEnd = prevPeriod.prevEnd;
+      const formattedPrevStart = prevPeriod.prevStart
+        ? formatDateToEpoch(new Date(prevPeriod.prevStart))
+        : null;
+      const formattedPrevEnd = prevPeriod.prevEnd
+        ? formatDateToEpoch(new Date(prevPeriod.prevEnd))
+        : null;
 
-      const prevStartDate = new Date(prevPeriod.prevStart);
-      const prevEndDate = new Date(prevPeriod.prevEnd);
-
-      if (prevStartDate.toDateString() === prevEndDate.toDateString()) {
-        prevStartDate.setHours(0, 0, 0, 0);
-        prevEndDate.setHours(23, 59, 59, 999);
-        formattedPrevStart = formatDate(prevStartDate, true);
-        formattedPrevEnd = formatDate(prevEndDate, true);
-      }
-
-      setDateRanges((prev) => ({
+      setDateRanges((prev: any) => ({
         ...prev,
         customDate: {
           period: "Custom Date",
@@ -158,27 +129,19 @@ const Dashboard: React.FC = () => {
   };
 
   // Function to calculate the previous period given the start date and number of days
+
   const getPreviousPeriod = (startDate: Date, days: number) => {
     const periodStart = new Date(
       startDate.getTime() - days * 24 * 60 * 60 * 1000
     );
     const periodEnd = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
 
-    let formattedPrevStart = formatDate(periodStart);
-    let formattedPrevEnd = formatDate(periodEnd);
-
-    if (periodStart.toDateString() === periodEnd.toDateString()) {
-      periodStart.setHours(0, 0, 0, 0);
-      periodEnd.setHours(23, 59, 59, 999);
-      formattedPrevStart = formatDate(periodStart, true);
-      formattedPrevEnd = formatDate(periodEnd, true);
-    }
-
     return {
-      prevStart: formattedPrevStart,
-      prevEnd: formattedPrevEnd,
+      prevStart: formatDateToEpoch(periodStart),
+      prevEnd: formatDateToEpoch(periodEnd),
     };
   };
+
   // get current and previous date ranges based on the number of days
 
   const getDateRanges = (days: number): DateRange => {
@@ -192,33 +155,16 @@ const Dashboard: React.FC = () => {
     );
     const prevPeriodEnd = new Date(periodStart.getTime() - 24 * 60 * 60 * 1000);
 
-    let formattedStart = formatDate(periodStart);
-    let formattedEnd = formatDate(periodEnd);
-    let formattedPrevStart = formatDate(prevPeriodStart);
-    let formattedPrevEnd = formatDate(prevPeriodEnd);
-
-    if (periodStart.toDateString() === periodEnd.toDateString()) {
-      periodStart.setHours(0, 0, 0, 0);
-      periodEnd.setHours(23, 59, 59, 999);
-      formattedStart = formatDate(periodStart, true);
-      formattedEnd = formatDate(periodEnd, true);
-    }
-
-    if (prevPeriodStart.toDateString() === prevPeriodEnd.toDateString()) {
-      prevPeriodStart.setHours(0, 0, 0, 0);
-      prevPeriodEnd.setHours(23, 59, 59, 999);
-      formattedPrevStart = formatDate(prevPeriodStart, true);
-      formattedPrevEnd = formatDate(prevPeriodEnd, true);
-    }
-
     return {
       period: `Last ${days} Days`,
-      start: formattedStart,
-      end: formattedEnd,
-      prevStart: formattedPrevStart,
-      prevEnd: formattedPrevEnd,
+      start: formatDateToEpoch(periodStart),
+      end: formatDateToEpoch(periodEnd),
+      prevStart: formatDateToEpoch(prevPeriodStart),
+      prevEnd: formatDateToEpoch(prevPeriodEnd),
     };
   };
+
+  // initial dates for dropdown values based on the number of days
 
   const getYesterdayDateRange = (): DateRange => {
     const today = new Date();
@@ -232,33 +178,18 @@ const Dashboard: React.FC = () => {
     const dayBeforeYesterday = new Date(yesterday);
     dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 1);
 
-    const formattedYesterdayStart = formatDate(yesterday, true);
-    const formattedYesterdayEnd = formatDate(yesterdayEnd, true);
-    const formattedDayBeforeYesterdayStart = formatDate(
-      dayBeforeYesterday,
-      true
-    );
-    const formattedDayBeforeYesterdayEnd = formatDate(
-      new Date(
-        dayBeforeYesterday.getTime() +
-          23 * 60 * 60 * 1000 +
-          59 * 60 * 1000 +
-          59 * 1000
-      ),
-      true
-    );
-
     return {
       period: "Yesterday",
-      start: formattedYesterdayStart,
-      end: formattedYesterdayEnd,
-      prevStart: formattedDayBeforeYesterdayStart,
-      prevEnd: formattedDayBeforeYesterdayEnd,
+      start: formatDateToEpoch(yesterday),
+      end: formatDateToEpoch(yesterdayEnd),
+      prevStart: formatDateToEpoch(dayBeforeYesterday),
+      prevEnd: formatDateToEpoch(
+        new Date(dayBeforeYesterday.getTime() + 86400000 - 1)
+      ),
     };
   };
 
-  // initial dates for dropdown values based on the number of days
-  const initialDateRanges: Record<string, DateRange> = useMemo(
+  const initialDateRanges: Record<number, DateRange> = useMemo(
     () => ({
       yesterday: getYesterdayDateRange(),
       lastSevenDays: getDateRanges(7),
@@ -278,6 +209,7 @@ const Dashboard: React.FC = () => {
 
   const [dateRanges, setDateRanges] =
     useState<Record<string, DateRange>>(initialDateRanges);
+  console.log("🚀 ~ dateRanges:", dateRanges);
 
   // event handler for period change dropdown
   const handlePeriodChange = (
@@ -323,6 +255,105 @@ const Dashboard: React.FC = () => {
   }, [selectedPeriod, dateRanges]);
 
   const { period, start, end, prevStart, prevEnd } = getPeriodData();
+  console.log("🚀 ~ prevEnd:", prevEnd);
+  console.log("🚀 ~ prevStart:", prevStart);
+  console.log("🚀 ~ endT:", end);
+  console.log("🚀 ~ start:", start);
+  console.log("🚀 ~ period:", period);
+
+  const fetchData = async (
+    start: number | null,
+    end: number | null,
+    prevStart: number | null,
+    prevEnd: number | null
+  ) => {
+    const payload = getPayloadForTab(activeTab, start, end, prevStart, prevEnd);
+    console.log("🚀 ~ payload:", payload);
+
+    // Ensure the payload is valid before proceeding
+    if (!payload || Object.keys(payload).length === 0) {
+      console.log("🚀 ~ Payload is not ready yet. Skipping API call.");
+      return;
+    }
+    try {
+      dispatch(setLoading(true));
+
+      const everydayShippingData = await POST(
+        GET_TODAY_DATA_FOR_DASHBOARD,
+        payload
+      );
+
+      if (everydayShippingData?.data?.success) {
+        const quickResponse = everydayShippingData?.data;
+        console.log("🚀 ~ quickResponse:", quickResponse);
+        toast.success(everydayShippingData?.data?.message);
+        if (activeTab === "Order") {
+          // Dispatch data to Redux store
+          console.log("🚀 ~ dispatching data order:", quickResponse.data);
+
+          dispatch(setData(quickResponse.data));
+        } else if (activeTab === "Revenue") {
+          console.log("🚀 ~ dispatching data revenue:", quickResponse.data);
+
+          dispatch(setRevenueData(quickResponse.data));
+        } else if (activeTab === "Exception") {
+          console.log("🚀 ~ dispatching data exception:", quickResponse.data);
+
+          dispatch(setExceptionData(quickResponse.data));
+        }
+
+        // const filteredData = quickResponse.data.filter(
+        //   (item: any) => item.tableId === 1 && item.tableName === "home"
+        // );
+
+        // if (filteredData.length > 0) {
+        //   const relevantData = filteredData.map((item: any) => ({
+        //     statusCounts: item.statusCounts,
+        //     totalOrders: item.totalOrders,
+        //     tableId: item.tableId,
+        //     tableName: item.tableName,
+        //   }));
+
+        //   // setTodaysImportantData(relevantData);
+        //   // toast.success(everydayShippingData?.data?.message);
+        // } else {
+        //   toast.error("No data matching the criteria found.");
+        // }
+      } else {
+        toast.error(
+          everydayShippingData?.data?.message || "Failed to fetch data"
+        );
+        dispatch(setError("Failed to fetch data"));
+      }
+    } catch (error) {
+      console.error("Error fetching shipping details:", error);
+      toast.error("An error occurred while fetching data");
+      dispatch(setError("An error occurred while fetching data"));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  // useEffect(() => {
+  //   // Only fetch data if it's a returning user and we have an active tab
+  //   if (isReturningUser === false) {
+  //     return;
+  //   }
+
+  //   const fetchAndSetData = async () => {
+  //     const { start, end, prevStart, prevEnd } = dateRanges[selectedPeriod];
+
+  //     try {
+  //       await fetchData(start, end, prevStart, prevEnd);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       dispatch(setLoading(false));
+  //     }
+  //   };
+
+  //   fetchAndSetData();
+  // }, [selectedPeriod, dateRanges, customDateSelected, activeTab]);
 
   useEffect(() => {
     const kycData = retrieveLocalStorageData("kycValue") as KycData | null;
@@ -332,9 +363,36 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Retrieve the saved tab from localStorage on page load
+    const savedTab = localStorage.getItem("DashboardDataTab");
+    if (savedTab) {
+      setActiveTab(savedTab || "Order");
+      const filterIndex = filterData.findIndex(
+        (item) => item.label === savedTab
+      );
+      setFilterId(filterIndex);
+    } else {
+      setActiveTab("Order"); // Default active tab
+    }
+  }, [filterData]);
+
+  const handleTabClick = (index: any, label: any) => {
+    // Store the selected tab in localStorage
+    localStorage.setItem("DashboardDataTab", label);
+    setFilterId(index);
+    setActiveTab(label);
+  };
+
   const handleAddOrder = () => {
     navigate("/orders/quick-order-place");
   };
+
+  // URL change function
+  // const changeUrl = (statusName: string) => {
+  //   let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");
+  //   window.history.pushState("", "", `${replaceUrl}`);
+  // };
 
   const renderNewUserContent = () => (
     <div className="h-[calc(100vh-220px)] flex flex-col items-center justify-center gap-y-[35px]">
@@ -377,7 +435,7 @@ const Dashboard: React.FC = () => {
         <div
           className={`flex text-sm xl:text-[15px] font-Open text-[#777777] font-semibold leading-[22px] h-[44px] cursor-pointer`}
         >
-          {filterData?.map((singleData, index) => {
+          {/* {filterData?.map((singleData, index) => {
             return (
               <span
                 key={index}
@@ -393,15 +451,38 @@ const Dashboard: React.FC = () => {
                     : ""
                 }`}
                 onClick={() => {
+                  // Store in localStorage
+                  localStorage.setItem("DashboardDataTab", singleData.label);
                   setFilterId(index);
                   if (index === 0) {
-                    setActiveTab("order");
+                    setActiveTab("Order");
                   } else if (index === 1) {
-                    setActiveTab("revenue");
+                    setActiveTab("Revenue");
                   } else if (index === 2) {
-                    setActiveTab("exception");
+                    setActiveTab("Exception");
                   }
                 }}
+              >
+                {singleData.label}
+              </span>
+            );
+          })} */}
+          {filterData?.map((singleData: any, index: any) => {
+            return (
+              <span
+                key={index}
+                className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#D2D2D2] text-center ${
+                  filterId === index
+                    ? `${
+                        index === 0
+                          ? "rounded-l-md"
+                          : index === filterData.length - 1
+                          ? "rounded-r-md"
+                          : ""
+                      } bg-[#F6F6F6] font-Open font-semibold  text-sm xl:text-[15px] leading-[22px] text-[#1C1C1C]`
+                    : ""
+                }`}
+                onClick={() => handleTabClick(index, singleData.label)}
               >
                 {singleData.label}
               </span>
@@ -457,6 +538,13 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+      {activeTab === "Order" ? (
+        <Orders />
+      ) : activeTab === "Revenue" ? (
+        <Revenue />
+      ) : (
+        renderComingSoonContent()
+      )}
     </>
   );
 
