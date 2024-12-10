@@ -9,9 +9,11 @@ type Props = {
   cancelRequestData?: any;
   openRightSideModal?: any;
   setOpenRightSideModal?: any;
+  getAllTracingBuyerRequest?: any;
 };
 
 const CancellationRequestTable = (props: Props) => {
+  const { getAllTracingBuyerRequest } = props;
   const [awb, setAwb] = useState<any>();
   const [requestType, setRequestType] = useState<any>();
   const [openRightSideModal, setOpenRightSideModal] = useState<any>(false);
@@ -24,10 +26,10 @@ const CancellationRequestTable = (props: Props) => {
       header: () => <div className="text-left">Tracking No</div>,
       cell: (info) => {
         const awb = info?.row?.original?.awb;
-        setAwb(awb);
+
         return (
           <div className="font-sans text-sm leading-5 text-black">
-            <span>{awb}</span>
+            <span>{awb || "NA"}</span>
           </div>
         );
       },
@@ -36,11 +38,16 @@ const CancellationRequestTable = (props: Props) => {
       header: () => <div className="text-left">EDD</div>,
       cell: (info) => {
         const edd = info?.row?.original?.edd;
+        const rescheduleEdd = info?.row?.original?.rescheduleEdd;
+        const eddSplit = edd?.split("T")?.[0];
+        const rescheduleEddSplit = rescheduleEdd?.split("T")?.[0];
+
+        // const rescheduleEdd = info?.row?.original?.edd;
         return (
           <div className="font-sans  text-sm leading-5 text-black font-semibold">
-            <p>{edd}</p>
+            <p>{`EDD : ${eddSplit || "NA"}`}</p>
             <p className="text-[#7CCA62] text-[14px] font-Open mt-1">
-              {"24-Oct-2024"}
+              {`Rescheduled Edd : ${rescheduleEddSplit || "NA"} `}
             </p>
           </div>
         );
@@ -53,7 +60,7 @@ const CancellationRequestTable = (props: Props) => {
         return (
           <div className="flex justify-center gap-x-2 items-center border border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E]">
             <img src={orangeTruck} alt="Truck" />
-            {currentStatus}
+            {currentStatus || "NA"}
           </div>
         );
       },
@@ -61,20 +68,32 @@ const CancellationRequestTable = (props: Props) => {
     columnsHelper.accessor("buyerRequest", {
       header: () => <div className="text-left">Buyer Request D&T</div>,
       cell: (info) => {
-        // const custRequest = info?.row?.original?.custRequest;
-        const buyerRequest =
-          info?.row?.original?.remarks?.buyer?.[0]?.buyerRequestDate;
-        return <div className="flex flex-col items-center">{buyerRequest}</div>;
+        const buyerRequest = info?.row?.original?.remarks?.buyer;
+
+        const buyerRequestData =
+          buyerRequest[buyerRequest?.length - 1]?.buyerRequestDate;
+
+        const buyerRequestTime = buyerRequestData?.split("T");
+
+        return (
+          <div className="flex flex-col items-center">
+            {buyerRequestTime?.[0] || "NA"}
+          </div>
+        );
       },
     }),
     columnsHelper.accessor("sellerRequest", {
       header: () => <div className="text-left">Seller Request D&T</div>,
       cell: (info) => {
-        // const custRequest = info?.row?.original?.custRequest;
-        const sellerRequest = info?.row?.original?.seller;
+        const sellerRequest = info?.row?.original?.remarks?.seller;
+
+        const sellerRequestData =
+          sellerRequest[sellerRequest?.length - 1]?.sellerActionDate;
+
+        const sellerRequestTime = sellerRequestData?.split("T");
         return (
           <div className="flex flex-col items-center">
-            {sellerRequest || "-"}
+            {sellerRequestTime?.[0] || "NA"}
           </div>
         );
       },
@@ -83,16 +102,19 @@ const CancellationRequestTable = (props: Props) => {
     columnsHelper.accessor("adminRequest", {
       header: () => <div className="text-left">Admin Action D&T </div>,
       cell: (info) => {
-        // const sellerAction = info?.row?.original?.sellerAction;
-        const adminAction = info?.row?.original?.admin;
-        return <div className="space-y-1">{adminAction || "-"}</div>;
+        const adminRequest = info?.row?.original?.remarks?.admin;
+        const adminRequestData =
+          adminRequest[adminRequest?.length - 1]?.adminActionDate;
+
+        const adminRequestTime = adminRequestData?.split("T");
+        return <div className="space-y-1">{adminRequestTime || "NA"}</div>;
       },
     }),
     columnsHelper.accessor("requestType", {
       header: () => <div className="text-left">Request Type</div>,
       cell: (info) => {
         const requestType = info?.row?.original?.requestType;
-        setRequestType(requestType);
+
         return <div className="flex flex-col">{requestType}</div>;
       },
     }),
@@ -106,8 +128,12 @@ const CancellationRequestTable = (props: Props) => {
         return (
           <div className="flex flex-col space-y-2 w-[200px]">
             <div className="flex flex-col mt-1 items-center  gap-y-2">
-              <p className=" text-[14px]">{`Mobile No: ${custContactDetail}`}</p>
-              <p className=" text-[14px]">{`Alt Mobile No: ${alternateMobileNo}`}</p>
+              <p className=" text-[14px]">{`Mobile No: ${
+                custContactDetail || "NA"
+              }`}</p>
+              <p className=" text-[14px]">{`Alt Mobile No: ${
+                alternateMobileNo || "NA"
+              }`}</p>
             </div>
           </div>
         );
@@ -144,14 +170,18 @@ const CancellationRequestTable = (props: Props) => {
     columnsHelper.accessor("actions", {
       header: () => <div className="text-left">Actions</div>,
       cell: (info) => {
+        const awb = info?.row?.original?.awb;
+        const requestType = info?.row?.original?.requestType;
+
         return (
           <p className="text-blue-600">
             {" "}
             <button
               className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
               onClick={() => {
+                setAwb(awb);
+                setRequestType(requestType);
                 setOpenRightSideModal(true);
-                // onActionModalClick(dataForAction);
               }}
             >
               Remarks
@@ -177,6 +207,7 @@ const CancellationRequestTable = (props: Props) => {
             onSubmit={"Cancellation"}
             awb={awb}
             requestType={requestType}
+            getAllTracingBuyerRequest={getAllTracingBuyerRequest}
           />
         </RightSideModal>
       )}

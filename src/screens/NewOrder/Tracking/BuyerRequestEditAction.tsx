@@ -12,10 +12,17 @@ interface IPROPS {
   requestType?: any;
   setOpenRightSideModal?: any;
   openRightSideModal?: any;
+  getAllTracingBuyerRequest?: any;
 }
 
 const BuyerAction = (props: IPROPS) => {
-  const { setOpenRightSideModal, openRightSideModal, awb, requestType } = props;
+  const {
+    setOpenRightSideModal,
+    openRightSideModal,
+    awb,
+    requestType,
+    getAllTracingBuyerRequest,
+  } = props;
   const [remark, setRemark] = useState("");
   const [error, setError] = useState<any>("");
 
@@ -34,6 +41,7 @@ const BuyerAction = (props: IPROPS) => {
         if (data?.data?.success) {
           toast.success(data?.data?.message);
           setOpenRightSideModal(false);
+          getAllTracingBuyerRequest();
         } else {
           toast.error(data?.data?.message);
           setOpenRightSideModal(false);

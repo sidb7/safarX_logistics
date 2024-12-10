@@ -32,6 +32,8 @@ const ReschedulingModal = ({
   const handleNavigationandModal = async () => {
     const token = sessionStorage.getItem(`${awb}`);
     try {
+      const dateOnly = startDate.toISOString().split("T")[0];
+
       const payload = {
         altno: "",
         rescheduleTime: startDate,
@@ -45,6 +47,7 @@ const ReschedulingModal = ({
       if (data?.data?.success) {
         toast.success(data?.data?.message);
         navigate("/tracking");
+        setStartDate(null);
         // setReschedulingModal && setReschedulingModal();
         setReschedulingModal && setReschedulingModal(false);
       } else {

@@ -450,8 +450,8 @@ const Tracking = () => {
                                             <div className="flex justify-between pt-2 md:pt-0">
                                               <div className="flex flex-col md:flex-row gap-y-2 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
                                                 {each?.updatedAt === "" ||
-                                                each?.updatedAt ===
-                                                  undefined ? (
+                                                each?.updatedAt === undefined ||
+                                                each?.updatedAt === 0 ? (
                                                   <>
                                                     <div className="flex gap-x-2 md:pt-2">
                                                       <p className="text-xs font-Open font-bold">

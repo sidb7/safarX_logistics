@@ -34,6 +34,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   const [openRightSideModal, setOpenRightSideModal] = useState<any>(false);
   const [searchText, setSearchText] = useState<any>("");
   const [loading, setIsLoading] = useState<any>(false);
+  const [clearSearch, setClearSearch] = useState<any>(false);
 
   const data = [{}];
 
@@ -82,8 +83,9 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
     setCurrentPage(1);
   };
 
-  useEffect(() => {
-    (async () => {
+  const getAllTracingBuyerRequest = async () => {
+    try {
+      setIsLoading(true);
       const payload = {
         skip: (currentPage - 1) * itemsPerPage,
         limit: itemsPerPage,
@@ -91,24 +93,29 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
         pageNo: currentPage,
         searchText: searchText,
       };
+      const data = await POST(GETALLTRACKINGBUYERREQUEST, payload);
 
-      try {
-        setIsLoading(true);
-        const data = await POST(GETALLTRACKINGBUYERREQUEST, payload);
+      if (data?.data?.success) {
+        setIsLoading(false);
+        setCancelRequestData(data?.data?.data);
+        setTotalItemsCount(data?.data?.totalCount);
+      } else {
+        setIsLoading(false);
+        setCancelRequestData(data?.data?.data);
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
 
-        if (data?.data?.success) {
-          setIsLoading(false);
-          setCancelRequestData(data?.data?.data);
-          setTotalItemsCount(data?.data?.totalCount);
-        } else {
-          setIsLoading(false);
-          setCancelRequestData(data?.data?.data);
-        }
-      } catch (error: any) {
-        console.log(error.message);
+  useEffect(() => {
+    (async () => {
+      getAllTracingBuyerRequest();
+      if (clearSearch) {
+        setClearSearch(false); // Reset the state after the API call
       }
     })();
-  }, [searchText, currentPage, itemsPerPage]);
+  }, [searchText, currentPage, itemsPerPage, clearSearch]);
 
   return (
     <>
@@ -133,6 +140,11 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
                 setSearchText(e.target.value);
               }}
               value={searchText}
+              getFullContent={() => {
+                setClearSearch(true); // Trigger full data fetch
+
+                setSearchText(""); // Clear search text
+              }}
               customPlaceholder="Search"
             />
           </div>
@@ -149,6 +161,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
                 cancelRequestData={cancelRequestData}
                 openRightSideModal={openRightSideModal}
                 setOpenRightSideModal={setOpenRightSideModal}
+                getAllTracingBuyerRequest={getAllTracingBuyerRequest}
               />
             )}
           </>
