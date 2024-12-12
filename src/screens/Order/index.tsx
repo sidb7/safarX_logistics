@@ -19,7 +19,7 @@ import {
 import "./common/FilterScreen/OrderInput.css";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
-import { POST } from "../../utils/webService";
+import { GET, POST } from "../../utils/webService";
 import {
   CANCEL_MULTIPLE_WAYBILLS,
   CANCEL_TEMP_SELLER_ORDER,
@@ -36,6 +36,7 @@ import {
   PAYMENT_ERRORS,
   DUPLICATE_ORDER,
   COMPANY_NAME,
+  GET_COUNT_AMAZON_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -416,6 +417,10 @@ const Index = () => {
   });
   const [isBulkCheckedBooked, setIsBulkCheckedBooked]: any = useState(false);
 
+  const [fullfillment, setFullfillment] = useState();
+  const [unFullfillment, setUnFullfillment] = useState();
+
+
   //  // Add ref for the abort controller
   //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
 
@@ -761,14 +766,16 @@ const Index = () => {
             <></>
           )}
 
-          <div className="flex gap-3">
+          {
+            <div className="flex gap-3">
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Fullfilled (10)
+              Amazon Fullfilment ({fullfillment})
             </span>
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Unfullfilled (10)
+              Amazon Unfullfilment ({unFullfillment})
             </span>
           </div>
+          }
 
           {isModalOpen && (
             <CenterModal
@@ -789,17 +796,19 @@ const Index = () => {
 
   const handleSyncOrder = async () => {
     try {
-      // if (syncChannelText.includes("Sync Channel")) {
-      //   setIsSyncModalOpen(true);
-      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      //   syncRef.current.style.backgroundColor = "#F8F8F8";
-      //   syncRef.current.style.pointerEvents = "none";
-      //   syncRef.current.childNodes[0].classList.add("infinite-rotate");
-      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      // }
 
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
+        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+        syncRef.current.style.backgroundColor = "#F8F8F8";
+        syncRef.current.style.pointerEvents = "none";
+        syncRef.current.childNodes[0].classList.add("infinite-rotate");
+        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+      }
+
+        setIsSyncModalOpen(true);
+
+      if (syncChannelText.includes("Sync Channel")) {
 
         dispatch(timerObject({ startTimer: true }));
         localStorage.setItem("isSyncCompleted", "false");
@@ -1959,6 +1968,21 @@ const Index = () => {
     }
   }, [endDate, activeTab, searchedText]);
 
+  useEffect(() => {
+  (async () => {
+    try {
+      const { data } = await POST(GET_COUNT_AMAZON_ORDER);
+      if(data?.code === 200){
+        let temp = data?.data?.[0];
+        setFullfillment(temp?.fullFillMent?.[0]?.fullFillMent || 0);
+        setUnFullfillment(temp?.unfullFillMent?.[0]?.unfullFillCount || 0);
+      }
+    } catch (error) {
+      toast.error("Something went wrong")
+    }
+  })();
+}, []);
+
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
     let limit: any = 0;
@@ -2608,8 +2632,9 @@ const Index = () => {
       {isActive ? (
         <div>
           <div className="flex justify-between">
-            <Breadcrum label="Orders" />
-            <div className="pl-5 pt-5 pr-5 lg:p-5">
+          
+              <Breadcrum label="Orders" />
+            <div className="pl-5 pt-5 pr-5 lg:p-5 mt-[33px]">
               {isSyncModalOpen &&
                 channelReduxData.map((elem: any) => (
                   <div className="items-center flex flex-col">
@@ -2657,6 +2682,7 @@ const Index = () => {
                   </div>
                 ))}
             </div>
+            
             <div
               className={`inline-flex space-x-2 items-center justify-start px-5 pl-5 pt-5 pr-5 lg:p-5`}
             >
@@ -3111,7 +3137,7 @@ const Index = () => {
         </RightSideModal>
       )}
 
-      {/* <CustomRightModal
+      <CustomRightModal
         isOpen={isSyncModalOpen}
         onClose={() => setIsSyncModalOpen(false)}
         className="!justify-start"
@@ -3205,7 +3231,7 @@ const Index = () => {
             ))
           )}
         </div>
-      </CustomRightModal> */}
+      </CustomRightModal>
 
       {/* new Tracking Screen with right modal  */}
       <CustomRightModal

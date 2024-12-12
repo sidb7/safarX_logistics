@@ -108,7 +108,7 @@ export const Breadcrum = ({
 
       {kycCheck && !isKycRoute && isCompanyNameInvalid && (
         <div
-          className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
+          className="flex justify-between bg-[#F5BE6D] p-2 absolute w-[-webkit-fill-available] cursor-pointer rounded-sm"
           // onClick={() => navigate("/onboarding/kyc-type")}
           // onClick={() => {
           //   navigate("/dashboard/overview", {
@@ -133,9 +133,9 @@ export const Breadcrum = ({
             Click Here
           </p>
         </div>
-      )}
+       )}
 
-      <div className="pl-5 pt-5 pr-5 lg:p-5">
+      <div className="pl-5 pt-5 pr-5 lg:p-5 mt-[33px]">
         <div className={`hidden lg:flex gap-x-2 pl-1 font-Lato `}>
           <div
             className={`flex items-center gap-x-2 cursor-pointer`}
