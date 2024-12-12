@@ -11,10 +11,6 @@ import { Environment } from "../utils/ApiUrls";
 import { ChannelSlice } from "./reducers/syncChannel";
 import { paginationSlice } from "./reducers/paginationReducer";
 import { buttonFlagSlice } from "./reducers/updateButtonReducer";
-import { dashboardOrderSlice } from "./reducers/dashboardOrderReducer";
-import { dashboardRevenueSlice } from "./reducers/dashboardRevenueReducer";
-import { dashboardExceptionSlice } from "./reducers/dashboardExceptionReducer";
-
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
@@ -28,12 +24,8 @@ export const store = configureStore({
     channel: ChannelSlice.reducer,
     paginationSlice: paginationSlice.reducer,
     buttonFlagSlice: buttonFlagSlice.reducer,
-    dashboardOrder: dashboardOrderSlice.reducer,
-    dashboardRevenue: dashboardRevenueSlice.reducer,
-    dashboardException: dashboardExceptionSlice.reducer,
   },
   devTools: Environment !== "production" ? true : false,
-  // devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

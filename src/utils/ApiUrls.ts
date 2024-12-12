@@ -332,8 +332,6 @@ const CREATE_AMAZON_STORE = `${SELLER_BASE_URL}/channel/amazon/createAmazonStore
 const DELETE_INTEGRATED_STORE = `${SELLER_BASE_URL}/channel/deleteStore `;
 const CREATE_UNICOMMERCE_STORE = `${SELLER_BASE_URL}/channel/unicommerce/createUCStore`;
 const UPDATE_EXPIRED_TOKEN = `${SELLER_BASE_URL}/channel/updateExpireToken`;
-const GET_COUNT_AMAZON_ORDER = `${SELLER_BASE_URL}/channel/unfullfill/count`;
-
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -705,5 +703,4 @@ export {
   FETCH_BULK_LABELS_REPORT_DOWNLOAD,
   FETCH_LABELS_REPORT_LIST,
   DOWNLOAD_S3_LABEL,
-  GET_COUNT_AMAZON_ORDER
 };
