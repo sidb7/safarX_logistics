@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InfoCircle from "../../../../assets/info-circle.svg";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
@@ -151,7 +151,10 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
         }
       );
       if (createAddressBook?.success) {
-        navigate(-1);
+        // navigate(-1);
+        navigate(`/catalogues/address-book`, {
+          state: { addressType: addressType },
+        });
         toast.success(createAddressBook?.message);
 
         setAddAddress({});
@@ -167,7 +170,10 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
         }
       );
       if (createDeliveryAddressBook?.success) {
-        navigate(-1);
+        // navigate(-1);
+        navigate(`/catalogues/address-book`, {
+          state: { addressType: addressType },
+        });
         toast.success(createDeliveryAddressBook?.message);
 
         setAddAddress({});
@@ -190,6 +196,16 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
       setIsDisabled(true);
     } else setIsDisabled(false);
   };
+
+  useEffect(() => {
+    if (activeTab === "pickup") {
+      setAddressType("Pickup Address");
+    } else {
+      setAddressType("Delivery Address");
+    }
+  }, [activeTab]);
+
+  console.log("addressType", addressType);
 
   return (
     <div className="h-full">
