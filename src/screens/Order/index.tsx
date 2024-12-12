@@ -761,6 +761,15 @@ const Index = () => {
             <></>
           )}
 
+          <div className="flex gap-3">
+            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+              Fullfilled (10)
+            </span>
+            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+              Unfullfilled (10)
+            </span>
+          </div>
+
           {isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
@@ -2535,18 +2544,18 @@ const Index = () => {
   useEffect(() => {
     if (channelReduxData?.length > 0) {
       setIsSyncModalLoading(false);
-      if (
-        channelReduxData?.[0]?.TotalOrderCount -
-          channelReduxData?.[0]?.syncedOrder <=
-        5
-      ) {
-        setTimeout(() => {
-          window.location.href = "/orders/view-orders?activeTab=draft";
-          window.onload = () => {
-            window.location.reload();
-          };
-        }, 4000);
-      }
+      // if (
+      //   channelReduxData?.[0]?.TotalOrderCount -
+      //     channelReduxData?.[0]?.syncedOrder <=
+      //   5
+      // ) {
+      //   setTimeout(() => {
+      //     window.location.href = "/orders/view-orders?activeTab=draft";
+      //     window.onload = () => {
+      //       window.location.reload();
+      //     };
+      //   }, 4000);
+      // }
     }
   }, [channelReduxData]);
 
@@ -2598,7 +2607,62 @@ const Index = () => {
     <>
       {isActive ? (
         <div>
-          <Breadcrum label="Orders" component={Buttons()} />
+          <div className="flex justify-between">
+            <Breadcrum label="Orders" />
+            <div className="pl-5 pt-5 pr-5 lg:p-5">
+              {isSyncModalOpen &&
+                channelReduxData.map((elem: any) => (
+                  <div className="items-center flex flex-col">
+                    <div className="mt-[2rem] text-[18px] w-full flex flex-wrap items-center ">
+                      <div className="flex gap-x-1">
+                        {/* <div>
+                          <b>{`${capitalizeFirstLetter(elem?.channel)}`} </b>
+                        </div> */}
+                        {/* <div>-</div> */}
+                        <div
+                        // className="w-[55%]"
+                        // style={{
+                        //   overflow: "hidden",
+                        //   display: "-webkit-box",
+                        //   WebkitBoxOrient: "vertical",
+                        //   WebkitLineClamp: "1",
+                        //   whiteSpace: "nowrap",
+                        //   textOverflow: "ellipsis",
+                        // }}
+                        >
+                          {/* {elem.storeName} */}
+                          Amazon is in progress
+                        </div>
+                      </div>
+                      {/* <div className="dot"></div>
+                      <div className="dot"></div>
+                      <div className="dot"></div> */}
+                    </div>
+                    <div className={`relative progress-bar`}>
+                      <div
+                        className={` h-full bg-[#06981d] transition-all duration-700 ease-in-out !rounded-2xl`}
+                        style={{
+                          width: `${
+                            (elem?.syncedOrder / elem?.TotalOrderCount) * 100
+                          }%`,
+                        }}
+                      ></div>
+                      <div className="absolute left-0">
+                        {elem?.syncedOrder || 0}
+                      </div>
+                      <div className="absolute right-0">
+                        {elem?.TotalOrderCount || 0}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            <div
+              className={`inline-flex space-x-2 items-center justify-start px-5 pl-5 pt-5 pr-5 lg:p-5`}
+            >
+              {Buttons()}
+            </div>
+          </div>
           <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5 ">
             {ordersArr?.map((order: any, i: number) => (
               <div
@@ -2780,13 +2844,13 @@ const Index = () => {
                 //   className="pb-6"
                 // />
                 <OnePagination
-                totalItems={totalCount}
-                itemsPerPageOptions={[10, 50, 100]}
-                onPageChange={onPageIndexChange}
-                onItemsPerPageChange={onPerPageItemChange}
-                initialItemsPerPage={itemsPerPage}
-                className="pb-6"
-              />
+                  totalItems={totalCount}
+                  itemsPerPageOptions={[10, 50, 100]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  initialItemsPerPage={itemsPerPage}
+                  className="pb-6"
+                />
               )}
             </div>
           </div>
@@ -3047,7 +3111,7 @@ const Index = () => {
         </RightSideModal>
       )}
 
-      <CustomRightModal
+      {/* <CustomRightModal
         isOpen={isSyncModalOpen}
         onClose={() => setIsSyncModalOpen(false)}
         className="!justify-start"
@@ -3065,9 +3129,6 @@ const Index = () => {
                   for our web application.. <br />
                   To Enable Sync Please Contact Administration.
                 </div>
-                {/* <div className="mt-[2rem] border-4 px-[0.5rem] py-[0.25rem] w-[max-content] rounded-md">
-                    Go To Catalogue
-                  </div> */}
               </div>
 
               {storeDetails?.map((store: any) => (
@@ -3091,15 +3152,6 @@ const Index = () => {
                     <div>
                       <div>
                         Store Name: {capitalizeFirstLetter(store.storeName)}
-                      </div>
-                      <div className="flex items-center gap-x-2">
-                        {/* <span>Sync</span> */}
-                        {/* <CustomSwitchToggle
-                          toggleValue={(boolean: boolean) =>
-                            console.log(boolean)
-                          }
-                          initValue={false}
-                        /> */}
                       </div>
                     </div>
                   </div>
@@ -3153,7 +3205,7 @@ const Index = () => {
             ))
           )}
         </div>
-      </CustomRightModal>
+      </CustomRightModal> */}
 
       {/* new Tracking Screen with right modal  */}
       <CustomRightModal
