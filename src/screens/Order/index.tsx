@@ -19,7 +19,7 @@ import {
 import "./common/FilterScreen/OrderInput.css";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
-import { GET, POST } from "../../utils/webService";
+import { POST } from "../../utils/webService";
 import {
   CANCEL_MULTIPLE_WAYBILLS,
   CANCEL_TEMP_SELLER_ORDER,
@@ -36,7 +36,6 @@ import {
   PAYMENT_ERRORS,
   DUPLICATE_ORDER,
   COMPANY_NAME,
-  GET_COUNT_AMAZON_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -417,10 +416,6 @@ const Index = () => {
   });
   const [isBulkCheckedBooked, setIsBulkCheckedBooked]: any = useState(false);
 
-  const [fullfillment, setFullfillment] = useState();
-  const [unFullfillment, setUnFullfillment] = useState();
-
-
   //  // Add ref for the abort controller
   //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
 
@@ -766,17 +761,6 @@ const Index = () => {
             <></>
           )}
 
-          {
-            <div className="flex gap-3">
-            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Amazon Fullfilment ({fullfillment})
-            </span>
-            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Amazon Unfullfilment ({unFullfillment})
-            </span>
-          </div>
-          }
-
           {isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
@@ -796,19 +780,17 @@ const Index = () => {
 
   const handleSyncOrder = async () => {
     try {
+      // if (syncChannelText.includes("Sync Channel")) {
+      //   setIsSyncModalOpen(true);
+      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+      //   syncRef.current.style.backgroundColor = "#F8F8F8";
+      //   syncRef.current.style.pointerEvents = "none";
+      //   syncRef.current.childNodes[0].classList.add("infinite-rotate");
+      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+      // }
 
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
-        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-        syncRef.current.style.backgroundColor = "#F8F8F8";
-        syncRef.current.style.pointerEvents = "none";
-        syncRef.current.childNodes[0].classList.add("infinite-rotate");
-        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      }
-
-        setIsSyncModalOpen(true);
-
-      if (syncChannelText.includes("Sync Channel")) {
 
         dispatch(timerObject({ startTimer: true }));
         localStorage.setItem("isSyncCompleted", "false");
@@ -1968,21 +1950,6 @@ const Index = () => {
     }
   }, [endDate, activeTab, searchedText]);
 
-  useEffect(() => {
-  (async () => {
-    try {
-      const { data } = await POST(GET_COUNT_AMAZON_ORDER);
-      if(data?.code === 200){
-        let temp = data?.data?.[0];
-        setFullfillment(temp?.fullFillMent?.[0]?.fullFillMent || 0);
-        setUnFullfillment(temp?.unfullFillMent?.[0]?.unfullFillCount || 0);
-      }
-    } catch (error) {
-      toast.error("Something went wrong")
-    }
-  })();
-}, []);
-
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
     let limit: any = 0;
@@ -2568,18 +2535,18 @@ const Index = () => {
   useEffect(() => {
     if (channelReduxData?.length > 0) {
       setIsSyncModalLoading(false);
-      // if (
-      //   channelReduxData?.[0]?.TotalOrderCount -
-      //     channelReduxData?.[0]?.syncedOrder <=
-      //   5
-      // ) {
-      //   setTimeout(() => {
-      //     window.location.href = "/orders/view-orders?activeTab=draft";
-      //     window.onload = () => {
-      //       window.location.reload();
-      //     };
-      //   }, 4000);
-      // }
+      if (
+        channelReduxData?.[0]?.TotalOrderCount -
+          channelReduxData?.[0]?.syncedOrder <=
+        5
+      ) {
+        setTimeout(() => {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }, 4000);
+      }
     }
   }, [channelReduxData]);
 
@@ -2631,64 +2598,7 @@ const Index = () => {
     <>
       {isActive ? (
         <div>
-          <div className="flex justify-between">
-          
-              <Breadcrum label="Orders" />
-            <div className="pl-5 pt-5 pr-5 lg:p-5 mt-[33px]">
-              {isSyncModalOpen &&
-                channelReduxData.map((elem: any) => (
-                  <div className="items-center flex flex-col">
-                    <div className="mt-[2rem] text-[18px] w-full flex flex-wrap items-center ">
-                      <div className="flex gap-x-1">
-                        {/* <div>
-                          <b>{`${capitalizeFirstLetter(elem?.channel)}`} </b>
-                        </div> */}
-                        {/* <div>-</div> */}
-                        <div
-                        // className="w-[55%]"
-                        // style={{
-                        //   overflow: "hidden",
-                        //   display: "-webkit-box",
-                        //   WebkitBoxOrient: "vertical",
-                        //   WebkitLineClamp: "1",
-                        //   whiteSpace: "nowrap",
-                        //   textOverflow: "ellipsis",
-                        // }}
-                        >
-                          {/* {elem.storeName} */}
-                          Amazon is in progress
-                        </div>
-                      </div>
-                      {/* <div className="dot"></div>
-                      <div className="dot"></div>
-                      <div className="dot"></div> */}
-                    </div>
-                    <div className={`relative progress-bar`}>
-                      <div
-                        className={` h-full bg-[#06981d] transition-all duration-700 ease-in-out !rounded-2xl`}
-                        style={{
-                          width: `${
-                            (elem?.syncedOrder / elem?.TotalOrderCount) * 100
-                          }%`,
-                        }}
-                      ></div>
-                      <div className="absolute left-0">
-                        {elem?.syncedOrder || 0}
-                      </div>
-                      <div className="absolute right-0">
-                        {elem?.TotalOrderCount || 0}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-            
-            <div
-              className={`inline-flex space-x-2 items-center justify-start px-5 pl-5 pt-5 pr-5 lg:p-5`}
-            >
-              {Buttons()}
-            </div>
-          </div>
+          <Breadcrum label="Orders" component={Buttons()} />
           <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5 ">
             {ordersArr?.map((order: any, i: number) => (
               <div
@@ -2870,13 +2780,13 @@ const Index = () => {
                 //   className="pb-6"
                 // />
                 <OnePagination
-                  totalItems={totalCount}
-                  itemsPerPageOptions={[10, 50, 100]}
-                  onPageChange={onPageIndexChange}
-                  onItemsPerPageChange={onPerPageItemChange}
-                  initialItemsPerPage={itemsPerPage}
-                  className="pb-6"
-                />
+                totalItems={totalCount}
+                itemsPerPageOptions={[10, 50, 100]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+                initialItemsPerPage={itemsPerPage}
+                className="pb-6"
+              />
               )}
             </div>
           </div>
@@ -3155,6 +3065,9 @@ const Index = () => {
                   for our web application.. <br />
                   To Enable Sync Please Contact Administration.
                 </div>
+                {/* <div className="mt-[2rem] border-4 px-[0.5rem] py-[0.25rem] w-[max-content] rounded-md">
+                    Go To Catalogue
+                  </div> */}
               </div>
 
               {storeDetails?.map((store: any) => (
@@ -3178,6 +3091,15 @@ const Index = () => {
                     <div>
                       <div>
                         Store Name: {capitalizeFirstLetter(store.storeName)}
+                      </div>
+                      <div className="flex items-center gap-x-2">
+                        {/* <span>Sync</span> */}
+                        {/* <CustomSwitchToggle
+                          toggleValue={(boolean: boolean) =>
+                            console.log(boolean)
+                          }
+                          initValue={false}
+                        /> */}
                       </div>
                     </div>
                   </div>

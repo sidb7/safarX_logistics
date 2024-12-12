@@ -85,57 +85,58 @@ export const Breadcrum = ({
 
   return (
     <>
-      {!isKycRoute && !kycCheck && (
-        <div
-          className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
-          // onClick={() => navigate("/onboarding/kyc-type")}
-          onClick={() => {
-            navigate("/dashboard/overview", {
-              state: { openSection: "kyc" }, // Pass the section you want to open
-            });
-          }}
-        >
-          <div className="flex gap-x-2 w-[150px]">
-            <img src={infoIcon} alt="" />
-            <p className="font-Lato text-base font-normal">KYC Pending</p>
-          </div>
-
-          <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
-            Click Here
-          </p>
-        </div>
-      )}
-
-      {kycCheck && !isKycRoute && isCompanyNameInvalid && (
-        <div
-          className="flex justify-between bg-[#F5BE6D] p-2 absolute w-[-webkit-fill-available] cursor-pointer rounded-sm"
-          // onClick={() => navigate("/onboarding/kyc-type")}
-          // onClick={() => {
-          //   navigate("/dashboard/overview", {
-          //     state: { openSection: "brandDetails" }, // Pass the section you want to open
-          //   });
-          // }}
-          onClick={() => setOpenCentreModal(true)}
-        >
-          <div className="flex gap-x-2 items-center">
-            <div>
-              <img src={infoIcon} alt="" width={"16px"} height={"16px"} />
+      <div>
+        {!isKycRoute && !kycCheck && (
+          <div
+            className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
+            // onClick={() => navigate("/onboarding/kyc-type")}
+            onClick={() => {
+              navigate("/dashboard/overview", {
+                state: { openSection: "kyc" }, // Pass the section you want to open
+              });
+            }}
+          >
+            <div className="flex gap-x-2 w-[150px]">
+              <img src={infoIcon} alt="" />
+              <p className="font-Lato text-base font-normal">KYC Pending</p>
             </div>
-            <div>
-              <p className="font-Lato text-base font-normal leading-5 tracking-wide">
-                We need your Company Name to enhance your experience with
-                {""} {capitalizeFirstLetter(companyName)}.
-              </p>
-            </div>
+
+            <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
+              Click Here
+            </p>
           </div>
+        )}
 
-          <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
-            Click Here
-          </p>
-        </div>
-       )}
+        {kycCheck && !isKycRoute && isCompanyNameInvalid && (
+          <div
+            className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
+            // onClick={() => navigate("/onboarding/kyc-type")}
+            // onClick={() => {
+            //   navigate("/dashboard/overview", {
+            //     state: { openSection: "brandDetails" }, // Pass the section you want to open
+            //   });
+            // }}
+            onClick={() => setOpenCentreModal(true)}
+          >
+            <div className="flex gap-x-2 items-center">
+              <div>
+                <img src={infoIcon} alt="" width={"16px"} height={"16px"} />
+              </div>
+              <div>
+                <p className="font-Lato text-base font-normal leading-5 tracking-wide">
+                  We need your Company Name to enhance your experience with
+                  {""} {capitalizeFirstLetter(companyName)}.
+                </p>
+              </div>
+            </div>
 
-      <div className="pl-5 pt-5 pr-5 lg:p-5 mt-[33px]">
+            <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
+              Click Here
+            </p>
+          </div>
+        )}
+      </div>
+      <div className="pl-5 pt-5 pr-5 lg:p-5">
         <div className={`hidden lg:flex gap-x-2 pl-1 font-Lato `}>
           <div
             className={`flex items-center gap-x-2 cursor-pointer`}

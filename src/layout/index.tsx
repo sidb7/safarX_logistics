@@ -13,7 +13,6 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
   const [openMobileSideBar, setMobileSideBar] = useState<boolean>(false);
   const { isLgScreen } = ResponsiveState();
   const dispatch = useDispatch();
-  const temp = window.location;
 
   useEffect(() => {
     dispatch(getRoles());
@@ -65,13 +64,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           openMobileSideBar={openMobileSideBar}
           setMobileSideBar={setMobileSideBar}
         />
-        <main
-          className={`lg:ml-16  lg:pl-5 !h-[calc(100vh-65px)] ${
-            temp?.pathname === "/dashboard/overview"
-              ? "overflow-y-auto"
-              : "customScroll"
-          }`}
-        >
+        <main className="lg:ml-16  lg:pl-5 !h-[calc(100vh-65px)] customScroll">
           <Outlet />
           {/* <BottomBar  /> */}
         </main>
