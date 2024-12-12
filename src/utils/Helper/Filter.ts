@@ -40,9 +40,9 @@ export const inputRegexFilter = async (
 
   // Read JSON file
   const reqObj = mapper[path];
-  // console.log("🚀 ~ reqObj:");
+
   const reqType = reqObj["req_type"];
-  // console.log("🚀 ~ reqType:", reqType);
+
   const responseKey = reqObj["response_key"];
 
   switch (reqType) {
@@ -50,8 +50,10 @@ export const inputRegexFilter = async (
       try {
         const apiUrlWithParams = `${reqObj["api"]}?${reqObj["query_key"]}=${filteredInput}`;
         const apiCall = await GET(apiUrlWithParams);
+        console.log("apiCallapiCall", apiCall);
         if (apiCall?.data?.success) {
           const result = apiCall?.data;
+
           return result;
         } else {
           return apiCall?.data?.message;

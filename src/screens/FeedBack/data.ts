@@ -983,4 +983,9 @@ export const tabs = [
     value: "HELP",
     orderNumber: 0,
   },
+  {
+    statusName: "Settings",
+    value: "SETTINGS",
+    orderNumber: 0,
+  },
 ];

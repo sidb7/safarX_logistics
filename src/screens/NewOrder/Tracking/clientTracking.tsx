@@ -96,11 +96,11 @@ const Tracking = () => {
     getJwtTokenForUser(getSellerId);
     try {
       setLoading(true);
-
       const result = await inputRegexFilter(trackingNo, path);
+      console.log("🚀 ~ handleTrackOrderClick ~ result:", result);
 
       //mapping the new data
-      if (result?.success) {
+      if (result?.data?.length !== 0) {
         const res = result?.data?.[0]?.trackingInfo?.map(
           (currentStatus: any, index: any) => {
             orderStatus(currentStatus?.currentStatus);
@@ -120,7 +120,8 @@ const Tracking = () => {
 
         const flattenedLogs = allProcessedLogs.flat();
       } else {
-        toast.error(result);
+        setTrackingState(result?.data);
+        toast.error(result?.message);
       }
     } catch (error: any) {
     } finally {
@@ -144,8 +145,6 @@ const Tracking = () => {
       callTrackOrderFunction();
     }
   }, []);
-
-  console.log("trackingState", trackingState?.length);
 
   return (
     <>
@@ -214,7 +213,6 @@ const Tracking = () => {
                       <div className="w-full">
                         {trackingState?.map(
                           (each: any, indexTracking: number) => {
-                            console.log("indexTracking", indexTracking);
                             const edd =
                               each?.shipmentStatus?.EDD === "N/A" ||
                               each?.shipmentStatus?.EDD === "" ||

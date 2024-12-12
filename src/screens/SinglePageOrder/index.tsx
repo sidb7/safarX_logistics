@@ -612,6 +612,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const PlaceOrder = async () => {
     let payload = { ...order };
     payload.boxInfo = payload.boxInfo.map((box: any) => {
+      if (box?.codInfo?.isCod && Number(box?.codInfo?.invoiceValue) <= 0) {
+        toast.error("Invoice Value Must Be Required For COD");
+        return;
+      }
       return {
         ...box,
         products: box.products.map((product: any) => {
