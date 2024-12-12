@@ -768,10 +768,10 @@ const Index = () => {
 
           <div className="flex gap-3">
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Amazon Fullfilment ({fullfillment})
+              Amazon Fulfillment ({fullfillment})
             </span>
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Amazon Unfullfilment ({unFullfillment})
+              Amazon unfulfillment ({unFullfillment})
             </span>
           </div>
 
