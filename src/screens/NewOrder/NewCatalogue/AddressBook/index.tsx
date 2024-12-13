@@ -18,6 +18,7 @@ import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import FailureIcon from "../../../../assets/failure.svg";
 import SuccessIcon from "../../../../assets/success.svg";
 import OneButton from "../../../../components/Button/OneButton";
+import { useLocation } from "react-router-dom";
 
 interface IAddressBookProps {
   setAddressTab: React.Dispatch<SetStateAction<string>>;
@@ -38,6 +39,10 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
+
+  const { addressType } = useLocation().state || "pickup";
+
+  console.log("addressTypeaddressType", addressType);
 
   const cardData = (address: any) => {
     return {
@@ -102,6 +107,18 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
       await getAddress();
     })();
   }, [filterId]);
+
+  useEffect(() => {
+    if (addressType === "Delivery Address") {
+      setActiveTab("delivery");
+      setFilterId(1);
+    } else {
+      setActiveTab("pickup");
+      setFilterId(0);
+    }
+  }, [addressType]);
+
+  console.log("activeTab", activeTab);
 
   const filterComponent = (className?: string) => {
     return (
