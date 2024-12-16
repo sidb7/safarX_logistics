@@ -138,7 +138,7 @@ const CancellationModal = ({
       const payload = {
         altno: "",
         rescheduleTime: "",
-        buyerRemark: cancelSelectedOption || "",
+        buyerRemark: otherReason || "",
         requestType: "CANCEL",
         awb,
       };

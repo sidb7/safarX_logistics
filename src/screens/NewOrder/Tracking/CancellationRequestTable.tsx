@@ -39,15 +39,25 @@ const CancellationRequestTable = (props: Props) => {
       cell: (info) => {
         const edd = info?.row?.original?.edd;
         const rescheduleEdd = info?.row?.original?.rescheduleEdd;
+
         const eddSplit = edd?.split("T")?.[0];
         const rescheduleEddSplit = rescheduleEdd?.split("T")?.[0];
 
         // const rescheduleEdd = info?.row?.original?.edd;
         return (
-          <div className="font-sans  text-sm leading-5 text-black font-semibold">
+          <div className="font-sans text-sm leading-5 text-black font-semibold w-[124px]">
             <p>{`EDD : ${eddSplit || "NA"}`}</p>
             <p className="text-[#7CCA62] text-[14px] font-Open mt-1">
-              {`Rescheduled Edd : ${rescheduleEddSplit || "NA"} `}
+              {rescheduleEdd ? (
+                <>
+                  <div>
+                    <p>Rescheduled Edd :</p>
+                    <p>{`${rescheduleEddSplit || "NA"} `}</p>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
             </p>
           </div>
         );
@@ -58,9 +68,11 @@ const CancellationRequestTable = (props: Props) => {
       cell: (info) => {
         const currentStatus = info?.row?.original?.currentStatus;
         return (
-          <div className="flex justify-center gap-x-2 items-center border border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E]">
+          <div className="flex justify-center gap-x-2 items-center border border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E]  px-8 py-2 w-[100px]">
             <img src={orangeTruck} alt="Truck" />
-            {currentStatus || "NA"}
+            <p className="text-[12px] text-[#F0A22E]">
+              {currentStatus || "NA"}
+            </p>
           </div>
         );
       },
@@ -75,9 +87,16 @@ const CancellationRequestTable = (props: Props) => {
 
         const buyerRequestTime = buyerRequestData?.split("T");
 
+        const buyerRequestTimer = buyerRequestData?.split("T")?.[1];
+
+        // Extract only the time part (without milliseconds, if needed)
+        const timeOnly = buyerRequestTimer?.split(".")[0] || "NA";
+        const timeronly = timeOnly?.split(":").slice(0, 2)?.join(":") || "NA";
+
         return (
-          <div className="flex flex-col items-center">
-            {buyerRequestTime?.[0] || "NA"}
+          <div className="flex flex-col w-[140px]">
+            <p>Date: {buyerRequestTime?.[0] || "NA"}</p>
+            <p className="mt-2">Time : {timeronly}</p>
           </div>
         );
       },
@@ -91,9 +110,16 @@ const CancellationRequestTable = (props: Props) => {
           sellerRequest[sellerRequest?.length - 1]?.sellerActionDate;
 
         const sellerRequestTime = sellerRequestData?.split("T");
+
+        const sellerRequestTimer = sellerRequestData?.split("T")?.[1];
+
+        const timeOnly = sellerRequestTimer?.split(".")[0] || "NA";
+        const timeronly = timeOnly?.split(":").slice(0, 2)?.join(":") || "NA";
+
         return (
-          <div className="flex flex-col items-center">
-            {sellerRequestTime?.[0] || "NA"}
+          <div className="flex flex-col  w-[140px]">
+            <p>Date: {sellerRequestTime?.[0] || "NA"}</p>
+            <p className="mt-2">Time : {timeronly}</p>
           </div>
         );
       },
@@ -107,15 +133,29 @@ const CancellationRequestTable = (props: Props) => {
           adminRequest[adminRequest?.length - 1]?.adminActionDate;
 
         const adminRequestTime = adminRequestData?.split("T");
-        return <div className="space-y-1">{adminRequestTime || "NA"}</div>;
+
+        const adminRequestTimer = adminRequestData?.split("T")?.[1];
+        const timeOnly = adminRequestTimer?.split(".")[0] || "NA";
+        const timeronly = timeOnly?.split(":").slice(0, 2)?.join(":") || "NA";
+
+        return (
+          <div className="flex flex-col  w-[140px]">
+            <p>Date: {adminRequestTime?.[0] || "NA"}</p>
+            <p className="mt-2">Time : {timeronly}</p>
+          </div>
+        );
       },
     }),
     columnsHelper.accessor("requestType", {
-      header: () => <div className="text-left">Request Type</div>,
+      header: () => <div className="text-left ">Request Type</div>,
       cell: (info) => {
         const requestType = info?.row?.original?.requestType;
 
-        return <div className="flex flex-col">{requestType}</div>;
+        return (
+          <div className="flex flex-col w-[130px]">
+            <p className="text-[14px]">{requestType}</p>
+          </div>
+        );
       },
     }),
     columnsHelper.accessor("custContactDetail", {
@@ -125,15 +165,23 @@ const CancellationRequestTable = (props: Props) => {
           info?.row?.original?.deliveryAddress?.contact?.mobileNo;
         const alternateMobileNo =
           info?.row?.original?.deliveryAddress?.contact?.alternateMobileNo;
+
         return (
-          <div className="flex flex-col space-y-2 w-[200px]">
-            <div className="flex flex-col mt-1 items-center  gap-y-2">
+          <div className="flex flex-col space-y-2 w-[160px]">
+            <div className="flex flex-col mt-1   gap-y-2">
               <p className=" text-[14px]">{`Mobile No: ${
                 custContactDetail || "NA"
               }`}</p>
-              <p className=" text-[14px]">{`Alt Mobile No: ${
-                alternateMobileNo || "NA"
-              }`}</p>
+              {alternateMobileNo ? (
+                <div>
+                  <p className="text-[#7CCA62] text-[14px]">Alt Mobile No:</p>
+                  <p className="text-[#7CCA62] text-[14px]">{` ${
+                    alternateMobileNo || "NA"
+                  }`}</p>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         );
@@ -154,13 +202,13 @@ const CancellationRequestTable = (props: Props) => {
         return (
           <div className="flex flex-col  my-1 w-[300px] gap-y-2">
             <p className="w-full overflow-x-scroll whitespace-nowrap customScroll">
-              Buyer : {buyerlastRemark}
+              Buyer : {buyerlastRemark || "NA"}
             </p>
             <p className="w-full overflow-x-scroll whitespace-nowrap customScroll">
-              Seller : {lastSellerRemark}
+              Seller : {lastSellerRemark || "NA"}
             </p>
             <p className="w-full overflow-x-scroll whitespace-nowrap customScroll">
-              Admin : {lastAdminRemark}
+              Admin : {lastAdminRemark || "NA"}
             </p>
           </div>
         );
