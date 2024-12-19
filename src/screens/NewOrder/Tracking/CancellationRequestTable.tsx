@@ -21,6 +21,19 @@ const CancellationRequestTable = (props: Props) => {
   const { cancelRequestData } = props;
   const columnsHelper = createColumnHelper<any>();
 
+  function convertUTCToIST(utcDateTime: string) {
+    const utcDate = new Date(utcDateTime);
+
+    if (isNaN(utcDate.getTime())) return "Invalid Date";
+
+    const IST_OFFSET = 5.5 * 60 * 60 * 1000;
+
+    const istDate = new Date(utcDate.getTime() + IST_OFFSET);
+
+    const formattedIST = istDate.toISOString().replace("T", " ").slice(0, -5);
+
+    return `${formattedIST} IST`;
+  }
   const columns = [
     columnsHelper.accessor("trackingNo", {
       header: () => <div className="text-left">Tracking No</div>,
@@ -43,7 +56,6 @@ const CancellationRequestTable = (props: Props) => {
         const eddSplit = edd?.split("T")?.[0];
         const rescheduleEddSplit = rescheduleEdd?.split("T")?.[0];
 
-        // const rescheduleEdd = info?.row?.original?.edd;
         return (
           <div className="font-sans text-sm leading-5 text-black font-semibold w-[124px]">
             <p>{`EDD : ${eddSplit || "NA"}`}</p>
@@ -63,89 +75,125 @@ const CancellationRequestTable = (props: Props) => {
         );
       },
     }),
+
     columnsHelper.accessor("currentStatus", {
       header: () => <div className="text-left">Current Status</div>,
       cell: (info) => {
         const currentStatus = info?.row?.original?.currentStatus;
+
+        // Define dynamic styles for border, text, and background colors
+        const styles: any = (() => {
+          if (currentStatus === "IN TRANSIT")
+            return {
+              border: "border-blue-500",
+              bg: "bg-blue-100",
+              text: "text-blue-500",
+            };
+          if (currentStatus === "DELIVERED")
+            return {
+              border: "border-green-500",
+              bg: "bg-green-100",
+              text: "text-green-500",
+            };
+          if (currentStatus === "OUT FOR DELIVERY")
+            return {
+              border: "border-yellow-500",
+              bg: "bg-yellow-100",
+              text: "text-yellow-500",
+            };
+          if (currentStatus === "BOOKED")
+            return {
+              border: "border-[#F0A22E]",
+              bg: "bg-[#FDF6EA]",
+              text: "text-[#F0A22E]",
+            };
+        })();
+
         return (
-          <div className="flex justify-center gap-x-2 items-center border border-[#F0A22E] bg-[#FDF6EA] text-[#F0A22E]  px-8 py-2 w-[100px]">
-            <img src={orangeTruck} alt="Truck" />
-            <p className="text-[12px] text-[#F0A22E]">
-              {currentStatus || "NA"}
-            </p>
+          <div
+            className={`flex justify-center gap-x-2 items-center border ${styles.border} ${styles.bg} ${styles.text} px-8 py-2 w-[100px]`}
+          >
+            {/* <img src={orangeTruck} alt="Truck" /> */}
+            <p className="text-[12px]">{currentStatus || "NA"}</p>
           </div>
         );
       },
     }),
+
     columnsHelper.accessor("buyerRequest", {
       header: () => <div className="text-left">Buyer Request D&T</div>,
       cell: (info) => {
         const buyerRequest = info?.row?.original?.remarks?.buyer;
 
         const buyerRequestData =
-          buyerRequest[buyerRequest?.length - 1]?.buyerRequestDate;
+          buyerRequest?.[buyerRequest.length - 1]?.buyerRequestDate;
 
-        const buyerRequestTime = buyerRequestData?.split("T");
+        const newDate = convertUTCToIST(buyerRequestData);
 
-        const buyerRequestTimer = buyerRequestData?.split("T")?.[1];
+        const [datePart, timePartWithIST] = newDate.split(" ");
 
-        // Extract only the time part (without milliseconds, if needed)
-        const timeOnly = buyerRequestTimer?.split(".")[0] || "NA";
-        const timeronly = timeOnly?.split(":").slice(0, 2)?.join(":") || "NA";
+        const timePart = timePartWithIST.replace("IST", "").trim();
 
         return (
           <div className="flex flex-col w-[140px]">
-            <p>Date: {buyerRequestTime?.[0] || "NA"}</p>
-            <p className="mt-2">Time : {timeronly}</p>
+            <p>{`Date: ${datePart}` || "NA"}</p>
+
+            <p>{`Time: ${timePart}` || "NA"}</p>
           </div>
         );
       },
     }),
+
     columnsHelper.accessor("sellerRequest", {
       header: () => <div className="text-left">Seller Request D&T</div>,
       cell: (info) => {
         const sellerRequest = info?.row?.original?.remarks?.seller;
 
         const sellerRequestData =
-          sellerRequest[sellerRequest?.length - 1]?.sellerActionDate;
+          sellerRequest?.[sellerRequest.length - 1]?.sellerActionDate;
 
-        const sellerRequestTime = sellerRequestData?.split("T");
+        const newDate = convertUTCToIST(sellerRequestData);
 
-        const sellerRequestTimer = sellerRequestData?.split("T")?.[1];
+        const [datePart, timePartWithIST] = newDate.split(" ");
 
-        const timeOnly = sellerRequestTimer?.split(".")[0] || "NA";
-        const timeronly = timeOnly?.split(":").slice(0, 2)?.join(":") || "NA";
+        const timePart = timePartWithIST.replace("IST", "").trim();
+
+        console.log("timePart", timePart);
 
         return (
-          <div className="flex flex-col  w-[140px]">
-            <p>Date: {sellerRequestTime?.[0] || "NA"}</p>
-            <p className="mt-2">Time : {timeronly}</p>
+          <div className="flex flex-col w-[140px]">
+            <p>{`Date: ${datePart === "Invalid" ? "NA" : datePart}`}</p>
+
+            <p>{`Time: ${timePart === "Date" ? "NA" : timePart}`}</p>
           </div>
         );
       },
     }),
 
     columnsHelper.accessor("adminRequest", {
-      header: () => <div className="text-left">Admin Action D&T </div>,
+      header: () => <div className="text-left">Admin Action D&T</div>,
       cell: (info) => {
         const adminRequest = info?.row?.original?.remarks?.admin;
+
         const adminRequestData =
-          adminRequest[adminRequest?.length - 1]?.adminActionDate;
+          adminRequest?.[adminRequest.length - 1]?.adminActionDate;
 
-        const adminRequestTime = adminRequestData?.split("T");
+        const newDate = convertUTCToIST(adminRequestData);
 
-        const adminRequestTimer = adminRequestData?.split("T")?.[1];
-        const timeOnly = adminRequestTimer?.split(".")[0] || "NA";
-        const timeronly = timeOnly?.split(":").slice(0, 2)?.join(":") || "NA";
+        const [datePart, timePartWithIST] = newDate.split(" ");
+
+        const timePart = timePartWithIST.replace("IST", "").trim();
 
         return (
-          <div className="flex flex-col  w-[140px]">
-            <p>Date: {adminRequestTime?.[0] || "NA"}</p>
-            <p className="mt-2">Time : {timeronly}</p>
+          <div className="flex flex-col w-[140px]">
+            <p>{`Date: ${datePart === "Invalid" ? "NA" : datePart}`}</p>
+
+            <p>{`Time: ${timePart === "Date" ? "NA" : timePart}`}</p>
           </div>
         );
       },
     }),
+
     columnsHelper.accessor("requestType", {
       header: () => <div className="text-left ">Request Type</div>,
       cell: (info) => {
@@ -153,7 +201,7 @@ const CancellationRequestTable = (props: Props) => {
 
         return (
           <div className="flex flex-col w-[130px]">
-            <p className="text-[14px]">{requestType}</p>
+            <p className="text-[14px]">{requestType || "NA"}</p>
           </div>
         );
       },

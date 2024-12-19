@@ -75,70 +75,14 @@ const CancellationModal = ({
     }
   };
 
-  // const handleSubmit = async () => {
-  //   const token = sessionStorage.getItem(`${awb}`);
-
-  //   if (!cancelSelectedOption || cancelSelectedOption === "Select Reason") {
-  //     toast.error("Please Select a reason");
-
-  //     setReasonError({
-  //       ...reasonError,
-  //       reason: "Please select a option",
-  //     });
-  //     setCancelSuccess(true);
-  //   } else {
-  //     setReasonError({
-  //       ...reasonError,
-  //       reason: "",
-  //     });
-  //   }
-
-  //   if (cancelSelectedOption === "Other" && !otherReason) {
-  //     setReasonError({
-  //       ...reasonError,
-  //       otherReasonError: "Please enter the reason",
-  //     });
-  //   } else {
-  //     setReasonError({
-  //       ...reasonError,
-  //       otherReasonError: "",
-  //     });
-  //     try {
-  //       const payload = {
-  //         altno: "",
-  //         rescheduleTime: "",
-  //         buyerRemark: cancelSelectedOption || "",
-  //         requestType: "CANCEL",
-  //         awb,
-  //       };
-  //       setCancellationModalOpen && setCancellationModalOpen();
-  //       navigate("/tracking");
-  //       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
-  //         token,
-  //       });
-  //       if (data?.data?.success) {
-  //         toast.success(data?.data?.message);
-  //         setCancelSuccess(false);
-  //         setCancelSelectedOption("");
-  //       } else {
-  //         setCancelSuccess(false);
-  //         toast.error(data?.data?.message);
-  //         setCancelSelectedOption("");
-  //       }
-  //       console.log("data12345678", data?.data?.message);
-  //     } catch (error: any) {
-  //       console.log(error?.message);
-  //     }
-  //   }
-  // };
-
   const handleCancelApi = async () => {
     const token = sessionStorage.getItem(`${awb}`);
     try {
       const payload = {
         altno: "",
         rescheduleTime: "",
-        buyerRemark: otherReason || "",
+        buyerRemark:
+          cancelSelectedOption === "Other" ? otherReason : cancelSelectedOption,
         requestType: "CANCEL",
         awb,
       };

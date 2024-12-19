@@ -29,14 +29,25 @@ const ReschedulingModal = ({
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState<any>(null);
 
+  const formatDateToLocalString = (date: Date) => {
+    const offset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const localDate = new Date(date.getTime() - offset);
+    return localDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  };
+
   const handleNavigationandModal = async () => {
     const token = sessionStorage.getItem(`${awb}`);
+    console.log("beforethefunctiuon", startDate);
     try {
-      const dateOnly = startDate.toISOString().split("T")[0];
+      if (!startDate || startDate === null) {
+        toast.error("Please select the date");
+      }
+      const dateOnly = formatDateToLocalString(startDate);
+      console.log("Formatted dateOnly:", dateOnly);
 
       const payload = {
         altno: "",
-        rescheduleTime: startDate,
+        rescheduleTime: dateOnly, // Send formatted date string
         buyerRemark: "Want to reschedule the order",
         requestType: "RESCHEDULE",
         awb,
@@ -48,7 +59,6 @@ const ReschedulingModal = ({
         toast.success(data?.data?.message);
         navigate("/tracking");
         setStartDate(null);
-        // setReschedulingModal && setReschedulingModal();
         setReschedulingModal && setReschedulingModal(false);
       } else {
         toast.error(data?.data?.message);
@@ -101,7 +111,7 @@ const ReschedulingModal = ({
           <div className="flex justify-center mt-10">
             <DatePicker
               selected={startDate}
-              onChange={(date: any) => setStartDate(date)}
+              onChange={(date: Date | null) => setStartDate(date)} // Ensure the correct type
               isClearable={true}
               customInput={
                 <button
@@ -109,10 +119,9 @@ const ReschedulingModal = ({
                   className="flex items-center gap-2 px-4 py-2 h-12 rounded-md border border-gray-400 min-w-[226px] w-[260px] md:w-[300px] lg:w-[420px]"
                 >
                   <img src={dateIcon} alt="Calendar Icon" className="mr-2" />
-
                   <p className="text-center text-primary-100 font-openSans text-[12px] font-normal leading-5">
                     {startDate
-                      ? startDate.toLocaleDateString()
+                      ? startDate.toLocaleDateString("en-GB") // Display in dd/MM/yyyy
                       : "Select a Date"}
                   </p>
                 </button>
