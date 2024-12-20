@@ -2115,10 +2115,7 @@ const Index = () => {
                 totalCount={totalCount}
               />
             </div>
-            <div
-              ref={scrollRef}
-              className="overflow-y-auto my-0 h-[calc(100%-180px)]"
-            >
+            <div ref={scrollRef} className="my-0 h-[calc(100%-180px)]">
               {isLoading ? (
                 <>
                   {isLgScreen ? (
