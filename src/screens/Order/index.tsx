@@ -31,6 +31,7 @@ import {
   DUPLICATE_ORDER,
   COMPANY_NAME,
   FETCH_MANIFEST_DATA,
+  GET_COUNT_AMAZON_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -296,6 +297,23 @@ const Index = () => {
   });
   const [isBulkCheckedBooked, setIsBulkCheckedBooked]: any = useState(false);
 
+  const [fullfillment, setFullfillment] = useState();
+  const [unFullfillment, setUnFullfillment] = useState();
+
+  //  // Add ref for the abort controller
+  //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
+
+  //  const fetchDataControllerRef = useRef<AbortController | null>(null);
+  //  const currentTabRef = useRef<number>(renderingComponents);
+
+  // const [isMasked, setIsMasked] = useState(false);
+
+  // useEffect(() => {
+  //   let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+  //   if (temp) {
+  //     setIsMasked(temp?.isMaskedUser);
+  //   }
+  // }, []);
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
@@ -517,6 +535,15 @@ const Index = () => {
           ) : (
             <></>
           )}
+
+          <div className="flex gap-3">
+            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+              Amazon Fulfillment ({fullfillment})
+            </span>
+            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+              Amazon unfulfillment ({unFullfillment})
+            </span>
+          </div>
 
           {isModalOpen && (
             <CenterModal
@@ -1329,6 +1356,21 @@ const Index = () => {
       );
     }
   }, [endDate, activeTab, searchedText]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await POST(GET_COUNT_AMAZON_ORDER);
+        if (data?.code === 200) {
+          let temp = data?.data?.[0];
+          setFullfillment(temp?.fullFillMent?.[0]?.fullFillMent || 0);
+          setUnFullfillment(temp?.unfullFillMent?.[0]?.unfullFillCount || 0);
+        }
+      } catch (error) {
+        toast.error("Something went wrong");
+      }
+    })();
+  }, []);
 
   const onPageIndexChange = async (data: any) => {
     setIsLoading(true);

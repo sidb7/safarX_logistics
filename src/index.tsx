@@ -6,7 +6,6 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter } from "react-router-dom";
-import "apexcharts/dist/apexcharts.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

@@ -459,10 +459,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         toast.error("COD Amount Must Be Required");
         return;
       }
-      if (item.codInfo.isCod && item.codInfo.invoiceValue <= 0) {
-        toast.error("Invoice Value Must Be Required In COD");
-        return;
-      }
     }
 
     // if (codData?.invoiceValue <= 0) {

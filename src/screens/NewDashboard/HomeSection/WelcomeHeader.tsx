@@ -128,10 +128,10 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
               <>
                 {isLoading ? (
                   <>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-24 p-4"></div>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-24 p-4"></div>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-24 p-4"></div>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-24 p-4"></div>
+                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
+                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
+                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
+                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
                   </>
                 ) : (
                   <>

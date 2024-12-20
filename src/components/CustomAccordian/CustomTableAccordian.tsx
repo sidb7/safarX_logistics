@@ -1877,7 +1877,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         </div>
       ) : (
         <>
-          <div className="w-[100%] p-[1rem] items-start overflow-auto h-[calc(100vh_-_140px)]">
+          <div className="w-[100%] p-[1rem] items-start overflow-auto">
             {orderDetails?.length > 0 &&
               orderDetails?.map((item: any, index: any) => {
                 return (
@@ -4740,7 +4740,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
           {!enabled && (
             <div
-              className="flex justify-end gap-x-10 shadow-lg border-[1px] bg-[#FFFFFF] p-[10px] rounded-tr-[20px] rounded-tl-[20px] fixed bottom-0"
+              className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
               style={{ width: "-webkit-fill-available" }}
             >
               <OneButton
