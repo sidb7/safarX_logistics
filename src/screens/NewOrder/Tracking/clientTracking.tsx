@@ -113,6 +113,27 @@ const Tracking = () => {
     return statuses;
   }
 
+  const checkAndRemoveToken = (trackingNo: any) => {
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key: any = sessionStorage.key(i);
+      const value = sessionStorage.getItem(key);
+
+      // If trackingNo matches the sessionStorage key, do nothing
+      if (trackingNo === key) {
+        console.log("trackingNo === key", trackingNo, key);
+        return;
+      }
+
+      // If trackingNo doesn't match, remove the token from sessionStorage
+      if (trackingNo !== key) {
+        console.log("trackingNo !== key, removing token", trackingNo, key);
+        sessionStorage.removeItem(key);
+        setOpenOrderDetails(null);
+        setLoggedIn(false);
+      }
+    }
+  };
+
   //getting seller id
 
   const getJwtTokenForUser = (sellerId: any) => {
@@ -132,7 +153,6 @@ const Tracking = () => {
     try {
       setLoading(true);
       const result = await inputRegexFilter(trackingNo, path);
-      console.log("🚀 ~ handleTrackOrderClick ~ result:", result);
 
       //mapping the new data
       if (result?.data?.length !== 0) {
@@ -224,6 +244,12 @@ const Tracking = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (trackingNo) {
+      checkAndRemoveToken(trackingNo); // Check and remove token based on new trackingNo
+    }
+  }, [trackingNo]);
+
   return (
     <>
       <div className="mx-5">
@@ -248,7 +274,9 @@ const Tracking = () => {
                     label="Enter tracking ID"
                     value={trackingNo}
                     containerStyle="!mt-1"
-                    onChange={(e) => setTrackingNo(e.target.value)}
+                    onChange={(e) => {
+                      setTrackingNo(e.target.value);
+                    }}
                   />
                   <OneButton
                     text={`${

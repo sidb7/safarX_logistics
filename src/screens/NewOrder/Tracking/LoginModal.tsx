@@ -32,6 +32,17 @@ const LoginModal = ({
   const [isButtonDisabled, setIsButtonDisabled] = useState<any>(true);
   const [isClickedResend, setClickedResend] = useState<any>(false);
 
+  const maskMobileNumber = (mobileNo: any) => {
+    if (!mobileNo) return "";
+    const mobileStr = String(mobileNo);
+    if (mobileStr.length < 4) return mobileStr;
+
+    const firstTwo = mobileStr.slice(0, 2);
+    const lastTwo = mobileStr.slice(-2);
+    const maskedSection = "*".repeat(mobileStr.length - 4);
+    return `${firstTwo}${maskedSection}${lastTwo}`;
+  };
+
   const handleSendOtp = async (data?: any) => {
     if (data === "resend") {
       setClickedResend(true);
@@ -72,8 +83,8 @@ const LoginModal = ({
           isVerified: true,
         };
         const data = await POST(TRACKING_SEND_VERIFY_OTP, payload);
-        console.log("data12345", data?.data?.message);
-        localStorage.setItem(awb, data?.data?.data?.[0]?.tempAccessToken);
+
+        // localStorage.setItem(awb, data?.data?.data?.[0]?.tempAccessToken);
         sessionStorage.setItem(awb, data?.data?.data?.[0]?.tempAccessToken);
         if (data?.data?.success) {
           toast.success(data?.data?.message);
@@ -199,7 +210,8 @@ const LoginModal = ({
           <div className="mx-24 my-10">
             <CustomInputBox
               label="Enter your mobile number"
-              value={`+91 ${mobileNo}`}
+              // value={`+91 ${mobileNo}`}
+              value={`+91 ${maskMobileNumber(mobileNo)}`}
               isDisabled={true}
             />
           </div>
