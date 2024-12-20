@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InfoCircle from "../../../../assets/info-circle.svg";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
@@ -8,11 +8,15 @@ import {
   ADD_PICKUP_ADDRESS_CATALOGUE,
   ADD_DELIVERY_ADDRESS,
   GET_PINCODE_DATA,
+  VERIFY_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import CustomDropDown from "../../../../components/DropDown";
+import { Spinner } from "../../../../components/Spinner";
+import MagicLocationIcon from "../../../../assets/PickUp/magicLocation.svg";
+import AiIcon from "../../../../assets/Buttons.svg";
 
 interface IAddAddressProps {}
 
@@ -61,6 +65,72 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
     contactName: "",
     mobileNo: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [pastedData, setPastedData] = useState("");
+  const [prevPastedData, setPrevPastedData] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const getVerifyAddress = async (verifyAddressPayload: any) => {
+    try {
+      setLoading(true);
+
+      const { data: verifyAddressResponse } = await POST(
+        VERIFY_ADDRESS,
+        verifyAddressPayload
+      );
+
+      if (verifyAddressResponse?.success) {
+        const parsedData = verifyAddressResponse?.data?.message;
+        setAddAddress((prevAddAddress: any) => ({
+          ...prevAddAddress,
+          fullAddress: parsedData.full_address || "",
+          flatNo:
+            `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+            "",
+
+          locality: parsedData.locality_name || parsedData.landmark || "",
+          sector: parsedData.locality_name || parsedData.landmark || "",
+          landmark: parsedData.landmark || "",
+          pincode: parsedData.pincode || "",
+          city: parsedData.city_name || "",
+          state: capitalizeFirstLetter(parsedData.state_name) || "",
+          country: parsedData.country_name || "India",
+          contact: {
+            mobileNo: parsedData.mobile_number,
+            name: parsedData.person_name,
+            type: "warehouse associate",
+          },
+        }));
+      } else {
+        console.error("ChatGpt api error");
+      }
+    } catch (error) {
+      console.error("An error occurred during API request:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyAddressPayload = {
+    data: pastedData,
+  };
+  const handleButtonClick = () => {
+    const trimmedData = pastedData.trim();
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
+      getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(trimmedData);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleButtonClick();
+    }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPastedData(e.target.value);
+  };
 
   const createAddress = async (e: any) => {
     if (!addressType) {
@@ -211,6 +281,49 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
     <div className="h-full">
       <Breadcrum label="Add Address" />
       <div className="mx-5 mt-4 customScroll h-[575px]">
+        <div>
+          <div className="lg:col-span-2 mb-4 lg:mb-6">
+            <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+              <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+                <img src={MagicLocationIcon} alt="Magic Location Icon" />
+                <div className="text-white text-[12px] font-Open">
+                  Magic Address
+                </div>
+              </div>
+
+              <div className="relative h-[75px]  ">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={pastedData}
+                  onKeyDown={handleKeyDown}
+                  onChange={handleChange}
+                  className="magicAddressInput w-full"
+                  style={{
+                    position: "absolute",
+                    border: "none",
+                  }}
+                  placeholder="Paste Address for the Magic"
+                  title=""
+                  id="magic-address-pickup"
+                />
+                <div>
+                  <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                    {loading ? (
+                      <Spinner />
+                    ) : (
+                      <img
+                        src={AiIcon}
+                        alt="Arrow"
+                        onClick={handleButtonClick}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-[4rem]">
           <div>
             <CustomDropDown
