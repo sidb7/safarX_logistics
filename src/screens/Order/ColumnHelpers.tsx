@@ -807,7 +807,10 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("IDs", {
       header: (props: any) => {
         return (
-          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
+          <div
+            className="flex items-center font-Open font-semibold leading-5 text-sm"
+            id="selectAll"
+          >
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -1533,7 +1536,10 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       header: (props: any) => {
         return (
           <div className="flex items-center">
-            <div className="flex justify-between mr-3 !my-[-10px] cursor-pointer ">
+            <div
+              className="flex justify-between mr-3 !my-[-10px] cursor-pointer"
+              id="selectAll"
+            >
               <PartialChecked
                 checked={props.table?.getIsAllRowsSelected()}
                 onChange={props?.table?.getToggleAllRowsSelectedHandler()}

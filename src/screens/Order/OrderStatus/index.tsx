@@ -1,21 +1,14 @@
-import SelectIcon from "../../../assets/Order/SelectIcon.svg";
-import FilterIcon from "../../../assets/Order/FilterIcon.svg";
 import PlaceChannelOrder from "../../../assets/placeChannelOrder.svg";
-import CloseIcon from "../../../assets/CloseIcon.svg";
-import { SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
-import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import CrossIcon from "../../../assets/cross.svg";
 import AddBoxIcon from "../../../assets/add-circle.svg";
 import {
-  FETCH_ALL_PARTNER,
   FETCH_MANIFEST_DATA,
-  GET_ORDER_BY_ID,
-  GET_ORDER_ERRORS,
   GET_SELLER_BOX,
   GET_SELLER_ORDER,
   POST_PLACE_ALL_ORDERS,
@@ -26,19 +19,12 @@ import {
   DOWNLOAD_FAIL_REPORT,
   FETCH_BULK_LABELS_REPORT_DOWNLOAD,
 } from "../../../utils/ApiUrls";
-import CustomButton from "../../../components/Button";
 import { toast } from "react-hot-toast";
 import CustomDropDown from "../../../components/DropDown";
-import DatePicker from "react-datepicker";
-import CenterModal from "../../../components/CustomModal/customCenterModal";
 import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
-import editIcon from "../../../assets/serv/edit.svg";
 import DownloadIcon from "../../../assets/download.svg";
-import { Tooltip } from "react-tooltip";
 import { capitalizeFirstLetter, getQueryJson } from "../../../utils/utility";
-//import * as FileSaver from "file-saver";
 import { tokenKey } from "../../../utils/utility";
-import FilterScreen from "../common/FilterScreen/filterScreen";
 import { Spinner } from "../../../components/Spinner";
 import { useSelector } from "react-redux";
 import OneButton from "../../../components/Button/OneButton";
@@ -48,7 +34,6 @@ import CustomInputBox from "../../../components/Input";
 import InfoCircle from "../../../assets/info-circle.svg";
 import BulkActionIcon from "../../../assets/Bulk_Action.svg";
 import RTOicon from "../../../assets/RTO.svg";
-import ReattemptIcon from "../../../assets/reattempt.svg";
 import BoxIcon from "../../../assets/layer.svg";
 import InputBox from "../../../components/Input";
 import { convertXMLToXLSX } from "../../../utils/helper";
@@ -65,6 +50,7 @@ interface IOrderstatusProps {
   selectedRowdata?: any;
   setSelectedRowData?: any;
   fetchLabels?: any;
+  fetchManifest?: any;
   setDeleteModalDraftOrder?: any;
   setCancellationModal?: any;
   tabStatusId?: any;
@@ -89,51 +75,24 @@ interface IOrderstatusProps {
   totalCount?: any;
 }
 
-const statusBar = (statusName: string, orderNumber: string) => {
-  interface Itype {
-    filterId: any;
-    setFilterId: any;
-    statusData: any;
-  }
-
-  return (
-    <div className="flex justify-center items-center border-b-4 border-[#777777] px-4">
-      <span className="text-[#777777] text-[14px]">{statusName}</span>
-      <span className="flex justify-center items-center rounded-full ml-2 text-[8px] text-white bg-[#777777] h-[16px] w-[16px]">
-        {orderNumber}
-      </span>
-    </div>
-  );
-};
-
-let insertFirst = true;
 let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
 
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId = 0,
   setFilterId,
   statusData,
-  handleTabChange,
   setOrders,
-  totalOrders,
   currentStatus,
-  orders,
-  allOrders,
   selectedRowdata,
-  setSelectedRowData,
   fetchLabels,
+  fetchManifest,
   setDeleteModalDraftOrder,
   setCancellationModal,
-  tabStatusId,
   setTotalcount,
-  setStatusCount,
-  isOrderTableLoader,
   fetchMultiTax,
   draftOrderCount,
   setDraftOrderCount,
   setIsErrorPage,
-  setErrorData,
-  setIsErrorListLoading,
   getErrors,
   selectedDateRange,
   filterPayLoad,
@@ -143,34 +102,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setIsBulkCheckedBooked,
   isBulkCheckedBooked,
   totalCount,
+  allOrders,
 }) => {
   const navigate = useNavigate();
-  let debounceTimer: any;
   const { isLgScreen } = ResponsiveState();
-  const [statusId, setStatusId] = useState(0);
-  const [filterModal, setFilterModal] = useState(false);
   const [searchedText, setSearchedText] = useState("");
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
-  const [partnerMenu, setPartnerMenu] = useState<any>([]);
-  const [partnerValue, setPartnerValue] = useState<any>();
   const [isLoadingManifest, setIsLoadingManifest] = useState({
     isLoading: false,
     identifier: "",
   });
   const [isBulkModalOpen, setIsBulkModalOpen] = useState<any>(false);
-  const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
-  const [filterState, setFilterState] = useState({
-    name: "",
-    menu: [],
-    label: "",
-    isCollapse: false,
-  });
-  // const [filterPayLoad, setFilterPayLoad] = useState({
-  //   filterArrOne: [],
-  //   filterArrTwo: [],
-  // });
-  const [manifestButton, setManifestButton] = useState<any>(true);
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
   const stateValue = useSelector((state: any) => state?.paginationSlice);
@@ -225,11 +166,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     navigate(`/orders/view-orders?activeTab=${tabName?.toLowerCase()}`);
   };
 
-  // useEffect(() => {
-  //   handleTabChange(tabIndex);
-  // }, []);
-
-  const [filterData, setFilterData] = useState([
+  let filterData = [
     {
       label: `All`,
       isActive: false,
@@ -240,19 +177,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       isActive: false,
       value: "draft",
     },
-    // {
-    //   label: `Failed`,
-    //   isActive: false,
-    //   value: "failed",
-    // },
     {
       label: `Error`,
       isActive: false,
       value: "error",
     },
-  ]);
-
-  //
+  ];
   const actionsObject: any = {
     DRAFT: [
       {
@@ -308,51 +238,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "RTO ORDERS",
       },
     ],
-    // "OUT OF DELIVERY": [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
-    // DELIVERED: [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
-    // RETURN: [
-    //   {
-    //     icon: CrossIcon,
-    //     hovertext: "Cancel Orders",
-    //     identifier: "Cancel",
-    //     buttonName: "CANCEL ORDERS",
-    //   },
-    // ],
-    EXCEPTION: [
-      //  {
-      //     icon: RTOicon,
-      //     hovertext: "Rto Orders",
-      //     identifier: "Rto",
-      //     buttonName: "RTO ORDERS",
-      //   },
-      //   {
-      //     icon: ReattemptIcon,
-      //     hovertext: "Re-Attempt Orders",
-      //     identifier: "Re -Attempt",
-      //     buttonName: "RE-ATTEMPT ORDERS",
-      //   },
-    ],
+    EXCEPTION: [],
     "READY TO PICK": [
-      // {
-      //   icon: CrossIcon,
-      //   hovertext: "Cancel Orders",
-      //   identifier: "Cancel",
-      //   buttonName: "CANCEL ORDERS",
-      // },
       {
         icon: DownloadIcon,
         hovertext: "Download Manifest Reports",
@@ -383,10 +270,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       awbs: awbArray,
       requestType: type,
     };
-    // setIsLoadingManifest({
-    //   isLoading: true,
-    //   identifier: "Rto",
-    // });
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
@@ -418,76 +301,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const fetchManifest = async (awbArray?: any) => {
-    let payload = {
-      awbs: awbArray,
-      source: "WEBSITE",
-    };
-    setIsLoadingManifest({
-      isLoading: true,
-      identifier: "Download_menifest_report",
-    });
-    let header = {
-      Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
-      "Content-Type": "application/json",
-    };
-    const response = await fetch(FETCH_MANIFEST_DATA, {
-      method: "POST",
-      headers: header,
-      body: JSON.stringify(payload),
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      toast.error(errorData.message);
-      setIsLoadingManifest({
-        isLoading: false,
-        identifier: "",
-      });
-      // setManifestButton(true);
-      return;
-    }
-    const data = await response.blob();
+  let progress = 0;
 
-    const blob = new Blob([data], { type: "application/pdf" });
-
-    var url = URL.createObjectURL(blob);
-    setIsLoadingManifest({
-      isLoading: false,
-      identifier: "",
-    });
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Manifest_Report.pdf`;
-    a.click();
-  };
-
-  const fetchPartnerList = async () => {
-    try {
-      const { data } = await POST(FETCH_ALL_PARTNER, {});
-
-      if (data?.success) {
-        let temp: any = [];
-        data?.data.map((partner: any, index: number) => {
-          let newData = {
-            label: capitalizeFirstLetter(partner.partnerName),
-            value: partner.partnerName,
-          };
-          temp.push(newData);
-        });
-        temp.sort((elem: any, i: any) => elem.label.localeCompare(i.label));
-        setPartnerMenu(temp);
-      } else {
-        throw new Error(data?.meesage);
-      }
-    } catch (error: any) {
-      toast.error(error);
-      return false;
-    }
-  };
+  function updateProgressBar() {
+    const progressBar: any = document.getElementById("progress");
+    const placeorderBar: any = document.getElementById("placeOrder");
+    // if (progress < 100) {
+    progress += 0.5;
+    placeorderBar.style.display = "flex";
+    progressBar.style.width = `${progress}%`;
+    // } else {
+    //   console.log("fun else");
+    //   placeorderBar.style.display = "none";
+    // }
+  }
 
   const handleActions = async (
     actionName: any,
@@ -497,9 +324,23 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     switch (actionName) {
       case "DRAFT": {
         if (identifier === "Delete") {
-          const tempOrderIds = selectedRowdata.map(
-            (data: any, index: any) => data.original.tempOrderId
+          let tempOrderIds: any = "";
+          const selectAllContainer: any = document.getElementById("selectAll");
+          const checkbox = selectAllContainer.querySelector(
+            'input[type="checkbox"]'
           );
+
+          // Function to check if the checkbox is checked
+          const isChecked = checkbox.checked;
+          if (isChecked) {
+            tempOrderIds = allOrders.map(
+              (data: any, index: any) => data?.tempOrderId
+            );
+          } else {
+            tempOrderIds = selectedRowdata.map(
+              (data: any, index: any) => data?.original?.tempOrderId
+            );
+          }
 
           let payload = {
             tempOrderIdArray: tempOrderIds,
@@ -538,22 +379,38 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             toast.error("Please Select Atleast One Order To Place.");
             return;
           }
-          const orderDetails = selectedRowdata?.map((order: any) => {
-            return {
-              tempOrderId: order?.original?.tempOrderId,
-              source: order?.original?.source,
-              orderId: order?.original?.orderId,
-            };
-          });
-          const placeOrderPayload = {
-            orders: orderDetails,
-          };
+          let orderDetails: any = "";
+          const selectAllContainer: any = document.getElementById("selectAll");
+          const checkbox = selectAllContainer.querySelector(
+            'input[type="checkbox"]'
+          );
 
+          // Function to check if the checkbox is checked
+          const isChecked = checkbox.checked;
+          if (isChecked) {
+            orderDetails = allOrders?.map((order: any) => {
+              return {
+                tempOrderId: order?.tempOrderId,
+                source: order?.source,
+                orderId: order?.orderId,
+              };
+            });
+          } else {
+            orderDetails = selectedRowdata?.map((order: any) => {
+              return {
+                tempOrderId: order?.original?.tempOrderId,
+                source: order?.original?.source,
+                orderId: order?.original?.orderId,
+              };
+            });
+          }
           try {
             setIsLoadingManifest({
               isLoading: true,
               identifier: "PlaceOrder",
             });
+
+            const interval = setInterval(updateProgressBar, 1000);
 
             const { data } = await POST(POST_PLACE_ALL_ORDERS, {
               orders: orderDetails,
@@ -564,11 +421,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 identifier: "",
               });
 
+              clearInterval(interval);
+              const placeorderBar: any = document.getElementById("placeOrder");
+              placeorderBar.style.display = "none";
+
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
-              // handleTabChange(1);
-              // navigate(`/orders/view-orders?activeTab=booked`);
+              window.location.reload();
             } else {
               setIsLoadingManifest({
                 isLoading: false,
@@ -589,12 +449,27 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       }
       case "BOOKED":
       case "PICKED UP": {
-        // if (selectedRowdata.length > 0) {
         if (identifier === "Cancel") {
           if (selectedRowdata.length > 0) {
-            const awbNo = selectedRowdata.map((data: any, index: any) => {
-              return data.original.awb;
-            });
+            let awbNo: any = "";
+            const selectAllContainer: any =
+              document.getElementById("selectAll");
+            const checkbox = selectAllContainer.querySelector(
+              'input[type="checkbox"]'
+            );
+
+            // Function to check if the checkbox is checked
+            const isChecked = checkbox.checked;
+            if (isChecked) {
+              awbNo = allOrders.map((data: any, index: any) => {
+                return data.awb;
+              });
+            } else {
+              awbNo = selectedRowdata.map((data: any, index: any) => {
+                return data.original.awb;
+              });
+            }
+
             setCancellationModal &&
               setCancellationModal({ isOpen: true, payload: awbNo });
           } else {
@@ -607,7 +482,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               return data.original.awb;
             });
 
-            fetchManifest(awbsNo);
+            // fetchManifest(awbsNo);
+            await fetchManifest(awbsNo, setIsLoadingManifest);
           } else {
             toast.error(
               "Please select atleast one order for Download Manifest"
@@ -617,16 +493,19 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         } else if (identifier === "Download_Labels") {
           if (selectedRowdata.length > 0) {
             let awbs: any = [];
-            const lebelsArr: string[] = selectedRowdata.map(
-              (data: any, index: any) => {
-                if (data?.original?.awb) {
-                  awbs.push(data?.original?.awb);
-                } else {
-                  return "";
-                }
+            selectedRowdata.map((data: any, index: any) => {
+              if (data?.original?.awb) {
+                awbs.push(data?.original?.awb);
+              } else {
+                return "";
               }
-            );
-            const data = await fetchLabels(awbs, setIsLoadingManifest);
+            });
+            if (awbs?.length > 100) {
+              return toast.error(
+                "Kindly select all label checkbox and try again with bulk download"
+              );
+            }
+            await fetchLabels(awbs, setIsLoadingManifest);
           } else {
             toast.error("Please select atleast one order for Download Labels");
             return;
@@ -634,28 +513,22 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         } else if (identifier === "Download_Multi_Tax") {
           if (selectedRowdata.length > 0) {
             let awbs: any = [];
-            const lebelsArr: string[] = selectedRowdata.map(
-              (data: any, index: any) => {
-                if (data?.original?.awb) {
-                  awbs.push(data?.original?.awb);
-                } else {
-                  return "";
-                }
+            selectedRowdata.map((data: any, index: any) => {
+              if (data?.original?.awb) {
+                awbs.push(data?.original?.awb);
+              } else {
+                return "";
               }
-            );
-            const data = await fetchMultiTax(awbs, setIsLoadingManifest);
+            });
+            await fetchMultiTax(awbs, setIsLoadingManifest);
           } else {
             toast.error("Please select atleast one order for Download Invoice");
             return;
           }
         }
-        // } else {
-        //   toast.error("Please select atleast one order for tax Invoice");
-        // }
         break;
       }
       case "IN TRANSIT": {
-        // if (selectedRowdata.length > 0) {
         if (identifier === "Rto") {
           if (selectedRowdata.length > 0) {
             const awbNo = selectedRowdata.map((data: any, index: any) => {
@@ -670,53 +543,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           toast.error("Please select atleast one order for Download Invoice");
           return;
         }
-
-        // } else {
-        //   toast.error("Please select atleast one order for tax Invoice");
-        // }
         break;
       }
       case "OUT OF DELIVERY":
       case "DELIVERED":
       case "RETURN":
       case "EXCEPTION": {
-        // if (selectedRowdata.length > 0) {
-        //   if (identifier === "Cancel") {
-        //     const awbNo = selectedRowdata.map((data: any, index: any) => {
-        //       return data.original.awb;
-        //     });
-        //     setCancellationModal &&
-        //       setCancellationModal({ isOpen: true, payload: awbNo });
-        //   }
-        // } else if (identifier === "Download_menifest_report") {
-        //   if (selectedRowdata.length > 0) {
-        //     const awbsNo = selectedRowdata.map((data: any, index: any) => {
-        //       return data.original.awb;
-        //     });
-
-        //     fetchManifest(awbsNo);
-        //   } else {
-        //     toast.error(
-        //       "Please select atleast one order for Download Manifest"
-        //     );
-        //     return;
-        //   }
-        // }else if (identifier === "Rto") {
-        //   if (selectedRowdata.length > 0) {
-        //     const awbNo = selectedRowdata.map((data: any, index: any) => {
-        //       return data.original.awb;
-        //     });
-        //     console.log("AWBNO>>>>>>>>>",awbNo)
-        //     rtoReattempt(awbNo, "RTO");
-        //   } else {
-        //     toast.error(
-        //       "Please select atleast one order for TESTING"
-        //     );
-        //     return;
-        //   }
-        // } else {
-        //   toast.error("Please select atleast one order");
-        // }
         if (selectedRowdata.length > 0) {
           const awbNo = selectedRowdata.map((data: any) => data.original.awb);
 
@@ -761,10 +593,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  // useEffect(() => {
-  //   fetchPartnerList();
-  // }, []);  // as asked by Ashish sir and Biswa
-
   const filterComponent = (className?: string) => {
     return (
       <div
@@ -803,7 +631,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const handleFilterOrders = (index: any) => {
-    console.log("🚀 ~ handleFilterOrders ~ index:", index);
     setFilterId(index);
     setIsErrorPage(index === 2 ? true : false);
     switch (index) {
@@ -820,12 +647,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         getAllOrders(subStatus, stateValue);
         break;
       }
-      // case 2: {
-      //   const subStatus = "FAILED";
-      //   getAllOrders(subStatus);
-
-      //   break;
-      // }
       case 2: {
         setShowErrorReportBtn(true);
         getErrors();
@@ -833,42 +654,22 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  // const handleSearchOrder = async (e: any) => {
-  //   try {
-  //     clearTimeout(debounceTimer);
-  //     debounceTimer = setTimeout(async () => {
-  //       if (e.target.value.length > 0) {
-  //         isOrderTableLoader(true);
-  //         const { data } = await POST(GET_SELLER_ORDER, {
-  //           id: e.target.value,
-  //           currentStatus,
-  //           filterArrOne: filterPayLoad?.filterArrOne || [],
-  //           filterArrTwo: filterPayLoad?.filterArrTwo || [],
-  //         });
-  //         const { OrderData, orderCount } = data?.data?.[0];
-  //         setStatusCount("", currentStatus, orderCount);
-  //         setTotalcount(orderCount ? orderCount : 0);
-
-  //         if (data?.status) {
-  //           isOrderTableLoader(false);
-  //           setOrders(OrderData);
-  //           setFilterModal(false);
-  //         } else {
-  //           isOrderTableLoader(false);
-  //           setFilterModal(false);
-  //           throw new Error(data?.meesage);
-  //         }
-  //       }
-  //     }, 800);
-  //   } catch (error: any) {
-  //     console.warn("Error in OrderStatus Debouncing: ", error.message);
-  //   }
-  // };
-
   const bulkLabelDownload = async () => {
-    setBulkReportDownloadLoading(true);
     let startEpoch = null;
     let lastendEpoch = null;
+    let awbs: any = [];
+    selectedRowdata.map((data: any, index: any) => {
+      if (data?.original?.awb) {
+        awbs.push(data?.original?.awb);
+      } else {
+        return "";
+      }
+    });
+    if (!isBulkCheckedBooked && awbs?.length === 0) {
+      return toast.error("First select checkbox for downloading bulk label");
+    }
+
+    setBulkReportDownloadLoading(true);
 
     const { startDate, endDate } = selectedDateRange;
 
@@ -884,11 +685,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       filterArrOne: filterPayLoad.filterArrOne,
       startDate: startEpoch,
       endDate: lastendEpoch,
+      awbs,
     };
 
     try {
-      let sellerId = localStorage.getItem("sellerId");
-
       const { data: response } = await POST(FETCH_BULK_LABELS_REPORT_DOWNLOAD, {
         ...payload,
       });
@@ -1011,7 +811,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               </div>
             )}
             <div className="grid grid-cols-4 lg:flex ">
-              {currentStatus === "BOOKED" && isBulkCheckedBooked && (
+              {currentStatus === "BOOKED" && (
                 <button
                   onClick={() => bulkLabelDownload()}
                   className={`inline-flex px-2 py-2 justify-center items-center gap-2 bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 border-r rounded-l-md rounded-r-md cursor-pointer`}
@@ -1024,7 +824,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   Bulk Download
                 </button>
               )}
-              {getActionsIcon()?.length > 0 && manifestButton && (
+              {getActionsIcon()?.length > 0 && (
                 <div className="rounded-md flex mx-3 gap-x-3">
                   {getActionsIcon()?.map((data: any, index: any) => {
                     return (
@@ -1057,94 +857,18 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             {capitalizeFirstLetter(data?.buttonName)}
                           </span>
                         </button>
-                        {/* <button
-                        key={index}
-                        className={`${
-                          index < getActionsIcon().length - 1 &&
-                          "border-r border-[#A4A4A4] "
-                        }
-                          px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
-                        onClick={() =>
-                          handleActions(
-                            currentStatus,
-                            selectedRowdata,
-                            data?.identifier
-                          )
-                        }
-                      >
-                        {isLoadingManifest.isLoading &&
-                        isLoadingManifest.identifier === data.identifier ? (
-                          <div className="flex justify-center items-center">
-                            <Spinner
-                              className={"!w-[15px] !h-[15px] !border-2"}
-                            />
-                          </div>
-                        ) : (
-                          <img src={data.icon} alt="" className="w-[16px]" />
-                        )}
-
-                        <span className="font-open-sans text-[14px] leading-20 whitespace-no-wrap">
-                          {capitalizeFirstLetter(data?.buttonName)}
-                        </span>
-                      </button> */}
-                        {/* <OneButton
-                        text={capitalizeFirstLetter(data?.buttonName)}
-                        icon={data.icon}
-                        showIcon
-                        // className={`${
-                        //   index < getActionsIcon().length - 1 &&
-                        //   "border-r border-[#A4A4A4]"
-                        // } px-3 py-1  `}
-                        onClick={() =>
-                          handleActions(
-                            currentStatus,
-                            selectedRowdata,
-                            data?.identifier
-                          )
-                        }
-                        loading={
-                          isLoadingManifest.isLoading &&
-                          isLoadingManifest.identifier === data.identifier
-                        }
-                        variant="secondary"
-                        size="medium"
-                        iconClass="w-[16px]"
-                      /> */}
                       </>
                     );
                   })}
                 </div>
               )}
-              {/* <div>
-              <SearchBox
-                className="removePaddingPlaceHolder"
-                label="Search"
-                value={searchedText}
-                onChange={(e: any) => {
-                  handleSearchOrder(e);
-                }}
-                getFullContent={getAllOrders}
-                customPlaceholder="Search By Order Id, AWB"
-              />
-            </div>
-            <div
-              className="flex justify-between cursor-pointer items-center p-2 gap-x-2"
-              onClick={() => setFilterModal(true)}
-            >
-              <img src={FilterIcon} alt="" />
-              <span className="text-[#004EFF] text-[14px] font-semibold">
-                Filter
-              </span>
-            </div> */}
             </div>
           </div>
         );
       } else if (currentStatus === "IN TRANSIT") {
-        // buttons and the logic to here for "IN TRANSIT"
-
         return (
           <div className="grid grid-cols-4 lg:flex ">
-            {getActionsIcon()?.length > 0 && manifestButton && (
+            {getActionsIcon()?.length > 0 && (
               <div className="rounded-md flex mx-3 gap-x-3">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
@@ -1185,10 +909,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           </div>
         );
       } else if (currentStatus === "EXCEPTION") {
-        // buttons and the logic to here for "EXCEPTION"
         return (
           <div className="grid grid-cols-4 lg:flex ">
-            {getActionsIcon()?.length > 0 && manifestButton && (
+            {getActionsIcon()?.length > 0 && (
               <div className="rounded-md flex mx-3 gap-x-3">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
@@ -1271,39 +994,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 })}
               </div>
             )}
-            {/* 
-            <div>
-              <SearchBox
-                className="removePaddingPlaceHolder"
-                label="Search"
-                value={searchedText}
-                onChange={(e: any) => {
-                  handleSearchOrder(e);
-                }}
-                getFullContent={getAllOrders}
-                customPlaceholder="Search By Order Id, AWB"
-              />
-            </div>
-
-            <div
-              className="flex justify-between items-center p-2 gap-x-2 cursor-pointer"
-              onClick={() => setFilterModal(true)}
-            >
-              <img src={FilterIcon} alt="" />
-              <span className="text-[#004EFF] text-[14px] font-semibold">
-                FILTER
-              </span>
-            </div> */}
           </div>
         );
       }
     }
   };
-
-  // const handleStatusChanges = (index: any) => {
-  //   handleTabChange(index);
-  //    setStatusId(index);
-  // };
 
   const getAllOrders = async (subStatus?: any, stateValue?: any) => {
     let value;
@@ -1396,9 +1091,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     label: string,
     value: string
   ) => {
-    // mobileNo: null,
-    // pincode: null,
-
     const regex = /^-?\d+(\.\d+)?$/;
 
     if (label === "mobileNo") {
@@ -1634,9 +1326,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           return toast.error(data?.message);
         }
       }
-
-      // setIsBulkModalOpen(false);
-      // getAllOrders("", stateValue);
     } catch (error: any) {
       return toast.error(error?.message);
     }
@@ -1838,7 +1527,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         <div className="mx-5">
           <div className="flex justify-between py-5 items-center text-center">
             <div className="flex justify-start items-start   flex-col gap-x-[8px] ">
-              {/* <img src={LocationIcon} alt="locationIcon" /> */}
               <p className="font-Lato font-normal text-2xl text-[#323232] leading-8 capitalize">
                 Bulk Actions
               </p>
@@ -1902,7 +1590,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   <div>
                     <div className="relative">
                       <SearchBox
-                        // className="removePaddingPlaceHolder !h-[34px] w-[245px] border-none"
                         className="rounded removePaddingPlaceHolder !pl-[2.5rem] border-[1px] h-[48px] w-full border-[#A4A4A4] focus:border-[#004eff]  gap-[15px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                         label="Search"
                         value={searchedText}
@@ -1922,7 +1609,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                               ...result,
                             ]);
                         }}
-                        // getFullContent={getAllOrders}
                         customPlaceholder="Search By Name"
                         imgClassName="!w-[42px] "
                       />
@@ -2006,19 +1692,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                       </div>
                     )}
                   </div>
-
-                  {/* <CustomInputBox
-                    label="Address"
-                    // value={pickupDetails.fullAddress}
-                    className="!h-[70px]"
-                    // onChange={handleInputChange}
-                    name="fullAddress"
-                  /> */}
-
                   <textarea
                     placeholder="Address"
                     value={bulkActionObject?.pickupAddress?.fullAddress}
-                    // className=" w-[100%] rounded-lg p-4"
                     className="rounded border-[1px] removePaddingPlaceHolder w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[80px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                     name="fullAddress"
                     onChange={(e: any) =>
@@ -2108,25 +1784,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 >
                   <OneButton
                     text={"Back"}
-                    // disabled={errorsArray.length > 0 ? true : false}
                     variant="secondary"
                     onClick={() => {
                       setPageToOpen("Home");
                       setSearchResult([]);
                       setSearchedText("");
                     }}
-                    //   onClick={() => handleServices(placeOrderButton)}
                     className="!w-[160px]"
                   />
 
                   <OneButton
                     text={"Update Order"}
-                    // disabled={errorsArray.length > 0 ? true : false}
                     variant="primary"
                     onClick={() => {
                       updateAddressOfMultipleOrders("pickupAddress");
                     }}
-                    //   onClick={() => handleServices(placeOrderButton)}
                     className="!w-[160px]"
                   />
                 </div>
@@ -2137,7 +1809,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   <div>
                     <div className="relative">
                       <SearchBox
-                        // className="removePaddingPlaceHolder !h-[34px] w-[245px] border-none"
                         className="rounded removePaddingPlaceHolder !pl-[2.5rem] border-[1px] h-[48px] w-full border-[#A4A4A4] focus:border-[#004eff]  gap-[15px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                         label="Search"
                         value={searchedText}
@@ -2241,7 +1912,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
                   <textarea
                     placeholder="Address"
-                    // className=" w-[100%] rounded-lg p-4"
                     className="rounded border-[1px] removePaddingPlaceHolder w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[70px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                     name="fullAddress"
                     value={bulkActionObject?.deliveryAddress?.fullAddress}
@@ -2253,15 +1923,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                       )
                     }
                   />
-
-                  {/* <CustomInputBox
-                    label="Address"
-                    // value={pickupDetails.fullAddress}
-                    className="!h-[70px]"
-                    // onChange={handleInputChange}
-                    name="fullAddress"
-                  /> */}
-
                   {validationErrors.deliveryAddress.fullAddress && (
                     <div className="flex items-center gap-x-1 mt-1">
                       <img src={InfoCircle} alt="info" width={10} height={10} />
@@ -2285,7 +1946,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         }
                         inputMode="numeric"
                         maxLength={6}
-                        // onChange={handlePincodeChange}
                         name="pincode"
                       />
 
@@ -2342,25 +2002,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 >
                   <OneButton
                     text={"Back"}
-                    // disabled={errorsArray.length > 0 ? true : false}
                     variant="secondary"
                     onClick={() => {
                       setPageToOpen("Home");
                       setSearchedText("");
                       setSearchResult([]);
                     }}
-                    //   onClick={() => handleServices(placeOrderButton)}
                     className="!w-[160px]"
                   />
 
                   <OneButton
                     text={"Update Order"}
-                    // disabled={errorsArray.length > 0 ? true : false}
                     variant="primary"
                     onClick={() => {
                       updateAddressOfMultipleOrders("deliveryAddress");
                     }}
-                    //   onClick={() => handleServices(placeOrderButton)}
                     className="!w-[160px]"
                   />
                 </div>
@@ -2374,10 +2030,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                     }}
                     wrapperClass="h-[2.6rem] !text-[14px]"
                     selectClassName="h-[2.6rem] !text-[14px]"
-                    // value={}
-                    // value={pickupAddress.state}
-                    // onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                    // }}
                     options={allBoxes.map((item: any) => {
                       return { label: item.name, value: item.boxId };
                     })}
@@ -2401,7 +2053,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                       boxShadow:
                         "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
                     }}
-                    // onClick={() => handleProductsDetails(index)}
                   >
                     <div className="w-[100%]">
                       <InputBox
@@ -2410,11 +2061,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         isDisabled={boxBoolean ? true : false}
                         name="boxName"
                         inputType="text"
-                        // inputMode="numeric"
                         onChange={(e: any) => {
                           handleBoxUpdates("name", e.target.value);
                         }}
-                        // inputError={inputError}
                       />
                       {validationErrors.box.name && (
                         <div className="flex items-center gap-x-1 mt-1">
@@ -2442,7 +2091,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           onChange={(e: any) => {
                             handleBoxUpdates("weight", e.target.value);
                           }}
-                          // inputError={inputError}
                         />
                         {validationErrors.box.weight && (
                           <div className="flex items-center gap-x-1 mt-1">
@@ -2463,12 +2111,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           label="Volumetric Weight"
                           value={bulkActionObject?.box?.volumetricWeight}
                           name="volumetricWeight"
-                          // onChange={(e: any) => {
-                          //   handleBoxUpdates("weight", e.target.value);
-                          // }}
                           inputType="number"
                           isDisabled={true}
-                          // inputError={inputError}
                         />
                       </div>
                     </div>
@@ -2572,25 +2216,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 >
                   <OneButton
                     text={"Back"}
-                    // disabled={errorsArray.length > 0 ? true : false}
                     variant="secondary"
                     onClick={() => {
                       setPageToOpen("Home");
                       setSearchedText("");
                       setSearchResult([]);
                     }}
-                    //   onClick={() => handleServices(placeOrderButton)}
                     className="!w-[160px]"
                   />
 
                   <OneButton
                     text={"Update Order"}
-                    // disabled={errorsArray.length > 0 ? true : false}
                     variant="primary"
                     onClick={() => {
                       updateBoxOfMultipleOrders();
                     }}
-                    //   onClick={() => handleServices(placeOrderButton)}
                     className="!w-[160px]"
                   />
                 </div>
