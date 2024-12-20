@@ -5,7 +5,7 @@ import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import CustomButton from "../../../components/Button/index";
 import CustomInputBox from "../../../components/Input";
-import { redirect, useNavigate } from "react-router-dom";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
@@ -43,9 +43,11 @@ import { useErrorBoundary } from "react-error-boundary";
 import { getQueryJson } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
 import { isMasked, login } from "../../../redux/reducers/userReducer";
+import axios from "axios";
 
 const Index = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const { resetPassword, source, sellerEmail } = getQueryJson();
@@ -317,12 +319,24 @@ const Index = () => {
       : "";
 
     const params = getQueryJson();
+
     const keys = [
       "selling_partner_id",
       "amazon_callback_uri",
       "amazon_state",
       "spapi_oauth_code",
     ];
+
+    const urlToken = params.token;
+    const sellerId = params.sellerId;
+
+    const header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${sellerId}_${tokenKey}`
+      )}`,
+    };
+
     keys.forEach((key) => {
       if (params?.hasOwnProperty(key)) {
         localStorage.setItem(key, params[key]);
@@ -346,38 +360,105 @@ const Index = () => {
     setTimeout(() => {
       setShowBootScreen(false);
     }, 2000);
-    token &&
-      (async () => {
-        const response = await POST(VALIDATE_USER_TOKEN);
-        const amazonsellerId: any = localStorage.getItem("sellerId");
-        const state = amazonsellerId;
-        // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
-        const redirectUrl = AMAZON_REDIRECT_URL;
-        if (response?.data?.success) {
-          if (
-            selling_partner_id &&
-            amazon_callback_uri &&
-            amazon_state &&
-            state
-          ) {
-            [
-              "selling_partner_id",
-              "amazon_callback_uri",
-              "amazon_state",
-            ].forEach((key) => localStorage.removeItem(key));
-            window.location.href =
-              amazon_callback_uri +
-              "?redirect_uri=" +
-              redirectUrl +
-              "&amazon_state=" +
-              amazon_state +
-              "&state=" +
-              state;
-          } else {
+    (async () => {
+      if (urlToken) {
+        // Validate the token from the URL
+        try {
+          const response = await axios.post(
+            VALIDATE_USER_TOKEN,
+            {},
+            { headers: { ...header, Authorization: `Bearer ${urlToken}` } }
+          );
+
+          if (response?.data?.success) {
+            localStorage.setItem("sellerId", response?.data?.data[0]?.sellerId);
+            setLocalStorage(
+              `${response?.data?.data[0]?.sellerId}_${tokenKey}`,
+              urlToken
+            );
+
+            // Navigate to the dashboard directly if the token is valid
             navigate("/dashboard/overview");
+            return; // Skip the rest of the logic
+          } else {
+            console.error("Invalid token from URL");
           }
+        } catch (error) {
+          console.error("Error validating token from URL", error);
         }
-      })();
+      }
+
+      if (token) {
+        // Validate the token from localStorage (existing logic)
+        try {
+          const response = await POST(VALIDATE_USER_TOKEN);
+          const amazonsellerId: any = localStorage.getItem("sellerId");
+          const state = amazonsellerId;
+          const redirectUrl = AMAZON_REDIRECT_URL;
+
+          if (response?.data?.success) {
+            if (
+              selling_partner_id &&
+              amazon_callback_uri &&
+              amazon_state &&
+              state
+            ) {
+              [
+                "selling_partner_id",
+                "amazon_callback_uri",
+                "amazon_state",
+              ].forEach((key) => localStorage.removeItem(key));
+
+              window.location.href =
+                amazon_callback_uri +
+                "?redirect_uri=" +
+                redirectUrl +
+                "&amazon_state=" +
+                amazon_state +
+                "&state=" +
+                state;
+            } else {
+              navigate("/dashboard/overview");
+            }
+          }
+        } catch (error) {
+          console.error("Error validating token from localStorage", error);
+        }
+      }
+    })();
+
+    // token &&
+    //   (async () => {
+    //     const response = await POST(VALIDATE_USER_TOKEN);
+    //     const amazonsellerId: any = localStorage.getItem("sellerId");
+    //     const state = amazonsellerId;
+    //     // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
+    //     const redirectUrl = AMAZON_REDIRECT_URL;
+    //     if (response?.data?.success) {
+    //       if (
+    //         selling_partner_id &&
+    //         amazon_callback_uri &&
+    //         amazon_state &&
+    //         state
+    //       ) {
+    //         [
+    //           "selling_partner_id",
+    //           "amazon_callback_uri",
+    //           "amazon_state",
+    //         ].forEach((key) => localStorage.removeItem(key));
+    //         window.location.href =
+    //           amazon_callback_uri +
+    //           "?redirect_uri=" +
+    //           redirectUrl +
+    //           "&amazon_state=" +
+    //           amazon_state +
+    //           "&state=" +
+    //           state;
+    //       } else {
+    //         navigate("/dashboard/overview");
+    //       }
+    //     }
+    //   })();
   }, []);
 
   useEffect(() => {

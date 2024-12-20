@@ -807,7 +807,10 @@ export const columnHelperForNewOrder = (
     ColumnsHelper.accessor("IDs", {
       header: (props: any) => {
         return (
-          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
+          <div
+            className="flex items-center font-Open font-semibold leading-5 text-sm"
+            id="selectAll"
+          >
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -963,6 +966,26 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
 
+              {(source === "SHOPIFY" ||
+                source === "WOOCOMMERCE" ||
+                source === "ZOHO" ||
+                source === "AMAZON" ||
+                source === "UNICOMMERCE") &&
+                otherDetails?.channelOrderCreatedAt && (
+                  <div className="mt-1">
+                    <span className="font-Open text-xs font-normal leading-4 mr-1">
+                      Order Created From Channel:
+                    </span>
+                    <div>
+                      <p className="font-Open text-sm font-semibold leading-5">
+                        {date_DD_MMM_YYYY_HH_MM_SS(
+                          otherDetails?.channelOrderCreatedAt
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
               <div className="flex items-center mt-1">
                 <span className=" font-Open  text-xs leading-4 font-normal">
                   Source :
@@ -973,7 +996,7 @@ export const columnHelperForNewOrder = (
                   </span>
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center mt-1">
                 <span className=" font-Open  text-xs leading-4 font-normal">
                   Order Type :
                 </span>
@@ -1533,7 +1556,10 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       header: (props: any) => {
         return (
           <div className="flex items-center">
-            <div className="flex justify-between mr-3 !my-[-10px] cursor-pointer ">
+            <div
+              className="flex justify-between mr-3 !my-[-10px] cursor-pointer"
+              id="selectAll"
+            >
               <PartialChecked
                 checked={props.table?.getIsAllRowsSelected()}
                 onChange={props?.table?.getToggleAllRowsSelectedHandler()}

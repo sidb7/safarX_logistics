@@ -1,74 +1,155 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import "../../styles/tableStyle.css";
-import { useVirtualizer } from "@tanstack/react-virtual";
 
 interface ITablePropTypes {
   data: any[];
   columns: any;
-  tdclassName?: any;
-  thclassName?: any;
-  trclassName?: any;
+  tdclassName?: string;
+  thclassName?: string;
+  trclassName?: string;
   setRowSelectedData?: any;
-  sticky?: any;
+  sticky?: boolean;
 }
 
-export const CustomTable = (props: ITablePropTypes) => {
-  const [rowSelection, setRowSelection]: any = useState([]);
-  const {
-    data = [],
-    columns,
-    tdclassName,
-    thclassName,
-    trclassName,
-    setRowSelectedData,
-    sticky,
-  } = props;
+const debounce = (func: Function, delay: number) => {
+  let timer: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
+};
+
+export const CustomTable = ({
+  data = [],
+  columns,
+  tdclassName = "",
+  thclassName = "",
+  trclassName = "",
+  setRowSelectedData,
+}: ITablePropTypes) => {
+  const [rowSelection, setRowSelection] = useState({});
+  const [visibleData, setVisibleData] = useState<any[]>([]);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  // const [isLoading, setIsLoading] = useState(false);
+  const prevScrollTop = useRef(0);
+  const chunkSize = 3;
+  const initialSize = 8;
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setVisibleData(data.slice(0, initialSize));
+    }
+  }, [data]);
 
   const table = useReactTable({
-    data,
+    data: visibleData,
     columns,
-    state: {
-      rowSelection,
-    },
+    state: { rowSelection },
     onRowSelectionChange: setRowSelection,
-    getCoreRowModel: getCoreRowModel()
-  });
-
-  const { rows } = table?.getRowModel();
-
-  //The virtualizer needs to know the scrollable container element
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-
-  const rowVirtualizer = useVirtualizer({
-    count: rows?.length,
-    estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
-    getScrollElement: () => tableContainerRef?.current,
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
-    measureElement:
-      typeof window !== "undefined" &&
-      navigator?.userAgent?.indexOf("Firefox") === -1
-        ? (element) => element?.getBoundingClientRect().height
-        : undefined,
-    overscan: 10,
+    getCoreRowModel: getCoreRowModel(),
   });
 
   useEffect(() => {
-    // table?.getSelectedRowModel()?.flatRows.length > 0 &&
     setRowSelectedData &&
       setRowSelectedData(table?.getSelectedRowModel()?.flatRows);
   }, [table?.getSelectedRowModel()?.flatRows]);
 
+  const handleScroll = useCallback(
+    debounce(() => {
+      const scrollElement = tableContainerRef.current;
+      if (!scrollElement) return;
+
+      const currentScrollTop = scrollElement.scrollTop;
+      const totalRows = data.length;
+
+      if (currentScrollTop > prevScrollTop.current) {
+        // Scrolling Down
+        const isNearBottom =
+          scrollElement.scrollHeight - scrollElement.scrollTop <=
+          scrollElement.clientHeight + 50;
+
+        if (isNearBottom && visibleData.length < totalRows) {
+          // setIsLoading(true);
+
+          setTimeout(() => {
+            setVisibleData((prev) => {
+              const start = prev.length;
+              const end = Math.min(start + chunkSize, totalRows);
+              return [...prev, ...data.slice(start, end)];
+            });
+            // setIsLoading(false);
+          }, 800); // Simulated delay
+        }
+      } else {
+        // Scrolling Up
+        const isNearTop = scrollElement.scrollTop <= 50;
+
+        if (isNearTop && visibleData[0]?.id > 0) {
+          // setIsLoading(true);
+
+          setTimeout(() => {
+            setVisibleData((prev) => {
+              const start = Math.max(0, visibleData[0]?.id - chunkSize);
+              const end = visibleData[0]?.id;
+              return [...data.slice(start, end), ...prev];
+            });
+            scrollElement.scrollTop = 100;
+            // setIsLoading(false);
+          }, 800);
+        }
+      }
+
+      prevScrollTop.current = currentScrollTop;
+    }, 200),
+    [data, visibleData]
+  );
+
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    container?.addEventListener("scroll", handleScroll);
+    return () => container?.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
   return (
-    <div ref={tableContainerRef}>
-      <div className="py-2">
-        <table className="w-full  bg-white tableContainerStyle	">
-          <thead className={`border-b border-[#E8E8E8] `}>
+    <>
+      <div
+        ref={tableContainerRef}
+        style={{
+          overflow: "auto",
+          maxHeight: "700px",
+          position: "relative",
+        }}
+      >
+        {/* Loading Overlay */}
+
+        <div
+          className="fixed inset-0 bg-[#333333b5] flex justify-center items-center z-50"
+          id="placeOrder"
+          style={{
+            pointerEvents: "none",
+            overflow: "hidden",
+            display: "none",
+          }} // Prevent interaction with the table
+        >
+          <span className="text-white text-2xl">
+            <div className="w-2/6 -ml-[15%] bg-gray-300 rounded-full absolute z-[111] h-6">
+              <div
+                id="progress"
+                className="bg-blue-500 h-6 rounded-full"
+                style={{ width: "0%" }}
+              ></div>
+            </div>
+          </span>
+        </div>
+
+        {/* Table Content */}
+        <table className="w-full bg-white tableContainerStyle relative">
+          <thead className={`border-b border-[#E8E8E8]`}>
             {table.getHeaderGroups()?.map((headerGroup: any) => (
               <tr key={headerGroup.id}>
                 {headerGroup?.headers?.map((header: any) => (
@@ -87,45 +168,19 @@ export const CustomTable = (props: ITablePropTypes) => {
               </tr>
             ))}
           </thead>
-          {/* <tbody className="section overflow-auto">
-          {table.getRowModel().rows?.length > 0
-            ? table.getRowModel().rows?.map((row: any) => (
+
+          <tbody>
+            {visibleData.map((rowData: any, index) => {
+              const row = table.getRowModel().rows[index];
+              return (
                 <tr
-                  key={row.id}
-                  className={`shadow-md rounded-lg	hover:bg-slate-100 ${trclassName}`}
+                  key={row?.id}
+                  className={`hover:bg-[#f8f8f8] ${trclassName}`}
                 >
-                  {row.getVisibleCells()?.map((cell: any) => (
+                  {row?.getVisibleCells()?.map((cell: any) => (
                     <td
                       key={cell.id}
                       className={`px-4 text-left ${tdclassName}`}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            : ""}
-        </tbody> */}
-
-          {/* new virtualized table  */}
-
-          <tbody className="section overflow-auto">
-            {rowVirtualizer.getVirtualItems().map((virtualRow, index) => {
-              const row = rows[virtualRow.index];
-              return (
-                <tr
-                  ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
-                  data-index={virtualRow.index} //
-                  key={row.id}
-                  className={`shadow-md rounded-lg	hover:bg-[#f8f8f8] ${trclassName}`}
-                >
-                  {row.getVisibleCells()?.map((cell: any) => (
-                    <td
-                      key={cell.id}
-                      className={`px-4 text-left  ${tdclassName}`}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -138,14 +193,14 @@ export const CustomTable = (props: ITablePropTypes) => {
             })}
           </tbody>
         </table>
-        <div>
-          {table?.getRowModel().rows?.length === 0 && (
-            <div className="w-full h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
-              No Data Found
-            </div>
-          )}
-        </div>
+
+        {/* No Data Found */}
+        {table?.getRowModel().rows?.length === 0 && (
+          <div className="w-full h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+            No Data Found
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };

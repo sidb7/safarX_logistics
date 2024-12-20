@@ -24,7 +24,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
     if (userInfo) {
       try {
         const parsedUserInfo = JSON.parse(userInfo);
-        console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
+        // console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
         const {
           sellerId,
           email,
