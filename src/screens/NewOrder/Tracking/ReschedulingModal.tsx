@@ -63,6 +63,9 @@ const ReschedulingModal = ({
       } else {
         toast.error(data?.data?.message);
         setReschedulingModal && setReschedulingModal(false);
+        if (data?.data?.message === "Please Provide Your Token") {
+          window.location.reload();
+        }
       }
     } catch (error: any) {
       console.log(error.message);

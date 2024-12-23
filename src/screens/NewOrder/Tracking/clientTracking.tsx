@@ -55,13 +55,14 @@ const Tracking = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const trackingNoFromURL = queryParams.get("trackingNo");
   const [mobileNo, setMobileNo] = useState<any>();
-  const [alternateNumber, setAlternateNumber] = useState<any>();
-  const [alterMobileNoError, setAlternateMobileNumber] = useState<any>({
-    mobileNoError: "",
-  });
+
   const [logginModal, setLogginModal] = useState<any>(false);
   const [altContactNo, setAltContactNo] = useState<any>(false);
   const [loginSuccess, setLoginSuccess] = useState<any>(false);
+  const [mobileNumber, setMobileNumber] = useState({
+    mobileNo: "",
+  });
+  const [mobileNoError, setMobileNoError] = useState<any>();
 
   const awb = trackingState?.[0]?.awb;
 
@@ -134,7 +135,13 @@ const Tracking = () => {
     }
   };
 
-  //getting seller id
+  const handleOnchangeError = (value: any) => {
+    if (value?.length === 10) {
+      setMobileNoError("");
+    } else {
+      setMobileNoError("Invalid Mobile No");
+    }
+  };
 
   const getJwtTokenForUser = (sellerId: any) => {
     // Construct the dynamic key based on the user ID
@@ -206,6 +213,7 @@ const Tracking = () => {
   };
 
   const handleUpdateAlternateNumber = async () => {
+    console.log("qwetyuio");
     const token = sessionStorage.getItem(`${awb}`);
     console.log("AWB:", awb);
     console.log("Retrieved Token:", token);
@@ -217,7 +225,7 @@ const Tracking = () => {
 
     try {
       const payload = {
-        altno: alternateNumber,
+        altno: mobileNumber?.mobileNo,
         rescheduleTime: "",
         buyerRemark: "Alternate Number Updation",
         requestType: "ALTMOBILENUMBER",
@@ -226,13 +234,19 @@ const Tracking = () => {
 
       setAltContactNo(true);
 
+      console.log("payload", payload);
+
       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });
+      console.log("asdghj", data);
       if (data?.data?.success) {
         toast.success(data?.data?.message);
       } else {
+        console.log("datatrutyuty", data?.data?.message);
         toast.error(data?.data?.message);
+        // if (data?.data?.message === "Please Provide Your Token") {
+        //   window.location.reload();
+        // }
       }
-      console.log("Response:", data?.data?.message);
     } catch (error: any) {
       console.error("Error:", error.message);
     }
@@ -955,111 +969,61 @@ const Tracking = () => {
                                                       </p>
                                                     </div>
 
-                                                    <div className="grid grid-cols-2 mt-4">
+                                                    <div className="flex mt-4">
                                                       <div className="flex gap-x-2 items-center">
                                                         {/* alternate number */}
-                                                        <div className="flex flex-col">
-                                                          <CustomInputBox
-                                                            label="Update Alt Contact No"
-                                                            inputType="number"
-                                                            onChange={(
-                                                              e: any
-                                                            ) => {
-                                                              const value =
-                                                                e.target.value;
-
-                                                              // Regex for valid Indian mobile numbers starting with 6-9 and up to 10 digits
-                                                              const regex =
-                                                                /^[6-9]\d{0,9}$/;
-
-                                                              if (
-                                                                regex.test(
-                                                                  value
-                                                                ) ||
-                                                                value === ""
-                                                              ) {
-                                                                setAlternateNumber(
-                                                                  value
-                                                                );
-
-                                                                // Check for length and set error message dynamically
+                                                        <div>
+                                                          <div>
+                                                            <CustomInputBox
+                                                              value={
+                                                                mobileNumber?.mobileNo ||
+                                                                ""
+                                                              }
+                                                              inputMode="numeric"
+                                                              label="Enter Mobile Number"
+                                                              maxLength={10}
+                                                              onChange={(
+                                                                e: any
+                                                              ) => {
                                                                 if (
-                                                                  value.length ===
-                                                                  0
+                                                                  !isNaN(
+                                                                    e.target
+                                                                      .value
+                                                                  )
                                                                 ) {
-                                                                  setAlternateMobileNumber(
+                                                                  setMobileNumber(
                                                                     {
-                                                                      ...alterMobileNoError,
-                                                                      mobileNoError:
-                                                                        "Mobile number cannot be empty",
-                                                                    }
-                                                                  );
-                                                                } else if (
-                                                                  value.length !==
-                                                                  10
-                                                                ) {
-                                                                  setAlternateMobileNumber(
-                                                                    {
-                                                                      ...alterMobileNoError,
-                                                                      mobileNoError:
-                                                                        "Invalid Mobile Number",
-                                                                    }
-                                                                  );
-                                                                } else {
-                                                                  setAlternateMobileNumber(
-                                                                    {
-                                                                      ...alterMobileNoError,
-                                                                      mobileNoError:
-                                                                        "",
+                                                                      ...mobileNumber,
+                                                                      mobileNo:
+                                                                        e.target
+                                                                          .value,
                                                                     }
                                                                   );
                                                                 }
-                                                              }
-                                                            }}
-                                                            onBlur={() => {
-                                                              // Validate again on blur
-                                                              if (
-                                                                alternateNumber?.length !==
-                                                                10
-                                                              ) {
-                                                                setAlternateMobileNumber(
-                                                                  {
-                                                                    ...alterMobileNoError,
-                                                                    mobileNoError:
-                                                                      "Invalid Mobile Number",
-                                                                  }
+                                                                handleOnchangeError(
+                                                                  e.target.value
                                                                 );
-                                                              } else {
-                                                                setAlternateMobileNumber(
-                                                                  {
-                                                                    ...alterMobileNoError,
-                                                                    mobileNoError:
-                                                                      "",
-                                                                  }
-                                                                );
-                                                              }
-                                                            }}
-                                                            className="!w-[150px] md:!w-[250px]"
-                                                            value={
-                                                              alternateNumber
-                                                            } // Bind the state to the input box
-                                                          />
-
-                                                          <p className="text-[12px] text-red-600 font-Open">
-                                                            {
-                                                              alterMobileNoError?.mobileNoError
-                                                            }
-                                                          </p>
+                                                              }}
+                                                            />
+                                                            <p className="text-[12px] text-red-600 font-Open">
+                                                              {mobileNoError}
+                                                            </p>
+                                                          </div>
                                                         </div>
-
-                                                        <OneButton
-                                                          text={"Submit"}
-                                                          onClick={() => {
-                                                            handleUpdateAlternateNumber();
-                                                          }}
-                                                          variant="primary"
-                                                          className="!w-20 !h-12 !rounded-lg"
-                                                        />
+                                                        <div>
+                                                          <OneButton
+                                                            text={"Submit"}
+                                                            onClick={() => {
+                                                              handleUpdateAlternateNumber();
+                                                            }}
+                                                            variant="primary"
+                                                            className={`${
+                                                              mobileNoError
+                                                                ? ""
+                                                                : ""
+                                                            } !w-20 !h-12 !rounded-lg`}
+                                                          />
+                                                        </div>
                                                       </div>
                                                     </div>
                                                     <div className="flex  items-center my-3">

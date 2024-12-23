@@ -107,6 +107,11 @@ const CancellationRequestTable = (props: Props) => {
               bg: "bg-[#FDF6EA]",
               text: "text-[#F0A22E]",
             };
+          return {
+            border: "border-gray-300",
+            bg: "bg-gray-100",
+            text: "text-gray-500",
+          };
         })();
 
         return (

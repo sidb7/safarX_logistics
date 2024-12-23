@@ -89,6 +89,7 @@ const CancellationModal = ({
       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
         token,
       });
+
       if (data?.data?.success) {
         toast.success(data?.data?.message);
         setOtherReason("");
@@ -101,6 +102,9 @@ const CancellationModal = ({
         setCancellationModalOpen && setCancellationModalOpen();
         toast.error(data?.data?.message);
         setCancelSelectedOption("");
+        if (data?.data?.message === "Please Provide Your Token") {
+          window.location.reload();
+        }
       }
     } catch (error: any) {
       console.log(error.message);
