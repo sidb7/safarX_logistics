@@ -175,7 +175,7 @@ export const CustomTable = ({
               return (
                 <tr
                   key={row?.id}
-                  className={`hover:bg-[#f8f8f8] ${trclassName}`}
+                  className={`hover:bg-[#f8f8f8] shadow-md rounded-lg ${trclassName}`}
                 >
                   {row?.getVisibleCells()?.map((cell: any) => (
                     <td
