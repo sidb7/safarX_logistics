@@ -1,0 +1,12 @@
+.react-datepicker__close-icon {
+  right: 10px; /* Adjust position if needed */
+  top: 50%; /* Center it vertically */
+  transform: translateY(-50%);
+}
+
+.react-datepicker__close-icon::after {
+  background-color: #a4a4a4; /* Change this to your desired color */
+  color: white; /* Change the icon color */
+  font-size: 12px; /* Adjust the size */
+  border-radius: 50%; /* Make it round if needed */
+}
