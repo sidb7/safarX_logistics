@@ -2,39 +2,57 @@ import React from "react";
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
 import PaymentsIcon from "../../../../assets/payment.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import {
+  commaSeparator,
+  selectDataByTableIdsRevenue,
+} from "../../../../utils/utility";
 
 interface ICodAndPaymentsProps {}
 
 const CodAndPayments: React.FunctionComponent<ICodAndPaymentsProps> = (
   props
 ) => {
-  // const barOptions: ApexOptions = {
-  //   chart: {
-  //     type: "bar",
-  //     height: 350,
-  //     toolbar: {
-  //       show: false,
-  //     },
-  //   },
-  //   plotOptions: {
-  //     bar: {
-  //       horizontal: true,
-  //       columnWidth: "55%",
-  //       borderRadius: 5,
-  //     },
-  //   },
-  //   dataLabels: {
-  //     enabled: false,
-  //   },
-  //   stroke: {
-  //     show: true,
-  //     width: 2,
-  //     colors: ["transparent"],
-  //   },
-  //   xaxis: {
-  //     categories: ["#bar"],
-  //   },
-  // };
+  const { revenueLoading } = useSelector(
+    (state: RootState) => state.dashboardRevenue
+  );
+  // console.log("🚀 ~ revenueLoading:", revenueLoading);
+
+  // Select data for multiple table IDs
+  const multipleTableDataCODAndPayments = useSelector(
+    (state: RootState) => selectDataByTableIdsRevenue(state, [10, 11]) || []
+  );
+  // console.log(
+  //   "🚀 ~ multipleTableDataCODAndPayments:",
+  //   multipleTableDataCODAndPayments
+  // );
+
+  const dataForPayments: any = multipleTableDataCODAndPayments.filter(
+    (item) => item.tableId === 10
+  );
+  // console.log("🚀 ~ dataForRevenueTotals:", dataForRevenueTotals);
+
+  const dataForRevenueAndCount = multipleTableDataCODAndPayments.filter(
+    (item) => item.tableId === 11
+  );
+  // console.log("🚀 ~ dataForRevenueAndCount:", dataForRevenueAndCount);
+
+  const donutSeries: any = dataForPayments[0]?.data?.map(
+    (item: any) => +item?.percentage.toFixed(2) || 0
+  ) || [0];
+  // console.log("🚀 ~ donutSeries:", donutSeries);
+  const donutLabels: any = dataForPayments[0]?.data?.map(
+    (item: any) => item?.paymentType || "Unknown"
+  ) || ["Unknown"];
+  // console.log("🚀 ~ donutLabels:", donutLabels);
+
+  const seriesData = [
+    dataForRevenueAndCount[0]?.eligibleAmount || 0,
+    dataForRevenueAndCount[0]?.remittedAmount || 0,
+    dataForRevenueAndCount[0]?.payableAmount || 0,
+    dataForRevenueAndCount[0]?.totalPaidTillDate || 0,
+  ];
 
   const chartOptions: any = {
     chart: {
@@ -50,7 +68,8 @@ const CodAndPayments: React.FunctionComponent<ICodAndPaymentsProps> = (
       bar: {
         horizontal: true,
         barHeight: "60%",
-        borderRadius: 5,
+
+        borderRadius: 3,
         dataLabels: {
           position: "end", // Positions labels at the end of the bars
         },
@@ -59,14 +78,14 @@ const CodAndPayments: React.FunctionComponent<ICodAndPaymentsProps> = (
     dataLabels: {
       enabled: true,
       style: {
-        fontSize: "10px",
+        fontSize: "14px",
         fontFamily: "Open Sans",
-        lineHieght: "12px",
+        lineHieght: "20px",
         colors: ["#adb5bd"],
       },
       formatter: (val: any) => `${val.toLocaleString()}`,
       textAnchor: "start", // Ensures text aligns properly
-      offsetX: 30, // Moves labels further outside to prevent overlap
+      offsetX: 10, // Moves labels further outside to prevent overlap
     },
     xaxis: {
       categories: [
@@ -105,7 +124,7 @@ const CodAndPayments: React.FunctionComponent<ICodAndPaymentsProps> = (
   const chartSeries = [
     {
       name: "COD Values",
-      data: [39779, 19027, 43887, 8142],
+      data: seriesData,
     },
   ];
 
@@ -114,114 +133,116 @@ const CodAndPayments: React.FunctionComponent<ICodAndPaymentsProps> = (
     chart: {
       type: "donut",
     },
-    labels: ["Consumer", "Business"],
-    colors: ["#3371FF", "#F3B558"], // Blue for Consumer, Yellow for Business
+    labels: donutLabels,
+    colors: ["#3371FF", "#F3B558"], // Default colors
     legend: {
       position: "bottom",
       horizontalAlign: "center",
-      markers: {
-        shape: "circle", // Circular markers for the legend
-        offsetX: -5, // Space between marker and text
-      },
+      fontSize: "14px",
+      fontFamily: "Open Sans",
+      fontWeight: 400,
       itemMargin: {
-        horizontal: 25, // Adjusts horizontal space between legend items
-        vertical: 5, // Adjusts vertical space between legend items
+        horizontal: 25,
+        vertical: 10,
       },
-      // formatter: function (label: string, opts: any) {
-      //   const seriesValue = opts?.w?.config?.series[opts.seriesIndex];
-      //   if (seriesValue === undefined) return label; // Default to label if seriesValue is undefined
-      //   const total =
-      //     opts?.w?.config?.series?.reduce((a: number, b: number) => a + b, 0) ||
-      //     1;
-      //   const percentage = ((seriesValue / total) * 100).toFixed(0); // Calculate percentage
-      //   return `${label} (${percentage}%)`;
-      // },
+      markers: {
+        offsetX: -5,
+        offsetY: 0,
+      },
     },
     dataLabels: {
       enabled: true,
-      // formatter: function (val: string | number | number[]) {
-      //   if (typeof val === "number") {
-      //     // If val is a number, format it to a percentage
-      //     return `${val.toFixed(0)}%`;
-      //   } else if (Array.isArray(val)) {
-      //     // If val is an array, join it (this case is unlikely for donut charts)
-      //     return val.join(", ");
-      //   } else {
-      //     // If val is a string (fallback case)
-      //     return val;
-      //   }
-      // },
+      formatter: (val, opts) => {
+        const dataIndex = opts?.dataPointIndex ?? 0;
+        const count = dataForPayments[0]?.data?.[dataIndex]?.count || 0;
+        const percentage = typeof val === "number" ? val.toFixed(2) : "0.00";
+        return `${percentage}%`;
+      },
     },
-
-    // tooltip: {
-    //   y: {
-    //     formatter: function (val: number | undefined) {
-    //       if (val === undefined) return ""; // Default to empty string if val is undefined
-    //       return `${val.toFixed(0)}%`; // Tooltip shows percentage
-    //     },
-    //   },
-    // },
-    stroke: {
-      width: 0, // No border for slices
+    tooltip: {
+      y: {
+        formatter: (val, opts) => {
+          const dataIndex = opts?.dataPointIndex ?? 0;
+          const count = dataForPayments[0]?.data?.[dataIndex]?.count || 0;
+          const percentage = typeof val === "number" ? val.toFixed(2) : "0.00";
+          return `${percentage}% (${commaSeparator(count)} orders)`;
+        },
+      },
     },
-    responsive: [
-      {
-        breakpoint: 600,
-        options: {
-          legend: {
-            fontSize: "12px",
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "65%",
+          labels: {
+            show: true,
           },
         },
       },
-    ],
+    },
   };
-  // Data for the Donut Chart
-  const donutseries = [70, 30]; // Values for each slice
+
   return (
     <>
-      <div className="grid grid-cols-2 gap-x-6 ">
-        <div className="flex flex-col">
-          <div className="rounded-tr-xl rounded-tl-xl pl-3 pr-4 py-4 bg-[#F6F6F6] ">
-            <div className="flex justify-between items-center text-center">
-              <div className="flex items-center gap-x-[10px]">
-                {/* <img src={ChannelIcon} alt="" /> */}
-                <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
-                  COD
-                </span>
-              </div>
-            </div>
+      {revenueLoading ? (
+        <div className=" h-[410px]">
+          <div className="flex items-stretch h-16 rounded-xl">
+            <div className="flex-3 my-2 animated rounded-xl"></div>
+            <div className="flex-1 my-2 animated rounded-xl"></div>
+            <div className="flex-1 m-2 animated rounded-xl"></div>
           </div>
-          <div className="border-[#E8E8E8] border-r-[1px] border-l-[1px] border-b-[1px] rounded-b-xl pl-6 pr-4 pt-6 pb-4 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] ">
-            <ReactApexChart
-              options={chartOptions}
-              series={chartSeries}
-              type="bar"
-              height={350}
-            />
+          <div className="flex items-stretch h-[350px] rounded-xl">
+            <div className="flex-3 my-2 animated rounded-xl"></div>
+            <div className="flex-2 my-2 animated rounded-xl"></div>
+            <div className="flex-1 my-2 animated rounded-xl"></div>
           </div>
         </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-x-6 ">
+            <div className="flex flex-col">
+              <div className="rounded-tr-xl rounded-tl-xl pl-3 pr-4 py-4 bg-[#F6F6F6] ">
+                <div className="flex justify-between items-center text-center">
+                  <div className="flex items-center gap-x-[10px]">
+                    {/* <img src={ChannelIcon} alt="" /> */}
+                    <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
+                      COD
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="border-[#E8E8E8] border-r-[1px] border-l-[1px] border-b-[1px] rounded-b-xl pl-6 pr-4 pt-6 pb-4 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] ">
+                <ReactApexChart
+                  options={chartOptions}
+                  series={chartSeries}
+                  type="bar"
+                  height={350}
+                />
+              </div>
+            </div>
 
-        <div className="flex flex-col">
-          <div className="rounded-tr-xl rounded-tl-xl pl-3 pr-4 py-4 bg-[#F6F6F6] ">
-            <div className="flex justify-between items-center text-center">
-              <div className="flex items-center gap-x-[10px]">
-                <img src={PaymentsIcon} alt="" />
-                <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
-                  Payments
-                </span>
+            <div className="flex flex-col">
+              <div className="rounded-tr-xl rounded-tl-xl pl-3 pr-4 py-4 bg-[#F6F6F6] ">
+                <div className="flex justify-between items-center text-center">
+                  <div className="flex items-center gap-x-[10px]">
+                    <img src={PaymentsIcon} alt="" />
+                    <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C]">
+                      Payments
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className=" border-[#E8E8E8] border-x-[1px] border-b-[1px] rounded-b-xl pl-6 pr-4 pt-6 pb-4 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] ">
+                <ReactApexChart
+                  type="donut"
+                  series={donutSeries}
+                  options={donutOptions}
+                  height={360}
+                />
               </div>
             </div>
           </div>
-          <div className=" border-[#E8E8E8] border-x-[1px] border-b-[1px] rounded-b-xl pl-6 pr-4 pt-6 pb-4 !shadow-[0px_0px_0px_0px_rgba(133,133,133,0.05),0px_6px_13px_0px_rgba(133,133,133,0.05)] ">
-            <ReactApexChart
-              type="donut"
-              series={donutseries}
-              options={donutOptions}
-              height={360}
-            />
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };

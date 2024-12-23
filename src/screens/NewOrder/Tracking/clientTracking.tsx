@@ -159,10 +159,11 @@ const Tracking = () => {
     getJwtTokenForUser(getSellerId);
     try {
       setLoading(true);
+
       const result = await inputRegexFilter(trackingNo, path);
 
       //mapping the new data
-      if (result?.data?.length !== 0) {
+      if (result?.success) {
         const res = result?.data?.[0]?.trackingInfo?.map(
           (currentStatus: any, index: any) => {
             orderStatus(currentStatus?.currentStatus);
@@ -192,8 +193,7 @@ const Tracking = () => {
 
         const flattenedLogs = allProcessedLogs.flat();
       } else {
-        setTrackingState(result?.data);
-        toast.error(result?.message);
+        toast.error(result);
       }
     } catch (error: any) {
     } finally {
@@ -263,6 +263,8 @@ const Tracking = () => {
       checkAndRemoveToken(trackingNo); // Check and remove token based on new trackingNo
     }
   }, [trackingNo]);
+
+  console.log("trackingState", trackingState?.length);
 
   return (
     <>
@@ -337,6 +339,7 @@ const Tracking = () => {
                               "🚀 ~ Tracking ~ indexTracking:",
                               indexTracking
                             );
+                            console.log("indexTracking", indexTracking);
                             const edd =
                               each?.shipmentStatus?.EDD === "N/A" ||
                               each?.shipmentStatus?.EDD === "" ||

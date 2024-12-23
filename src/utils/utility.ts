@@ -260,24 +260,6 @@ export function kFormatter(num: number) {
     : Math.sign(num) * Math.abs(num);
 }
 
-export function commaSeparator(num: any) {
-  return parseFloat(num).toLocaleString("en-IN");
-}
-
-export function inrValueFormatter(num: any) {
-  if (num == null) return "-"; // Handle null or undefined inputs early
-
-  // Round the number to the nearest whole number before formatting
-  const roundedNum = Math.round(num);
-
-  return roundedNum.toLocaleString("en-IN", {
-    style: "currency",
-    currency: "INR",
-    minimumFractionDigits: 0, // Do not show decimal places if not necessary
-    maximumFractionDigits: 0, // Do not show decimal places at all
-  });
-}
-
 export const capitalizeFirstLetter = (str: string) => {
   if (typeof str !== "string") {
     return "";
@@ -672,6 +654,32 @@ export const selectDataByTableIds = createSelector(
   }
 );
 
+export const selectDataByTableIdsRevenue = createSelector(
+  [
+    (state: RootState) => state.dashboardRevenue?.revenueData || [],
+    (_: RootState, tableIds: number[]) => tableIds,
+  ],
+  (data, tableIds) => {
+    if (!Array.isArray(data)) {
+      console.error("Dashboard data is not an array.");
+      return [];
+    }
+
+    if (!Array.isArray(tableIds) || tableIds.length === 0) {
+      console.warn("No valid tableIds provided.");
+      return [];
+    }
+
+    const results = data.filter((item) => tableIds.includes(item?.tableId));
+
+    if (results.length === 0) {
+      console.warn(`No data found for tableIds: ${tableIds.join(", ")}`);
+    }
+
+    return results;
+  }
+);
+
 export const dashboardPayloads: any = {
   Order: [
     {
@@ -906,24 +914,82 @@ export const dashboardPayloads: any = {
   ],
 };
 
+// export const getPayloadForTab = (
+//   activeTab: string,
+//   start: number | null,
+//   end: number | null,
+//   prevStart: number | null,
+//   prevEnd: number | null,
+//   stateFilter: boolean
+// ) => {
+//   const selectedPayload = dashboardPayloads[activeTab] || [];
+
+//   // Update globalFilter dates dynamically
+//   return selectedPayload.map((item: any) => ({
+//     ...item,
+//     globalFilter: {
+//       ...item.globalFilter,
+//       startDate: start,
+//       endDate: end,
+//       previousStartDate: prevStart,
+//       previousEndDate: prevEnd,
+//     },
+//   }));
+// };
+
 export const getPayloadForTab = (
   activeTab: string,
   start: number | null,
   end: number | null,
   prevStart: number | null,
-  prevEnd: number | null
+  prevEnd: number | null,
+  isStateSelected: boolean = false // New parameter for state filter
 ) => {
   const selectedPayload = dashboardPayloads[activeTab] || [];
 
-  // Update globalFilter dates dynamically
-  return selectedPayload.map((item: any) => ({
-    ...item,
-    globalFilter: {
-      ...item.globalFilter,
-      startDate: start,
-      endDate: end,
-      previousStartDate: prevStart,
-      previousEndDate: prevEnd,
-    },
-  }));
+  // Update globalFilter and customFilter for specific cases
+  return selectedPayload.map((item: any) => {
+    if (item.tableName === "Top 5 Regions" && activeTab === "Order") {
+      return {
+        ...item,
+        customFilter: {
+          ...item.customFilter,
+          state: isStateSelected, // Update the state property of customFilter
+        },
+        globalFilter: {
+          ...item.globalFilter,
+          startDate: start,
+          endDate: end,
+          previousStartDate: prevStart,
+          previousEndDate: prevEnd,
+        },
+      };
+    }
+    return {
+      ...item,
+      globalFilter: {
+        ...item.globalFilter,
+        startDate: start,
+        endDate: end,
+        previousStartDate: prevStart,
+        previousEndDate: prevEnd,
+      },
+    };
+  });
 };
+
+export function commaSeparator(num: any) {
+  return parseFloat(num).toLocaleString("en-IN");
+}
+
+export function inrValueFormatter(num: any) {
+  if (num == null) return "-"; // Handle null or undefined inputs early
+  // Round the number to the nearest whole number before formatting
+  const roundedNum = Math.round(num);
+  return roundedNum.toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0, // Do not show decimal places if not necessary
+    maximumFractionDigits: 0, // Do not show decimal places at all
+  });
+}

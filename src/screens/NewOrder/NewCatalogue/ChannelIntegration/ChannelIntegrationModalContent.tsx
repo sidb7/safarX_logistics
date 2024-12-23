@@ -143,7 +143,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
           try {
             const { data } = await axios.get(reqUrl);
-            console.log("data: ", data);
+            window.location.href = reqUrl;
           } catch (error: any) {
             console.log("error?.config?.url: ", error?.config?.url);
             // window.alert(JSON.stringify(error));

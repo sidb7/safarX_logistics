@@ -13,25 +13,19 @@ import Orders from "./Orders/index";
 import toast from "react-hot-toast";
 import { POST } from "../../../utils/webService";
 import { GET_TODAY_DATA_FOR_DASHBOARD } from "../../../utils/ApiUrls";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch } from "react-redux";
 import {
   setLoading,
-  // clearLoading,
   setData,
   setError,
 } from "../../../redux/reducers/dashboardOrderReducer";
 import {
-  // setLoading,
-  // clearLoading,
   setRevenueData,
-  // setError,
+  setRevenueLoading,
 } from "../../../redux/reducers/dashboardRevenueReducer";
 import {
-  // setLoading,
-  // clearLoading,
   setExceptionData,
-  // setError,
+  setExceptionLoading,
 } from "../../../redux/reducers/dashboardExceptionReducer";
 
 import Revenue from "./Revenue/index";
@@ -53,34 +47,19 @@ const Dashboard: React.FC = () => {
   const [isReturningUser, setIsReturningUser] = useState<boolean | null>(null);
   const [filterId, setFilterId] = useState<any>(0);
   const [activeTab, setActiveTab] = useState<any>("");
-  console.log("🚀 ~ activeTab:", activeTab);
-  // const [loading, setLoading] = useState(false);
   const [filterData, setFilterData] = useState([
     { label: "Order", isActive: false },
     { label: "Revenue", isActive: false },
     { label: "Exception", isActive: false },
   ]);
-  const [isLoading, setIsLoading] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
   const [dateRange, setDateRange]: any = useState([null, null]);
   const [customDateSelected, setCustomDateSelected] = useState<boolean>(false);
   const [selectedPeriod, setSelectedPeriod] = useState<string>("lastSevenDays");
+  const [isStateSelected, setIsStateSelected] = useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const { data, error, loading } = useSelector(
-    (state: RootState) => state.dashboardOrder
-  );
-  console.log("🚀 ~ loading:", loading);
-  console.log("🚀 ~ error:", error);
-
-  const { revenueData, revenueError, revenueLoading } = useSelector(
-    (state: RootState) => state.dashboardRevenue
-  );
-
-  const { exceptionData, ExceptionError, exceptionLoading } = useSelector(
-    (state: RootState) => state.dashboardException
-  );
 
   const formatDateToEpoch = (date: Date | null): number | null => {
     if (!date) return null;
@@ -196,20 +175,19 @@ const Dashboard: React.FC = () => {
       lastThirtyDays: getDateRanges(30),
       lastSixtyDays: getDateRanges(60),
       lastNinetyDays: getDateRanges(90),
-      customDate: {
-        period: "Custom Date",
-        start: "",
-        end: "",
-        prevStart: "",
-        prevEnd: "",
-      },
+      // customDate: {
+      //   period: "Custom Date",
+      //   start: "",
+      //   end: "",
+      //   prevStart: "",
+      //   prevEnd: "",
+      // },
     }),
     []
   );
 
   const [dateRanges, setDateRanges] =
     useState<Record<string, DateRange>>(initialDateRanges);
-  console.log("🚀 ~ dateRanges:", dateRanges);
 
   // event handler for period change dropdown
   const handlePeriodChange = (
@@ -255,11 +233,6 @@ const Dashboard: React.FC = () => {
   }, [selectedPeriod, dateRanges]);
 
   const { period, start, end, prevStart, prevEnd } = getPeriodData();
-  console.log("🚀 ~ prevEnd:", prevEnd);
-  console.log("🚀 ~ prevStart:", prevStart);
-  console.log("🚀 ~ endT:", end);
-  console.log("🚀 ~ start:", start);
-  console.log("🚀 ~ period:", period);
 
   const fetchData = async (
     start: number | null,
@@ -267,16 +240,29 @@ const Dashboard: React.FC = () => {
     prevStart: number | null,
     prevEnd: number | null
   ) => {
-    const payload = getPayloadForTab(activeTab, start, end, prevStart, prevEnd);
-    console.log("🚀 ~ payload:", payload);
+    const payload = getPayloadForTab(
+      activeTab,
+      start,
+      end,
+      prevStart,
+      prevEnd,
+      isStateSelected
+    );
 
     // Ensure the payload is valid before proceeding
     if (!payload || Object.keys(payload).length === 0) {
-      console.log("🚀 ~ Payload is not ready yet. Skipping API call.");
+      // console.log("🚀 ~ Payload is not ready yet. Skipping API call.");
       return;
     }
     try {
-      dispatch(setLoading(true));
+      if (activeTab === "Order") {
+        dispatch(setLoading(true));
+      } else if (activeTab === "Revenue") {
+        dispatch(setRevenueLoading(true));
+      } else if (activeTab === "Exception") {
+        dispatch(setExceptionLoading(true));
+      }
+      // dispatch(setLoading(true));
 
       const everydayShippingData = await POST(
         GET_TODAY_DATA_FOR_DASHBOARD,
@@ -285,20 +271,13 @@ const Dashboard: React.FC = () => {
 
       if (everydayShippingData?.data?.success) {
         const quickResponse = everydayShippingData?.data;
-        console.log("🚀 ~ quickResponse:", quickResponse);
         toast.success(everydayShippingData?.data?.message);
         if (activeTab === "Order") {
           // Dispatch data to Redux store
-          console.log("🚀 ~ dispatching data order:", quickResponse.data);
-
           dispatch(setData(quickResponse.data));
         } else if (activeTab === "Revenue") {
-          console.log("🚀 ~ dispatching data revenue:", quickResponse.data);
-
           dispatch(setRevenueData(quickResponse.data));
         } else if (activeTab === "Exception") {
-          console.log("🚀 ~ dispatching data exception:", quickResponse.data);
-
           dispatch(setExceptionData(quickResponse.data));
         }
 
@@ -331,29 +310,39 @@ const Dashboard: React.FC = () => {
       dispatch(setError("An error occurred while fetching data"));
     } finally {
       dispatch(setLoading(false));
+      dispatch(setRevenueLoading(false));
+      dispatch(setExceptionLoading(false));
     }
   };
 
-  // useEffect(() => {
-  //   // Only fetch data if it's a returning user and we have an active tab
-  //   if (isReturningUser === false) {
-  //     return;
-  //   }
+  useEffect(() => {
+    // Only fetch data if it's a returning user and we have an active tab
+    if (isReturningUser === false) {
+      return;
+    }
 
-  //   const fetchAndSetData = async () => {
-  //     const { start, end, prevStart, prevEnd } = dateRanges[selectedPeriod];
+    const fetchAndSetData = async () => {
+      const { start, end, prevStart, prevEnd } = dateRanges[selectedPeriod];
 
-  //     try {
-  //       await fetchData(start, end, prevStart, prevEnd);
-  //     } catch (error) {
-  //       console.error(error);
-  //     } finally {
-  //       dispatch(setLoading(false));
-  //     }
-  //   };
+      try {
+        await fetchData(start, end, prevStart, prevEnd);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        dispatch(setLoading(false));
+        dispatch(setRevenueLoading(false));
+        dispatch(setExceptionLoading(false));
+      }
+    };
 
-  //   fetchAndSetData();
-  // }, [selectedPeriod, dateRanges, customDateSelected, activeTab]);
+    fetchAndSetData();
+  }, [
+    selectedPeriod,
+    dateRanges,
+    customDateSelected,
+    activeTab,
+    isStateSelected,
+  ]);
 
   useEffect(() => {
     const kycData = retrieveLocalStorageData("kycValue") as KycData | null;
@@ -539,7 +528,10 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
       {activeTab === "Order" ? (
-        <Orders />
+        <Orders
+          isStateSelected={isStateSelected}
+          setIsStateSelected={setIsStateSelected}
+        />
       ) : activeTab === "Revenue" ? (
         <Revenue />
       ) : (
@@ -553,7 +545,7 @@ const Dashboard: React.FC = () => {
     return null;
   }
 
-  return isReturningUser ? renderComingSoonContent() : renderNewUserContent();
+  return isReturningUser ? dashboard() : renderNewUserContent();
 };
 
 export default Dashboard;
