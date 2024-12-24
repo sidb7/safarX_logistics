@@ -14,6 +14,33 @@ const createHeader = (_URL: string, options = {}) => {
   return { URL: _URL, options: options };
 };
 
+const CreateHeaderToken = (_URL: string, _options?: any) => {
+  const token = _options?.token; // Retrieve token from options if provided
+  const headers = {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }), // Add token if available
+  };
+
+  return {
+    URL: _URL,
+    options: {
+      ..._options,
+      headers,
+    },
+  };
+};
+
+const POSTHEADER = async (_URL: string, data = {}, _options?: any) => {
+  let { URL, options } = CreateHeaderToken(_URL, _options);
+
+  try {
+    const response = await axios.post(URL, data, options);
+    return response;
+  } catch (error: any) {
+    return error.response;
+  }
+};
+
 const POST = async (_URL: string, data = {}, _options?: any) => {
   let { URL, options } = createHeader(_URL, _options);
   try {
@@ -64,4 +91,4 @@ const DELETE = async (_URL: string, _options?: any) => {
   }
 };
 
-export { POST, PUT, GET, PATCH, DELETE };
+export { POST, PUT, GET, PATCH, DELETE, POSTHEADER };

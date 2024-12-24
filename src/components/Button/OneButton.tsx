@@ -12,7 +12,7 @@ interface OneButtonProps {
   showIcon?: boolean;
   loading?: boolean;
   onlyIcon?: boolean;
-  variant?: "primary" | "secondary" | "tertiary" | "quad" | "penta";
+  variant?: "primary" | "secondary" | "tertiary" | "quad" | "penta" | "new";
   size?: "small" | "medium" | "large";
   ref?: React.RefObject<HTMLButtonElement>;
   textTransform?: "uppercase" | "lowercase" | "capitalize" | "none";
@@ -66,6 +66,11 @@ const OneButton = (props: OneButtonProps) => {
     ${
       variant === "penta"
         ? "bg-[#FFFFFF] text-[#004EFF] inline-flex flex-col justify-center items-center !w-auto gap-1 !h-14 hover:bg-[#F2F6FF] hover:shadow-cardShadow2a "
+        : ""
+    }
+    ${
+      variant === "new"
+        ? "bg-[#004EFF] text-[#FFFFFF] hover:bg-[#606060] hover:shadow-cardShadow2a focus:bg-[#1C1C1C] focus:border focus:border-[#A4A4A4]"
         : ""
     }
     ${size === "small" ? "h-6 p-1" : ""}
