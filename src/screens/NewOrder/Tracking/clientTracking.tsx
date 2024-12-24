@@ -1074,7 +1074,7 @@ const Tracking = () => {
             </div>
           </div>
 
-          {/* This is for the center modal  */}
+          {/* This is for the centehhjkjr  modal  */}
 
           {/* login part  */}
           <LoginModal
