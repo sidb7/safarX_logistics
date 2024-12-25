@@ -299,15 +299,15 @@ const Dashboard: React.FC = () => {
         //   toast.error("No data matching the criteria found.");
         // }
       } else {
-        toast.error(
-          everydayShippingData?.data?.message || "Failed to fetch data"
-        );
-        dispatch(setError("Failed to fetch data"));
+        // toast.error(
+        //   everydayShippingData?.data?.message || "Failed to fetch data"
+        // );
+        // dispatch(setError("Failed to fetch data"));
       }
     } catch (error) {
       console.error("Error fetching shipping details:", error);
-      toast.error("An error occurred while fetching data");
-      dispatch(setError("An error occurred while fetching data"));
+      // toast.error("An error occurred while fetching data");
+      // dispatch(setError("An error occurred while fetching data"));
     } finally {
       dispatch(setLoading(false));
       dispatch(setRevenueLoading(false));
