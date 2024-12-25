@@ -68,16 +68,16 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
           setTodaysImportantData(relevantData);
           // toast.success(everydayShippingData?.data?.message);
         } else {
-          toast.error("No data matching the criteria found.");
+          //    toast.error("No data matching the criteria found.");
         }
       } else {
-        toast.error(
-          everydayShippingData?.data?.message || "Failed to fetch data"
-        );
+        // toast.error(
+        //   everydayShippingData?.data?.message || "Failed to fetch data"
+        // );
       }
     } catch (error) {
       console.error("Error fetching shipping details:", error);
-      toast.error("An error occurred while fetching data");
+      //  toast.error("An error occurred while fetching data");
     } finally {
       setIsLoading(false);
     }
