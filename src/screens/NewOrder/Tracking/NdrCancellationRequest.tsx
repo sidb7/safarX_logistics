@@ -60,7 +60,8 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
     } else if (id === 1) {
       navigate("/tracking/rto");
     } else if (id === 2) {
-      navigate("/tracking/cancellation-request");
+      // navigate("/tracking/cancellation-request");
+      navigate("/tracking/update-tracking");
     }
   };
 
