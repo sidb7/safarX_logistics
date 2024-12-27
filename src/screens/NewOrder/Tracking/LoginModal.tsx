@@ -28,7 +28,7 @@ const LoginModal = ({
   const [inputError, setInputError] = useState<any>();
   const [timerActive, setTimerActive] = useState<any>(false);
   const [seconds, setSeconds] = useState<any>(59);
-  const [minutes, setMinutes] = useState<any>(0);
+  const [minutes, setMinutes] = useState<any>(9);
   const [isButtonDisabled, setIsButtonDisabled] = useState<any>(true);
   const [isClickedResend, setClickedResend] = useState<any>(false);
 
@@ -63,7 +63,7 @@ const LoginModal = ({
         setSendOtp(!sendOtp);
 
         setTimerActive(true);
-        setMinutes(0);
+        setMinutes(9);
         setSeconds(59);
         setIsButtonDisabled(true);
       }
@@ -134,7 +134,7 @@ const LoginModal = ({
       const { data: response } = await POST(TRACKING_SEND_VERIFY_OTP, payload);
       if (response?.success === true) {
         toast.success("OTP resent Successfully");
-        setMinutes(0);
+        setMinutes(9);
         setSeconds(59);
       } else {
         toast.error(response?.message);
