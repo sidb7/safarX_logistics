@@ -137,6 +137,7 @@ const SearchDropDown: React.FC<CustomInputWithDropDownProps> = ({
             name: value?.name,
             category: value?.category,
             unitPrice: value?.unitPrice,
+            unitTax: value?.unitTax,
             deadWeight: value?.deadWeight,
             length: value?.length,
             breadth: value?.breadth,

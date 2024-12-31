@@ -63,6 +63,8 @@ const Tracking = () => {
     mobileNo: "",
   });
   const [mobileNoError, setMobileNoError] = useState<any>();
+  const [verifyOtpState, setVerifyOtpState] = useState<any>(false);
+  const [allAwbs, setAllAwbs]: any = useState([]);
 
   const awb = trackingState?.[0]?.awb;
 
@@ -154,6 +156,11 @@ const Tracking = () => {
   };
 
   const handleTrackOrderClick = async () => {
+    // setVerifyOtpState(true);
+
+    if (!allAwbs.includes(trackingNo)) {
+      checkAndRemoveToken(trackingNo);
+    }
     const getSellerId = localStorage.getItem("sellerId");
     setSellerId(getSellerId);
     getJwtTokenForUser(getSellerId);
@@ -190,7 +197,8 @@ const Tracking = () => {
         const allProcessedLogs = result?.data?.[0]?.trackingInfo?.map(
           (eachItem: any) => eachItem?.processedLog
         );
-
+        setVerifyOtpState(false);
+        setAllAwbs([...allAwbs, trackingNo]);
         const flattenedLogs = allProcessedLogs.flat();
       } else {
         toast.error(result);
@@ -200,6 +208,10 @@ const Tracking = () => {
       setLoading(false);
     }
   };
+
+  // const handleTrackOrderClick = () => {
+  //   setAllAwbs([...allAwbs, trackingNo]);
+  // };
 
   const callTrackOrderFunction = async () => {
     await handleTrackOrderClick();
@@ -257,14 +269,6 @@ const Tracking = () => {
       callTrackOrderFunction();
     }
   }, []);
-
-  useEffect(() => {
-    if (trackingNo) {
-      checkAndRemoveToken(trackingNo); // Check and remove token based on new trackingNo
-    }
-  }, [trackingNo]);
-
-  console.log("trackingState", trackingState?.length);
 
   return (
     <>
