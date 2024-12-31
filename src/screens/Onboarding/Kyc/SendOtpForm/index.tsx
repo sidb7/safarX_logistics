@@ -285,7 +285,7 @@ const Index = (props: ITypeProps) => {
         setVerifyBtnStatus(false);
       }
     } else {
-      if (otpNumber && otpNumber?.length === 4) {
+      if (otpNumber && otpNumber?.length >= 4) {
         setVerifyBtnStatus(true);
       } else {
         setVerifyBtnStatus(false);

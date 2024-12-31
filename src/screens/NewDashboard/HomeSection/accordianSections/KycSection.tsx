@@ -516,7 +516,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         setVerifyBtnStatus(false);
       }
     } else {
-      if (otpNumber && otpNumber?.length === 4) {
+      if (otpNumber && otpNumber?.length >= 4) {
         setVerifyBtnStatus(true);
       } else {
         setVerifyBtnStatus(false);
@@ -894,7 +894,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
                                 containerStyle={`lg:!w-auto`}
                                 className="md:!w-[320px] !font-Open`"
                                 labelClassName="!font-Open"
-                                maxLength={4}
+                                maxLength={6}
                                 value={otpNumber || ""}
                                 onChange={(e: any) => {
                                   if (isNaN(e.target.value)) {
