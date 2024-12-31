@@ -1,0 +1,21 @@
+{
+  "trackingJson": {
+    "login": {
+      "mobileNo": "Verify your mobile number",
+      "otp": "Please enter the OTP",
+      "receive": "Didn't receive code ?",
+      "resend": "Resend"
+    },
+    "reschedule": {
+      "message1": "Reschedule Delivery",
+      "message2": "Select a new date for your delivery"
+    },
+    "cancelling": {
+      "message1": "Are you sure, you want to cancel your order?",
+      "message2": "YES, I WISH TO CANCEL",
+      "message3": "NO, I WANT MY ORDER",
+      "message4": "What is the reason for cancelling?",
+      "reason": "Please mention the reason"
+    }
+  }
+}

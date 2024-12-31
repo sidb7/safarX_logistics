@@ -8,9 +8,6 @@ import Delivery_Icon from "../../assets/Delivery Icon.svg";
 import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Stepper from "./Stepper";
-import "../../styles/silkStyle.css";
-import DeliveryIcon from "../../assets/Delivery.svg";
 import {
   columnHelperForNewOrder,
   ColumnHelperForBookedAndReadyToPicked,
@@ -24,18 +21,16 @@ import {
   CANCEL_MULTIPLE_WAYBILLS,
   CANCEL_TEMP_SELLER_ORDER,
   GET_SELLER_ORDER,
-  GET_SINGLE_FILE,
-  LEBEL_DOWNLOAD,
   GET_STATUS_COUNT,
   POST_SYNC_ORDER,
   FETCH_LABELS_REPORT_DOWNLOAD,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
-  GET_SELLER_ORDER_COMPLETE_DATA,
   GET_ORDER_ERRORS,
   RECHARGE_STATUS,
   PAYMENT_ERRORS,
   DUPLICATE_ORDER,
   COMPANY_NAME,
+  FETCH_MANIFEST_DATA,
   GET_COUNT_AMAZON_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
@@ -47,7 +42,6 @@ import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
 import { useSelector, useDispatch } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
-import Pagination from "../../components/Pagination";
 import OnePagination from "../../components/OnePagination/OnePagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
@@ -58,8 +52,6 @@ import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
 import CloseIcon from "../../assets/CloseIcon.svg";
-import CopyTooltip from "../../components/CopyToClipboard";
-import { BottomNavBar } from "../../components/BottomNavBar";
 import {
   capitalizeFirstLetter,
   getLocalStorage,
@@ -72,111 +64,24 @@ import Errors from "./Errors";
 import ErrorModal from "./ErrorModal";
 import PartnerJumperModal from "./PartnerJumberModal";
 import DatePicker from "react-datepicker";
-import { debounce } from "lodash";
 import RightSideModal from "../../components/CustomModal/customRightModal";
-
-import { io, Socket } from "socket.io-client";
 import { SearchBox } from "../../components/SearchBox";
 import FilterScreen from "./common/FilterScreen/filterScreen";
-import ServiceButton from "../../components/Button/ServiceButton";
 import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 import NewTrackingContent from "./newTrackingContent";
 import OneButton from "../../components/Button/OneButton";
 import DoneIcon from "../../assets/Done .svg";
 import DateButton from "../../components/Button/DateButton";
-import OrderUpdationModal from "../Order/OrderUpdationModal";
 import { DuplicateModel } from "../../components/Duplicate";
-// import OrderUpdationModal from "../Order/OrderUpdationModal";
-
 import ShopifyIcon from "../../assets/Catalogue/shopifyLg.svg";
 import WoocommerceIcon from "../../assets/Catalogue/WooCommerceLg.svg";
 import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
-import CustomSwitchToggle from "../../components/CustomSwitchToggle";
-// import { DuplicateModel } from "../../components/Duplicate";
 import { timerObject } from "../../redux/reducers/syncChannel";
 import WhatsappIcon from "../../assets/whatsappIcon.svg";
 import DeltaOnBlaze from "./deltaOnBlaze";
 
 let allOrdersCount: any;
-
-const Buttons = (className?: string) => {
-  const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  return (
-    <div
-      className={
-        className
-          ? className
-          : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
-      }
-    >
-      <div className="grid col-span-2">
-        {/* <CustomButton
-          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
-          text="ADD ORDER"
-          onClick={() => navigate("/orders/add-order/pickup")}
-          showIcon={true}
-          icon={AddOrderIcon}
-        /> */}
-        <OneButton
-          text="ADD ORDER"
-          onClick={() => navigate("/orders/add-order/pickup")}
-          variant="primary"
-          showIcon={true}
-          icon={AddOrderIcon}
-        />
-      </div>
-
-      {/* <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
-        <img src={SyncIcon} alt="" width="16px" />
-        <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-          SYNC CHANNEL
-        </span>
-      </div> */}
-
-      <div
-        className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
-        // onClick={() => setIsModalOpen(true)}
-        onClick={() => navigate("/orders/add-bulk")}
-      >
-        <img src={BlukOrderIcon} alt="" width="16px" />
-        <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-          BULK UPLOAD
-        </span>
-      </div>
-      {isModalOpen && (
-        <CenterModal
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-        >
-          <BulkUpload
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-          />
-        </CenterModal>
-      )}
-    </div>
-  );
-};
-// [
-//   "BOOKED",
-//   "NOT PICKED",
-//   "CANCELLED",
-//   "DRAFT",
-//   "PICKED UP",
-//   "PICKED UP",
-//   "IN TRANSIT",
-//   "DESTINATION CITY",
-//   "OUT OF DELIVERY",
-//   "DELIVERED",
-//   "RETURN",
-//   "RTO",
-//   "FAILED",
-// ];
-
 const ordersArr = [
   {
     count: 23,
@@ -262,7 +167,7 @@ const Index = () => {
   const [totalOrders, setTotalOrders]: any = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [columnHelper, setColumnhelper]: any = useState([]);
-  const [totalCount, setTotalcount]: any = useState(0);
+  const [totalCount, setTotalcount]: any = useState(100);
   const [globalIndex, setGlobalIndex] = useState(0);
   const [tabStatusId, setTabStatusId] = useState(0);
   const syncRef: any = useRef(null);
@@ -292,27 +197,6 @@ const Index = () => {
     isOpen: false,
     data: [],
   });
-  const [sellerOverview, setSellerOverview]: any = useState([
-    {
-      label: "Today's delivery",
-      value: "todayDelivery",
-      number: "23",
-      gif: DeliveryGIF,
-    },
-    { label: "COD", value: "cod", number: "2000", gif: false },
-    {
-      label: "Online Payment",
-      value: "onlinePayment",
-      number: "13000",
-      gif: DeliveryGIF,
-    },
-    {
-      label: "Sucsess Rate",
-      value: "sucsessRate",
-      number: "5%",
-      gif: false,
-    },
-  ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent]: any = useState({
     isOpen: false,
@@ -334,7 +218,6 @@ const Index = () => {
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
   const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
 
-  const roles = useSelector((state: any) => state?.roles);
   const channelReduxData = useSelector((state: any) => state?.channel?.channel);
   const dispatch = useDispatch();
   const isMasked = useSelector((state: any) => state?.user?.isMasked);
@@ -343,14 +226,11 @@ const Index = () => {
   const { isLgScreen, isXlScreen } = ResponsiveState();
   const navigate = useNavigate();
   const [isDeleted, setIsDeleted] = useState(false);
-
-  const [openSection, setOpenSection] = useState<any>(false);
   const [selectedRowdata, setSelectedRowData] = useState([]);
-
   const isActive = checkPageAuthorized("View Orders");
   const [isSticky, setIsSticky] = useState(false);
   const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(100);
   const [draftOrderCount, setDraftOrderCount] = useState({
     all: 0,
     draft: 0,
@@ -417,7 +297,6 @@ const Index = () => {
   });
   const [isBulkCheckedBooked, setIsBulkCheckedBooked]: any = useState(false);
 
-
   const [fullfillment, setFullfillment] = useState();
   const [unFullfillment, setUnFullfillment] = useState();
 
@@ -451,32 +330,6 @@ const Index = () => {
     ? "Sync Channel"
     : "Add Channel";
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-
-      // Check if the user has scrolled past the threshold
-      setIsSticky(scrollTop > 263);
-    };
-
-    // Attach the event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  //Scrolling the orders data of the custom table
-  const handleScroll = (event: any) => {
-    if (scrollRef.current) {
-      event.preventDefault();
-      const scrollAmount = event.deltaY * 8;
-      scrollRef.current.scrollBy({ top: scrollAmount });
-    }
-  };
-
   const setInfoModalContentFunction = async (data: any) => {
     setInfoModalContent({
       isOpen: true,
@@ -499,50 +352,12 @@ const Index = () => {
     });
   };
 
-  const handleSearchOrder = async (e: any) => {
-    try {
-      let currentStatus = tabs[globalIndex]?.value;
-      const payload: any = {
-        currentStatus,
-        filterArrOne: filterPayLoad?.filterArrOne || [],
-        filterArrTwo: filterPayLoad?.filterArrTwo || [],
-      };
-
-      if (e.target.value.length > 0) {
-        payload.id = e.target.value;
-      }
-
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(async () => {
-        setIsLoading(true);
-        const { data } = await POST(GET_SELLER_ORDER, {
-          id: e.target.value,
-          currentStatus,
-        });
-        const { OrderData, orderCount } = data?.data?.[0];
-        setStatusCount("", currentStatus, orderCount);
-        setTotalcount(orderCount ? orderCount : 0);
-        if (data?.status) {
-          setIsLoading(false);
-          setOrders(OrderData);
-          setFilterModal(false);
-        } else {
-          setIsLoading(false);
-          setFilterModal(false);
-          throw new Error(data?.meesage);
-        }
-      }, 800);
-    } catch (error: any) {
-      console.warn("Error in OrderStatus Debouncing: ", error.message);
-    }
-  };
-
   const getAllOrders = async (subStatus?: any) => {
     let currentStatus = tabs[globalIndex]?.value;
 
     let payload: any = {
       skip: 0,
-      limit: 10,
+      limit: 100,
       pageNo: 1,
       sort: { _id: -1 },
       currentStatus,
@@ -626,17 +441,13 @@ const Index = () => {
               onChange={(update: any) => {
                 setDateRange(update);
                 if (update[0] === null && update[1] === null) {
-                  // Explicitly set startDate and endDate to null when cleared
                   setStartDate(null);
                   setEndDate(null);
-                  // fetchCodRemittanceData();
                 } else {
-                  // Update startDate and endDate based on the selected range
                   setStartDate(update[0]);
                   setEndDate(update[1]);
                 }
               }}
-              // isClearable={true}
               dateFormat="dd/MM/yyyy"
               customInput={
                 <DateButton
@@ -647,10 +458,10 @@ const Index = () => {
                     startDate && endDate
                       ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
                       : ""
-                  } // Display date range
-                  onClear={handleClear} // Handle clear action
+                  }
+                  onClear={handleClear}
                 />
-              } // Include placeholder onClick function
+              }
             />
           </div>
           <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border w-[250px]">
@@ -666,15 +477,6 @@ const Index = () => {
               customPlaceholder="Search By Order Id, AWB"
             />
           </div>
-          {/* <div
-            className="flex ml-2 rounded-md py-2 px-4 bg-[#E5EDFF] justify-between cursor-pointer items-center  gap-x-2"
-            onClick={() => setFilterModal(true)}
-          >
-            <img src={FilterIcon} alt="" />
-            <span className="text-[#004EFF] text-[14px] font-semibold">
-              FILTER
-            </span>
-          </div> */}
           <OneButton
             text="FILTER"
             onClick={() => setFilterModal(true)}
@@ -692,13 +494,6 @@ const Index = () => {
           }
         >
           <div className="grid col-span-2">
-            {/* <CustomButton
-              className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
-              text="ADD ORDER"
-              onClick={() => navigate("/orders/add-order/pickup")}
-              showIcon={true}
-              icon={AddOrderIcon}
-            /> */}
             <OneButton
               text=" ADD ORDER"
               onClick={() => navigate("/orders/add-order/pickup")}
@@ -718,33 +513,9 @@ const Index = () => {
               {syncChannelText}
             </span>
             <div
-              // style={{
-              //   background: "linear-gradient(90deg, #ff0000, #00ff00, #0000ff)",
-              // }}
               className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
             ></div>
           </div>
-          {/* w-[${syncChannelWidth}%] */}
-
-          {/* <OneButton
-            ref={syncRef}
-            text={syncChannelText}
-            onClick={handleSyncOrder}
-            variant="secondary"
-            showIcon={true}
-            icon={SyncIcon}
-          /> */}
-          {/* <div
-            className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
-            // onClick={() => setIsModalOpen(true)}
-            onClick={() => navigate("/orders/add-bulk")}
-          >
-            <img src={BlukOrderIcon} alt="" width="16px" />
-            <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C] capitalize">
-              Bulk Upload
-            </span>
-          </div> */}
-
           <OneButton
             text="Bulk Upload"
             onClick={() => navigate("/orders/add-bulk")}
@@ -758,7 +529,6 @@ const Index = () => {
               text="Delivery Max"
               className="!bg-[#60D669] !border-[#60D669] !text-[#FFFFFF] !px-4 !py-2 !font-Open !font-semibold !text-[14px] !leading-5 !rounded-[4px] hover:!bg-[#27B031] hover:!shadow-cardShadow2a focus:!bg-[#60D669] focus:border focus:!border-[#27B031]"
               onClick={() => setOpenRightModalForDelta(true)}
-              // variant="secondary"
               showIcon={true}
               icon={WhatsappIcon}
             />
@@ -794,24 +564,13 @@ const Index = () => {
 
   const handleSyncOrder = async () => {
     try {
-      // if (syncChannelText.includes("Sync Channel")) {
-      //   setIsSyncModalOpen(true);
-      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      //   syncRef.current.style.backgroundColor = "#F8F8F8";
-      //   syncRef.current.style.pointerEvents = "none";
-      //   syncRef.current.childNodes[0].classList.add("infinite-rotate");
-      //   syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      // }
-
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
 
         dispatch(timerObject({ startTimer: true }));
         localStorage.setItem("isSyncCompleted", "false");
 
-        // Check if syncRef.current is not null
         if (syncRef.current) {
-          // Access the child nodes and properties only if syncRef.current is not null
           const buttonTextNode = syncRef.current.childNodes[1];
           const buttonIconNode = syncRef.current.childNodes[0];
 
@@ -827,13 +586,6 @@ const Index = () => {
           }
         }
       }
-
-      // const { data: response } = await POST(GET_ALL_STORES, {});
-      // if (response.data.length === 0) {
-      //   toast.error("Please Integrate A Channel First");
-      //   return navigate("/catalogues/channel-integration");
-      // }
-
       let payload: any = {};
 
       if (startDate && endDate) {
@@ -874,15 +626,8 @@ const Index = () => {
           toast.success("Sync In Progress", {
             className: "custom-toast-success",
           });
-          // setTimeout(() => {
-          //   window.location.href = "/orders/view-orders?activeTab=draft";
-          //   window.onload = () => {
-          //     window.location.reload();
-          //   };
-          // }, 18000);
         }
       } else {
-        // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
       }
     } catch (error: any) {
@@ -894,15 +639,6 @@ const Index = () => {
       syncRef.current.style.pointerEvents = "auto";
       syncRef.current.childNodes[0].classList.remove("infinite-rotate");
     }
-    // if (syncRef.current) {
-    //   syncRef.current.childNodes[0].childNodes[0].childNodes[1].childNodes[0].textContent =
-    //     "Sync Channel";
-    //   syncRef.current.childNodes[0].style.backgroundColor = "white";
-    //   syncRef.current.childNodes[0].style.pointerEvents = "auto";
-    //   syncRef.current.childNodes[0].childNodes[0].childNodes[0].classList.remove(
-    //     "infinite-rotate"
-    //   );
-    // }
   };
 
   const warningMessageForDuplicate = (data: any) => {
@@ -961,35 +697,6 @@ const Index = () => {
           className ? className : `flex items-center mx-5 mt-2 justify-between`
         }
       >
-        <div>
-          {/* <CustomButton
-            className="text-[12px] lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
-            text="ADD ORDER"
-            onClick={() => navigate("/orders/add-order/pickup")}
-            showIcon={true}
-            icon={AddOrderIcon}
-          /> */}
-          {/* <OneButton
-            text=" TEST ORDER"
-            onClick={() => navigate("/orders/add-order/pickup")}
-            variant="primary"
-            showIcon={true}
-            icon={AddOrderIcon}
-            className="text-[14px] font-semibold"
-          /> */}
-        </div>
-        {/* 
-        <div
-          // ref={syncRef}
-          onClick={handleSyncOrder} // Function Added
-          className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
-        >
-          <img src={SyncIcon} alt="" width="16px" />
-          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            Sync Channel
-          </span>
-        </div> */}
-
         <div
           className="flex flex-col items-center "
           onClick={() => navigate("/orders/add-bulk")}
@@ -1001,7 +708,6 @@ const Index = () => {
     );
   };
 
-  //  settings for desktop view
   const desktopSettings = {
     dots: true,
     infinite: true,
@@ -1011,9 +717,6 @@ const Index = () => {
     centerMode: false,
   };
 
-  //  settings for mobile view
-
-  // Define settings for mobile view
   const mobileSettings = {
     dots: true,
     infinite: true,
@@ -1031,7 +734,7 @@ const Index = () => {
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
-    limit: number = 10,
+    limit: number = 100,
     dateFilter: any = false,
     searchText?: any,
     startDate?: any,
@@ -1114,7 +817,7 @@ const Index = () => {
       }
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
-      const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
+      const { orderCount, draftCount, errorCount } = data?.data[0];
 
       if (dateFilter === true) {
         getStatusCount(
@@ -1169,161 +872,7 @@ const Index = () => {
     }
   };
 
-  //  // Modified getSellerOrderByStatus to use POST options
-  //  const getSellerOrderByStatus = async (
-  //   currentStatus = "DRAFT",
-  //   pageNo: number = 1,
-  //   sort: object = { _id: -1 },
-  //   skip: number = 0,
-  //   limit: number = 10,
-  //   dateFilter: any = false,
-  //   searchText?: any,
-  //   startDate?: any,
-  //   endDate?: any,
-  //   filterPayLoadData?: any,
-  //   signal?: AbortSignal
-  // ) => {
-  //   let payload: any;
-  //   try {
-  //     setIsLoading(true);
-
-  //     let firstFilterData = [];
-  //     let secondFilterData = [];
-
-  //     if (filterId === 1) {
-  //       payload = {
-  //         pageNo: 1, //temp
-  //         sort: { _id: -1 }, //temp
-  //         skip: 0, //temp
-  //         limit: limit, //temp
-  //         currentStatus,
-  //         subStatus: "DRAFT",
-  //       };
-  //     } else {
-  //       payload = {
-  //         pageNo: 1, //temp
-  //         sort: { _id: -1 }, //temp
-  //         skip: 0, //temp
-  //         limit: limit, //temp
-  //         currentStatus,
-  //       };
-  //     }
-
-  //     if (searchText?.length > 0) {
-  //       payload.id = searchText;
-  //     }
-
-  //     if (
-  //       filterPayLoadData?.filterArrOne?.length > 0 ||
-  //       filterPayLoadData?.filterArrTwo?.length > 0
-  //     ) {
-  //       const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
-  //         (obj: any) => !Object.keys(obj).includes("createdAt")
-  //       );
-
-  //       firstFilterData = newFilterArrOne;
-  //       secondFilterData = filterPayLoadData?.filterArrTwo;
-  //     }
-
-  //     if (startDate && endDate) {
-  //       let startEpoch = null;
-  //       let lastendEpoch = null;
-
-  //       if (startDate instanceof Date && endDate instanceof Date) {
-  //         startDate.setHours(0, 0, 0, 0);
-  //         startEpoch = startDate.getTime();
-
-  //         endDate.setHours(23, 59, 59, 999);
-  //         const endEpoch = endDate.getTime();
-  //         lastendEpoch = endEpoch;
-  //       }
-
-  //       firstFilterData.unshift(
-  //         {
-  //           createdAt: {
-  //             $gte: startEpoch,
-  //           },
-  //         },
-  //         {
-  //           createdAt: {
-  //             $lte: lastendEpoch,
-  //           },
-  //         }
-  //       );
-  //     }
-
-  //     if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
-  //       payload.filterArrOne = firstFilterData;
-  //       payload.filterArrTwo = secondFilterData;
-  //     }
-
-  //     // Use POST with signal in options
-  //     const { data } = await POST(GET_SELLER_ORDER, payload, { signal });
-
-  //     if (!signal?.aborted) {
-  //       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
-
-  //       if (dateFilter === true) {
-  //         getStatusCount(
-  //           currentStatus,
-  //           dateFilter,
-  //           searchText,
-  //           startDate,
-  //           endDate,
-  //           firstFilterData,
-  //           secondFilterData
-  //         );
-  //       } else {
-  //         setStatusCount("", currentStatus, orderCount);
-  //       }
-  //       setTotalcount(orderCount ? orderCount : 0);
-
-  //       if (payload.filterArrOne) {
-  //         setDraftOrderCount({
-  //           ...draftOrderCount,
-  //           all: allOrdersCount && orderCount ? Math.min(allOrdersCount, orderCount) : orderCount,
-  //           draft: draftCount || 0,
-  //           error: errorCount || 0,
-  //         });
-  //       } else {
-  //         setDraftOrderCount({
-  //           ...draftOrderCount,
-  //           all: allOrdersCount && orderCount ? Math.max(allOrdersCount, orderCount) : orderCount,
-  //           draft: draftCount || 0,
-  //           error: errorCount || 0,
-  //         });
-  //       }
-
-  //       setSelectedRowData([]);
-  //       if (data?.status || data?.success) {
-  //         return data?.data[0];
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     if (error.name !== 'AbortError') {
-  //       setIsLoading(false);
-  //       toast.error(error.message || "An error occurred");
-  //     }
-  //     return false;
-  //   } finally {
-  //     if (!signal?.aborted) {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  // };
-
-  //  // Cleanup on unmount
-  //  useEffect(() => {
-  //   return () => {
-  //     if (fetchDataControllerRef.current) {
-  //       fetchDataControllerRef.current.abort();
-  //       fetchDataControllerRef.current = null;
-  //     }
-  //   };
-  // }, []);
-
   const getSingleFile = async (payload: any, actionType?: any) => {
-    // let fileName = "";
     let awbs = {
       awbs: payload?.awbs,
       source: "WEBSITE",
@@ -1348,7 +897,6 @@ const Index = () => {
         if (!data.ok) {
           const contentType = data.headers.get("Content-Type");
 
-          // Check if the Content-Type indicates JSON
           if (contentType && contentType.includes("application/json")) {
             const jsonData = await data.json();
             console.log("JSON Data:", jsonData);
@@ -1357,11 +905,10 @@ const Index = () => {
               toast.error(jsonData?.message);
             }
           } else {
-            // Handle other types of responses or errors
             toast.error("An unexpected error occurred.");
           }
 
-          return; // Exit the function to avoid further processing
+          return;
         }
 
         const resdata: any = await data?.blob();
@@ -1371,34 +918,7 @@ const Index = () => {
           filename = "Label_Report.png";
         } else {
           filename = "Label_Report.pdf";
-        } // // Function to handle form submission
-        // const submitFormData = async (formData: any) => {
-        //   try {
-        //     setLoading(true);
-        //     setBrandLoadingState(true);
-        //     const { data } = await POST(LOGO_AND_BRAND, formData, {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //       },
-        //     });
-
-        //     if (data?.success) {
-        //       toast.success(data.message);
-        //       localStorage.setItem("brandDetails", "true");
-        //       // window.location.reload(); // Uncomment if needed
-        //       // getProfileData(); // Uncomment if needed
-        //     } else {
-        //       toast.error(data.message);
-        //     }
-        //   } catch (error) {
-        //     toast.error("An error occurred while updating branding details.");
-        //     console.error(error);
-        //   } finally {
-        //     setLoading(false);
-        //     setBrandLoadingState(false);
-        //   }
-        // };
-
+        }
         var url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -1444,7 +964,6 @@ const Index = () => {
               awb: "0",
             },
           });
-          // setIsPartnerModal(true);
         } else if (actionType === "duplicate_order") {
           setDuplicateOrderModalData({
             isOpen: true,
@@ -1503,10 +1022,6 @@ const Index = () => {
       if (updatedCount === undefined) {
         statusListFromApi.length > 0 &&
           statusListFromApi?.forEach((e1: any) => {
-            const matchingIndex = tempArr.findIndex(
-              (e: any) => e.value === e1._id?.toUpperCase()
-            );
-
             for (let index = 0; index < tempArr.length; index++) {
               const element1 = tempArr[index];
 
@@ -1536,12 +1051,6 @@ const Index = () => {
               minimumIntegerDigits: 2,
               useGrouping: false,
             });
-          } else {
-            // const num: any = 0;
-            //   element.orderNumber = num.toLocaleString("en-US", {
-            //     minimumIntegerDigits: 2,
-            //     useGrouping: false,
-            //   });
           }
         }
       }
@@ -1652,122 +1161,6 @@ const Index = () => {
       console.error("An error occurred in handleTabChanges function:", error);
     }
   };
-
-  // Modified handleTabChanges
-  // const handleTabChanges = async (
-  //   index?: any,
-  //   dateFilter = false,
-  //   searchedText?: any,
-  //   startDate?: any,
-  //   endDate?: any,
-  //   filterPayLoad?: any,
-  //   itemsPerPage?: any
-  // ) => {
-  //   try {
-  //     // Abort previous request if exists and if we're changing tabs
-  //     if (index !== currentTabRef.current && fetchDataControllerRef.current) {
-  //       fetchDataControllerRef.current.abort();
-  //       fetchDataControllerRef.current = null;
-  //     }
-  //     currentTabRef.current = index;
-
-  //     // Create new controller
-  //     fetchDataControllerRef.current = new AbortController();
-  //     const signal = fetchDataControllerRef.current.signal;
-
-  //     const data = await getSellerOrderByStatus(
-  //       statusData[index].value,
-  //       1,
-  //       { _id: -1 },
-  //       0,
-  //       itemsPerPage,
-  //       dateFilter,
-  //       searchedText,
-  //       startDate,
-  //       endDate,
-  //       filterPayLoad,
-  //       signal
-  //     );
-
-  //     if (!signal.aborted && data) {
-  //       const { OrderData } = data;
-  //       setOrders(OrderData);
-  //       setAllOrders(OrderData);
-  //       setTotalOrders(OrderData);
-  //       setGlobalIndex(index);
-  //       setTabStatusId(index);
-  //       setRenderingComponents(index);
-
-  //       let currentStatus = tabs[index].value;
-  //       setCurrentTap(currentStatus);
-  //       setIsErrorPage(index > 0 && false);
-  //       index > 0 && setFilterId(0);
-
-  //       // Update column helpers based on status
-  //       switch (tabs[index].value) {
-  //         case "DRAFT":
-  //           setColumnhelper(
-  //             columnHelperForNewOrder(
-  //               navigate,
-  //               setDeleteModalDraftOrder,
-  //               setInfoModalContent,
-  //               currentStatus,
-  //               orderActions,
-  //               setInfoModalContentFunction
-  //             )
-  //           );
-  //           break;
-  //         case "BOOKED":
-  //           setColumnhelper(
-  //             ColumnHelperForBookedAndReadyToPicked(
-  //               navigate,
-  //               setCancellationModal,
-  //               setInfoModalContent,
-  //               setInfoModalContentFunction,
-  //               currentStatus,
-  //               orderActions,
-  //               setOpenRightModalForTracking,
-  //               openRightModalForTracking,
-  //               isMasked
-  //             )
-  //           );
-  //           break;
-  //         case "READYTOPICK":
-  //           setColumnhelper(
-  //             ColumnHelperForBookedAndReadyToPicked(
-  //               navigate,
-  //               setInfoModalContent,
-  //               setInfoModalContentFunction,
-  //               currentStatus,
-  //               orderActions,
-  //               setOpenRightModalForTracking,
-  //               openRightModalForTracking,
-  //               isMasked
-  //             )
-  //           );
-  //           break;
-  //         default:
-  //           setColumnhelper(
-  //             columnHelpersForRest(
-  //               navigate,
-  //               setInfoModalContent,
-  //               currentStatus,
-  //               orderActions,
-  //               setInfoModalContentFunction,
-  //               setInfoReverseModalFunction,
-  //               setOpenRightModalForTracking,
-  //               openRightModalForTracking,
-  //               isMasked
-  //             )
-  //           );
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     if (error.name !== 'AbortError') {
-  //       console.error("An error occurred in handleTabChanges function:", error);
-  //     }
-  //   }
-  // };
 
   const PersistFilterArr = (key: any, data: any) => {
     setPersistFilterData((prevData: any) => {
@@ -1965,21 +1358,22 @@ const Index = () => {
   }, [endDate, activeTab, searchedText]);
 
   useEffect(() => {
-  (async () => {
-    try {
-      const { data } = await POST(GET_COUNT_AMAZON_ORDER);
-      if(data?.code === 200){
-        let temp = data?.data?.[0];
-        setFullfillment(temp?.fullFillMent?.[0]?.fullFillMent || 0);
-        setUnFullfillment(temp?.unfullFillMent?.[0]?.unfullFillCount || 0);
+    (async () => {
+      try {
+        const { data } = await POST(GET_COUNT_AMAZON_ORDER);
+        if (data?.code === 200) {
+          let temp = data?.data?.[0];
+          setFullfillment(temp?.fullFillMent?.[0]?.fullFillMent || 0);
+          setUnFullfillment(temp?.unfullFillMent?.[0]?.unfullFillCount || 0);
+        }
+      } catch (error) {
+        toast.error("Something went wrong");
       }
-    } catch (error) {
-      toast.error("Something went wrong")
-    }
-  })();
-}, []);
+    })();
+  }, []);
 
   const onPageIndexChange = async (data: any) => {
+    setIsLoading(true);
     let skip: any = 0;
     let limit: any = 0;
     let pageNo: any = 0;
@@ -2008,6 +1402,7 @@ const Index = () => {
     setOrders(OrderData);
     setAllOrders(OrderData);
     setTotalOrders(OrderData);
+    setIsLoading(false);
   };
 
   const onPerPageItemChange = async (data: any) => {
@@ -2052,7 +1447,7 @@ const Index = () => {
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
-    limit: number = 10,
+    limit: number = 100,
     dateFilter: any = false,
     searchText?: any,
     startDate?: any,
@@ -2154,6 +1549,7 @@ const Index = () => {
 
       const { data: count } = await POST(GET_STATUS_COUNT, dates);
       allOrders = count?.data?.[0]?.count;
+
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
@@ -2173,6 +1569,66 @@ const Index = () => {
       return false;
     }
   };
+
+  const fetchManifest = async (awbArray?: any, setIsLoadingManifest?: any) => {
+    const selectAllContainer: any = document.getElementById("selectAll");
+    const checkbox = selectAllContainer.querySelector('input[type="checkbox"]');
+
+    // Function to check if the checkbox is checked
+    const isChecked = checkbox.checked;
+    let awbs: any = [];
+    if (isChecked) {
+      orders?.map((el: any, i: number) => {
+        awbs.push(el?.awb);
+      });
+    } else {
+      awbs.push(...awbArray.filter((item: any) => item !== ""));
+    }
+    let payload = {
+      awbs,
+      source: "WEBSITE",
+    };
+    setIsLoadingManifest({
+      isLoading: true,
+      identifier: "Download_menifest_report",
+    });
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${localStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(FETCH_MANIFEST_DATA, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message);
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
+      return;
+    }
+    const data = await response.blob();
+
+    const blob = new Blob([data], { type: "application/pdf" });
+
+    var url = URL.createObjectURL(blob);
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Manifest_Report.pdf`;
+    a.click();
+  };
+
   const fetchLabels = async (
     arrLebels: string[],
     setIsLoadingManifest: any
@@ -2182,13 +1638,26 @@ const Index = () => {
       return;
     }
 
+    const selectAllContainer: any = document.getElementById("selectAll");
+    const checkbox = selectAllContainer.querySelector('input[type="checkbox"]');
+
+    // Function to check if the checkbox is checked
+    const isChecked = checkbox.checked;
+    let awbs: any = [];
+    if (isChecked) {
+      orders?.map((el: any, i: number) => {
+        awbs.push(el?.awb);
+      });
+    } else {
+      awbs.push(...arrLebels.filter((item: any) => item !== ""));
+    }
     setIsLoadingManifest({
       isLoading: true,
       identifier: "Download_Labels",
     });
 
     const payload: any = {
-      awbs: arrLebels.filter((item: any) => item !== ""),
+      awbs,
       source: "WEBSITE",
     };
 
@@ -2262,13 +1731,27 @@ const Index = () => {
       return;
     }
 
+    const selectAllContainer: any = document.getElementById("selectAll");
+    const checkbox = selectAllContainer.querySelector('input[type="checkbox"]');
+
+    // Function to check if the checkbox is checked
+    const isChecked = checkbox.checked;
+    let awbs: any = [];
+    if (isChecked) {
+      orders?.map((el: any, i: number) => {
+        awbs.push(el?.awb);
+      });
+    } else {
+      awbs.push(...arrLebels.filter((item: any) => item !== ""));
+    }
+
     setIsLoadingManifest({
       isLoading: true,
       identifier: "Download_Multi_Tax",
     });
 
     const payload: any = {
-      awbs: arrLebels.filter((item: any) => item !== ""),
+      awbs,
       source: "WEBSITE",
     };
 
@@ -2413,7 +1896,6 @@ const Index = () => {
             ...draftOrderCount,
             all: sellerOrder.orderCount || 0,
             draft: sellerOrder.draftCount || 0,
-            // failed: failedCount || 0,
             error: sellerOrder.errorCount || 0,
           });
         }
@@ -2438,7 +1920,7 @@ const Index = () => {
       let currentStatus = tabs[globalIndex]?.value;
       let payload: any = {
         skip: 0,
-        limit: 10,
+        limit: 100,
         pageNo: 1,
         sort: { _id: -1 },
         currentStatus,
@@ -2519,43 +2001,26 @@ const Index = () => {
     }
   };
 
-  //for scrolling the customTable
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-
-    // Attach the wheel event listener, wheel event is the javascript
-    if (scrollElement) {
-      scrollElement.addEventListener("wheel", handleScroll);
-    }
-
-    // Clean up the event listener on component unmount
-    return () => {
-      if (scrollElement) {
-        scrollElement.removeEventListener("wheel", handleScroll);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      if (!infoModalContent.isOpen && currentTap == "DRAFT") {
-        const data: any = await getSellerOrderByStatus(
-          activeTab,
-          1,
-          { _id: -1 },
-          0,
-          itemsPerPage,
-          true,
-          searchedText,
-          startDate,
-          endDate,
-          filterPayLoad
-        );
-        const { OrderData } = data;
-        setOrders(OrderData);
-      }
-    })();
-  }, [infoModalContent]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (!infoModalContent.isOpen && currentTap == "DRAFT") {
+  //       const data: any = await getSellerOrderByStatus(
+  //         activeTab,
+  //         1,
+  //         { _id: -1 },
+  //         0,
+  //         itemsPerPage,
+  //         true,
+  //         searchedText,
+  //         startDate,
+  //         endDate,
+  //         filterPayLoad
+  //       );
+  //       const { OrderData } = data;
+  //       setOrders(OrderData);
+  //     }
+  //   })();
+  // }, [infoModalContent]);
 
   useEffect(() => {
     getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
@@ -2667,6 +2132,7 @@ const Index = () => {
                 selectedRowdata={selectedRowdata}
                 setSelectedRowData={setSelectedRowData}
                 fetchLabels={fetchLabels}
+                fetchManifest={fetchManifest}
                 fetchMultiTax={fetchMultiTax}
                 setDeleteModalDraftOrder={setDeleteModalDraftOrder}
                 setCancellationModal={setCancellationModal}
@@ -2691,12 +2157,7 @@ const Index = () => {
                 totalCount={totalCount}
               />
             </div>
-            <div
-              // h-[calc(100%-150px)]
-              ref={scrollRef}
-              className="overflow-y-auto my-0 h-[calc(100%-180px)] scroll-smooth"
-              // style={{ border: "2px solid yellow" }}
-            >
+            <div ref={scrollRef} className="my-0 h-[calc(100%-180px)]">
               {isLoading ? (
                 <>
                   {isLgScreen ? (
@@ -2763,17 +2224,6 @@ const Index = () => {
                             tdclassName={"py-4"}
                           />
                         </div>
-                        {/* As this pagination should not scroll with the table */}
-
-                        {/* {totalCount > 0 && (
-                          <Pagination
-                            totalItems={totalCount}
-                            itemsPerPageOptions={[10, 50, 100]}
-                            onPageChange={onPageIndexChange}
-                            onItemsPerPageChange={onPerPageItemChange}
-                            initialItemsPerPage={itemsPerPage}
-                          />
-                        )} */}
                       </>
                     )
                   ) : (
@@ -2800,22 +2250,14 @@ const Index = () => {
             </div>
             <div>
               {totalCount > 0 && (
-                // <Pagination
-                //   totalItems={totalCount}
-                //   itemsPerPageOptions={[10, 50, 100]}
-                //   onPageChange={onPageIndexChange}
-                //   onItemsPerPageChange={onPerPageItemChange}
-                //   initialItemsPerPage={itemsPerPage}
-                //   className="pb-6"
-                // />
                 <OnePagination
-                totalItems={totalCount}
-                itemsPerPageOptions={[10, 50, 100]}
-                onPageChange={onPageIndexChange}
-                onItemsPerPageChange={onPerPageItemChange}
-                initialItemsPerPage={itemsPerPage}
-                className="pb-6"
-              />
+                  totalItems={totalCount}
+                  itemsPerPageOptions={[100, 200, 500, 1000]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  initialItemsPerPage={itemsPerPage}
+                  className="pb-6"
+                />
               )}
             </div>
           </div>
@@ -3045,14 +2487,6 @@ const Index = () => {
                 className=" px-5  "
                 variant="secondary"
               />
-              {/* <ServiceButton
-                text="RESET ALL"
-                onClick={() => {
-                  window.location.reload();
-                  setFilterModal(false);
-                }}
-                className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-              /> */}
               {isFilterLoading ? (
                 <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
                   <Spinner />
@@ -3064,12 +2498,6 @@ const Index = () => {
                   className=" px-5  "
                   variant="primary"
                 />
-
-                // <ServiceButton
-                //   text="APPLY"
-                //   onClick={applyFilterforOrders}
-                //   className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-                // />
               )}
             </div>
           </div>
