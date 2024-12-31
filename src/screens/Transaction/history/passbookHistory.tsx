@@ -101,7 +101,7 @@ export const PassbookColumns = (setSortOrder: any) => {
   const isValidJSON = (str: any) => {
     return /^[\],:{}\s]*$/.test(
       str
-        .replace(/\\["\\\/bfnrtu]/g, "@")
+        ?.replace(/\\["\\\/bfnrtu]/g, "@")
         .replace(
           /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
           "]"
@@ -425,27 +425,8 @@ export const PassbookColumns = (setSortOrder: any) => {
                 }:${info?.row?.original?.amount},Balance:${
                   info?.row?.original?.balance
                 },
-                TrackingNo:${
-                  info?.row?.original?.remark?.length === 0
-                    ? "N/A"
-                    : isValidJSON(info?.row?.original?.remark)
-                    ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
-                        ?.tracking?.awb !== undefined
-                      ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
-                          ?.tracking?.awb
-                      : "---"
-                    : "---"
-                },
-                ShipyaariId:${
-                  info?.row?.original?.remark?.length === 0
-                    ? "N/A"
-                    : isValidJSON(info?.row?.original?.remark)
-                    ? JSON.parse(info?.row?.original?.remark)?.tempOrderId !==
-                      undefined
-                      ? JSON.parse(info?.row?.original?.remark)?.tempOrderId
-                      : "---"
-                    : "---"
-                },
+                TrackingNo:${info?.row?.original?.awb || "N/A"},
+                ShipyaariId:${info?.row?.original?.tempOrderId || "N/A"},
                 Status:${info?.row?.original?.status},
                 Description:${info?.row?.original?.description}`}
               />
