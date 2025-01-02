@@ -550,7 +550,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Track Order
                         </span>
                       </div>
-                      <div
+                      {/* commented as not needed now  */}
+                      {/* <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                         onClick={() => navigate("/weight-freeze")}
                       >
@@ -564,7 +565,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
                           Weight Freeze
                         </span>
-                      </div>
+                      </div> */}
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                         onClick={() => navigate("/orders/add-order/pickup")}
