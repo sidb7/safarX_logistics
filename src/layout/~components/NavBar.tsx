@@ -185,7 +185,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         </div>
         {sideBarMenus?.map((e: any, index: number) => {
           console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
-          if (e?.name !== "Notifications" && e?.name !== "Feedback") {
+          if (e?.name !== "Notifications") {
             let iconName = e?.icon?.toLowerCase() || "";
             const iconPath =
               require(`../../assets/Navbar/${iconName}.svg`) || "";
@@ -276,7 +276,8 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                         child?.name !== "Exception" &&
                         child?.name !== "SY Performance" &&
                         child?.name !== "Weight Freeze" &&
-                        child?.name !== "Credit Notes"
+                        child?.name !== "Credit Notes" &&
+                        child?.name !== "Channel Inventory"
                       ) {
                         return (
                           <div
