@@ -95,7 +95,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   };
 
   const setIsActivePath = (index: number, childIndex: number, path: any) => {
-    if (path.startsWith('https://')) {
+    if (path.startsWith("https://")) {
       window.open(path, "_blank");
       return;
     }
@@ -123,10 +123,14 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     navigate(path);
   };
 
+  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
+
   const opneAndCloseChild = (index: number, element: any) => {
     const { name, isChild } = element;
     if (name === "Help") {
-      window.open("https://support.shipyaari.com/tickets", "_blank");
+      companyName === "Shipyaari"
+        ? window.open("https://support.shipyaari.com/tickets", "_blank")
+        : window.open("https://wa.me/8700391426", "_blank");
       return;
     }
 
@@ -180,79 +184,123 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           )}
         </div>
         {sideBarMenus?.map((e: any, index: number) => {
-          let iconName = e?.icon?.toLowerCase() || "";
-          const iconPath = require(`../../assets/Navbar/${iconName}.svg`) || "";
-          return (
-            <div className="w-full flex-col" key={index}>
-              <div
-                key={`${e.name + index}`}
-                className={`h-10 flex items-center rounded-lg px-2
+          console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
+          if (e?.name !== "Notifications" && e?.name !== "Feedback") {
+            let iconName = e?.icon?.toLowerCase() || "";
+            const iconPath =
+              require(`../../assets/Navbar/${iconName}.svg`) || "";
+            return (
+              <div className="w-full flex-col" key={index}>
+                <div
+                  key={`${e.name + index}`}
+                  className={`h-10 flex items-center rounded-lg px-2
 } w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
-                onClick={() => {
-                  opneAndCloseChild(index, e);
-                }}
-              >
-                <img
-                  src={iconPath}
-                  className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
-                  alt=""
-                />
-                {isHover ? (
-                  <div
-                    className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize`}
-                  >
-                    <p
-                      className={`px-2 whitespace-nowrap ${
-                        e.isActivePath ? " invert" : ""
-                      }`}
-                    >
-                      {e.name}
-                    </p>
-
+                  onClick={() => {
+                    opneAndCloseChild(index, e);
+                  }}
+                >
+                  <img
+                    src={iconPath}
+                    className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
+                    alt=""
+                  />
+                  {isHover ? (
                     <div
-                      className={`${
-                        e.isActivePath ? "text-white" : ""
-                      } flex items-center gap-2`}
+                      className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize`}
                     >
-                      <CustomButton
-                        icon={downArrow}
-                        showIcon={true}
-                        onlyIcon={true}
-                        className={`${
+                      <p
+                        className={`px-2 whitespace-nowrap ${
                           e.isActivePath ? " invert" : ""
-                        } bg-white w-fit !p-0 !h-fit`}
-                        text={""}
-                        onClick={() => {}}
-                      />
+                        }`}
+                      >
+                        {e.name}
+                      </p>
+
+                      <div
+                        className={`${
+                          e.isActivePath ? "text-white" : ""
+                        } flex items-center gap-2`}
+                      >
+                        <CustomButton
+                          icon={downArrow}
+                          showIcon={true}
+                          onlyIcon={true}
+                          className={`${
+                            e.isActivePath ? " invert" : ""
+                          } bg-white w-fit !p-0 !h-fit`}
+                          text={""}
+                          onClick={() => {}}
+                        />
+                      </div>
                     </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                {e.isChild ? (
+                  <div className="flex flex-col overflow-hidden">
+                    {/* {e.menu?.map((child: any, childIndex: number) => {
+                      console.log("e.target.child", e?.menu?.[1]?.name);
+                      // if (e?.menu?.[1]?.name !== "Orders") {
+                      return (
+                        <div
+                          key={childIndex}
+                          className={`py-2 pl-10 rounded-lg ${
+                            child.isActivePath ? "bg-[#E8E8E8]" : ""
+                          }`}
+                          onClick={() =>
+                            setIsActivePath(index, childIndex, child.path)
+                          }
+                        >
+                          {child.name}
+                        </div>
+                      );
+                      // }
+                      // return (
+                      //   <div
+                      //     key={childIndex}
+                      //     className={`py-2 pl-10 rounded-lg ${
+                      //       child.isActivePath ? "bg-[#E8E8E8]" : ""
+                      //     }`}
+                      //     onClick={() =>
+                      //       setIsActivePath(index, childIndex, child.path)
+                      //     }
+                      //   >
+                      //     {child.name}
+                      //   </div>
+                      // );
+                    })} */}
+                    {e.menu?.map((child: any, childIndex: number) => {
+                      if (
+                        child?.name !== "Orders" &&
+                        child?.name !== "Exception" &&
+                        child?.name !== "SY Performance" &&
+                        child?.name !== "Weight Freeze" &&
+                        child?.name !== "Credit Notes"
+                      ) {
+                        return (
+                          <div
+                            key={childIndex}
+                            className={`py-2 pl-10 rounded-lg ${
+                              child.isActivePath ? "bg-[#E8E8E8]" : ""
+                            }`}
+                            onClick={() =>
+                              setIsActivePath(index, childIndex, child.path)
+                            }
+                          >
+                            {child.name}
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
                   </div>
                 ) : (
                   ""
                 )}
               </div>
-              {e.isChild ? (
-                <div className="flex flex-col overflow-hidden">
-                  {e.menu?.map((child: any, childIndex: number) => {
-                    return (
-                      <div
-                        key={childIndex}
-                        className={`py-2 pl-10 rounded-lg ${
-                          child.isActivePath ? "bg-[#E8E8E8]" : ""
-                        }`}
-                        onClick={() =>
-                          setIsActivePath(index, childIndex, child.path)
-                        }
-                      >
-                        {child.name}
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          );
+            );
+          }
         })}
       </nav>
       <div
