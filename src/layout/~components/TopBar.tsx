@@ -113,6 +113,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
+  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
+
   // Handler for Report A Bug click
   const handleReportBugClick = () => {
     setIsSentryOpen(true);
@@ -391,7 +393,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
               /> */}
-
               <div ref={dropdownQuickRef}>
                 <img
                   src={PowerBoosterlogo}
@@ -402,7 +403,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   onClick={() => openQuickAction()}
                 />
               </div>
-
+              {/* commented as not needed now  */}
+              {/* 
               <CustomButton
                 icon={NotificationLogo}
                 showIcon={true}
@@ -410,7 +412,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
                 text={""}
                 onClick={() => navigate("/notifications")}
-              />
+              /> */}
               <CustomButton
                 icon={ProfileLogo}
                 onClick={() => setIsOpen(!isOpen)}
@@ -419,7 +421,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="bg-white !w-6 !h-6 !p-0 lg:w-fit"
                 text={""}
               />
-
               {isModalOpen && (
                 <CenterModal
                   isOpen={isModalOpen}
@@ -433,7 +434,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   />
                 </CenterModal>
               )}
-
               {/* <img src={ProfileLogo} alt="" /> */}
               {isOpen && (
                 <div
@@ -583,23 +583,27 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
                       {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
                         <>
-                          <a
-                            className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                            href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img
-                              src={SyAppIcon}
-                              alt=""
-                              className="self-center"
-                              width={"40px"}
-                              height={"40px"}
-                            />
-                            <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                              Shipyaari App
-                            </span>
-                          </a>
+                          {companyName === "Shipyaari" ? (
+                            <a
+                              className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                              href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <img
+                                src={SyAppIcon}
+                                alt=""
+                                className="self-center"
+                                width={"40px"}
+                                height={"40px"}
+                              />
+                              <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                                Shipyaari App
+                              </span>
+                            </a>
+                          ) : (
+                            <></>
+                          )}
                         </>
                       ) : (
                         <></>
