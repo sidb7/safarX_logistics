@@ -41,7 +41,7 @@ import { inputRegexFilter } from "../../utils/Helper/Filter";
 
 const arrayData = [
   { label: "Passbook" },
-  { label: "Cashback" },
+  // { label: "Cashback" },
   { label: "NEFT/IMPS/RTGS Transaction" },
 ];
 
