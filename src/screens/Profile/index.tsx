@@ -182,17 +182,15 @@ export const Profile = () => {
             }}
             BrandingDetails={profileData?.privateCompany}
           />
-          <div className="lg:grid lg:grid-cols-2 gap-4  mb-4">
-            {/* <ProfileNotification /> */}
+          <div className="lg:grid lg:grid-cols-2 gap-4">
+            <ProfileNotification />
             <ProfileReferEarn
               ReferData={{
                 referCode: profileData?.refferalCode,
                 referImage: profileData?.refferalCodeImageUrl,
               }}
             />
-            <div className="mt-4">
-              <ProfileSetting ProfileDetails={profileData} />
-            </div>
+            <ProfileSetting ProfileDetails={profileData} />
           </div>
         </>
       )}

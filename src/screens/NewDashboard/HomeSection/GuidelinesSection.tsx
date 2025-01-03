@@ -10,9 +10,6 @@ const GuidelinesSection: React.FunctionComponent<IGuidelinesSectionProps> = (
       "https://blaze-whitelabel.s3.ap-south-1.amazonaws.com/blaze/assets/SY_Packaging%20Guide.pdf?response[…]f36adf0c0fca4435752efe347aa334866cd1e6c0669edb";
     window.open(pdfUrl, "_blank");
   };
-
-  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
-
   return (
     <>
       <div className="mx-6 lg:mx-12 mt-10 lg:mt-[81px] mb-6">
@@ -20,25 +17,20 @@ const GuidelinesSection: React.FunctionComponent<IGuidelinesSectionProps> = (
           <p className="font-Open text-lg lg:text-2xl font-semibold leading-8 text-[#1C1C1C]">
             Packaging Guidelines for Easy, Hassle-Free Shipping
           </p>
-          {/* commented as not required now  */}
-          {companyName === "Shipyaari" ? (
-            <p className="font-Open text-base lg:text-xl font-normal leading-8 lg:leading-6 text-[#697586]">
-              Follow these guidelines to securely pack and label your shipments,
-              ensuring a smooth delivery process and item protection. For expert
-              tips and details,{" "}
-              <span
-                className="font-Open text-[15px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer"
-                onClick={handleDownload}
-              >
-                [Get the Full Guide]
-              </span>
-            </p>
-          ) : (
-            <p></p>
-          )}
+          <p className="font-Open text-base lg:text-xl font-normal leading-8 lg:leading-6 text-[#697586]">
+            Follow these guidelines to securely pack and label your shipments,
+            ensuring a smooth delivery process and item protection. For expert
+            tips and details,{" "}
+            <span
+              className="font-Open text-[15px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer"
+              onClick={handleDownload}
+            >
+              [Get the Full Guide]
+            </span>
+          </p>
         </div>
         {/* guidlines summary in cards  */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-3 lg:mt-10 gap-x-11 gap-y-10 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-5 lg:mt-10 gap-x-11 gap-y-10 ">
           <div className="rounded-[20px] bg-white shadow-[0px_23px_23px_0px_rgba(133,133,133,0.04),_0px_6px_13px_0px_rgba(133,133,133,0.05),_0px_0px_0px_0px_rgba(133,133,133,0.05)] max-w-[351px] h-[291px] lg:h-[280px]">
             <div className="pt-[35px] px-[22px] flex flex-col space-y-2">
               <div>
