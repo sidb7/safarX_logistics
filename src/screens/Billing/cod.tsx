@@ -36,7 +36,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const arrayData = [
     { label: "Orders" },
     { label: "Invoice" },
-    { label: "Credit Note" },
+    // { label: "Credit Note" },
     { label: "Cod" },
   ];
 
@@ -45,9 +45,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
       navigate("/billing/orders");
     } else if (id === 1) {
       navigate("/billing/invoices");
-    } else if (id === 2) {
-      navigate("/billing/credit-notes");
-    } else if (id === 3) {
+    }
+    // else if (id === 2) {
+    //   navigate("/billing/credit-notes");
+    // }
+    else if (id === 2) {
       navigate("/billing/cod");
     }
   };
@@ -178,7 +180,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 arrayData={arrayData}
                 showNumber={false}
                 setScrollIndex={setScrollIndex}
-                defaultIndexValue={3}
+                defaultIndexValue={2}
               />
             </div>
             <div className="flex justify-end gap-x-2  ">
