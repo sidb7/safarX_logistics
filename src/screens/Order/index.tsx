@@ -622,8 +622,16 @@ const Index = () => {
             className: "custom-toast-success",
           });
           setStoreDetails(data?.data);
+        } else if (data?.message.includes("try")) {
+          setIsSyncModalOpen(false);
+          // setIsChannelPartner(true);
+          setIsSyncModalLoading(false);
+          toast.success(data?.message, {
+            className: "custom-toast-success",
+          });
+          setStoreDetails(data?.data);
         } else {
-          toast.success("Sync In Progress", {
+          toast.success(data?.message || "Sync In Progress", {
             className: "custom-toast-success",
           });
         }
