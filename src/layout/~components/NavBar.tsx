@@ -271,8 +271,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                       // );
                     })} */}
                     {e.menu?.map((child: any, childIndex: number) => {
+                      if (e?.name === "Dashboard" && child?.name === "Orders") {
+                        return null;
+                      }
+
                       if (
-                        child?.name !== "Orders" &&
                         child?.name !== "Exception" &&
                         child?.name !== "SY Performance" &&
                         child?.name !== "Weight Freeze" &&
