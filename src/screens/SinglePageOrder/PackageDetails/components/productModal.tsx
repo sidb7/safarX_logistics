@@ -299,6 +299,11 @@ function ProductModal({ onClose, setOrder, index }: any) {
                           name="unitTax"
                           inputType="text"
                           isDisabled={true}
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
 
                           //   inputError={inputError}
                         />
