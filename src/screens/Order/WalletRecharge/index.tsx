@@ -498,10 +498,6 @@ const WalletRecharge = () => {
     }
   };
 
-  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
-
-  console.log("companyName", companyName);
-
   useEffect(() => {
     (async () => {
       try {
@@ -873,10 +869,7 @@ const WalletRecharge = () => {
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-12">
                           <p className="font-Open text-base font-semibold leading-[22px]">
-                            {companyName === "Shipyaari"
-                              ? "Yaari points are availed after first"
-                              : "Reward points are availed after first"}
-                            {/* Yaari points are availed after first */}
+                            Yaari points are availed after first
                           </p>
                           <p className="font-Open text-base font-semibold leading-[22px]">
                             order is placed
