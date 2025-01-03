@@ -45,7 +45,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const arrayData = [
     { label: "Orders" },
     { label: "Invoice" },
-    { label: "Credit Note" },
+    // { label: "Credit Note" },
     { label: "Cod" },
   ];
 
@@ -54,9 +54,11 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
       navigate("/billing/orders");
     } else if (id === 1) {
       navigate("/billing/invoices");
-    } else if (id === 2) {
-      navigate("/billing/credit-notes");
-    } else if (id === 3) {
+    }
+    // else if (id === 2) {
+    //   navigate("/billing/credit-notes");
+    // }
+    else if (id === 2) {
       navigate("/billing/cod");
     }
   };
