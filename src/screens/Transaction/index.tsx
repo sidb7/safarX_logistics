@@ -24,7 +24,7 @@ import { TransactionSearchBox } from "../../components/Transactions/TransactionS
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../assets/serv/edit.svg";
-
+import CloseIcon from "../../assets/CloseIcon.svg";
 import { useErrorBoundary } from "react-error-boundary";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -38,10 +38,15 @@ import {
 import { NewSearch } from "../../components/NewSearch/NewSearch";
 import { PathFinder } from "../../utils/Helper/PathFinder";
 import { inputRegexFilter } from "../../utils/Helper/Filter";
+import DatePicker from "react-datepicker";
+import DateButton from "../../components/Button/DateButton";
+import OneButton from "../../components/Button/OneButton";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import TransactionFilter from "./transactionFilter";
 
 const arrayData = [
   { label: "Passbook" },
-  { label: "Cashback" },
+  // { label: "Cashback" },
   { label: "NEFT/IMPS/RTGS Transaction" },
 ];
 
@@ -64,50 +69,242 @@ export const Transaction = () => {
   const [searchValue, setSearchValue]: any = useState("");
   const currenturl = window.location.href;
   const path = PathFinder(currenturl);
+  const [dateRange, setDateRange]: any = useState([null, null]);
+  let thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
+  const [endDate, setEndDate] = useState<any>(new Date());
+  const [filterModal, setFilterModal] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
+  const [filterState, setFilterState] = useState({
+    name: "",
+    menu: [],
+    label: "",
+    isCollapse: false,
+  });
+  const [filterPayLoad, setFilterPayLoad] = useState({
+    filterArrOne: [],
+    filterArrTwo: [],
+  });
+
+  const [persistFilterData, setPersistFilterData]: any = useState({
+    deliveryPincode: [],
+    pickupPincode: [],
+  });
 
   useEffect(() => {
-    if (renderingComponents === 0 || renderingComponents === 2) {
-      setLoading(true);
+    // if (renderingComponents === 0 || renderingComponents === 2) {
+    setLoading(true);
+    console.log("renderingComponents", renderingComponents);
 
-      const getData = setTimeout(async () => {
-        const payload: any = {
-          filter: {
-            status: "",
-            from: "",
-            to: "",
-          },
-          skip: (currentPage - 1) * itemsPerPage,
-          limit: itemsPerPage,
-          pageNo: currentPage,
-          sort: { _id: sortOrder === "desc" ? -1 : 1 },
-          searchValue: searchValue,
-        };
+    const getData = setTimeout(async () => {
+      const payload: any = {
+        filter: [],
+        skip: (currentPage - 1) * itemsPerPage,
+        limit: itemsPerPage,
+        pageNo: currentPage,
+        sort: { _id: sortOrder === "desc" ? -1 : 1 },
+        searchValue: searchValue,
+        apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
+      };
 
-        if (renderingComponents === 2) {
-          payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
         }
+        payload.startDate = startEpoch;
+        payload.endDate = lastendEpoch;
 
-        const { data: response } = await inputRegexFilter(
-          searchValue,
-          path,
-          payload
-        );
-        console.log("🚀 ~ getData ~ data:", response);
-
-        if (response?.success) {
-          setData(response?.data || []);
-          setTotalItemCount(response.totalTransactions);
-          setLoading(false);
-        } else {
-          toast.error(response?.message);
-          showBoundary(response?.message);
-          setLoading(false);
+        // payload?.filter?.push({
+        //   createdAt: {
+        //     $gte: startEpoch,
+        //     $lte: lastendEpoch,
+        //   },
+        // });
+      }
+      payload.filter = [];
+      let extraFilter = filterPayLoad?.filterArrOne;
+      extraFilter?.map((el: any, i: any) => {
+        if (el?.status?.$in?.length > 0) {
+          payload?.filter?.push(el);
         }
-      }, 500);
+        if (el?.description?.$in?.length > 0) {
+          payload?.filter?.push(el);
+        }
+      });
 
-      return () => clearTimeout(getData);
+      if (renderingComponents === 1) {
+        payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
+      }
+
+      const { data: response } = await inputRegexFilter(
+        searchValue,
+        path,
+        payload
+      );
+
+      if (response?.success) {
+        setData(response?.data || []);
+        setTotalItemCount(response.totalTransactions);
+        setLoading(false);
+        setIsFilterLoading(false);
+        setFilterModal(false);
+      } else {
+        toast.error(response?.message);
+        // showBoundary(response?.message);
+        setLoading(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(getData);
+    // }
+  }, [
+    itemsPerPage,
+    currentPage,
+    sortOrder,
+    searchValue,
+    isFilterLoading,
+    renderingComponents,
+  ]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+
+  //   const getData = setTimeout(async () => {
+  //     let skip;
+  //     let limit;
+  //     let pageNo;
+  //     if (currentPage !== 1) {
+  //       skip = 0;
+  //       limit = itemsPerPage;
+  //       pageNo = 1;
+  //     } else {
+  //       skip = (currentPage - 1) * itemsPerPage;
+  //       limit = itemsPerPage;
+  //       pageNo = currentPage;
+  //     }
+  //     const payload: any = {
+  //       filter: [],
+  //       skip,
+  //       limit,
+  //       pageNo,
+  //       sort: { _id: sortOrder === "desc" ? -1 : 1 },
+  //       searchValue: searchValue,
+  //     };
+
+  //     if (startDate && endDate) {
+  //       let startEpoch = null;
+  //       let lastendEpoch = null;
+
+  //       if (startDate instanceof Date && endDate instanceof Date) {
+  //         startDate.setHours(0, 0, 0, 0);
+  //         startEpoch = startDate.getTime();
+
+  //         endDate.setHours(23, 59, 59, 999);
+  //         const endEpoch = endDate.getTime();
+
+  //         lastendEpoch = endEpoch;
+  //       }
+  //       payload?.filter?.push({
+  //         createdAt: {
+  //           $gte: startEpoch,
+  //           $lte: lastendEpoch,
+  //         },
+  //       });
+  //     }
+  //     let extraFilter = filterPayLoad?.filterArrOne;
+  //     extraFilter?.map((el: any, i: any) => {
+  //       if (el?.status?.$in?.length > 0) {
+  //         payload?.filter?.push(el);
+  //       }
+  //       if (el?.description?.$in?.length > 0) {
+  //         payload?.filter?.push(el);
+  //       }
+  //     });
+
+  //     if (renderingComponents === 2) {
+  //       payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
+  //     }
+
+  //     const { data: response } = await inputRegexFilter(
+  //       searchValue,
+  //       path,
+  //       payload
+  //     );
+
+  //     if (response?.success) {
+  //       setData(response?.data || []);
+  //       setTotalItemCount(response.totalTransactions);
+  //       setLoading(false);
+  //       setIsFilterLoading(false);
+  //       setFilterModal(false);
+  //     } else {
+  //       toast.error(response?.message);
+  //       // showBoundary(response?.message);
+  //       setLoading(false);
+  //     }
+  //   }, 500);
+
+  //   return () => clearTimeout(getData);
+  // }, [endDate]);
+
+  const PersistFilterArr = (key: any, data: any) => {
+    setPersistFilterData((prevData: any) => {
+      return { ...prevData, [key]: [...data] };
+    });
+  };
+
+  function getObjectWithIsActiveTrue(data: any, name: any) {
+    let tempArrOne = filterPayLoad?.filterArrOne;
+
+    const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
+      const index = arr.findIndex(
+        (findArr: any) => Object.keys(findArr)[0] === key
+      );
+      if (index > -1) {
+        arr[index][key][subKey] = data;
+      } else {
+        const newObj = { [key]: { [subKey]: [...data] } };
+        arr.push(newObj);
+      }
+    };
+
+    switch (name) {
+      case "Status":
+        updateFilterArr(tempArrOne, "status", "$in", data);
+        PersistFilterArr("status", data);
+        break;
+      case "Description":
+        updateFilterArr(tempArrOne, "description", "$in", data);
+        PersistFilterArr("description", data);
+        break;
+      default:
+        break;
     }
-  }, [renderingComponents, itemsPerPage, currentPage, sortOrder, searchValue]);
+
+    tempArrOne = tempArrOne.filter((obj: any) => {
+      const key = Object.keys(obj)[0];
+      return obj[key].$in.length > 0;
+    });
+
+    setFilterPayLoad({
+      ...filterPayLoad,
+      filterArrOne: [...tempArrOne],
+    });
+  }
+
+  useEffect(() => {
+    getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
+  }, [filterState]);
 
   function formatDate(dateString: any) {
     const date = new Date(dateString);
@@ -128,6 +325,12 @@ export const Transaction = () => {
 
     return `${formattedDate} ${formattedTime}`;
   }
+
+  const handleClear = () => {
+    setDateRange([null, null]);
+    setStartDate(null);
+    setEndDate(null);
+  };
 
   //column for wallet NEFT
   const columnsHelper = createColumnHelper<any>();
@@ -485,6 +688,10 @@ export const Transaction = () => {
     }
   };
 
+  const applyFilterforTransaction = () => {
+    setIsFilterLoading(true);
+  };
+
   const render = () => {
     if (renderingComponents === 0) {
       return (
@@ -496,9 +703,11 @@ export const Transaction = () => {
           tdclassName={"!w-auto"}
         />
       );
-    } else if (renderingComponents === 1) {
-      return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
-    } else if (renderingComponents === 2) {
+    }
+    // else if (renderingComponents === 1) {
+    //   return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
+    // }
+    else if (renderingComponents === 1) {
       return <CustomTable data={data || []} columns={columns} />;
     }
   };
@@ -514,6 +723,7 @@ export const Transaction = () => {
           <div>
             <Breadcrum label="Transaction History" />
           </div>
+
           <div className="flex flex-col">
             <div className="mx-4">
               <div className="lg:flex justify-between lg:mt-2 lg:mb-4">
@@ -524,7 +734,52 @@ export const Transaction = () => {
                     setScrollIndex={setScrollIndex}
                   />
                 </div>
-                <div className="hidden lg:block">{filterButton()}</div>
+                <div className="flex gap-2">
+                  <div className="">
+                    <DatePicker
+                      selectsRange={true}
+                      startDate={startDate}
+                      endDate={endDate}
+                      onChange={(update: any) => {
+                        setDateRange(update);
+                        if (update[0] === null && update[1] === null) {
+                          // Explicitly set startDate and endDate to null when cleared
+                          setStartDate(null);
+                          setEndDate(null);
+                          // fetchCodRemittanceData();
+                        } else {
+                          // Update startDate and endDate based on the selected range
+                          setStartDate(update[0]);
+                          setEndDate(update[1]);
+                        }
+                      }}
+                      // isClearable={true}
+                      dateFormat="dd/MM/yyyy"
+                      customInput={
+                        <DateButton
+                          text="Select From & To Date" // Text for the button
+                          onClick={() => {}} // onClick is managed by DatePicker
+                          className="h-[36px]"
+                          value={
+                            startDate && endDate
+                              ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                              : ""
+                          } // Display date range
+                          onClear={handleClear} // Handle clear action
+                        />
+                      } // Include placeholder onClick function
+                    />
+                  </div>
+                  <div className="hidden lg:block">{filterButton()}</div>
+                  <OneButton
+                    text="FILTER"
+                    onClick={() => setFilterModal(true)}
+                    variant="quad"
+                    showIcon={true}
+                    icon={FilterIcon}
+                    className="ml-2 !uppercase"
+                  />
+                </div>
               </div>
 
               {/* <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
@@ -584,6 +839,7 @@ export const Transaction = () => {
                         </div>
                       ))}
                   </div>
+
                   <div>
                     {isLgScreen && (
                       <div className="customScroll">{render()}</div>
@@ -606,6 +862,83 @@ export const Transaction = () => {
                 </>
               )}
             </div>
+            {/* filter */}
+            <RightSideModal
+              isOpen={filterModal}
+              onClose={() => {
+                setFilterModal(false);
+              }}
+              className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
+            >
+              <div>
+                <div className="flex justify-between mt-5 mx-5">
+                  <div>
+                    <p className="text-2xl font-normal">Filter</p>
+                  </div>
+                  <div>
+                    <img
+                      src={CloseIcon}
+                      alt="close button"
+                      onClick={() => {
+                        setFilterModal(false);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="mx-5">
+                  <TransactionFilter
+                    filterState={filterState}
+                    setFilterState={setFilterState}
+                    setFilterPayLoad={setFilterPayLoad}
+                    filterPayLoad={filterPayLoad}
+                    filterModal={filterModal}
+                    setPersistFilterData={setPersistFilterData}
+                    persistFilterData={persistFilterData}
+                  />
+                </div>
+
+                <div
+                  className="hidden lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
+                  style={{ width: "-webkit-fill-available" }}
+                >
+                  <OneButton
+                    text="RESET ALL"
+                    onClick={() => {
+                      window.location.reload();
+                      setFilterModal(false);
+                    }}
+                    className=" px-5  "
+                    variant="secondary"
+                  />
+                  {/* <ServiceButton
+                text="RESET ALL"
+                onClick={() => {
+                  window.location.reload();
+                  setFilterModal(false);
+                }}
+                className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+              /> */}
+                  {isFilterLoading ? (
+                    <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
+                      <Spinner />
+                    </div>
+                  ) : (
+                    <OneButton
+                      text="APPLY"
+                      onClick={applyFilterforTransaction}
+                      className=" px-5  "
+                      variant="primary"
+                    />
+
+                    // <ServiceButton
+                    //   text="APPLY"
+                    //   onClick={applyFilterforTransaction}
+                    //   className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+                    // />
+                  )}
+                </div>
+              </div>
+            </RightSideModal>
           </div>
         </>
       ) : (

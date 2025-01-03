@@ -70,7 +70,6 @@ function ProductModal({ onClose, setOrder, index }: any) {
       { value: boxInputData.breadth, name: "Breadth" },
       { value: boxInputData.height, name: "Height" },
       { value: boxInputData.unitPrice, name: "unit Price" },
-      { value: boxInputData.unitTax, name: "unit Tax" },
     ];
 
     const isZeroString = (value: any) => /^0+$/.test(value);
@@ -300,6 +299,11 @@ function ProductModal({ onClose, setOrder, index }: any) {
                           name="unitTax"
                           inputType="text"
                           isDisabled={true}
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
 
                           //   inputError={inputError}
                         />
