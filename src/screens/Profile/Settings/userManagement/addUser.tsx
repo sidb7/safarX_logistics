@@ -174,12 +174,14 @@ function AddUser() {
           />
         </div>
         <div>
-          <CustomDropDown
+        <CustomDropDown
             value={addUserData.roleId}
-            options={roleData?.map((rate: any) => ({
-              label: rate.roleName,
-              value: rate.roleId,
-            }))}
+            options={roleData
+              ?.filter((rate: any) => rate.roleName !== "SUPERUSER")
+              .map((rate: any) => ({
+                label: rate.roleName,
+                value: rate.roleId,
+              }))}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               copyDataFromHandler(e);
             }}
