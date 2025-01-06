@@ -415,7 +415,7 @@ const Index: React.FC = () => {
         partnerServiceName,
         companyServiceId,
         companyServiceName,
-        tempOrderId: +shipyaari_id,
+        tempOrderId: shipyaari_id,
         source: orderSource,
       };
 
