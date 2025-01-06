@@ -624,7 +624,7 @@ const Errors = (props: ErrorProps) => {
   }, []);
 
   return (
-    <div className="h-[70vh]">
+    <div className="h-[70vh] overflow-auto">
       {isLoading ? (
         <div className="flex w-full justify-center items-center h-[50%]">
           <Spinner />
