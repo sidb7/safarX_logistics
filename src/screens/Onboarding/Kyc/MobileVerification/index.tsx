@@ -316,7 +316,7 @@ const Index = (props: ITypeProps) => {
                       containerStyle="md:!w-auto self-center"
                       className=" md:!w-[320px] !font-Open "
                       labelClassName="!font-Open"
-                      maxLength={businessType === "company" ? 4 : 6}
+                      maxLength={businessType === "company" ? 6 : 6}
                       value={otpNumber || ""}
                       onChange={(e: any) => {
                         if (isNaN(e.target.value)) {

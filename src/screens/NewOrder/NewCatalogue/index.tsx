@@ -78,11 +78,11 @@ const Catalogue = () => {
       active: false,
       icon: LayersIcon,
     },
-    {
-      statusName: "Channel Inventory",
-      active: false,
-      icon: LayersIcon,
-    },
+    // {
+    //   statusName: "Channel Inventory",
+    //   active: false,
+    //   icon: LayersIcon,
+    // },
   ];
   const [addressTab, setAddressTab] = useState("pickup");
   const [productCatalogueTab, setProductCatalogueTab] =

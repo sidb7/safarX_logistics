@@ -567,9 +567,6 @@ const Index = () => {
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
 
-        dispatch(timerObject({ startTimer: true }));
-        localStorage.setItem("isSyncCompleted", "false");
-
         if (syncRef.current) {
           const buttonTextNode = syncRef.current.childNodes[1];
           const buttonIconNode = syncRef.current.childNodes[0];
@@ -622,8 +619,18 @@ const Index = () => {
             className: "custom-toast-success",
           });
           setStoreDetails(data?.data);
+        } else if (data?.message.includes("try")) {
+          setIsSyncModalOpen(false);
+          // setIsChannelPartner(true);
+          setIsSyncModalLoading(false);
+          toast.success(data?.message, {
+            className: "custom-toast-success",
+          });
+          setStoreDetails(data?.data);
         } else {
-          toast.success("Sync In Progress", {
+          dispatch(timerObject({ startTimer: true }));
+          localStorage.setItem("isSyncCompleted", "false");
+          toast.success(data?.message || "Sync In Progress", {
             className: "custom-toast-success",
           });
         }
@@ -2118,7 +2125,7 @@ const Index = () => {
 
           {!isLgScreen && MobileButtons()}
 
-          <div className="px-4 md:pl-5 md:pr-6 h-[calc(100vh-80px)]">
+          <div className="px-4 md:pl-5 md:pr-6">
             <div className="bg-white">
               <OrderStatus
                 filterId={filterId}
@@ -2248,15 +2255,15 @@ const Index = () => {
                 </div>
               )}
             </div>
-            <div>
+            <div className="mt-6 mb-6">
               {totalCount > 0 && (
                 <OnePagination
                   totalItems={totalCount}
-                  itemsPerPageOptions={[100, 200, 500, 1000]}
+                  itemsPerPageOptions={[100, 500, 1000, 2000, 5000, 10000]}
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   initialItemsPerPage={itemsPerPage}
-                  className="pb-6"
+                  className="!mb-0"
                 />
               )}
             </div>

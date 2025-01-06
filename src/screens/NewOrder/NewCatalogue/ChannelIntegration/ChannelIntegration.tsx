@@ -24,6 +24,7 @@ import { toast } from "react-hot-toast";
 import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
 import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
 import ClickpostIcon from "../../../../assets/Catalogue/clickpost.png";
+import EasycomIcon from "../../../../assets/Catalogue/easycom.png";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -215,6 +216,8 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? UniCommerceIcon
                   : item?.channel === "AMAZON"
                   ? AmazonPngIcon
+                  : item?.channel === "EASYECOM"
+                  ? EasycomIcon
                   : ClickpostIcon,
               iconLg:
                 item?.channel === "SHOPIFY"
@@ -227,6 +230,8 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? UniCommerceIcon
                   : item?.channel === "AMAZON"
                   ? AmazonPngIcon
+                  : item?.channel === "EASYECOM"
+                  ? EasycomIcon
                   : ClickpostIcon,
               integrated: true,
               storeId: item?.storeId,

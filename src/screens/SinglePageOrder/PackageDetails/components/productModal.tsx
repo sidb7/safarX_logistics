@@ -35,7 +35,7 @@ const initialState: any = {
   sku: "",
   qty: 1,
   unitPrice: "",
-  unitTax: 0,
+  unitTax: "",
   weightUnit: "kg",
   currency: "INR",
   deadWeight: "",
@@ -47,6 +47,7 @@ const initialState: any = {
 };
 
 function ProductModal({ onClose, setOrder, index }: any) {
+  console.log("🚀 ~ ProductModal ~ setOrder:", setOrder);
   const [boxInputData, setBoxInputData]: any = useState(initialState);
   const [isnewData, setIsNewData]: any = useState(false);
   const [isAutoPopulateData, setIsAutoPopulateData]: any = useState(false);
@@ -132,12 +133,14 @@ function ProductModal({ onClose, setOrder, index }: any) {
   };
 
   const addProductToBox: any = (boxIndex: any, newProduct: any) => {
-    const { length, breadth, height, deadWeight, unitPrice } = boxInputData;
+    const { length, breadth, height, deadWeight, unitPrice, unitTax } =
+      boxInputData;
     const parsedLength = +length;
     const parsedBreadth = +breadth;
     const parsedHeight = +height;
     const parsedDeadWeight = +deadWeight;
     const parsedUnitPrice = +unitPrice;
+    const parsedUnitTax = +unitTax;
     const volumetricWeight = +calculateVolumeWeight(
       parsedLength,
       parsedBreadth,
@@ -148,6 +151,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
     setOrder((prevOrder: any) => {
       const updatedBoxInfo = [...prevOrder.boxInfo];
       const box = updatedBoxInfo[boxIndex];
+      console.log("box", box);
 
       const updatedProducts = [
         ...box.products,
@@ -158,6 +162,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
           height: parsedHeight,
           deadWeight: parsedDeadWeight,
           unitPrice: parsedUnitPrice,
+          unitTax: parsedUnitTax,
           volumetricWeight,
           appliedWeight,
         },
@@ -278,6 +283,22 @@ function ProductModal({ onClose, setOrder, index }: any) {
                           value={boxInputData?.unitPrice}
                           name="unitPrice"
                           inputType="text"
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              onChangeHandler(e);
+                            }
+                          }}
+
+                          //   inputError={inputError}
+                        />
+                      </div>
+                      <div>
+                        <InputBox
+                          label="Tax"
+                          value={boxInputData?.unitTax}
+                          name="unitTax"
+                          inputType="text"
+                          isDisabled={true}
                           onChange={(e: any) => {
                             if (!isNaN(e.target.value)) {
                               onChangeHandler(e);

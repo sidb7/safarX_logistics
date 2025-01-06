@@ -150,7 +150,7 @@ const Summary = (props: Props) => {
       let payload = {
         orderId: orderId,
         eWayBillNo: ewaybillNumber,
-        tempOrderId: +shipyaari_id,
+        tempOrderId: shipyaari_id,
         source: orderSource,
       };
 
@@ -162,7 +162,7 @@ const Summary = (props: Props) => {
         const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, {
           orders: [
             {
-              tempOrderId: +shipyaari_id,
+              tempOrderId: shipyaari_id,
               source: orderSource,
               orderId,
             },
