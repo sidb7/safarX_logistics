@@ -2259,7 +2259,7 @@ const Index = () => {
               {totalCount > 0 && (
                 <OnePagination
                   totalItems={totalCount}
-                  itemsPerPageOptions={[100, 200, 500, 1000]}
+                  itemsPerPageOptions={[100, 500, 1000, 2000, 5000, 10000]}
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   initialItemsPerPage={itemsPerPage}
