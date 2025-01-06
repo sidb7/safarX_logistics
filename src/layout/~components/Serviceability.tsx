@@ -50,11 +50,13 @@ const Serviceability = (props: ITypeProps) => {
   //   serviceabilityData?.orderType
   // );
   const [serviceValue, setServiceValue] = useState("B2C");
+  const [serviceMode, setServiceMode] = useState<any>();
 
   const [servicesDataArray, setServicesDataArray] = useState<any>();
 
   const weightData: any = [];
   let temp: any = [];
+  let mode: any = [];
 
   useEffect(() => {
     servicesData &&
@@ -65,10 +67,35 @@ const Serviceability = (props: ITypeProps) => {
             value: eachData.serviceId,
           };
           temp.push(newData);
+          let modeData = {
+            label: eachData.serviceMode,
+            value: eachData.serviceMode,
+          };
+          mode.push(modeData);
         }
       });
     setServicesDataArray(temp);
+    setServiceMode(mode);
   }, [servicesData, serviceValue]);
+
+  const handleServiceModeChange = (event:any) => {
+    const selectedMode = event.target.value;
+
+    // Filter services based on the selected service mode
+    if (selectedMode) {
+      const filtered = servicesData?.filter(
+        (service:any) => service?.serviceMode === selectedMode && service?.type === serviceValue
+      );
+      setServicesDataArray(
+        filtered.map((service: any) => ({
+          label: `${service.serviceName} - ${service.serviceMode}`,
+          value: service.serviceId,
+        }))
+      );
+    } else {
+      setServicesDataArray(servicesDataArray); // Show all services if no mode is selected
+    }
+  };
 
   function validateData(data: any) {
     // Check if any of the required fields are empty
@@ -83,7 +110,8 @@ const Serviceability = (props: ITypeProps) => {
       !data?.dimension.height ||
       !data?.dimension.length ||
       !data?.invoiceValue ||
-      !data?.serviceId
+      !data?.serviceId ||
+      !data?.serviceMode
     ) {
       return false;
     }
@@ -383,6 +411,12 @@ const Serviceability = (props: ITypeProps) => {
                   value={serviceabilityData?.weight}
                   options={weightData}
                   heading="Select Weight(KG)"
+                />
+                <CustomDropDown
+                  onChange={handleServiceModeChange}
+                  value={serviceabilityData?.serviceMode}
+                  options={serviceMode}
+                  heading="Select Mode"
                 />
                 <CustomDropDown
                   onChange={(e: any) => {
