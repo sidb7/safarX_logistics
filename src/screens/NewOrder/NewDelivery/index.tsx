@@ -358,7 +358,7 @@ const DeliveryLocation = () => {
       const sanitizeField = (fieldValue: number) =>
         fieldValue === 0 ? "" : fieldValue;
 
-      const payload = { tempOrderId: +shipyaari_id, source: orderSource };
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
 
       const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data.success && data?.data.length > 0) {
@@ -452,7 +452,7 @@ const DeliveryLocation = () => {
     if (container) {
       container.scrollIntoView({ block: "start" });
     }
-  }, []);
+  }, [shipyaari_id]);
 
   useEffect(() => {
     if (inputError) {

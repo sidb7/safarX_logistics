@@ -567,9 +567,6 @@ const Index = () => {
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
 
-        dispatch(timerObject({ startTimer: true }));
-        localStorage.setItem("isSyncCompleted", "false");
-
         if (syncRef.current) {
           const buttonTextNode = syncRef.current.childNodes[1];
           const buttonIconNode = syncRef.current.childNodes[0];
@@ -631,6 +628,8 @@ const Index = () => {
           });
           setStoreDetails(data?.data);
         } else {
+          dispatch(timerObject({ startTimer: true }));
+          localStorage.setItem("isSyncCompleted", "false");
           toast.success(data?.message || "Sync In Progress", {
             className: "custom-toast-success",
           });
@@ -2260,7 +2259,7 @@ const Index = () => {
               {totalCount > 0 && (
                 <OnePagination
                   totalItems={totalCount}
-                  itemsPerPageOptions={[100, 200, 500, 1000]}
+                  itemsPerPageOptions={[100, 500, 1000, 2000, 5000, 10000]}
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   initialItemsPerPage={itemsPerPage}
