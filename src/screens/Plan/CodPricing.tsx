@@ -160,8 +160,8 @@ const CodPricing = (props: ICodPricingPropsTypes) => {
   ];
   return (
     <>
-      <div className="overflow-auto custromScroll mx-5">
-        <CustomTable columns={CODColumns} data={codData || []} />
+      <div className="overflow-auto  mx-5">
+        <CustomTable columnsData={CODColumns} rowData={codData || []} />
       </div>
     </>
   );

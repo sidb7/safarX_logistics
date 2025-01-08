@@ -377,7 +377,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <CustomTable columns={columns} data={data} />
+      <CustomTable columnsData={columns} rowData={data} />
     </div>
   );
 };

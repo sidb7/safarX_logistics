@@ -247,8 +247,8 @@ function RoleManagement() {
 
             <div className=" mt-6">
               <CustomTable
-                data={rolesData || []}
-                columns={HelperColumn || []}
+                rowData={rolesData || []}
+                columnsData={HelperColumn || []}
               />
             </div>
 

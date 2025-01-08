@@ -690,8 +690,8 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
               </h4>{" "}
               <div className="mt-7">
                 <CustomTable
-                  data={filterVariableData || []}
-                  columns={variableColumns}
+                  rowData={filterVariableData || []}
+                  columnsData={variableColumns}
                 />
               </div>
             </div>
@@ -782,8 +782,8 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
               </h4>{" "}
               <div className="mt-7">
                 <CustomTable
-                  data={filterVariableData || []}
-                  columns={variableColumns}
+                  rowData={filterVariableData || []}
+                  columnsData={variableColumns}
                 />
               </div>
             </div>
@@ -871,8 +871,8 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
               </h4>{" "}
               <div className="mt-7">
                 <CustomTable
-                  data={filterVariableData || []}
-                  columns={variableColumns}
+                  rowData={filterVariableData || []}
+                  columnsData={variableColumns}
                 />
               </div>
             </div>
@@ -962,8 +962,8 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
               </h4>{" "}
               <div className="mt-7">
                 <CustomTable
-                  data={filterVariableData || []}
-                  columns={variableColumns}
+                  rowData={filterVariableData || []}
+                  columnsData={variableColumns}
                 />
               </div>
             </div>
