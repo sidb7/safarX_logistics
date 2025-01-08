@@ -1260,7 +1260,7 @@ const RateCardTable = (props: any) => {
     }),
   ];
 
-  return <CustomTable data={activeServiceInfo || []} columns={columns} />;
+  return <CustomTable rowData={activeServiceInfo || []} columnsData={columns} />;
 };
 
 export default RateCardTable;

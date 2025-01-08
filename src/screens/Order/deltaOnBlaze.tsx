@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CloseIcon from "../../assets/CloseIcon.svg";
-import { CustomTable } from "../../components/Table";
+import  {CustomTable}  from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tooltip } from "react-tooltip";
 import Checkbox from "../../components/CheckBox";
@@ -639,11 +639,9 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             </p>
             <div className="p-2">
               <CustomTable
-                columns={columns}
-                data={communicationChannels || []}
-                thclassName={"!pb-4 !relative !z-0"}
-                tdclassName={"border-0 border-b !pb-[16px]"}
-                trclassName={"!shadow-none !rounded-none"}
+                columnsData={columns}
+                rowData={communicationChannels || []}
+        
               />
             </div>
           </div>
@@ -653,11 +651,9 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             </p>
             <div className="p-2">
               <CustomTable
-                columns={PricingColumns}
-                data={filteredRateCard || []}
-                thclassName={"!pb-4 !z-0"}
-                tdclassName={"border-0 border-b !pb-[16px]"}
-                trclassName={"!shadow-none !rounded-none"}
+                columnsData={PricingColumns}
+                rowData={filteredRateCard || []}
+               
               />
             </div>
           </div>

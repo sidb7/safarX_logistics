@@ -700,10 +700,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
             {isLgScreen ? (
               <div className="px-5">
                 <CustomTable
-                  data={order?.boxInfo || []}
-                  columns={SummaryColumns}
-                  thclassName={"!w-auto"}
-                  tdclassName={"!w-auto"}
+                  rowData={order?.boxInfo || []}
+                  columnsData={SummaryColumns}
+            
                 />
 
                 {/* <MyTable data={order?.boxInfo || []} columns={columns} /> */}

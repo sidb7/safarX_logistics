@@ -204,16 +204,18 @@ const BulkLabelList = () => {
         <div>
           <Breadcrum label="Bulk Label List" />
         </div>
-        <div className="mx-4 customScroll">
+        <div className="mx-4 ">
           <CustomTable
-            data={bulkDownloadLabelList}
-            columns={bulkDownloadColumns}
+            rowData={bulkDownloadLabelList}
+            columnsData={bulkDownloadColumns}
           />
         </div>
         {/* {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
+            itemsPerPageOptions={[
+                      10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+                    ]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
             // rightmodalPagination={true}

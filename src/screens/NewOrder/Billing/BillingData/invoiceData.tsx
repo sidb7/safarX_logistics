@@ -183,9 +183,9 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
   return (
     <div>
       <CustomTable
-        columns={billingOrdersHeading}
-        data={data}
-        thclassName={" bg-white"}
+        columnsData={billingOrdersHeading}
+        rowData={data}
+
       />
     </div>
   );

@@ -136,8 +136,8 @@ function CodRemittedAwbModal({
           ) : ( */}
           <div className="overflow-x-auto mt-5 mx-6">
             <CustomTable
-              data={tableData || []}
-              columns={billingOrdersHeading}
+              rowData={tableData || []}
+              columnsData={billingOrdersHeading}
             />
           </div>
         </div>
@@ -145,7 +145,9 @@ function CodRemittedAwbModal({
         {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
+            itemsPerPageOptions={[
+                      10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+                    ]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
           />
