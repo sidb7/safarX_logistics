@@ -549,7 +549,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         element4.classList.contains("!border-red-500") &&
         requestName === "Services"
       ) {
-        return toast.error("Please solve the box error");
+        return toast.error("Service is not available");
       } else if (requestName === "Services" && addressOpen.current === false) {
         await getServiceList();
         // setAddressOpenModal(true);
