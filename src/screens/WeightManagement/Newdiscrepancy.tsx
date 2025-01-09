@@ -625,8 +625,8 @@ const NewDiscrepancyTable = ({
       ) : (
         <div className="overflow-x-auto pb-5">
           <CustomTable
-            columns={NewDiscrepancyHeading}
-            data={data || []}
+            columnsData={NewDiscrepancyHeading}
+            rowData={data || []}
             // setRowSelectedData={setRowSelectedData}
           />
         </div>

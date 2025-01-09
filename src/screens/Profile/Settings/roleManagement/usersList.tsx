@@ -121,7 +121,7 @@ function UsersList() {
         {data?.length === 0 ? (
           <NotFound />
         ) : (
-          <CustomTable data={data || []} columns={columns || []} />
+          <CustomTable rowData={data || []} columnsData={columns || []} />
         )}
       </div>
     </div>

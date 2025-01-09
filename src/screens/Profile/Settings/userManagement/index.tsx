@@ -286,7 +286,7 @@ function UserManagement() {
             </div> */}
 
             <div className=" mt-6">
-              <CustomTable data={usersData || []} columns={columns || []} />
+              <CustomTable rowData={usersData || []} columnsData={columns || []} />
             </div>
 
             <CenterModal

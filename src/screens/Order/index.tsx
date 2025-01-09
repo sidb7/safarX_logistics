@@ -2222,15 +2222,13 @@ const Index = () => {
                       />
                     ) : (
                       <>
-                        <div>
+                  
                           <CustomTable
-                            data={orders || []}
-                            columns={columnHelper || []}
+                            rowData={orders || []}
+                            columnsData={columnHelper || []}
                             setRowSelectedData={setSelectedRowData}
-                            sticky={isSticky}
-                            tdclassName={"py-4"}
                           />
-                        </div>
+              
                       </>
                     )
                   ) : (
@@ -2259,11 +2257,13 @@ const Index = () => {
               {totalCount > 0 && (
                 <OnePagination
                   totalItems={totalCount}
-                  itemsPerPageOptions={[100, 500, 1000, 2000, 5000, 10000]}
+                  itemsPerPageOptions={[
+                    10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+                  ]}
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   initialItemsPerPage={itemsPerPage}
-                  className="!mb-0"
+                  className="pb-6"
                 />
               )}
             </div>
