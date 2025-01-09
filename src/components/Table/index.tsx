@@ -29,6 +29,10 @@ const CustomTable = (props: any) => {
   const [rowSelection, setRowSelection]: any = useState([]);
   const [data, setData] = React.useState(rowData);
   // console.log(rowData.length, "DATA");
+
+  useEffect(() => {
+    setData(rowData);
+  }, [rowData]);
   const table = useReactTable({
     data,
     columns,
@@ -48,7 +52,7 @@ const CustomTable = (props: any) => {
   const virtualizer = useVirtualizer({
     count: rows?.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 34,
+    estimateSize: () => 100,
     overscan: 5,
   });
 
@@ -61,11 +65,13 @@ const CustomTable = (props: any) => {
   return (
     <div
       ref={parentRef}
-      className="h-screen w-full overflow-scroll"
-      style={{ scrollbarWidth: "thin" }}
-      onScroll={() => {
-        setIsMenuOpen != undefined && setIsMenuOpen(false);
+      style={{
+        maxHeight: "calc(100vh - 300px)",
+        minHeight: "50vh",
+        overflow: "auto",
+        scrollbarWidth: "thin",
       }}
+      className="w-full "
     >
       <div
         style={{
