@@ -74,6 +74,25 @@ const CustomTable = (props: any) => {
       className="w-full "
     >
       <div
+        className="fixed inset-0 bg-[#333333b5] flex justify-center items-center z-50"
+        id="placeOrder"
+        style={{
+          pointerEvents: "none",
+          overflow: "hidden",
+          display: "none",
+        }} // Prevent interaction with the table
+      >
+        <span className="text-white text-2xl">
+          <div className="w-2/6 -ml-[15%] bg-gray-300 rounded-full absolute z-[111] h-6">
+            <div
+              id="progress"
+              className="bg-blue-500 h-6 rounded-full"
+              style={{ width: "0%" }}
+            ></div>
+          </div>
+        </span>
+      </div>
+      <div
         style={{
           height: `${virtualizer.getTotalSize() + 40}px`, // Add padding (e.g., 20px each for top and bottom)
           paddingTop: "20px", // Top padding
@@ -155,4 +174,4 @@ const CustomTable = (props: any) => {
   );
 };
 
-export  {CustomTable};
+export { CustomTable };
