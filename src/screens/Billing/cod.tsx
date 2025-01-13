@@ -22,7 +22,7 @@ interface IInvoiceProps {}
 
 const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
-  const [totalItemCount, setTotalItemCount] = useState(10);
+  const [totalItemCount, setTotalItemCount] = useState(0);
   const [codModal, setCodModal] = useState({ isOpen: false, data: {} });
   const [awbModal, setAwbModal] = useState({ isOpen: false, data: [] });
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -66,6 +66,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
 
       if (response?.success) {
         setCodRemittedData(response?.data);
+        setTotalItemCount(response?.totalCount)
       } else {
         setCodRemittedData([]);
       }
