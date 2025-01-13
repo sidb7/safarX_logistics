@@ -131,7 +131,7 @@ const CancellationRequestTable = (props: Props) => {
         const buyerRequest = info?.row?.original?.remarks?.buyer;
 
         const buyerRequestData =
-          buyerRequest?.[buyerRequest.length - 1]?.buyerRequestDate;
+          buyerRequest?.[buyerRequest?.length - 1]?.buyerRequestDate;
 
         const newDate = convertUTCToIST(buyerRequestData);
 
@@ -155,7 +155,7 @@ const CancellationRequestTable = (props: Props) => {
         const sellerRequest = info?.row?.original?.remarks?.seller;
 
         const sellerRequestData =
-          sellerRequest?.[sellerRequest.length - 1]?.sellerActionDate;
+          sellerRequest?.[sellerRequest?.length - 1]?.sellerActionDate;
 
         const newDate = convertUTCToIST(sellerRequestData);
 
@@ -181,7 +181,7 @@ const CancellationRequestTable = (props: Props) => {
         const adminRequest = info?.row?.original?.remarks?.admin;
 
         const adminRequestData =
-          adminRequest?.[adminRequest.length - 1]?.adminActionDate;
+          adminRequest?.[adminRequest?.length - 1]?.adminActionDate;
 
         const newDate = convertUTCToIST(adminRequestData);
 
@@ -245,12 +245,12 @@ const CancellationRequestTable = (props: Props) => {
       cell: (info) => {
         const buyerRemark = info?.row?.original?.remarks?.buyer;
         const buyerlastRemark =
-          buyerRemark[buyerRemark.length - 1]?.buyerRemark;
+          buyerRemark[buyerRemark?.length - 1]?.buyerRemark;
         const sellerRemark = info?.row?.original?.remarks?.seller;
         const lastSellerRemark =
-          sellerRemark[sellerRemark.length - 1]?.sellerRemark;
+          sellerRemark[sellerRemark?.length - 1]?.sellerRemark;
         const admin = info?.row?.original?.remarks?.admin;
-        const lastAdminRemark = admin[admin.length - 1]?.adminRemark;
+        const lastAdminRemark = admin[admin?.length - 1]?.adminRemark;
 
         return (
           <div className="flex flex-col  my-1 w-[300px] gap-y-2">
@@ -295,7 +295,9 @@ const CancellationRequestTable = (props: Props) => {
 
   return (
     <div>
-      <CustomTable columns={columns} data={cancelRequestData} />
+
+      
+      { <CustomTable columnsData={columns} rowData={cancelRequestData} />}
 
       {openRightSideModal && (
         <RightSideModal
