@@ -45,8 +45,9 @@ const connectSocket = (dispatch?: any) => {
   const token = sellerId
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";
+  console.log(sellerId, token);
 
-  if (token !== "") {
+  if (token) {
     socket = initSocket();
 
     socket.emit("joinRoom", `${sellerId}`);
@@ -56,10 +57,10 @@ const connectSocket = (dispatch?: any) => {
       dispatch(setWalletBalance({ amt: Number(newBalance) }));
     });
 
-    // socket.on("bulkOrderFailed", (data: any) => {
-    //   console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
-    //   GlobalToast(data);
-    // });
+    socket.on("bulkOrderFailed", (data: any) => {
+      console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
+      GlobalToast(data);
+    });
 
     socket.on("order_error", (data: any) => {
       const url = window.location.href;
@@ -136,17 +137,17 @@ const connectSocket = (dispatch?: any) => {
       // GlobalToast(data);
     });
 
-    // socket.on("switch_draft_page", (data: any) => {
-    //   console.log("--------------SWITCHDRAFTPAGE-------------");
-    //   console.log("parsedData ------------------- : ", data);
+    socket.on("switch_draft_page", (data: any) => {
+      console.log("--------------SWITCHDRAFTPAGE-------------");
+      console.log("parsedData ------------------- : ", data);
 
-    //   setTimeout(() => {
-    //     window.location.href = `/orders/view-orders?activeTab=${data}`;
-    //     window.onload = () => {
-    //       window.location.reload();
-    //     };
-    //   }, 3500);
-    // });
+      setTimeout(() => {
+        window.location.href = `/orders/view-orders?activeTab=${data}`;
+        window.onload = () => {
+          window.location.reload();
+        };
+      }, 3500);
+    });
   }
 };
 
