@@ -75,7 +75,9 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
       isOpen: false,
       awbNo: "",
     });
-  const itemsPerPageOptions = [10, 20, 30, 50];
+  const itemsPerPageOptions = [
+    10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+  ];
   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
   const [exceptionCount, setExceptionCount] = useState<any>([]);

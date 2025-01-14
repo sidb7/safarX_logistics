@@ -228,7 +228,7 @@ function RoleManagement() {
       {isActive ? (
         <div>
           <Breadcrum label="Role Management" component={Buttons()} />
-          <div className=" my-3 mx-6 customScroll">
+          <div className=" my-3 mx-6">
             {/* <div className=" flex justify-end">
               <div className="grid grid-cols-3 gap-x-2 lg:flex ">
                 <div>
