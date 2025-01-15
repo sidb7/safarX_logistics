@@ -80,7 +80,10 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     isDeleted,
 
     privateCompanyId,
-    contact,
+    contact: {
+      ...contact,
+      name: name,  
+    },
     fullAddress,
     sellerId,
     workingDays: workingDays,
@@ -161,6 +164,18 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
         setIsDisabled(true);
       } else setIsDisabled(false);
     }
+  };
+
+  const handleContactNameChange = (e: any) => {
+    const newName = e.target.value;
+    setUpdateAddress({
+      ...updateAddress,
+      contactName: newName,
+      contact: {
+        ...updateAddress.contact,
+        name: newName  // Update both contactName and contact.name
+      }
+    });
   };
 
   useEffect(() => {
@@ -273,18 +288,19 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
           <CustomInputBox
             label="Contact Name"
             value={updateAddress.contactName}
-            onChange={(e: any) => {
-              setUpdateAddress({
-                ...updateAddress,
-                contactName: e.target.value,
-              });
-              // if (emptyOrFullTextRegex.test(e.target.value)) {
-              //   const temp = updateAddress;
-              //   temp.contactName = e.target.value;
-              //   temp.contact.name = e.target.value;
-              //   setUpdateAddress({ ...temp });
-              // }
-            }}
+            onChange={handleContactNameChange}
+            // onChange={(e: any) => {
+            //   setUpdateAddress({
+            //     ...updateAddress,
+            //     contactName: e.target.value,
+            //   });
+            //   // if (emptyOrFullTextRegex.test(e.target.value)) {
+            //   //   const temp = updateAddress;
+            //   //   temp.contactName = e.target.value;
+            //   //   temp.contact.name = e.target.value;
+            //   //   setUpdateAddress({ ...temp });
+            //   // }
+            // }}
           />
           <CustomInputBox
             label="Contact Number"
