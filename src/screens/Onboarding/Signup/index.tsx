@@ -5,7 +5,7 @@ import CustomInputBox from "../../../components/Input";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import InfoCircle from "../../../assets/info-circle.svg";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams,useParams } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
@@ -44,6 +44,7 @@ import OneButton from "../../../components/Button/OneButton";
 const Index = () => {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
+  const { genReferralCode } = useParams();
   const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
@@ -55,7 +56,7 @@ const Index = () => {
     firstName: "",
     lastName: "",
     password: "",
-    referalCode: "",
+    referalCode: genReferralCode || "",
   });
 
   const [signUpError, setSignUpError] = useState<any>({
@@ -526,7 +527,7 @@ const Index = () => {
                   </div>
 
                   {/* commented as instructed */}
-                  {/* <div>
+                  <div>
                     <CustomInputBox
                       label="Referal Code"
                       maxLength={20}
@@ -534,6 +535,7 @@ const Index = () => {
                       // tempLabel={true}
                       // placeholder=""
                       id="referalCode"
+                      value={sellerData.referalCode}
                       onChange={(e) => {
                         setSignUpError({
                           ...signUpError,
@@ -562,7 +564,7 @@ const Index = () => {
                           });
                         }
                       }}
-                      isDisabled={true}
+                      isDisabled={false}
                     />
                     {signUpError.referalCode !== "" && (
                       <div className="flex items-center gap-x-1 mt-1">
@@ -572,7 +574,7 @@ const Index = () => {
                         </span>
                       </div>
                     )}
-                  </div> */}
+                  </div>
 
                   {/* <CustomButton
                     onClick={(e: any) => signUpOnClick(sellerData)}

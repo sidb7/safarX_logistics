@@ -226,7 +226,7 @@ const MyRoutes: React.FC = () => {
 
       {/* onboarding routes  */}
       <Route>
-        <Route path="/onboarding/signup" element={<SignUpScreen />} />
+        <Route path="/onboarding/signup/:genReferralCode?" element={<SignUpScreen />} />
         <Route path="/onboarding/sendotp" element={<SendOTPScreen />} />
         <Route path="/onboarding/verifyotp" element={<VerifyOTPScreen />} />
         <Route
