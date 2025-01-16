@@ -373,7 +373,9 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
         {isLgScreen && totalItemsCount > 0 && (
           <PaginationComponent
             totalItems={totalItemsCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
+            itemsPerPageOptions={[
+              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+            ]}
             onPageChange={handlePageChange}
             onItemsPerPageChange={handleItemsPerPageChange}
             pageNo={currentPage}

@@ -363,6 +363,12 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         data={tableData}
         fixedData={fixedCol}
       />
+
+      {/* <CustomTable
+        columnsData={billingOrdersHeading}
+        rowData={tableData}
+        // fixedData={fixedCol}
+      /> */}
     </div>
   );
 };

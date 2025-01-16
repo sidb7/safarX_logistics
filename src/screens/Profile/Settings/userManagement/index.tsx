@@ -268,7 +268,7 @@ function UserManagement() {
             label="User Management"
             component={Buttons("", usersData)}
           />
-          <div className=" my-3 mx-6 overflow-auto">
+          <div className=" my-3 mx-6">
             {/* <div className=" flex justify-end">
               <div className="grid grid-cols-3 gap-x-2 lg:flex ">
                 <div>
@@ -286,7 +286,7 @@ function UserManagement() {
             </div> */}
 
             <div className=" mt-6">
-              <CustomTable data={usersData || []} columns={columns || []} />
+              <CustomTable rowData={usersData || []} columnsData={columns || []} />
             </div>
 
             <CenterModal

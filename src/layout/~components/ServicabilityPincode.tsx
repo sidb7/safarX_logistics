@@ -235,8 +235,8 @@ const ServicabilityPincode = (props: ITypeProps) => {
       </div>
 
       {response && response.length > 0 && (
-        <div className="ml-10 mr-5 max-h-[550px] customScroll">
-          <CustomTable columns={columns} data={response || []} />
+        <div className="ml-10 mr-5 max-h-[550px]">
+          <CustomTable columnsData={columns} rowData={response || []} />
         </div>
       )}
     </div>

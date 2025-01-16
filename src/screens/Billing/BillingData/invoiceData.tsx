@@ -295,9 +295,9 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
     <div>
       {isLgScreen ? (
         <CustomTable
-          columns={billingOrdersHeading}
-          data={invoiceData}
-          thclassName={"bg-white"}
+          columnsData={billingOrdersHeading}
+          rowData={invoiceData}
+       
         />
       ) : (
         <InvoiceCardMobile invoiceData={invoiceData} />

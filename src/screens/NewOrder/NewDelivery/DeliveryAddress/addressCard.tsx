@@ -252,6 +252,14 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     return gstRegex.test(gstNumber);
   };
 
+  const mapAddress = (data: any) => {
+    const verifyAddressPayload = {
+      data: data,
+    };
+    getVerifyAddress(verifyAddressPayload);
+    setPrevPastedData(data);
+  };
+
   console.log("deliveryAddress", deliveryAddress);
   console.log("orderType>>>", orderType);
 
@@ -524,7 +532,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         onClose={() => setIsLocationRightModal(false)}
         className="!w-[389px]"
       >
-        <Map onClick={() => setIsLocationRightModal(false)} />
+        <Map onClick={() => setIsLocationRightModal(false)} callBackFun={mapAddress} />
       </RightSideModal>
     </div>
   );

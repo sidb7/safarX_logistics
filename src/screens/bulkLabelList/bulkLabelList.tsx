@@ -29,7 +29,7 @@ const BulkLabelList = () => {
   );
   const roles = useSelector((state: any) => state?.roles);
   // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[3]?.isActive;
-  // const [totalItemCount, setTotalItemCount] = useState<any>();
+  const [totalItemCount, setTotalItemCount] = useState<any>();
 
   React.useEffect(() => {
     (async () => {
@@ -37,7 +37,7 @@ const BulkLabelList = () => {
         const { data: response } = await POST(FETCH_LABELS_REPORT_LIST, {});
         if (response?.success) {
           setBulkDownloadLabelList(response?.data);
-          // setTotalItemCount(data?.data[0]?.paginationData[0]?.total);
+          setTotalItemCount(response?.totalLabelCount);
         } else {
           // toast.error(data?.message);
         }
@@ -204,21 +204,23 @@ const BulkLabelList = () => {
         <div>
           <Breadcrum label="Bulk Label List" />
         </div>
-        <div className="mx-4 customScroll">
+        <div className="mx-4 ">
           <CustomTable
-            data={bulkDownloadLabelList}
-            columns={bulkDownloadColumns}
+            rowData={bulkDownloadLabelList}
+            columnsData={bulkDownloadColumns}
           />
         </div>
-        {/* {totalItemCount > 0 && (
+        {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
+            itemsPerPageOptions={[
+                      10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+                    ]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
             // rightmodalPagination={true}
           />
-        )} */}
+        )}
       </div>
       {/* ) : (
         <div>
