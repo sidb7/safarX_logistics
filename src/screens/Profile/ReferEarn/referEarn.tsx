@@ -121,7 +121,8 @@ import { useNavigate } from "react-router-dom";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ShareIcon from "../../../assets/Label/share.svg";
 import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
-import { SocialShareBar } from "../../../components/SocialShareBar/SocialShareBar";  
+import { SocialShareBar } from "../../../components/SocialShareBar/SocialShareBar"; 
+import { SELLER_WEB_URL } from "../../../utils/ApiUrls" 
 
 
 export const ProfileReferEarn = ({ ReferData }: any) => {
@@ -139,7 +140,7 @@ export const ProfileReferEarn = ({ ReferData }: any) => {
     else setIsOpen(true);
   };
 
-  const shareUrl = "https://app.shipyaari.com/onboarding/signup";
+  const shareUrl = `${SELLER_WEB_URL}/onboarding/signup`;
   const shareTitle = "Join Shipyaari";
   const shareMessage = `Sign up on Shipyaari to streamline your logistics: ${shareUrl}\nUse my referral code: ${ReferData?.referCode}`;
 
