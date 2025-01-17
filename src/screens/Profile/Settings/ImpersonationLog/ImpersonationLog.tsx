@@ -102,14 +102,16 @@ const ImpersonationLog = () => {
               <Spinner />
             </div>
           ) : (
-            <CustomTable data={logData} columns={columns} />
+            <CustomTable rowData={logData} columnsData={columns} />
           )}
         </div>
       </div>
       {totalItemCount > 0 && !isLoading && (
         <PaginationComponent
           totalItems={totalItemCount}
-          itemsPerPageOptions={[10, 20, 30, 50]}
+          itemsPerPageOptions={[
+            10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+          ]}
           onPageChange={onPageChange}
           onItemsPerPageChange={onItemsPerPageChange}
           pageNo={currentPage}

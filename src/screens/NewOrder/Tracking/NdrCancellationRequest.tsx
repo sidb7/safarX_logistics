@@ -102,7 +102,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
         setTotalItemsCount(data?.data?.totalCount);
       } else {
         setIsLoading(false);
-        setCancelRequestData(data?.data?.data);
+    
       }
     } catch (error: any) {
       console.log(error.message);
@@ -153,7 +153,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
 
         <div className="mx-4">
           <>
-            {loading ? (
+            {loading && cancelRequestData ? (
               <div className="flex w-full justify-center items-center h-[600px]">
                 <Spinner />
               </div>
@@ -171,7 +171,9 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
         {isLgScreen && totalItemsCount > 0 && (
           <PaginationComponent
             totalItems={totalItemsCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
+            itemsPerPageOptions={[
+              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+            ]}
             onPageChange={handlePageChange}
             onItemsPerPageChange={handleItemsPerPageChange}
             pageNo={currentPage}

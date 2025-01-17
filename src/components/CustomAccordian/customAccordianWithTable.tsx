@@ -61,10 +61,9 @@ const CustomAccordianWithTable: React.FunctionComponent<
           className={`flex flex-col border-[1px] rounded-bl-lg rounded-br-lg  py-0 px-2 `}
         >
           <CustomTable
-            data={data}
-            columns={columns}
-            tdclassName={"def"}
-            thclassName={"bg-white"}
+            rowData={data}
+            columnsData={columns}
+          
           />
         </div>
       )}

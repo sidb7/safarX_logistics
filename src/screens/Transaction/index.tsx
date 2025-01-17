@@ -695,20 +695,20 @@ export const Transaction = () => {
   const render = () => {
     if (renderingComponents === 0) {
       return (
-        <CustomTable
-          data={data || []}
-          columns={PassbookColumns(setSortOrder)}
-          setRowSelectedData={setRowSelectedData}
-          thclassName={"!w-auto "}
-          tdclassName={"!w-auto"}
-        />
+        <div>
+          <CustomTable
+            rowData={data || []}
+            columnsData={PassbookColumns(setSortOrder)}
+            setRowSelectedData={setRowSelectedData}
+          />
+        </div>
       );
-    }
-    // else if (renderingComponents === 1) {
-    //   return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
-    // }
-    else if (renderingComponents === 1) {
-      return <CustomTable data={data || []} columns={columns} />;
+    } else if (renderingComponents === 1) {
+      return (
+        <CustomTable rowData={[]} columnsData={cashbackDetailsColumns()} />
+      );
+    } else if (renderingComponents === 2) {
+      return <CustomTable rowData={data || []} columnsData={columns} />;
     }
   };
 
@@ -851,13 +851,15 @@ export const Transaction = () => {
                   {/* {(renderingComponents === 0 || renderingComponents === 2) && ( */}
                   <Pagination
                     totalItems={totalItemCount}
-                    itemsPerPageOptions={[10, 20, 30, 50]}
+                    itemsPerPageOptions={[
+                      10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+                    ]}
                     onPageChange={onPageIndexChange}
                     onItemsPerPageChange={onPerPageItemChange}
                     pageNo={currentPage}
                     initialItemsPerPage={itemsPerPage}
                     className="!mx-0"
-                    rightmodalPagination={true}
+                   
                   />
                 </>
               )}

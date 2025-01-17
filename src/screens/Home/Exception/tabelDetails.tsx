@@ -52,11 +52,11 @@ const TableDetails = (props: ITable) => {
           />
         </div>
       </div>
-      <div className="customScroll">
+      <div className="">
         {isLgScreen ? (
-          <CustomTable columns={col} data={data} />
+          <CustomTable columnsdata={col} rowData={data} />
         ) : (
-          isOpen && <CustomTable columns={col} data={data} />
+          isOpen && <CustomTable columnsData={col} rowData={data} />
         )}
       </div>
     </div>

@@ -511,8 +511,8 @@ const CompletedTable = ({
       ) : (
         <div className="overflow-x-auto">
           <CustomTable
-            columns={PendingDisputeHeading}
-            data={data || []}
+            columnsData={PendingDisputeHeading}
+            rowData={data || []}
             // setRowSelectedData={setRowSelectedData}
           />
         </div>

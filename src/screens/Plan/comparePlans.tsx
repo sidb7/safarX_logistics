@@ -228,12 +228,11 @@ const ComparePlans = (props: ITypeProps) => {
       <div className="lg:hidden">
         <Breadcrum label="Compare" />
       </div>
-      <div className="ml-5 customScroll">
+      <div className="ml-5 ">
         <CustomTable
-          columns={columns}
-          data={data}
-          tdclassName={"def"}
-          thclassName={"bg-white"}
+          columnsData={columns}
+          rowData={data}
+ 
         />
       </div>
       {/* <div className="lg:hidden mt-24">
