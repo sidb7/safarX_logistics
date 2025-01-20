@@ -91,81 +91,80 @@ export const Transaction = () => {
     deliveryPincode: [],
     pickupPincode: [],
   });
+  const getData = async () => {
+    const payload: any = {
+      filter: [],
+      skip: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
+      pageNo: currentPage,
+      sort: { _id: sortOrder === "desc" ? -1 : 1 },
+      searchValue: searchValue,
+      apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
+    };
+
+    if (startDate && endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+      payload.startDate = startEpoch;
+      payload.endDate = lastendEpoch;
+
+      // payload?.filter?.push({
+      //   createdAt: {
+      //     $gte: startEpoch,
+      //     $lte: lastendEpoch,
+      //   },
+      // });
+    }
+    payload.filter = [];
+    let extraFilter = filterPayLoad?.filterArrOne;
+    extraFilter?.map((el: any, i: any) => {
+      if (el?.status?.$in?.length > 0) {
+        payload?.filter?.push(el);
+      }
+      if (el?.description?.$in?.length > 0) {
+        payload?.filter?.push(el);
+      }
+    });
+
+    if (renderingComponents === 1) {
+      payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
+    }
+
+    const { data: response } = await inputRegexFilter(
+      searchValue,
+      path,
+      payload
+    );
+
+    if (response?.success) {
+      setData(response?.data || []);
+      setTotalItemCount(response.totalTransactions);
+      setLoading(false);
+      setIsFilterLoading(false);
+      setFilterModal(false);
+    } else {
+      toast.error(response?.message);
+      // showBoundary(response?.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     // if (renderingComponents === 0 || renderingComponents === 2) {
     setLoading(true);
-    console.log("renderingComponents", renderingComponents);
+    // console.log("renderingComponents", renderingComponents);
 
-    const getData = setTimeout(async () => {
-      const payload: any = {
-        filter: [],
-        skip: (currentPage - 1) * itemsPerPage,
-        limit: itemsPerPage,
-        pageNo: currentPage,
-        sort: { _id: sortOrder === "desc" ? -1 : 1 },
-        searchValue: searchValue,
-        apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
-      };
-
-      if (startDate && endDate) {
-        let startEpoch = null;
-        let lastendEpoch = null;
-
-        if (startDate instanceof Date && endDate instanceof Date) {
-          startDate.setHours(0, 0, 0, 0);
-          startEpoch = startDate.getTime();
-
-          endDate.setHours(23, 59, 59, 999);
-          const endEpoch = endDate.getTime();
-
-          lastendEpoch = endEpoch;
-        }
-        payload.startDate = startEpoch;
-        payload.endDate = lastendEpoch;
-
-        // payload?.filter?.push({
-        //   createdAt: {
-        //     $gte: startEpoch,
-        //     $lte: lastendEpoch,
-        //   },
-        // });
-      }
-      payload.filter = [];
-      let extraFilter = filterPayLoad?.filterArrOne;
-      extraFilter?.map((el: any, i: any) => {
-        if (el?.status?.$in?.length > 0) {
-          payload?.filter?.push(el);
-        }
-        if (el?.description?.$in?.length > 0) {
-          payload?.filter?.push(el);
-        }
-      });
-
-      if (renderingComponents === 1) {
-        payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
-      }
-
-      const { data: response } = await inputRegexFilter(
-        searchValue,
-        path,
-        payload
-      );
-
-      if (response?.success) {
-        setData(response?.data || []);
-        setTotalItemCount(response.totalTransactions);
-        setLoading(false);
-        setIsFilterLoading(false);
-        setFilterModal(false);
-      } else {
-        toast.error(response?.message);
-        // showBoundary(response?.message);
-        setLoading(false);
-      }
-    }, 500);
-
-    return () => clearTimeout(getData);
+    getData();
     // }
   }, [
     itemsPerPage,
@@ -795,13 +794,13 @@ export const Transaction = () => {
                 </div> */}
 
               {loading ? (
-                <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
+                <div className="flex justify-center  items-center h-[65vh]">
                   <Spinner />
                 </div>
               ) : (
                 <>
                   <div className="lg:hidden">
-                    {data &&
+                    {/* {data &&
                       data?.length !== 0 &&
                       data.map((passbookData: any, index: any) => (
                         <div
@@ -837,12 +836,12 @@ export const Transaction = () => {
                             }}
                           />
                         </div>
-                      ))}
+                      ))} */}
                   </div>
 
                   <div>
-                    {isLgScreen && (
-                      <div className="customScroll">{render()}</div>
+                    { (
+                      <div className="">{render()}</div>
                     )}
                   </div>
 
@@ -858,7 +857,6 @@ export const Transaction = () => {
                     onItemsPerPageChange={onPerPageItemChange}
                     pageNo={currentPage}
                     initialItemsPerPage={itemsPerPage}
-                    className="!mx-0"
                    
                   />
                 </>

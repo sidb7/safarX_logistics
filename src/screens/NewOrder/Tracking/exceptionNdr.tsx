@@ -80,8 +80,8 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
   ];
   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
-  const [exceptionCount, setExceptionCount] = useState<any>([]);
-  const [rtoCount, setRtoCount] = useState<any>([]);
+  const [exceptionCount, setExceptionCount] = useState<any>(0);
+  const [rtoCount, setRtoCount] = useState<any>(0);
   const [isLoadingSellerAction, setIsLoadingSellerAction] =
     useState<boolean>(false);
 
