@@ -16,6 +16,7 @@ import { downloadCSVFromString } from "../../utils/helper";
 import { ResponsiveState } from "../../utils/responsiveState";
 import BillingOrdersCard from "./BillingOrdersCard";
 import { Spinner } from "../../components/Spinner";
+import { toast } from "react-hot-toast";
 
 interface IOrdersProps {}
 
@@ -112,6 +113,26 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
     }
   };
 
+  // const getBilledOrders = async (payloads?: any) => {
+  //   try {
+  //     setIsLoading(true);
+  //     const payload = {
+  //       skip: (currentPage - 1) * itemsPerPage,
+  //       limit: itemsPerPage,
+  //       pageNo: currentPage,
+  //     };
+
+  //     const { data: response } = await POST(GET_BILLED_ORDERS, { ...payload });
+  //     if (response?.success) {
+  //       setData(response?.data);
+  //       setTotalItemCount(response?.total);
+  //       setIsLoading(false);
+  //     }
+  //   } catch (error: any) {
+  //     console.log(error.message);
+  //   }
+  // };
+
   const getBilledOrders = async (payloads?: any) => {
     try {
       setIsLoading(true);
@@ -120,15 +141,19 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
         limit: itemsPerPage,
         pageNo: currentPage,
       };
-
+  
       const { data: response } = await POST(GET_BILLED_ORDERS, { ...payload });
       if (response?.success) {
         setData(response?.data);
         setTotalItemCount(response?.total);
-        setIsLoading(false);
+        toast.success('Orders fetched successfully');
+      } else {
+        toast.error(response?.message || 'Failed to fetch orders');
       }
     } catch (error: any) {
-      console.log(error.message);
+      toast.error(error?.message || 'Something went wrong while fetching orders');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -181,7 +206,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
             <div className="mx-4">
               <OrdersData data={data} />
             </div>
-            {isLgScreen && totalItemCount > 0 && (
+            {isLgScreen && totalItemCount.length > 0  && (
               <PaginationComponent
                 totalItems={totalItemCount}
                 itemsPerPageOptions={[
