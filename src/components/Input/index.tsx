@@ -2,6 +2,7 @@ import { Tooltip } from "react-tooltip";
 import "../../styles/inputBox.css";
 import InfoCircle from "../../assets/info-circle.svg";
 import React, { useState } from "react";
+import Flag from "../../assets/Flag.svg";
 
 interface propTypes {
   label?: string;
@@ -46,6 +47,7 @@ interface propTypes {
   range?: boolean; // Add this line
   startDateValue?: string; // Add this line
   endDateValue?: string; // Add this line
+  isIndNumber?: boolean;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -92,6 +94,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     range = false,
     startDateValue = "",
     endDateValue = "",
+    isIndNumber = false,
   } = props;
 
   // Function to check if the error condition is met
@@ -118,91 +121,108 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="flex  flex-col text-start  w-full">
-      <div className={`relative w-[100%]  ${containerStyle}`}>
-        <input
-          ref={ref}
-          name={name}
-          type={inputType}
-          placeholder={placeholder}
-          className={`${className} ${
-            errorMessage !== true &&
-            errorMessage !== false &&
-            "!border-[#F35838]"
-          }  ${
-            (!isFocused && errorCondition?.message) || (inputError && !value)
-              ? "border-[#F35838]"
-              : "border-[#A4A4A4]"
-          }
-           rounded border-[1px] w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask `}
-          required={isRequired}
-          onChange={(e: any) => onChange(e)}
-          onBlur={(e) => {
-            onBlur(e);
-            setIsFocused(false); // Set isFocused to false on blur
-          }}
-          onFocus={() => setIsFocused(true)} // Set isFocused to true on focus
-          autoComplete={autoComplete}
-          value={value}
-          defaultValue={defaultValue}
-          disabled={isDisabled}
-          inputMode={inputMode}
-          minLength={minLength}
-          maxLength={maxLength}
-          onKeyDown={onKeyDown}
-          title={title}
-          id={id}
-        />
-        {/* absolute -bottom-4 px-2 left-0 */}
-
-        <label
-          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
-            (value || tempLabel || isFocused) && "filled"
-          } ${
-            errorMessage !== true &&
-            errorMessage !== false &&
-            "!text-[#F35838] "
-          } ${labelClassName}`}
-          htmlFor={id}
-        >
-          {label}
-        </label>
-
-        {isRightIcon && (
-          <img
-            src={rightIcon}
-            alt=""
-            className={`${imageClassName} absolute z-15  right-6  top-[30%] cursor-pointer w-[16px] h-[20px]`}
-            onClick={() => {
-              setVisibility(!visibility);
-              onClick();
-            }}
-          />
-        )}
-        <div>
-          {isInfoIcon && (
+    <>
+      <div className={`${isIndNumber ? "flex" : ""}`}>
+        {isIndNumber ? (
+          <div className="rounded-s border-[1px] border-[#A4A4A4] bg-[#E8E8E8] border-r-white pt-[15px] px-1">
             <img
-              src={informativeIcon}
+              src={Flag}
               alt=""
-              className={`${imageClassName} absolute z-20  right-1  top-[34%] cursor-pointer`}
-              data-tooltip-id="my-tooltip-landing"
-              data-tooltip-content={tooltipContent}
+              // className="absolute z-2 left-[18px] top-[1px]"
+              width={"59px"}
+              height={"55px"}
             />
-          )}
-          <Tooltip
-            id="my-tooltip-landing"
-            style={{
-              backgroundColor: "#4D83FF",
-              color: "#FFFFFF",
-              width: "270px",
-              fontSize: "12px",
-              lineHeight: "14px",
-              textTransform: "capitalize",
-            }}
-          />
-        </div>
-      </div>
-      {/* <span
+          </div>
+        ) : (
+          <></>
+        )}
+
+        <div className="flex  flex-col text-start  w-full">
+          <div className={`relative w-[100%]  ${containerStyle}`}>
+            <input
+              ref={ref}
+              name={name}
+              type={inputType}
+              placeholder={placeholder}
+              className={`${className} ${
+                errorMessage !== true &&
+                errorMessage !== false &&
+                "!border-[#F35838]"
+              }  ${
+                (!isFocused && errorCondition?.message) ||
+                (inputError && !value)
+                  ? "border-[#F35838]"
+                  : "border-[#A4A4A4]"
+              }
+           rounded border-[1px] w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask `}
+              required={isRequired}
+              onChange={(e: any) => onChange(e)}
+              onBlur={(e) => {
+                onBlur(e);
+                setIsFocused(false); // Set isFocused to false on blur
+              }}
+              onFocus={() => setIsFocused(true)} // Set isFocused to true on focus
+              autoComplete={autoComplete}
+              value={value}
+              defaultValue={defaultValue}
+              disabled={isDisabled}
+              inputMode={inputMode}
+              minLength={minLength}
+              maxLength={maxLength}
+              onKeyDown={onKeyDown}
+              title={title}
+              id={id}
+            />
+            {/* absolute -bottom-4 px-2 left-0 */}
+
+            <label
+              className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
+                (value || tempLabel || isFocused) && "filled"
+              } ${
+                errorMessage !== true &&
+                errorMessage !== false &&
+                "!text-[#F35838] "
+              } ${labelClassName}`}
+              htmlFor={id}
+            >
+              {label}
+            </label>
+
+            {isRightIcon && (
+              <img
+                src={rightIcon}
+                alt=""
+                className={`${imageClassName} absolute z-15  right-6  top-[30%] cursor-pointer w-[16px] h-[20px]`}
+                onClick={() => {
+                  setVisibility(!visibility);
+                  onClick();
+                }}
+              />
+            )}
+            <div>
+              {isInfoIcon && (
+                <img
+                  src={informativeIcon}
+                  alt=""
+                  className={`${imageClassName} absolute z-20  right-1  top-[34%] cursor-pointer`}
+                  data-tooltip-id="my-tooltip-landing"
+                  data-tooltip-content={tooltipContent}
+                />
+              )}
+              <Tooltip
+                id="my-tooltip-landing"
+                style={{
+                  backgroundColor: "#4D83FF",
+                  color: "#FFFFFF",
+                  width: "270px",
+                  fontSize: "12px",
+                  lineHeight: "14px",
+                  textTransform: "capitalize",
+                }}
+              />
+            </div>
+          </div>
+          {/* <span
         className={`text-[red] transition-all ease-out h-0 ${
           errorMessage !== false &&
           errorMessage !== true &&
@@ -212,16 +232,16 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         {errorMessage && errorMessage}
       </span> */}
 
-      {errorMessage !== false && errorMessage !== true && (
-        <div className="flex items-center gap-x-1 mt-1">
-          <img src={InfoCircle} alt="" width={16} height={16} />
-          <span className="font-normal text-[#F35838] text-xs leading-3">
-            {errorMessage && errorMessage}
-          </span>
-        </div>
-      )}
+          {errorMessage !== false && errorMessage !== true && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={16} height={16} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {errorMessage && errorMessage}
+              </span>
+            </div>
+          )}
 
-      {/* {inputError && !value && (
+          {/* {inputError && !value && (
         <span
           className={`text-[red] transition-all ease-out h-[18px] delay-100 font-Open font-normal text-[12px] mt-1 px-2 leading-4`}
         >
@@ -229,26 +249,28 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         </span>
       )} */}
 
-      {inputError && !value && (
-        <div className="flex items-center gap-x-1 mt-1">
-          <img src={InfoCircle} alt="" width={16} height={16} />
-          <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
-            Field is required
-          </span>
-        </div>
-      )}
+          {inputError && !value && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={16} height={16} />
+              <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
+                Field is required
+              </span>
+            </div>
+          )}
 
-      {/* Render dynamic error message based on errorCondition */}
-      {/* Render dynamic error message based on errorCondition */}
-      {!isFocused && errorCondition?.message && (
-        <div className="flex items-center gap-x-1 mt-1">
-          <img src={InfoCircle} alt="" width={16} height={16} />
-          <span className="font-normal text-[#F35838] text-xs leading-3">
-            {errorCondition.message}
-          </span>
+          {/* Render dynamic error message based on errorCondition */}
+          {/* Render dynamic error message based on errorCondition */}
+          {!isFocused && errorCondition?.message && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={16} height={16} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {errorCondition.message}
+              </span>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 
