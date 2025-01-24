@@ -25,6 +25,7 @@ const Index = () => {
   const [mobileNumber, setMobileNumber] = useState({
     mobileNo: "",
   });
+  const [isInvalidIndianNumber, setIsInvalidIndianNumber] = useState(false);
   const [firstName, setFirstName] = useState();
   const [email, setEmail] = useState();
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Button disable state
@@ -236,13 +237,33 @@ const Index = () => {
               value={mobileNumber?.mobileNo || ""}
               inputMode="numeric"
               label="Enter Your 10 Digit Mobile Number"
+              isIndNumber={true}
               maxLength={10}
+              // onChange={(e: any) => {
+              //   if (!isNaN(e.target.value)) {
+              //     setMobileNumber({
+              //       ...mobileNumber,
+              //       mobileNo: e.target.value,
+              //     });
+              //   }
+              // }}
               onChange={(e: any) => {
-                if (!isNaN(e.target.value)) {
+                const enteredValue = e.target.value;
+
+                // Regex to validate Indian mobile numbers
+                const indianMobileRegex = /^[6-9]\d{9}$/;
+
+                if (!isNaN(enteredValue)) {
+                  // Update the mobile number state
                   setMobileNumber({
                     ...mobileNumber,
-                    mobileNo: e.target.value,
+                    mobileNo: enteredValue,
                   });
+
+                  // Update the invalid number flag state
+                  setIsInvalidIndianNumber(
+                    !indianMobileRegex.test(enteredValue)
+                  );
                 }
               }}
               // isDisabled={seconds === 0 && minutes === 0 ? false : true}
@@ -325,7 +346,7 @@ const Index = () => {
                 variant="primary"
                 onClick={(e: any) => sendOtpOnClick(body)}
                 text="Verify Number"
-                disabled={isButtonDisabled}
+                disabled={isButtonDisabled || isInvalidIndianNumber}
               />
             )}
           </div>
@@ -336,7 +357,7 @@ const Index = () => {
 
   // useEffect to handle API call after mobileNo is 10 digits
   useEffect(() => {
-    if (mobileNumber?.mobileNo.length === 10) {
+    if (!isInvalidIndianNumber && mobileNumber?.mobileNo.length === 10) {
       sendOtpOnClick(body); // Automatically send OTP when there are 10 digits
       setIsButtonDisabled(false); // Enable button when exactly 10 digits
     } else {
