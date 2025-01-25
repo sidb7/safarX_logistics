@@ -17,6 +17,8 @@ interface IInputProps {
   isRequired?: boolean;
   imgSrc?: string;
   inputError?: boolean;
+  inputMode?: any;
+  maxLength?: any;
 }
 
 const InputWithImage = (props: IInputProps) => {
@@ -32,10 +34,11 @@ const InputWithImage = (props: IInputProps) => {
     name,
     isDisabled,
     inputType,
-
+    inputMode = "",
     isRequired = false,
     imgSrc,
     inputError,
+    maxLength,
   } = props;
 
   const inputContainerClass = imgSrc && value ? "input-container-aligned" : "";
@@ -65,6 +68,7 @@ const InputWithImage = (props: IInputProps) => {
           value={value}
           disabled={isDisabled}
           style={{ caretColor }}
+          maxLength={maxLength}
         />
       </div>
       {inputError && !value && (
