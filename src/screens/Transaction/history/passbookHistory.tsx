@@ -153,7 +153,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
 
       cell: (info: any) => {
-        console.log("timestamp", info.getValue());
+        // console.log("timestamp", info.getValue());
         const formattedDateTime = date_DD_MMM_YYYY_HH_MM(info.getValue());
 
         return (
@@ -248,7 +248,7 @@ export const PassbookColumns = (setSortOrder: any) => {
               {info?.row?.original?.orderId}
             </div>
             <div className="cursor-pointer">
-              <CopyTooltip stringToBeCopied={info?.row?.original?.orderId} />
+             {info?.row?.original?.orderId&& <CopyTooltip stringToBeCopied={info?.row?.original?.orderId} />}
             </div>
           </div>
         );

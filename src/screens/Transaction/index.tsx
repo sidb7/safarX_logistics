@@ -610,7 +610,7 @@ export const Transaction = () => {
 
   const filterButton = () => {
     const actionHandler = () => {
-      console.log("rowSelectedData", rowSelectedData);
+      // console.log("rowSelectedData", rowSelectedData);
     };
 
     if (isLgScreen) {
@@ -704,7 +704,10 @@ export const Transaction = () => {
       );
     } else if (renderingComponents === 1) {
       return (
-        <CustomTable rowData={[]} columnsData={cashbackDetailsColumns()} />
+        <CustomTable
+          rowData={data || []}
+          columnsData={PassbookColumns(setSortOrder)}
+        />
       );
     } else if (renderingComponents === 2) {
       return <CustomTable rowData={data || []} columnsData={columns} />;
@@ -839,11 +842,7 @@ export const Transaction = () => {
                       ))} */}
                   </div>
 
-                  <div>
-                    { (
-                      <div className="">{render()}</div>
-                    )}
-                  </div>
+                  <div>{<div className="">{render()}</div>}</div>
 
                   {/* {totalItemCount > 0 && ( */}
 
@@ -857,7 +856,6 @@ export const Transaction = () => {
                     onItemsPerPageChange={onPerPageItemChange}
                     pageNo={currentPage}
                     initialItemsPerPage={itemsPerPage}
-                   
                   />
                 </>
               )}
