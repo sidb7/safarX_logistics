@@ -1584,8 +1584,4 @@ export const keyNameMapping = {
   sources: { name: "Sources", label: "source" },
   orderType: { name: "Order Type", label: "orderType" },
   sellerId: { name: "Seller Id", label: "sellerId" },
-  isBuyerConfirmed: {
-    name: "Buyer Confirmation Status",
-    label: "buyerConfirmation"
-  }
 };
