@@ -252,6 +252,7 @@ const Index = () => {
   const [persistFilterData, setPersistFilterData]: any = useState({
     deliveryPincode: [],
     pickupPincode: [],
+    buyerConfirmation: [],
   });
 
   const [isErrorPage, setIsErrorPage] = useState(false);
@@ -1236,7 +1237,7 @@ const Index = () => {
         updateFilterArr(tempArrOne, "isBuyerConfirmed", "$in", data);
         PersistFilterArr("buyerConfirmation", data);
         break;
-        
+
       default:
         break;
     }

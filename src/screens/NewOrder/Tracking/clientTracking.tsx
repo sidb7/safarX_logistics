@@ -289,38 +289,42 @@ const Tracking = () => {
           >
             <div className="flex md:justify-center w-full">
               <div className="w-full">
-                <div className="flex w-full">
-                  <CustomInputBox
-                    label="Enter tracking ID"
-                    value={trackingNo}
-                    containerStyle="!mt-1"
-                    onChange={(e) => {
-                      setTrackingNo(e.target.value);
-                    }}
-                  />
-                  <OneButton
-                    text={`${
-                      isMobileResponsive?.isMobileScreen ? "" : "Track Order"
-                    }`}
-                    className="ml-2 p-6 mt-1"
-                    onClick={() => handleTrackOrderClick()}
-                    variant="primary"
-                    showIcon={isMobileResponsive?.isMobileScreen ? true : false}
-                    icon={TrackingIcon}
-                    iconClass="!w-8 !h-8 ml-2 mr-0"
-                  />
-                  {trackingState?.length !== 0 && (
-                    <div className="flex justify-center items-center mt-1 ml-2">
-                      <img
-                        src={RefreshIcon}
-                        alt=""
-                        className="w-[50px] h-[50px] cursor-pointer"
-                        onClick={() => handleTrackOrderClick()}
-                      />
-                    </div>
-                  )}
+                <div className="flex flex-col justify-center items-center">
+                  <div className="flex">
+                    <CustomInputBox
+                      label="Enter tracking ID"
+                      value={trackingNo}
+                      containerStyle="!mt-1 md:!w-[340px] lg:!w-[670px]"
+                      onChange={(e) => {
+                        setTrackingNo(e.target.value);
+                      }}
+                    />
+                    <OneButton
+                      text={`${
+                        isMobileResponsive?.isMobileScreen ? "" : "Track Order"
+                      }`}
+                      className="ml-2 p-6 mt-1"
+                      onClick={() => handleTrackOrderClick()}
+                      variant="primary"
+                      showIcon={
+                        isMobileResponsive?.isMobileScreen ? true : false
+                      }
+                      icon={TrackingIcon}
+                      iconClass="!w-8 !h-8 ml-2 mr-0"
+                    />
+                    {trackingState?.length !== 0 && (
+                      <div className="flex justify-center items-center mt-1 ml-2">
+                        <img
+                          src={RefreshIcon}
+                          alt=""
+                          className="w-[50px] h-[50px] cursor-pointer"
+                          onClick={() => handleTrackOrderClick()}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <p className="text-[10px] py-2 font-Open font-bold">
+                <p className="text-[10px] py-2 font-Open font-bold px-8 md:px-32 lg:px-0">
                   For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
                 </p>
               </div>

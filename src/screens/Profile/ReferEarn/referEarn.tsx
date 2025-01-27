@@ -140,7 +140,7 @@ export const ProfileReferEarn = ({ ReferData }: any) => {
     else setIsOpen(true);
   };
 
-  const shareUrl = `${SELLER_WEB_URL}/onboarding/signup`;
+  const shareUrl = `${SELLER_WEB_URL}/onboarding/signup/${ReferData?.referCode}`;
   const shareTitle = "Join Shipyaari";
   const shareMessage = `Sign up on Shipyaari to streamline your logistics: ${shareUrl}\nUse my referral code: ${ReferData?.referCode}`;
 

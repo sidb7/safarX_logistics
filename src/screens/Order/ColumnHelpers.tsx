@@ -562,6 +562,7 @@ const idHelper = (
       const { status, awb, source, otherDetails, isBuyerConfirmed } =
         info?.row?.original;
       const rowsData = info?.row?.original;
+      console.log("rowsData", rowsData);
       // const timeStamp = status?.[0]?.timeStamp;
       const timeStamp =
         rowsData?.status?.[rowsData?.status?.length - 1]?.timeStamp;
@@ -728,6 +729,8 @@ const idHelper = (
         // });
       };
       const buyerConfirmation = rowsData?.isBuyerConfirmed;
+
+      // const buyerConfirmation = rowsData?.isBuyerConfirmed;
 
       return (
         <div className="py-3">
@@ -1267,7 +1270,7 @@ export const columnHelperForNewOrder = (
                     : time}
                 </div>
 
-                <div>
+                <div className="py-2">
                   {buyerConfirmation === "BUYER CANCELLED" ? (
                     <p className="px-2 py-2 w-[150px] bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
                       {buyerConfirmation}
