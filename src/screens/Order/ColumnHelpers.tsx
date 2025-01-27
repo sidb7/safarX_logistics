@@ -727,59 +727,35 @@ const idHelper = (
         //       : `T${rowsData.tempOrderId}`,
         // });
       };
-      const buyerConfirmation = rowsData?.isBuyerConfirmed;
 
       return (
         <div className="py-3">
           {
-            <>
-              <div className="flex flex-col gap-y-1">
-                <div className="flex text-base items-center font-medium">
-                  <div
-                    className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
-                    onClick={handleInformativeModal}
-                  >
-                    <div>
-                      <p className="font-Open font-semibold leading-5 text-sm ">
-                        {capitalizeFirstLetter(renderStatus)}
-                      </p>
-                    </div>
-                    {setInfoModalContent && (
-                      <div
-                        className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
-                        onClick={handleInformativeModal}
-                      >
-                        <img
-                          src={InformativeIcon}
-                          alt="Info Icon"
-                          width="18px"
-                        />
-                      </div>
-                    )}
+            <div className="flex flex-col gap-y-1">
+              <div className="flex text-base items-center font-medium">
+                <div
+                  className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
+                  onClick={handleInformativeModal}
+                >
+                  <div>
+                    <p className="font-Open font-semibold leading-5 text-sm ">
+                      {capitalizeFirstLetter(renderStatus)}
+                    </p>
                   </div>
-                </div>
-                <div className="font-Open font-normal leading-5 text-sm ">
-                  {time}
+                  {setInfoModalContent && (
+                    <div
+                      className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
+                      onClick={handleInformativeModal}
+                    >
+                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
+                    </div>
+                  )}
                 </div>
               </div>
-
-              <div>
-                {buyerConfirmation === "BUYER CANCELLED" ? (
-                  <p className="px-2 py-2 w-[150px] bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
-                    {buyerConfirmation}
-                  </p>
-                ) : buyerConfirmation === "PENDING" ? (
-                  <p className="px-2 py-2 w-[80px] bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
-                    {buyerConfirmation}
-                  </p>
-                ) : buyerConfirmation === "BUYER VERIFIED" ? (
-                  <span className="px-2 py-2 w-[150px] bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                    {buyerConfirmation}
-                  </span>
-                ) : null}
+              <div className="font-Open font-normal leading-5 text-sm ">
+                {time}
               </div>
-            </>
-
+            </div>
             // <div className="flex flex-col gap-y-1">
             //   <div className="flex">
             //     {/* <img src={forwardShareIcon} alt="" /> <img src={downloadIcon} alt="" /> */}

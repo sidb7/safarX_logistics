@@ -1232,11 +1232,6 @@ const Index = () => {
         updateFilterArr(tempArrOne, "sellerId", "$in", data);
         PersistFilterArr("sellerId", data);
         break;
-      case "Buyer Confirmation Status":
-        updateFilterArr(tempArrOne, "isBuyerConfirmed", "$in", data);
-        PersistFilterArr("buyerConfirmation", data);
-        break;
-        
       default:
         break;
     }
