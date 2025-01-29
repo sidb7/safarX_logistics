@@ -766,17 +766,17 @@ const idHelper = (
                 </div>
               </div>
 
-              <div>
+              <div className="mt-2">
                 {buyerConfirmation === "BUYER CANCELLED" ? (
-                  <p className="px-2 py-2 w-[150px] bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                  <p className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FEEEEB] text-[#F35838]">
                     {buyerConfirmation}
                   </p>
                 ) : buyerConfirmation === "PENDING" ? (
-                  <p className="px-2 py-2 w-[80px] bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+                  <p className="px-2 py-2 w-fit text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FDF6EA] text-[#F0A22E]">
                     {buyerConfirmation}
                   </p>
                 ) : buyerConfirmation === "BUYER VERIFIED" ? (
-                  <span className="px-2 py-2 w-[150px] bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                  <span className="px-2 py-2  w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#F2FAEF] text-[#7CCA62]">
                     {buyerConfirmation}
                   </span>
                 ) : null}
@@ -1272,15 +1272,15 @@ export const columnHelperForNewOrder = (
 
                 <div className="py-2">
                   {buyerConfirmation === "BUYER CANCELLED" ? (
-                    <p className="px-2 py-2 w-[150px] bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                    <p className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FEEEEB] text-[#F35838]">
                       {buyerConfirmation}
                     </p>
                   ) : buyerConfirmation === "PENDING" ? (
-                    <p className="px-2 py-2 w-[80px] bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+                    <p className="px-2 py-2 w-fit text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FDF6EA] text-[#F0A22E]">
                       {buyerConfirmation}
                     </p>
                   ) : buyerConfirmation === "BUYER VERIFIED" ? (
-                    <span className="px-2 py-2 w-[150px] bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                    <span className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#F2FAEF] text-[#7CCA62]">
                       {buyerConfirmation}
                     </span>
                   ) : null}
