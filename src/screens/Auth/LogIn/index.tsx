@@ -376,6 +376,10 @@ const Index = () => {
               `${response?.data?.data[0]?.sellerId}_${tokenKey}`,
               urlToken
             );
+            localStorage.setItem(
+              "userInfo",
+              JSON.stringify(response?.data?.data[0])
+            );
 
             // Navigate to the dashboard directly if the token is valid
             navigate("/dashboard/overview");
