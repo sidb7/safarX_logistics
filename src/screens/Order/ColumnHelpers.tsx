@@ -562,7 +562,7 @@ const idHelper = (
       const { status, awb, source, otherDetails, isBuyerConfirmed } =
         info?.row?.original;
       const rowsData = info?.row?.original;
-      console.log("rowsData", rowsData);
+      // console.log("rowsData", rowsData);
       // const timeStamp = status?.[0]?.timeStamp;
       const timeStamp =
         rowsData?.status?.[rowsData?.status?.length - 1]?.timeStamp;
@@ -1330,10 +1330,10 @@ export const columnHelperForNewOrder = (
         );
       },
       cell: (info: any) => {
-        console.log(
-          "info?.row?.original?.pickupAddress",
-          info?.row?.original?.pickupAddress
-        );
+        // console.log(
+        //   "info?.row?.original?.pickupAddress",
+        //   info?.row?.original?.pickupAddress
+        // );
         return (
           <div className=" font-Open font-normal leading-5 text-sm  py-3">
             {capitalizeFirstLetter(
