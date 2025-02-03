@@ -78,7 +78,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
   const validateOnSubmit = () => {
     let hasErrors = false;
     for (const inputName in validation) {
-      console.log("inputname", inputName);
+      // console.log("inputname", inputName);
       const errors = validate(productData[inputName], validation[inputName]);
       setValidationErrors((prevErrors: any) => ({
         ...prevErrors,

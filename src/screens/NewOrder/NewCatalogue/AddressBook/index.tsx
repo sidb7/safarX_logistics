@@ -118,7 +118,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
     }
   }, [addressType]);
 
-  console.log("activeTab", activeTab);
+  // console.log("activeTab", activeTab);
 
   const filterComponent = (className?: string) => {
     return (
