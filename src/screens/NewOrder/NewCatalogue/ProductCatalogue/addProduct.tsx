@@ -234,7 +234,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         <Stepper steps={steps} />
       </div> */}
       <div className="px-5 mb-20">
-        {console.log("productInputState", productInputState)}
+        {/* {console.log("productInputState", productInputState)} */}
         {productInputState?.map((e: any, index: number) => {
           return (
             <>
