@@ -617,6 +617,8 @@ const Accordion = (props: ICustomTableAccordion) => {
               " " +
               getPickAddressData?.pickUpAddress?.locality +
               " " +
+              getPickAddressData?.pickUpAddress?.landmark +
+              " " +
               getPickAddressData?.pickUpAddress?.city +
               " " +
               getPickAddressData?.pickUpAddress?.state +
@@ -676,6 +678,8 @@ const Accordion = (props: ICustomTableAccordion) => {
               getDeliveryAddressData?.deliveryAddress?.flatNo +
               " " +
               getDeliveryAddressData?.deliveryAddress?.locality +
+              " " +
+              getDeliveryAddressData?.deliveryAddress?.landmark +
               " " +
               getDeliveryAddressData?.deliveryAddress?.city +
               " " +
