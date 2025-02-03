@@ -442,8 +442,6 @@ const DeliveryLocation = () => {
             source: orderData?.source || "",
           });
           // Logging orderType here
-          console.log("orderType:", orderData?.orderType);
-          console.log("Helo");
         }
       }
     })();

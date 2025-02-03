@@ -214,7 +214,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
       if (data?.status) {
         toast.success(data?.message || "Successfully Integrated Store");
-        console.log("dara.dara: ", data?.data);
+
         let tempArr = channelData.channels;
         tempArr = [
           ...tempArr,
@@ -229,7 +229,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           },
         ];
         setChannelData({ channels: tempArr });
-        console.log("ChannelsData: ", channelData);
+        // console.log("ChannelsData: ", channelData);
       } else {
         toast.error(data?.message || "Invalid Credentials");
       }
@@ -294,7 +294,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         }&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}?storeId=${storeId}`;
         try {
           const { data } = await axios.get(reqUrl);
-          console.log("data: ", data);
+          // console.log("data: ", data);
         } catch (error: any) {
           console.log("error?.config?.url: ", error?.config?.url);
           // window.alert(JSON.stringify(error));
@@ -725,7 +725,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               />
               <CustomDropDown
                 onChange={(e) => {
-                  console.log("e.target.value : ", e.target.value);
+                  // console.log("e.target.value : ", e.target.value);
                   setStoreData({ ...storeData, domain: e.target.value });
                 }}
                 options={channelArr}

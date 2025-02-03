@@ -52,8 +52,8 @@ const Channel = (props: IProps) => {
   };
 
   const handleProductUpdate = async (e: any, productId: any) => {
-    console.log("productObject: ", productId);
-    console.log("oneProduct", productObject);
+    // console.log("productObject: ", productId);
+    // console.log("oneProduct", productObject);
     Object.keys(productObject).forEach(async (outerKey) => {
       if (outerKey === productId) {
         const data = {
@@ -306,7 +306,7 @@ const Channel = (props: IProps) => {
       },
       cell: ({ row }) => {
         const rowData = row?.original;
-        console.log("rowid", rowData);
+        // console.log("rowid", rowData);
         return (
           <div
             className="flex justify-center  items-center"
@@ -362,7 +362,7 @@ const Channel = (props: IProps) => {
   useEffect(() => {
     (async () => {
       const { data: response }: any = await POST(GET_CHANNEL_INVENTORIES);
-      console.log("response", response);
+      // console.log("response", response);
 
       response?.data?.map((item: any) => {
         productObject = {
