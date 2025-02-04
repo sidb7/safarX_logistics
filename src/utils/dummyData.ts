@@ -30,6 +30,10 @@ import ForkIcon from "../assets/Product/ForkKnife.svg";
 import ZohoIcon from "../assets/Catalogue/ZOHO.svg.png";
 import AmazonPngIcon from "../assets/AmazonIcon.png";
 import UniCommerceIcon from "../assets/Catalogue/unicommerce fn.svg";
+import ClickpostIcon from "../assets/Catalogue/clickpost.png";
+import EasycomIcon from "../assets/Catalogue/easycom.png";
+import ShopifyIconApp from "../assets/shopifyApp.svg";
+import ShopifyIconLgApp from "../assets/shopifyAppLg.svg";
 
 export const insufficientBalance = [
   {
@@ -693,6 +697,38 @@ export const ChannelIntegrationCarts = {
       integrated: false,
       storesIntegrated: 5,
       channel: "AMAZON",
+    },
+    {
+      name: "STORE_NAME",
+      icon: EasycomIcon,
+      iconLg: EasycomIcon,
+      integrated: false,
+      storesIntegrated: 5,
+      channel: "EASYECOM",
+    },
+    // {
+    //   name: "STORE_NAME",
+    //   icon: ShopifyIconApp,
+    //   iconLg: ShopifyIconLgApp,
+    //   integrated: false,
+    //   storesIntegrated: 5,
+    //   channel: "SHOPIFY_APP",
+    // },
+    {
+      name: "STORE_NAME",
+      icon: ClickpostIcon,
+      iconLg: ClickpostIcon,
+      integrated: false,
+      storesIntegrated: 5,
+      channel: "CLICKPOST",
+    },
+    {
+      name: "STORE_NAME",
+      icon: UniCommerceIcon,
+      iconLg: UniCommerceIcon,
+      integrated: false,
+      storesIntegrated: 5,
+      channel: "UNICOMMERCE",
     },
     // {
     //   name: "Woo",
@@ -1586,6 +1622,6 @@ export const keyNameMapping = {
   sellerId: { name: "Seller Id", label: "sellerId" },
   isBuyerConfirmed: {
     name: "Buyer Confirmation Status",
-    label: "buyerConfirmation"
-  }
+    label: "buyerConfirmation",
+  },
 };

@@ -27,6 +27,16 @@ const Card = (props: any) => {
           const sellerId: any = localStorage.getItem("sellerId");
           const url = `https://sellercentral.amazon.in/apps/authorize/consent?application_id=amzn1.sp.solution.10046c77-e1de-42ab-a2c6-3f9da56707e4&version=beta&state=${sellerId}`;
           window.location.href = url;
+        } else if (channel.channel === "EASYECOM") {
+          const url = `https://app.easyecom.io/V2/account/auth/login`;
+          window.location.href = url;
+        } else if (channel.channel === "UNICOMMERCE") {
+          // const sellerId: any = localStorage.getItem("sellerId");
+          const url = `https://dashboard.unicommerce.com/connect/login`;
+          window.location.href = url;
+        } else if (channel.channel === "CLICKPOST") {
+          const url = `https://dashboard.clickpost.in/login`;
+          window.location.href = url;
         } else {
           setModalData({ isOpen: true, modalData: channel });
         }
