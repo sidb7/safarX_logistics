@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Spinner } from "../../../../components/Spinner";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
+import ShopifyIconApp from "../../../../assets/shopifyApp.svg";
+import ShopifyIconLgApp from "../../../../assets/shopifyAppLg.svg";
 import WooIcon from "../../../../assets/Catalogue/woo.svg";
 import WooLg from "../../../../assets/Catalogue/WooCommerceLg.svg";
 import ZohoIcon from "../../../../assets/Catalogue/ZOHO.svg.png";
@@ -24,6 +26,7 @@ import { toast } from "react-hot-toast";
 import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
 import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
 import ClickpostIcon from "../../../../assets/Catalogue/clickpost.png";
+import EasycomIcon from "../../../../assets/Catalogue/easycom.png";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -41,6 +44,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
     setIndexNum,
     setIntegrate,
   } = props;
+  console.log("🚀 ~ ChannelIntegration ~ channelData:", channelData);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteChannel, setDeleteChannel] = useState<any>("");
@@ -202,10 +206,15 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           }
           let tempArr: any = [];
           response?.data?.forEach((item: any) => {
+            const isShopifyAppKey = item?.hasOwnProperty("isShopifyApp")
+              ? { isShopifyApp: item?.isShopifyApp }
+              : {};
             tempArr.push({
               name: item?.storeName,
               icon:
-                item?.channel === "SHOPIFY"
+                item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
+                  ? ShopifyIconApp
+                  : item?.channel === "SHOPIFY"
                   ? ShopifyIcon
                   : item?.channel === "WOOCOMMERCE"
                   ? WooIcon
@@ -215,9 +224,13 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? UniCommerceIcon
                   : item?.channel === "AMAZON"
                   ? AmazonPngIcon
+                  : item?.channel === "EASYECOM"
+                  ? EasycomIcon
                   : ClickpostIcon,
               iconLg:
-                item?.channel === "SHOPIFY"
+                item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
+                  ? ShopifyIconLgApp
+                  : item?.channel === "SHOPIFY"
                   ? ShopifyLg
                   : item?.channel === "WOOCOMMERCE"
                   ? WooLg
@@ -227,6 +240,8 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? UniCommerceIcon
                   : item?.channel === "AMAZON"
                   ? AmazonPngIcon
+                  : item?.channel === "EASYECOM"
+                  ? EasycomIcon
                   : ClickpostIcon,
               integrated: true,
               storeId: item?.storeId,
@@ -234,6 +249,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
               createdAt: item?.createdAt,
               expiredToken: item?.expiredToken,
               storeUrl: item?.storeUrl,
+              ...isShopifyAppKey,
             });
           });
           setChannelData({ channels: tempArr });

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { classNames } from "./classNames";
+import { createPortal } from "react-dom";
 
 interface TooltipPropTypes {
   position: any;
@@ -26,6 +27,27 @@ export const Tooltip = (props: TooltipPropTypes) => {
   } = props;
 
   const [showTooltip, setShowTooltip] = useState(false);
+
+
+    const [dropdownPosition, setDropdownPosition] = useState({
+      top: 0,
+      left: 0,
+    });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const handleMenuClick = (
+      event: React.MouseEvent<HTMLDivElement>,
+
+    ) => {
+      const rect = event.currentTarget.getBoundingClientRect();
+
+      setDropdownPosition({
+        top: rect.bottom,
+        left: rect.right,
+      });
+
+      setIsMenuOpen(prev=>!prev)
+   
+    };
 
   const handleHover = () => {
     if (showOnHover) {
@@ -53,7 +75,12 @@ export const Tooltip = (props: TooltipPropTypes) => {
       onMouseLeave={handleHoverExit}
       onClick={handleClick}
     >
-      <div className="my-1">{children}</div>
+      <div
+        onMouseEnter={(event) => handleMenuClick(event)}
+        onMouseLeave={(event) => handleMenuClick(event)}
+      >
+        {children}
+      </div>
       <span
         className={classNames(
           "absolute rounded-md shadow-lg z-50",
@@ -73,7 +100,22 @@ export const Tooltip = (props: TooltipPropTypes) => {
             : ""
         )}
       >
-        {content}
+        {isMenuOpen &&
+          createPortal(
+            <div
+              onMouseEnter={(event) => setIsMenuOpen(true)}
+              onMouseLeave={(event) => setIsMenuOpen(false)}
+              className="absolute  bg-white cursor-pointer"
+              style={{
+                top: `${dropdownPosition.top}px`,
+                left: `${dropdownPosition.left - 100}px`,
+              }}
+              role="menu"
+            >
+              {content}
+            </div>,
+            document.body
+          )}
       </span>
       <span
         className={classNames(

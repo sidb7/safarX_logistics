@@ -26,6 +26,12 @@ import TimerCounter from "../../../../components/TimerCountdown";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import OneButton from "../../../../components/Button/OneButton";
 
+interface GatewayResponse {
+  success: any;
+  data: any;
+  message: any;
+}
+
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
@@ -64,6 +70,31 @@ const Index = (props: ITypeProps) => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
   //getting the sellerID
   const sellerId = localStorage.getItem("sellerId");
+
+  const [isGatewayDown, setIsGatewayDown] = useState<any>(false);
+  const [gatewayDownTimer, setGatewayDownTimer] = useState<any>(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+
+    if (isGatewayDown && gatewayDownTimer > 0) {
+      interval = setInterval(() => {
+        setGatewayDownTimer((prev: number) => {
+          if (prev <= 1) {
+            setIsGatewayDown(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isGatewayDown, gatewayDownTimer]);
 
   useEffect(() => {
     // Retrieve the 'kycValue' from session storage
@@ -377,6 +408,17 @@ const Index = (props: ITypeProps) => {
               POST_VERIFY_AADHAR_OTP_URL,
               payload
             );
+
+            if (
+              response?.message ===
+              "KYC gateway down please retry after 5 minutes"
+            ) {
+              setIsGatewayDown(true);
+              setGatewayDownTimer(300); // 5 minutes
+              toast.error(response.message);
+              setLoading(false);
+              return;
+            }
             if (response?.success) {
               // window?.dataLayer?.push({
               //   event: "KYCVerification",
@@ -405,6 +447,17 @@ const Index = (props: ITypeProps) => {
 
             setLoading(true);
             const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+
+            if (
+              response?.message ===
+              "KYC gateway down please retry after 5 minutes"
+            ) {
+              setIsGatewayDown(true);
+              setGatewayDownTimer(300); // 5 minutes
+              toast.error(response.message);
+              setLoading(false);
+              return;
+            }
             if (response?.success) {
               setLoading(false);
               verifyPAN(panNumber);
@@ -425,6 +478,18 @@ const Index = (props: ITypeProps) => {
             otp: otpNumber,
           };
           const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+
+          if (
+            response?.message ===
+            "KYC gateway down please retry after 5 minutes"
+          ) {
+            setIsGatewayDown(true);
+            setGatewayDownTimer(300); // 5 minutes
+            toast.error(response.message);
+            setLoading(false);
+            return;
+          }
+
           if (response?.success) {
             // setLoading(false);
             verifyPAN(panNumber);
@@ -714,12 +779,28 @@ const Index = (props: ITypeProps) => {
                   </div>
 
                   <div className=" w-full">
-                    <OneButton
+                    {/* <OneButton
                       text="Verify OTP"
                       onClick={() => onVerifyOtp()}
                       disabled={!verifyBtnStatus}
                       variant="primary"
                       className="w-full md:!w-[220px]  mb-5"
+                    /> */}
+
+                    <OneButton
+                      text={
+                        isGatewayDown
+                          ? `Retry in ${Math.floor(gatewayDownTimer / 60)}:${(
+                              gatewayDownTimer % 60
+                            )
+                              .toString()
+                              .padStart(2, "0")}`
+                          : "Verify OTP"
+                      }
+                      onClick={onVerifyOtp}
+                      disabled={!verifyBtnStatus || isGatewayDown}
+                      variant="primary"
+                      className="w-full md:!w-[220px] mb-5"
                     />
                   </div>
                 </div>

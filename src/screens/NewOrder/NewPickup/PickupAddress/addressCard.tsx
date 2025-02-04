@@ -226,6 +226,15 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     }
   };
 
+  const mapAddress = (data: any) => {
+    const verifyAddressPayload = {
+      data: data,
+    };
+    getVerifyAddress(verifyAddressPayload);
+    setPrevPastedData(data);
+  };
+
+
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
@@ -437,7 +446,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         onClose={() => setIsLocationRightModal(false)}
         className="!w-[389px]"
       >
-        <Map onClick={() => setIsLocationRightModal(false)} />
+        <Map onClick={() => setIsLocationRightModal(false)} callBackFun={mapAddress}  />
       </RightSideModal>
     </div>
   );

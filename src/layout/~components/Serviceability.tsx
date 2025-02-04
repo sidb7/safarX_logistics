@@ -299,10 +299,10 @@ const Serviceability = (props: ITypeProps) => {
 
   const tableComponent = () => {
     return (
-      <div className="customScroll h-full m-5">
+      <div className=" h-full m-5">
         <CustomTable
-          data={serviceabilityTableData}
-          columns={columns}
+          rowData={serviceabilityTableData}
+          columnsData={columns}
           thclassName={"bg-white"}
           tdclassName={"bg-white"}
         />

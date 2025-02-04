@@ -208,10 +208,8 @@ const InternationalOrders: React.FunctionComponent<
           {/* table section  */}
           <div className="px-5">
             <CustomTable
-              data={order?.boxInfo || []}
-              columns={SummaryColumns}
-              thclassName={"!w-auto"}
-              tdclassName={"!w-auto"}
+              rowData={order?.boxInfo || []}
+              columnsData={SummaryColumns}
             />
           </div>
 

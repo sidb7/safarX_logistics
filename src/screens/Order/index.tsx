@@ -252,6 +252,7 @@ const Index = () => {
   const [persistFilterData, setPersistFilterData]: any = useState({
     deliveryPincode: [],
     pickupPincode: [],
+    buyerConfirmation: [],
   });
 
   const [isErrorPage, setIsErrorPage] = useState(false);
@@ -538,11 +539,13 @@ const Index = () => {
 
           <div className="flex gap-3">
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
-              Amazon Fulfillment ({fullfillment})
+              Amazon Fulfillment (
+              {Number(unFullfillment || 0) + Number(fullfillment || 0)}/{" "}
+              {Number(fullfillment || 0)})
             </span>
-            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+            {/* <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
               Amazon unfulfillment ({unFullfillment})
-            </span>
+            </span> */}
           </div>
 
           {isModalOpen && (
@@ -1230,6 +1233,11 @@ const Index = () => {
         updateFilterArr(tempArrOne, "sellerId", "$in", data);
         PersistFilterArr("sellerId", data);
         break;
+      case "Buyer Confirmation Status":
+        updateFilterArr(tempArrOne, "isBuyerConfirmed", "$in", data);
+        PersistFilterArr("buyerConfirmation", data);
+        break;
+
       default:
         break;
     }
@@ -1370,8 +1378,10 @@ const Index = () => {
         const { data } = await POST(GET_COUNT_AMAZON_ORDER);
         if (data?.code === 200) {
           let temp = data?.data?.[0];
+
+          console.log("🚀 ~ temp:", temp);
           setFullfillment(temp?.fullFillMent?.[0]?.fullFillMent || 0);
-          setUnFullfillment(temp?.unfullFillMent?.[0]?.unfullFillCount || 0);
+          setUnFullfillment(temp?.unfullFillCount?.[0]?.unfullFillCount || 0);
         }
       } catch (error) {
         toast.error("Something went wrong");
@@ -2222,15 +2232,11 @@ const Index = () => {
                       />
                     ) : (
                       <>
-                        <div>
-                          <CustomTable
-                            data={orders || []}
-                            columns={columnHelper || []}
-                            setRowSelectedData={setSelectedRowData}
-                            sticky={isSticky}
-                            tdclassName={"py-4"}
-                          />
-                        </div>
+                        <CustomTable
+                          rowData={orders || []}
+                          columnsData={columnHelper || []}
+                          setRowSelectedData={setSelectedRowData}
+                        />
                       </>
                     )
                   ) : (
@@ -2259,11 +2265,13 @@ const Index = () => {
               {totalCount > 0 && (
                 <OnePagination
                   totalItems={totalCount}
-                  itemsPerPageOptions={[100, 200, 500, 1000]}
+                  itemsPerPageOptions={[
+                    10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+                  ]}
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   initialItemsPerPage={itemsPerPage}
-                  className="!mb-0"
+                  className="pb-6"
                 />
               )}
             </div>

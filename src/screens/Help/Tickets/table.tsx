@@ -239,12 +239,14 @@ const TicketsTable = () => {
   return (
     <div>
       <div>
-        <CustomTable columns={TicketsHeading} data={TicketsData} />
+        <CustomTable columnsData={TicketsHeading} rowData={TicketsData} />
       </div>
       {totalItemCount > 0 && (
         <Pagination
           totalItems={totalItemCount}
-          itemsPerPageOptions={[10, 20, 30, 50]}
+          itemsPerPageOptions={[
+            10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+          ]}
           onPageChange={onPageIndexChange}
           onItemsPerPageChange={onPerPageItemChange}
         />

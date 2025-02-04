@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import WebCloseModalIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import axios from "axios";
-import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, MarkerF, Autocomplete } from "@react-google-maps/api";
 import CustomButton from "../../../components/Button";
 import GPSIcon from "../../../assets/Map/gps.svg";
 import LocationIcon from "../../../assets/Map/Location.svg";
@@ -13,141 +12,94 @@ const googleMapApiKey = "AIzaSyAKZhK6VLrzuuikYBNLKYdv9tpUTfW5hRQ";
 
 interface IPropsTypes {
   onClick?: () => void;
+  callBackFun?: (data: string) => void;
 }
 
-const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
-  const { onClick } = props;
-
+const Index: React.FunctionComponent<IPropsTypes> = ({ onClick, callBackFun }) => {
   const navigate = useNavigate();
 
   const containerStyle = {
     width: "100%",
     height: "546px",
   };
-  const [centerValue, setCenterValue] = useState({
-    lat: 20.5937,
+  const [centerValue, setCenterValue] = useState({ 
+    lat: 20.5937, 
     lng: 78.9629,
   });
   const [zoom, setZoom] = useState(5);
   const [address, setAddress] = useState("");
-  const [shortAddress, setshortAddress] = useState("");
+  const [shortAddress, setShortAddress] = useState("");
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
-  const onMapClick = async (e: any) => {
-    setCenterValue({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    });
-    if (e.placeId) {
-      await getAddress(e.placeId);
+  const onMapClick = async (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+      setCenterValue({ lat, lng });
+      await fetchAddressByLatLng(lat, lng);
     }
   };
 
-  async function getAddress(placeId: string) {
-    try {
-      const config = {
-        method: "post",
-        url: `http://65.2.176.43:8006/api/v1/address/getAddress`,
-        headers: { authorization: "6481876edafb412cf0294413" },
-        data: { placeId: placeId },
-      };
+  const fetchAddressByLatLng = async (lat: number, lng: number) => {
+    const geocoder = new google.maps.Geocoder();
+    const response = await geocoder.geocode({ location: { lat, lng } });
+    if (response.results && response.results.length > 0) {
+      setAddress(response.results[0].formatted_address);
+      const shortName = response.results[0].address_components[0]?.short_name || "";
+      setShortAddress(shortName);
+    }
+  };
 
-      const response = await axios(config);
+  const onAutocompleteLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
+    setAutocomplete(autocompleteInstance);
+  };
 
-      if (response.data?.success === 1 && response.data.data.result) {
-        const formattedAddress = response.data.data.result.formatted_address;
-
-        setAddress(formattedAddress);
-        const addressComponents = response.data.data.result.address_components;
-        const shortAddress = addressComponents[3].short_name;
-        setshortAddress(shortAddress);
-      } else {
+  const onPlaceChanged = () => {
+    if (autocomplete) {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        const lat = place.geometry.location?.lat() || 0;
+        const lng = place.geometry.location?.lng() || 0;
+        setCenterValue({ lat, lng });
+        setAddress(place.formatted_address || "");
+        const shortName = place.address_components?.[0]?.short_name || "";
+        setShortAddress(shortName);
       }
-    } catch (error) {}
-  }
-
-  async function getLocationByLatLng(lat: number, lng: number) {
-    try {
-      const config = {
-        method: "post",
-        url: `http://65.2.176.43:8006/api/v1/address/getAddressByCoordinate`,
-        headers: { authorization: "6481876edafb412cf0294413" },
-        data: { lat: lat, lng: lng },
-      };
-
-      const response = await axios(config);
-
-      if (response.data?.success === 1 && response.data.data.results) {
-        const formattedAddress =
-          response.data.data.results[0].formatted_address;
-
-        setAddress(formattedAddress);
-        const addressComponents =
-          response.data.data.results[0].address_components;
-        const shortAddress = addressComponents[3].short_name;
-        setshortAddress(shortAddress);
-      } else {
-      }
-    } catch (error) {}
-  }
+    }
+  };
 
   const getLocation = async () => {
     if ("geolocation" in navigator) {
-      try {
-        const position = await new Promise<GeolocationPosition>(
-          (resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
-          }
-        );
-
-        setCenterValue({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-
-        if (position) {
-          await getLocationByLatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-        }
-
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setCenterValue({ lat, lng });
         setZoom(15);
-      } catch (error) {
-        console.error("Error getting geolocation:", error);
-      }
-    } else {
+        await fetchAddressByLatLng(lat, lng);
+      });
     }
   };
 
   const confirmLocation = () => {
-    if (onClick) {
-      onClick();
-    }
-    navigate("/orders/add-order/pickup", { state: { address: address } });
+    if (onClick) onClick();
+    if (callBackFun) callBackFun(address);
+    //navigate("/orders/add-order/pickup", { state: { address } });
   };
 
   return (
     <>
       {centerValue ? (
-        <div className="lg:flex lg:flex-col lg:h-screen  lg:pt-5 lg:relative">
-          <div className="hidden   lg:flex justify-between items-center mb-5 lg:px-5 ">
-            <p className="font-Lato text-[24px] text-[#323232]">
-              Search Location
-            </p>
-            <img
-              src={WebCloseModalIcon}
-              alt="Close Icon"
-              className="cursor-pointer"
-              onClick={onClick}
-            />
-          </div>
-
-          <div className="relative w-full ">
-            <LoadScript
-              googleMapsApiKey={googleMapApiKey}
-              libraries={["places"]}
-              region="india"
-            >
+        <div className="lg:flex lg:flex-col lg:h-screen lg:pt-5 lg:relative">
+          <div className="relative w-full">
+            <LoadScript googleMapsApiKey={googleMapApiKey} libraries={["places"]}>
+              <Autocomplete onLoad={onAutocompleteLoad} onPlaceChanged={onPlaceChanged}>
+                <input
+                  type="text"
+                  placeholder="Search location"
+                  className="absolute z-10 top-5 left-5 p-2 border rounded-md shadow-md bg-white"
+                  style={{ width: "300px" }}
+                />
+              </Autocomplete>
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={centerValue}
@@ -159,36 +111,27 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
             </LoadScript>
             <div className="absolute top-[60%] left-[25%] w-1/2 flex justify-center">
               <CustomButton
-                text="LOCATE ME"
-                onClick={getLocation}
-                showIcon={true}
+                text="LOCATE ME" 
+                onClick={getLocation} 
+                showIcon={true} 
                 icon={GPSIcon}
-              ></CustomButton>
+              />
             </div>
-
             <div className="flex flex-col h-[254px] px-6 py-4 rounded-t-md w-full">
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-base font-light lg:font-Open lg:text-[16px]	">
-                  Select pickup location
-                </span>
-                <button className="text-blue-600 underline underline-offset-4 lg:font-Open lg:text-[16px]">
-                  CHANGE
-                </button>
-              </div>
               <div className="flex flex-col mt-8">
                 <div className="flex lg:gap-x-2">
                   <img src={LocationIcon} alt="Location" width="24px" />
-                  <span className="pl-1 font-medium lg:font-Open lg:text-base">
+                  <span className="pl-1 font-medium">
                     {shortAddress}
                   </span>
                 </div>
                 <div className="flex mt-2">
-                  <span className="text-sm font-light lg:font-Open	">
+                  <span className="text-sm font-light">
                     {address}
                   </span>
                 </div>
               </div>
-              <div className="mt-6 lg:hidden    ">
+              <div className="mt-6 lg:hidden">
                 <CustomButton
                   text="CONFIRM LOCATION"
                   onClick={() => confirmLocation()}
@@ -198,7 +141,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
           </div>
 
           <div
-            className="hidden lg:flex justify-end shadow-lg border-[1px]  bg-[#FFFFFF] p-6  rounded-tr-[32px] rounded-tl-[32px]   fixed bottom-0 "
+            className="hidden lg:flex justify-end shadow-lg border-[1px] bg-[#FFFFFF] p-6 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
             style={{ width: "-webkit-fill-available" }}
           >
             <ServiceButton

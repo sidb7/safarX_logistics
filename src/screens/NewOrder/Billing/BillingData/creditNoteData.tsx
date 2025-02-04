@@ -151,9 +151,9 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
   return (
     <div>
       <CustomTable
-        columns={billingOrdersHeading}
-        data={data}
-        thclassName={" bg-white"}
+        columnsData={billingOrdersHeading}
+        rowData={data}
+     
       />
     </div>
   );

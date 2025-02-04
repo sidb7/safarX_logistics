@@ -141,7 +141,7 @@ const InvoiceCard: React.FC<InvoiceCardProps> = ({ invoiceData }) => {
                           Due Date
                         </p>
                         <p className="text-[14px] open-sans">
-                          {invoice?._id?.billingDate || "-"}
+                          {invoice?.reportNumber || "-"}
                         </p>
                       </div>
                       <div className="mt-2 border-l-2 pl-4">

@@ -41,7 +41,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
     remark: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [rtoData, setRtoData] = useState<any>([]);
+  const [rtoData, setRtoData] = useState<any>(null);
   const [rightModalSellerAction, setRightModalSellerAction] = useState(false);
   const [currentAttemptsReasons, setCurrentAttemptsReasons] = useState<any[]>(
     []
@@ -61,8 +61,8 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
   const [rightModalAccordian, setRightModalAccordian] = useState(false);
   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
   const [sellerActionData, setSellerActionData] = useState<any[]>([]);
-  const [exceptionCount, setExceptionCount] = useState<any>([]);
-  const [rtoCount, setRtoCount] = useState<any>([]);
+  const [exceptionCount, setExceptionCount] = useState<any>(0);
+  const [rtoCount, setRtoCount] = useState<any>(0);
   const [isLoadingSellerAction, setIsLoadingSellerAction] =
     useState<boolean>(false);
 
@@ -347,6 +347,7 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
         <div className="flex flex-row-reverse items-center flex-grow">
           <div className="flex mr-4">
             <ServiceButton
+              disabled={isLoading}
               text="DOWNLOAD"
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[130px] mr-2"
               onClick={downloadRtoReport}
@@ -373,7 +374,9 @@ const Rto: React.FunctionComponent<IOrdersProps> = () => {
         {isLgScreen && totalItemsCount > 0 && (
           <PaginationComponent
             totalItems={totalItemsCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
+            itemsPerPageOptions={[
+              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+            ]}
             onPageChange={handlePageChange}
             onItemsPerPageChange={handleItemsPerPageChange}
             pageNo={currentPage}

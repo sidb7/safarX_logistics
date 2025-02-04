@@ -8,6 +8,7 @@ import infoIcon from "../../../assets/info.svg";
 import { Tooltip } from "react-tooltip";
 import { formatDate } from "../../../utils/dateUtils";
 import { COMPANY_NAME } from "../../../utils/ApiUrls";
+import { Spinner } from "../../../components/Spinner";
 
 interface IOrderDataProps {
   data: any[];
@@ -377,7 +378,13 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <CustomTable columns={columns} data={data} />
+      {data === null ? (
+        <div className="flex justify-center items-center h-[60vh]">
+          <Spinner />
+        </div>
+      ) : (
+        <CustomTable columnsData={columns} rowData={data} />
+      )}
     </div>
   );
 };

@@ -559,8 +559,10 @@ const idHelper = (
       );
     },
     cell: (info: any) => {
-      const { status, awb, source, otherDetails } = info?.row?.original;
+      const { status, awb, source, otherDetails, isBuyerConfirmed } =
+        info?.row?.original;
       const rowsData = info?.row?.original;
+      // console.log("rowsData", rowsData);
       // const timeStamp = status?.[0]?.timeStamp;
       const timeStamp =
         rowsData?.status?.[rowsData?.status?.length - 1]?.timeStamp;
@@ -726,35 +728,61 @@ const idHelper = (
         //       : `T${rowsData.tempOrderId}`,
         // });
       };
+      const buyerConfirmation = rowsData?.isBuyerConfirmed;
+
+      // const buyerConfirmation = rowsData?.isBuyerConfirmed;
 
       return (
         <div className="py-3">
           {
-            <div className="flex flex-col gap-y-1">
-              <div className="flex text-base items-center font-medium">
-                <div
-                  className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
-                  onClick={handleInformativeModal}
-                >
-                  <div>
-                    <p className="font-Open font-semibold leading-5 text-sm ">
-                      {capitalizeFirstLetter(renderStatus)}
-                    </p>
-                  </div>
-                  {setInfoModalContent && (
-                    <div
-                      className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
-                      onClick={handleInformativeModal}
-                    >
-                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
+            <>
+              <div className="flex flex-col gap-y-1">
+                <div className="flex text-base items-center font-medium">
+                  <div
+                    className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
+                    onClick={handleInformativeModal}
+                  >
+                    <div>
+                      <p className="font-Open font-semibold leading-5 text-sm ">
+                        {capitalizeFirstLetter(renderStatus)}
+                      </p>
                     </div>
-                  )}
+                    {setInfoModalContent && (
+                      <div
+                        className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
+                        onClick={handleInformativeModal}
+                      >
+                        <img
+                          src={InformativeIcon}
+                          alt="Info Icon"
+                          width="18px"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="font-Open font-normal leading-5 text-sm ">
+                  {time}
                 </div>
               </div>
-              <div className="font-Open font-normal leading-5 text-sm ">
-                {time}
+
+              <div className="mt-2">
+                {buyerConfirmation === "BUYER CANCELLED" ? (
+                  <p className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FEEEEB] text-[#F35838]">
+                    {buyerConfirmation}
+                  </p>
+                ) : buyerConfirmation === "PENDING" ? (
+                  <p className="px-2 py-2 w-fit text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FDF6EA] text-[#F0A22E]">
+                    {buyerConfirmation}
+                  </p>
+                ) : buyerConfirmation === "BUYER VERIFIED" ? (
+                  <span className="px-2 py-2  w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#F2FAEF] text-[#7CCA62]">
+                    {buyerConfirmation}
+                  </span>
+                ) : null}
               </div>
-            </div>
+            </>
+
             // <div className="flex flex-col gap-y-1">
             //   <div className="flex">
             //     {/* <img src={forwardShareIcon} alt="" /> <img src={downloadIcon} alt="" /> */}
@@ -831,6 +859,7 @@ export const columnHelperForNewOrder = (
           otherDetails,
           awb,
           createdAt,
+          isBuyerConfirmed,
         } = info?.row?.original;
         // const AWB = otherDetails?.awbNo
         let updatedAtStatus = 0;
@@ -1020,6 +1049,7 @@ export const columnHelperForNewOrder = (
       },
       cell: (info: any) => {
         let rowData = info?.row?.original;
+        console.log("🚀 ~ info:", rowData);
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
         const { status, tempOrderId, source, otherDetails, awb, createdAt } =
@@ -1142,6 +1172,8 @@ export const columnHelperForNewOrder = (
           rows.push(boxObj);
         });
 
+        const buyerConfirmation = rowData?.isBuyerConfirmed;
+
         let statusObj: any = { title: "" };
         rowsData?.status?.map((elem: any, index: any) => {
           statusObj = {
@@ -1194,6 +1226,7 @@ export const columnHelperForNewOrder = (
                           : "Draft"}{" "}
                       </p>
                     </div>
+
                     {setInfoModalContent && (
                       <div
                         className="cursor-pointer text-blue-500 hover:text-blue-700 transition duration-300"
@@ -1235,6 +1268,22 @@ export const columnHelperForNewOrder = (
                   source === "ZOHO"
                     ? date_DD_MMM_YYYY_HH_MM_SS(createdAt)
                     : time}
+                </div>
+
+                <div className="py-2">
+                  {buyerConfirmation === "BUYER CANCELLED" ? (
+                    <p className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FEEEEB] text-[#F35838]">
+                      {buyerConfirmation}
+                    </p>
+                  ) : buyerConfirmation === "PENDING" ? (
+                    <p className="px-2 py-2 w-fit text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FDF6EA] text-[#F0A22E]">
+                      {buyerConfirmation}
+                    </p>
+                  ) : buyerConfirmation === "BUYER VERIFIED" ? (
+                    <span className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#F2FAEF] text-[#7CCA62]">
+                      {buyerConfirmation}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             }
@@ -1281,10 +1330,10 @@ export const columnHelperForNewOrder = (
         );
       },
       cell: (info: any) => {
-        console.log(
-          "info?.row?.original?.pickupAddress",
-          info?.row?.original?.pickupAddress
-        );
+        // console.log(
+        //   "info?.row?.original?.pickupAddress",
+        //   info?.row?.original?.pickupAddress
+        // );
         return (
           <div className=" font-Open font-normal leading-5 text-sm  py-3">
             {capitalizeFirstLetter(
