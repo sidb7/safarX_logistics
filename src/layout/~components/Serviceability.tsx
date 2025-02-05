@@ -44,19 +44,21 @@ const Serviceability = (props: ITypeProps) => {
     setShowTable,
     loader,
   } = props;
+
   const columnsHelper = createColumnHelper<any>();
 
   // const [serviceValue, setServiceValue] = useState(
   //   serviceabilityData?.orderType
   // );
   const [serviceValue, setServiceValue] = useState("B2C");
-  const [serviceMode, setServiceMode] = useState<any>();
-
+  const [serviceMode, setServiceMode] = useState<any>(null);
   const [servicesDataArray, setServicesDataArray] = useState<any>();
 
   const weightData: any = [];
   let temp: any = [];
   let mode: any = [];
+
+  // const mode: any[] = [{ label: "Please Select", value: "" }];
 
   useEffect(() => {
     servicesData &&
@@ -78,13 +80,19 @@ const Serviceability = (props: ITypeProps) => {
     setServiceMode(mode);
   }, [servicesData, serviceValue]);
 
-  const handleServiceModeChange = (event:any) => {
+  const handleServiceModeChange = (event: any) => {
     const selectedMode = event.target.value;
+    setServiceabilityData({
+      ...serviceabilityData,
+      serviceMode: selectedMode,
+    });
 
     // Filter services based on the selected service mode
     if (selectedMode) {
       const filtered = servicesData?.filter(
-        (service:any) => service?.serviceMode === selectedMode && service?.type === serviceValue
+        (service: any) =>
+          service?.serviceMode === selectedMode &&
+          service?.type === serviceValue
       );
       setServicesDataArray(
         filtered.map((service: any) => ({
