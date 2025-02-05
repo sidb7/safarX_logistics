@@ -41,6 +41,14 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   };
 
   const data = getCurrentPath() as string[];
+  console.log("🚀 ~ data:", data)
+
+  useEffect(() => {
+    if(data[1] === 'invoices') {
+      setIsActive(checkPageAuthorized("Invoices"));
+    }
+  });
+  
 
   const arrayData = [
     { label: "Orders" },
@@ -81,7 +89,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   useEffect(() => {
     fetchInvoices();
-  }, []);
+  },[]);
 
   //on page change index
   const onPageIndexChange = () => {};
@@ -96,7 +104,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   return (
     <>
-      {/* {isActive || isActive === undefined ? ( */}
+      {isActive || isActive === undefined ? (
       <div>
         <Breadcrum label="Billing" />
 
@@ -133,11 +141,11 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
         </div>
       </div>
 
-      {/* ) : (
+      ) : (
         <div>
           <AccessDenied />
         </div>
-      )} */}
+      )}
     </>
   );
 };

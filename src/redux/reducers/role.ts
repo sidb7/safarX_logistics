@@ -10,19 +10,19 @@ export function checkPageAuthorized(name: any) {
   name = name.toLowerCase();
   if (role) {
     for (let parent of role?.menu) {
-      if (parent.name.toLowerCase() === name) {
+      if (parent.name.toLowerCase() === name && parent?.isActive === true) {
         status = true;
         break;
       } else {
         if (parent?.menu?.length > 0) {
           for (let child of parent?.menu) {
-            if (child.name.toLowerCase() === name) {
+            if (child.name.toLowerCase() === name && child?.isActive === true) {
               status = true;
               break;
             }
           }
           for (let child of parent?.menu?.[0]?.pages) {
-            if (child.name.toLowerCase() === name) {
+            if (child.name.toLowerCase() === name && child?.isActive === true) {
               status = true;
               break;
             }

@@ -6,6 +6,7 @@ import PaginationComponent from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import OrdersData from "./BillingData/ordersData";
 import ServiceButton from "../../components/Button/ServiceButton";
+import AccessDenied from "../../components/AccessDenied";
 import {
   COMPANY_NAME,
   DOWNLOAD_ORDER_BILLED_CSV,
@@ -17,6 +18,9 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import BillingOrdersCard from "./BillingOrdersCard";
 import { Spinner } from "../../components/Spinner";
 import { toast } from "react-hot-toast";
+import { checkPageAuthorized } from "../../redux/reducers/role";
+  
+
 
 interface IOrdersProps {}
 
@@ -156,6 +160,26 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
       setIsLoading(false);
     }
   };
+const [isActive, setIsActive] = useState<any>(false);
+
+    const getCurrentPath = () => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const location = url;
+    const path = location.pathname;
+    const pathArray = path.split("/");
+    const removedFirstPath = pathArray.slice(1);
+    return removedFirstPath;
+  };
+
+  const dataCurrentPath = getCurrentPath() as string[];
+  console.log('dataCurrentPath',dataCurrentPath);
+
+  useEffect(() => {
+    if(dataCurrentPath[1] === 'orders') {
+      setIsActive(checkPageAuthorized("Billing"));
+    }
+  })
 
   useEffect(() => {
     getBilledOrders();
@@ -163,6 +187,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   return (
     <>
+    {isActive || isActive === undefined ? (
       <div>
         <Breadcrum label="Billing" />
         <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
@@ -251,6 +276,11 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
           </div>
         )}
       </div>
+         ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
     </>
   );
 };

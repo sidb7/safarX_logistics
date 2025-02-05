@@ -490,11 +490,10 @@ function UpdateRole() {
       });
 
       const { data: menus } = await POST(POST_GET_ALL_INITIAL_MENU, {});
-      // console.log("🚀 ~ getRoleInfo ~ menus:", menus);
 
       if (data?.success) {
-        // setMenuData(data?.data?.[0]?.menu || []);
-        setMenuData(menus?.data);
+        setMenuData(data?.data?.[0]?.menu || []);
+        // setMenuData(menus?.data);
         let temp = data?.data?.[0]?.roleName;
         let companyInfoId = data?.data?.[0]?.companyId;
         setRoleName(temp || "N/A");
@@ -521,7 +520,10 @@ function UpdateRole() {
       };
 
       const { data } = await POST(POST_UPDATE_SELLER_ROLE, reqBody);
+      console.log("🚀 ~ constupdateRoleApi:any= ~ data:", data)
+      
       if (data?.success) {
+        toast.success(data?.message);
         navigate("/settings/role-management");
       } else {
         toast.error(data?.message);
@@ -530,6 +532,8 @@ function UpdateRole() {
       toast.error(error?.message);
     }
   };
+
+  useEffect(() => {}, [menuData, roleName]);
 
   useEffect(() => {
     getRoleInfo();
