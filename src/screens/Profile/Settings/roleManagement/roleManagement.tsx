@@ -161,6 +161,7 @@ function RoleManagement() {
       const { data } = await POST(POST_DELETE_ROLE_DATA, reqBody);
 
       if (data?.success) {
+        toast.success(data?.message);
         setIsModalOpen(false);
         getRolesData();
       } else {

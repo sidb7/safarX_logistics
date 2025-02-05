@@ -4,6 +4,7 @@ import { ScrollNav } from "../../components/ScrollNav";
 import { SearchBox } from "../../components/SearchBox";
 import PaginationComponent from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
+import AccessDenied from "../../components/AccessDenied";
 import InvoiceData from "./BillingData/invoiceData";
 import CodData from "./BillingData/codData";
 import RightSideModal from "../../components/CustomModal/customRightModal";
@@ -17,6 +18,7 @@ import { toast } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import DateButton from "../../components/Button/DateButton";
 import ServiceButton from "../../components/Button/ServiceButton";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 interface IInvoiceProps {}
 
@@ -40,6 +42,28 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     { label: "Cod" },
   ];
 
+  const [isActive, setIsActive] = useState<any>(false);
+  
+      const getCurrentPath = () => {
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const location = url;
+      const path = location.pathname;
+      const pathArray = path.split("/");
+      const removedFirstPath = pathArray.slice(1);
+      return removedFirstPath;
+    };
+  
+    const dataCurrentPath = getCurrentPath() as string[];
+    console.log('dataCurrentPath',dataCurrentPath);
+  
+    useEffect(() => {
+      if(dataCurrentPath[1] === 'cod') {
+        setIsActive(checkPageAuthorized("Cod"));
+      }
+    })
+  
+
   const render = (id: any) => {
     if (id === 0) {
       navigate("/billing/orders");
@@ -53,6 +77,8 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
       navigate("/billing/cod");
     }
   };
+
+
 
   const getCodRemittedDetails = async () => {
     try {
@@ -172,6 +198,8 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   };
   return (
     <>
+
+      {isActive || isActive === undefined ? (
       <div>
         <Breadcrum label="Billing" />
         <div className="customScroll">
@@ -301,6 +329,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           />
         </RightSideModal>
       </div>
+       ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
     </>
   );
 };
