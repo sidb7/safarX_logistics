@@ -51,7 +51,7 @@ const Serviceability = (props: ITypeProps) => {
   //   serviceabilityData?.orderType
   // );
   const [serviceValue, setServiceValue] = useState("B2C");
-  const [serviceMode, setServiceMode] = useState<any>(null);
+  const [serviceMode, setServiceMode] = useState<any>([]);
   const [servicesDataArray, setServicesDataArray] = useState<any>();
 
   const weightData: any = [];
@@ -84,7 +84,7 @@ const Serviceability = (props: ITypeProps) => {
     const selectedMode = event.target.value;
     setServiceabilityData({
       ...serviceabilityData,
-      serviceMode: selectedMode,
+      serviceMode: selectedMode || "",
     });
 
     // Filter services based on the selected service mode
@@ -285,7 +285,6 @@ const Serviceability = (props: ITypeProps) => {
         );
       },
       cell: (info: any) => {
-        console.log("EDT_Epoch", info.row?.original?.EDT);
         // date_DD_MMM_YYYY_HH_MM(info.row?.original?.EDT);
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
@@ -409,34 +408,6 @@ const Serviceability = (props: ITypeProps) => {
                   ]}
                   heading="Payment Mode"
                 />
-                <CustomDropDown
-                  onChange={(e: any) => {
-                    setServiceabilityData({
-                      ...serviceabilityData,
-                      weight: e.target.value ? Number(e.target.value) : "",
-                    });
-                  }}
-                  value={serviceabilityData?.weight}
-                  options={weightData}
-                  heading="Select Weight(KG)"
-                />
-                <CustomDropDown
-                  onChange={handleServiceModeChange}
-                  value={serviceabilityData?.serviceMode}
-                  options={serviceMode}
-                  heading="Select Mode"
-                />
-                <CustomDropDown
-                  onChange={(e: any) => {
-                    setServiceabilityData({
-                      ...serviceabilityData,
-                      serviceId: e.target.value,
-                    });
-                  }}
-                  value={serviceabilityData?.serviceId}
-                  options={servicesDataArray}
-                  heading="Select Service"
-                />
                 <CustomInputBox
                   label="Invoice Value"
                   value={serviceabilityData?.invoiceValue}
@@ -452,62 +423,93 @@ const Serviceability = (props: ITypeProps) => {
                     }
                   }}
                 />
-              </div>
-              <div className="grid grid-cols-3 p-5 gap-5">
-                <CustomInputBox
-                  label="Length (CM)"
-                  value={serviceabilityData?.dimension?.length}
-                  onChange={(e: any) => {
-                    if (isNaN(e.target.value)) {
-                    } else {
-                      let temp = serviceabilityData;
-                      if (temp && temp.dimension)
-                        temp.dimension.length = +e.target.value
-                          ? Number(e.target.value)
-                          : "";
 
-                      setServiceabilityData({
-                        ...temp,
-                      });
-                    }
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomInputBox
+                    label="Length (CM)"
+                    value={serviceabilityData?.dimension?.length}
+                    onChange={(e: any) => {
+                      if (isNaN(e.target.value)) {
+                      } else {
+                        let temp = serviceabilityData;
+                        if (temp && temp.dimension)
+                          temp.dimension.length = +e.target.value
+                            ? Number(e.target.value)
+                            : "";
+
+                        setServiceabilityData({
+                          ...temp,
+                        });
+                      }
+                    }}
+                  />
+                  <CustomInputBox
+                    label="Height (CM)"
+                    value={serviceabilityData?.dimension?.height}
+                    onChange={(e: any) => {
+                      if (isNaN(e.target.value)) {
+                      } else {
+                        let temp = serviceabilityData;
+                        if (temp && temp.dimension)
+                          temp.dimension.height = +e.target.value
+                            ? Number(e.target.value)
+                            : "";
+
+                        setServiceabilityData({
+                          ...temp,
+                        });
+                      }
+                    }}
+                  />
+                  <CustomInputBox
+                    label="Width (CM)"
+                    value={serviceabilityData?.dimension?.width || ""}
+                    inputMode="numeric"
+                    onChange={(e: any) => {
+                      if (isNaN(e.target.value)) {
+                      } else {
+                        let temp = serviceabilityData;
+                        if (temp && temp.dimension)
+                          temp.dimension.width = +e.target.value
+                            ? Number(e.target.value)
+                            : "";
+
+                        setServiceabilityData({
+                          ...temp,
+                        });
+                      }
+                    }}
+                  />
+                </div>
+                <CustomDropDown
+                  onChange={(e: any) => {
+                    setServiceabilityData({
+                      ...serviceabilityData,
+                      weight: e.target.value ? Number(e.target.value) : "",
+                    });
                   }}
+                  value={serviceabilityData?.weight}
+                  options={weightData}
+                  heading="Select Weight(KG)"
                 />
-                <CustomInputBox
-                  label="Height (CM)"
-                  value={serviceabilityData?.dimension?.height}
-                  onChange={(e: any) => {
-                    if (isNaN(e.target.value)) {
-                    } else {
-                      let temp = serviceabilityData;
-                      if (temp && temp.dimension)
-                        temp.dimension.height = +e.target.value
-                          ? Number(e.target.value)
-                          : "";
 
-                      setServiceabilityData({
-                        ...temp,
-                      });
-                    }
-                  }}
+                <CustomDropDown
+                  onChange={handleServiceModeChange}
+                  // value={serviceabilityData?.serviceMode}
+                  value={serviceabilityData?.serviceMode ?? ""}
+                  options={serviceMode}
+                  heading="Select Mode"
                 />
-                <CustomInputBox
-                  label="Width (CM)"
-                  value={serviceabilityData?.dimension?.width || ""}
-                  inputMode="numeric"
+                <CustomDropDown
                   onChange={(e: any) => {
-                    if (isNaN(e.target.value)) {
-                    } else {
-                      let temp = serviceabilityData;
-                      if (temp && temp.dimension)
-                        temp.dimension.width = +e.target.value
-                          ? Number(e.target.value)
-                          : "";
-
-                      setServiceabilityData({
-                        ...temp,
-                      });
-                    }
+                    setServiceabilityData({
+                      ...serviceabilityData,
+                      serviceId: e.target.value,
+                    });
                   }}
+                  value={serviceabilityData?.serviceId}
+                  options={servicesDataArray}
+                  heading="Select Service"
                 />
               </div>
             </div>
