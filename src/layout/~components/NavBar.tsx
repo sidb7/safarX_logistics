@@ -27,7 +27,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     let { roles: data, loading } = roles;
     let tempArr = JSON.parse(JSON.stringify(data[0]?.menu || []));
     if (loading === false && data?.length > 0) {
-      const filterActiveMenus:any = (menuArray: any[]) => {
+      const filterActiveMenus: any = (menuArray: any[]) => {
         return menuArray
           .filter((menuItem) => menuItem.isActive)
           .map((menuItem) => ({
@@ -38,9 +38,9 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             pages: menuItem.pages?.filter((page: any) => page.isActive) || [],
           }));
       };
-  
+
       let tempArr = filterActiveMenus(data[0]?.menu || []);
-  
+
       setSideBarMenus([...tempArr]);
       if (tempArr.length > 0) {
         updateActivetab(tempArr);
@@ -181,7 +181,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           )}
         </div>
         {sideBarMenus?.map((e: any, index: number) => {
-          console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
+          // console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
           if (e?.name !== "Notifications") {
             let iconName = e?.icon?.toLowerCase() || "";
             const iconPath =
