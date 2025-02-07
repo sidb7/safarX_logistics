@@ -26,24 +26,21 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   useEffect(() => {
     let { roles: data, loading } = roles;
     let tempArr = JSON.parse(JSON.stringify(data[0]?.menu || []));
-    if (loading === false) {
-      tempArr?.length > 0 &&
-        tempArr.forEach((e: any) => {
-          e.isChild = false;
-          e.isActivePath = false;
-          if (e.menu) {
-            e.menu?.forEach((e1: any) => {
-              e1.isChild = false;
-              e1.isActivePath = false;
-              if (e1.menu.menu) {
-                e1.menu.menu.forEach((e2: any) => {
-                  e2.isActivePath = false;
-                  e2.isChild = false;
-                });
-              }
-            });
-          }
-        });
+    if (loading === false && data?.length > 0) {
+      const filterActiveMenus: any = (menuArray: any[]) => {
+        return menuArray
+          .filter((menuItem) => menuItem.isActive)
+          .map((menuItem) => ({
+            ...menuItem,
+            isChild: false,
+            isActivePath: false,
+            menu: menuItem.menu ? filterActiveMenus(menuItem.menu) : [],
+            pages: menuItem.pages?.filter((page: any) => page.isActive) || [],
+          }));
+      };
+
+      let tempArr = filterActiveMenus(data[0]?.menu || []);
+
       setSideBarMenus([...tempArr]);
       if (tempArr.length > 0) {
         updateActivetab(tempArr);
@@ -184,7 +181,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           )}
         </div>
         {sideBarMenus?.map((e: any, index: number) => {
-          console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
+          // console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
           if (e?.name !== "Notifications") {
             let iconName = e?.icon?.toLowerCase() || "";
             const iconPath =

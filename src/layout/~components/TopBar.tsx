@@ -83,6 +83,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     deliveryPincode: "",
     invoiceValue: "",
     paymentMode: "",
+    serviceMode: "",
     serviceId: "",
     weight: "",
     orderType: "B2B",
