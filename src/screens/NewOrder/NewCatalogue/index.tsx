@@ -241,7 +241,7 @@ const Catalogue = () => {
         if (productCatalogueTab === "singleProduct" && !isMobileView) {
           return (
             <div className="flex">
-              <OneButton
+              {/* <OneButton
                 text={"CREATE COMBO"}
                 icon={addIcon}
                 showIcon
@@ -252,7 +252,7 @@ const Catalogue = () => {
                   await getProductDetails();
                 }}
                 variant="primary"
-              />
+              /> */}
               {/* <CustomButton
                 icon={addIcon}
                 showIcon={true}
