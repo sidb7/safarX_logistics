@@ -66,7 +66,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
 
   const [filterData, setFilterData] = useState([
     { label: "Single Product", isActive: false },
-    { label: "Combo Product", isActive: false },
+    // { label: "Combo Product", isActive: false },
   ]);
 
   //on page change index
@@ -194,7 +194,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 if (index === 0) {
                   setProductCatalogueTab("singleProduct");
                 } else if (index === 1) {
-                  setProductCatalogueTab("comboProduct");
+                  // setProductCatalogueTab("comboProduct");
                 }
               }}
             >
@@ -418,7 +418,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     } else if (filterId === 1) {
                       return (
                         <div className="w-[95%]" key={`${data.name}_${index}`}>
-                          <ComboProductBox
+                          {/* <ComboProductBox
                             image={StackLogo}
                             source={data?.source}
                             productName={data?.name}
@@ -437,7 +437,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                             setIsDeleteModalOpen={setIsDeleteModalOpen}
                             setDeleteProductsData={setDeleteProductsData}
                             deleteProductsData={deleteProductsData}
-                          />
+                          /> */}
                         </div>
                       );
                     }

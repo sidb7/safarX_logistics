@@ -96,6 +96,7 @@ const BulkUpload = (props: ITypeProps) => {
     let headers = [
       "Source",
       "Product Id",
+      "Variant Id",
       "Name",
       "Category",
       "SKU",
@@ -209,6 +210,7 @@ const BulkUpload = (props: ITypeProps) => {
       return {
         Source: item?.source || "SHIPYAARI",
         "Product Id": item?.productId,
+        "Variant Id": item?.variantId,
         Name: item?.name,
         Category: item?.category,
         SKU: item?.sku,
