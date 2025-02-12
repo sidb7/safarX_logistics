@@ -66,7 +66,7 @@ export const PassbookColumns = (setSortOrder: any) => {
     return (
       <div>
         <div
-          className={`inline-flex items-center justify-center gap-x-2 ${
+          className={`inline-flex items-center text-xs justify-center gap-x-2 ${
             status.toUpperCase() === "SUCCESS"
               ? "bg-[#F2FAEF] border-[#7CCA62]"
               : "bg-[#FEEEEB] border-[#F35838]"
@@ -216,7 +216,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex justify-center whitespace-nowrap">
+          <div className="flex justify-center">
             {/* {info?.row?.original?.remark?.length === 0
               ? "---"
               : isValidJSON(info?.row?.original?.remark)
@@ -248,7 +248,9 @@ export const PassbookColumns = (setSortOrder: any) => {
               {info?.row?.original?.orderId}
             </div>
             <div className="cursor-pointer">
-             {info?.row?.original?.orderId&& <CopyTooltip stringToBeCopied={info?.row?.original?.orderId} />}
+              {info?.row?.original?.orderId && (
+                <CopyTooltip stringToBeCopied={info?.row?.original?.orderId} />
+              )}
             </div>
           </div>
         );
@@ -377,7 +379,7 @@ export const PassbookColumns = (setSortOrder: any) => {
     columnsHelper.accessor("description", {
       header: () => {
         return (
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-left">
             <div>
               <h1 className="font-Open font-semibold leading-5 text-sm">
                 Description
@@ -391,10 +393,15 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div>
-            <span className="font-Open font-normal leading-5 text-sm ">
+          <div className="relative group w-[100px]">
+            <span className="font-Open font-normal leading-5 text-xs line-clamp-2">
               {info?.row?.original?.description}
             </span>
+            {info?.row?.original?.description.length > 15 && (
+              <div className="absolute left-0 line-clamp-3 top-full mt-1 w-[200px] p-2 bg-white text-gray-600 text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                {info?.row?.original?.description}
+              </div>
+            )}
           </div>
         );
       },
