@@ -22,7 +22,7 @@ import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import ReverseIcon from "../../assets/reverseIcon.png";
 import { COMPANY_NAME, SELLER_WEB_URL } from "../../utils/ApiUrls";
-import { useEffect, useRef } from "react";
+import { Key, useEffect, useRef } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 import tickcircle from "../../assets/Order/tickcircle.svg";
@@ -1060,6 +1060,12 @@ export const columnHelperForNewOrder = (
           rowData?.status?.[rowData?.status?.length - 1]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
+        const { tags } = info?.row?.original?.otherDetails || [];
+         const tagsString = tags?.join(", "); 
+  const tagsLength = tagsString?.length; 
+
+  const showAllTags = tagsLength > 10;
+  
         const rows: any = [
           {
             title: "Pickup Address",
@@ -1269,6 +1275,39 @@ export const columnHelperForNewOrder = (
                     ? date_DD_MMM_YYYY_HH_MM_SS(createdAt)
                     : time}
                 </div>
+
+                <div className="relative group">
+      <div className="flex space-x-2">
+        {showAllTags ? (
+          <span className="flex items-center bg-gray-200 px-3 py-1 rounded-full text-sm">
+            {capitalizeFirstLetter(tags[0])}...
+          </span>
+        ) : (
+          tags?.map((tag: string, index: Key | null | undefined) => (
+            <span
+              key={index}
+              className="flex items-center bg-gray-200 px-3 py-1 rounded-full text-sm"
+            >
+              {capitalizeFirstLetter(tag)}
+            </span>
+          ))
+        )}
+      </div>
+
+      {/* Tooltip for hover to show all tags */}
+      {showAllTags && (
+        <div className="absolute top-full left-0 mt-2 hidden group-hover:block bg-white border border-gray-300 p-2 rounded shadow-lg flex flex-col space-y-2">
+          {tags.map((tag: string, index: Key | null | undefined) => (
+            <span
+              key={index}
+              className="flex items-center bg-gray-200 px-3 py-1 rounded-full text-sm"
+            >
+              {capitalizeFirstLetter(tag)}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
 
                 <div className="py-2">
                   {buyerConfirmation === "BUYER CANCELLED" ? (
