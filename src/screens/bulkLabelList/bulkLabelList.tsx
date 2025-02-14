@@ -34,7 +34,10 @@ const BulkLabelList = () => {
   React.useEffect(() => {
     (async () => {
       try {
-        const { data: response } = await POST(FETCH_LABELS_REPORT_LIST, {});
+        const { data: response } = await POST(FETCH_LABELS_REPORT_LIST, {
+          limit: 10000,
+          pageNo: 1,
+        });
         if (response?.success) {
           setBulkDownloadLabelList(response?.data);
           setTotalItemCount(response?.totalLabelCount);
@@ -214,7 +217,7 @@ const BulkLabelList = () => {
             columnsData={bulkDownloadColumns}
           />
         </div>
-        {totalItemCount > 0 && (
+        {/* {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
             itemsPerPageOptions={[
@@ -224,7 +227,7 @@ const BulkLabelList = () => {
             onItemsPerPageChange={onPerPageItemChange}
             // rightmodalPagination={true}
           />
-        )}
+        )} */}
       </div>
       {/* ) : (
         <div>
