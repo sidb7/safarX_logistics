@@ -277,13 +277,13 @@ const RechargePayment = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-[8px]">
+        {/* <div className="flex items-center gap-[8px]">
           <Checkbox checkboxClassName="gap-2" />
           <p className="text-[14px] font-medium  lg:font-semibold lg:text-[#004EFF] uppercase text-[#CCDCFF]">
             INSTANT RECHARGE WITH COD
           </p>
-        </div>
-
+        </div> */}
+        {/* commented bcuz for wrong cod */}
         <p className="mt-3 text-[12px] text-[#BBBBBB] lg:font-normal">
           Add money to wallet with COD
         </p>
