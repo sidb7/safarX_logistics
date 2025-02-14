@@ -632,7 +632,7 @@ export const Transaction = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleSearch(e.target.value);
               }}
-              customPlaceholder="Search by awb / order / company ID"
+              customPlaceholder="Search by awb / order ID"
               getFullContent={() => setSearchValue("")}
             />
 
