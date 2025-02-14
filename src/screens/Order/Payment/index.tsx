@@ -596,13 +596,13 @@ const Payment = () => {
               </div>
             </div>
 
-            <div className="flex items-center lg:mb-2">
+            {/* <div className="flex items-center lg:mb-2">
               <Checkbox checkboxClassName="gap-2" />
               <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#CCDCFF]">
                 INSTANT RECHARGE WITH COD
               </p>
-            </div>
-
+            </div> */}
+            {/* commented bcuz for wrong cod */}
             <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
               Add money to wallet with COD
             </p>
