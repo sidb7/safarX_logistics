@@ -243,15 +243,21 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex  items-center justify-between ">
-            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm">
+          <div className="flex relative group w-[100px]">
+            <span className=" flex w-[100px] font-Open font-normal leading-5 text-xs line-clamp-2 ">
               {info?.row?.original?.orderId}
-            </div>
-            <div className="cursor-pointer">
+            </span>
+            <span className="text-lg w-20">
               {info?.row?.original?.orderId && (
                 <CopyTooltip stringToBeCopied={info?.row?.original?.orderId} />
               )}
-            </div>
+            </span>
+
+            {info?.row?.original?.orderId.length > 3 && (
+              <div className="absolute left-0 line-clamp-3 top-full mt-1 w-[200px] p-2 bg-white text-gray-600 text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                {info?.row?.original?.orderId}
+              </div>
+            )}
           </div>
         );
       },
