@@ -34,7 +34,10 @@ const BulkLabelList = () => {
   React.useEffect(() => {
     (async () => {
       try {
-        const { data: response } = await POST(FETCH_LABELS_REPORT_LIST, {});
+        const { data: response } = await POST(FETCH_LABELS_REPORT_LIST, {
+          limit: 10000,
+          pageNo: 1,
+        });
         if (response?.success) {
           setBulkDownloadLabelList(response?.data);
           setTotalItemCount(response?.totalLabelCount);
@@ -137,15 +140,19 @@ const BulkLabelList = () => {
         let partnerArr =
           data?.filter?.filterArrOne?.[0]?.["service.partnerName"]["$in"];
         return (
-          <div className="flex flex-col font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
+          <div className="font-Open font-semibold text-sm py-2  leading-5 text-[#1C1C1C] ">
             Partner Name:
-            <div className="flex gap-1 flex-wrap">
-              {partnerArr?.length > 0
-                ? partnerArr?.map((el: any, i: any) => {
-                    return <span className="font-Lato font-normal">{el}</span>;
-                  })
-                : "N/A"}
-            </div>
+            {partnerArr?.length > 0 ? (
+              partnerArr?.map((el: any, i: any) => {
+                return (
+                  <p className="flex font-Open font-normal text-xs w-full my-2">
+                    {el.toString()}
+                  </p>
+                );
+              })
+            ) : (
+              <p className="font-normal"> N/A</p>
+            )}
           </div>
         );
       },
@@ -204,23 +211,23 @@ const BulkLabelList = () => {
         <div>
           <Breadcrum label="Bulk Label List" />
         </div>
-        <div className="mx-4 ">
+        <div className="">
           <CustomTable
             rowData={bulkDownloadLabelList}
             columnsData={bulkDownloadColumns}
           />
         </div>
-        {totalItemCount > 0 && (
+        {/* {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
             itemsPerPageOptions={[
-                      10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
-                    ]}
+              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+            ]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
             // rightmodalPagination={true}
           />
-        )}
+        )} */}
       </div>
       {/* ) : (
         <div>
