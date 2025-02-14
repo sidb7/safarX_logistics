@@ -197,6 +197,10 @@ const WalletRecharge = () => {
 
   const walletMenu = [
     {
+      label: "1",
+      value: "1",
+    },
+    {
       label: "100",
       value: "100",
     },
