@@ -743,7 +743,7 @@ const idHelper = (
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
                   <div
-                    className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
+                    className="flex gap-x-1 items-center cursor-pointer underline hover:text-[#004EFF] transition duration-300"
                     onClick={handleInformativeModal}
                   >
                     <div>
@@ -751,7 +751,7 @@ const idHelper = (
                         {capitalizeFirstLetter(renderStatus)}
                       </p>
                     </div>
-                    {/* {setInfoModalContent && (
+                    {setInfoModalContent && (
                       <div
                         className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
@@ -762,7 +762,7 @@ const idHelper = (
                           width="18px"
                         />
                       </div>
-                    )} */}
+                    )}
                   </div>
                 </div>
                 <div className="font-Open font-normal leading-5 text-sm ">
@@ -772,10 +772,10 @@ const idHelper = (
                 {showAllTags && (
                   <div className="relative group">
                     <div className="flex relative group w-[100px]">
-                      <div className="font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
+                      <div className="text-center font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
                         {capitalizeFirstLetter(tags[0])}
                       </div>
-                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
+                      {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
 
                       {tags.length > 1 && (
                         <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -1252,7 +1252,7 @@ export const columnHelperForNewOrder = (
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
                   <div
-                    className="flex gap-x-1 items-center cursor-pointer underline text-[#004EFF] transition duration-300"
+                    className="flex gap-x-1 items-center cursor-pointer underline hover:text-[#004EFF] transition duration-300"
                     onClick={handleInformativeModal}
                   >
                     <div>
@@ -1268,11 +1268,11 @@ export const columnHelperForNewOrder = (
                         className="cursor-pointer text-blue-500 hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
                       >
-                        {/* <img
+                        <img
                           src={InformativeIcon}
                           alt="Info Icon"
                           width="18px"
-                        /> */}
+                        />
                       </div>
                     )}
                   </div>
@@ -1309,16 +1309,16 @@ export const columnHelperForNewOrder = (
                 {showAllTags && (
                   <div className="relative group">
                     <div className="flex relative group w-[100px]">
-                      <span className="font-Open w-full bg-[#FEEEEB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
+                      <div className="text-center font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
                         {capitalizeFirstLetter(tags[0])}
-                      </span>
-                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
+                      </div>
+                      {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
 
                       {tags.length > 1 && (
-                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[200px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           {tags.map(
                             (tag: string, index: Key | null | undefined) => (
-                              <p className="bg-[#FEEEEB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
+                              <p className="bg-[#FFF6EB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
                                 {" "}
                                 {capitalizeFirstLetter(tag)}{" "}
                               </p>
