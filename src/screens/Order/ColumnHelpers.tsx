@@ -22,7 +22,7 @@ import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import ReverseIcon from "../../assets/reverseIcon.png";
 import { COMPANY_NAME, SELLER_WEB_URL } from "../../utils/ApiUrls";
-import { useEffect, useRef } from "react";
+import { Key, useEffect, useRef } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 import tickcircle from "../../assets/Order/tickcircle.svg";
@@ -729,11 +729,15 @@ const idHelper = (
         // });
       };
       const buyerConfirmation = rowsData?.isBuyerConfirmed;
+      const { tags } = info?.row?.original?.otherDetails || [];
+      const tagsString = tags?.join(", ");
+      const tagsLength = tagsString?.length;
 
+      const showAllTags = tagsLength > 10;
       // const buyerConfirmation = rowsData?.isBuyerConfirmed;
 
       return (
-        <div className="py-3">
+        <div className="py-3 w-[100px]">
           {
             <>
               <div className="flex flex-col gap-y-1">
@@ -747,7 +751,7 @@ const idHelper = (
                         {capitalizeFirstLetter(renderStatus)}
                       </p>
                     </div>
-                    {setInfoModalContent && (
+                    {/* {setInfoModalContent && (
                       <div
                         className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
@@ -758,12 +762,38 @@ const idHelper = (
                           width="18px"
                         />
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div className="font-Open font-normal leading-5 text-sm ">
                   {time}
                 </div>
+
+                {showAllTags && (
+                  <div className="relative group">
+                    <div className="flex relative group w-[100px]">
+                      <div className="font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
+                        {capitalizeFirstLetter(tags[0])}
+                      </div>
+                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
+
+                      {tags.length > 1 && (
+                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                          {tags.map(
+                            (tag: string, index: Key | null | undefined) => (
+                              <p className="bg-[#FFF6EB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
+                                {" "}
+                                {capitalizeFirstLetter(tag)}{" "}
+                              </p>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Tooltip for hover to show all tags */}
+                  </div>
+                )}
               </div>
 
               <div className="mt-2">
@@ -1060,6 +1090,12 @@ export const columnHelperForNewOrder = (
           rowData?.status?.[rowData?.status?.length - 1]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
+        const { tags } = info?.row?.original?.otherDetails || [];
+        const tagsString = tags?.join(", ");
+        const tagsLength = tagsString?.length;
+
+        const showAllTags = tagsLength > 10;
+
         const rows: any = [
           {
             title: "Pickup Address",
@@ -1216,7 +1252,7 @@ export const columnHelperForNewOrder = (
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
                   <div
-                    className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
+                    className="flex gap-x-1 items-center cursor-pointer underline text-[#004EFF] transition duration-300"
                     onClick={handleInformativeModal}
                   >
                     <div>
@@ -1232,11 +1268,11 @@ export const columnHelperForNewOrder = (
                         className="cursor-pointer text-blue-500 hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
                       >
-                        <img
+                        {/* <img
                           src={InformativeIcon}
                           alt="Info Icon"
                           width="18px"
-                        />
+                        /> */}
                       </div>
                     )}
                   </div>
@@ -1269,6 +1305,32 @@ export const columnHelperForNewOrder = (
                     ? date_DD_MMM_YYYY_HH_MM_SS(createdAt)
                     : time}
                 </div>
+
+                {showAllTags && (
+                  <div className="relative group">
+                    <div className="flex relative group w-[100px]">
+                      <span className="font-Open w-full bg-[#FEEEEB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
+                        {capitalizeFirstLetter(tags[0])}
+                      </span>
+                      <img src={InformativeIcon} alt="Info Icon" width="18px" />
+
+                      {tags.length > 1 && (
+                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[200px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                          {tags.map(
+                            (tag: string, index: Key | null | undefined) => (
+                              <p className="bg-[#FEEEEB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
+                                {" "}
+                                {capitalizeFirstLetter(tag)}{" "}
+                              </p>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Tooltip for hover to show all tags */}
+                  </div>
+                )}
 
                 <div className="py-2">
                   {buyerConfirmation === "BUYER CANCELLED" ? (
