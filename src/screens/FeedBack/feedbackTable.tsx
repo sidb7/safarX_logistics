@@ -139,7 +139,18 @@ function FeedbackTable({
         );
       },
       cell: (info: any) => {
-        return <div className="flex px-2 ">{info.getValue()}</div>;
+        return (
+          <div className="relative group w-[100px]">
+            <span className="font-Open font-normal leading-5 text-xs line-clamp-2">
+              {info?.getValue()}
+            </span>
+            {
+              <div className="absolute left-0 top-full mt-1 w-[200px] p-2 bg-white text-gray-600 text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                {info?.getValue()}
+              </div>
+            }
+          </div>
+        );
       },
     }),
   ];
@@ -151,9 +162,7 @@ function FeedbackTable({
       {totalItemCount > 0 && (
         <Pagination
           totalItems={totalItemCount}
-          itemsPerPageOptions={[
-            10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
-          ]}
+          itemsPerPageOptions={[20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]}
           onPageChange={onPageIndexChange}
           onItemsPerPageChange={onPerPageItemChange}
         />

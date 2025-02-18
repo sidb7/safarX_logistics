@@ -2220,7 +2220,7 @@ const Index = () => {
                 </>
               ) : (
                 <div>
-                  {isLgScreen ? (
+                  {
                     isErrorPage ? (
                       <Errors
                         errorData={errorData}
@@ -2239,25 +2239,26 @@ const Index = () => {
                         />
                       </>
                     )
-                  ) : (
-                    <div className="border border-white my-5">
-                      {orders?.length > 0 ? (
-                        <>
-                          {orders?.map((data: any, i: any) => (
-                            <OrderCard
-                              data={data}
-                              currentStatus={tabs[tabStatusId].value}
-                              orderActions={orderActions}
-                            />
-                          ))}
-                        </>
-                      ) : (
-                        <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
-                          No Data Found
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    // : (
+                    //   <div className="border border-white my-5">
+                    //     {/* {orders?.length > 0 ? (
+                    //       <>
+                    //         {orders?.map((data: any, i: any) => (
+                    //           <OrderCard
+                    //             data={data}
+                    //             currentStatus={tabs[tabStatusId].value}
+                    //             orderActions={orderActions}
+                    //           />
+                    //         ))}
+                    //       </>
+                    //     ) : (
+                    //       <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+                    //         No Data Found
+                    //       </div>
+                    //     )} */}
+                    //   </div>
+                    // )
+                  }
                 </div>
               )}
             </div>
