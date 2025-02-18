@@ -352,6 +352,12 @@ const UPDATETRACKINGBYBUYER = `${SELLER_BASE_URL}/tracking/updateTrackingByBuyer
 const GETALLTRACKINGBUYERREQUEST = `${SELLER_BASE_URL}/tracking/getAllTrackingBuyerRequest`;
 const BUYERREQUESTACTION = `${SELLER_BASE_URL}/tracking/buyerRequestAction`;
 
+//Lost and Damaged
+const FETCH_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersSeller`;
+const UPDATE_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/updateLDOrdersSeller`;
+
+
+
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
 const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
@@ -713,5 +719,7 @@ export {
   FETCH_BULK_LABELS_REPORT_DOWNLOAD,
   FETCH_LABELS_REPORT_LIST,
   DOWNLOAD_S3_LABEL,
-  GET_COUNT_AMAZON_ORDER
+  GET_COUNT_AMAZON_ORDER,
+  FETCH_LD_ORDERS,
+  UPDATE_LD_ORDERS
 };
