@@ -67,6 +67,10 @@ const Reports = () => {
       label: "WHATSAPP REPORT",
       value: "WHATSAPP_REPORT",
     },
+    {
+      label: "WALLET TRANSACTION REPORT",
+      value: "WALLET_TRANSACTION_REPORT",
+    },
   ];
 
   const convertEpoch = (epochDate: any) => {
