@@ -195,6 +195,72 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           localStorage.removeItem("amazon_store");
         }
 
+        // const { data: response } = await POST(GET_ALL_STORES, {});
+        // setLoading(false);
+        // if (response && response.data.length > 0) {
+        //   let channelSessionObj: any = localStorage.getItem("userInfo");
+        //   channelSessionObj = JSON.parse(channelSessionObj);
+        //   if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
+        //     channelSessionObj.nextStep.isChannelIntegrated = true;
+        //     localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+        //   }
+        //   let tempArr: any = [];
+        //   response?.data?.forEach((item: any) => {
+        //     const isShopifyAppKey = item?.hasOwnProperty("isShopifyApp")
+        //       ? { isShopifyApp: item?.isShopifyApp }
+        //       : {};
+        //     tempArr.push({
+        //       name: item?.storeName,
+        //       icon:
+        //         item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
+        //           ? ShopifyIconApp
+        //           : item?.channel === "SHOPIFY"
+        //           ? ShopifyIcon
+        //           : item?.channel === "WOOCOMMERCE"
+        //           ? WooIcon
+        //           : item?.channel === "ZOHO"
+        //           ? ZohoIcon
+        //           : item?.channel === "UNICOMMERCE"
+        //           ? UniCommerceIcon
+        //           : item?.channel === "AMAZON"
+        //           ? AmazonPngIcon
+        //           : item?.channel === "EASYECOM"
+        //           ? EasycomIcon
+        //           : ClickpostIcon,
+        //       iconLg:
+        //         item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
+        //           ? ShopifyIconLgApp
+        //           : item?.channel === "SHOPIFY"
+        //           ? ShopifyLg
+        //           : item?.channel === "WOOCOMMERCE"
+        //           ? WooLg
+        //           : item?.channel === "ZOHO"
+        //           ? ZohoIcon
+        //           : item?.channel === "UNICOMMERCE"
+        //           ? UniCommerceIcon
+        //           : item?.channel === "AMAZON"
+        //           ? AmazonPngIcon
+        //           : item?.channel === "EASYECOM"
+        //           ? EasycomIcon
+        //           : ClickpostIcon,
+        //       integrated: true,
+        //       storeId: item?.storeId,
+        //       channelName: item?.channel,
+        //       createdAt: item?.createdAt,
+        //       expiredToken: item?.expiredToken,
+        //       storeUrl: item?.storeUrl,
+        //       ...isShopifyAppKey,
+        //     });
+        //   });
+        //   setChannelData({ channels: tempArr });
+        // } else {
+        //   let channelSessionObj: any = localStorage.getItem("userInfo");
+        //   channelSessionObj = JSON.parse(channelSessionObj);
+        //   if (channelSessionObj?.nextStep?.isChannelIntegrated) {
+        //     channelSessionObj.nextStep.isChannelIntegrated = false;
+        //     localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+        //   }
+        // }
         const { data: response } = await POST(GET_ALL_STORES, {});
         setLoading(false);
         if (response && response.data.length > 0) {
@@ -204,54 +270,60 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
             channelSessionObj.nextStep.isChannelIntegrated = true;
             localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
           }
+
           let tempArr: any = [];
-          response?.data?.forEach((item: any) => {
-            const isShopifyAppKey = item?.hasOwnProperty("isShopifyApp")
-              ? { isShopifyApp: item?.isShopifyApp }
-              : {};
-            tempArr.push({
-              name: item?.storeName,
-              icon:
-                item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
-                  ? ShopifyIconApp
-                  : item?.channel === "SHOPIFY"
-                  ? ShopifyIcon
-                  : item?.channel === "WOOCOMMERCE"
-                  ? WooIcon
-                  : item?.channel === "ZOHO"
-                  ? ZohoIcon
-                  : item?.channel === "UNICOMMERCE"
-                  ? UniCommerceIcon
-                  : item?.channel === "AMAZON"
-                  ? AmazonPngIcon
-                  : item?.channel === "EASYECOM"
-                  ? EasycomIcon
-                  : ClickpostIcon,
-              iconLg:
-                item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
-                  ? ShopifyIconLgApp
-                  : item?.channel === "SHOPIFY"
-                  ? ShopifyLg
-                  : item?.channel === "WOOCOMMERCE"
-                  ? WooLg
-                  : item?.channel === "ZOHO"
-                  ? ZohoIcon
-                  : item?.channel === "UNICOMMERCE"
-                  ? UniCommerceIcon
-                  : item?.channel === "AMAZON"
-                  ? AmazonPngIcon
-                  : item?.channel === "EASYECOM"
-                  ? EasycomIcon
-                  : ClickpostIcon,
-              integrated: true,
-              storeId: item?.storeId,
-              channelName: item?.channel,
-              createdAt: item?.createdAt,
-              expiredToken: item?.expiredToken,
-              storeUrl: item?.storeUrl,
-              ...isShopifyAppKey,
+          response?.data
+            ?.filter(
+              (item: any) => !(item.channel === "SHOPIFY" && !item.isShopifyApp)
+            ) // Filter out unwanted Shopify stores
+            .forEach((item: any) => {
+              const isShopifyAppKey = item?.hasOwnProperty("isShopifyApp")
+                ? { isShopifyApp: item?.isShopifyApp }
+                : {};
+              tempArr.push({
+                name: item?.storeName,
+                icon:
+                  item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
+                    ? ShopifyIconApp
+                    : item?.channel === "SHOPIFY"
+                    ? ShopifyIcon
+                    : item?.channel === "WOOCOMMERCE"
+                    ? WooIcon
+                    : item?.channel === "ZOHO"
+                    ? ZohoIcon
+                    : item?.channel === "UNICOMMERCE"
+                    ? UniCommerceIcon
+                    : item?.channel === "AMAZON"
+                    ? AmazonPngIcon
+                    : item?.channel === "EASYECOM"
+                    ? EasycomIcon
+                    : ClickpostIcon,
+                iconLg:
+                  item?.hasOwnProperty("isShopifyApp") && item?.isShopifyApp
+                    ? ShopifyIconLgApp
+                    : item?.channel === "SHOPIFY"
+                    ? ShopifyLg
+                    : item?.channel === "WOOCOMMERCE"
+                    ? WooLg
+                    : item?.channel === "ZOHO"
+                    ? ZohoIcon
+                    : item?.channel === "UNICOMMERCE"
+                    ? UniCommerceIcon
+                    : item?.channel === "AMAZON"
+                    ? AmazonPngIcon
+                    : item?.channel === "EASYECOM"
+                    ? EasycomIcon
+                    : ClickpostIcon,
+                integrated: true,
+                storeId: item?.storeId,
+                channelName: item?.channel,
+                createdAt: item?.createdAt,
+                expiredToken: item?.expiredToken,
+                storeUrl: item?.storeUrl,
+                ...isShopifyAppKey,
+              });
             });
-          });
+
           setChannelData({ channels: tempArr });
         } else {
           let channelSessionObj: any = localStorage.getItem("userInfo");
