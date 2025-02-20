@@ -10,8 +10,11 @@ import { POST } from "../../../utils/webService";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import { strongpasswordRegex } from "../../../utils/regexCheck";
+import AccessDenied from "../../../components/AccessDenied";
 import InfoCircle from "../../../assets/info-circle.svg";
 import OneButton from "../../../components/Button/OneButton";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
+
 
 interface PassModalProps {
   isPassModalOpen: boolean;
@@ -100,8 +103,15 @@ function PassModal(props: PassModalProps) {
 
     return "";
   }
+ 
+
+   const isActive = checkPageAuthorized("Change Password");
+
 
   return (
+
+    <>
+    
     <RightSideModal
       isOpen={isPassModalOpen}
       onClose={() => {
@@ -110,6 +120,9 @@ function PassModal(props: PassModalProps) {
       className={` top-[50%] w-full fixed outline-none md:inset-y-0 md:right-0 md:bg-white md:w-1/3 `}
       // wrapperClassName="!justify-start outline-none"
     >
+      {isActive || isActive === undefined ? (
+
+        <>
       <div className="flex flex-col w-full p-4 mt-5 ">
         <div className="flex justify-between w-full ">
           <div className="text-[24px] font-normal">Change Password</div>
@@ -253,7 +266,17 @@ function PassModal(props: PassModalProps) {
           </div>
         </footer>
       </div>
+
+      </>
+      ) : (
+         <div>
+           <AccessDenied />
+         </div>
+       )}
     </RightSideModal>
+
+    </>
+
   );
 }
 
