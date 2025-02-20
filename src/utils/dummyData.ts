@@ -34,6 +34,7 @@ import ClickpostIcon from "../assets/Catalogue/clickpost.png";
 import EasycomIcon from "../assets/Catalogue/easycom.png";
 import ShopifyIconApp from "../assets/shopifyApp.svg";
 import ShopifyIconLgApp from "../assets/shopifyAppLg.svg";
+import baseIcon from "../assets/Catalogue/base.jpg";
 
 export const insufficientBalance = [
   {
@@ -729,6 +730,14 @@ export const ChannelIntegrationCarts = {
       integrated: false,
       storesIntegrated: 5,
       channel: "UNICOMMERCE",
+    },
+    {
+      name: "STORE_NAME",
+      icon: baseIcon,
+      iconLg: baseIcon,
+      integrated: false,
+      storesIntegrated: 5,
+      channel: "BASE",
     },
     // {
     //   name: "Woo",
