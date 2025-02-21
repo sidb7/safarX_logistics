@@ -5,6 +5,7 @@ import "../../styles/plan.css";
 import {
   GET_ALL_PLANS,
   GET_FEATURES_PLANS,
+  GET_PENDING_PLANS,
   POST_ASSIGN_PLANV3,
   POST_CREATE_PLAN,
 } from "../../utils/ApiUrls";
@@ -23,12 +24,15 @@ import { Spinner } from "../../components/Spinner";
 import ToastCustom from "../toastCutom";
 import OneButton from "../../components/Button/OneButton";
 import FeatureRateCard from "./featureRateCardDetails";
+import { ResponsiveState } from "../../utils/responsiveState";
+import CustomButton from "../../components/Button";
 
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
+  const { isMdScreen } = ResponsiveState();
 
   // const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("Plans");
@@ -39,6 +43,7 @@ const Index = (props: ITypeProps) => {
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [featureRateCardPlan, setFeatureRateCardPlan] = useState([]);
+  const [pendingPlan, setPendingPlan] = useState<any>({});
 
   const ModalContent = () => {
     return (
@@ -299,6 +304,18 @@ const Index = (props: ITypeProps) => {
   //     ],
   //   },
   // ];
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success && response?.data?.length > 0) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -309,7 +326,6 @@ const Index = (props: ITypeProps) => {
             <div className="">
               <Breadcrum label="Plans" />
             </div>
-
             {loading ? (
               <div className="flex items-center justify-center w-full h-[40vh]">
                 <Spinner />
@@ -370,6 +386,67 @@ const Index = (props: ITypeProps) => {
                   <ComparePlans />
                 </div> */}
               </>
+            )}
+            {!loading && featureRateCardPlan?.length > 0 ? (
+              <div
+                className={`${
+                  isMdScreen
+                    ? "flex items-center justify-between h-[60px] rounded-lg p-9 md:p-5  bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]"
+                    : "flex items-center text-center px-3 py-4 rounded-lg  bg-[#E5E4FF]  mb-6 mx-5"
+                }`}
+              >
+                {isMdScreen ? (
+                  <p className=" font-Open md:font-Lato font-normal md:font-semibold text-base lg:text-xl leading-3 lg:leading-[26px] text-[#494949]">
+                    Not sure which plan to choose?
+                  </p>
+                ) : (
+                  <></>
+                )}
+
+                <div className="flex gap-x-2">
+                  {Object.keys(pendingPlan).length !== 0 ? (
+                    <>
+                      <div className="">
+                        <CustomButton
+                          className=" !bg-[#FFFFFF] !border-[#FABCAF] !text-[#F35838] lg:!py-2 lg:!px-4 !font-Open !border-[1px] !rounded-sm lg:!border-2 lg:!rounded-[4px] lg:hover:-translate-y-1 lg:hover:scale-100 lg:duration-300"
+                          text={"Pending Plan!"}
+                          textClassName="!font-normal !text-[12px]"
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+
+                  <div className="">
+                    {/* <ServiceButton
+                  className=" md:!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open text-xs md:text-sm font-normal md:font-semibold leading-4 whitespace-nowrap"
+                  text="TALK TO OUR SUPPORT"
+                  onClick={() => {
+                    window.open(
+                      "https://support.shipyaari.com/tickets",
+                      "_blank"
+                    );
+                  }}
+                /> */}
+                    <OneButton
+                      text={"TALK TO OUR SUPPORT"}
+                      onClick={() => {
+                        window.open(
+                          "https://support.shipyaari.com/tickets",
+                          "_blank"
+                        );
+                      }}
+                      variant="primary"
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
             )}
           </div>
           {/* Bottom NavBar */}

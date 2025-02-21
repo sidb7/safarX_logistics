@@ -452,28 +452,31 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 {/* <img src={ProfileLogo} alt="" /> */}
                 {isOpen && (
                   <div
-                    className="origin-top-right z-50 absolute right-2 mt-8 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                    className="origin-top-right z-50 absolute right-0 mt-9 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
                     <div className="py-0.5" role="none">
                       <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
                         role="menuitem"
-                        onClick={() => navigate("/profile")}
+                        onClick={() => {
+                          navigate("/profile");
+                          setIsOpen(false);
+                        }}
                       >
                         My Profile
                       </button>
-                      <button
+                      {/* <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
                         onClick={() => navigate("/settings")}
                       >
                         Settings
-                      </button>
+                      </button> */}
                       <button
-                        className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
                         role="menuitem"
                         onClick={() => logoutHandler()}
                       >
