@@ -139,20 +139,19 @@ function AddUser() {
           />
         </div>
         <div>
-          <CustomInputBox
-            label="Password"
-            minLength={8}
-            maxLength={16}
-            value={addUserData?.password}
-            inputType={viewPassWord ? "text" : "password"}
-            setVisibility={setViewPassWord}
-            isRightIcon={true}
-            onClick={() => {}}
-            visibility={viewPassWord}
-            rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
-            onChange={(e) =>
-              onChangeAddUserCardHandler("password", e.target.value)
-            }
+          <CustomDropDown
+            value={addUserData.roleId}
+            options={roleData
+              ?.filter((rate: any) => rate.roleName !== "SUPERUSER")
+              .map((rate: any) => ({
+                label: rate.roleName,
+                value: rate.roleId,
+              }))}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              copyDataFromHandler(e);
+            }}
+            selectClassName="rounded-md bg-[#FEFEFE]"
+            heading="Select Role"
           />
         </div>
         <div>
@@ -174,19 +173,20 @@ function AddUser() {
           />
         </div>
         <div>
-        <CustomDropDown
-            value={addUserData.roleId}
-            options={roleData
-              ?.filter((rate: any) => rate.roleName !== "SUPERUSER")
-              .map((rate: any) => ({
-                label: rate.roleName,
-                value: rate.roleId,
-              }))}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              copyDataFromHandler(e);
-            }}
-            selectClassName="rounded-md bg-[#FEFEFE]"
-            heading="Select Role"
+          <CustomInputBox
+            label="Password"
+            minLength={8}
+            maxLength={16}
+            value={addUserData?.password}
+            inputType={viewPassWord ? "text" : "password"}
+            setVisibility={setViewPassWord}
+            isRightIcon={true}
+            onClick={() => {}}
+            visibility={viewPassWord}
+            rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
+            onChange={(e) =>
+              onChangeAddUserCardHandler("password", e.target.value)
+            }
           />
         </div>
       </div>
