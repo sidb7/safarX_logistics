@@ -320,7 +320,7 @@ const Index = (props: ITypeProps) => {
       }
     })();
   }, []);
-
+  
   const assignPendingPlan = async () => {
     setLoaderForAssignValue(true);
     let payload = { planId: pendingPlan?.planId };
@@ -457,6 +457,7 @@ const Index = (props: ITypeProps) => {
                           textClassName="!font-normal !text-[12px]"
                           onClick={() => {
                             setIsModalOpenPlan(true);
+                            setIsModalOpen(true);
                           }}
                         />
                       </div>
