@@ -28,6 +28,7 @@ import Card from "../../../Onboarding/Kyc/TermsAndAgreement/Card";
 import WelcomeHeader from "../../../Onboarding/Kyc/welcomeHeader";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
 import GstContent from "../../../Onboarding/Kyc/TermsAndAgreement/gstAgreementContent";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface IKycSectionProps {
   loadingState?: boolean;
@@ -62,14 +63,17 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
   const [otpSuccess, setOtpSuccess] = useState<boolean>(false);
   const [acceptTnC, setAcceptTnC] = useState<any>();
   const [isBusinessVerified, setIsBusinessVerified] = useState(false);
-  const sellerId = localStorage.getItem("sellerId");
+
   const [isModalOpenForServiceAgreement, setIsModalOpenForServiceAgreement] =
     useState<any>(false);
   const [isModalOpenForNonGstAgreement, setIsModalOpenForNonGstAgreement] =
     useState<any>(false);
   const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
-  const userNameForGst = localStorage.getItem("userName");
-
+  const { sellerInfo } = sessionManager({});
+  // const userNameForGst = localStorage.getItem("userName");
+  const userNameForGst = sellerInfo?.name;
+  // const sellerId = localStorage.getItem("sellerId");
+  const sellerId = sellerInfo?.sellerId;
   // Handle GST question checkbox change
 
   // Handle selection change
@@ -525,8 +529,9 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
   }, [otpNumber]);
 
   useEffect(() => {
-    let data = localStorage.getItem("userInfo") as any;
-    data = JSON.parse(data);
+    // let data = localStorage.getItem("userInfo") as any;
+    const { sessionId, sellerInfo } = sessionManager({});
+    let data = sellerInfo;
 
     if (data !== "" && data !== null) {
       setIsUserState(data);

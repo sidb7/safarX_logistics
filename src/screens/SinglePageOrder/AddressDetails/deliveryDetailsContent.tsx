@@ -18,6 +18,7 @@ import { capitalizeFirstLetter } from "../../../utils/utility";
 import ErrorIcon from "../../../assets/common/info-circle.svg";
 import { gstRegex } from "../../../utils/regexCheck";
 import toast from "react-hot-toast";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IContact {
   name: string;
@@ -115,8 +116,11 @@ const DeliveryDetailsContent: React.FunctionComponent<
   });
   const [isnewData, setIsNewData]: any = useState(false);
   const [isAutoPopulateData, setIsAutoPopulateData]: any = useState(false);
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
+
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  const { sessionId, sellerInfo } = sessionManager({});
+  let kycCheck = sellerInfo;
+  // kycCheck = JSON.parse(kycCheck);
 
   useEffect(() => {
     setDeliveryDetails(details);

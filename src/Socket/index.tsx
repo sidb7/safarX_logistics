@@ -7,11 +7,14 @@ import {
 } from "../components/GlobalToast/GlobalToast";
 import { setWalletBalance } from "../redux/reducers/userReducer";
 import { channelState } from "../redux/reducers/syncChannel";
+import sessionManager from "../utils/sessionManager";
 
 let socket: Socket | null = null;
 
 export const initSocket = (): Socket => {
-  const sellerId = localStorage.getItem("sellerId");
+  const { sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
+  // const sellerId = localStorage.getItem("sellerId");
   const token = sellerId
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";
@@ -41,7 +44,9 @@ export const initSocket = (): Socket => {
 };
 
 const connectSocket = (dispatch?: any) => {
-  const sellerId = localStorage.getItem("sellerId");
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const token = sellerId
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";

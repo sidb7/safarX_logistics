@@ -29,6 +29,7 @@ import {
 } from "../../../redux/reducers/dashboardExceptionReducer";
 
 import Revenue from "./Revenue/index";
+import sessionManager from "../../../utils/sessionManager";
 
 interface KycData {
   isReturningUser: boolean;
@@ -345,8 +346,9 @@ const Dashboard: React.FC = () => {
   ]);
 
   useEffect(() => {
-    const kycData = retrieveLocalStorageData("kycValue") as KycData | null;
-
+    // const kycData = retrieveLocalStorageData("kycValue") as KycData | null;
+    const { sessionId, sellerInfo } = sessionManager({});
+    const kycData = sellerInfo as KycData | null;
     if (kycData?.isReturningUser !== undefined) {
       setIsReturningUser(kycData.isReturningUser);
     }

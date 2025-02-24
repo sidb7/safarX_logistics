@@ -5,6 +5,7 @@ import NavigationIcon from "../../assets/navigatorIcon.svg";
 import CustomButton from "../Button";
 import "../../styles/progressBar.css";
 import { useNavigate } from "react-router-dom";
+import sessionManager from "../../utils/sessionManager";
 // import SucessCenterModal from "./sucessCenterModal";
 // import CenterModal from "../CustomModal/customCenterModal";
 // import KycVerify from "./kycVerify";
@@ -18,9 +19,15 @@ interface IIndexProps {}
 
 const Index: React.FunctionComponent<IIndexProps> = () => {
   const navigate = useNavigate();
-
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
+  const { sessionId, sellerInfo } = sessionManager({});
+  // const kyc = localStorage.getItem("setKycValue") as any;
+  // if (sellerInfo?.nextStep) {
+  //   const kyc = sellerInfo.nextStep.kyc;
+  //   setKycValue(kyc);
+  // }
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  let kycCheck = sellerInfo;
+  // kycCheck = JSON.parse(kycCheck);
   const onboardingStatus = kycCheck?.nextStep;
 
   let dataset: any = {
