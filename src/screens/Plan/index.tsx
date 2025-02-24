@@ -308,6 +308,18 @@ const Index = (props: ITypeProps) => {
   //     ],
   //   },
   // ];
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success && response?.data?.length > 0) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   const assignPendingPlan = async () => {
     setLoaderForAssignValue(true);
