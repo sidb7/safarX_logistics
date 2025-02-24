@@ -163,7 +163,7 @@ export const SettingTab = () => {
               </div>
             </div>
 
-            <div
+            {/* <div
               className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
               onClick={() => navigate(`/settings/system-logs`)}
               style={{
@@ -181,11 +181,11 @@ export const SettingTab = () => {
                   <img src={RightArrowIcon} alt="" className="ml-4" />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* /////////// ---- Impersonation Logs ----- */}
 
-            <div
+            {/* <div
               className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
               onClick={() => navigate(`impersonation-logs`)}
               style={{
@@ -203,7 +203,7 @@ export const SettingTab = () => {
                   <img src={RightArrowIcon} alt="" className="ml-4" />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* ///////////// */}
 

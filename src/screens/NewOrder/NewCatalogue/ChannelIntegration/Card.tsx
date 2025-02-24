@@ -37,6 +37,9 @@ const Card = (props: any) => {
         } else if (channel.channel === "CLICKPOST") {
           const url = `https://dashboard.clickpost.in/login`;
           window.location.href = url;
+        } else if (channel.channel === "BASE") {
+          const url = `https://base.com/en-IN/register`;
+          window.location.href = url;
         } else {
           setModalData({ isOpen: true, modalData: channel });
         }

@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { useSelector } from "react-redux";
 import { LARGE_LOGO, SMALL_LOGO, COMPANY_NAME } from "../../utils/ApiUrls";
+import { sideBarMenusData } from "../../utils/dummyData";
 
 interface INavBarProps {
   openMobileSideBar: any;
@@ -19,34 +20,38 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const roles = useSelector((state: any) => state?.roles);
   const navigate = useNavigate();
   const location = useLocation();
-  const [sideBarMenus, setSideBarMenus]: any = useState<any>([]);
+  const [sideBarMenus, setSideBarMenus]: any = useState<any>(
+    sideBarMenusData || []
+  );
+  // console.log("🚀 ~ sideBarMenus:", sideBarMenus)
+  // console.log("🚀 ~ sideBarMenus:", sideBarMenus);
   const { isLgScreen } = ResponsiveState();
   const [isHover, setIsHover]: any = useState<boolean>(false);
 
-  useEffect(() => {
-    let { roles: data, loading } = roles;
-    let tempArr = JSON.parse(JSON.stringify(data[0]?.menu || []));
-    if (loading === false && data?.length > 0) {
-      const filterActiveMenus: any = (menuArray: any[]) => {
-        return menuArray
-          .filter((menuItem) => menuItem.isActive)
-          .map((menuItem) => ({
-            ...menuItem,
-            isChild: false,
-            isActivePath: false,
-            menu: menuItem.menu ? filterActiveMenus(menuItem.menu) : [],
-            pages: menuItem.pages?.filter((page: any) => page.isActive) || [],
-          }));
-      };
+  // useEffect(() => {
+  //   let { roles: data, loading } = roles;
+  //   let tempArr = JSON.parse(JSON.stringify(data[0]?.menu || []));
+  //   if (loading === false && data?.length > 0) {
+  //     const filterActiveMenus: any = (menuArray: any[]) => {
+  //       return menuArray
+  //         .filter((menuItem) => menuItem.isActive)
+  //         .map((menuItem) => ({
+  //           ...menuItem,
+  //           isChild: false,
+  //           isActivePath: false,
+  //           menu: menuItem.menu ? filterActiveMenus(menuItem.menu) : [],
+  //           pages: menuItem.pages?.filter((page: any) => page.isActive) || [],
+  //         }));
+  //     };
 
-      let tempArr = filterActiveMenus(data[0]?.menu || []);
+  //     let tempArr = filterActiveMenus(data[0]?.menu || []);
 
-      setSideBarMenus([...tempArr]);
-      if (tempArr.length > 0) {
-        updateActivetab(tempArr);
-      }
-    }
-  }, [roles]);
+  //     setSideBarMenus([...tempArr]);
+  //     if (tempArr.length > 0) {
+  //       updateActivetab(tempArr);
+  //     }
+  //   }
+  // }, [roles]);
 
   useEffect(() => {
     if (!sideBarMenus.length) return;
@@ -61,14 +66,54 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     mobileWidth: `${openMobileSideBar ? "100%" : "0"}`,
   };
 
+  // const updateActivetab = (arr: any = []) => {
+  //   const { pathname } = location;
+  //   const [parent, ...childs] = pathname
+  //     .split("/")
+  //     .filter((path: any) => path !== "");
+  //   arr?.forEach((e: any) => {
+  //     if (e.menu) {
+  //       if (e.isActivePath) e.isActivePath = !e.isActivePath;
+  //       e.menu?.forEach((e1: any) => {
+  //         if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
+  //         const [parentFromPaths, ...restChild] = e1.path
+  //           .split("/")
+  //           .filter((path: any) => path !== "");
+  //         if (parent === parentFromPaths) {
+  //           e.isActivePath = true;
+  //         }
+  //         if (pathname === e1.path) {
+  //           e1.isActivePath = true;
+  //         }
+  //         if (e1.menu.menu) {
+  //           e1.menu.menu.forEach((e2: any) => {
+  //             if (e2.isActivePath) e2.isActivePath = !e2.isActivePath;
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  //   setSideBarMenus([...arr]);
+  // };
+
   const updateActivetab = (arr: any = []) => {
     const { pathname } = location;
     const [parent, ...childs] = pathname
       .split("/")
       .filter((path: any) => path !== "");
+
     arr?.forEach((e: any) => {
-      if (e.menu) {
-        if (e.isActivePath) e.isActivePath = !e.isActivePath;
+      // Reset active state
+      if (e.isActivePath) e.isActivePath = !e.isActivePath;
+
+      // Handle items with direct paths
+      if ((!e.menu || e.menu.length === 0) && e.path) {
+        if (pathname === e.path) {
+          e.isActivePath = true;
+        }
+      }
+      // Handle items with child menus
+      else if (e.menu) {
         e.menu?.forEach((e1: any) => {
           if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
           const [parentFromPaths, ...restChild] = e1.path
@@ -121,6 +166,47 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   };
 
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
+
+  const handleMenuClick = (index: number, element: any) => {
+    // If menu is empty and path exists, navigate directly
+    if ((!element.menu || element.menu.length === 0) && element.path) {
+      if (element.path.startsWith("https://")) {
+        window.open(element.path, "_blank");
+        return;
+      }
+
+      // Update active states before navigation
+      let tempArr = sideBarMenus;
+      tempArr?.forEach((e: any) => {
+        e.isActivePath = false;
+        if (e.menu) {
+          e.menu?.forEach((e1: any) => {
+            e1.isActivePath = false;
+            if (e1.menu.menu) {
+              e1.menu.menu.forEach((e2: any) => {
+                e2.isActivePath = false;
+              });
+            }
+          });
+        }
+      });
+      tempArr[index].isActivePath = true;
+      setSideBarMenus([...tempArr]);
+
+      // Handle navigation
+      navigate(element.path);
+
+      // Handle mobile menu closing
+      if (!isLgScreen) {
+        setMobileSideBar(false);
+        handleClose();
+      }
+      return;
+    }
+
+    // Otherwise use existing child menu toggle logic
+    opneAndCloseChild(index, element);
+  };
 
   const opneAndCloseChild = (index: number, element: any) => {
     const { name, isChild } = element;
@@ -193,7 +279,8 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   className={`h-10 flex items-center rounded-lg px-2
 } w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
                   onClick={() => {
-                    opneAndCloseChild(index, e);
+                    // opneAndCloseChild(index, e);
+                    handleMenuClick(index, e);
                   }}
                 >
                   <img
@@ -355,7 +442,8 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                     <div
                       className={` flex items-center justify-between w-full text-sm font-semibold leading-5 capitalize overflow-hidden`}
                       onClick={() => {
-                        opneAndCloseChild(index, e);
+                        // opneAndCloseChild(index, e);
+                        handleMenuClick(index, e);
                       }}
                     >
                       <p className={` whitespace-nowrap`}>{e.name} </p>

@@ -227,7 +227,10 @@ const MyRoutes: React.FC = () => {
 
       {/* onboarding routes  */}
       <Route>
-        <Route path="/onboarding/signup/:genReferralCode?" element={<SignUpScreen />} />
+        <Route
+          path="/onboarding/signup/:genReferralCode?"
+          element={<SignUpScreen />}
+        />
         <Route path="/onboarding/sendotp" element={<SendOTPScreen />} />
         <Route path="/onboarding/verifyotp" element={<VerifyOTPScreen />} />
         <Route
@@ -635,7 +638,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/orders/rule-engine"
+            path="/catalogues/rule-engine"
             element={
               <ProtectedRoute>
                 <RuleEngine />
