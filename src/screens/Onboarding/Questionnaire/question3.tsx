@@ -12,6 +12,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
 import { LARGE_LOGO, COMPANY_NAME } from "../../../utils/ApiUrls";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -57,8 +58,9 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   const question = questionsData[2]?.question;
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const sellerProducts: any = [];
 
   for (let i = 0; i < questionsData.length; i++) {

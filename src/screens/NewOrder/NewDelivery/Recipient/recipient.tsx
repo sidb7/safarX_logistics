@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DroneDelivery from "../../../../assets/Delivery/DroneDelivery.gif";
 import CargoRating from "../../../../assets/Delivery/CargoRating.gif";
 import Checkbox from "../../../../components/CheckBox";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface IRecipientType {
   orderType: string;
@@ -21,9 +22,12 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
   const isError = inputError && !orderType;
 
   const [businessType, setBusinessType] = useState<any>(() => {
-    const userInfoString = localStorage.getItem("userInfo");
+    const { sessionId, sellerInfo } = sessionManager({});
+    // const userInfoString = localStorage.getItem("userInfo");
+    const userInfoString = sellerInfo;
     if (userInfoString) {
-      const userInfo = JSON.parse(userInfoString);
+      // const userInfo = JSON.parse(userInfoString);
+      const userInfo = userInfoString;
       return userInfo.businessType;
     }
     return null;

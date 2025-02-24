@@ -80,6 +80,7 @@ import UnicommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
 import { timerObject } from "../../redux/reducers/syncChannel";
 import WhatsappIcon from "../../assets/whatsappIcon.svg";
 import DeltaOnBlaze from "./deltaOnBlaze";
+import sessionManager from "../../utils/sessionManager";
 
 let allOrdersCount: any;
 const ordersArr = [
@@ -179,7 +180,8 @@ const Index = () => {
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
-
+  const [buyerConfirmationStatus, setBuyerConfirmationStatus]: any =
+    useState("");
   const scrollRef: any = useRef(null);
 
   let thirtyDaysAgo = new Date();
@@ -300,7 +302,6 @@ const Index = () => {
 
   const [fullfillment, setFullfillment] = useState();
   const [unFullfillment, setUnFullfillment] = useState();
-
   //  // Add ref for the abort controller
   //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
 
@@ -319,11 +320,15 @@ const Index = () => {
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
 
-  let syncChannelTextObj: any = localStorage.getItem("userInfo");
-  syncChannelTextObj = JSON.parse(syncChannelTextObj);
+  // let syncChannelTextObj: any = localStorage.getItem("userInfo");
+  const { sellerInfo } = sessionManager({});
+  let syncChannelTextObj = sellerInfo;
+  // syncChannelTextObj = JSON.parse(syncChannelTextObj);
 
-  let kycValue: any = localStorage.getItem("kycValue");
-  kycValue = JSON.parse(kycValue);
+  // let kycValue: any = localStorage.getItem("kycValue");
+
+  let kycValue = sellerInfo;
+  // kycValue = JSON.parse(kycValue);
 
   let syncTimerState = useSelector((state: any) => state?.channel?.time?.time);
 
@@ -887,12 +892,14 @@ const Index = () => {
       awbs: payload?.awbs,
       source: "WEBSITE",
     };
-
+    const { sessionId, sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
 
@@ -1118,7 +1125,9 @@ const Index = () => {
               setInfoModalContent,
               currentStatus,
               orderActions,
-              setInfoModalContentFunction
+              setInfoModalContentFunction,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1133,7 +1142,9 @@ const Index = () => {
               orderActions,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1147,7 +1158,9 @@ const Index = () => {
               orderActions,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1162,7 +1175,9 @@ const Index = () => {
               setInfoReverseModalFunction,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1370,7 +1385,7 @@ const Index = () => {
         itemsPerPage
       );
     }
-  }, [endDate, activeTab, searchedText]);
+  }, [endDate, activeTab, searchedText, buyerConfirmationStatus]);
 
   useEffect(() => {
     (async () => {
@@ -1609,11 +1624,14 @@ const Index = () => {
       isLoading: true,
       identifier: "Download_menifest_report",
     });
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     const response = await fetch(FETCH_MANIFEST_DATA, {
@@ -1677,12 +1695,14 @@ const Index = () => {
       awbs,
       source: "WEBSITE",
     };
-
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
 
@@ -1771,12 +1791,14 @@ const Index = () => {
       awbs,
       source: "WEBSITE",
     };
-
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {

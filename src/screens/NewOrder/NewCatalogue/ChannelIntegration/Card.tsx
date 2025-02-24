@@ -5,6 +5,7 @@ import {
 } from "../../../../utils/utility";
 import OrangeAlertIcon from "../../../../assets/info-circle-outline.svg";
 import OneButton from "../../../../components/Button/OneButton";
+import sessionManager from "../../../../utils/sessionManager";
 
 const Card = (props: any) => {
   const {
@@ -24,7 +25,9 @@ const Card = (props: any) => {
     if (setModalData) {
       if (e.target.textContent === "Integrate" || channel.expiredToken)
         if (channel.channel === "AMAZON") {
-          const sellerId: any = localStorage.getItem("sellerId");
+          // const sellerId: any = localStorage.getItem("sellerId");
+          const { sessionId, sellerInfo } = sessionManager({});
+          const sellerId = sellerInfo?.sellerId;
           const url = `https://sellercentral.amazon.in/apps/authorize/consent?application_id=amzn1.sp.solution.10046c77-e1de-42ab-a2c6-3f9da56707e4&version=beta&state=${sellerId}`;
           window.location.href = url;
         } else if (channel.channel === "EASYECOM") {

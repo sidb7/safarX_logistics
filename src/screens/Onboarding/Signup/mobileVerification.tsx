@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { constructNavigationObject, tokenKey } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
 import { Spinner } from "../../../components/Spinner";
+import sessionManager from "../../../utils/sessionManager";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -52,9 +53,12 @@ const Index = () => {
   // console.log("🚀 ~ Index ~ seconds:", seconds);
 
   useEffect(() => {
-    let temp: any = localStorage.getItem("userInfo");
-    temp = JSON.parse(temp);
-    setFirstName(temp?.firstName);
+    // let temp: any = localStorage.getItem("userInfo");
+    const { sellerInfo } = sessionManager({});
+    let temp = sellerInfo;
+    // temp = JSON.parse(temp);
+    // setFirstName(temp?.firstName);
+    setFirstName(temp?.name);
     setEmail(temp?.email);
   }, []);
 
@@ -137,16 +141,18 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
 
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
       if (response?.success === true) {
-        localStorage.setItem(
-          `${response?.data[0]?.sellerId}_${tokenKey}`,
-          response?.data[0]?.token
-        );
-        localStorage.setItem("userName", response?.data[0]?.name);
-        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        // localStorage.setItem(
+        //   `${response?.data[0]?.sellerId}_${tokenKey}`,
+        //   response?.data[0]?.token
+        // );
+        // localStorage.setItem("userName", response?.data[0]?.name);
+        // localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
+
         // setLocalStorage(tokenKey, response?.data[0]?.token);
 
         window?.dataLayer?.push({

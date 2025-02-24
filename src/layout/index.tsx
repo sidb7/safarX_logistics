@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../utils/responsiveState";
 import { getRoles } from "../redux/reducers/role";
 import { useDispatch } from "react-redux";
+import sessionManager from "../utils/sessionManager";
 // import BottomBar from "./~components/BottomBar";
 
 interface ICommonLayoutProps {}
@@ -19,10 +20,12 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
+    // const userInfo = localStorage.getItem("userInfo");
+    const { sessionId, sellerInfo } = sessionManager({});
+    const userInfo = sellerInfo;
     if (userInfo) {
       try {
-        const parsedUserInfo = JSON.parse(userInfo);
+        const parsedUserInfo = userInfo;
         // console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
         const {
           sellerId,

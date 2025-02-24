@@ -10,6 +10,7 @@ import {
   retrieveLocalStorageData,
 } from "../../utils/utility";
 import { COMPANY_NAME } from "../../utils/ApiUrls";
+import sessionManager from "../../utils/sessionManager";
 
 interface IBreadcrumProps {
   label: string;
@@ -52,11 +53,20 @@ export const Breadcrum = ({
     return navigate(-1);
   };
 
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  const { sessionId, sellerInfo } = sessionManager({});
+  // const kyc = localStorage.getItem("setKycValue") as any;
+  // if (sellerInfo?.nextStep) {
+  //   const kyc = sellerInfo.nextStep.kyc;
+  //   setKycValue(kyc);
+  // }
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  let kycCheck = sellerInfo;
+
   kycCheck = kycCheck?.nextStep?.kyc;
 
-  const privateCompanyDetails = retrieveLocalStorageData("kycValue");
+  // const privateCompanyDetails = retrieveLocalStorageData("kycValue");
+  const privateCompanyDetails = kycCheck;
 
   // List of invalid company names
   const invalidCompanyNames = [null, undefined, "", "N/A", "NA", "n/a", "na"];

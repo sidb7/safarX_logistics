@@ -32,6 +32,7 @@ import ErrorIcon from "../../../../assets/info-circle.svg";
 import { woocommerceUrl } from "../../../../utils/regexCheck";
 import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
 import ShipYaariIcon from "../../../../assets/webshipyaarilogo.svg";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface IChannelProps {
   setIsLoading: any;
@@ -106,14 +107,13 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             // setChannelData({ channels: newStore });
             setModalData({ isOpen: false });
             toast.success(data?.message);
-            let channelSessionObj: any = localStorage.getItem("userInfo");
-            channelSessionObj = JSON.parse(channelSessionObj);
+            const { sessionId, sellerInfo } = sessionManager({});
+            let channelSessionObj = sellerInfo;
+            // channelSessionObj = JSON.parse(channelSessionObj);
             if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
               channelSessionObj.nextStep.isChannelIntegrated = true;
-              localStorage.setItem(
-                "userInfo",
-                JSON.stringify(channelSessionObj)
-              );
+              // localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+              sessionManager(channelSessionObj);
             }
             window.location.reload();
             return;
@@ -137,8 +137,10 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           );
           let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
 
-          const sellerId = localStorage.getItem("sellerId");
+          // const sellerId = localStorage.getItem("sellerId");
 
+          const { sessionId, sellerInfo } = sessionManager({});
+          const sellerId = sellerInfo?.sellerId;
           const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}?sellerId=${sellerId}`;
 
           try {
@@ -288,7 +290,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         //   JSON.stringify(updateWooCommerceToken)
         // );
         let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
-        const sellerId = localStorage.getItem("sellerId");
+        // const sellerId = localStorage.getItem("sellerId");
         const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=${
           COMPANY_NAME || "SHIPYAARI"
         }&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}?storeId=${storeId}`;

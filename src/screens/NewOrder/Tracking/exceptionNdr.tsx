@@ -33,6 +33,7 @@ import NdrRemarksContent from "./NdrRemarksContent";
 import { Spinner } from "../../../components/Spinner";
 import AccordionRightModal from "./accordianRightModal";
 import NewTrackingContent from "../../Order/newTrackingContent";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IOrdersProps {}
 
@@ -415,15 +416,18 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
     };
     try {
       setIsLoading(true); // Start the loader
-      let sellerId = localStorage.getItem("sellerId");
-
+      // let sellerId = localStorage.getItem("sellerId");
+      const { sessionId, sellerInfo } = sessionManager({});
+      const sellerId = sellerInfo?.sellerId;
+      const token = sellerInfo?.token || "";
       const response = await fetch(DOWNLOAD_NDR_ORDERS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem(
-            `${sellerId}_${tokenKey}`
-          )}`,
+          // Authorization: `Bearer ${localStorage.getItem(
+          //   `${sellerId}_${tokenKey}`
+          // )}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

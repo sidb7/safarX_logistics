@@ -19,6 +19,7 @@ import {
 } from "../../../utils/ApiUrls";
 import { constructNavigationObject } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 export const QuestionComponent1: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -33,8 +34,9 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   const state = location.state || {};
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   //storing the selected options
   const selectedDescribeYourself: any = [];
 
