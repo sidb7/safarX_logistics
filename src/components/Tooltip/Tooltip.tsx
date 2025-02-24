@@ -12,6 +12,8 @@ interface TooltipPropTypes {
   className?: any;
   bgColor?: any;
   textColor?: any;
+  left?: number;
+  top?: number;
 }
 
 export const Tooltip = (props: TooltipPropTypes) => {
@@ -24,30 +26,27 @@ export const Tooltip = (props: TooltipPropTypes) => {
     className,
     bgColor = "bg-neutral-900",
     textColor = "white",
+    left,
+    top,
   } = props;
 
   const [showTooltip, setShowTooltip] = useState(false);
 
-
-    const [dropdownPosition, setDropdownPosition] = useState({
-      top: 0,
-      left: 0,
-    });
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const handleMenuClick = (
-      event: React.MouseEvent<HTMLDivElement>,
+  const handleMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
 
-    ) => {
-      const rect = event.currentTarget.getBoundingClientRect();
+    setDropdownPosition({
+      top: rect.bottom,
+      left: rect.right,
+    });
 
-      setDropdownPosition({
-        top: rect.bottom,
-        left: rect.right,
-      });
-
-      setIsMenuOpen(prev=>!prev)
-   
-    };
+    setIsMenuOpen((prev) => !prev);
+  };
 
   const handleHover = () => {
     if (showOnHover) {
@@ -105,10 +104,16 @@ export const Tooltip = (props: TooltipPropTypes) => {
             <div
               onMouseEnter={(event) => setIsMenuOpen(true)}
               onMouseLeave={(event) => setIsMenuOpen(false)}
-              className="absolute  bg-white cursor-pointer"
+              className="absolute  bg-white rounded-md  cursor-pointer"
               style={{
-                top: `${dropdownPosition.top}px`,
-                left: `${dropdownPosition.left - 100}px`,
+                top: `${
+                  top ? dropdownPosition.top + top : dropdownPosition.top
+                }px`,
+                left: `${
+                  left
+                    ? dropdownPosition.left + left
+                    : dropdownPosition.left - 40
+                }px`,
               }}
               role="menu"
             >

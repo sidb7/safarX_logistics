@@ -180,7 +180,8 @@ const Index = () => {
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
-
+  const [buyerConfirmationStatus, setBuyerConfirmationStatus]: any =
+    useState("");
   const scrollRef: any = useRef(null);
 
   let thirtyDaysAgo = new Date();
@@ -301,7 +302,6 @@ const Index = () => {
 
   const [fullfillment, setFullfillment] = useState();
   const [unFullfillment, setUnFullfillment] = useState();
-
   //  // Add ref for the abort controller
   //    const [renderingComponents, setRenderingComponents] = useState<number>(0);
 
@@ -1125,7 +1125,9 @@ const Index = () => {
               setInfoModalContent,
               currentStatus,
               orderActions,
-              setInfoModalContentFunction
+              setInfoModalContentFunction,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1140,7 +1142,9 @@ const Index = () => {
               orderActions,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1154,7 +1158,9 @@ const Index = () => {
               orderActions,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1169,7 +1175,9 @@ const Index = () => {
               setInfoReverseModalFunction,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1377,7 +1385,7 @@ const Index = () => {
         itemsPerPage
       );
     }
-  }, [endDate, activeTab, searchedText]);
+  }, [endDate, activeTab, searchedText, buyerConfirmationStatus]);
 
   useEffect(() => {
     (async () => {

@@ -1,6 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
 import Copy from "../../assets/copy.svg";
+import { LiaPenSolid } from "react-icons/lia";
 import {
   date_DD_MMM_YYYY_HH_MM,
   date_DD_MMM_YYYY_HH_MM_SS,
@@ -21,11 +22,18 @@ import {
 import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import ReverseIcon from "../../assets/reverseIcon.png";
-import { COMPANY_NAME, SELLER_WEB_URL } from "../../utils/ApiUrls";
-import { Key, useEffect, useRef } from "react";
+import {
+  COMPANY_NAME,
+  SELLER_WEB_URL,
+  UPDATE_ORDER_CONFIRMATION_STATUS,
+} from "../../utils/ApiUrls";
+import { Key, useEffect, useRef, useState } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 import tickcircle from "../../assets/Order/tickcircle.svg";
+import { update } from "lodash";
+import toast from "react-hot-toast";
+import { POST } from "../../utils/webService";
 
 const ColumnsHelper = createColumnHelper<any>();
 const excludeWords = ["B2B", "B2C"];
@@ -438,7 +446,9 @@ const idHelper = (
   setInfoModalContent?: any,
   setInfoModalContentFunction: any = () => {},
   setOpenRightModalForTracking?: any,
-  openRightModalForTracking?: any
+  openRightModalForTracking?: any,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
@@ -470,7 +480,7 @@ const idHelper = (
       const time = createdAt && date_DD_MMM_YYYY_HH_MM_SS(createdAt);
 
       return (
-        <div className="py-3">
+        <div className="py-3 w-[200px]">
           {tempOrderId && (
             <div className="">
               <span className="font-Open font-normal leading-4 text-xs">
@@ -705,7 +715,6 @@ const idHelper = (
       });
 
       const handleInformativeModal = () => {
-        console.log("hiii");
         setInfoModalContentFunction({
           awb,
           orderId:
@@ -735,7 +744,37 @@ const idHelper = (
 
       const showAllTags = tagsLength > 10;
       // const buyerConfirmation = rowsData?.isBuyerConfirmed;
-
+      const buyerConfirmationStatus = [
+        {
+          value: "PENDING",
+          class: "bg-[#FDF6EA] text-[#F0A22E] border-[#F0A22E] border",
+        },
+        {
+          value: "BUYER VERIFIED",
+          class: "bg-[#F2FAEF] text-[#7CCA62] border-[#7CCA62] border",
+        },
+        {
+          value: "BUYER CANCELLED",
+          class: "bg-[#FEEEEB] text-[#F35838] border-[#F35838] border",
+        },
+      ];
+      const updateBuyerConfirmation = async (buyerConfirmationStatus: any) => {
+        const payload = {
+          orderId: rowsData?.orderId,
+          currentOrderStatus: renderStatus,
+          isBuyerConfirmed: buyerConfirmationStatus,
+        };
+        const response = await POST(UPDATE_ORDER_CONFIRMATION_STATUS, payload);
+        console.log("response", response);
+        if (response?.data?.success) {
+          toast.success("Order confirmation status updated successfully");
+          setBuyerConfirmationStatus(
+            rowsData?.orderId + buyerConfirmationStatus
+          );
+          // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
+          // console.log("updateBuyerConfirmation", payload);
+        }
+      };
       return (
         <div className="py-3 w-[100px]">
           {
@@ -796,21 +835,52 @@ const idHelper = (
                 )}
               </div>
 
-              <div className="mt-2">
-                {buyerConfirmation === "BUYER CANCELLED" ? (
-                  <p className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FEEEEB] text-[#F35838]">
-                    {buyerConfirmation}
-                  </p>
-                ) : buyerConfirmation === "PENDING" ? (
-                  <p className="px-2 py-2 w-fit text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FDF6EA] text-[#F0A22E]">
-                    {buyerConfirmation}
-                  </p>
-                ) : buyerConfirmation === "BUYER VERIFIED" ? (
-                  <span className="px-2 py-2  w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#F2FAEF] text-[#7CCA62]">
-                    {buyerConfirmation}
-                  </span>
-                ) : null}
-              </div>
+              {buyerConfirmation && (
+                <div className="py-1 flex items-center">
+                  {buyerConfirmationStatus.map((e) => {
+                    return (
+                      e.value === buyerConfirmation && (
+                        <p
+                          className={`px-2 py-1 w-fit  text-xs font-medium text-center  rounded-full ${e.class}`}
+                        >
+                          {e.value}
+                        </p>
+                      )
+                    );
+                  })}
+
+                  <CustomToolTip
+                    position="bottom"
+                    content={
+                      <div className="p-0.5 rounded-md bg-white shadow-md">
+                        {buyerConfirmationStatus.map((e) => {
+                          return (
+                            e.value !== buyerConfirmation && (
+                              <p
+                                key={e.value}
+                                className={`px-2 py-1 w-fit m-2 text-xs text-center rounded-md cursor-pointer hover:scale-105 ${e.class}`}
+                                onClick={() => updateBuyerConfirmation(e.value)}
+                              >
+                                {e.value}
+                              </p>
+                            )
+                          );
+                        })}
+                      </div>
+                    }
+                    showOnHover={true}
+                    bgColor="bg-white"
+                    textColor="black"
+                    left={-26}
+                  >
+                    <img
+                      src={editIcon}
+                      alt="editIcon"
+                      className="hover:-translate-y-[0.1rem] hover:scale-110 duration-100 cursor-pointer mx-2"
+                    />
+                  </CustomToolTip>
+                </div>
+              )}
             </>
 
             // <div className="flex flex-col gap-y-1">
@@ -855,7 +925,9 @@ export const columnHelperForNewOrder = (
   setInfoModalContent?: any,
   currentStatus?: any,
   orderActions?: any,
-  setInfoModalContentFunction?: any
+  setInfoModalContentFunction?: any,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => {
   // const handleDeleteModalDraftOrder = (payload: any) => {
   //   setDeleteModalDraftOrder({ isOpen: true, payload });
@@ -901,7 +973,7 @@ export const columnHelperForNewOrder = (
         }
 
         return (
-          <div className="flex py-3">
+          <div className="flex py-3 w-[200px]">
             <div className="flex justify-center mr-3 !my-[-10px] cursor-pointer">
               <input
                 type="checkbox"
@@ -1210,6 +1282,44 @@ export const columnHelperForNewOrder = (
 
         const buyerConfirmation = rowData?.isBuyerConfirmed;
 
+        // const buyerConfirmationStatus = (buyerConfirmation: any) => {
+        //   let className = "";
+        //   let text = buyerConfirmation;
+        //   console.log("buyerConfirmation", buyerConfirmation);
+        //   switch (buyerConfirmation) {
+        //     case "BUYER CANCELLED":
+        //       className = " bg-[#FEEEEB] text-[#F35838]";
+        //       break;
+        //     case "PENDING":
+        //       className = " bg-[#FDF6EA] text-[#F0A22E]";
+        //       break;
+
+        //     case "BUYER VERIFIED":
+        //       className = " bg-[#F2FAEF] text-[#7CCA62]";
+        //       break;
+        //     default:
+        //       text = "";
+        //       className = "";
+        //       break;
+        //   }
+        //   return { className, text };
+        // };
+
+        const buyerConfirmationStatus = [
+          {
+            value: "PENDING",
+            class: "bg-[#FDF6EA] text-[#F0A22E] border-[#F0A22E] border",
+          },
+          {
+            value: "BUYER VERIFIED",
+            class: "bg-[#F2FAEF] text-[#7CCA62] border-[#7CCA62] border",
+          },
+          {
+            value: "BUYER CANCELLED",
+            class: "bg-[#FEEEEB] text-[#F35838] border-[#F35838] border",
+          },
+        ];
+
         let statusObj: any = { title: "" };
         rowsData?.status?.map((elem: any, index: any) => {
           statusObj = {
@@ -1246,6 +1356,34 @@ export const columnHelperForNewOrder = (
             orderNumber: otherDetails?.orderNumber,
           });
         };
+        const updateBuyerConfirmation = async (
+          buyerConfirmationStatus: any
+        ) => {
+          try {
+            const payload = {
+              orderId: rowsData?.orderId,
+              currentOrderStatus: latestStatus
+                ? capitalizeFirstLetter(latestStatus)
+                : "Draft",
+              isBuyerConfirmed: buyerConfirmationStatus,
+            };
+            const response = await POST(
+              UPDATE_ORDER_CONFIRMATION_STATUS,
+              payload
+            );
+            if (response?.data?.success) {
+              toast.success("Order confirmation status updated successfully");
+              setBuyerConfirmationStatus(
+                rowsData?.orderId + buyerConfirmationStatus
+              );
+              // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
+              // console.log("updateBuyerConfirmation", payload);
+            }
+          } catch (error) {
+            toast.error("Failed to update order confirmation status");
+          }
+        };
+        // const { text, className } = buyerConfirmationStatus("BUYER VERIFIED");
         return (
           <div className="py-3">
             {
@@ -1307,46 +1445,90 @@ export const columnHelperForNewOrder = (
                 </div>
 
                 {showAllTags && (
-                  <div className="relative group">
-                    <div className="flex relative group w-[100px]">
-                      <div className="text-center font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
-                        {capitalizeFirstLetter(tags[0])}
-                      </div>
-                      {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
-
-                      {tags.length > 1 && (
-                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                          {tags.map(
-                            (tag: string, index: Key | null | undefined) => (
-                              <p className="bg-[#FFF6EB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
-                                {" "}
-                                {capitalizeFirstLetter(tag)}{" "}
-                              </p>
-                            )
-                          )}
-                        </div>
-                      )}
+                  <div className="flex ">
+                    <div className="flex  w-fit px-2  text-xs py-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
+                      {capitalizeFirstLetter(tags[0])}
                     </div>
-
-                    {/* Tooltip for hover to show all tags */}
+                    {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
+                    {tags.length > 1 && (
+                      <CustomToolTip
+                        position="bottom"
+                        content={
+                          <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-md rounded-md">
+                            {tags.map(
+                              (tag: string, index: Key | null | undefined) => (
+                                <p className="bg-white text-[#004EFF] rounded-md px-2 border-[#004EFF] border shadow-inner-sm">
+                                  {" "}
+                                  {capitalizeFirstLetter(tag)}{" "}
+                                </p>
+                              )
+                            )}
+                          </div>
+                        }
+                        showOnHover={true}
+                        bgColor="bg-white"
+                        textColor="black"
+                        left={-26}
+                        top={-8}
+                      >
+                        <img
+                          src={moreIcon}
+                          alt="editIcon"
+                          className="hover:-translate-y-[0.1rem] hover:scale-110 duration-100 cursor-pointer mx-2"
+                        />
+                      </CustomToolTip>
+                    )}
                   </div>
                 )}
 
-                <div className="py-2">
-                  {buyerConfirmation === "BUYER CANCELLED" ? (
-                    <p className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FEEEEB] text-[#F35838]">
-                      {buyerConfirmation}
-                    </p>
-                  ) : buyerConfirmation === "PENDING" ? (
-                    <p className="px-2 py-2 w-fit text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#FDF6EA] text-[#F0A22E]">
-                      {buyerConfirmation}
-                    </p>
-                  ) : buyerConfirmation === "BUYER VERIFIED" ? (
-                    <span className="px-2 py-2 w-fit  text-sm font-medium me-2 px-2.5 py-0.5 rounded-full bg-[#F2FAEF] text-[#7CCA62]">
-                      {buyerConfirmation}
-                    </span>
-                  ) : null}
-                </div>
+                {buyerConfirmation && (
+                  <div className="py-1 flex items-center">
+                    {buyerConfirmationStatus.map((e) => {
+                      return (
+                        e.value === buyerConfirmation && (
+                          <p
+                            className={`px-2 py-1 w-fit  text-xs font-medium text-center  rounded-full ${e.class}`}
+                          >
+                            {e.value}
+                          </p>
+                        )
+                      );
+                    })}
+
+                    <CustomToolTip
+                      position="bottom"
+                      content={
+                        <div className="p-0.5 rounded-md bg-white shadow-md">
+                          {buyerConfirmationStatus.map((e) => {
+                            return (
+                              e.value !== buyerConfirmation && (
+                                <p
+                                  key={e.value}
+                                  className={`px-2 py-1 w-fit m-2 text-xs text-center rounded-md cursor-pointer hover:scale-105 ${e.class}`}
+                                  onClick={() =>
+                                    updateBuyerConfirmation(e.value)
+                                  }
+                                >
+                                  {e.value}
+                                </p>
+                              )
+                            );
+                          })}
+                        </div>
+                      }
+                      showOnHover={true}
+                      bgColor="bg-white"
+                      textColor="black"
+                      left={-26}
+                    >
+                      <img
+                        src={editIcon}
+                        alt="editIcon"
+                        className="hover:-translate-y-[0.1rem] hover:scale-110 duration-100 cursor-pointer mx-2"
+                      />
+                    </CustomToolTip>
+                  </div>
+                )}
               </div>
             }
           </div>
@@ -1656,7 +1838,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   orderActions?: any,
   setOpenRightModalForTracking?: any,
   openRightModalForTracking?: any,
-  isMasked?: boolean
+  isMasked?: boolean,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => {
   // const handleCancellationModal = (awbNo: any, orderId: any) => {
   //   setCancellationModal({ isOpen: true, awbNo, orderId });
@@ -1787,7 +1971,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       setInfoModalContent,
       setInfoModalContentFunction,
       setOpenRightModalForTracking,
-      openRightModalForTracking
+      openRightModalForTracking,
+      buyerConfirmationStatus,
+      setBuyerConfirmationStatus
     ),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
@@ -1930,7 +2116,9 @@ export const columnHelpersForRest = (
   setInfoReverseModalFunction?: any,
   setOpenRightModalForTracking?: any,
   openRightModalForTracking?: any,
-  isMasked?: any
+  isMasked?: any,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -2045,7 +2233,9 @@ export const columnHelpersForRest = (
       setInfoModalContent,
       setInfoModalContentFunction,
       setOpenRightModalForTracking,
-      openRightModalForTracking
+      openRightModalForTracking,
+      buyerConfirmationStatus,
+      setBuyerConfirmationStatus
     ),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
