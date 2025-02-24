@@ -43,6 +43,7 @@ import SelectDateModalForSinglePageOrder from "./components/scheduleTimeModale";
 import Accordian from "./components/accordian";
 import MyTable from "./ShippingDetails/components/customeTableForSummary";
 import InternationalOrders from "./InternationalOrder";
+import sessionManager from "../../utils/sessionManager";
 
 interface IIndexProps {}
 
@@ -105,8 +106,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     pickupTimeDetails: false,
   });
 
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  const { sessionId, sellerInfo } = sessionManager({});
+  let kycCheck = sellerInfo;
+  // kycCheck = JSON.parse(kycCheck);
 
   const initialColumns = useMemo(
     () => [
@@ -451,11 +454,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       isLoading: true,
       identifier: "downloadManifest",
     });
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     const response = await fetch(FETCH_MANIFEST_DATA, {
@@ -503,12 +509,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
     };
-
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
@@ -560,12 +568,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
     };
-
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
@@ -702,7 +712,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 <CustomTable
                   rowData={order?.boxInfo || []}
                   columnsData={SummaryColumns}
-            
                 />
 
                 {/* <MyTable data={order?.boxInfo || []} columns={columns} /> */}

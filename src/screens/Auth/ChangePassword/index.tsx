@@ -23,6 +23,7 @@ import { signInUser } from "../../../redux/reducers/signInReducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CHANGE_PASSWORD, REACT_APP_GTM_ID } from "../../../utils/ApiUrls";
+import sessionManager from "../../../utils/sessionManager";
 
 interface PasswordVisibility {
   newPassword: boolean;
@@ -72,6 +73,12 @@ function ChangePasswordv2() {
 
   const updatePasswordData = async () => {
     try {
+      // let tabId = sessionStorage.getItem("tabId");
+      // if (!tabId) {
+      //   tabId = `${Date.now()}-${Math.random()}`;
+      //   sessionStorage.setItem("tabId", tabId);
+      // }
+
       if (password?.newPassword !== password?.confirmNewPassword) {
         return toast.error("Passwords do not match.");
       }
@@ -80,7 +87,16 @@ function ChangePasswordv2() {
       };
       // CHANGE_PASSWORD;
       const { data: response } = await POST(CHANGE_PASSWORD, updatedFormData);
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      sessionManager(response?.data[0]);
+      // if (sellerInfo?.nextStep) {
+      //   sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
+      // } else {
+      //   sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
+      // }
+      // localStorage.setItem(
+      //   `sellerSession_${tabId}`,
+      //   JSON.stringify(sellerInfo)
+      // );
 
       let signInUserReducerDetails = {
         email: email,
@@ -91,11 +107,16 @@ function ChangePasswordv2() {
       dispatch(signInUser(signInUserReducerDetails));
 
       if (response?.success) {
-        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        localStorage.setItem("userName", response?.data[0]?.name);
-        console.log("userInfo", JSON.stringify(response.data[0]));
-        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
-        setLocalStorage(`${response?.data[0]?.sellerId}_${tokenKey}`, token);
+        // localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        // localStorage.setItem("userName", response?.data[0]?.name);
+        // console.log("userInfo", JSON.stringify(response.data[0]));
+        const { sessionId, sellerInfo } = sessionManager({
+          ...response.data[0],
+          token: token,
+        });
+
+        // localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        // setLocalStorage(`${response?.data[0]?.sellerId}_${tokenKey}`, token);
 
         // console.log(
         //   "🚀 ~ file: index.tsx:87 ~ logInOnClick ~ response?.data[0]?.sellerId:",
@@ -116,10 +137,10 @@ function ChangePasswordv2() {
           user_id: response?.data[0]?.sellerId,
         });
 
-        const tokenV1 = localStorage.getItem("sellerId")
-          ? `${localStorage.getItem(
-              "sellerId"
-            )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+        // let sellerId = localStorage.getItem("sellerId");
+        let sellerId = sellerInfo?.sellerId;
+        const tokenV1 = sellerId
+          ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
           : "";
 
         if (tokenV1 !== "") {
@@ -196,13 +217,20 @@ function ChangePasswordv2() {
   }
 
   useEffect(() => {
-    let sellerId = localStorage.getItem("sellerId");
-    let userInfo: any = localStorage.getItem("userInfo");
-    let userData = JSON.parse(userInfo);
+    // let sellerId = localStorage.getItem("sellerId");
 
-    const localUserToken = getLocalStorage(
-      `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-    );
+    // let userInfo: any = localStorage.getItem("userInfo");
+    const { sessionId, sellerInfo } = sessionManager({});
+    let sellerId = sellerInfo?.sellerId;
+    // const userInfo = sellerInfo;
+    let userData = sellerInfo;
+
+    // const localUserToken = getLocalStorage(
+    //   `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+    // );
+
+    const token = sellerInfo?.token;
+    const localUserToken = token;
 
     if (localUserToken) {
       if (userData?.nextStep?.qna === false) {

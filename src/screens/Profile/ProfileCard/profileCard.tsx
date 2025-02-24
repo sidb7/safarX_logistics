@@ -13,6 +13,7 @@ import editIcon from "../../../assets/edit-black.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import EditProfile from "./editProfile";
 import { COMPANY_NAME } from "../../../utils/ApiUrls";
+import sessionManager from "../../../utils/sessionManager";
 console.log("🚀 ~ COMPANY_NAME:", COMPANY_NAME);
 
 interface ProfileCardProps {
@@ -70,8 +71,12 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const [showModal, setShowModal] = useState(false);
   let currentBalance = parseFloat(walletBalance?.toFixed(2));
   useEffect(() => {
-    const kyc = localStorage.getItem("setKycValue") as any;
-    setKycValue(kyc);
+    const { sessionId, sellerInfo } = sessionManager({});
+    // const kyc = localStorage.getItem("setKycValue") as any;
+    if (sellerInfo?.nextStep) {
+      const kyc = sellerInfo.nextStep.kyc;
+      setKycValue(kyc);
+    }
   }, []);
 
   const navigate = useNavigate();

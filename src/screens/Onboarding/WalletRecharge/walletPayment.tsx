@@ -29,6 +29,7 @@ import { POST } from "../../../utils/webService";
 import JusPayIcon from "../../../assets/juspay.png";
 import JusPay from "../../../components/JusPay/juspay";
 import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
+import sessionManager from "../../../utils/sessionManager";
 
 const modalTitle = () => {
   return (
@@ -130,8 +131,9 @@ const WalletPayment = () => {
   };
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
     let redirectUrl = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;

@@ -16,6 +16,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import NavBar from "../../../layout/Old_NavBar";
 import { Spinner } from "../../../components/Spinner";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 const modalTitle = () => {
   return (
@@ -44,8 +45,9 @@ const WalletDetails = () => {
 
   const WalletBankDetails = () => {
     //getting the sellerID
-    const sellerId = localStorage.getItem("sellerId");
-
+    // const sellerId = localStorage.getItem("sellerId");
+    const { sessionId, sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     const postAccountDetails = async () => {
       setLoading(true);
       const payload = {

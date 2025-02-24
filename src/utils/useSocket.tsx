@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { GlobalToast } from "../components/GlobalToast/GlobalToast";
 import { SELLER_URL } from "./ApiUrls";
+import sessionManager from "./sessionManager";
 
 export const useSocket = (roomName: any) => {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const sellerId = localStorage.getItem("sellerId");
+  const { sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
+  // const sellerId = localStorage.getItem("sellerId");
   const token = sellerId
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";
