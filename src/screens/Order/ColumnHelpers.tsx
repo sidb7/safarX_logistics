@@ -446,7 +446,9 @@ const idHelper = (
   setInfoModalContent?: any,
   setInfoModalContentFunction: any = () => {},
   setOpenRightModalForTracking?: any,
-  openRightModalForTracking?: any
+  openRightModalForTracking?: any,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
@@ -756,15 +758,22 @@ const idHelper = (
           class: "bg-[#FEEEEB] text-[#F35838] border-[#F35838] border",
         },
       ];
-      const updateBuyerConfirmation = (buyerConfirmationStatus: any) => {
+      const updateBuyerConfirmation = async (buyerConfirmationStatus: any) => {
         const payload = {
           orderId: rowsData?.orderId,
           currentOrderStatus: renderStatus,
           isBuyerConfirmed: buyerConfirmationStatus,
         };
-        toast.success("Order confirmation status updated successfully");
-
-        console.log("updateBuyerConfirmation", payload);
+        const response = await POST(UPDATE_ORDER_CONFIRMATION_STATUS, payload);
+        console.log("response", response);
+        if (response?.data?.success) {
+          toast.success("Order confirmation status updated successfully");
+          setBuyerConfirmationStatus(
+            rowsData?.orderId + buyerConfirmationStatus
+          );
+          // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
+          // console.log("updateBuyerConfirmation", payload);
+        }
       };
       return (
         <div className="py-3 w-[100px]">
@@ -1347,7 +1356,9 @@ export const columnHelperForNewOrder = (
             orderNumber: otherDetails?.orderNumber,
           });
         };
-        const updateBuyerConfirmation = (buyerConfirmationStatus: any) => {
+        const updateBuyerConfirmation = async (
+          buyerConfirmationStatus: any
+        ) => {
           try {
             const payload = {
               orderId: rowsData?.orderId,
@@ -1356,10 +1367,18 @@ export const columnHelperForNewOrder = (
                 : "Draft",
               isBuyerConfirmed: buyerConfirmationStatus,
             };
-            const response = POST(UPDATE_ORDER_CONFIRMATION_STATUS, payload);
-            toast.success("Order confirmation status updated successfully");
-            setBuyerConfirmationStatus(buyerConfirmationStatus);
-            console.log("updateBuyerConfirmation", payload);
+            const response = await POST(
+              UPDATE_ORDER_CONFIRMATION_STATUS,
+              payload
+            );
+            if (response?.data?.success) {
+              toast.success("Order confirmation status updated successfully");
+              setBuyerConfirmationStatus(
+                rowsData?.orderId + buyerConfirmationStatus
+              );
+              // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
+              // console.log("updateBuyerConfirmation", payload);
+            }
           } catch (error) {
             toast.error("Failed to update order confirmation status");
           }
@@ -1819,7 +1838,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   orderActions?: any,
   setOpenRightModalForTracking?: any,
   openRightModalForTracking?: any,
-  isMasked?: boolean
+  isMasked?: boolean,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => {
   // const handleCancellationModal = (awbNo: any, orderId: any) => {
   //   setCancellationModal({ isOpen: true, awbNo, orderId });
@@ -1950,7 +1971,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       setInfoModalContent,
       setInfoModalContentFunction,
       setOpenRightModalForTracking,
-      openRightModalForTracking
+      openRightModalForTracking,
+      buyerConfirmationStatus,
+      setBuyerConfirmationStatus
     ),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
@@ -2093,7 +2116,9 @@ export const columnHelpersForRest = (
   setInfoReverseModalFunction?: any,
   setOpenRightModalForTracking?: any,
   openRightModalForTracking?: any,
-  isMasked?: any
+  isMasked?: any,
+  buyerConfirmationStatus?: any,
+  setBuyerConfirmationStatus?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -2208,7 +2233,9 @@ export const columnHelpersForRest = (
       setInfoModalContent,
       setInfoModalContentFunction,
       setOpenRightModalForTracking,
-      openRightModalForTracking
+      openRightModalForTracking,
+      buyerConfirmationStatus,
+      setBuyerConfirmationStatus
     ),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {

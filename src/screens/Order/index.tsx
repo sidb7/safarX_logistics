@@ -1142,7 +1142,9 @@ const Index = () => {
               orderActions,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1156,7 +1158,9 @@ const Index = () => {
               orderActions,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
@@ -1171,7 +1175,9 @@ const Index = () => {
               setInfoReverseModalFunction,
               setOpenRightModalForTracking,
               openRightModalForTracking,
-              isMasked
+              isMasked,
+              buyerConfirmationStatus,
+              setBuyerConfirmationStatus
             )
           );
           break;
