@@ -26,6 +26,7 @@ import OneButton from "../../components/Button/OneButton";
 import FeatureRateCard from "./featureRateCardDetails";
 import { ResponsiveState } from "../../utils/responsiveState";
 import CustomButton from "../../components/Button";
+import { capitalizeFirstLetter } from "../../utils/utility";
 
 interface ITypeProps {}
 
@@ -40,10 +41,13 @@ const Index = (props: ITypeProps) => {
   const [allPlans, setAllPlans] = useState<any>([]);
   const [activePlanId, setActivePlanId] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenPlan, setIsModalOpenPlan] = useState(false);
+  // console.log("🚀 ~ Index ~ isModalOpenPlan:", isModalOpenPlan);
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [featureRateCardPlan, setFeatureRateCardPlan] = useState([]);
   const [pendingPlan, setPendingPlan] = useState<any>({});
+  const [LoaderForAssignValue, setLoaderForAssignValue] = useState(false);
 
   const ModalContent = () => {
     return (
@@ -316,6 +320,46 @@ const Index = (props: ITypeProps) => {
       }
     })();
   }, []);
+  
+  const assignPendingPlan = async () => {
+    setLoaderForAssignValue(true);
+    let payload = { planId: pendingPlan?.planId };
+    try {
+      const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
+      if (responseV4?.success) {
+        // console.log("responseV4", responseV4?.message.includes("Approve"));
+        if (responseV4?.message.includes("Approve")) {
+          toast.success(responseV4?.message);
+          setIsModalOpenPlan(false);
+          setLoaderForAssignValue(false);
+        } else {
+          setIsModalOpenPlan(false);
+          setLoaderForAssignValue(false);
+
+          toast.success(responseV4?.message);
+          window.location.reload();
+        }
+      } else {
+        setIsModalOpenPlan(false);
+        setLoaderForAssignValue(false);
+        toast.error(responseV4?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success && response?.data?.length > 0) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -412,6 +456,7 @@ const Index = (props: ITypeProps) => {
                           text={"Pending Plan!"}
                           textClassName="!font-normal !text-[12px]"
                           onClick={() => {
+                            setIsModalOpenPlan(true);
                             setIsModalOpen(true);
                           }}
                         />
@@ -461,6 +506,113 @@ const Index = (props: ITypeProps) => {
           >
             {ModalContent()}
           </CenterModal>
+
+          {isModalOpenPlan && (
+            <CenterModal
+              isOpen={isModalOpenPlan}
+              onRequestClose={() => setIsModalOpenPlan(false)}
+              className="md:h-[65%] md:w-[65%] h-[55%] lg:h-[60%%] lg:w-[50%] xl:h-[60%] 2xl:h-[56%] xl:w-[40%]"
+            >
+              <>
+                <div className=" w-full gap-y-6 p-4 flex flex-col">
+                  <div className="flex items-center justify-end">
+                    <div
+                      onClick={() => {
+                        setIsModalOpenPlan(false);
+                      }}
+                      className="flex justify-end"
+                    >
+                      <img
+                        alt=""
+                        className="cursor-pointer"
+                        src={WebCrossIcon}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col m-5 mt-3 gap-y-4">
+                    <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
+                      <div className="flex flex-col gap-y-6">
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Plan Name:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {capitalizeFirstLetter(pendingPlan?.planName)}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Validity:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {capitalizeFirstLetter(pendingPlan?.validity)}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Description:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {capitalizeFirstLetter(
+                              pendingPlan?.shortDescription
+                            )}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Plan Price:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            ₹ {pendingPlan?.preTaxPrice || 0}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Tax:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            ₹ {pendingPlan?.taxAmount || 0}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
+                      <div className="flex flex-col gap-y-6">
+                        <div className="flex justify-between">
+                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#004EFF]">
+                            Total:
+                          </p>
+                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#004EFF]">
+                            ₹ {pendingPlan?.price || 0}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center gap-x-3 mt-5">
+                      <CustomButton
+                        text="close"
+                        onClick={() => {
+                          setIsModalOpen(false);
+                        }}
+                        className="lg:!w-[184px] lg:!h-[54px] !bg-[white] !border-[1px] !border-[#A4A4A4] !text-[black] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                      />
+                      {LoaderForAssignValue ? (
+                        <div className="flex justify-center items-center lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <CustomButton
+                          text="yes"
+                          onClick={assignPendingPlan}
+                          className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            </CenterModal>
+          )}
         </div>
       ) : (
         <AccessDenied />
