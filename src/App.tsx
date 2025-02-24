@@ -302,7 +302,7 @@ const App = () => {
         scriptElement.parentNode.removeChild(scriptElement);
       }
     };
-  }, [userInfoString]);
+  }, []);
 
   let syncTime: any = localStorage.getItem("syncTime");
 
