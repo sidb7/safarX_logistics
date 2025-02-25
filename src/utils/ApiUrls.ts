@@ -313,6 +313,8 @@ const CHANGE_PASSWORD = `${SELLER_BASE_URL}/seller/changePasswordv2`;
 
 // System Logs
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
+// Order Confirmation Log
+const GET_ORDER_CONFIRMATION_LOG = `${SELLER_BASE_URL}/seller/getOrderConfirmationLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
@@ -717,4 +719,5 @@ export {
   DOWNLOAD_S3_LABEL,
   GET_COUNT_AMAZON_ORDER,
   UPDATE_ORDER_CONFIRMATION_STATUS,
+  GET_ORDER_CONFIRMATION_LOG,
 };

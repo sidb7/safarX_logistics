@@ -2,7 +2,9 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   COMPANY_NAME,
   GET_COURIER_PARTNER_SERVICE,
+  GET_ORDER_CONFIRMATION_LOG,
   GET_SELLER_ORDER_COMPLETE_DATA,
+  GET_SYSTEM_LOG,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import {
@@ -761,14 +763,26 @@ const Accordion = (props: ICustomTableAccordion) => {
       });
 
       const boxData = await POST(GET_SELLER_BOX);
-
+      const buyerConfirmationOrder = await POST(GET_ORDER_CONFIRMATION_LOG, {
+        limit: 2,
+        pageNo: 1,
+      });
+      console.log(
+        "BUYER COCOC",
+        buyerConfirmationOrder?.data?.data[0]?.data.length
+      );
       setOrderPayload({
         ...orderPayload,
         orderId: data?.data?.[0]?.data?.[0]?.orderId,
         tempOrderId: data?.data?.[0]?.data?.[0]?.tempOrderId,
         source: data?.data?.[0]?.data?.[0]?.source,
       });
-      setBuyerConfirmationLogs(data?.data?.[0]?.buyerConfirmationLogs[0]?.data);
+      if (buyerConfirmationOrder?.data?.success) {
+        setBuyerConfirmationLogs(
+          buyerConfirmationOrder?.data?.data[0]?.data || []
+        );
+      }
+
       setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
       console.log(
@@ -1085,6 +1099,30 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         rows.push({
           title: "Order History",
+          [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
+          "Order Id": rowsData?.orderId,
+          "Tracking Id": orderData?.awb,
+          "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
+          Source: capitalizeFirstLetter(rowsData?.source),
+          "Order Type": rowsData?.orderType,
+          Zone: capitalizeFirstLetter(rowsData?.zone),
+        });
+        {
+          buyerConfirmationOrder?.data?.data[0]?.data.length &&
+            rows.push({
+              title: "Order Confirmation Logs",
+              [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
+              "Order Id": rowsData?.orderId,
+              "Tracking Id": orderData?.awb,
+              "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
+              Source: capitalizeFirstLetter(rowsData?.source),
+              "Order Type": rowsData?.orderType,
+              Zone: capitalizeFirstLetter(rowsData?.zone),
+            });
+        }
+
+        rows.push({
+          title: "Order Confirmation Logs",
           [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": orderData?.awb,
@@ -3509,7 +3547,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                           "Order Confirmation Logs" &&
                                           index === 5 && (
                                             <div className="mb-40">
-                                              {buyerConfirmationLogs.map(
+
+                                              {buyerConfirmationLogs?.map(
+
                                                 (item: any) => {
                                                   return (
                                                     <div className="">
@@ -3522,6 +3562,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           </p>
                                                         </div>
                                                         <div className="flex justify-between mt-4">
+
                                                           <p>User ID:</p>
                                                           <p>
                                                             {item?.userId ||
@@ -3529,6 +3570,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           </p>
                                                         </div>
                                                         <div className="flex justify-between mt-4">
+
                                                           <p>New Status:</p>
                                                           <p>
                                                             {item?.eventRecord
