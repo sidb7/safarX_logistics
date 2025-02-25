@@ -776,7 +776,7 @@ const idHelper = (
         }
       };
       return (
-        <div className="py-3 w-[100px]">
+        <div className="py-3 w-[200px]">
           {
             <>
               <div className="flex flex-col gap-y-1">
@@ -2091,6 +2091,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                 showOnHover={true}
                 bgColor="bg-white"
                 textColor="black"
+                left={-100}
               >
                 <div className="mx-2 cursor-pointer">
                   <img

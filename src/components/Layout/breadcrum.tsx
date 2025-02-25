@@ -62,8 +62,7 @@ export const Breadcrum = ({
   // }
   // let kycCheck = localStorage.getItem("kycValue") as any;
   let kycCheck = sellerInfo;
-
-  kycCheck = kycCheck?.nextStep?.kyc;
+  const kyc = kycCheck?.nextStep?.kyc;
 
   // const privateCompanyDetails = retrieveLocalStorageData("kycValue");
   const privateCompanyDetails = kycCheck;
@@ -86,7 +85,6 @@ export const Breadcrum = ({
   const isCompanyNameInvalid = invalidCompanyNames.includes(
     privateCompanyName?.trim()
   );
-
   // Check if current route is the same as "/onboarding/kyc-type"
   const isKycRoute = location.pathname === "/dashboard/overview";
   // const isCompanyNameRoute = location.pathname === "/dashboard/overview";
