@@ -782,13 +782,9 @@ const Accordion = (props: ICustomTableAccordion) => {
           buyerConfirmationOrder?.data?.data[0]?.data || []
         );
       }
-
       setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
-      console.log(
-        data?.data?.[0]?.buyerConfirmationLogs[0]?.data,
-        "BUYERCONFIRMATION"
-      );
+
       let temp;
       temp = getPickAddressData;
       temp.pickUpAddress.contact.contactName =
@@ -1120,28 +1116,6 @@ const Accordion = (props: ICustomTableAccordion) => {
               Zone: capitalizeFirstLetter(rowsData?.zone),
             });
         }
-
-        rows.push({
-          title: "Order Confirmation Logs",
-          [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
-          "Order Id": rowsData?.orderId,
-          "Tracking Id": orderData?.awb,
-          "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
-          Source: capitalizeFirstLetter(rowsData?.source),
-          "Order Type": rowsData?.orderType,
-          Zone: capitalizeFirstLetter(rowsData?.zone),
-        });
-
-        rows.push({
-          title: "Order Confirmation Logs",
-          [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
-          "Order Id": rowsData?.orderId,
-          "Tracking Id": orderData?.awb,
-          "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
-          Source: capitalizeFirstLetter(rowsData?.source),
-          "Order Type": rowsData?.orderType,
-          Zone: capitalizeFirstLetter(rowsData?.zone),
-        });
 
         setOrderDetails(rows);
         setIsLoading(false);
@@ -3547,9 +3521,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                           "Order Confirmation Logs" &&
                                           index === 5 && (
                                             <div className="mb-40">
-
                                               {buyerConfirmationLogs?.map(
-
                                                 (item: any) => {
                                                   return (
                                                     <div className="">
@@ -3562,15 +3534,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           </p>
                                                         </div>
                                                         <div className="flex justify-between mt-4">
-
-                                                          <p>User ID:</p>
-                                                          <p>
-                                                            {item?.userId ||
-                                                              "--"}
-                                                          </p>
-                                                        </div>
-                                                        <div className="flex justify-between mt-4">
-
                                                           <p>New Status:</p>
                                                           <p>
                                                             {item?.eventRecord
