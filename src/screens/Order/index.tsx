@@ -419,6 +419,7 @@ const Index = () => {
       const { OrderData, orderCount } = data?.data?.[0];
       setSearchedText("");
       setOrders(OrderData);
+      setAllOrders(OrderData);
       setTotalcount(orderCount || 0);
       getStatusCount(currentStatus, true, "", startDate, endDate);
     }
@@ -1996,6 +1997,7 @@ const Index = () => {
         });
 
         setOrders(OrderData);
+        setAllOrders(OrderData);
         getStatusCount(
           currentStatus,
           true,

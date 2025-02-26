@@ -1,5 +1,5 @@
 import PlaceChannelOrder from "../../../assets/placeChannelOrder.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
@@ -384,9 +384,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           const checkbox = selectAllContainer.querySelector(
             'input[type="checkbox"]'
           );
-
+          // console.log(checkbox, "CHECLLLD");
           // Function to check if the checkbox is checked
           const isChecked = checkbox.checked;
+          // console.log(allOrders, "ORDERSSS");
           if (isChecked) {
             orderDetails = allOrders?.map((order: any) => {
               return {
@@ -412,7 +413,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
             const interval = setInterval(updateProgressBar, 1000);
 
-            const { data } = await POST(POST_PLACE_ALL_ORDERS, {
+            const { data } = await POST("Fdsv", {
               orders: orderDetails,
             });
             if (data?.success) {
@@ -1068,7 +1069,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
     const { OrderData, orderCount, draftCount } = data?.data?.[0];
-
+    // console.log(OrderData + " " + orderCount + " " + draftCount);
     if (subStatus === "DRAFT") {
       setDraftOrderCount({
         ...draftOrderCount,
@@ -1504,7 +1505,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           >
             <div className="flex gap-x-4">
               <div className="flex items-center text-[22px] ">
-                {currentStatus === "DRAFT" && `${draftOrderCount.all} Orders`}
+                {currentStatus === "DRAFT" && `${allOrders.length} Orders`}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}
