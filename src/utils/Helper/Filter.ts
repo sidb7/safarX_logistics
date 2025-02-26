@@ -44,7 +44,7 @@ export const inputRegexFilter = async (
   const reqType = reqObj["req_type"];
   // console.log("🚀 ~ reqType:", reqType);
   const responseKey = reqObj["response_key"];
-
+  console.log(reqObj, "PATH");
   switch (reqType) {
     case "GET":
       try {
