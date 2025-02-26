@@ -413,7 +413,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
             const interval = setInterval(updateProgressBar, 1000);
 
-            const { data } = await POST("Fdsv", {
+            const { data } = await POST(POST_PLACE_ALL_ORDERS, {
               orders: orderDetails,
             });
             if (data?.success) {

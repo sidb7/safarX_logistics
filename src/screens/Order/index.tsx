@@ -431,6 +431,8 @@ const Index = () => {
     setEndDate(null);
   };
 
+  useEffect(() => {}, [allOrders]);
+
   const Buttons = (className?: string) => {
     return (
       <div>
