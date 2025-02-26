@@ -5,7 +5,11 @@ import ProfileLogo from "../../assets/Navbar/essential.svg";
 import NotificationLogo from "../../assets/Navbar/notification.svg";
 import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import HamMenu from "../../assets/Navbar/hamMenu.svg";
-import { GetCurrentPath, clearLocalStorage } from "../../utils/utility";
+import {
+  GetCurrentPath,
+  clearLocalStorage,
+  getLocalStorage,
+} from "../../utils/utility";
 import SearchIcon from "../../assets/Search.svg";
 import CustomButton from "../../components/Button/index";
 import locationImage from "../../assets/serv/location.svg";
@@ -45,6 +49,7 @@ import { initSocket } from "../../Socket";
 import ProfileIcon from "../../assets/ProfileIconBlue.png";
 import SentryFeedback from "./SentryFeedback";
 import ReportAbugIcon from "../../assets/ReportABug.svg";
+import sessionManager from "../../utils/sessionManager";
 
 let socket: Socket | null = null;
 
@@ -113,6 +118,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
+
+  // let sellerId = localStorage.getItem("sellerId");
+  // const localUserToken = getLocalStorage(
+  //   `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+  // );
 
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
 
@@ -256,7 +266,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     }
     clearLocalStorage();
     localStorage.clear();
+    sessionStorage.clear();
   };
+  const { sellerInfo } = sessionManager({});
+  // let sellerId = localStorage.getItem("sellerId");
+  let sellerId = sellerInfo?.sellerId;
 
   // const socket = initSocket();
 
@@ -291,29 +305,34 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
           boxShadow: "0px 4px 6px 0px rgba(0, 0, 0, 0.04)",
         }}
       >
-        <div className="justify-between lg:justify-self-end flex items-center gap-3">
-          <div className="flex items-center gap-x-3 lg:hidden">
-            <img src={HamMenu} alt="" onClick={() => setMobileSideBar(true)} />
-
-            <div
-              className="mt-1 p-1"
-              onClick={() => navigate("/dashboard/overview")}
-            >
+        {sellerId ? (
+          <div className="justify-between lg:justify-self-end flex items-center gap-3">
+            <div className="flex items-center gap-x-3 lg:hidden">
               <img
-                className="h-[30px] w-[100px] object-contain"
-                src={LARGE_LOGO}
+                src={HamMenu}
                 alt=""
+                onClick={() => setMobileSideBar(true)}
               />
-            </div>
-          </div>
 
-          {/* <InputWithImage
+              <div
+                className="mt-1 p-1"
+                onClick={() => navigate("/dashboard/overview")}
+              >
+                <img
+                  className="h-[30px] w-[100px] object-contain"
+                  src={LARGE_LOGO}
+                  alt=""
+                />
+              </div>
+            </div>
+
+            {/* <InputWithImage
             imgSrc={SearchIcon}
             inputClassName="hidden lg:!w-80 lg:flex !p-0"
             placeholder="Search"
           /> */}
 
-          {/* <CustomButton
+            {/* <CustomButton
             icon={PowerBoosterlogo}
             showIcon={true}
             onlyIcon={true}
@@ -321,8 +340,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             text={""}
             onClick={() => {}}
           /> */}
-          <div className="flex items-center justify-self-end gap-x-3 ">
-            {/* <div
+            <div className="flex items-center justify-self-end gap-x-3 ">
+              {/* <div
               className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
               onClick={() => navigate("/wallet/view-wallet")}
             >
@@ -338,55 +357,63 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               </div>
             </div> */}
 
-            {isLoading ? (
-              <div className="flex animated !rounded-md w-20 h-[36px]    ">
-                <img
-                  src={WalletIcon}
-                  width={35}
-                  className="z-10  mx-2"
-                  alt=""
-                />
-              </div>
-            ) : (
-              <div className="hidden lg:block">
-                <div
-                  className="flex items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
-                  onClick={() => navigate("/wallet/view-wallet")}
-                >
-                  <img src={WalletIcon} width={35} alt="" />
-                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
-                    <div>₹</div>
-                    <div>{walletBalance?.toLocaleString("en-IN")}</div>
+              {isLoading ? (
+                <div className="flex animated !rounded-md w-20 h-[36px]    ">
+                  <img
+                    src={WalletIcon}
+                    width={35}
+                    className="z-10  mx-2"
+                    alt=""
+                  />
+                </div>
+              ) : (
+                <div className="hidden lg:block">
+                  <div
+                    className="flex items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
+                    onClick={() => navigate("/wallet/view-wallet")}
+                  >
+                    <img src={WalletIcon} width={35} alt="" />
+                    <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                      <div>₹</div>
+                      <div>{walletBalance?.toLocaleString("en-IN")}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {localStorage.getItem("sellerId") && (
-              <div className="hidden lg:block">
-                <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
-                  <img src={ProfileIcon} width={16} alt="" />
-                  <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
-                    <div>Seller ID: </div>
-                    <div>{localStorage.getItem("sellerId")}</div>
+              {
+                // localStorage.getItem("sellerId")
+                sellerId && (
+                  <div className="hidden lg:block">
+                    <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
+                      <img src={ProfileIcon} width={16} alt="" />
+                      <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                        <div>Seller ID: </div>
+                        <div>
+                          {
+                            // localStorage.getItem("sellerId")
+                            sellerId
+                          }
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )}
+                )
+              }
 
-            <img
-              src={SearchIcon}
-              width={"22px"}
-              className="lg:hidden"
-              height={"22px"}
-              alt=""
-            />
-            <div
-              className="relative cursor-pointer col-span-1 flex gap-x-4"
-              ref={dropdownRef}
-              id="profileIcon"
-            >
-              {/* <img
+              <img
+                src={SearchIcon}
+                width={"22px"}
+                className="lg:hidden"
+                height={"22px"}
+                alt=""
+              />
+              <div
+                className="relative cursor-pointer col-span-1 flex gap-x-4"
+                ref={dropdownRef}
+                id="profileIcon"
+              >
+                {/* <img
                 src={locationImage}
                 width={"22px"}
                 height={"22px"}
@@ -394,18 +421,18 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
               /> */}
-              <div ref={dropdownQuickRef}>
-                <img
-                  src={PowerBoosterlogo}
-                  width={"22px"}
-                  height={"22px"}
-                  alt=""
-                  className="cursor-pointer"
-                  onClick={() => openQuickAction()}
-                />
-              </div>
-              {/* commented as not needed now  */}
-              {/* 
+                <div ref={dropdownQuickRef}>
+                  <img
+                    src={PowerBoosterlogo}
+                    width={"22px"}
+                    height={"22px"}
+                    alt=""
+                    className="cursor-pointer"
+                    onClick={() => openQuickAction()}
+                  />
+                </div>
+                {/* commented as not needed now  */}
+                {/* 
               <CustomButton
                 icon={NotificationLogo}
                 showIcon={true}
@@ -414,145 +441,148 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 text={""}
                 onClick={() => navigate("/notifications")}
               /> */}
-              <CustomButton
-                icon={ProfileLogo}
-                onClick={() => setIsOpen(!isOpen)}
-                showIcon={true}
-                onlyIcon={true}
-                className="bg-white !w-6 !h-6 !p-0 lg:w-fit"
-                text={""}
-              />
-              {isModalOpen && (
-                <CenterModal
-                  isOpen={isModalOpen}
-                  onRequestClose={() => setIsModalOpen(false)}
-                  className="w-3/4 h-3/4 max-h-screen overflow-auto"
-                >
-                  <ServicabilityPincode
-                    onClick={() => {
-                      setIsModalOpen(false);
-                    }}
-                  />
-                </CenterModal>
-              )}
-              {/* <img src={ProfileLogo} alt="" /> */}
-              {isOpen && (
-                <div
-                  className="origin-top-right z-50 absolute right-2 mt-8 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  <div className="py-0.5" role="none">
-                    <button
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      onClick={() => navigate("/profile")}
-                    >
-                      My Profile
-                    </button>
-                    <button
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      onClick={() => navigate("/settings")}
-                    >
-                      Settings
-                    </button>
-                    <button
-                      className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      onClick={() => logoutHandler()}
-                    >
-                      Sign out
-                    </button>
-                  </div>
-                </div>
-              )}
-              {isQuick && (
-                <div
-                  className="origin-top-right z-50 absolute -right-4 md:right-2 mt-8 w-[21rem] md:w-[27rem] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  <div className="p-4" role="none">
-                    <div className="flex justify-between mt-4">
-                      <span className="text-[#1C1C1C] text-[1rem] font-Open font-semibold">
-                        Quick action
-                      </span>
-                      <span onClick={() => setIsQuick(false)}>
-                        <img
-                          src={CrossIcon}
-                          alt=""
-                          className="self-center"
-                          width={"20px"}
-                          height={"20px"}
-                        />
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-4 gap-6 overflow-hidden mt-4">
-                      <div
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                <CustomButton
+                  icon={ProfileLogo}
+                  onClick={() => setIsOpen(!isOpen)}
+                  showIcon={true}
+                  onlyIcon={true}
+                  className="bg-white !w-6 !h-6 !p-0 lg:w-fit"
+                  text={""}
+                />
+                {isModalOpen && (
+                  <CenterModal
+                    isOpen={isModalOpen}
+                    onRequestClose={() => setIsModalOpen(false)}
+                    className="w-3/4 h-3/4 max-h-screen overflow-auto"
+                  >
+                    <ServicabilityPincode
+                      onClick={() => {
+                        setIsModalOpen(false);
+                      }}
+                    />
+                  </CenterModal>
+                )}
+                {/* <img src={ProfileLogo} alt="" /> */}
+                {isOpen && (
+                  <div
+                    className="origin-top-right z-50 absolute right-0 mt-9 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    <div className="py-0.5" role="none">
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
+                        role="menuitem"
                         onClick={() => {
-                          setShowTable(false);
-                          setShowServiceability(true);
-                          onClickServiceability();
+                          navigate("/profile");
+                          setIsOpen(false);
                         }}
                       >
-                        <img
-                          src={ServiceabilityIcon}
-                          alt=""
-                          className="self-center"
-                          width={"40px"}
-                          height={"40px"}
-                        />
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Serviceability
+                        My Profile
+                      </button>
+                      {/* <button
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        role="menuitem"
+                        onClick={() => navigate("/settings")}
+                      >
+                        Settings
+                      </button> */}
+                      <button
+                        className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
+                        role="menuitem"
+                        onClick={() => logoutHandler()}
+                      >
+                        Sign out
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {isQuick && (
+                  <div
+                    className="origin-top-right z-50 absolute -right-4 md:right-2 mt-8 w-[21rem] md:w-[27rem] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    <div className="p-4" role="none">
+                      <div className="flex justify-between mt-4">
+                        <span className="text-[#1C1C1C] text-[1rem] font-Open font-semibold">
+                          Quick action
                         </span>
-                        {/* <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
-                          ₹ {quickData?.walletBalance}
-                        </span> */}
+                        <span onClick={() => setIsQuick(false)}>
+                          <img
+                            src={CrossIcon}
+                            alt=""
+                            className="self-center"
+                            width={"20px"}
+                            height={"20px"}
+                          />
+                        </span>
                       </div>
-
-                      {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+                      <div className="grid grid-cols-4 gap-6 overflow-hidden mt-4">
                         <div
                           className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                          onClick={() => navigate("/wallet/view-wallet")}
+                          onClick={() => {
+                            setShowTable(false);
+                            setShowServiceability(true);
+                            onClickServiceability();
+                          }}
                         >
                           <img
-                            src={YaariIcon}
+                            src={ServiceabilityIcon}
                             alt=""
                             className="self-center"
                             width={"40px"}
                             height={"40px"}
                           />
                           <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                            Yaari Points
+                            Serviceability
                           </span>
-                          <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
-                            {0}
+                          {/* <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
+                          ₹ {quickData?.walletBalance}
+                        </span> */}
+                        </div>
+
+                        {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+                          <div
+                            className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                            onClick={() => navigate("/wallet/view-wallet")}
+                          >
+                            <img
+                              src={YaariIcon}
+                              alt=""
+                              className="self-center"
+                              width={"40px"}
+                              height={"40px"}
+                            />
+                            <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                              Yaari Points
+                            </span>
+                            <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
+                              {0}
+                            </span>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        <div
+                          className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                          onClick={() => navigate("/tracking")}
+                        >
+                          <img
+                            src={TrackOrderIcon}
+                            alt=""
+                            className="self-center"
+                            width={"40px"}
+                            height={"40px"}
+                          />
+                          <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                            Track Order
                           </span>
                         </div>
-                      ) : (
-                        <></>
-                      )}
-                      <div
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/tracking")}
-                      >
-                        <img
-                          src={TrackOrderIcon}
-                          alt=""
-                          className="self-center"
-                          width={"40px"}
-                          height={"40px"}
-                        />
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Track Order
-                        </span>
-                      </div>
-                      {/* commented as not needed now  */}
-                      {/* <div
+                        {/* commented as not needed now  */}
+                        {/* <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                         onClick={() => navigate("/weight-freeze")}
                       >
@@ -567,88 +597,89 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Weight Freeze
                         </span>
                       </div> */}
-                      <div
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/orders/add-order/pickup")}
-                      >
-                        <img
-                          src={CreateOrderIcon}
-                          alt=""
-                          className="self-center"
-                          width={"40px"}
-                          height={"40px"}
-                        />
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Create an order
-                        </span>
-                      </div>
-
-                      {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
-                        <>
-                          {companyName === "Shipyaari" ? (
-                            <a
-                              className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                              href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                src={SyAppIcon}
-                                alt=""
-                                className="self-center"
-                                width={"40px"}
-                                height={"40px"}
-                              />
-                              <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                                Shipyaari App
-                              </span>
-                            </a>
-                          ) : (
-                            <></>
-                          )}
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                      <div
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={handleReportBugClick}
-                      >
-                        <div className="h-7 w-7  pt-2 mb-3 md:ml-6 ml-3">
+                        <div
+                          className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                          onClick={() => navigate("/orders/add-order/pickup")}
+                        >
                           <img
-                            src={ReportAbugIcon}
+                            src={CreateOrderIcon}
                             alt=""
                             className="self-center"
-                            height={"40px"}
                             width={"40px"}
+                            height={"40px"}
                           />
+                          <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                            Create an order
+                          </span>
                         </div>
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Report A Bug
-                        </span>
-                      </div>
-                      <div
-                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => setIsModalOpen(true)}
-                      >
-                        <img
-                          src={PinCodeIcon}
-                          alt=""
-                          className="self-center"
-                          width={"40px"}
-                          height={"40px"}
-                        />
-                        <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Pincode Check
-                        </span>
+
+                        {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+                          <>
+                            {companyName === "Shipyaari" ? (
+                              <a
+                                className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                                href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <img
+                                  src={SyAppIcon}
+                                  alt=""
+                                  className="self-center"
+                                  width={"40px"}
+                                  height={"40px"}
+                                />
+                                <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                                  Shipyaari App
+                                </span>
+                              </a>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        <div
+                          className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                          onClick={handleReportBugClick}
+                        >
+                          <div className="h-7 w-7  pt-2 mb-3 md:ml-6 ml-3">
+                            <img
+                              src={ReportAbugIcon}
+                              alt=""
+                              className="self-center"
+                              height={"40px"}
+                              width={"40px"}
+                            />
+                          </div>
+                          <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                            Report A Bug
+                          </span>
+                        </div>
+                        <div
+                          className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                          onClick={() => setIsModalOpen(true)}
+                        >
+                          <img
+                            src={PinCodeIcon}
+                            alt=""
+                            className="self-center"
+                            width={"40px"}
+                            height={"40px"}
+                          />
+                          <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
+                            Pincode Check
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
         {/* Open Modal on Clicking Serviceability */}
 
         <CenterModal

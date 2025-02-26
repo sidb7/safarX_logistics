@@ -1,16 +1,16 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import feedBackIcon from "../../assets/feedback.svg";
 import closeIcon from "../../assets/CloseIcon.svg";
 import { Tooltip } from "react-tooltip";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CustomDropDown from "../../components/DropDown";
-import terriableEmojiIcon from "../../assets/Feedback/terriable.svg";
+import terribleEmojiIcon from "../../assets/Feedback/terriable.svg";
 import badEmojiIcon from "../../assets/Feedback/bad.svg";
 import goodEmojiIcon from "../../assets/Feedback/good.svg";
 import InputBox from "../../components/Input/index";
 import okayEmojiIcon from "../../assets/Feedback/okay.svg";
 import ExcellentEmojiIcon from "../../assets/Feedback/excellent.svg";
-import terriableActiveIcon from "../../assets/Feedback/terriableColor.svg";
+import terribleActiveIcon from "../../assets/Feedback/terriableColor.svg";
 import badActiveIcon from "../../assets/Feedback/badColor.svg";
 import okayActiveIcon from "../../assets/Feedback/okayColor.svg";
 import goodActiveIcon from "../../assets/Feedback/goodColor.svg";
@@ -24,9 +24,9 @@ import { useNavigate } from "react-router-dom";
 
 const userExperienceExpression = [
   {
-    icon: terriableEmojiIcon,
+    icon: terribleEmojiIcon,
     isActive: false,
-    activeIcon: terriableActiveIcon,
+    activeIcon: terribleActiveIcon,
     value: "Terriable",
   },
   {
@@ -63,13 +63,13 @@ function AddFeedBack() {
 
   const [feedbackState, setFeedBackState] = useState({
     module: module[0]?.name || "", // Set initial module to first in list
-    subModule: module[0]?.menu?.[0]?.name || "", 
+    subModule: module[0]?.menu?.[0]?.name || "",
     comments: "",
     experience: "",
   });
 
-   // Set initial submodule list on component mount
-   useEffect(() => {
+  // Set initial submodule list on component mount
+  useEffect(() => {
     if (module.length > 0) {
       const firstModule = module[0];
       setSubModuleList(firstModule.menu || []);

@@ -27,6 +27,7 @@ import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
 import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
 import ClickpostIcon from "../../../../assets/Catalogue/clickpost.png";
 import EasycomIcon from "../../../../assets/Catalogue/easycom.png";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -63,11 +64,14 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
 
       if (response?.status) {
         if (channelData?.channels?.length === 0) {
-          let channelSessionObj: any = localStorage.getItem("userInfo");
-          channelSessionObj = JSON.parse(channelSessionObj);
+          // let channelSessionObj: any = localStorage.getItem("userInfo");
+          const { sessionId, sellerInfo } = sessionManager({});
+          let channelSessionObj = sellerInfo;
+          // channelSessionObj = JSON.parse(channelSessionObj);
           if (channelSessionObj.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = false;
-            localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            // localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            sessionManager(channelSessionObj);
           }
         }
         toast.success("Channel Deactivated Successfully!!");
@@ -264,11 +268,14 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
         const { data: response } = await POST(GET_ALL_STORES, {});
         setLoading(false);
         if (response && response.data.length > 0) {
-          let channelSessionObj: any = localStorage.getItem("userInfo");
-          channelSessionObj = JSON.parse(channelSessionObj);
+          // let channelSessionObj: any = localStorage.getItem("userInfo");
+          const { sessionId, sellerInfo } = sessionManager({});
+          let channelSessionObj = sellerInfo;
+          // channelSessionObj = JSON.parse(channelSessionObj);
           if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = true;
-            localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            // localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            sessionManager(channelSessionObj);
           }
 
           let tempArr: any = [];
@@ -326,11 +333,13 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
 
           setChannelData({ channels: tempArr });
         } else {
-          let channelSessionObj: any = localStorage.getItem("userInfo");
-          channelSessionObj = JSON.parse(channelSessionObj);
-          if (channelSessionObj?.nextStep?.isChannelIntegrated) {
-            channelSessionObj.nextStep.isChannelIntegrated = false;
-            localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+          const { sessionId, sellerInfo } = sessionManager({});
+          let channelSessionObj = sellerInfo;
+          // channelSessionObj = JSON.parse(channelSessionObj);
+          if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
+            channelSessionObj.nextStep.isChannelIntegrated = true;
+            // localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+            sessionManager(channelSessionObj);
           }
         }
       } catch (error) {}

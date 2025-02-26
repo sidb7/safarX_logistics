@@ -90,11 +90,12 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   }, [completedStatus?.returningUser]);
 
   // Extracted count calculations
-  const bookedCount = getCount("BOOKED");
-  const inTransitCount = getCount("IN TRANSIT");
-  const outForDeliveryCount = getCount("OUT FOR DELIVERY");
-  const exceptionCount = getCount("EXCEPTION");
-  const cancelledCount = getCount("CANCELLED");
+  const bookedCount = getCount("BOOKED") || 0;
+  const notPickedCount = getCount("NOT PICKED") || 0;
+  const inTransitCount = getCount("IN TRANSIT") || 0;
+  const outForDeliveryCount = getCount("OUT FOR DELIVERY") || 0;
+  const exceptionCount = getCount("EXCEPTION") || 0;
+  const cancelledCount = getCount("CANCELLED") || 0;
   return (
     <>
       <div className="px-4 py-[10px] border-1 border-[#E8E8E8] rounded-2xl shadow-md bg-[#EBFCFF] mt-[35px] mb-6 md:mb-0">
@@ -142,7 +143,7 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
                           Orders Placed
                         </p>
                         <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
-                          {bookedCount || "0"}
+                          {bookedCount + notPickedCount || "0"}
                         </p>
                       </div>
                     </div>
