@@ -39,6 +39,8 @@ const Index = (props: ITypeProps) => {
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [featureRateCardPlan, setFeatureRateCardPlan] = useState([]);
+  const [isShopifyEnabled, setIsShopifyEnabled] = useState(false);
+  // console.log("🚀 ~ Index ~ isShopifyEnabled:", isShopifyEnabled);
 
   const ModalContent = () => {
     return (
@@ -131,9 +133,17 @@ const Index = (props: ITypeProps) => {
       try {
         //Get all plans API
         setLoading(true);
-        const { data: response }: any = await POST(GET_ALL_PLANS, {
+        const kycCheck = JSON.parse(localStorage.getItem("kycValue") || "{}");
+        const isChannelIntegrated =
+          kycCheck?.nextStep?.isChannelIntegrated || false;
+        const isShopifyApp = kycCheck?.nextStep?.isShopifyApp || false;
+        const shouldEnableShopify = isChannelIntegrated && isShopifyApp;
+        setIsShopifyEnabled(shouldEnableShopify);
+        const payload: any = {
           limit: 1000000,
-        });
+          ...(shouldEnableShopify ? { isShopify: true } : {}),
+        };
+        const { data: response }: any = await POST(GET_ALL_PLANS, payload);
 
         if (response?.success) {
           setLoading(false);
@@ -164,6 +174,8 @@ const Index = (props: ITypeProps) => {
           // });
           setAllPlans(tempPlan);
           callFeaturesRateCard();
+        } else {
+          setLoading(false);
         }
       } catch (error) {
         setLoading(false);
@@ -332,6 +344,7 @@ const Index = (props: ITypeProps) => {
                             price={eachPlan?.price}
                             validity={eachPlan?.validity}
                             description={eachPlan?.description}
+                            currencyType={eachPlan?.currency}
                             onClick={() => {
                               setIsModalOpen(true);
                               setOnSelectPlan(eachPlan);

@@ -13,10 +13,20 @@ interface ITypeProps {
   onClick: any;
   activePlanId: string;
   isSelected: boolean;
+  currencyType?: string;
 }
 
 const PlanCard = (props: ITypeProps) => {
-  const { planName, price, validity, description, onClick, isSelected } = props;
+  const {
+    planName,
+    price,
+    validity,
+    description,
+    onClick,
+    isSelected,
+    currencyType,
+  } = props;
+  // console.log("🚀 ~ PlanCard ~ currencyType:", currencyType);
   const { isLgScreen } = ResponsiveState();
 
   const descriptionArray = description.split("\n");
@@ -77,7 +87,7 @@ const PlanCard = (props: ITypeProps) => {
               <div className="flex items-end gap-x-1">
                 <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
                   <span className="font-Open text-[12px] font-semibold leading-4 text-[#777777] ">
-                    ₹
+                    {`${currencyType === "USD" ? "$" : "₹"}`}
                   </span>
                   {`${price}`}
                 </p>
