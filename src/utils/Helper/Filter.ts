@@ -1,6 +1,7 @@
 import MappingFilter from "../../utils/Helper/MappingFilter.json";
 import { GET, POST } from "../../utils/webService";
 import CryptoJS from "crypto-js";
+import { COMPANY_NAME } from "../../utils/ApiUrls";
 
 const ENCRYPTION_KEY = "MyStaticEncryptionKey123!@#"; // This should match the backend key
 
@@ -31,7 +32,14 @@ export const inputRegexFilter = async (
     .trim()
     .replace(/^,|,$/g, "");
   const mapper: any = MappingFilter;
-
+  mapper[`${`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}`] = {
+    query_key: "trackingNo",
+    req_type: "GET_CUSTOM",
+    api: "/api/v1/tracking/getTrackingforSystem",
+    data_type: [],
+    response_key: "trackingInfo",
+    error_msg: "Please Enter Tracking ID",
+  };
   // Perform input validation
   const isValid = validateInputData(filteredInput);
   if (!isValid && inputData?.length !== 0) {
