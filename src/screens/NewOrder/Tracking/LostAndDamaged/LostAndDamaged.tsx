@@ -4,19 +4,51 @@ import centerIcon from "../../../../assets/LostAndDamged/Group 1000006836 (1).sv
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import CustomInputBox from "../../../../components/Input";
 import OneRadioButton from "../../../../components/OneRadioButton/OneRadioButton";
-import { FETCH_LD_ORDERS, UPDATE_LD_ORDERS } from "../../../../utils/ApiUrls";
+import { FETCH_LD_ORDERS, UPDATE_LD_ORDERS ,FETCH_LD_ORDERS_FOR_SEARCH} from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import toast from "react-hot-toast";
 import LostAndFoundTable from "./LostAndFoundTable";
 import OneButton from "../../../../components/Button/OneButton";
 
-// interface OrderDetails {
-//   packageInfo: string;
-//   weight: string;
-//   invoiceValue: string;
-//   insurance: string;
-//   bookedDate: string;
-// }
+import DateButton from "../../../../components/Button/DateButton";
+import DatePicker from "react-datepicker";
+import { SearchBox } from "../../../../components/SearchBox";
+import LostDamagedFilter from "./LostDamagedFilter";
+import RightSideModal from "../../../../components/CustomModal/customRightModal";
+import FilterIcon from "../../../../assets/Order/FilterIcon.svg";
+import CloseIcon from "../../../../assets/CloseIcon.svg";
+import { Spinner } from "../../../../components/Spinner";
+
+interface FilterCondition {
+  $in: any[];
+}
+
+interface FilterObject {
+  ldStatus?: { $in: string[] };
+  isClaimed?: { $in: boolean[] };
+  [key: string]: any;
+}
+
+// Define payload structure
+interface OrderPayload {
+  searchValue?: string;
+  filterArr: FilterObject[];
+  startDate?: number | null;
+  endDate?: number | null;
+}
+
+interface FilterMenuItem {
+  name: string;
+  value: string | boolean;
+  isActive: boolean;
+}
+
+interface FilterState {
+  name: string;
+  menu: FilterMenuItem[];
+  label: string;
+  isCollapse: boolean;
+}
 
 const LostAndDamaged: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +62,26 @@ const LostAndDamaged: React.FC = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [videoFile, setVideoFile] = useState<File | null>(null);
 
+  const [dateRange, setDateRange]: any = useState([null, null]);
+  const [startDate, setStartDate] = useState<any>(null);
+  const [endDate, setEndDate] = useState<any>(null);
+
+  const [searchValue, setSearchValue] = useState("");
+
+  const [filterModal, setFilterModal] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState<boolean>(false);
+
+  const [filterState, setFilterState] = useState<FilterState>({
+    name: "",
+    menu: [], // Now typed as FilterMenuItem[]
+    label: "",
+    isCollapse: false,
+  });
+
+  const [filterPayLoad, setFilterPayLoad] = useState<any>({
+    filterArrOne: [],
+  });
+
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(e.target.value);
   };
@@ -41,12 +93,12 @@ const LostAndDamaged: React.FC = () => {
   const fetchOrderDetails = async (awb?: string) => {
     try {
       const payload = {
-        searchValue: awb,
+        awb: awb,
       };
 
-      const response = await POST(FETCH_LD_ORDERS, payload);
+      const response = await POST(FETCH_LD_ORDERS_FOR_SEARCH, payload);
       if (response?.data?.success) {
-        setOrderDetails(response.data.data?.[0]?.data);
+        setOrderDetails(response?.data?.data[0]);
       }
     } catch (error) {
       setOrderDetails(null);
@@ -55,22 +107,205 @@ const LostAndDamaged: React.FC = () => {
     }
   };
 
+  // const fetchOrderDetailsTable = async (awb?: string) => {
+  //   try {
+  //     const payload: any = {
+  //       searchValue: searchValue || awb,
+  //       filterArr: []
+  //     };
+
+  //     // Add date range if present
+  //     if (startDate && endDate) {
+  //       let startEpoch = null;
+  //       let lastendEpoch = null;
+
+  //       if (startDate instanceof Date && endDate instanceof Date) {
+  //         startDate.setHours(0, 0, 0, 0);
+  //         startEpoch = startDate.getTime();
+
+  //         endDate.setHours(23, 59, 59, 999);
+  //         const endEpoch = endDate.getTime();
+
+  //         lastendEpoch = endEpoch;
+  //       }
+  //       payload.startDate = startEpoch;
+  //       payload.endDate = lastendEpoch;
+  //     }
+
+  //     // Add filters if present
+  //     if (filterPayLoad?.filterArrOne?.length > 0) {
+  //       filterPayLoad.filterArrOne.forEach((filter: any) => {
+  //         if (filter.ldStatus?.$in?.length > 0) {
+  //           payload.filterArr.push({
+  //             ldStatus: { $in: filter.ldStatus.$in }
+  //           });
+  //         }
+  //         if (filter.isClaimed?.$in?.length > 0) {
+  //           payload.filterArr.push({
+  //             isClaimed: { $in: filter.isClaimed.$in }
+  //           });
+  //         }
+  //       });
+  //     }
+
+  //     const response = await POST(FETCH_LD_ORDERS, payload);
+  //     if (response?.data?.success) {
+  //       setOrderDetailsTable(response.data.data?.[0]?.data);
+  //       setIsFilterLoading(false);
+  //     } else {
+  //       toast.error(response?.message || "Failed to fetch orders");
+  //       setIsFilterLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching order details:", error);
+  //     toast.error("An error occurred while fetching orders");
+  //     setIsFilterLoading(false);
+  //   }
+  // };
+
+  // Then update your fetchOrderDetailsTable function
   const fetchOrderDetailsTable = async (awb?: string) => {
     try {
-      const payload = {
-        searchValue: awb,
+      setIsFilterLoading(true);
+      const payload: OrderPayload = {
+        searchValue: searchValue || awb,
+        filterArr: [],
       };
+
+      // Add date range if present
+      if (startDate && endDate) {
+        let startEpoch: number | null = null;
+        let lastendEpoch: number | null = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          lastendEpoch = endDate.getTime();
+        }
+        payload.startDate = startEpoch;
+        payload.endDate = lastendEpoch;
+      }
+
+      // Add filters if present
+      if (filterPayLoad?.filterArrOne?.length > 0) {
+        payload.filterArr = [...filterPayLoad.filterArrOne];
+        // console.log("Applied filters:", payload.filterArr); // Debug line
+      }
+
+      // console.log("API Payload:", payload); // Debug line to check payload
 
       const response = await POST(FETCH_LD_ORDERS, payload);
       if (response?.data?.success) {
         setOrderDetailsTable(response.data.data?.[0]?.data);
+      } else {
+        toast.error(response?.data?.message || "Failed to fetch orders");
       }
     } catch (error) {
-      setOrderDetails(null);
-
       console.error("Error fetching order details:", error);
+      toast.error("An error occurred while fetching orders");
+    } finally {
+      setIsFilterLoading(false);
     }
   };
+
+  const handleFilterReset = () => {
+    setFilterState({
+      name: "",
+      menu: [] as FilterMenuItem[], // Explicitly cast as FilterMenuItem[]
+      label: "",
+      isCollapse: false,
+    });
+    setFilterPayLoad({
+      filterArrOne: [],
+    });
+    fetchOrderDetailsTable();
+  };
+
+  // const fetchOrderDetailsTable = async (awb?: string) => {
+  //   try {
+  //     const payload: any = {
+  //       searchValue: awb,
+  //       filterArr: [],
+  //     };
+
+  //     // Handle date range
+  //     if (startDate && endDate) {
+  //       let startEpoch = null;
+  //       let lastendEpoch = null;
+
+  //       if (startDate instanceof Date && endDate instanceof Date) {
+  //         startDate.setHours(0, 0, 0, 0);
+  //         startEpoch = startDate.getTime();
+
+  //         endDate.setHours(23, 59, 59, 999);
+  //         const endEpoch = endDate.getTime();
+
+  //         lastendEpoch = endEpoch;
+  //       }
+  //       payload.startDate = startEpoch;
+  //       payload.endDate = lastendEpoch;
+  //     }
+
+  //     // Handle filters
+  //     if (filterPayLoad?.filterArrOne?.length > 0) {
+  //       filterPayLoad.filterArrOne.forEach((filter: any) => {
+  //         if (filter.ldStatus?.$in?.length > 0) {
+  //           payload.filterArr.push({
+  //             ldStatus: { $in: filter.ldStatus.$in },
+  //           });
+  //         }
+  //         if (filter.isClaimed?.$in?.length > 0) {
+  //           payload.filterArr.push({
+  //             isClaimed: { $in: filter.isClaimed.$in },
+  //           });
+  //         }
+  //       });
+  //     }
+
+  //     const response = await POST(FETCH_LD_ORDERS, payload);
+  //     if (response?.data?.success) {
+  //       setOrderDetailsTable(response.data.data?.[0]?.data);
+  //     }
+  //   } catch (error) {
+  //     setOrderDetails(null);
+  //     console.error("Error fetching order details:", error);
+  //   }
+  // };
+
+  // const fetchOrderDetailsTable = async (awb?: string) => {
+  //   try {
+  //     const payload: any = {
+  //       searchValue: awb,
+  //     };
+
+  //     if (startDate && endDate) {
+  //       let startEpoch = null;
+  //       let lastendEpoch = null;
+
+  //       if (startDate instanceof Date && endDate instanceof Date) {
+  //         startDate.setHours(0, 0, 0, 0);
+  //         startEpoch = startDate.getTime();
+
+  //         endDate.setHours(23, 59, 59, 999);
+  //         const endEpoch = endDate.getTime();
+
+  //         lastendEpoch = endEpoch;
+  //       }
+  //       payload.startDate = startEpoch;
+  //       payload.endDate = lastendEpoch;
+  //     }
+
+  //     const response = await POST(FETCH_LD_ORDERS, payload);
+  //     if (response?.data?.success) {
+  //       setOrderDetailsTable(response.data.data?.[0]?.data);
+  //     }
+  //   } catch (error) {
+  //     setOrderDetails(null);
+  //     console.error("Error fetching order details:", error);
+  //   }
+  // };
 
   const handleAwbChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const awbValue = e.target.value;
@@ -155,16 +390,22 @@ const LostAndDamaged: React.FC = () => {
 
       const requestData = {
         awb: awbNo,
-        ldStatus: selectedOption,
+        status: selectedOption,
         remark: remark,
       };
       formData.append("request", JSON.stringify(requestData));
 
+      // if (selectedOption === "DAMAGE") {
+      //   imageFiles.forEach((file, index) => {
+      //     formData.append(`image${index + 1}`, file);
+      //   });
+      //   if (videoFile) formData.append("video", videoFile);
+      // }
       if (selectedOption === "DAMAGE") {
-        imageFiles.forEach((file, index) => {
-          formData.append(`image${index + 1}`, file);
+        imageFiles.forEach((file) => {
+          formData.append("files", file);
         });
-        if (videoFile) formData.append("video", videoFile);
+        if (videoFile) formData.append("files", videoFile);
       }
 
       const response = await POST(UPDATE_LD_ORDERS, formData, {
@@ -221,13 +462,83 @@ const LostAndDamaged: React.FC = () => {
     setVideoFile(null);
   };
 
+  const handleClear = () => {
+    setDateRange([null, null]);
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+  function getObjectWithIsActiveTrue(data: FilterMenuItem[], name: string) {
+    // Create a deep copy of the current filter array
+    let tempArrOne = [...(filterPayLoad?.filterArrOne || [])];
+
+    // Extract active filter values
+    const filterValues = data
+      .filter((item) => item.isActive)
+      .map((item) => item.value);
+
+    // Find index of existing filter if present
+    let filterKey = "";
+    if (name === "Current Tag") filterKey = "ldStatus";
+    if (name === "Actions") filterKey = "isClaimed";
+
+    // If no key matches, exit early
+    if (!filterKey) return;
+
+    const existingIndex = tempArrOne.findIndex(
+      (filter) => Object.keys(filter)[0] === filterKey
+    );
+
+    // If no active values, remove filter entirely
+    if (filterValues.length === 0) {
+      if (existingIndex > -1) {
+        tempArrOne.splice(existingIndex, 1);
+      }
+    } else {
+      // If filter already exists, update it
+      if (existingIndex > -1) {
+        tempArrOne[existingIndex] = { [filterKey]: { $in: filterValues } };
+      } else {
+        // Otherwise add new filter
+        tempArrOne.push({ [filterKey]: { $in: filterValues } });
+      }
+    }
+
+    // Update the filter payload state
+    setFilterPayLoad({
+      ...filterPayLoad,
+      filterArrOne: tempArrOne,
+    });
+
+    // console.log("Updated filter payload:", tempArrOne); // Debug line
+  }
   console.log(
     "Order details ",
     // orderDetails?.codInfo?.isCod
     //   ? orderDetails?.codInfo?.collectableAmount
     //   : orderDetails?.codInfo?.invoiceValue
-    orderDetails
+    orderDetails,
+    orderDetails?.[0]?.orderInfo?.boxInfo?.[0]?.products?.[0]?.name
+
   );
+
+  useEffect(() => {
+    fetchOrderDetailsTable();
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      fetchOrderDetailsTable(searchValue);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (filterState?.name && filterState?.menu) {
+      getObjectWithIsActiveTrue(filterState.menu, filterState.name);
+    }
+  }, [filterState]);
 
   useEffect(() => {
     fetchOrderDetailsTable();
@@ -235,16 +546,86 @@ const LostAndDamaged: React.FC = () => {
 
   return (
     <div>
-      <Breadcrum label="Lost and Damaged" />
-      {orderDetailsTable?.length != 0 &&(<div className="flex flex-col items-end justify-end pr-4">
+      <div className=" flex justify-between w-full">
+        <div>
+          <Breadcrum label="Lost and Damaged" />
+        </div>
+        <div className="flex gap-2 items-center mb-4 mr-4">
+          <DatePicker
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update: any) => {
+              setDateRange(update);
+              if (update[0] === null && update[1] === null) {
+                setStartDate(null);
+                setEndDate(null);
+                fetchOrderDetailsTable();
+              } else {
+                setStartDate(update[0]);
+                setEndDate(update[1]);
+              }
+            }}
+            dateFormat="dd/MM/yyyy"
+            customInput={
+              <DateButton
+                text="Select From & To Date"
+                onClick={() => {}}
+                className="h-[36px]"
+                value={
+                  startDate && endDate
+                    ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                    : ""
+                }
+                onClear={handleClear}
+              />
+            }
+          />
 
-        <OneButton
-          text="ADD SHIPMENT"
-          onClick={handleClick}
-          className="max-w-[200px]"
-          variant="primary"
-        />
-      </div>)}
+          <SearchBox
+            label="Search"
+            value={searchValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchValue(e.target.value);
+            }}
+            customPlaceholder="Search by AWB number"
+            getFullContent={() => setSearchValue("")}
+          />
+
+          <div className="relative">
+            <OneButton
+              text="FILTER"
+              onClick={() => setFilterModal(true)}
+              variant="quad"
+              showIcon={true}
+              icon={FilterIcon}
+              className="ml-2 !uppercase"
+            />
+            {filterPayLoad.filterArrOne.length > 0 && (
+              <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
+                {filterPayLoad.filterArrOne.reduce(
+                  (total: any, filter: any) => {
+                    const key = Object.keys(filter)[0];
+                    return total + filter[key].$in.length;
+                  },
+                  0
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {orderDetailsTable?.length != 0 && (
+        <div className="flex flex-col items-end justify-end pr-4">
+          <OneButton
+            text="ADD SHIPMENT"
+            onClick={handleClick}
+            className="max-w-[200px]"
+            variant="primary"
+          />
+        </div>
+      )}
 
       {orderDetailsTable?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[calc(100vh-300px)]">
@@ -271,7 +652,14 @@ const LostAndDamaged: React.FC = () => {
         onRequestClose={handleModalClose}
         className="!h-[calc(100vh-50px)] w-[500px]"
       >
-        {/* <div className="flex justify-between items-center p-6  w-full">
+        {/* <div className="flex justify-between items-center p-6  w<RightSideModal isOpen={filterModal} onClose={() => setFilterModal(false)}>
+  <div>
+    <LostDamagedFilter 
+      filterState={filterState}
+      setFilterState={setFilterState}
+    />
+  </div>
+</RightSideModal>-full">
             <h2 className="text-xl font-medium">Lost And Damage</h2>
             <button
               onClick={handleModalClose}
@@ -403,8 +791,8 @@ const LostAndDamaged: React.FC = () => {
                     <div>
                       <p className="text-sm text-gray-500 mb-1">Weight</p>
                       <p className="font-medium">
-                        {orderDetails?.trackingInfo?.service?.appliedWeight
-                          ? `${orderDetails?.[0]?.trackingInfo?.service.appliedWeight} kg`
+                        {orderDetails?.service?.appliedWeight
+                          ? `${orderDetails?.service?.appliedWeight} kg`
                           : "N/A"}
                       </p>
                     </div>
@@ -433,11 +821,11 @@ const LostAndDamaged: React.FC = () => {
                       </p>
                       <p className="font-medium">
                         ₹{" "}
-                        {orderDetails?.trackingInfo?.codInfo?.isCod
-                          ? orderDetails?.[0]?.trackingInfo?.codInfo?.collectableAmount?.toLocaleString(
+                        {orderDetails?.orderInfo?.boxInfo?.[0]?.codInfo?.isCod
+                          ? orderDetails?.orderInfo?.boxInfo?.[0]?.codInfo?.collectableAmount?.toLocaleString(
                               "en-IN"
                             )
-                          : orderDetails?.[0]?.trackingInfo?.codInfo?.invoiceValue?.toLocaleString(
+                          : orderDetails?.orderInfo?.boxInfo?.[0]?.codInfo?.invoiceValue?.toLocaleString(
                               "en-IN"
                             ) || "N/A"}
                       </p>
@@ -445,9 +833,9 @@ const LostAndDamaged: React.FC = () => {
                     <div>
                       <p className="text-sm text-gray-500 mb-1">Booking Date</p>
                       <p className="font-medium">
-                        {orderDetails?.trackingInfo?.createdAt
+                        {orderDetails?.createdAt
                           ? new Date(
-                              orderDetails?.[0]?.trackingInfo?.createdAt
+                              orderDetails?.createdAt
                             ).toLocaleDateString("en-IN", {
                               day: "numeric",
                               month: "short",
@@ -642,6 +1030,75 @@ const LostAndDamaged: React.FC = () => {
           </div>
         </div>
       </CenterModal>
+
+      <RightSideModal
+        isOpen={filterModal}
+        onClose={() => setFilterModal(false)}
+        className="w-[500px] !justify-between !items-stretch"
+      >
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="flex justify-between items-center p-5 border-b">
+            <h2 className="text-2xl font-normal">Filter</h2>
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="cursor-pointer"
+              onClick={() => setFilterModal(false)}
+            />
+          </div>
+
+          {/* Content - with scrolling */}
+          <div className="flex-1 overflow-y-auto p-4">
+            <LostDamagedFilter
+              filterState={filterState}
+              setFilterState={setFilterState}
+              isLoading={isFilterLoading}
+            />
+          </div>
+
+          {/* Footer - fixed at bottom of modal */}
+          <div className="mt-auto border-t bg-white px-6 py-4">
+            <div className="flex justify-end gap-5">
+              <OneButton
+                text="RESET ALL"
+                onClick={() => {
+                  setFilterState({
+                    name: "",
+                    menu: [],
+                    label: "",
+                    isCollapse: false,
+                  });
+                  setFilterPayLoad({
+                    filterArrOne: [],
+                  });
+                  setIsFilterLoading(false);
+                  fetchOrderDetailsTable();
+                  setFilterModal(false);
+                }}
+                variant="secondary"
+                className="px-5"
+              />
+              {isFilterLoading ? (
+                <div className="flex justify-center items-center px-5">
+                  <Spinner />
+                </div>
+              ) : (
+                <OneButton
+                  text="APPLY"
+                  onClick={() => {
+                    setIsFilterLoading(true);
+                    fetchOrderDetailsTable();
+                    setFilterModal(false);
+                  }}
+                  variant="primary"
+                  className="px-5"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </RightSideModal>
     </div>
   );
 };

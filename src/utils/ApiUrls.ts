@@ -355,6 +355,10 @@ const BUYERREQUESTACTION = `${SELLER_BASE_URL}/tracking/buyerRequestAction`;
 //Lost and Damaged
 const FETCH_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersSeller`;
 const UPDATE_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/updateLDOrdersSeller`;
+const FETCH_LD_ORDERS_FOR_SEARCH = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersForSearch`;
+const UPDATE_LD_CLAIM = `${SELLER_BASE_URL}/lostAndDamage/updateClaimStatus`;
+
+
 
 
 
@@ -721,5 +725,7 @@ export {
   DOWNLOAD_S3_LABEL,
   GET_COUNT_AMAZON_ORDER,
   FETCH_LD_ORDERS,
-  UPDATE_LD_ORDERS
+  UPDATE_LD_ORDERS,
+  FETCH_LD_ORDERS_FOR_SEARCH,
+  UPDATE_LD_CLAIM,
 };
