@@ -94,13 +94,13 @@ export const Transaction = () => {
   });
   const getData = async () => {
     const payload: any = {
-      filter: [],
+      filter: {},
       skip: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
       pageNo: currentPage,
       sort: { _id: sortOrder === "desc" ? -1 : 1 },
-      searchValue: searchValue,
-      apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
+      search: searchValue,
+      // apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
     };
 
     if (startDate && endDate) {
@@ -116,8 +116,8 @@ export const Transaction = () => {
 
         lastendEpoch = endEpoch;
       }
-      payload.startDate = startEpoch;
-      payload.endDate = lastendEpoch;
+      payload.filter.startDate = startEpoch;
+      payload.filter.endDate = lastendEpoch;
 
       // payload?.filter?.push({
       //   createdAt: {
@@ -126,20 +126,14 @@ export const Transaction = () => {
       //   },
       // });
     }
-    payload.filter = [];
+    payload.filter.type = renderingComponents === 1 ? "neft" : "";
     let extraFilter = filterPayLoad?.filterArrOne;
+    console.log(extraFilter, "EXTRAA");
     extraFilter?.map((el: any, i: any) => {
       if (el?.status?.$in?.length > 0) {
-        payload?.filter?.push(el);
-      }
-      if (el?.description?.$in?.length > 0) {
-        payload?.filter?.push(el);
+        payload.filter.status = el.status;
       }
     });
-
-    if (renderingComponents === 1) {
-      payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
-    }
 
     // const { data: response } = await inputRegexFilter(
     //   searchValue,
@@ -152,7 +146,7 @@ export const Transaction = () => {
     );
     if (response?.success) {
       setData(response?.data || []);
-      setTotalItemCount(response.totalTransactions);
+      setTotalItemCount(response.total);
       setLoading(false);
       setIsFilterLoading(false);
       setFilterModal(false);
@@ -177,6 +171,7 @@ export const Transaction = () => {
     searchValue,
     isFilterLoading,
     renderingComponents,
+    endDate,
   ]);
 
   // useEffect(() => {
