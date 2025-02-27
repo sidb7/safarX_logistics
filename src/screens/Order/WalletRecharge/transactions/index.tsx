@@ -16,6 +16,7 @@ import TickGif from "../../../../assets/tick.gif";
 import toast from "react-hot-toast";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { Spinner } from "../../../../components/Spinner";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface IIndexProps {
   setOpenRightModal?: any;
@@ -44,10 +45,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   // console.log("🚀 ~ amountForTransaction:", amountForTransaction);
 
   const userDetailsFromSession = () => {
-    let temp: any = localStorage.getItem("userInfo");
+    // let temp: any = localStorage.getItem("userInfo");
     // console.log("🚀 ~ userDetailsFromSession ~ temp:", temp);
-    temp = JSON.parse(temp);
-
+    // temp = JSON.parse(temp);
+    const { sellerInfo } = sessionManager({});
+    let temp = sellerInfo;
     setUserDetails({
       ...userDetails,
       sellerId: temp?.sellerId,

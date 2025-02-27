@@ -44,6 +44,7 @@ import { getQueryJson } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
 import { isMasked, login } from "../../../redux/reducers/userReducer";
 import axios from "axios";
+import sessionManager from "../../../utils/sessionManager";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -74,7 +75,16 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      // if (sellerInfo?.nextStep) {
+      //   sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
+      // } else {
+      //   sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
+      // }
+      // localStorage.setItem(
+      //   `sellerSession_${sessionId}`,
+      //   JSON.stringify(sellerInfo)
+      // );
+      // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
       let signInUserReducerDetails = {
         email: loginCredentials.email,
@@ -85,14 +95,14 @@ const Index = () => {
       dispatch(signInUser(signInUserReducerDetails));
 
       if (response?.success) {
-        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        localStorage.setItem("userName", response?.data[0]?.name);
-        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
-        setLocalStorage(
-          `${response?.data[0]?.sellerId}_${tokenKey}`,
-          response?.data[0]?.token
-        );
-
+        // localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        // localStorage.setItem("userName", response?.data[0]?.name);
+        // localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        // setLocalStorage(
+        //   `${response?.data[0]?.sellerId}_${tokenKey}`,
+        //   response?.data[0]?.token
+        // );
+        const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
         //for hubspot sso
         const params = getQueryJson();
 
@@ -121,12 +131,10 @@ const Index = () => {
         window.gtag("config", REACT_APP_GTM_ID, {
           user_id: response?.data[0]?.sellerId,
         });
-
-        const token = localStorage.getItem("sellerId")
-          ? `${localStorage.getItem(
-              "sellerId"
-            )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-          : "";
+        let sellerId = sellerInfo?.sellerId;
+        const token =
+          // localStorage.getItem("sellerId")
+          sellerId ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d` : "";
 
         if (token !== "") {
           console.log("socketConnectedAfterlogin");
@@ -214,14 +222,24 @@ const Index = () => {
       payload
     );
 
-    localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+    // if (sellerInfo?.nextStep) {
+    //   sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
+    // } else {
+    //   sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
+    // }
+    // localStorage.setItem(
+    //   `sellerSession_${sessionId}`,
+    //   JSON.stringify(sellerInfo)
+    // );
+    // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
+      const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
       // setLocalStorage(tokenKey, response?.data[0]?.token);
-      localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
-      localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-      localStorage.setItem("userName", response?.data[0]?.name);
+      // localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+      // localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      // localStorage.setItem("userName", response?.data[0]?.name);
 
       window?.dataLayer?.push({
         event: "login",
@@ -237,16 +255,15 @@ const Index = () => {
         user_id: response?.data[0]?.sellerId,
       });
 
-      setLocalStorage(
-        `${response?.data[0]?.sellerId}_${tokenKey}`,
-        response?.data[0]?.token
-      );
+      // setLocalStorage(
+      //   `${response?.data[0]?.sellerId}_${tokenKey}`,
+      //   response?.data[0]?.token
+      // );
 
-      const token = localStorage.getItem("sellerId")
-        ? `${localStorage.getItem(
-            "sellerId"
-          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-        : "";
+      let sellerId = sellerInfo?.sellerId;
+      const token =
+        // localStorage.getItem("sellerId")
+        sellerId ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d` : "";
 
       if (token !== "") {
         console.log("socketConnectedAfterlogin");
@@ -312,11 +329,14 @@ const Index = () => {
 
   useEffect(() => {
     //adding token for preventing validateTokenApi to hit while logout and refreshing login screen
-    const token = localStorage.getItem("sellerId")
-      ? `${localStorage.getItem(
-          "sellerId"
-        )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-      : "";
+
+    const { sessionId, sellerInfo } = sessionManager({});
+    let sellerIdInfo = sellerInfo?.sellerId;
+    const token =
+      // localStorage.getItem("sellerId")
+      sellerIdInfo
+        ? `${sellerIdInfo}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+        : "";
 
     const params = getQueryJson();
 
@@ -327,14 +347,16 @@ const Index = () => {
       "spapi_oauth_code",
     ];
 
-    const urlToken = params.token;
+    // const urlToken = params.token;
+    const urlToken = sellerInfo?.token;
     const sellerId = params.sellerId;
 
     const header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${sellerId}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
     };
 
     keys.forEach((key) => {
@@ -371,15 +393,19 @@ const Index = () => {
           );
 
           if (response?.data?.success) {
-            localStorage.setItem("sellerId", response?.data?.data[0]?.sellerId);
-            setLocalStorage(
-              `${response?.data?.data[0]?.sellerId}_${tokenKey}`,
-              urlToken
-            );
-            localStorage.setItem(
-              "userInfo",
-              JSON.stringify(response?.data?.data[0])
-            );
+            // localStorage.setItem("sellerId", response?.data?.data[0]?.sellerId);
+            // setLocalStorage(
+            //   `${response?.data?.data[0]?.sellerId}_${tokenKey}`,
+            //   urlToken
+            // );
+            const { sessionId, sellerInfo } = sessionManager({
+              ...response?.data?.data[0],
+              token: urlToken,
+            });
+            // localStorage.setItem(
+            //   "userInfo",
+            //   JSON.stringify(response?.data?.data[0])
+            // );
 
             // Navigate to the dashboard directly if the token is valid
             navigate("/dashboard/overview");
@@ -396,7 +422,9 @@ const Index = () => {
         // Validate the token from localStorage (existing logic)
         try {
           const response = await POST(VALIDATE_USER_TOKEN);
-          const amazonsellerId: any = localStorage.getItem("sellerId");
+
+          // const amazonsellerId: any = localStorage.getItem("sellerId");
+          const amazonsellerId = sellerInfo?.sellerId;
           const state = amazonsellerId;
           const redirectUrl = AMAZON_REDIRECT_URL;
 

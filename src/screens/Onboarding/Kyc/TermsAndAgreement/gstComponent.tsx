@@ -19,6 +19,7 @@ import { ResponsiveState } from "../../../../utils/responsiveState";
 import Checkbox from "../../../../components/CheckBox";
 import OneButton from "../../../../components/Button/OneButton";
 import GstContent from "./gstAgreementContent";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypeProps {}
 
@@ -36,10 +37,13 @@ export const GSTComponent = (props: ITypeProps) => {
   const { isMdScreen } = ResponsiveState();
 
   const userName = localStorage.getItem("fullname")?.replace(/,/g, " ");
-  const userNameForGst = localStorage.getItem("userName");
+  const { sellerInfo } = sessionManager({});
+  // const userNameForGst = localStorage.getItem("userName");
+  const userNameForGst = sellerInfo?.name;
   useEffect(() => {
-    let data = localStorage.getItem("userInfo") as any;
-    data = JSON.parse(data);
+    // let data = localStorage.getItem("userInfo") as any;
+    const { sellerInfo } = sessionManager({});
+    let data = sellerInfo;
 
     if (data !== "" && data !== null) {
       setIsUserState(data);

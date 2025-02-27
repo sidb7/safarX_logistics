@@ -78,6 +78,7 @@ import OneButton from "../../../components/Button/OneButton";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import doneIcon from "../../../assets/Done .svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
+import sessionManager from "../../../utils/sessionManager";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -189,7 +190,9 @@ const WalletRecharge = () => {
   // }, []);
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
+  const { sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
+  // const sellerId = localStorage.getItem("sellerId");
 
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
@@ -402,8 +405,10 @@ const WalletRecharge = () => {
   };
 
   const userDetailsFromSession = () => {
-    let temp: any = localStorage.getItem("userInfo");
-    temp = JSON.parse(temp);
+    // let temp: any = localStorage.getItem("userInfo");
+    // temp = JSON.parse(temp);
+    const { sellerInfo } = sessionManager({});
+    let temp = sellerInfo;
     setDataFromSession(temp);
   };
 
@@ -577,8 +582,10 @@ const WalletRecharge = () => {
     const fetchData = async () => {
       try {
         // Fetch user details from session
-        let temp: any = localStorage.getItem("userInfo");
-        temp = JSON.parse(temp);
+        // let temp: any = localStorage.getItem("userInfo");
+        // temp = JSON.parse(temp);
+        const { sellerInfo } = sessionManager({});
+        let temp = sellerInfo;
         setDataFromSession(temp);
 
         // Fetch wallet balance

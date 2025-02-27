@@ -37,6 +37,7 @@ import RTOicon from "../../../assets/RTO.svg";
 import BoxIcon from "../../../assets/layer.svg";
 import InputBox from "../../../components/Input";
 import { convertXMLToXLSX } from "../../../utils/helper";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -270,11 +271,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       awbs: awbArray,
       requestType: type,
     };
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     try {

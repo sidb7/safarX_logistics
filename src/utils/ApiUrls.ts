@@ -313,6 +313,8 @@ const CHANGE_PASSWORD = `${SELLER_BASE_URL}/seller/changePasswordv2`;
 
 // System Logs
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
+// Order Confirmation Log
+const GET_ORDER_CONFIRMATION_LOG = `${SELLER_BASE_URL}/seller/getOrderConfirmationLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
@@ -333,7 +335,6 @@ const DELETE_INTEGRATED_STORE = `${SELLER_BASE_URL}/channel/deleteStore `;
 const CREATE_UNICOMMERCE_STORE = `${SELLER_BASE_URL}/channel/unicommerce/createUCStore`;
 const UPDATE_EXPIRED_TOKEN = `${SELLER_BASE_URL}/channel/updateExpireToken`;
 const GET_COUNT_AMAZON_ORDER = `${SELLER_BASE_URL}/channel/unfullfill/count`;
-
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -478,6 +479,9 @@ const CREATE_UPDATE_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/createA
 
 // dashboard
 const GET_TODAY_DATA_FOR_DASHBOARD = `${SELLER_BASE_URL}/seller/getDashBoardData`;
+
+//Buyer confirmation status update
+const UPDATE_ORDER_CONFIRMATION_STATUS = `${SELLER_BASE_URL}/order/updateOrderConfirmationStatus`;
 
 export {
   ADMIN_URL,
@@ -728,4 +732,6 @@ export {
   UPDATE_LD_ORDERS,
   FETCH_LD_ORDERS_FOR_SEARCH,
   UPDATE_LD_CLAIM,
+  UPDATE_ORDER_CONFIRMATION_STATUS,
+  GET_ORDER_CONFIRMATION_LOG,
 };

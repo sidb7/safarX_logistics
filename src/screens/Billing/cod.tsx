@@ -19,6 +19,7 @@ import DatePicker from "react-datepicker";
 import DateButton from "../../components/Button/DateButton";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import sessionManager from "../../utils/sessionManager";
 
 interface IInvoiceProps {}
 
@@ -43,26 +44,25 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   ];
 
   const [isActive, setIsActive] = useState<any>(false);
-  
-      const getCurrentPath = () => {
-      const currentUrl = window.location.href;
-      const url = new URL(currentUrl);
-      const location = url;
-      const path = location.pathname;
-      const pathArray = path.split("/");
-      const removedFirstPath = pathArray.slice(1);
-      return removedFirstPath;
-    };
-  
-    const dataCurrentPath = getCurrentPath() as string[];
-    console.log('dataCurrentPath',dataCurrentPath);
-  
-    useEffect(() => {
-      if(dataCurrentPath[1] === 'cod') {
-        setIsActive(checkPageAuthorized("Cod"));
-      }
-    })
-  
+
+  const getCurrentPath = () => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const location = url;
+    const path = location.pathname;
+    const pathArray = path.split("/");
+    const removedFirstPath = pathArray.slice(1);
+    return removedFirstPath;
+  };
+
+  const dataCurrentPath = getCurrentPath() as string[];
+  console.log("dataCurrentPath", dataCurrentPath);
+
+  useEffect(() => {
+    if (dataCurrentPath[1] === "cod") {
+      setIsActive(checkPageAuthorized("Cod"));
+    }
+  });
 
   const render = (id: any) => {
     if (id === 0) {
@@ -78,12 +78,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     }
   };
 
-
-
   const getCodRemittedDetails = async () => {
     try {
+      const { sellerInfo } = sessionManager({});
       setLoading(true);
-      const payload = { sellerId: +`${localStorage.getItem("sellerId")}` };
+      const payload = { sellerId: +`${sellerInfo?.sellerId}` };
       // const payload = {
       //   sellerId: 2483, //only for testing
       // };
@@ -92,7 +91,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
 
       if (response?.success) {
         setCodRemittedData(response?.data);
-        setTotalItemCount(response?.totalCount)
+        setTotalItemCount(response?.totalCount);
       } else {
         setCodRemittedData([]);
       }
@@ -198,26 +197,25 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   };
   return (
     <>
-
       {isActive || isActive === undefined ? (
-      <div>
-        <Breadcrum label="Billing" />
-        <div className="customScroll">
-          <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-            <div>
-              <ScrollNav
-                arrayData={arrayData}
-                showNumber={false}
-                setScrollIndex={setScrollIndex}
-                defaultIndexValue={2}
-              />
-            </div>
-            <div className="flex justify-end gap-x-2  ">
+        <div>
+          <Breadcrum label="Billing" />
+          <div className="customScroll">
+            <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
               <div>
-                {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
+                <ScrollNav
+                  arrayData={arrayData}
+                  showNumber={false}
+                  setScrollIndex={setScrollIndex}
+                  defaultIndexValue={2}
+                />
               </div>
-              <div className="">
-                {/* <ReactDatePicker
+              <div className="flex justify-end gap-x-2  ">
+                <div>
+                  {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
+                </div>
+                <div className="">
+                  {/* <ReactDatePicker
                 selectsRange={true}
                 startDate={startDate}
                 endDate={endDate}
@@ -240,96 +238,96 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 dateFormat="dd/MM/yyyy"
               /> */}
 
-                <DatePicker
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(update: any) => {
-                    setDateRange(update);
-                    if (update[0] === null && update[1] === null) {
-                      // Explicitly set startDate and endDate to null when cleared
-                      setStartDate(null);
-                      setEndDate(null);
-                      // fetchCodRemittanceData();
-                    } else {
-                      // Update startDate and endDate based on the selected range
-                      setStartDate(update[0]);
-                      setEndDate(update[1]);
-                    }
-                  }}
-                  // isClearable={true}
-                  dateFormat="dd/MM/yyyy"
-                  customInput={
-                    <DateButton
-                      text="Select From & To Date" // Text for the button
-                      onClick={() => {}} // onClick is managed by DatePicker
-                      className="h-[36px]"
-                      value={
-                        startDate && endDate
-                          ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
-                          : ""
-                      } // Display date range
-                      onClear={handleClear} // Handle clear action
-                    />
-                  } // Include placeholder onClick function
-                />
-              </div>
-              <div>
-                <ServiceButton
-                  text="Download"
-                  className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
-                  onClick={() => downloadReport()}
-                />
+                  <DatePicker
+                    selectsRange={true}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(update: any) => {
+                      setDateRange(update);
+                      if (update[0] === null && update[1] === null) {
+                        // Explicitly set startDate and endDate to null when cleared
+                        setStartDate(null);
+                        setEndDate(null);
+                        // fetchCodRemittanceData();
+                      } else {
+                        // Update startDate and endDate based on the selected range
+                        setStartDate(update[0]);
+                        setEndDate(update[1]);
+                      }
+                    }}
+                    // isClearable={true}
+                    dateFormat="dd/MM/yyyy"
+                    customInput={
+                      <DateButton
+                        text="Select From & To Date" // Text for the button
+                        onClick={() => {}} // onClick is managed by DatePicker
+                        className="h-[36px]"
+                        value={
+                          startDate && endDate
+                            ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+                            : ""
+                        } // Display date range
+                        onClear={handleClear} // Handle clear action
+                      />
+                    } // Include placeholder onClick function
+                  />
+                </div>
+                <div>
+                  <ServiceButton
+                    text="Download"
+                    className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
+                    onClick={() => downloadReport()}
+                  />
+                </div>
               </div>
             </div>
+            <div className="mx-4">
+              <CodData
+                setCodModal={setCodModal}
+                setAwbModal={setAwbModal}
+                tableData={codRemittedData}
+                downloadReport={downloadReport}
+              />
+            </div>
           </div>
-          <div className="mx-4">
-            <CodData
-              setCodModal={setCodModal}
-              setAwbModal={setAwbModal}
-              tableData={codRemittedData}
-              downloadReport={downloadReport}
+
+          {totalItemCount > 0 && (
+            <PaginationComponent
+              totalItems={totalItemCount}
+              itemsPerPageOptions={[
+                10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+              ]}
+              onPageChange={onPageIndexChange}
+              onItemsPerPageChange={onPerPageItemChange}
             />
-          </div>
+          )}
+
+          <RightSideModal
+            isOpen={codModal?.isOpen}
+            onClose={() => {
+              setCodModal({ isOpen: false, data: {} });
+            }}
+            className="md:!w-[50%]"
+          >
+            <ShipmentDetailModal
+              onClick={() => setCodModal({ isOpen: false, data: {} })}
+            />
+          </RightSideModal>
+
+          <RightSideModal
+            isOpen={awbModal?.isOpen}
+            onClose={() => {
+              setAwbModal({ isOpen: false, data: [] });
+            }}
+            className="md:!w-[25%]"
+          >
+            <CodRemittedAwbModal
+              onClick={() => setAwbModal({ isOpen: false, data: [] })}
+              awbs={awbModal.data}
+            />
+          </RightSideModal>
         </div>
-
-        {totalItemCount > 0 && (
-          <PaginationComponent
-            totalItems={totalItemCount}
-            itemsPerPageOptions={[
-              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
-            ]}
-            onPageChange={onPageIndexChange}
-            onItemsPerPageChange={onPerPageItemChange}
-          />
-        )}
-
-        <RightSideModal
-          isOpen={codModal?.isOpen}
-          onClose={() => {
-            setCodModal({ isOpen: false, data: {} });
-          }}
-          className="md:!w-[50%]"
-        >
-          <ShipmentDetailModal
-            onClick={() => setCodModal({ isOpen: false, data: {} })}
-          />
-        </RightSideModal>
-
-        <RightSideModal
-          isOpen={awbModal?.isOpen}
-          onClose={() => {
-            setAwbModal({ isOpen: false, data: [] });
-          }}
-          className="md:!w-[25%]"
-        >
-          <CodRemittedAwbModal
-            onClick={() => setAwbModal({ isOpen: false, data: [] })}
-            awbs={awbModal.data}
-          />
-        </RightSideModal>
-      </div>
-       ) : (
+      ) : (
         <div>
           <AccessDenied />
         </div>

@@ -24,6 +24,7 @@ import {
 } from "../../../utils/utility";
 import { Spinner } from "../../../components/Spinner";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -86,16 +87,38 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
 
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
+
+      if (sellerInfo?.nextStep) {
+        sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
+      } else {
+        sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
+      }
+      localStorage.setItem(
+        `sellerSession_${sessionId}`,
+        JSON.stringify(sellerInfo)
+      );
 
       if (response?.success === true) {
-        localStorage.setItem(
-          `${response?.data[0]?.sellerId}_${tokenKey}`,
-          response?.data[0]?.token
-        );
-        localStorage.setItem("userName", response?.data[0]?.name);
-        localStorage.setItem("sellerId", response?.data[0]?.sellerId);
-        localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        // localStorage.setItem(
+        //   `${response?.data[0]?.sellerId}_${tokenKey}`,
+        //   response?.data[0]?.token
+        // );
+        // localStorage.setItem("userName", response?.data[0]?.name);
+        // localStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
+
+        // if (sellerInfo?.nextStep) {
+        //   sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
+        // } else {
+        //   sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
+        // }
+        // localStorage.setItem(
+        //   `sellerSession_${sessionId}`,
+        //   JSON.stringify(sellerInfo)
+        // );
         // setLocalStorage(tokenKey, response?.data[0]?.token);
 
         window?.dataLayer?.push({
@@ -156,8 +179,10 @@ const Index = () => {
   }, [seconds]);
 
   useEffect(() => {
-    let temp: any = localStorage.getItem("userInfo");
-    temp = JSON.parse(temp);
+    // let temp: any = localStorage.getItem("userInfo");
+    // temp = JSON.parse(temp);
+    const { sellerInfo } = sessionManager({});
+    let temp = sellerInfo;
     setEmail(temp?.email);
   }, []);
 

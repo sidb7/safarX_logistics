@@ -49,6 +49,7 @@ import { initSocket } from "../../Socket";
 import ProfileIcon from "../../assets/ProfileIconBlue.png";
 import SentryFeedback from "./SentryFeedback";
 import ReportAbugIcon from "../../assets/ReportABug.svg";
+import sessionManager from "../../utils/sessionManager";
 
 let socket: Socket | null = null;
 
@@ -118,10 +119,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
-  let sellerId = localStorage.getItem("sellerId");
-  const localUserToken = getLocalStorage(
-    `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-  );
+  // let sellerId = localStorage.getItem("sellerId");
+  // const localUserToken = getLocalStorage(
+  //   `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+  // );
 
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
 
@@ -265,7 +266,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     }
     clearLocalStorage();
     localStorage.clear();
+    sessionStorage.clear();
   };
+  const { sellerInfo } = sessionManager({});
+  // let sellerId = localStorage.getItem("sellerId");
+  let sellerId = sellerInfo?.sellerId;
 
   // const socket = initSocket();
 
@@ -300,7 +305,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
           boxShadow: "0px 4px 6px 0px rgba(0, 0, 0, 0.04)",
         }}
       >
-        {sellerId || localUserToken ? (
+        {sellerId ? (
           <div className="justify-between lg:justify-self-end flex items-center gap-3">
             <div className="flex items-center gap-x-3 lg:hidden">
               <img
@@ -376,17 +381,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 </div>
               )}
 
-              {localStorage.getItem("sellerId") && (
-                <div className="hidden lg:block">
-                  <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
-                    <img src={ProfileIcon} width={16} alt="" />
-                    <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
-                      <div>Seller ID: </div>
-                      <div>{localStorage.getItem("sellerId")}</div>
+              {
+                // localStorage.getItem("sellerId")
+                sellerId && (
+                  <div className="hidden lg:block">
+                    <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
+                      <img src={ProfileIcon} width={16} alt="" />
+                      <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                        <div>Seller ID: </div>
+                        <div>
+                          {
+                            // localStorage.getItem("sellerId")
+                            sellerId
+                          }
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )
+              }
 
               <img
                 src={SearchIcon}
