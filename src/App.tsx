@@ -335,33 +335,33 @@ const App = () => {
     }
   }, [syncTime, syncTimerObject]);
 
-  useEffect(() => {
-    const receiveMessage = (event: any) => {
-      console.log(
-        "🚀 ~ receiveMessage ~ ADMIN_URL:",
-        event.origin,
-        " ",
-        ADMIN_URL
-      );
-      // console.log("SELLER DATA", event.data);
-      const expectedOrigin = ADMIN_URL;
-      if (event.origin.includes(expectedOrigin)) {
-        const sellerData = event.data.sellerData;
-        console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
-        if (sellerData) {
-          loginFromSeller(JSON.parse(sellerData));
-        }
-      } else {
-        console.error("Unexpected origin:", event.origin);
+  // Only send READY_FOR_DATA once the window is fully loaded
+  window.addEventListener("load", () => {
+    console.log("Seller window loaded. Informing parent...");
+    window.opener?.postMessage("READY_FOR_DATA", ADMIN_URL);
+  });
+
+  // Listen for sellerData from parent
+  const receiveMessage = (event: any) => {
+    console.log(
+      "🚀 ~ receiveMessage ~ ADMIN_URL:",
+      event.origin,
+      " ",
+      ADMIN_URL
+    );
+    const expectedOrigin = ADMIN_URL;
+    if (event.origin.includes(expectedOrigin)) {
+      const sellerData = event.data.sellerData;
+      console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
+      if (sellerData) {
+        loginFromSeller(JSON.parse(sellerData));
       }
-    };
+    } else {
+      console.error("Unexpected origin:", event.origin);
+    }
+  };
 
-    window.addEventListener("message", receiveMessage, false);
-
-    return () => {
-      window.removeEventListener("message", receiveMessage);
-    };
-  }, []);
+  window.addEventListener("message", receiveMessage);
 
   const loginFromSeller = (sellerData: any) => {
     // localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
