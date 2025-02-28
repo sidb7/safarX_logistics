@@ -128,7 +128,6 @@ export const Transaction = () => {
     }
     payload.filter.type = renderingComponents === 1 ? "neft" : "";
     let extraFilter = filterPayLoad?.filterArrOne;
-    console.log(extraFilter, "EXTRAA");
     extraFilter?.map((el: any, i: any) => {
       if (el?.status?.$in?.length > 0) {
         payload.filter.status = el.status;
