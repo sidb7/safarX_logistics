@@ -541,8 +541,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
-    console.log("handleItemClick Check index", index);
-    console.log("box requestName", requestName);
     if (requestName === "Box & Products") {
       setSelectBoxIndex(index - 2);
     }
@@ -764,13 +762,9 @@ const Accordion = (props: ICustomTableAccordion) => {
 
       const boxData = await POST(GET_SELLER_BOX);
       const buyerConfirmationOrder = await POST(GET_ORDER_CONFIRMATION_LOG, {
-        limit: 2,
-        pageNo: 1,
+        orderId: data?.data?.[0]?.data?.[0]?.orderId,
       });
-      console.log(
-        "BUYER COCOC",
-        buyerConfirmationOrder?.data?.data[0]?.data.length
-      );
+
       setOrderPayload({
         ...orderPayload,
         orderId: data?.data?.[0]?.data?.[0]?.orderId,
@@ -1828,10 +1822,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   useEffect(() => {
     setproductAccordian(boxProductDetails?.boxInfo?.[selectBoxIndex]?.products);
-    console.log(
-      "boxProductDetails?.boxInfo?.[selectBoxIndex]?.products",
-      boxProductDetails?.boxInfo?.[selectBoxIndex]?.products
-    );
+
     if (!enabled) {
       setProdctError(
         boxProductDetails?.boxInfo?.[0]?.products?.map(
@@ -3526,13 +3517,13 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   return (
                                                     <div className="">
                                                       <div className="border border-[#A4A4A4]  p-4 mt-2 rounded-md">
-                                                        <div className="flex justify-between mt-4">
+                                                        {/* <div className="flex justify-between mt-4">
                                                           <p>Order ID:</p>
                                                           <p>
                                                             {item?.orderId ||
                                                               "--"}
                                                           </p>
-                                                        </div>
+                                                        </div> */}
                                                         <div className="flex justify-between mt-4">
                                                           <p>New Status:</p>
                                                           <p>
@@ -3555,9 +3546,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           <p>Time Stamp:</p>
                                                           <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
                                                             {item?.createdAt
-                                                              ? new Date(
+                                                              ? convertEpochToDateTime(
                                                                   item.createdAt
-                                                                ).toLocaleString()
+                                                                )
                                                               : "--"}
                                                           </p>
                                                         </div>
