@@ -541,8 +541,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
-    console.log("handleItemClick Check index", index);
-    console.log("box requestName", requestName);
     if (requestName === "Box & Products") {
       setSelectBoxIndex(index - 2);
     }
@@ -1824,10 +1822,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   useEffect(() => {
     setproductAccordian(boxProductDetails?.boxInfo?.[selectBoxIndex]?.products);
-    console.log(
-      "boxProductDetails?.boxInfo?.[selectBoxIndex]?.products",
-      boxProductDetails?.boxInfo?.[selectBoxIndex]?.products
-    );
+
     if (!enabled) {
       setProdctError(
         boxProductDetails?.boxInfo?.[0]?.products?.map(
