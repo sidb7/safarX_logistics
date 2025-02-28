@@ -742,7 +742,7 @@ const idHelper = (
       const tagsString = tags?.join(", ");
       const tagsLength = tagsString?.length;
 
-      const showAllTags = tagsLength > 10;
+      const showAllTags = tagsLength > 0;
       // const buyerConfirmation = rowsData?.isBuyerConfirmed;
       const buyerConfirmationStatus = [
         {
@@ -1166,7 +1166,7 @@ export const columnHelperForNewOrder = (
         const tagsString = tags?.join(", ");
         const tagsLength = tagsString?.length;
 
-        const showAllTags = tagsLength > 10;
+        const showAllTags = tagsLength > 0;
 
         const rows: any = [
           {
