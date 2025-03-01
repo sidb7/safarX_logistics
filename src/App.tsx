@@ -335,13 +335,6 @@ const App = () => {
     }
   }, [syncTime, syncTimerObject]);
 
-  // Only send READY_FOR_DATA once the window is fully loaded
-  window.addEventListener("load", () => {
-    console.log("Seller window loaded. Informing parent...");
-    window.opener?.postMessage("READY_FOR_DATA", ADMIN_URL);
-  });
-
-  // Listen for sellerData from parent
   const receiveMessage = (event: any) => {
     console.log(
       "🚀 ~ receiveMessage ~ ADMIN_URL:",
@@ -360,8 +353,26 @@ const App = () => {
       console.error("Unexpected origin:", event.origin);
     }
   };
+  useEffect(() => {
+    console.log("Seller window loaded. Informing parent...");
 
-  window.addEventListener("message", receiveMessage);
+    setTimeout(() => {
+      if (window.opener) {
+        console.log("Ready for data");
+        window.opener.postMessage("READY_FOR_DATA", ADMIN_URL);
+      }
+    }, 1000);
+
+    window.addEventListener("message", receiveMessage);
+
+    return () => {
+      window.removeEventListener("message", receiveMessage);
+    };
+  }, []);
+
+  // Only send READY_FOR_DATA once the window is fully loaded
+
+  // Listen for sellerData from parent
 
   const loginFromSeller = (sellerData: any) => {
     // localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
