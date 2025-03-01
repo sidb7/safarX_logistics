@@ -42,6 +42,7 @@ export const DuplicateModel: React.FunctionComponent<IDeleteModal> = ({
       if (duplicateData?.success) {
         toast.success(duplicateData?.message);
         navigate("?activaTab=Draft");
+        window.location.reload();
         reloadData(0);
       } else {
         toast.error(duplicateData?.message);

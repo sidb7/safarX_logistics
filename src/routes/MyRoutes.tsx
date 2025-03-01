@@ -216,17 +216,17 @@ const MyRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-
+      {/* 
       <Route>
-        <Route
-          path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
-          element={<ClientTracking />}
-        />
-      </Route>
+      
+      </Route> */}
 
       {/* onboarding routes  */}
       <Route>
-        <Route path="/onboarding/signup/:genReferralCode?" element={<SignUpScreen />} />
+        <Route
+          path="/onboarding/signup/:genReferralCode?"
+          element={<SignUpScreen />}
+        />
         <Route path="/onboarding/sendotp" element={<SendOTPScreen />} />
         <Route path="/onboarding/verifyotp" element={<VerifyOTPScreen />} />
         <Route
@@ -1206,7 +1206,10 @@ const MyRoutes: React.FC = () => {
               // </ProtectedRoute>
             }
           />
-
+          <Route
+            path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
+            element={<ClientTracking />}
+          />
           <Route
             path="/tracking/exception-ndr"
             element={

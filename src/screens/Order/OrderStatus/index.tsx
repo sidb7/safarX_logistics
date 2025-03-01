@@ -103,6 +103,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   isBulkCheckedBooked,
   totalCount,
   allOrders,
+  orders,
 }) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -333,7 +334,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           // Function to check if the checkbox is checked
           const isChecked = checkbox.checked;
           if (isChecked) {
-            tempOrderIds = allOrders.map(
+            tempOrderIds = orders?.map(
               (data: any, index: any) => data?.tempOrderId
             );
           } else {
@@ -388,7 +389,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           // Function to check if the checkbox is checked
           const isChecked = checkbox.checked;
           if (isChecked) {
-            orderDetails = allOrders?.map((order: any) => {
+            orderDetails = orders?.map((order: any) => {
               return {
                 tempOrderId: order?.tempOrderId,
                 source: order?.source,
@@ -461,7 +462,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             // Function to check if the checkbox is checked
             const isChecked = checkbox.checked;
             if (isChecked) {
-              awbNo = allOrders.map((data: any, index: any) => {
+              awbNo = orders?.map((data: any, index: any) => {
                 return data.awb;
               });
             } else {
@@ -1504,7 +1505,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           >
             <div className="flex gap-x-4">
               <div className="flex items-center text-[22px] ">
-                {currentStatus === "DRAFT" && `${draftOrderCount.all} Orders`}
+                {currentStatus === "DRAFT" && `${orders?.length} Orders`}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}

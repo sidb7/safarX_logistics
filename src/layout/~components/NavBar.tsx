@@ -126,7 +126,8 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     const { name, isChild } = element;
     if (name === "Help") {
       companyName === "Shipyaari"
-        ? window.open("https://support.shipyaari.com/tickets", "_blank")
+        // ? window.open("https://support.shipyaari.com/tickets", "_blank")
+        ? window.open("https://shipyaari.freshdesk.com/", "_blank")  // mentioned by yuvika
         : window.open("https://wa.me/8700391426", "_blank");
       return;
     }
