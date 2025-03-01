@@ -7,6 +7,7 @@ import {
   GET_FEATURES_PLANS,
   POST_ASSIGN_PLANV3,
   POST_CREATE_PLAN,
+  POST_PROCESS_SHOPIFY_PLAN,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -65,7 +66,9 @@ const Index = (props: ITypeProps) => {
                 text="Yes"
                 className=" px-4 py-2"
                 onClick={() => {
-                  assignPlan(onSelectPlan);
+                  isShopifyEnabled
+                    ? processShopifyPlan(onSelectPlan)
+                    : assignPlan(onSelectPlan);
                   setIsModalOpen(false);
                 }}
                 variant="secondary"
@@ -113,6 +116,31 @@ const Index = (props: ITypeProps) => {
     }
   };
 
+  const processShopifyPlan = async (payload: any) => {
+    try {
+      // Assign Plan API
+      const { data: response }: any = await POST(POST_PROCESS_SHOPIFY_PLAN, {
+        planId: payload?.planId,
+      });
+
+      if (response?.success) {
+        setActivePlanId(payload?.planId);
+        toast.success(response?.message);
+
+        // Redirect to the confirmation URL
+        if (response?.confirmationUrl) {
+          // window.location.href = response?.confirmationUrl;
+          window.open(response?.confirmationUrl, "_blank");
+        }
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred during the plan process.");
+      console.error(error);
+    }
+  };
+
   const sortByPrice = (a: any, b: any) => {
     return a.price - b.price;
   };
@@ -138,6 +166,7 @@ const Index = (props: ITypeProps) => {
           kycCheck?.nextStep?.isChannelIntegrated || false;
         const isShopifyApp = kycCheck?.nextStep?.isShopifyApp || false;
         const shouldEnableShopify = isChannelIntegrated && isShopifyApp;
+        // console.log("🚀 ~ shouldEnableShopify:", shouldEnableShopify);
         setIsShopifyEnabled(shouldEnableShopify);
         const payload: any = {
           limit: 1000000,
