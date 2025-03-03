@@ -662,7 +662,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
         setDownloadLebal(true);
-        sessionStorage.clear();
+        // sessionStorage.clear();
         toast.success(data?.message || "Successfully Placed order");
       } else {
         toast.error(data?.message);
@@ -1219,7 +1219,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             <OneButton
                               onClick={() => {
                                 window.location.reload();
-                                sessionStorage.clear();
+                                // sessionStorage.clear();
                               }}
                               text={`CREATE NEW ORDER`}
                               variant="primary"

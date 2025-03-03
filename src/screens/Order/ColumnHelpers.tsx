@@ -2126,7 +2126,10 @@ export const columnHelpersForRest = (
     ColumnsHelper.accessor("packageType", {
       header: (props: any) => {
         return (
-          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
+          <div
+            className="flex items-center font-Open font-semibold leading-5 text-sm"
+            id="selectAll"
+          >
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
