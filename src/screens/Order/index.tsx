@@ -2478,7 +2478,7 @@ const Index = () => {
                 />
               </div>
             </div>
-            <div className="mx-5">
+            <div className="mx-5 h-[calc(100vh-150px)] overflow-y-auto">
               <FilterScreen
                 filterState={filterState}
                 setFilterState={setFilterState}
