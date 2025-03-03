@@ -2121,7 +2121,6 @@ export const columnHelpersForRest = (
               showOnHover={true}
               bgColor="bg-white"
               textColor="black"
-              left={-80}
             >
               <div className="mx-2 cursor-pointer">
                 <img
