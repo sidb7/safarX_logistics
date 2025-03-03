@@ -1889,7 +1889,7 @@ export const columnHelpersForRest = (
         const { pickupAddress, service, source, orderId, otherDetails, awb } =
           info?.row?.original;
         return (
-          <div className="flex">
+          <div className="flex w-[300px]">
             <div className="flex justify-center mr-4 !my-[-6px] cursor-pointer">
               <input
                 type="checkbox"
@@ -2121,6 +2121,7 @@ export const columnHelpersForRest = (
               showOnHover={true}
               bgColor="bg-white"
               textColor="black"
+              left={-80}
             >
               <div className="mx-2 cursor-pointer">
                 <img
