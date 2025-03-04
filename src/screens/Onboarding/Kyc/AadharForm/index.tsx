@@ -27,6 +27,7 @@ import { aadharRegex } from "../../../../utils/regexCheck";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 // import TimerCounter from "../../../../components/TimerCountdown";
 import TimerCounter from "../../../../components/TimerCountdown";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypeProps {}
 
@@ -54,8 +55,9 @@ const Index = (props: ITypeProps) => {
   let routeCheck = route.includes("kyc-aadhar-form");
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const { isMdScreen } = ResponsiveState();
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });

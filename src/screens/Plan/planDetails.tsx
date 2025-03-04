@@ -997,7 +997,7 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div
+          {/* <div
             className={`${
               isMdScreen
                 ? "flex items-center justify-between h-[60px] rounded-lg p-9 md:p-5  bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]"
@@ -1031,16 +1031,6 @@ const PlanDetails = (props: ITypeProps) => {
               )}
 
               <div className="">
-                {/* <ServiceButton
-                  className=" md:!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open text-xs md:text-sm font-normal md:font-semibold leading-4 whitespace-nowrap"
-                  text="TALK TO OUR SUPPORT"
-                  onClick={() => {
-                    window.open(
-                      "https://support.shipyaari.com/tickets",
-                      "_blank"
-                    );
-                  }}
-                /> */}
                 <OneButton
                   text={"TALK TO OUR SUPPORT"}
                   onClick={() => {
@@ -1053,7 +1043,7 @@ const PlanDetails = (props: ITypeProps) => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
 
           {isModalOpen && (
             <CenterModal

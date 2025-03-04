@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 export const QuestionComponent4: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -45,8 +46,9 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   // };
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const syService: any = [];
 
   //for gmt

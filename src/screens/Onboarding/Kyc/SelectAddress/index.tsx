@@ -27,6 +27,7 @@ import { Spinner } from "../../../../components/Spinner";
 import { v4 as uuidv4 } from "uuid";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import OneButton from "../../../../components/Button/OneButton";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypeProps {}
 
@@ -127,7 +128,18 @@ const BusinessType = (props: ITypeProps) => {
           companyObj
         );
         if (response?.success) {
-          localStorage.setItem("setKycValue", "true");
+          // localStorage.setItem("setKycValue", "true");
+          const { sessionId, sellerInfo } = sessionManager({});
+
+          if (sellerInfo?.nextStep) {
+            sellerInfo.nextStep.kyc = true;
+          } else {
+            sellerInfo.nextStep = { kyc: true };
+          }
+          localStorage.setItem(
+            `sellerSession_${sessionId}`,
+            JSON.stringify(sellerInfo)
+          );
           setLoading(false);
           // toast.success(responses?.message);
         } else {

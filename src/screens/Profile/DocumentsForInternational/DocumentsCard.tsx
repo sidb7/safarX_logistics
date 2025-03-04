@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
 import LabelContainer from "../../../components/LabelContainer";
 import shareIcon from "../../../assets/ShareIcon.svg";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IDocumentCardProps {}
 
@@ -13,8 +14,10 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
-  let userInfo = localStorage.getItem("userInfo") as any;
-  userInfo = JSON.parse(userInfo);
+  // let userInfo = localStorage.getItem("userInfo") as any;
+  const { sellerInfo } = sessionManager({});
+  let userInfo = sellerInfo;
+  // userInfo = JSON.parse(userInfo);
 
   const renderIndividualDocument = () => {
     return (
@@ -157,9 +160,10 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
   };
 
   useEffect(() => {
-    let data = localStorage.getItem("userInfo") as any;
-    data = JSON.parse(data);
-
+    // let data = localStorage.getItem("userInfo") as any;
+    // data = JSON.parse(data);
+    const { sellerInfo } = sessionManager({});
+    let data = sellerInfo;
     if (data !== "" && data !== null) {
       setUserData(data);
     }

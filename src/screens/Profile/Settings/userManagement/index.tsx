@@ -122,19 +122,19 @@ function UserManagement() {
       cell: (info: any) => info.getValue(),
     }),
 
-    columnsHelper.accessor("roleId", {
-      header: () => {
-        return (
-          <div>
-            <div className="flex justify-between items-center">
-              <h1>Role Id</h1>
-              <div className="cursor-pointer"></div>
-            </div>
-          </div>
-        );
-      },
-      cell: (info: any) => info.getValue(),
-    }),
+    // columnsHelper.accessor("roleId", {
+    //   header: () => {
+    //     return (
+    //       <div>
+    //         <div className="flex justify-between items-center">
+    //           <h1>Role Id</h1>
+    //           <div className="cursor-pointer"></div>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => info.getValue(),
+    // }),
     columnsHelper.accessor("roleName", {
       header: () => {
         return (

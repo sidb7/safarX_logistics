@@ -4,6 +4,7 @@ import shareIcon from "../../../assets/ShareIcon.svg";
 // import DummyImage from "../../../assets/Profile/DummyImage.svg";
 import { useNavigate } from "react-router-dom";
 import LabelContainer from "../../../components/LabelContainer";
+import sessionManager from "../../../utils/sessionManager";
 
 interface ProfileCardProps {
   BankDetails: any;
@@ -17,8 +18,10 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
     query: "(min-width: 1024px)",
   });
 
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  const { sessionId, sellerInfo } = sessionManager({});
+  let kycCheck = sellerInfo;
+  // kycCheck = JSON.parse(kycCheck);
   kycCheck = kycCheck?.nextStep?.bank;
 
   return (

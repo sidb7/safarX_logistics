@@ -18,6 +18,7 @@ import {
 import { POST } from "../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 import toast from "react-hot-toast";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IContact {
   name: string;
@@ -105,8 +106,11 @@ const PickupDetailsContent: React.FunctionComponent<
   const [gstError, setgstError] = useState<any>("");
   const [isAutoPopulateData, setIsAutoPopulateData]: any = useState(false);
   const [isnewData, setIsNewData]: any = useState(false);
-  let kycCheck: any = localStorage.getItem("kycValue");
-  kycCheck = JSON.parse(kycCheck);
+
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  const { sessionId, sellerInfo } = sessionManager({});
+  let kycCheck = sellerInfo;
+  // kycCheck = JSON.parse(kycCheck);
 
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({
     name: null,

@@ -29,6 +29,7 @@ import BottomModal from "../../../components/CustomModal/customBottomModal";
 import { Spinner } from "../../../components/Spinner";
 import { toast } from "react-hot-toast";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 const Catalogue = () => {
   const navigate = useNavigate();
@@ -437,11 +438,14 @@ const Catalogue = () => {
           storeName,
         });
 
-        let channelSessionObj: any = localStorage.getItem("userInfo");
-        channelSessionObj = JSON.parse(channelSessionObj);
+        // let channelSessionObj: any = localStorage.getItem("userInfo");
+        const { sessionId, sellerInfo } = sessionManager({});
+        let channelSessionObj = sellerInfo;
+        // channelSessionObj = JSON.parse(channelSessionObj);
         if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
           channelSessionObj.nextStep.isChannelIntegrated = true;
-          localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+          // localStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+          sessionManager(channelSessionObj);
         }
 
         let newAddedChannel = [

@@ -2,7 +2,9 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   COMPANY_NAME,
   GET_COURIER_PARTNER_SERVICE,
+  GET_ORDER_CONFIRMATION_LOG,
   GET_SELLER_ORDER_COMPLETE_DATA,
+  GET_SYSTEM_LOG,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import {
@@ -273,6 +275,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [dropDownContent, setDropDownContent] = useState<any>(false);
   const [existingBox, setExistingBox] = useState<any>(false);
   const [addnewBox, setAddNewBox] = useState<any>(false);
+  const [buyerConfirmationLogs, setBuyerConfirmationLogs] = useState([]);
   const { getAllSellerData, isMasked } = props;
   let servicePartnerServiceId: any;
   const mainDate: any = convertEpochToDateTimeV2(
@@ -538,8 +541,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
-    console.log("handleItemClick Check index", index);
-    console.log("box requestName", requestName);
     if (requestName === "Box & Products") {
       setSelectBoxIndex(index - 2);
     }
@@ -760,6 +761,9 @@ const Accordion = (props: ICustomTableAccordion) => {
       });
 
       const boxData = await POST(GET_SELLER_BOX);
+      const buyerConfirmationOrder = await POST(GET_ORDER_CONFIRMATION_LOG, {
+        orderId: data?.data?.[0]?.data?.[0]?.orderId,
+      });
 
       setOrderPayload({
         ...orderPayload,
@@ -767,7 +771,11 @@ const Accordion = (props: ICustomTableAccordion) => {
         tempOrderId: data?.data?.[0]?.data?.[0]?.tempOrderId,
         source: data?.data?.[0]?.data?.[0]?.source,
       });
-
+      if (buyerConfirmationOrder?.data?.success) {
+        setBuyerConfirmationLogs(
+          buyerConfirmationOrder?.data?.data[0]?.data || []
+        );
+      }
       setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
 
@@ -1089,6 +1097,19 @@ const Accordion = (props: ICustomTableAccordion) => {
           "Order Type": rowsData?.orderType,
           Zone: capitalizeFirstLetter(rowsData?.zone),
         });
+
+        if (buyerConfirmationOrder?.data?.data[0]?.data?.length > 0) {
+          rows.push({
+            title: "Order Confirmation Logs",
+            [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
+            "Order Id": rowsData?.orderId,
+            "Tracking Id": orderData?.awb,
+            "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
+            Source: capitalizeFirstLetter(rowsData?.source),
+            "Order Type": rowsData?.orderType,
+            Zone: capitalizeFirstLetter(rowsData?.zone),
+          });
+        }
 
         setOrderDetails(rows);
         setIsLoading(false);
@@ -1801,10 +1822,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   useEffect(() => {
     setproductAccordian(boxProductDetails?.boxInfo?.[selectBoxIndex]?.products);
-    console.log(
-      "boxProductDetails?.boxInfo?.[selectBoxIndex]?.products",
-      boxProductDetails?.boxInfo?.[selectBoxIndex]?.products
-    );
+
     if (!enabled) {
       setProdctError(
         boxProductDetails?.boxInfo?.[0]?.products?.map(
@@ -1925,6 +1943,17 @@ const Accordion = (props: ICustomTableAccordion) => {
                             setOpenIndex(null);
                             handlePaymentDetails();
                           } else if (e.target.textContent == "Event Logs") {
+                            handleItemClick(index, e.target.textContent);
+
+                            setOpen({
+                              [`item${index}`]: false,
+                            });
+                            setOpenIndex(null);
+
+                            setApiCall(false);
+                          } else if (
+                            e.target.textContent == "Order Confirmation Logs"
+                          ) {
                             handleItemClick(index, e.target.textContent);
 
                             setOpen({
@@ -3478,7 +3507,59 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             </>
                                           )}
                                       </div>
-
+                                      <div>
+                                        {item.title ===
+                                          "Order Confirmation Logs" &&
+                                          index === 5 && (
+                                            <div className="mb-40">
+                                              {buyerConfirmationLogs?.map(
+                                                (item: any) => {
+                                                  return (
+                                                    <div className="">
+                                                      <div className="border border-[#A4A4A4]  p-4 mt-2 rounded-md">
+                                                        {/* <div className="flex justify-between mt-4">
+                                                          <p>Order ID:</p>
+                                                          <p>
+                                                            {item?.orderId ||
+                                                              "--"}
+                                                          </p>
+                                                        </div> */}
+                                                        <div className="flex justify-between mt-4">
+                                                          <p>New Status:</p>
+                                                          <p>
+                                                            {item?.eventRecord
+                                                              ?.newStatus ||
+                                                              "--"}
+                                                          </p>
+                                                        </div>
+                                                        <div className="flex justify-between mt-4">
+                                                          <p>
+                                                            Previous Status:
+                                                          </p>
+                                                          <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
+                                                            {item?.eventRecord
+                                                              ?.previousStatus ||
+                                                              "--"}
+                                                          </p>
+                                                        </div>
+                                                        <div className="flex justify-between mt-4">
+                                                          <p>Time Stamp:</p>
+                                                          <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
+                                                            {item?.createdAt
+                                                              ? convertEpochToDateTime(
+                                                                  item.createdAt
+                                                                )
+                                                              : "--"}
+                                                          </p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  );
+                                                }
+                                              )}
+                                            </div>
+                                          )}
+                                      </div>
                                       <div>
                                         {item.title === "Services" && (
                                           <div>

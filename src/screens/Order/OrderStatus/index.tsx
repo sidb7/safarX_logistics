@@ -1,5 +1,5 @@
 import PlaceChannelOrder from "../../../assets/placeChannelOrder.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
@@ -37,6 +37,7 @@ import RTOicon from "../../../assets/RTO.svg";
 import BoxIcon from "../../../assets/layer.svg";
 import InputBox from "../../../components/Input";
 import { convertXMLToXLSX } from "../../../utils/helper";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -73,12 +74,16 @@ interface IOrderstatusProps {
   setIsBulkCheckedBooked?: any;
   isBulkCheckedBooked?: any;
   totalCount?: any;
+  itemPerPage?: number;
+  skip?: number;
 }
 
 let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
 
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId = 0,
+  itemPerPage,
+  skip,
   setFilterId,
   statusData,
   setOrders,
@@ -271,11 +276,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       awbs: awbArray,
       requestType: type,
     };
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     try {
@@ -385,9 +393,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           const checkbox = selectAllContainer.querySelector(
             'input[type="checkbox"]'
           );
-
+          // console.log(checkbox, "CHECLLLD");
           // Function to check if the checkbox is checked
           const isChecked = checkbox.checked;
+          // console.log(allOrders, "ORDERSSS");
           if (isChecked) {
             orderDetails = orders?.map((order: any) => {
               return {
@@ -1007,8 +1016,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       value = stateValue.value;
     }
     let payload: any = {
-      skip: 0,
-      limit: +value || 10,
+      skip: skip,
+      limit: itemPerPage || 10,
       pageNo: 1,
       sort: { _id: -1 },
       currentStatus,
@@ -1017,7 +1026,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
     let firstFilterData: any = [];
     let secondFilterData: any = [];
-
+    payload.filterArrOne = [];
+    payload.filterArrTwo = [];
     if (
       filterPayLoad?.filterArrOne.length > 0 ||
       filterPayLoad?.filterArrTwo.length > 0
@@ -1058,18 +1068,17 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           },
         },
       ];
-      payload.filterArrTwo = [];
     }
 
-    if (firstFilterData.length > 0 || secondFilterData.length > 0) {
-      payload.filterArrOne = firstFilterData;
+    if (secondFilterData.length > 0) {
       payload.filterArrTwo = secondFilterData;
     }
 
+    console.log(firstFilterData, "FILTER one");
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
     const { OrderData, orderCount, draftCount } = data?.data?.[0];
-
+    // console.log(OrderData + " " + orderCount + " " + draftCount);
     if (subStatus === "DRAFT") {
       setDraftOrderCount({
         ...draftOrderCount,
@@ -1464,8 +1473,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   return (
-    <div className="flex flex-col pt-7">
-      <div className="flex font-medium customScroll whitespace-nowrap mt-2 ">
+    <div className="flex flex-col ">
+      <div className="flex font-medium customScroll whitespace-nowrap  ">
         {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
           return (
             <button

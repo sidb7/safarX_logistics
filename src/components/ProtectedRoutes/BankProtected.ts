@@ -5,6 +5,7 @@ import { POST } from "../../utils/webService";
 import { VALIDATE_USER_TOKEN } from "../../utils/ApiUrls";
 import { setWalletBalance } from "../../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
+import sessionManager from "../../utils/sessionManager";
 
 interface Props {
   children?: any;
@@ -15,14 +16,18 @@ const BankProtected = ({ children }: Props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
-  let sellerId = localStorage.getItem("sellerId");
+  const { sellerInfo } = sessionManager({});
+  // let sellerId = localStorage.getItem("sellerId");
+  let sellerId = sellerInfo?.sellerId;
 
   //used getLocalStorage to get the token from local storage
 
-  const localUserToken = getLocalStorage(
-    `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-  );
+  // const localUserToken = getLocalStorage(
+  //   `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+  // );
+
+  const token = sellerInfo?.token;
+  const localUserToken = token;
 
   React.useEffect(() => {
     localUserToken &&
@@ -32,6 +37,7 @@ const BankProtected = ({ children }: Props) => {
         if (!response?.data?.success) {
           setIsAuthenticated(false);
           clearLocalStorage();
+          sessionStorage.clear();
           navigate("/auth/login");
         } else {
           const { nextStep, walletBalance } = response?.data?.data[0];
@@ -45,14 +51,15 @@ const BankProtected = ({ children }: Props) => {
 
           //if bank not verified return to "/"
           if (!bank || !(walletBalance > 0)) {
-            localStorage.setItem(
-              "kycValue",
-              JSON.stringify(response?.data?.data[0])
-            );
-            localStorage.setItem(
-              "walletAmt",
-              response?.data?.data[0]?.walletBalance
-            );
+            const { sellerInfo } = sessionManager(response?.data?.data[0]);
+            // localStorage.setItem(
+            //   "kycValue",
+            //   JSON.stringify(response?.data?.data[0])
+            // );
+            // localStorage.setItem(
+            //   "walletAmt",
+            //   response?.data?.data[0]?.walletBalance
+            // );
             setIsAuthenticated(true);
             dispatch(
               setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })

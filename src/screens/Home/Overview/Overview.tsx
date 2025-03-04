@@ -31,6 +31,7 @@ import OverallShipmentDetails from "./ShipmentDetails/OverallShipmentDetails";
 import OrderCount from "./OrderDetails/orderCount";
 import CodIcon from "../../../assets/codIcon.svg";
 import ComingSoonGif from "../../../assets/Coming Soon.gif";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IOverview {
   ordersArr?: any;
@@ -410,8 +411,9 @@ export const Overview = (props: IOverview) => {
   };
 
   React.useEffect(() => {
-    let data = localStorage.getItem("userInfo") as any;
-    data = JSON.parse(data);
+    // let data = localStorage.getItem("userInfo") as any;
+    const { sessionId, sellerInfo } = sessionManager({});
+    let data = sellerInfo;
 
     if (data !== "" && data !== null) {
       setUserData(data);

@@ -7,19 +7,21 @@ import { CashbackHistory } from "./history/cashbackHistory";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { CustomTable } from "../../components/Table";
 import { useNavigate } from "react-router-dom";
-import PaginationComponent from "../../components/Pagination";
 import { SearchBox } from "../../components/SearchBox";
 import { PassbookColumns } from "./history/passbookHistory";
 import { OnlineDetailsColumns } from "./history/onlineHistory";
 import { cashbackDetailsColumns } from "./history/cashbackHistory";
 import { POST } from "../../utils/webService";
-import { GET_WALLET_TRANSACTION } from "../../utils/ApiUrls";
+import {
+  GET_WALLET_TRANSACTION,
+  GET_WALLET_TRANSACTION_FINANCE,
+} from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../components/OnePagination/OnePagination";
 import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
@@ -84,7 +86,6 @@ export const Transaction = () => {
   });
   const [filterPayLoad, setFilterPayLoad] = useState({
     filterArrOne: [],
-    filterArrTwo: [],
   });
 
   const [persistFilterData, setPersistFilterData]: any = useState({
@@ -93,13 +94,13 @@ export const Transaction = () => {
   });
   const getData = async () => {
     const payload: any = {
-      filter: [],
+      filter: {},
       skip: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
       pageNo: currentPage,
       sort: { _id: sortOrder === "desc" ? -1 : 1 },
-      searchValue: searchValue,
-      apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
+      search: searchValue,
+      // apiType: renderingComponents === 1 ? "neft/rtgs/imps" : "",
     };
 
     if (startDate && endDate) {
@@ -115,8 +116,8 @@ export const Transaction = () => {
 
         lastendEpoch = endEpoch;
       }
-      payload.startDate = startEpoch;
-      payload.endDate = lastendEpoch;
+      payload.filter.startDate = startEpoch;
+      payload.filter.endDate = lastendEpoch;
 
       // payload?.filter?.push({
       //   createdAt: {
@@ -125,30 +126,26 @@ export const Transaction = () => {
       //   },
       // });
     }
-    payload.filter = [];
+    payload.filter.type = renderingComponents === 1 ? "neft" : "";
     let extraFilter = filterPayLoad?.filterArrOne;
     extraFilter?.map((el: any, i: any) => {
       if (el?.status?.$in?.length > 0) {
-        payload?.filter?.push(el);
-      }
-      if (el?.description?.$in?.length > 0) {
-        payload?.filter?.push(el);
+        payload.filter.status = el.status;
       }
     });
 
-    if (renderingComponents === 1) {
-      payload.filter.type = "WALLET_RECHARGE_USING_NEFT";
-    }
-
-    const { data: response } = await inputRegexFilter(
-      searchValue,
-      path,
+    // const { data: response } = await inputRegexFilter(
+    //   searchValue,
+    //   path,
+    //   payload
+    // );
+    const { data: response } = await POST(
+      GET_WALLET_TRANSACTION_FINANCE,
       payload
     );
-
     if (response?.success) {
       setData(response?.data || []);
-      setTotalItemCount(response.totalTransactions);
+      setTotalItemCount(response.total);
       setLoading(false);
       setIsFilterLoading(false);
       setFilterModal(false);
@@ -173,6 +170,7 @@ export const Transaction = () => {
     searchValue,
     isFilterLoading,
     renderingComponents,
+    endDate,
   ]);
 
   // useEffect(() => {

@@ -1,14 +1,19 @@
 import axios from "axios";
 import { SELLER_URL } from "./ApiUrls";
 import { tokenKey } from "./utility";
+import sessionManager from "./sessionManager";
 
 axios.defaults.baseURL = SELLER_URL;
 
 const createHeader = (_URL: string, options = {}) => {
-  let sellerId = localStorage.getItem("sellerId");
+  // let sellerId = localStorage.getItem("sellerId");
+  const { sellerInfo } = sessionManager({});
   let header = {
     Accept: "/",
-    Authorization: `Bearer ${localStorage.getItem(`${sellerId}_${tokenKey}`)}`,
+    // Authorization: `Bearer ${localStorage.getItem(
+    //   `${sellerId}_${tokenKey}`
+    // )}`,
+    Authorization: `Bearer ${sellerInfo?.token || null}`,
   };
   options = { ...options, headers: header };
   return { URL: _URL, options: options };

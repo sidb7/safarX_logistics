@@ -12,6 +12,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
 import { LARGE_LOGO, COMPANY_NAME } from "../../../utils/ApiUrls";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const navigate = useNavigate();
@@ -49,8 +50,9 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const question = questionsData[1]?.question;
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const dailyOrder: any = [];
 
   //for the gmt

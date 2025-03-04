@@ -16,7 +16,7 @@ import SortIcon from "../../assets/sort.svg";
 import EyeIcon from "../../assets/blueEye.svg";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import CrossIcon from "../../assets/CloseIcon.svg";
-import PaginationComponent from "../../components/Pagination";
+import PaginationComponent from "../../components/OnePagination/OnePagination";
 
 const SystemLog = () => {
   const columnsHelper = createColumnHelper<any>();
