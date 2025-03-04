@@ -1028,13 +1028,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         });
 
         //payment details
-        {
-          buyerConfirmationLogs.length > 0 &&
-            rows.push({
-              title: "Order Confirmation Logs",
-              data: "Order Confirmation Logs",
-            });
-        }
+
         rows.push({
           title: "Payment Details",
           "Payment Type": rowsData?.codInfo?.isCod,
@@ -1103,6 +1097,19 @@ const Accordion = (props: ICustomTableAccordion) => {
           "Order Type": rowsData?.orderType,
           Zone: capitalizeFirstLetter(rowsData?.zone),
         });
+
+        if (buyerConfirmationOrder?.data?.data[0]?.data?.length > 0) {
+          rows.push({
+            title: "Order Confirmation Logs",
+            [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
+            "Order Id": rowsData?.orderId,
+            "Tracking Id": orderData?.awb,
+            "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
+            Source: capitalizeFirstLetter(rowsData?.source),
+            "Order Type": rowsData?.orderType,
+            Zone: capitalizeFirstLetter(rowsData?.zone),
+          });
+        }
 
         setOrderDetails(rows);
         setIsLoading(false);
