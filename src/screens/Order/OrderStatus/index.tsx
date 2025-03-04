@@ -1473,8 +1473,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   return (
-    <div className="flex flex-col pt-7">
-      <div className="flex font-medium customScroll whitespace-nowrap mt-2 ">
+    <div className="flex flex-col ">
+      <div className="flex font-medium customScroll whitespace-nowrap  ">
         {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
           return (
             <button
