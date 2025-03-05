@@ -107,21 +107,15 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
       // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
-      const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
 
-      if (sellerInfo?.nextStep) {
-        sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
-      } else {
-        sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
-      }
-      localStorage.setItem(
-        `sellerSession_${sessionId}`,
-        JSON.stringify(sellerInfo)
-      );
       //setting the local storage  with site signing up to show in dataslayer
       localStorage.setItem("key", "Site");
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        const { sessionId, sellerInfo } = sessionManager({
+          ...response?.data[0],
+          ...sellerData,
+        });
         const { sellerId, email, isReturningUser, name, nextStep } =
           response?.data[0];
         window?.dataLayer?.push({
@@ -135,7 +129,7 @@ const Index = () => {
         });
 
         // localStorage.setItem("userInfo", JSON.stringify(sellerData));
-        sessionManager(sellerData);
+
         setLoading(false);
         const navigationObject = constructNavigationObject(
           "/onboarding/sendotp",
