@@ -76,6 +76,8 @@ interface IOrderstatusProps {
   totalCount?: any;
   itemPerPage?: number;
   skip?: number;
+  setSubStatus?: any;
+  getAllOrders?: any;
 }
 
 let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
@@ -85,6 +87,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   itemPerPage,
   skip,
   setFilterId,
+  setSubStatus,
   statusData,
   setOrders,
   currentStatus,
@@ -109,6 +112,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   totalCount,
   allOrders,
   orders,
+  getAllOrders,
 }) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -604,6 +608,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const filterComponent = (className?: string) => {
+    console.log(draftOrderCount, "FILTER DATA");
     return (
       <div
         className={`flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] lg:hidden ${className}`}
@@ -646,19 +651,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     switch (index) {
       case 0: {
         setShowErrorReportBtn(false);
-
-        getAllOrders();
+        setSubStatus("");
+        // getAllOrders();
         break;
       }
       case 1: {
         const subStatus = "DRAFT";
         setShowErrorReportBtn(false);
-
-        getAllOrders(subStatus, stateValue);
+        setSubStatus(subStatus);
+        // getAllOrders(subStatus, stateValue);
         break;
       }
       case 2: {
         setShowErrorReportBtn(true);
+        setSubStatus("");
         getErrors();
       }
     }
@@ -1010,91 +1016,99 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const getAllOrders = async (subStatus?: any, stateValue?: any) => {
-    let value;
-    if (stateValue) {
-      value = stateValue.value;
-    }
-    let payload: any = {
-      skip: skip,
-      limit: itemPerPage || 10,
-      pageNo: 1,
-      sort: { _id: -1 },
-      currentStatus,
-      subStatus,
-    };
+  // const getAllOrders = async (subStatus?: any, stateValue?: any) => {
+  //   let value;
+  //   if (stateValue) {
+  //     value = stateValue.value;
+  //   }
+  //   let payload: any = {
+  //     skip: skip,
+  //     limit: itemPerPage || 10,
+  //     pageNo: 1,
+  //     sort: { _id: -1 },
+  //     currentStatus,
+  //     subStatus,
+  //   };
 
-    let firstFilterData: any = [];
-    let secondFilterData: any = [];
-    payload.filterArrOne = [];
-    payload.filterArrTwo = [];
-    if (
-      filterPayLoad?.filterArrOne.length > 0 ||
-      filterPayLoad?.filterArrTwo.length > 0
-    ) {
-      const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
-        (obj: any) => !Object.keys(obj).includes("createdAt")
-      );
+  //   // let firstFilterData: any = [];
+  //   // let secondFilterData: any = [];
+  //   payload.filterArrOne = filterPayLoad?.filterArrOne || [];
 
-      firstFilterData = newFilterArrOne;
-      secondFilterData = filterPayLoad?.filterArrTwo;
-    }
+  //   payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
 
-    if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
-      let startEpoch = null;
-      let lastendEpoch = null;
+  //   console.log(
+  //     filterPayLoad?.filterArrOne,
+  //     "FILTERRR",
+  //     filterPayLoad?.filterArrTwo
+  //   );
+  //   // if (
+  //   //   filterPayLoad?.filterArrOne.length > 0 ||
+  //   //   filterPayLoad?.filterArrTwo.length > 0
+  //   // ) {
+  //   //   const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
+  //   //     (obj: any) => !Object.keys(obj).includes("createdAt")
+  //   //   );
 
-      const { startDate, endDate } = selectedDateRange;
+  //   //   firstFilterData = newFilterArrOne;
+  //   //   secondFilterData = filterPayLoad?.filterArrTwo;
+  //   // }
 
-      if (startDate instanceof Date && endDate instanceof Date) {
-        startDate.setHours(0, 0, 0, 0);
-        startEpoch = startDate.getTime();
+  //   // if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
+  //   //   let startEpoch = null;
+  //   //   let lastendEpoch = null;
 
-        endDate.setHours(23, 59, 59, 999);
-        const endEpoch = endDate.getTime();
+  //   //   const { startDate, endDate } = selectedDateRange;
 
-        lastendEpoch = endEpoch;
-      }
+  //   //   if (startDate instanceof Date && endDate instanceof Date) {
+  //   //     startDate.setHours(0, 0, 0, 0);
+  //   //     startEpoch = startDate.getTime();
 
-      payload.filterArrOne = [
-        {
-          createdAt: {
-            $gte: startEpoch,
-          },
-        },
-        {
-          createdAt: {
-            $lte: lastendEpoch,
-          },
-        },
-      ];
-    }
+  //   //     endDate.setHours(23, 59, 59, 999);
+  //   //     const endEpoch = endDate.getTime();
 
-    if (secondFilterData.length > 0) {
-      payload.filterArrTwo = secondFilterData;
-    }
+  //   //     lastendEpoch = endEpoch;
+  //   //   }
 
-    console.log(firstFilterData, "FILTER one");
-    const { data } = await POST(GET_SELLER_ORDER, payload);
+  //   //   payload.filterArrOne = [
+  //   //     {
+  //   //       createdAt: {
+  //   //         $gte: startEpoch,
+  //   //       },
+  //   //     },
+  //   //     {
+  //   //       createdAt: {
+  //   //         $lte: lastendEpoch,
+  //   //       },
+  //   //     },
+  //   //   ];
+  //   // }
 
-    const { OrderData, orderCount, draftCount } = data?.data?.[0];
-    // console.log(OrderData + " " + orderCount + " " + draftCount);
-    if (subStatus === "DRAFT") {
-      setDraftOrderCount({
-        ...draftOrderCount,
-        draft: orderCount || 0,
-      });
-    } else {
-      setDraftOrderCount({
-        ...draftOrderCount,
-        all: orderCount,
-        draft: draftCount || 0,
-      });
-    }
+  //   // if (secondFilterData.length > 0) {
+  //   //   payload.filterArrTwo = secondFilterData;
+  //   // }
 
-    setOrders(OrderData);
-    setTotalcount(orderCount || 0);
-  };
+  //   // console.log(firstFilterData, "FILTER one");
+  //   console.log(payload, "PAYLOAD 2");
+  //   const { data } = await POST(GET_SELLER_ORDER, payload);
+
+  //   const { OrderData, orderCount, draftCount } = data?.data?.[0];
+  //   // console.log(OrderData + " " + orderCount + " " + draftCount);
+  //   if (subStatus === "DRAFT") {
+  //     setDraftOrderCount({
+  //       ...draftOrderCount,
+  //       draft: orderCount || 0,
+  //     });
+  //   } else {
+  //     setDraftOrderCount({
+  //       ...draftOrderCount,
+  //       all: orderCount,
+  //       draft: draftCount || 0,
+  //     });
+  //   }
+
+  //   setOrders(OrderData);
+  //   setTotalcount(orderCount || 0);
+  // };
 
   const handleBulkActionAddress = (
     typeOfAddress: string,
@@ -1303,7 +1317,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       if (data?.success) {
         toast.success(data?.message);
         setIsBulkModalOpen(false);
-        getAllOrders("", stateValue);
+        getAllOrders();
         setPageToOpen("Home");
       } else {
         toast.error(data?.message || "Failed While Updating Address");
@@ -1329,7 +1343,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
         if (data?.success) {
           setIsBulkModalOpen(false);
-          getAllOrders("", stateValue);
+          getAllOrders();
           setPageToOpen("Home");
           return toast.success(data?.message);
         } else {
@@ -1514,7 +1528,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           >
             <div className="flex gap-x-4">
               <div className="flex items-center text-[22px] ">
-                {currentStatus === "DRAFT" && `${orders?.length} Orders`}
+                {currentStatus === "DRAFT" &&
+                  !showErrorReportBtn &&
+                  `${orders?.length} Orders`}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}
