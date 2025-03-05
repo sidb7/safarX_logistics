@@ -764,7 +764,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       const buyerConfirmationOrder = await POST(GET_ORDER_CONFIRMATION_LOG, {
         orderId: data?.data?.[0]?.data?.[0]?.orderId,
       });
-
+      console.log("buyerConfirmationOrder", buyerConfirmationOrder);
       setOrderPayload({
         ...orderPayload,
         orderId: data?.data?.[0]?.data?.[0]?.orderId,
@@ -772,9 +772,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         source: data?.data?.[0]?.data?.[0]?.source,
       });
       if (buyerConfirmationOrder?.data?.success) {
-        setBuyerConfirmationLogs(
-          buyerConfirmationOrder?.data?.data[0]?.data || []
-        );
+        setBuyerConfirmationLogs(buyerConfirmationOrder?.data?.data[0]?.data);
       }
       setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
@@ -1098,7 +1096,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           Zone: capitalizeFirstLetter(rowsData?.zone),
         });
 
-        if (buyerConfirmationOrder?.data?.data[0]?.data?.length > 0) {
+        if (buyerConfirmationOrder?.data?.success == true) {
           rows.push({
             title: "Order Confirmation Logs",
             [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
