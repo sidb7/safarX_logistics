@@ -75,7 +75,8 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="py-4">
             <p className="font-Open text-xs font-normal leading-4">
-              {info.row.original.reportNumber}
+              {info.row?.original?.reportDate ||
+                info.row?.original?.reportNumber}
             </p>
           </div>
         );

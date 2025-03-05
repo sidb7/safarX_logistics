@@ -480,7 +480,7 @@ const Index = () => {
 
   useEffect(() => {
     setSkip(0);
-    setSearchedText("");
+    // setSearchedText("");
     setSubStatus("");
   }, [globalIndex]);
   useEffect(() => {
