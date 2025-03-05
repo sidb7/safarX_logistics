@@ -5,6 +5,7 @@ import { Breadcrum } from "../../components/Layout/breadcrum";
 import WeightFreezeBanner from "./WeightFreezeBanner";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import WeightFreezeTable from "./WeightFreezetable";
+import "../../styles/hideScroll.css";
 import NewDiscrepancyTable from "./Newdiscrepancy";
 import PendingDispute from "./PendingDispute";
 import CompletedTable from "./CompletedTable";
