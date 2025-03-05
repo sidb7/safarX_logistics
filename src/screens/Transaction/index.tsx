@@ -22,7 +22,6 @@ import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/OnePagination/OnePagination";
-import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../assets/serv/edit.svg";
@@ -95,7 +94,7 @@ export const Transaction = () => {
   const getData = async () => {
     const payload: any = {
       filter: {},
-      skip: (currentPage - 1) * itemsPerPage,
+      skip: searchValue !== "" ? 0 : (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
       pageNo: currentPage,
       sort: { _id: sortOrder === "desc" ? -1 : 1 },
