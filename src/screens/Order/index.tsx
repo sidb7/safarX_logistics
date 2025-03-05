@@ -182,6 +182,7 @@ const Index = () => {
   const [storeDetails, setStoreDetails] = useState([]);
   const [buyerConfirmationStatus, setBuyerConfirmationStatus]: any =
     useState("");
+  const [skip, setSkip] = useState(0);
   const scrollRef: any = useRef(null);
 
   let thirtyDaysAgo = new Date();
@@ -421,9 +422,15 @@ const Index = () => {
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
     if (data?.status) {
-      const { OrderData, orderCount } = data?.data?.[0];
+      const { OrderData, orderCount, draftCount } = data?.data?.[0];
       setSearchedText("");
       setOrders(OrderData);
+      // setAllOrders(OrderData);
+      setDraftOrderCount({
+        ...draftOrderCount,
+        all: orderCount,
+        draft: draftCount || 0,
+      });
       setTotalcount(orderCount || 0);
       getStatusCount(currentStatus, true, "", startDate, endDate);
     }
@@ -434,6 +441,10 @@ const Index = () => {
     setStartDate(null);
     setEndDate(null);
   };
+
+  useEffect(() => {
+    getAllOrders();
+  }, [allOrders, isDeleted]);
 
   const Buttons = (className?: string) => {
     return (
@@ -1431,6 +1442,7 @@ const Index = () => {
       endDate,
       filterPayLoad
     );
+    setSkip((data?.currentPage - 1) * data?.itemsPerPage);
     setOrders(OrderData);
     setAllOrders(OrderData);
     setTotalOrders(OrderData);
@@ -1940,6 +1952,7 @@ const Index = () => {
         }
 
         setErrorData(result);
+        setTotalcount(0);
         setIsErrorListLoading(false);
       } else {
         setIsErrorListLoading(false);
@@ -1999,10 +2012,15 @@ const Index = () => {
         );
       }
       const { data } = await POST(GET_SELLER_ORDER, payload);
-      const { OrderData, orderCount } = data?.data?.[0];
+
+      const { OrderData, orderCount, draftCount } = data?.data?.[0];
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
-
+      setDraftOrderCount({
+        ...draftOrderCount,
+        all: orderCount,
+        draft: draftCount || 0,
+      });
       if (data?.status) {
         setIsFilterLoading(false);
 
@@ -2018,6 +2036,7 @@ const Index = () => {
         });
 
         setOrders(OrderData);
+
         getStatusCount(
           currentStatus,
           true,
@@ -2161,6 +2180,8 @@ const Index = () => {
             <div className="bg-white">
               <OrderStatus
                 filterId={filterId}
+                itemPerPage={itemsPerPage}
+                skip={skip}
                 orders={orders}
                 setFilterId={setFilterId}
                 handleTabChange={handleTabChanges}
@@ -2500,7 +2521,7 @@ const Index = () => {
                 />
               </div>
             </div>
-            <div className="mx-5">
+            <div className="mx-5 h-[calc(100vh-150px)] overflow-y-auto">
               <FilterScreen
                 filterState={filterState}
                 setFilterState={setFilterState}

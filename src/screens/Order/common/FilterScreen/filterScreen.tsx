@@ -123,7 +123,7 @@ function FilterScreen({
   }, []);
 
   return (
-    <div className="my-4 h-[740px] overflow-auto">
+    <div className="my-4">
       <div className="flex flex-col gap-y-4">
         {searchPincodListLoader.map((pincodeData: any, i: any) => {
           return (

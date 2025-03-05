@@ -742,7 +742,7 @@ const idHelper = (
       const tagsString = tags?.join(", ");
       const tagsLength = tagsString?.length;
 
-      const showAllTags = tagsLength > 10;
+      const showAllTags = tagsLength > 0;
       // const buyerConfirmation = rowsData?.isBuyerConfirmed;
       const buyerConfirmationStatus = [
         {
@@ -1166,7 +1166,7 @@ export const columnHelperForNewOrder = (
         const tagsString = tags?.join(", ");
         const tagsLength = tagsString?.length;
 
-        const showAllTags = tagsLength > 10;
+        const showAllTags = tagsLength > 0;
 
         const rows: any = [
           {
@@ -2126,7 +2126,10 @@ export const columnHelpersForRest = (
     ColumnsHelper.accessor("packageType", {
       header: (props: any) => {
         return (
-          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
+          <div
+            className="flex items-center font-Open font-semibold leading-5 text-sm"
+            id="selectAll"
+          >
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -2140,7 +2143,7 @@ export const columnHelpersForRest = (
         const { pickupAddress, service, source, orderId, otherDetails, awb } =
           info?.row?.original;
         return (
-          <div className="flex">
+          <div className="flex w-[300px]">
             <div className="flex justify-center mr-4 !my-[-6px] cursor-pointer">
               <input
                 type="checkbox"
@@ -2374,6 +2377,7 @@ export const columnHelpersForRest = (
               showOnHover={true}
               bgColor="bg-white"
               textColor="black"
+              left={-80}
             >
               <div className="mx-2 cursor-pointer">
                 <img
