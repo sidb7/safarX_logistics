@@ -44,7 +44,7 @@ switch (Environment) {
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
-    FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
+    FINANCE_URL = `${process?.env?.REACT_APP_FINANCE_URL}`;
     break;
 
   case "test":
@@ -85,7 +85,12 @@ switch (Environment) {
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
-    FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
+    FINANCE_URL = `${
+      process.env?.REACT_APP_SELLER_PROD ==
+      "http://stage-api-seller.shipyaari.com"
+        ? "https://finance-stage.shipyaari.com"
+        : process?.env?.REACT_APP_FINANCE_URL || "https://finance.shipyaari.com"
+    }`;
     break;
 
   default:
@@ -736,5 +741,5 @@ export {
   UPDATE_ORDER_CONFIRMATION_STATUS,
   GET_ORDER_CONFIRMATION_LOG,
   GET_WALLET_TRANSACTION_FINANCE,
-  POST_SSO_URL
+  POST_SSO_URL,
 };
