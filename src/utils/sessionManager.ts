@@ -20,7 +20,8 @@ const sessionManager = (sellerData: SellerData) => {
   // Merge new sellerData with existingData if token is present
   if (
     (existingData.token && existingData.name) ||
-    (sellerData.token && sellerData.name)
+    (sellerData.token && sellerData.name) ||
+    sellerData?.email
   ) {
     const updatedData = { ...existingData, ...sellerData };
     sessionStorage.setItem(
