@@ -1,5 +1,5 @@
 import PlaceChannelOrder from "../../../assets/placeChannelOrder.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
@@ -37,6 +37,7 @@ import RTOicon from "../../../assets/RTO.svg";
 import BoxIcon from "../../../assets/layer.svg";
 import InputBox from "../../../components/Input";
 import { convertXMLToXLSX } from "../../../utils/helper";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -73,13 +74,21 @@ interface IOrderstatusProps {
   setIsBulkCheckedBooked?: any;
   isBulkCheckedBooked?: any;
   totalCount?: any;
+  itemPerPage?: number;
+  skip?: number;
+  setSubStatus?: any;
+  getAllOrders?: any;
+  setIsOrderPlaced?: any;
 }
 
 let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
 
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId = 0,
+  itemPerPage,
+  skip,
   setFilterId,
+  setSubStatus,
   statusData,
   setOrders,
   currentStatus,
@@ -104,6 +113,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   totalCount,
   allOrders,
   orders,
+  getAllOrders,
+  setIsOrderPlaced,
 }) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -271,11 +282,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       awbs: awbArray,
       requestType: type,
     };
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
     let header = {
       Accept: "/",
-      Authorization: `Bearer ${localStorage.getItem(
-        `${localStorage.getItem("sellerId")}_${tokenKey}`
-      )}`,
+      // Authorization: `Bearer ${localStorage.getItem(
+      //   `${sellerId}_${tokenKey}`
+      // )}`,
+      Authorization: `Bearer ${sellerInfo?.token}`,
       "Content-Type": "application/json",
     };
     try {
@@ -385,9 +399,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           const checkbox = selectAllContainer.querySelector(
             'input[type="checkbox"]'
           );
-
+          // console.log(checkbox, "CHECLLLD");
           // Function to check if the checkbox is checked
           const isChecked = checkbox.checked;
+          // console.log(allOrders, "ORDERSSS");
           if (isChecked) {
             orderDetails = orders?.map((order: any) => {
               return {
@@ -410,8 +425,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               isLoading: true,
               identifier: "PlaceOrder",
             });
-
-            const interval = setInterval(updateProgressBar, 1000);
+            setIsOrderPlaced(false);
+            // const interval = setInterval(updateProgressBar, 1000);
 
             const { data } = await POST(POST_PLACE_ALL_ORDERS, {
               orders: orderDetails,
@@ -421,8 +436,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 isLoading: false,
                 identifier: "",
               });
-
-              clearInterval(interval);
+              // setIsOrderPlaced(true);
+              // clearInterval(interval);
               const placeorderBar: any = document.getElementById("placeOrder");
               placeorderBar.style.display = "none";
 
@@ -595,6 +610,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const filterComponent = (className?: string) => {
+    console.log(draftOrderCount, "FILTER DATA");
     return (
       <div
         className={`flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] lg:hidden ${className}`}
@@ -637,19 +653,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     switch (index) {
       case 0: {
         setShowErrorReportBtn(false);
-
-        getAllOrders();
+        setSubStatus("");
+        // getAllOrders();
         break;
       }
       case 1: {
         const subStatus = "DRAFT";
         setShowErrorReportBtn(false);
-
-        getAllOrders(subStatus, stateValue);
+        setSubStatus(subStatus);
+        // getAllOrders(subStatus, stateValue);
         break;
       }
       case 2: {
         setShowErrorReportBtn(true);
+        setSubStatus("");
         getErrors();
       }
     }
@@ -1001,91 +1018,99 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const getAllOrders = async (subStatus?: any, stateValue?: any) => {
-    let value;
-    if (stateValue) {
-      value = stateValue.value;
-    }
-    let payload: any = {
-      skip: 0,
-      limit: +value || 10,
-      pageNo: 1,
-      sort: { _id: -1 },
-      currentStatus,
-      subStatus,
-    };
+  // const getAllOrders = async (subStatus?: any, stateValue?: any) => {
+  //   let value;
+  //   if (stateValue) {
+  //     value = stateValue.value;
+  //   }
+  //   let payload: any = {
+  //     skip: skip,
+  //     limit: itemPerPage || 10,
+  //     pageNo: 1,
+  //     sort: { _id: -1 },
+  //     currentStatus,
+  //     subStatus,
+  //   };
 
-    let firstFilterData: any = [];
-    let secondFilterData: any = [];
+  //   // let firstFilterData: any = [];
+  //   // let secondFilterData: any = [];
+  //   payload.filterArrOne = filterPayLoad?.filterArrOne || [];
 
-    if (
-      filterPayLoad?.filterArrOne.length > 0 ||
-      filterPayLoad?.filterArrTwo.length > 0
-    ) {
-      const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
-        (obj: any) => !Object.keys(obj).includes("createdAt")
-      );
+  //   payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
 
-      firstFilterData = newFilterArrOne;
-      secondFilterData = filterPayLoad?.filterArrTwo;
-    }
+  //   console.log(
+  //     filterPayLoad?.filterArrOne,
+  //     "FILTERRR",
+  //     filterPayLoad?.filterArrTwo
+  //   );
+  //   // if (
+  //   //   filterPayLoad?.filterArrOne.length > 0 ||
+  //   //   filterPayLoad?.filterArrTwo.length > 0
+  //   // ) {
+  //   //   const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
+  //   //     (obj: any) => !Object.keys(obj).includes("createdAt")
+  //   //   );
 
-    if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
-      let startEpoch = null;
-      let lastendEpoch = null;
+  //   //   firstFilterData = newFilterArrOne;
+  //   //   secondFilterData = filterPayLoad?.filterArrTwo;
+  //   // }
 
-      const { startDate, endDate } = selectedDateRange;
+  //   // if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
+  //   //   let startEpoch = null;
+  //   //   let lastendEpoch = null;
 
-      if (startDate instanceof Date && endDate instanceof Date) {
-        startDate.setHours(0, 0, 0, 0);
-        startEpoch = startDate.getTime();
+  //   //   const { startDate, endDate } = selectedDateRange;
 
-        endDate.setHours(23, 59, 59, 999);
-        const endEpoch = endDate.getTime();
+  //   //   if (startDate instanceof Date && endDate instanceof Date) {
+  //   //     startDate.setHours(0, 0, 0, 0);
+  //   //     startEpoch = startDate.getTime();
 
-        lastendEpoch = endEpoch;
-      }
+  //   //     endDate.setHours(23, 59, 59, 999);
+  //   //     const endEpoch = endDate.getTime();
 
-      payload.filterArrOne = [
-        {
-          createdAt: {
-            $gte: startEpoch,
-          },
-        },
-        {
-          createdAt: {
-            $lte: lastendEpoch,
-          },
-        },
-      ];
-      payload.filterArrTwo = [];
-    }
+  //   //     lastendEpoch = endEpoch;
+  //   //   }
 
-    if (firstFilterData.length > 0 || secondFilterData.length > 0) {
-      payload.filterArrOne = firstFilterData;
-      payload.filterArrTwo = secondFilterData;
-    }
+  //   //   payload.filterArrOne = [
+  //   //     {
+  //   //       createdAt: {
+  //   //         $gte: startEpoch,
+  //   //       },
+  //   //     },
+  //   //     {
+  //   //       createdAt: {
+  //   //         $lte: lastendEpoch,
+  //   //       },
+  //   //     },
+  //   //   ];
+  //   // }
 
-    const { data } = await POST(GET_SELLER_ORDER, payload);
+  //   // if (secondFilterData.length > 0) {
+  //   //   payload.filterArrTwo = secondFilterData;
+  //   // }
 
-    const { OrderData, orderCount, draftCount } = data?.data?.[0];
+  //   // console.log(firstFilterData, "FILTER one");
+  //   console.log(payload, "PAYLOAD 2");
+  //   const { data } = await POST(GET_SELLER_ORDER, payload);
 
-    if (subStatus === "DRAFT") {
-      setDraftOrderCount({
-        ...draftOrderCount,
-        draft: orderCount || 0,
-      });
-    } else {
-      setDraftOrderCount({
-        ...draftOrderCount,
-        all: orderCount,
-        draft: draftCount || 0,
-      });
-    }
+  //   const { OrderData, orderCount, draftCount } = data?.data?.[0];
+  //   // console.log(OrderData + " " + orderCount + " " + draftCount);
+  //   if (subStatus === "DRAFT") {
+  //     setDraftOrderCount({
+  //       ...draftOrderCount,
+  //       draft: orderCount || 0,
+  //     });
+  //   } else {
+  //     setDraftOrderCount({
+  //       ...draftOrderCount,
+  //       all: orderCount,
+  //       draft: draftCount || 0,
+  //     });
+  //   }
 
-    setOrders(OrderData);
-    setTotalcount(orderCount || 0);
-  };
+  //   setOrders(OrderData);
+  //   setTotalcount(orderCount || 0);
+  // };
 
   const handleBulkActionAddress = (
     typeOfAddress: string,
@@ -1294,7 +1319,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       if (data?.success) {
         toast.success(data?.message);
         setIsBulkModalOpen(false);
-        getAllOrders("", stateValue);
+        getAllOrders();
         setPageToOpen("Home");
       } else {
         toast.error(data?.message || "Failed While Updating Address");
@@ -1320,7 +1345,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
         if (data?.success) {
           setIsBulkModalOpen(false);
-          getAllOrders("", stateValue);
+          getAllOrders();
           setPageToOpen("Home");
           return toast.success(data?.message);
         } else {
@@ -1505,7 +1530,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           >
             <div className="flex gap-x-4">
               <div className="flex items-center text-[22px] ">
-                {currentStatus === "DRAFT" && `${orders?.length} Orders`}
+                {currentStatus === "DRAFT" &&
+                  !showErrorReportBtn &&
+                  `${orders?.length} Orders`}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}

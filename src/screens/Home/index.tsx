@@ -31,6 +31,7 @@ import {
 import { ResponsiveState } from "../../utils/responsiveState";
 import { tokenKey } from "../../utils/utility";
 import CouponScreen from "../../components/Coupons/index";
+import sessionManager from "../../utils/sessionManager";
 
 interface IOverview {}
 const BarchartData = [
@@ -88,8 +89,9 @@ export const Home = (props: IOverview) => {
   const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
 
-  let kycCheck = localStorage.getItem("kycValue") as any;
-  kycCheck = JSON.parse(kycCheck);
+  // let kycCheck = localStorage.getItem("kycValue") as any;
+  const { sessionId, sellerInfo } = sessionManager({});
+  let kycCheck = sellerInfo;
 
   if (!kycCheck) {
     console.log("Unable to parse kycCheck", kycCheck);
@@ -331,8 +333,14 @@ export const Home = (props: IOverview) => {
     }
   };
   React.useMemo(async () => {
-    let sellerId = localStorage.getItem("sellerId");
-    if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
+    const { sessionId, sellerInfo } = sessionManager({});
+    // let sellerId = localStorage.getItem("sellerId");
+    let sellerId = sellerInfo?.sellerId;
+    const token = sellerInfo?.token;
+    if (
+      // localStorage.getItem(`${sellerId}_${tokenKey}`)
+      token
+    ) {
       await Promise.all([
         getDashDetails(),
         getRevenueAndOrderDetails(

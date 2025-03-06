@@ -25,6 +25,7 @@ import { Spinner } from "../../../../components/Spinner";
 import TimerCounter from "../../../../components/TimerCountdown";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import OneButton from "../../../../components/Button/OneButton";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface GatewayResponse {
   success: any;
@@ -69,8 +70,9 @@ const Index = (props: ITypeProps) => {
 
   const { isLgScreen, isMdScreen } = ResponsiveState();
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const [isGatewayDown, setIsGatewayDown] = useState<any>(false);
   const [gatewayDownTimer, setGatewayDownTimer] = useState<any>(0);
 
@@ -98,9 +100,12 @@ const Index = (props: ITypeProps) => {
 
   useEffect(() => {
     // Retrieve the 'kycValue' from session storage
-    const kycValueString = localStorage.getItem("kycValue");
+    // const kycValueString = localStorage.getItem("kycValue");
+    const { sessionId, sellerInfo } = sessionManager({});
+    const kycValueString = sellerInfo;
     if (kycValueString) {
-      const kycValue = JSON.parse(kycValueString);
+      // const kycValue = JSON.parse(kycValueString);
+      const kycValue = kycValueString;
       const kycDetails = kycValue.kycDetails;
 
       // Check if kycDetails are available and update the state accordingly

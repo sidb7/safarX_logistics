@@ -44,28 +44,32 @@ const Reports = () => {
     //   value: "NDRSTATUS",
     // },
     {
-      label: "Product Wise Status",
+      label: "Product Wise Status Report",
       value: "PRODUCTWISESTATUS",
     },
     {
-      label: "SERVICEABLE PINCODE",
+      label: "Serviceable Pincode Report",
       value: "SERVICEABLE_PINCODE",
     },
     {
-      label: "NEW NPR REPORT",
+      label: "New NPR Report",
       value: "NEW_NPR_REPORT",
     },
     {
-      label: "PIKCUP RECONCILATION",
+      label: "Pickup Reconcilation Report",
       value: "PIKCUP_RECONCILATION",
     },
     {
-      label: "RTO RECONCILIATION REPORT",
+      label: "RTO Reconcilation Report",
       value: "RTO_RECONCILIATION_REPORT",
     },
     {
-      label: "WHATSAPP REPORT",
+      label: "Whatsapp Report",
       value: "WHATSAPP_REPORT",
+    },
+    {
+      label: "Wallet Transaction Report",
+      value: "WALLET_TRANSACTION_REPORT",
     },
   ];
 

@@ -36,6 +36,7 @@ import MyWidget from "./Widget";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter } from "react-router-dom";
 import { timer } from "./redux/reducers/syncChannel";
+import sessionManager from "./utils/sessionManager";
 const timestamp = Date.now(); // Get the current timestamp in milliseconds
 const date = new Date(timestamp); // Create a Date object from the timestamp
 
@@ -48,10 +49,12 @@ function padZero(num: any) {
   return num.toString().padStart(2, "0"); // Pad the number with leading zero if less than 10
 }
 
-const userInfo = localStorage.getItem("userInfo");
-if (userInfo) {
+// const userInfo = localStorage.getItem("userInfo");
+const { sessionId, sellerInfo } = sessionManager({});
+// const userInfo = sellerInfo;
+if (sellerInfo) {
   try {
-    const parsedUserInfo = JSON.parse(userInfo);
+    const parsedUserInfo = sellerInfo;
     // console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
     const {
       sellerId,
@@ -109,7 +112,8 @@ const App = () => {
   }
 
   const [roomName, setRoomName] = useState<any>(
-    `${localStorage.getItem("sellerId")}`
+    // `${localStorage.getItem("sellerId")}`
+    ""
   );
 
   const dispatch = useDispatch();
@@ -117,10 +121,14 @@ const App = () => {
   // console.log("isSocketconnectedApp.tsx", isSocketInitialized);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
+    // const userInfo = localStorage.getItem("userInfo");
+    const { sessionId, sellerInfo } = sessionManager({});
+    const userInfo = sellerInfo;
+    setRoomName(`${userInfo?.sellerId}`);
     if (userInfo) {
       try {
-        const parsedUserInfo = JSON.parse(userInfo);
+        // const parsedUserInfo = JSON.parse(userInfo);
+        const parsedUserInfo = userInfo;
         // console.log("🚀 ~ useEffect ~ parsedUserInfo:", parsedUserInfo);
         const {
           sellerId,
@@ -169,9 +177,11 @@ const App = () => {
   // console.log("packageversion", process.env.npm_package_version);
 
   //sentry code
-  const userInfoString = localStorage.getItem("userInfo");
+  // const userInfoString = localStorage.getItem("userInfo");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const userInfoString = sellerInfo;
   useEffect(() => {
-    const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
+    const userInfo = userInfoString;
     const sellerId = userInfo?.sellerId;
     const emailId = userInfo?.email;
 
@@ -292,7 +302,7 @@ const App = () => {
         scriptElement.parentNode.removeChild(scriptElement);
       }
     };
-  }, [userInfoString]);
+  }, []);
 
   let syncTime: any = localStorage.getItem("syncTime");
 
@@ -325,30 +335,51 @@ const App = () => {
     }
   }, [syncTime, syncTimerObject]);
 
-  useEffect(() => {
-    const receiveMessage = (event: any) => {
-      // console.log("🚀 ~ receiveMessage ~ ADMIN_URL:", ADMIN_URL);
-      const expectedOrigin = ADMIN_URL;
-      if (event.origin.includes(expectedOrigin)) {
-        const sellerData = event.data.sellerData;
-        // console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
-        if (sellerData) {
-          loginFromSeller(JSON.parse(sellerData));
-        }
-      } else {
-        console.error("Unexpected origin:", event.origin);
+  const receiveMessage = (event: any) => {
+    console.log(
+      "🚀 ~ receiveMessage ~ ADMIN_URL:",
+      event.origin,
+      " ",
+      ADMIN_URL
+    );
+    const expectedOrigin = ADMIN_URL;
+    if (event.origin.includes(expectedOrigin)) {
+      const sellerData = event.data.sellerData;
+      console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
+      if (sellerData) {
+        loginFromSeller(JSON.parse(sellerData));
       }
-    };
+    } else {
+      console.error("Unexpected origin:", event.origin);
+    }
+  };
+  useEffect(() => {
+    console.log("Seller window loaded. Informing parent...");
 
-    window.addEventListener("message", receiveMessage, false);
+    setTimeout(() => {
+      if (window.opener) {
+        console.log("Ready for data");
+        window.opener.postMessage("READY_FOR_DATA", ADMIN_URL);
+      }
+    }, 1000);
+
+    window.addEventListener("message", receiveMessage);
 
     return () => {
       window.removeEventListener("message", receiveMessage);
     };
   }, []);
 
+  // Only send READY_FOR_DATA once the window is fully loaded
+
+  // Listen for sellerData from parent
+
   const loginFromSeller = (sellerData: any) => {
-    localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
+    // localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
+
+    //Session Storage TABID
+    const sellerInfo = sessionManager(sellerData);
+    //Session Storage TABID
 
     let signInUserReducerDetails = {
       email: sellerData.email,
@@ -357,10 +388,10 @@ const App = () => {
 
     dispatch(signInUser(signInUserReducerDetails));
 
-    localStorage.setItem("sellerId", sellerData.sellerId);
-    localStorage.setItem("userName", sellerData.name);
-    localStorage.setItem("userInfo", JSON.stringify(sellerData));
-    setLocalStorage(`${sellerData.sellerId}_${tokenKey}`, sellerData.token);
+    // localStorage.setItem("sellerId", sellerData.sellerId);
+    // localStorage.setItem("userName", sellerData.name);
+    // localStorage.setItem("userInfo", JSON.stringify(sellerData));
+    // setLocalStorage(`${sellerData.sellerId}_${tokenKey}`, sellerData.token);
 
     window?.dataLayer?.push({
       event: "Login",
@@ -373,10 +404,14 @@ const App = () => {
       isReturningUser: sellerData?.isReturningUser,
     });
 
-    const token = localStorage.getItem("sellerId")
-      ? `${localStorage.getItem(
-          "sellerId"
-        )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+    // const token = localStorage.getItem("sellerId")
+    //   ? `${localStorage.getItem(
+    //       "sellerId"
+    //     )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+    //   : "";
+
+    const token = sellerData?.sellerId
+      ? `${sellerData?.sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";
 
     if (token !== "") {

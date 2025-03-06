@@ -5,7 +5,7 @@ import CustomInputBox from "../../../components/Input";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import InfoCircle from "../../../assets/info-circle.svg";
-import { useNavigate, useSearchParams,useParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
@@ -40,6 +40,7 @@ import {
 import { Tooltip } from "react-tooltip";
 import * as Sentry from "@sentry/react";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -105,11 +106,16 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
-      localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+
       //setting the local storage  with site signing up to show in dataslayer
       localStorage.setItem("key", "Site");
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        const { sessionId, sellerInfo } = sessionManager({
+          ...response?.data[0],
+          ...sellerData,
+        });
         const { sellerId, email, isReturningUser, name, nextStep } =
           response?.data[0];
         window?.dataLayer?.push({
@@ -122,7 +128,8 @@ const Index = () => {
           isReturningUser: isReturningUser,
         });
 
-        localStorage.setItem("userInfo", JSON.stringify(sellerData));
+        // localStorage.setItem("userInfo", JSON.stringify(sellerData));
+
         setLoading(false);
         const navigationObject = constructNavigationObject(
           "/onboarding/sendotp",
@@ -163,7 +170,8 @@ const Index = () => {
         payload
       );
       if (response?.success === true) {
-        localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        // localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        sessionManager(response.data[0]);
         dispatch(signUpUser(response.data[0]));
         setLoading(false);
         const navigationObject = constructNavigationObject(

@@ -29,6 +29,7 @@ import Powerbooster from "../../../assets/powerbooster.svg";
 import { UPDATETRACKINGBYBUYER } from "../../../utils/ApiUrls";
 // import { POST } from "../../../utils/webService";
 import { POSTHEADER } from "../../../utils/webService";
+import sessionManager from "../../../utils/sessionManager";
 
 const Tracking = () => {
   const isMobileResponsive = ResponsiveState();
@@ -69,8 +70,10 @@ const Tracking = () => {
   const awb = trackingState?.[0]?.awb;
 
   useEffect(() => {
-    let temp = JSON.parse(localStorage.getItem("userInfo") as any);
-    let privateCompanyId = JSON.parse(localStorage.getItem("userInfo") as any);
+    // let temp = JSON.parse(localStorage.getItem("userInfo") as any);
+    const { sellerInfo } = sessionManager({});
+    let temp = sellerInfo;
+    // let privateCompanyId = JSON.parse(localStorage.getItem("userInfo") as any);
 
     if (temp) {
       setIsMasked(temp?.isMaskedUser);
@@ -161,9 +164,11 @@ const Tracking = () => {
     if (!allAwbs.includes(trackingNo)) {
       checkAndRemoveToken(trackingNo);
     }
-    const getSellerId = localStorage.getItem("sellerId");
-    setSellerId(getSellerId);
-    getJwtTokenForUser(getSellerId);
+    // const getSellerId = localStorage.getItem("sellerId");
+    const { sessionId, sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
+    setSellerId(sellerId);
+    getJwtTokenForUser(sellerId);
     try {
       setLoading(true);
 

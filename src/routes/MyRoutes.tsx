@@ -634,7 +634,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/orders/rule-engine"
+            path="/catalogues/rule-engine"
             element={
               <ProtectedRoute>
                 <RuleEngine />

@@ -5,8 +5,10 @@ import "../../styles/plan.css";
 import {
   GET_ALL_PLANS,
   GET_FEATURES_PLANS,
+  GET_PENDING_PLANS,
   POST_ASSIGN_PLANV3,
   POST_CREATE_PLAN,
+  POST_PROCESS_SHOPIFY_PLAN,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -23,12 +25,16 @@ import { Spinner } from "../../components/Spinner";
 import ToastCustom from "../toastCutom";
 import OneButton from "../../components/Button/OneButton";
 import FeatureRateCard from "./featureRateCardDetails";
+import { ResponsiveState } from "../../utils/responsiveState";
+import CustomButton from "../../components/Button";
+import { capitalizeFirstLetter } from "../../utils/utility";
 
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
+  const { isMdScreen } = ResponsiveState();
 
   // const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("Plans");
@@ -36,9 +42,13 @@ const Index = (props: ITypeProps) => {
   const [allPlans, setAllPlans] = useState<any>([]);
   const [activePlanId, setActivePlanId] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenPlan, setIsModalOpenPlan] = useState(false);
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [featureRateCardPlan, setFeatureRateCardPlan] = useState([]);
+  const [isShopifyEnabled, setIsShopifyEnabled] = useState(false);
+  const [pendingPlan, setPendingPlan] = useState<any>({});
+  const [LoaderForAssignValue, setLoaderForAssignValue] = useState(false);
 
   const ModalContent = () => {
     return (
@@ -63,7 +73,9 @@ const Index = (props: ITypeProps) => {
                 text="Yes"
                 className=" px-4 py-2"
                 onClick={() => {
-                  assignPlan(onSelectPlan);
+                  isShopifyEnabled
+                    ? processShopifyPlan(onSelectPlan)
+                    : assignPlan(onSelectPlan);
                   setIsModalOpen(false);
                 }}
                 variant="secondary"
@@ -111,6 +123,31 @@ const Index = (props: ITypeProps) => {
     }
   };
 
+  const processShopifyPlan = async (payload: any) => {
+    try {
+      // Assign Plan API
+      const { data: response }: any = await POST(POST_PROCESS_SHOPIFY_PLAN, {
+        planId: payload?.planId,
+      });
+
+      if (response?.success) {
+        setActivePlanId(payload?.planId);
+        toast.success(response?.message);
+
+        // Redirect to the confirmation URL
+        if (response?.confirmationUrl) {
+          // window.location.href = response?.confirmationUrl;
+          window.open(response?.confirmationUrl, "_blank");
+        }
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred during the plan process.");
+      console.error(error);
+    }
+  };
+
   const sortByPrice = (a: any, b: any) => {
     return a.price - b.price;
   };
@@ -131,9 +168,19 @@ const Index = (props: ITypeProps) => {
       try {
         //Get all plans API
         setLoading(true);
-        const { data: response }: any = await POST(GET_ALL_PLANS, {
+        const kycCheck = JSON.parse(
+          localStorage.getItem("sellerSession") || "{}"
+        );
+        const isChannelIntegrated =
+          kycCheck?.nextStep?.isChannelIntegrated || false;
+        const isShopifyApp = kycCheck?.nextStep?.isShopifyApp || false;
+        const shouldEnableShopify = isChannelIntegrated && isShopifyApp;
+        setIsShopifyEnabled(shouldEnableShopify);
+        const payload: any = {
           limit: 1000000,
-        });
+          ...(shouldEnableShopify ? { isShopify: true } : {}),
+        };
+        const { data: response }: any = await POST(GET_ALL_PLANS, payload);
 
         if (response?.success) {
           setLoading(false);
@@ -164,6 +211,8 @@ const Index = (props: ITypeProps) => {
           // });
           setAllPlans(tempPlan);
           callFeaturesRateCard();
+        } else {
+          setLoading(false);
         }
       } catch (error) {
         setLoading(false);
@@ -299,6 +348,58 @@ const Index = (props: ITypeProps) => {
   //     ],
   //   },
   // ];
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success && response?.data?.length > 0) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
+
+  const assignPendingPlan = async () => {
+    setLoaderForAssignValue(true);
+    let payload = { planId: pendingPlan?.planId };
+    try {
+      const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
+      if (responseV4?.success) {
+        // console.log("responseV4", responseV4?.message.includes("Approve"));
+        if (responseV4?.message.includes("Approve")) {
+          toast.success(responseV4?.message);
+          setIsModalOpenPlan(false);
+          setLoaderForAssignValue(false);
+        } else {
+          setIsModalOpenPlan(false);
+          setLoaderForAssignValue(false);
+
+          toast.success(responseV4?.message);
+          window.location.reload();
+        }
+      } else {
+        setIsModalOpenPlan(false);
+        setLoaderForAssignValue(false);
+        toast.error(responseV4?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success && response?.data?.length > 0) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -309,7 +410,6 @@ const Index = (props: ITypeProps) => {
             <div className="">
               <Breadcrum label="Plans" />
             </div>
-
             {loading ? (
               <div className="flex items-center justify-center w-full h-[40vh]">
                 <Spinner />
@@ -332,6 +432,7 @@ const Index = (props: ITypeProps) => {
                             price={eachPlan?.price}
                             validity={eachPlan?.validity}
                             description={eachPlan?.description}
+                            currencyType={eachPlan?.currency}
                             onClick={() => {
                               setIsModalOpen(true);
                               setOnSelectPlan(eachPlan);
@@ -371,6 +472,68 @@ const Index = (props: ITypeProps) => {
                 </div> */}
               </>
             )}
+            {!loading && featureRateCardPlan?.length > 0 ? (
+              <div
+                className={`${
+                  isMdScreen
+                    ? "flex items-center justify-between h-[60px] rounded-lg p-9 md:p-5  bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]"
+                    : "flex items-center text-center px-3 py-4 rounded-lg  bg-[#E5E4FF]  mb-6 mx-5"
+                }`}
+              >
+                {isMdScreen ? (
+                  <p className=" font-Open md:font-Lato font-normal md:font-semibold text-base lg:text-xl leading-3 lg:leading-[26px] text-[#494949]">
+                    Not sure which plan to choose?
+                  </p>
+                ) : (
+                  <></>
+                )}
+
+                <div className="flex gap-x-2">
+                  {Object.keys(pendingPlan).length !== 0 ? (
+                    <>
+                      <div className="">
+                        <CustomButton
+                          className=" !bg-[#FFFFFF] !border-[#FABCAF] !text-[#F35838] lg:!py-2 lg:!px-4 !font-Open !border-[1px] !rounded-sm lg:!border-2 lg:!rounded-[4px] lg:hover:-translate-y-1 lg:hover:scale-100 lg:duration-300"
+                          text={"Pending Plan!"}
+                          textClassName="!font-normal !text-[12px]"
+                          onClick={() => {
+                            setIsModalOpenPlan(true);
+                            setIsModalOpen(true);
+                          }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+
+                  <div className="">
+                    {/* <ServiceButton
+                  className=" md:!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open text-xs md:text-sm font-normal md:font-semibold leading-4 whitespace-nowrap"
+                  text="TALK TO OUR SUPPORT"
+                  onClick={() => {
+                    window.open(
+                      "https://support.shipyaari.com/tickets",
+                      "_blank"
+                    );
+                  }}
+                /> */}
+                    <OneButton
+                      text={"TALK TO OUR SUPPORT"}
+                      onClick={() => {
+                        window.open(
+                          "https://support.shipyaari.com/tickets",
+                          "_blank"
+                        );
+                      }}
+                      variant="primary"
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           {/* Bottom NavBar */}
           {/* <div className="lg:hidden">
@@ -384,6 +547,113 @@ const Index = (props: ITypeProps) => {
           >
             {ModalContent()}
           </CenterModal>
+
+          {isModalOpenPlan && (
+            <CenterModal
+              isOpen={isModalOpenPlan}
+              onRequestClose={() => setIsModalOpenPlan(false)}
+              className="md:h-[65%] md:w-[65%] h-[55%] lg:h-[60%%] lg:w-[50%] xl:h-[60%] 2xl:h-[56%] xl:w-[40%]"
+            >
+              <>
+                <div className=" w-full gap-y-6 p-4 flex flex-col">
+                  <div className="flex items-center justify-end">
+                    <div
+                      onClick={() => {
+                        setIsModalOpenPlan(false);
+                      }}
+                      className="flex justify-end"
+                    >
+                      <img
+                        alt=""
+                        className="cursor-pointer"
+                        src={WebCrossIcon}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col m-5 mt-3 gap-y-4">
+                    <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
+                      <div className="flex flex-col gap-y-6">
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Plan Name:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {capitalizeFirstLetter(pendingPlan?.planName)}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Validity:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {capitalizeFirstLetter(pendingPlan?.validity)}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Description:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {capitalizeFirstLetter(
+                              pendingPlan?.shortDescription
+                            )}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Plan Price:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            ₹ {pendingPlan?.preTaxPrice || 0}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Tax:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            ₹ {pendingPlan?.taxAmount || 0}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
+                      <div className="flex flex-col gap-y-6">
+                        <div className="flex justify-between">
+                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#004EFF]">
+                            Total:
+                          </p>
+                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#004EFF]">
+                            ₹ {pendingPlan?.price || 0}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center gap-x-3 mt-5">
+                      <CustomButton
+                        text="close"
+                        onClick={() => {
+                          setIsModalOpen(false);
+                        }}
+                        className="lg:!w-[184px] lg:!h-[54px] !bg-[white] !border-[1px] !border-[#A4A4A4] !text-[black] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                      />
+                      {LoaderForAssignValue ? (
+                        <div className="flex justify-center items-center lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <CustomButton
+                          text="yes"
+                          onClick={assignPendingPlan}
+                          className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            </CenterModal>
+          )}
         </div>
       ) : (
         <AccessDenied />

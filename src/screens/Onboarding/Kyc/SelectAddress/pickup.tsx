@@ -20,6 +20,7 @@ import { Spinner } from "../../../../components/Spinner";
 // import PlusIcon from "../../../../assets/plusIcon.svg";
 import { v4 as uuidv4 } from "uuid";
 import { ResponsiveState } from "../../../../utils/responsiveState";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypeProps {}
 
@@ -69,7 +70,18 @@ const PickUp = (props: ITypeProps) => {
         );
         if (responses?.success) {
           // toast.success(responses?.message);
-          localStorage.setItem("setKycValue", "true");
+          // localStorage.setItem("setKycValue", "true");
+          const { sessionId, sellerInfo } = sessionManager({});
+
+          if (sellerInfo?.nextStep) {
+            sellerInfo.nextStep.kyc = true;
+          } else {
+            sellerInfo.nextStep = true;
+          }
+          localStorage.setItem(
+            `sellerSession_${sessionId}`,
+            JSON.stringify(sellerInfo)
+          );
           navigate("/onboarding/wallet-main");
           //Navigate Url's go here
           setLoading(false);

@@ -8,12 +8,14 @@ import downloadIcon from "../../../assets/download.svg";
 import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
 import CustomTableWithScroll from "../../../components/CustomTableWithScroll";
+import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
 
 interface IInvoiceDataProps {
   setCodModal?: any;
   setAwbModal?: any;
   tableData?: any[];
   downloadReport?: (reportNumber: any) => Promise<void>;
+  setSortReportByDate?: any;
 }
 
 const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
@@ -21,6 +23,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
   setAwbModal,
   tableData,
   downloadReport,
+  setSortReportByDate,
 }) => {
   console.log("tableDatacodData", tableData);
   const columnsHelper = createColumnHelper<any>();
@@ -67,7 +70,14 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
             <h1 className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
               Report Date
             </h1>
-            <img className="cursor-pointer" src={sortIcon} alt="" />
+            <img
+              className="cursor-pointer"
+              src={sortIcon}
+              alt=""
+              onClick={() =>
+                setSortReportByDate((prev: any) => (prev == 1 ? -1 : 1))
+              }
+            />
           </div>
         );
       },
@@ -75,7 +85,9 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="py-4">
             <p className="font-Open text-xs font-normal leading-4">
-              {info.row.original.reportNumber}
+              {info.row?.original?.reportDate
+                ? date_DD_MMM_YYY(info.row?.original?.reportDate)
+                : info.row?.original?.reportNumber}
             </p>
           </div>
         );
@@ -108,7 +120,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-              CodAmount
+              Cod Amount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
           </div>
@@ -119,7 +131,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="font-Open text-xs font-normal leading-4">
-              ₹ {info?.row?.original?.details?.codAmountRemittable}
+              ₹ {info?.row?.original?.details?.codAmountRemittable.toFixed(2)}
             </p>
           </div>
         );
@@ -268,7 +280,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="font-Open font-normal leading-4 text-xs ">
             <p className="text-[#5958FF] cursor-pointer">
-              ₹ {info?.row?.original?.details?.codAmountRemitted}
+              ₹ {info?.row?.original?.details?.codAmountRemitted.toFixed(2)}
             </p>
           </div>
         );
@@ -311,7 +323,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         const awbNumbers = info?.row?.original?.details?.awbNos;
         // Calculate the count of AWBs
-        const awbCount = Array.isArray(awbNumbers) ? awbNumbers.length : 0;
+        const awbCount = Array.isArray(awbNumbers) ? awbNumbers?.length : 0;
 
         return (
           <div
@@ -324,7 +336,41 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
             }
           >
             {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
-            <p className="text-[#5958FF] cursor-pointer">{awbCount}Awbs</p>
+            <p className="text-[#5958FF] cursor-pointer">{awbCount} AWB</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("awb", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
+              Recoverd AWB
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        const awbNumbers = info?.row?.original?.details?.recoveryAwbNos;
+        // Calculate the count of AWBs
+        const awbCount = Array.isArray(awbNumbers) ? awbNumbers?.length : 0;
+
+        return (
+          <div
+            className=""
+            onClick={() =>
+              setAwbModal({
+                isOpen: true,
+                data: info?.row?.original?.details?.recoveryAwbNos,
+                recovery: true,
+              })
+            }
+          >
+            {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
+            <p className="text-[#5958FF] cursor-pointer">{awbCount} AWB</p>
           </div>
         );
       },

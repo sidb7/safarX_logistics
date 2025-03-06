@@ -196,10 +196,10 @@ const ServicabilityPincode = (props: ITypeProps) => {
   ];
 
   return (
-    <div className="flex flex-col lg:h-screen lg:w-full lg:py-5">
-      <div className="flex justify-between lg:mb-10 lg:px-5">
-        <div className="flex gap-x-2 lg:gap-x-3 ">
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-4">
+    <div className="flex flex-col lg:h-screen lg:w-full pt-8 px-5 xl:p-6">
+      <div className="flex justify-between">
+        <div>
+          <h3 className="font-Lato text-base font-normal xl:font-medium xl:text-2xl lg:text-[#323232]">
             Servicable Pincode
           </h3>
         </div>

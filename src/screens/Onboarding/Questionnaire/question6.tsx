@@ -15,6 +15,7 @@ import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
 import CustomDropDown from "../../../components/DropDown";
 import OneButton from "../../../components/Button/OneButton";
+import sessionManager from "../../../utils/sessionManager";
 
 export const QuestionComponent6: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -50,8 +51,9 @@ export const QuestionComponent6: React.FunctionComponent = () => {
   // };
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const industryOptions: any = [];
 
   console.log("questionsData", questionsData);

@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { Spinner } from "../../../../components/Spinner";
 import Onboarding from "../../../../redux/reducers/onboarding";
 import OneButton from "../../../../components/Button/OneButton";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypeProps {}
 
@@ -36,8 +37,9 @@ const BusinessType = (props: ITypeProps) => {
   });
 
   //getting the sellerID
-  const sellerId = localStorage.getItem("sellerId");
-
+  // const sellerId = localStorage.getItem("sellerId");
+  const { sessionId, sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
   const bussinessType: any = [];
 
   //for the gtm
@@ -55,23 +57,25 @@ const BusinessType = (props: ITypeProps) => {
 
   useEffect(() => {
     // Attempt to retrieve the userInfo object from localStorage
-    const userInfoString = localStorage.getItem("userInfo");
+    // const userInfoString = localStorage.getItem("userInfo");
+    const { sellerInfo } = sessionManager({});
+    const userInfoString = sellerInfo;
     let initialBusinessType = "";
 
     if (userInfoString) {
-      const userInfo = JSON.parse(userInfoString);
+      const userInfo = userInfoString;
       if (userInfo.businessType) {
-        initialBusinessType = userInfo.businessType;
-        localStorage.setItem(
-          "businessType",
-          initialBusinessType.toLocaleLowerCase()
-        );
+        initialBusinessType = userInfo?.businessType || "";
+        // localStorage.setItem(
+        //   "businessType",
+        //   initialBusinessType.toLocaleLowerCase()
+        // );
       }
     }
 
-    if (!initialBusinessType) {
-      initialBusinessType = localStorage.getItem("businessType") || "";
-    }
+    // if (!initialBusinessType) {
+    //   initialBusinessType = localStorage.getItem("businessType") || "";
+    // }
 
     if (initialBusinessType) {
       setChecked((prevState: any) => ({
@@ -85,7 +89,9 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitBusinessType = async () => {
     try {
-      let businessType = localStorage.getItem("businessType");
+      const { sellerInfo } = sessionManager({});
+      // let businessType = localStorage.getItem("businessType");
+      let businessType = sellerInfo?.businessType;
       const payload = { businessType };
       setLoading(true);
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);

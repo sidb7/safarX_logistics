@@ -126,6 +126,7 @@ const NavBar = (props: IpropTypes) => {
                       role="menuitem"
                       onClick={() => {
                         clearLocalStorage();
+                        sessionStorage.clear();
                         navigate("/");
                       }}
                     >

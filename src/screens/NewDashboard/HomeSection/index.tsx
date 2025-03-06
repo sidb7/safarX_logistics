@@ -7,6 +7,7 @@ import GuidelinesSection from "./GuidelinesSection";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CompanyNameContent from "./accordianSections/CompanyNameContent";
 import { COMPANY_NAME } from "../../../utils/ApiUrls";
+import sessionManager from "../../../utils/sessionManager";
 
 interface IHomeProps {}
 
@@ -99,8 +100,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   };
 
   useEffect(() => {
-    const kycValue = retrieveLocalStorageData("kycValue");
-    const userName = localStorage.getItem("userName");
+    // const kycValue = retrieveLocalStorageData("kycValue");
+    const { sessionId, sellerInfo } = sessionManager({});
+    const kycValue = sellerInfo;
+    // const userName = localStorage.getItem("userName");
+    const userName = sellerInfo?.name;
     const brandDetails = localStorage.getItem("brandDetails");
     const brandName = kycValue?.privateCompany?.brandName;
     let privateCompanyName = kycValue?.privateCompany?.name;

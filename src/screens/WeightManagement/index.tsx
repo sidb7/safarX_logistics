@@ -72,7 +72,7 @@ const WeightFreeze: React.FunctionComponent = () => {
   const [cartStatus, setcartStatus] = useState([
     {
       count: 0,
-      text: "Total Weight Descripancy",
+      text: "Total Weight Discrepancy",
       name: "totalWeightDisputeCount",
     },
     {

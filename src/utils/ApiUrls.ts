@@ -16,6 +16,7 @@ let WALLETSHAREDIV = "";
 let WALLETSECRETKEY = "";
 let WHITE_COMPANYFULLNAME = "";
 let WHITE_COMPANYADDRESS = "";
+let FINANCE_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -43,6 +44,7 @@ switch (Environment) {
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
+    FINANCE_URL = `${process?.env?.REACT_APP_FINANCE_URL}`;
     break;
 
   case "test":
@@ -63,6 +65,8 @@ switch (Environment) {
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
+    FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
+
     break;
 
   case "production":
@@ -81,6 +85,12 @@ switch (Environment) {
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
+    FINANCE_URL = `${
+      process.env.REACT_APP_SELLER_PROD ==
+      "http://stage-api-seller.shipyaari.com"
+        ? "https://finance-stage.shipyaari.com"
+        : process.env.REACT_APP_FINANCE_URL || "https://finance.shipyaari.com"
+    }`;
     break;
 
   default:
@@ -100,6 +110,7 @@ switch (Environment) {
     SELLER_WEB_URL = `http://localhost:3000`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
+    FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
 
     break;
 }
@@ -126,6 +137,7 @@ const MAGIC_ADDRESS = `${SELLER_URL}/api/v1/seller/verifyAddress`;
 const SELLER_BASE_URL = `${SELLER_URL}/api/v1`;
 const PARTNER_BASE_URL = `${PARTNER_URL}/api/v1`;
 const FILE_BASE_URL = `${FILE_SERVER_URL}/api/v1`;
+const BASE_FINANCE__SELLER_API = `${FINANCE_URL}/api/v1/finance/seller`;
 
 // Onboarding URLs
 const POST_SIGN_IN_URL = `${SELLER_BASE_URL}/seller/signIn`;
@@ -313,6 +325,8 @@ const CHANGE_PASSWORD = `${SELLER_BASE_URL}/seller/changePasswordv2`;
 
 // System Logs
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
+// Order Confirmation Log
+const GET_ORDER_CONFIRMATION_LOG = `${SELLER_BASE_URL}/seller/getOrderConfirmationLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
@@ -333,7 +347,7 @@ const DELETE_INTEGRATED_STORE = `${SELLER_BASE_URL}/channel/deleteStore `;
 const CREATE_UNICOMMERCE_STORE = `${SELLER_BASE_URL}/channel/unicommerce/createUCStore`;
 const UPDATE_EXPIRED_TOKEN = `${SELLER_BASE_URL}/channel/updateExpireToken`;
 const GET_COUNT_AMAZON_ORDER = `${SELLER_BASE_URL}/channel/unfullfill/count`;
-
+const POST_PROCESS_SHOPIFY_PLAN = `${SELLER_BASE_URL}/seller/processShopifyPlan`;
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -468,6 +482,15 @@ const CREATE_UPDATE_ADVANCE_RULE_ENGINE = `${SELLER_BASE_URL}/ruleEngine/createA
 
 // dashboard
 const GET_TODAY_DATA_FOR_DASHBOARD = `${SELLER_BASE_URL}/seller/getDashBoardData`;
+
+//Buyer confirmation status update
+const UPDATE_ORDER_CONFIRMATION_STATUS = `${SELLER_BASE_URL}/order/updateOrderConfirmationStatus`;
+
+//Finance APP
+const GET_WALLET_TRANSACTION_FINANCE = `${BASE_FINANCE__SELLER_API}/ledger/wallet/amount`;
+
+// SSO URL
+const POST_SSO_URL = `${SELLER_BASE_URL}/seller/sso/reirect`;
 
 export {
   ADMIN_URL,
@@ -713,5 +736,10 @@ export {
   FETCH_BULK_LABELS_REPORT_DOWNLOAD,
   FETCH_LABELS_REPORT_LIST,
   DOWNLOAD_S3_LABEL,
-  GET_COUNT_AMAZON_ORDER
+  GET_COUNT_AMAZON_ORDER,
+  POST_PROCESS_SHOPIFY_PLAN,
+  UPDATE_ORDER_CONFIRMATION_STATUS,
+  GET_ORDER_CONFIRMATION_LOG,
+  GET_WALLET_TRANSACTION_FINANCE,
+  POST_SSO_URL,
 };
