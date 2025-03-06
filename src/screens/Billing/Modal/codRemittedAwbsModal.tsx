@@ -15,7 +15,7 @@ function CodRemittedAwbModal({
 }) {
   console.log("onClickawbModal", onClick);
   const columnsHelper = createColumnHelper<any>();
-  const [totalItemCount, setTotalItemCount] = useState(awbs.length);
+  // const [totalItemCount, setTotalItemCount] = useState(awbs?.length);
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {

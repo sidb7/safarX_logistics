@@ -323,7 +323,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         const awbNumbers = info?.row?.original?.details?.awbNos;
         // Calculate the count of AWBs
-        const awbCount = Array.isArray(awbNumbers) ? awbNumbers.length : 0;
+        const awbCount = Array.isArray(awbNumbers) ? awbNumbers?.length : 0;
 
         return (
           <div
@@ -356,7 +356,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         const awbNumbers = info?.row?.original?.details?.recoveryAwbNos;
         // Calculate the count of AWBs
-        const awbCount = Array.isArray(awbNumbers) ? awbNumbers.length : 0;
+        const awbCount = Array.isArray(awbNumbers) ? awbNumbers?.length : 0;
 
         return (
           <div
