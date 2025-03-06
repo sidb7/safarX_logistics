@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import crossIcon from "../../../assets/cross.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../../components/Table";
@@ -7,18 +7,25 @@ import PaginationComponent from "../../../components/Pagination";
 function CodRemittedAwbModal({
   onClick,
   awbs,
+  isRecovery,
 }: {
   onClick: any;
   awbs: string[];
+  isRecovery: any;
 }) {
   console.log("onClickawbModal", onClick);
   const columnsHelper = createColumnHelper<any>();
-  const [totalItemCount, setTotalItemCount] = useState(10);
-  const tableData = awbs.map((trackingId, index) => ({
-    trackingId,
-  }));
+  const [totalItemCount, setTotalItemCount] = useState(awbs.length);
+  const [data, setData] = useState<any>([]);
 
-  console.log("tableDataAWBmodal", tableData);
+  useEffect(() => {
+    const tableData = awbs?.map((trackingId, index) => ({
+      trackingId,
+    }));
+    setData(tableData);
+  }, []);
+
+  console.log("tableDataAWBmodal", data);
 
   const billingOrdersHeading = [
     // columnsHelper.accessor("shipyaariId", {
@@ -106,17 +113,13 @@ function CodRemittedAwbModal({
     // }),
   ];
 
-  //on page change index
-  const onPageIndexChange = () => {};
-
-  // on per page item change
-  const onPerPageItemChange = () => {};
-
   return (
     <div className="">
       <div className="flex items-center w-[100%] justify-between p-5">
         <div className="flex items-center gap-x-3">
-          <p className="font-normal text-2xl">Cod Remitted Awbs</p>
+          <p className="font-semibold text-2xl">
+            {isRecovery ? "Cod Recovery AWBs" : "Cod Remitted AWBs"}
+          </p>
         </div>
         <div className="">
           <img
@@ -136,22 +139,22 @@ function CodRemittedAwbModal({
           ) : ( */}
           <div className="overflow-x-auto mt-5 mx-6">
             <CustomTable
-              rowData={tableData || []}
+              rowData={data || []}
               columnsData={billingOrdersHeading}
             />
           </div>
         </div>
 
-        {totalItemCount > 0 && (
+        {/* {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
             itemsPerPageOptions={[
-                      10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
-                    ]}
+              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+            ]}
             onPageChange={onPageIndexChange}
             onItemsPerPageChange={onPerPageItemChange}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

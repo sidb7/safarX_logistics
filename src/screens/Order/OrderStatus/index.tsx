@@ -424,7 +424,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               identifier: "PlaceOrder",
             });
 
-            const interval = setInterval(updateProgressBar, 1000);
+            // const interval = setInterval(updateProgressBar, 1000);
 
             const { data } = await POST(POST_PLACE_ALL_ORDERS, {
               orders: orderDetails,
@@ -435,14 +435,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 identifier: "",
               });
 
-              clearInterval(interval);
+              // clearInterval(interval);
               const placeorderBar: any = document.getElementById("placeOrder");
               placeorderBar.style.display = "none";
 
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
-              window.location.reload();
+              // window.location.reload();
             } else {
               setIsLoadingManifest({
                 isLoading: false,
