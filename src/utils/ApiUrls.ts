@@ -86,10 +86,10 @@ switch (Environment) {
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${
-      process.env?.REACT_APP_SELLER_PROD ==
+      process.env.REACT_APP_SELLER_PROD ==
       "http://stage-api-seller.shipyaari.com"
         ? "https://finance-stage.shipyaari.com"
-        : process?.env?.REACT_APP_FINANCE_URL || "https://finance.shipyaari.com"
+        : process.env.REACT_APP_FINANCE_URL || "https://finance.shipyaari.com"
     }`;
     break;
 
