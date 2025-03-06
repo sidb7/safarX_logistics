@@ -78,6 +78,7 @@ interface IOrderstatusProps {
   skip?: number;
   setSubStatus?: any;
   getAllOrders?: any;
+  setIsOrderPlaced?: any;
 }
 
 let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
@@ -113,6 +114,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   allOrders,
   orders,
   getAllOrders,
+  setIsOrderPlaced,
 }) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -423,7 +425,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               isLoading: true,
               identifier: "PlaceOrder",
             });
-
+            setIsOrderPlaced(false);
             // const interval = setInterval(updateProgressBar, 1000);
 
             const { data } = await POST(POST_PLACE_ALL_ORDERS, {
@@ -434,7 +436,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 isLoading: false,
                 identifier: "",
               });
-
+              // setIsOrderPlaced(true);
               // clearInterval(interval);
               const placeorderBar: any = document.getElementById("placeOrder");
               placeorderBar.style.display = "none";
@@ -442,7 +444,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
-              // window.location.reload();
+              window.location.reload();
             } else {
               setIsLoadingManifest({
                 isLoading: false,
