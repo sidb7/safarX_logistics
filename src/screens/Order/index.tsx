@@ -187,7 +187,7 @@ const Index = () => {
   const [subStatus, setSubStatus] = useState("");
   let thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
@@ -481,6 +481,7 @@ const Index = () => {
   useEffect(() => {
     setSkip(0);
     // setSearchedText("");
+    setIsOrderPlaced(false);
     setSubStatus("");
   }, [globalIndex]);
   useEffect(() => {
@@ -496,6 +497,8 @@ const Index = () => {
     searchedText,
     resetFilter,
     subStatus,
+    isOrderPlaced,
+    buyerConfirmationStatus,
   ]);
 
   const Buttons = (className?: string) => {
@@ -1902,6 +1905,7 @@ const Index = () => {
                 skip={skip}
                 orders={orders}
                 setSubStatus={setSubStatus}
+                setIsOrderPlaced={setIsOrderPlaced}
                 setFilterId={setFilterId}
                 handleTabChange={handleTabChanges}
                 statusData={statusData}
