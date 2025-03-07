@@ -77,16 +77,16 @@ const Index = (props: ITypeProps) => {
   useEffect(() => {
     let localbtype = localStorage.getItem("businessType");
 
-    let localaadharno = localStorage.getItem("aadharNumber");
-    let localclient_id = localStorage.getItem("client_id");
-    let localpanNumber = localStorage.getItem("panNumber");
-    let localgstNo = localStorage.getItem("gstNumber");
-
-    setBusinessType(localbtype);
-    setAadharNo(localaadharno);
-    setClientId(localclient_id);
-    setPanCard(localpanNumber);
-    setGSTNo(localgstNo);
+    // let localaadharno = localStorage.getItem("aadharNumber");
+    // let localclient_id = localStorage.getItem("client_id");
+    // let localpanNumber = localStorage.getItem("panNumber");
+    // let localgstNo = localStorage.getItem("gstNumber");
+    const { sessionId, sellerInfo } = sessionManager({});
+    setBusinessType(sellerInfo?.businessType);
+    setAadharNo(sellerInfo?.aadharNumber);
+    setClientId(sellerInfo?.client_id);
+    setPanCard(sellerInfo?.panNumber);
+    setGSTNo(sellerInfo?.gstNumber);
   }, [clientId]);
 
   const onSendOtp = async (e: any) => {
@@ -100,15 +100,21 @@ const Index = (props: ITypeProps) => {
 
         if (response?.success) {
           toast.success(response?.message);
-          localStorage.setItem("aadharNumber", aadharNumber);
-          localStorage.setItem("client_id", response.data.data.client_id);
+          // localStorage.setItem("aadharNumber", aadharNumber);
+          // localStorage.setItem("client_id", response.data.data.client_id);
+          sessionManager({
+            aadharNumber: aadharNumber,
+            client_id: response?.data?.data?.client_id,
+          });
           setOtp(true);
         } else {
           toast.error(response?.message);
         }
       } else {
         if (Number(otpNumber) !== 0) {
-          let clientId_session = localStorage.getItem("client_id");
+          // let clientId_session = localStorage.getItem("client_id");
+          const { sellerInfo } = sessionManager({});
+          let clientId_session = sellerInfo?.client_id;
           const payload = {
             client_id: clientId_session,
             otp: Number(otpNumber),
@@ -152,8 +158,11 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         setMinutes(0);
         setSeconds(60);
-        localStorage.setItem("client_id", response.data.data.client_id);
-        setClientId(response.data.data.client_id);
+        // localStorage.setItem("client_id", response?.data?.data?.client_id);
+        sessionManager({
+          client_id: response?.data?.data?.client_id,
+        });
+        setClientId(response?.data?.data?.client_id);
 
         toast.success("Aadhar OTP Resent Successfully");
       } else {
