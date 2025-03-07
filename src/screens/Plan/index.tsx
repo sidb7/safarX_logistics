@@ -168,12 +168,13 @@ const Index = (props: ITypeProps) => {
       try {
         //Get all plans API
         setLoading(true);
-        const kycCheck = JSON.parse(localStorage.getItem("kycValue") || "{}");
+        const kycCheck = JSON.parse(
+          localStorage.getItem("sellerSession") || "{}"
+        );
         const isChannelIntegrated =
           kycCheck?.nextStep?.isChannelIntegrated || false;
         const isShopifyApp = kycCheck?.nextStep?.isShopifyApp || false;
         const shouldEnableShopify = isChannelIntegrated && isShopifyApp;
-        // console.log("🚀 ~ shouldEnableShopify:", shouldEnableShopify);
         setIsShopifyEnabled(shouldEnableShopify);
         const payload: any = {
           limit: 1000000,

@@ -7,8 +7,15 @@ import CloseMenu from "../../assets/Navbar/closeMenu.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { useSelector } from "react-redux";
-import { LARGE_LOGO, SMALL_LOGO, COMPANY_NAME } from "../../utils/ApiUrls";
+import {
+  LARGE_LOGO,
+  SMALL_LOGO,
+  COMPANY_NAME,
+  POST_SSO_URL,
+} from "../../utils/ApiUrls";
 import { sideBarMenusData } from "../../utils/dummyData";
+import { POST } from "../../utils/webService";
+import toast from "react-hot-toast";
 
 interface INavBarProps {
   openMobileSideBar: any;
@@ -165,7 +172,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     navigate(path);
   };
 
-  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
+  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME || "shipyaari";
 
   const handleMenuClick = (index: number, element: any) => {
     // If menu is empty and path exists, navigate directly
@@ -208,13 +215,27 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     opneAndCloseChild(index, element);
   };
 
-  const opneAndCloseChild = (index: number, element: any) => {
+  const opneAndCloseChild = async (index: number, element: any) => {
     const { name, isChild } = element;
     if (name === "Help") {
-      companyName === "Shipyaari"
-        // ? window.open("https://support.shipyaari.com/tickets", "_blank")
-        ? window.open("https://shipyaari.freshdesk.com/support/login", "_blank")  // mentioned by yuvika
-        : window.open("https://wa.me/8700391426", "_blank");
+      console.log("🚀 ~ opneAndCloseChild ~ companyName:", companyName)
+      if (companyName && companyName?.trim()?.toLowerCase() === "shipyaari") {
+        console.log("---------------------------------")
+        const   { data: response }: any = await POST(POST_SSO_URL, {});
+        console.log("🚀 ~ opneAndCloseChild ~ response:", response)
+
+        if (response?.success) {
+          window.open(response?.data, "_blank") 
+        } else {
+          toast.error(response?.message);
+        }
+      } else {
+        window.open("https://wa.me/8700391426", "_blank");
+      }
+      // companyName === "Shipyaari"
+      //   // ? window.open("https://support.shipyaari.com/tickets", "_blank")
+      //   ? window.open("https://shipyaari.freshdesk.com/support/login", "_blank")  // mentioned by yuvika
+      //   : window.open("https://wa.me/8700391426", "_blank");
       return;
     }
 

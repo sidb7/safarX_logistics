@@ -57,8 +57,8 @@ const Index = () => {
     const { sellerInfo } = sessionManager({});
     let temp = sellerInfo;
     // temp = JSON.parse(temp);
-    // setFirstName(temp?.firstName);
-    setFirstName(temp?.name);
+    setFirstName(temp?.firstName);
+    // setFirstName(temp?.name);
     setEmail(temp?.email);
   }, []);
 
