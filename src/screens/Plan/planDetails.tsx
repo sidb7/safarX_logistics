@@ -997,7 +997,7 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          {/* <div
+          <div
             className={`${
               isMdScreen
                 ? "flex items-center justify-between h-[60px] rounded-lg p-9 md:p-5  bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]"
@@ -1043,7 +1043,7 @@ const PlanDetails = (props: ITypeProps) => {
                 />
               </div>
             </div>
-          </div> */}
+          </div>
 
           {isModalOpen && (
             <CenterModal
