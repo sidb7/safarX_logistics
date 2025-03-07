@@ -64,7 +64,7 @@ const BusinessType = (props: ITypeProps) => {
 
     if (userInfoString) {
       const userInfo = userInfoString;
-      if (userInfo.businessType) {
+      if (userInfo?.businessType) {
         initialBusinessType = userInfo?.businessType || "";
         // localStorage.setItem(
         //   "businessType",

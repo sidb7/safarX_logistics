@@ -5,6 +5,7 @@ import TickGif from "../../../../assets/tick.gif";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../../utils/responsiveState";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypesProps {}
 
@@ -14,8 +15,9 @@ const Modal = (props: ITypesProps) => {
   const { isMdScreen } = ResponsiveState();
 
   useEffect(() => {
-    let localbtype = localStorage.getItem("businessType");
-    setBusinessType(localbtype);
+    // let localbtype = localStorage.getItem("businessType");
+    const { sellerInfo } = sessionManager({});
+    setBusinessType(sellerInfo?.businessType);
   }, []);
 
   const navigate = useNavigate();
