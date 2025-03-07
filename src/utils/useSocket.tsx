@@ -22,7 +22,8 @@ export const useSocket = (roomName: any) => {
       path: "/socket.io",
       reconnectionDelayMax: 10000,
       auth: {
-        token: localStorage.getItem(token),
+        // token: localStorage.getItem(token),
+        token: sellerInfo?.token,
         sessionID: sessionID,
       },
       query: {

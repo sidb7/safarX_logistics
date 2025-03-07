@@ -809,28 +809,39 @@ const idHelper = (
                 </div>
 
                 {showAllTags && (
-                  <div className="relative group">
-                    <div className="flex relative group w-[100px]">
-                      <div className="text-center font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
-                        {capitalizeFirstLetter(tags[0])}
-                      </div>
-                      {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
-
-                      {tags.length > 1 && (
-                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                          {tags.map(
-                            (tag: string, index: Key | null | undefined) => (
-                              <p className="bg-[#FFF6EB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
-                                {" "}
-                                {capitalizeFirstLetter(tag)}{" "}
-                              </p>
-                            )
-                          )}
-                        </div>
-                      )}
+                  <div className="flex ">
+                    <div className="flex  w-fit px-2  text-xs py-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
+                      {capitalizeFirstLetter(tags[0])}
                     </div>
-
-                    {/* Tooltip for hover to show all tags */}
+                    {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
+                    {tags.length > 1 && (
+                      <CustomToolTip
+                        position="bottom"
+                        content={
+                          <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-md rounded-md">
+                            {tags.map(
+                              (tag: string, index: Key | null | undefined) => (
+                                <p className="bg-white text-[#004EFF] rounded-md px-2 border-[#004EFF] border shadow-inner-sm">
+                                  {" "}
+                                  {capitalizeFirstLetter(tag)}{" "}
+                                </p>
+                              )
+                            )}
+                          </div>
+                        }
+                        showOnHover={true}
+                        bgColor="bg-white"
+                        textColor="black"
+                        left={-26}
+                        top={-8}
+                      >
+                        <img
+                          src={moreIcon}
+                          alt="editIcon"
+                          className="hover:-translate-y-[0.1rem] hover:scale-110 duration-100 cursor-pointer mx-2"
+                        />
+                      </CustomToolTip>
+                    )}
                   </div>
                 )}
               </div>

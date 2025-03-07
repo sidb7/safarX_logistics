@@ -28,7 +28,8 @@ export const initSocket = (): Socket => {
     path: "/socket.io",
     reconnectionDelayMax: 1000,
     auth: {
-      token: localStorage.getItem(token),
+      // token: localStorage.getItem(token),
+      token: sellerInfo?.token,
       sessionID: sessionID,
     },
     autoConnect: true,

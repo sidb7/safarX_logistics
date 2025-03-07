@@ -95,10 +95,7 @@ const Index = () => {
       } else {
         sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
       }
-      localStorage.setItem(
-        `sellerSession_${sessionId}`,
-        JSON.stringify(sellerInfo)
-      );
+      sessionManager({ sellerInfo });
 
       if (response?.success === true) {
         // localStorage.setItem(
