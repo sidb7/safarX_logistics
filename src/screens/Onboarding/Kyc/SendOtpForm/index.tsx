@@ -147,7 +147,7 @@ const Index = (props: ITypeProps) => {
   useEffect(() => {
     let btype = localStorage.getItem("businessType");
     const { sellerInfo } = sessionManager({});
-    setBusinessType(sellerInfo?.businessType);
+    setBusinessType(sellerInfo?.businessType?.toLowerCase());
   }, []);
 
   console.log("businessType", businessType);
@@ -553,7 +553,7 @@ const Index = (props: ITypeProps) => {
 
           <div>
             <div className="flex flex-col justify-center items-center mt-[104px]  px-5 md:px-0 gap-y-4 mb-6">
-              {businessType === "individual" ? (
+              {businessType?.toLowerCase() === "individual" ? (
                 <>
                   <div className={`${!isMdScreen ? "w-full" : ""}`}>
                     <CustomInputBox

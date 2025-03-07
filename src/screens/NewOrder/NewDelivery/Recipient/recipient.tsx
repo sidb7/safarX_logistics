@@ -28,7 +28,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
     if (userInfoString) {
       // const userInfo = JSON.parse(userInfoString);
       const userInfo = userInfoString;
-      return userInfo.businessType;
+      return userInfo?.businessType?.toLowerCase();
     }
     return null;
   });

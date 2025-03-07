@@ -14,7 +14,7 @@ interface IEditDocumentsProps {}
 const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
   const location = useLocation();
   // console.log("🚀 ~ location:", location?.state?.data?.businessType);
-  const businessType = location?.state?.data?.businessType || "";
+  const businessType = location?.state?.data?.businessType?.toLowerCase() || "";
 
   const renderIndividualDocument = () => {
     return (
