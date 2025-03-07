@@ -17,7 +17,7 @@ const Modal = (props: ITypesProps) => {
   useEffect(() => {
     // let localbtype = localStorage.getItem("businessType");
     const { sellerInfo } = sessionManager({});
-    setBusinessType(sellerInfo?.businessType);
+    setBusinessType(sellerInfo?.businessType?.toLowerCase());
   }, []);
 
   const navigate = useNavigate();

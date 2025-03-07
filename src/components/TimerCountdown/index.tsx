@@ -28,7 +28,7 @@ const TimerCounter = (props: IProps) => {
     // let btype = localStorage.getItem("businessType");
     // let gtype = localStorage.getItem("gstNumber");
     const { sellerInfo } = sessionManager({});
-    setBusinessType(sellerInfo?.businessType);
+    setBusinessType(sellerInfo?.businessType?.toLowerCase());
     setAadharNumber(sellerInfo?.aadharNumber);
     setGstNumber(sellerInfo?.gstNumber);
   }, []);
