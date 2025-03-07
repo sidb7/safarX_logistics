@@ -34,6 +34,7 @@ import {
   LOGOUT,
   LARGE_LOGO,
   COMPANY_NAME,
+  COD_DETAILS_FINANCE,
 } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
@@ -102,22 +103,9 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   });
   const [codPayable, setCodPayable] = useState<any>([]);
   const fetchCodPaymentDetails = async () => {
-    const { data } = await POST(
-      "https://finance-stage.shipyaari.com/api/v1/finance/seller/cod-details",
-      {}
-    );
+    const { data } = await POST(COD_DETAILS_FINANCE, {});
     console.log(data.data, "COD DATA");
-    setCodPayable({
-      totalCodAmount: 1840923,
-      paidCodAmount: 1779123,
-      payableAmount: [],
-      payableAmountWithDate: [
-        {
-          payableAmount: 61800,
-          date: 1741717799999,
-        },
-      ],
-    });
+    setCodPayable(data.data);
   };
   useEffect(() => {
     fetchCodPaymentDetails();
@@ -374,7 +362,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                     <div>Payable</div>
                     <div>₹</div>
-                    <div> {codPayable?.payableAmount ?? 0}</div>
+                    <div> {codPayable?.payableAmount?.[0] ?? 0} </div>
                   </div>
                 </div>
 
@@ -386,7 +374,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     aria-labelledby="options-menu"
                   >
                     <div className="" role="none">
-                      {codPayable.payableAmountWithDate?.map((ele: any) => {
+                      {codPayable?.payableAmountWithDate?.map((ele: any) => {
                         return (
                           <div
                             className="border-t-2 border-blue-600 rounded-md  cursor-pointer bg-blue-50  m-1 text-left px-4 py-2 text-sm
