@@ -150,7 +150,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         //   seller_kyc_type: selectedKycOption,
         // });
         // localStorage.setItem("businessType", payload?.businessType);
-        sessionManager({ businessType: payload?.businessType });
+        sessionManager({ businessType: payload?.businessType?.toLowerCase() });
         setLoading(false);
 
         if (payload.businessType === "individual") {

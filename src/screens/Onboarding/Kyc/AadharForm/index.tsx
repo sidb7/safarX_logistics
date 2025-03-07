@@ -82,7 +82,7 @@ const Index = (props: ITypeProps) => {
     // let localpanNumber = localStorage.getItem("panNumber");
     // let localgstNo = localStorage.getItem("gstNumber");
     const { sessionId, sellerInfo } = sessionManager({});
-    setBusinessType(sellerInfo?.businessType);
+    setBusinessType(sellerInfo?.businessType?.toLowerCase());
     setAadharNo(sellerInfo?.aadharNumber);
     setClientId(sellerInfo?.client_id);
     setPanCard(sellerInfo?.panNumber);
