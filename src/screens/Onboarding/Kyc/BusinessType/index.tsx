@@ -107,7 +107,7 @@ const BusinessType = (props: ITypeProps) => {
 
         // navigate("/onboarding/kyc-photo"); // temparory hide
         // navigate("/onboarding/kyc-form");
-        if (payload.businessType === "individual") {
+        if (payload.businessType?.toLowerCase() === "individual") {
           navigate("/onboarding/kyc-terms/gst-agreement");
         } else {
           navigate("/onboarding/kyc-terms/service-agreement");
