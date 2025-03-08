@@ -153,7 +153,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         sessionManager({ businessType: payload?.businessType?.toLowerCase() });
         setLoading(false);
 
-        if (payload.businessType === "individual") {
+        if (payload.businessType?.toLowerCase() === "individual") {
           // navigate("/onboarding/kyc-terms/gst-agreement");
         } else {
           // navigate("/onboarding/kyc-terms/service-agreement");

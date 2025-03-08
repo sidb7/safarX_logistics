@@ -423,9 +423,9 @@ const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
     );
   };
   const renderDocument = () => {
-    if (businessType === "INDIVIDUAL") {
+    if (businessType === "individual") {
       return renderIndividualDocument();
-    } else if (businessType === "COMPANY") {
+    } else if (businessType === "company") {
       return renderCompanyDocument();
     } else {
       return <div>No document to fill!</div>;
