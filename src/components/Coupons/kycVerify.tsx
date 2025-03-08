@@ -31,7 +31,7 @@ const KycVerify: React.FunctionComponent<IKycVerifyProps> = ({
           </div>
         </>
       );
-    } else if (businessType === "business") {
+    } else if (businessType?.toLowerCase() === "business") {
       return (
         <>
           <div>

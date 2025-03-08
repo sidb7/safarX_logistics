@@ -49,7 +49,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
     >
       <div
         className={` flex lg:grid ${
-          businessType === "INDIVIDUAL" ? "grid-cols-2" : "grid-cols-3"
+          businessType === "individal" ? "grid-cols-2" : "grid-cols-3"
         } overflow-x-auto lg:overflow-x-visible first-letter  pb-4 lg:pb-4 pt-2 lg:pt-0`}
       >
         {/* B2C */}
@@ -82,7 +82,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
         </div>
 
         {/* B2B */}
-        {businessType !== "INDIVIDUAL" && (
+        {businessType !== "individual" && (
           <div
             className={`relative z-1  border-[1px] rounded ${
               orderType === "B2B" && transitType === "FORWARD"

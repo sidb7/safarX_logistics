@@ -34,7 +34,7 @@ const Card = (props: ITypesProps) => {
         onClick={(e: any) => {
           onClick({ [value]: true });
           // localStorage.setItem("businessType", value);
-          sessionManager({ businessType: value });
+          sessionManager({ businessType: value?.toLowerCase() });
         }}
       >
         <div className="flex flex-col">
