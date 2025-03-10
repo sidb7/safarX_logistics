@@ -1292,7 +1292,6 @@ export const columnHelperForNewOrder = (
         });
 
         const buyerConfirmation = rowData?.isBuyerConfirmed;
-        console.log(rowsData?.orderId, "ORDR", rowsData?.tempOrderId, "TEMP");
         // const buyerConfirmationStatus = (buyerConfirmation: any) => {
         //   let className = "";
         //   let text = buyerConfirmation;
