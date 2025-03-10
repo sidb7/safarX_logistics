@@ -378,7 +378,7 @@ const App = () => {
     // localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
 
     //Session Storage TABID
-    const sellerInfo = sessionManager(sellerData);
+    const { sellerInfo } = sessionManager(sellerData);
     //Session Storage TABID
 
     let signInUserReducerDetails = {

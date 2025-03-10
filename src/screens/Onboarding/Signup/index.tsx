@@ -104,7 +104,8 @@ const Index = () => {
       });
 
       setLoading(true);
-      const { data: response } = await POST(POST_SIGN_UP_URL, payload);
+      console.log(POST_SIGN_UP_URL, "POSTTT");
+      const { data: response } = await POST(`${POST_SIGN_UP_URL}`, payload);
 
       // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 

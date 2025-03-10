@@ -5,6 +5,7 @@ import {
   POST_VERIFY_GST_URL,
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
+import sessionManager from "../../utils/sessionManager";
 
 interface IProps {
   sec?: any;
@@ -23,13 +24,13 @@ const TimerCounter = (props: IProps) => {
   const [clickedOnce, setClickedOnce] = useState<any>(false);
 
   useEffect(() => {
-    let atype = localStorage.getItem("aadharNumber");
-    let btype = localStorage.getItem("businessType");
-    let gtype = localStorage.getItem("gstNumber");
-
-    setBusinessType(btype);
-    setAadharNumber(atype);
-    setGstNumber(gtype);
+    // let atype = localStorage.getItem("aadharNumber");
+    // let btype = localStorage.getItem("businessType");
+    // let gtype = localStorage.getItem("gstNumber");
+    const { sellerInfo } = sessionManager({});
+    setBusinessType(sellerInfo?.businessType?.toLowerCase());
+    setAadharNumber(sellerInfo?.aadharNumber);
+    setGstNumber(sellerInfo?.gstNumber);
   }, []);
 
   useEffect(() => {
@@ -64,9 +65,14 @@ const TimerCounter = (props: IProps) => {
         setOTPNumber("");
         setMinutes(0);
         setSeconds(sec);
-        localStorage.setItem("client_id", response.data.data.client_id);
+        // localStorage.setItem("client_id", response.data.data.client_id);
+        sessionManager({
+          client_id:
+            response?.data?.data?.client_id ??
+            response?.data[0]?.data?.client_id,
+        });
         setClientId(response.data.data.client_id);
-        localStorage.setItem("client_id", response.data[0].data.client_id);
+        // localStorage.setItem("client_id", response.data[0].data.client_id);
       } else {
         setClickedOnce(false);
         toast.error("Aadhar OTP Resent Failed!");
@@ -85,7 +91,8 @@ const TimerCounter = (props: IProps) => {
       if (response?.success) {
         toast.success("GST OTP Resent Successfully");
         setOTPNumber("");
-        localStorage.setItem("client_id", response.data[0].data.client_id);
+        // localStorage.setItem("client_id", response.data[0].data.client_id);
+        sessionManager({ client_id: response.data[0].data.client_id });
         setClientId(response.data[0].data.client_id);
         setMinutes(0);
         setSeconds(sec);

@@ -78,10 +78,7 @@ const PickUp = (props: ITypeProps) => {
           } else {
             sellerInfo.nextStep = true;
           }
-          localStorage.setItem(
-            `sellerSession_${sessionId}`,
-            JSON.stringify(sellerInfo)
-          );
+          sessionManager({ sellerInfo });
           navigate("/onboarding/wallet-main");
           //Navigate Url's go here
           setLoading(false);

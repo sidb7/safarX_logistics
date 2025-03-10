@@ -14,7 +14,7 @@ interface IEditDocumentsProps {}
 const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
   const location = useLocation();
   // console.log("🚀 ~ location:", location?.state?.data?.businessType);
-  const businessType = location?.state?.data?.businessType || "";
+  const businessType = location?.state?.data?.businessType?.toLowerCase() || "";
 
   const renderIndividualDocument = () => {
     return (
@@ -423,9 +423,9 @@ const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
     );
   };
   const renderDocument = () => {
-    if (businessType === "INDIVIDUAL") {
+    if (businessType === "individual") {
       return renderIndividualDocument();
-    } else if (businessType === "COMPANY") {
+    } else if (businessType === "company") {
       return renderCompanyDocument();
     } else {
       return <div>No document to fill!</div>;

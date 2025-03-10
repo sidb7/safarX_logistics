@@ -149,10 +149,11 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         //   sellerId: sellerId,
         //   seller_kyc_type: selectedKycOption,
         // });
-        localStorage.setItem("businessType", payload?.businessType);
+        // localStorage.setItem("businessType", payload?.businessType);
+        sessionManager({ businessType: payload?.businessType?.toLowerCase() });
         setLoading(false);
 
-        if (payload.businessType === "individual") {
+        if (payload.businessType?.toLowerCase() === "individual") {
           // navigate("/onboarding/kyc-terms/gst-agreement");
         } else {
           // navigate("/onboarding/kyc-terms/service-agreement");
@@ -234,11 +235,16 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         setShowAaddharOtpBox(true);
         setVerifyOTP(true);
 
-        localStorage.setItem("aadharNumber", value);
-        localStorage.setItem("panNumber", panNumber);
-        localStorage.setItem("client_id", response.data.data.client_id);
+        // localStorage.setItem("aadharNumber", value);
+        // localStorage.setItem("panNumber", panNumber);
+        // localStorage.setItem("client_id", response.data.data.client_id);
+        sessionManager({
+          aadharNumber: value,
+          panNumber: panNumber,
+          client_id: response.data.data.client_id,
+        });
         setClientId(response?.data?.data?.client_id);
-        let clientIdSession = localStorage.getItem("client_id");
+        // let clientIdSession = localStorage.getItem("client_id");
       } else {
         setLoading(false);
 
@@ -259,9 +265,14 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
         setOtpSuccess(true);
         setLoadingState(true);
         setLoading(false);
-        localStorage.setItem("gstNumber", value);
-        localStorage.setItem("panNumber", panNumber);
-        localStorage.setItem("client_id", response.data[0].data.client_id);
+        // localStorage.setItem("gstNumber", value);
+        // localStorage.setItem("panNumber", panNumber);
+        // localStorage.setItem("client_id", response.data[0].data.client_id);
+        sessionManager({
+          gstNumber: value,
+          panNumber: panNumber,
+          client_id: response.data[0].data.client_id,
+        });
         setShowgstOtpBox(true);
         setVerifyOTP(true);
         setgstError("");
@@ -353,7 +364,9 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
   const onVerifyOtp = async () => {
     try {
       if (Number(otpNumber) !== 0) {
-        let clientId_session = localStorage.getItem("client_id");
+        // let clientId_session = localStorage.getItem("client_id");
+        const { sellerInfo } = sessionManager({});
+        let clientId_session = sellerInfo?.client_id;
         if (businessType === "individual") {
           const payload = {
             client_id: clientId_session,

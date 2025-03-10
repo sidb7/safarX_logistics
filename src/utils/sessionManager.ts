@@ -22,6 +22,7 @@ const sessionManager = (sellerData: SellerData) => {
     (existingData.token && existingData.name) ||
     (sellerData.token && sellerData.name) ||
     sellerData?.email
+    // true
   ) {
     const updatedData = { ...existingData, ...sellerData };
     sessionStorage.setItem(
