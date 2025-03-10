@@ -659,14 +659,14 @@ export const dummyTransactionFilterData = [
 export const ChannelIntegrationCarts = {
   title: "Carts",
   channels: [
-    {
-      name: "STORE_NAME",
-      icon: ShopifyIcon,
-      iconLg: ShopifyLg,
-      integrated: false,
-      storesIntegrated: 5,
-      channel: "SHOPIFY",
-    },
+    // {
+    //   name: "STORE_NAME",
+    //   icon: ShopifyIcon,
+    //   iconLg: ShopifyLg,
+    //   integrated: false,
+    //   storesIntegrated: 5,
+    //   channel: "SHOPIFY",
+    // },
     {
       name: "STORE_NAME",
       icon: WooIcon,
