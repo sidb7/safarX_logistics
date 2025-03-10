@@ -773,6 +773,8 @@ const idHelper = (
           );
           // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
           // console.log("updateBuyerConfirmation", payload);
+        } else {
+          toast.error(response?.data?.message);
         }
       };
       return (
@@ -1392,6 +1394,8 @@ export const columnHelperForNewOrder = (
               );
               // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
               // console.log("updateBuyerConfirmation", payload);
+            } else {
+              toast.error(response?.data?.message);
             }
           } catch (error) {
             toast.error("Failed to update order confirmation status");
