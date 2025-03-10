@@ -1292,7 +1292,7 @@ export const columnHelperForNewOrder = (
         });
 
         const buyerConfirmation = rowData?.isBuyerConfirmed;
-
+        console.log(rowsData?.orderId, "ORDR", rowsData?.tempOrderId, "TEMP");
         // const buyerConfirmationStatus = (buyerConfirmation: any) => {
         //   let className = "";
         //   let text = buyerConfirmation;
@@ -1332,6 +1332,7 @@ export const columnHelperForNewOrder = (
         ];
 
         let statusObj: any = { title: "" };
+
         rowsData?.status?.map((elem: any, index: any) => {
           statusObj = {
             ...statusObj,
@@ -1372,7 +1373,10 @@ export const columnHelperForNewOrder = (
         ) => {
           try {
             const payload = {
-              orderId: rowsData?.orderId,
+              orderId:
+                rowsData?.orderId != ""
+                  ? rowsData?.orderId
+                  : rowsData?.tempOrderId,
               currentOrderStatus: latestStatus
                 ? capitalizeFirstLetter(latestStatus)
                 : "Draft",
