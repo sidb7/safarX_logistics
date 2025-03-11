@@ -247,22 +247,22 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
     <div className="p-[24px] rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[505px]">
       <div className="flex flex-col ">
         <div className="flex flex-col gap-y-4">
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Invoice Value:
             </p>
             <p>
               {`\u20B9`} {roundedInvoiceValue?.toLocaleString("en-IN")}
             </p>
-          </div>
-          <div className="flex justify-between">
+          </div> */}
+          {/* <div className="flex justify-between">
             <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Collectible Amount:
             </p>
             <p>
               {`\u20B9`} {roundedCODValue?.toLocaleString("en-IN")}
             </p>
-          </div>
+          </div> */}
           <div className="flex justify-between">
             <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Billable Weight:
