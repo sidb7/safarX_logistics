@@ -654,6 +654,7 @@ const Index = () => {
   };
 
   const handleSyncOrder = async () => {
+    console.log(channelReduxData, "CHANNEL REDUX");
     try {
       if (syncChannelText.includes("Sync Channel")) {
         setIsSyncModalOpen(true);
@@ -663,7 +664,9 @@ const Index = () => {
           const buttonIconNode = syncRef.current.childNodes[0];
 
           syncRef.current.style.backgroundColor = "#F8F8F8";
-          syncRef.current.style.pointerEvents = "none";
+          if (process.env.NODE_ENV == "production") {
+            syncRef.current.style.pointerEvents = "none";
+          }
 
           if (buttonIconNode) {
             buttonIconNode.classList.add("infinite-rotate");

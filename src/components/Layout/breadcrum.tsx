@@ -94,7 +94,7 @@ export const Breadcrum = ({
   return (
     <>
       <div>
-        {!isKycRoute && !kycCheck && (
+        {!isKycRoute && !kyc && (
           <div
             className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
             // onClick={() => navigate("/onboarding/kyc-type")}
@@ -115,7 +115,7 @@ export const Breadcrum = ({
           </div>
         )}
 
-        {kycCheck && !isKycRoute && isCompanyNameInvalid && (
+        {kyc && !isKycRoute && isCompanyNameInvalid && (
           <div
             className="flex justify-between bg-[#F5BE6D] p-2 cursor-pointer rounded-sm"
             // onClick={() => navigate("/onboarding/kyc-type")}

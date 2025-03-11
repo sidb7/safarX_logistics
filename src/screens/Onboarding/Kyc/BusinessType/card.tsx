@@ -1,5 +1,6 @@
 import CustomRadioButton from "../../../../components/RadioButton/Index";
 import { useState } from "react";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ITypesProps {
   name: string;
@@ -32,7 +33,8 @@ const Card = (props: ITypesProps) => {
         } w-full lg:!w-[320px] relative`}
         onClick={(e: any) => {
           onClick({ [value]: true });
-          localStorage.setItem("businessType", value);
+          // localStorage.setItem("businessType", value);
+          sessionManager({ businessType: value?.toLowerCase() });
         }}
       >
         <div className="flex flex-col">
@@ -43,7 +45,8 @@ const Card = (props: ITypesProps) => {
               style={{ accentColor: "black" }}
               inputClassName="cursor-pointer"
               onChange={(e) => {
-                localStorage.setItem("businessType", e.target.value);
+                // localStorage.setItem("businessType", e.target.value);
+                sessionManager({ businessType: e.target.value });
               }}
               checked={checked}
             />

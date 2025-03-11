@@ -136,10 +136,8 @@ const BusinessType = (props: ITypeProps) => {
           } else {
             sellerInfo.nextStep = { kyc: true };
           }
-          localStorage.setItem(
-            `sellerSession_${sessionId}`,
-            JSON.stringify(sellerInfo)
-          );
+          sessionManager(sellerInfo);
+
           setLoading(false);
           // toast.success(responses?.message);
         } else {

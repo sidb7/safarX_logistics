@@ -28,6 +28,7 @@ import FeatureRateCard from "./featureRateCardDetails";
 import { ResponsiveState } from "../../utils/responsiveState";
 import CustomButton from "../../components/Button";
 import { capitalizeFirstLetter } from "../../utils/utility";
+import sessionManager from "../../utils/sessionManager";
 
 interface ITypeProps {}
 
@@ -168,9 +169,8 @@ const Index = (props: ITypeProps) => {
       try {
         //Get all plans API
         setLoading(true);
-        const kycCheck = JSON.parse(
-          localStorage.getItem("sellerSession") || "{}"
-        );
+        const { sellerInfo } = sessionManager({});
+        const kycCheck = sellerInfo;
         const isChannelIntegrated =
           kycCheck?.nextStep?.isChannelIntegrated || false;
         const isShopifyApp = kycCheck?.nextStep?.isShopifyApp || false;

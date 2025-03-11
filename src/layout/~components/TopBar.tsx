@@ -5,6 +5,7 @@ import ProfileLogo from "../../assets/Navbar/essential.svg";
 import NotificationLogo from "../../assets/Navbar/notification.svg";
 import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import HamMenu from "../../assets/Navbar/hamMenu.svg";
+import { BsCashCoin } from "react-icons/bs";
 import {
   GetCurrentPath,
   clearLocalStorage,
@@ -33,6 +34,7 @@ import {
   LOGOUT,
   LARGE_LOGO,
   COMPANY_NAME,
+  COD_DETAILS_FINANCE,
 } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
@@ -69,6 +71,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const [quickData, setQuickData] = useState<any>();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isPayableOpen, setIsPayableOpen] = useState(false);
   const [isQuick, setIsQuick] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [showServiceability, setShowServiceability] = useState(false);
@@ -98,7 +101,15 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       height: "",
     },
   });
-
+  const [codPayable, setCodPayable] = useState<any>([]);
+  const fetchCodPaymentDetails = async () => {
+    const { data } = await POST(COD_DETAILS_FINANCE, {});
+    console.log(data.data, "COD DATA");
+    setCodPayable(data.data);
+  };
+  useEffect(() => {
+    fetchCodPaymentDetails();
+  }, []);
   const clearServiceabilityState = () => {
     setServiceabilityData({
       pickupPincode: "",
@@ -341,22 +352,72 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             onClick={() => {}}
           /> */}
             <div className="flex items-center justify-self-end gap-x-3 ">
-              {/* <div
-              className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
-              onClick={() => navigate("/wallet/view-wallet")}
-            >
-              <img
-                src={profileIcon}
-                width={35}
-                alt=""
-                className="border w-[16px] mx-1"
-              />
-              <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
-                <div>Seller ID :</div>
-                <div>1019</div>
-              </div>
-            </div> */}
+              <div className="relative">
+                <div
+                  className="flex gap-2 items-center cursor-pointer h-[36px] rounded-lg p-4 bg-[#E5EDFF]"
+                  onClick={() => setIsPayableOpen((prev: any) => !prev)}
+                >
+                  <BsCashCoin size={18} />
 
+                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                    <div>Cod Payable&nbsp;</div>
+
+                    <div>
+                      {" "}
+                      {codPayable?.payableAmount?.[0]
+                        ? ` ₹ ${codPayable?.payableAmount?.[0]} *`
+                        : "- -"}
+                    </div>
+                  </div>
+                </div>
+
+                {isPayableOpen && (
+                  <div
+                    className="absolute left-0 top-full mt-2 w-56 rounded-md shadow-lg bg-white ring-black ring-opacity-5 z-50"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    <div className="" role="none">
+                      {codPayable?.payableAmountWithDate?.map((ele: any) => {
+                        return (
+                          <div
+                            className="border-t-2 border-blue-600 rounded-md  cursor-pointer bg-blue-50  m-1 text-left px-4 py-2 text-sm
+                      text-gray-700 hover:bg-gray-100 hover:text-gray-900
+                      font-Open"
+                          >
+                            {" "}
+                            <div className="">
+                              {ele?.date
+                                ? new Date(ele.date).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      weekday: "long",
+                                      day: "2-digit",
+                                      month: "long",
+                                      year: "numeric",
+                                    }
+                                  )
+                                : "--"}
+                            </div>
+                            <div className="font-semibold">
+                              ₹ {ele?.payableAmount ?? "--"}
+                            </div>
+                          </div>
+                        );
+                      })}
+                      {/* <div
+                        className="border-t-2 border-blue-600  rounded-md  cursor-pointer bg-blue-50  m-1 text-left px-4 py-2 text-sm
+                      text-gray-700 hover:bg-gray-100 hover:text-gray-900
+                      font-Open"
+                      >
+                        <div>12th Feb 2025</div>
+                        <div className="font-semibold">₹ 10000</div>
+                      </div>{" "} */}
+                    </div>
+                  </div>
+                )}
+              </div>
               {isLoading ? (
                 <div className="flex animated !rounded-md w-20 h-[36px]    ">
                   <img
@@ -498,6 +559,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     </div>
                   </div>
                 )}
+
                 {isQuick && (
                   <div
                     className="origin-top-right z-50 absolute -right-4 md:right-2 mt-8 w-[21rem] md:w-[27rem] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"

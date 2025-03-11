@@ -237,7 +237,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
               setCodModal({ isOpen: true, data: info?.row?.original })
             }
           >
-            <p>₹{info.row.original?.recoveryAmount || 0}</p>
+            <p>₹{info.row.original?.details?.totalRecoveredAmount || 0}</p>
           </div>
         );
       },
@@ -257,7 +257,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="font-Open font-normal leading-4 text-xs ">
-            <p>₹{info.row.original?.codRecharge || 0}</p>
+            <p>₹{info.row.original?.details?.codRecharge || 0}</p>
           </div>
         );
       },

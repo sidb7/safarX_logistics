@@ -20,7 +20,7 @@ const KycVerify: React.FunctionComponent<IKycVerifyProps> = ({
   console.log("🚀 ~ isRightSideModal:", isRightSideModal);
 
   const inputFieldToType = (businessType: string) => {
-    if (businessType === "individual") {
+    if (businessType?.toLowerCase() === "individual") {
       return (
         <>
           <div>
@@ -31,7 +31,7 @@ const KycVerify: React.FunctionComponent<IKycVerifyProps> = ({
           </div>
         </>
       );
-    } else if (businessType === "business") {
+    } else if (businessType?.toLowerCase() === "business") {
       return (
         <>
           <div>
