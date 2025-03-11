@@ -1374,10 +1374,7 @@ export const columnHelperForNewOrder = (
         ) => {
           try {
             const payload = {
-              orderId:
-                rowsData?.orderId != ""
-                  ? rowsData?.orderId
-                  : rowsData?.tempOrderId,
+              orderId: rowsData?.tempOrderId,
               currentOrderStatus: latestStatus
                 ? capitalizeFirstLetter(latestStatus)
                 : "Draft",
