@@ -360,9 +360,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   <BsCashCoin size={18} />
 
                   <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
-                    <div>Payable</div>
-                    <div>₹</div>
-                    <div> {codPayable?.payableAmount?.[0] ?? 0} </div>
+                    <div>Cod Payable&nbsp;</div>
+
+                    <div>
+                      {" "}
+                      {codPayable?.payableAmount?.[0]
+                        ? ` ₹ ${codPayable?.payableAmount?.[0]} *`
+                        : "- -"}
+                    </div>
                   </div>
                 </div>
 
