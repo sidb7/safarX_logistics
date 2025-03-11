@@ -33,9 +33,11 @@ import {
   GET_PROFILE_URL,
   LOGOUT,
   LARGE_LOGO,
+  SMALL_LOGO,
   COMPANY_NAME,
   COD_DETAILS_FINANCE,
 } from "../../utils/ApiUrls";
+
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
 import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
@@ -52,6 +54,7 @@ import ProfileIcon from "../../assets/ProfileIconBlue.png";
 import SentryFeedback from "./SentryFeedback";
 import ReportAbugIcon from "../../assets/ReportABug.svg";
 import sessionManager from "../../utils/sessionManager";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 let socket: Socket | null = null;
 
@@ -127,6 +130,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     });
   };
 
+  const { isLgScreen } = ResponsiveState();
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
@@ -741,7 +745,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <>
+            {" "}
+            <div
+              className="mt-1 p-1 cursor-pointer"
+              onClick={() => navigate("/dashboard/overview")}
+            >
+              {isLgScreen ? (
+                <img
+                  className="h-[30px] w-[100px] object-contain"
+                  src={LARGE_LOGO}
+                  alt=""
+                />
+              ) : (
+                <img className=" object-contain" src={SMALL_LOGO} alt="" />
+              )}
+            </div>{" "}
+          </>
+        )}
         {/* Open Modal on Clicking Serviceability */}
 
         <CenterModal

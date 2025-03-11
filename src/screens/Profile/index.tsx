@@ -190,9 +190,9 @@ export const Profile = () => {
                 referImage: profileData?.refferalCodeImageUrl,
               }}
             />
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <ProfileSetting ProfileDetails={profileData} />
-            </div>
+            </div> */}
           </div>
         </>
       )}
