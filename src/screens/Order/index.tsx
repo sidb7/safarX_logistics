@@ -664,9 +664,8 @@ const Index = () => {
           const buttonIconNode = syncRef.current.childNodes[0];
 
           syncRef.current.style.backgroundColor = "#F8F8F8";
-          if (process.env.NODE_ENV == "production") {
-            syncRef.current.style.pointerEvents = "none";
-          }
+
+          syncRef.current.style.pointerEvents = "none";
 
           if (buttonIconNode) {
             buttonIconNode.classList.add("infinite-rotate");
