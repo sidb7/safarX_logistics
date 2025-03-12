@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import { LOGO_AND_BRAND } from "../../../../utils/ApiUrls";
 import { retrieveLocalStorageData } from "../../../../utils/utility";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface IBrandSectionProps {
   setBrandLoadingState: any;
@@ -173,7 +174,7 @@ const BrandSection: React.FunctionComponent<IBrandSectionProps> = ({
 
       if (data?.success) {
         toast.success(data.message);
-        localStorage.setItem("brandDetails", "true");
+        sessionManager({ brandDetails: "true" });
         // window.location.reload(); // Uncomment if needed
         // getProfileData(); // Uncomment if needed
       } else {

@@ -105,7 +105,8 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     const kycValue = sellerInfo;
     // const userName = localStorage.getItem("userName");
     const userName = sellerInfo?.name;
-    const brandDetails = localStorage.getItem("brandDetails");
+    // const brandDetails = localStorage.getItem("brandDetails");
+    const brandDetails = kycValue?.brandDetails;
     const brandName = kycValue?.privateCompany?.brandName;
     let privateCompanyName = kycValue?.privateCompany?.name;
     // const isCompanyNameInvalid =
