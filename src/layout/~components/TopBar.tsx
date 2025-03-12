@@ -358,16 +358,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             <div className="flex items-center justify-self-end gap-x-3 ">
               <div className="relative">
                 <div
-                  className="flex gap-2 items-center cursor-pointer h-[36px] rounded-lg p-4 bg-[#E5EDFF]"
+                  className="hidden sm:flex gap-2 items-center cursor-pointer h-[36px] rounded-lg p-4 bg-[#E5EDFF]"
                   onClick={() => setIsPayableOpen((prev: any) => !prev)}
                 >
                   <BsCashCoin size={18} />
 
-                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                  <div className="flex  gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                     <div>Cod Payable&nbsp;</div>
-
                     <div>
-                      {" "}
                       {codPayable?.payableAmount?.[0]
                         ? ` ₹ ${codPayable?.payableAmount?.[0]} *`
                         : "- -"}

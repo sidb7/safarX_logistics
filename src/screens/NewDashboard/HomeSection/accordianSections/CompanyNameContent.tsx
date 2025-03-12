@@ -7,6 +7,7 @@ import OneButton from "../../../../components/Button/OneButton";
 import toast from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
+import sessionManager from "../../../../utils/sessionManager";
 
 interface ICompanyNameContentProps {
   setOpenCentreModal: React.Dispatch<React.SetStateAction<any>>;
@@ -51,6 +52,7 @@ const CompanyNameContent: React.FunctionComponent<ICompanyNameContentProps> = ({
       setOpenCentreModal(false);
       //   setBrandLoadingState(false);
       //   localStorage.setItem("brandDetails", "true");
+      sessionManager({ brandDetails: "true" });
       //   setBrandingModal(false);
       window.location.reload();
       // getProfileData();

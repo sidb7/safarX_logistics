@@ -163,7 +163,7 @@ const App = () => {
 
     //Socket Connectionu
     const connectSocket1 = async () => {
-      if (roomName) {
+      if (userInfo?.sellerId) {
         await socketCallbacks.connectSocket(dispatch);
         setIsSocketInitialized(true);
       }
@@ -413,7 +413,6 @@ const App = () => {
     const token = sellerData?.sellerId
       ? `${sellerData?.sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";
-
     if (token !== "") {
       // console.log("socketConnectedAfterlogin");
       socketCallbacks.connectSocket(dispatch);
