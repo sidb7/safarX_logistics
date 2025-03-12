@@ -16,6 +16,7 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import BrandingModalContent from "./BrandingDetails/brandingModalContent";
 import DocumentCard from "./DocumentsForInternational/DocumentsCard";
 import sessionManager from "../../utils/sessionManager";
+import AgreementsCard from "./Agreement/AgreementsCard";
 
 export const Profile = () => {
   const { isLgScreen } = ResponsiveState();
@@ -196,6 +197,8 @@ export const Profile = () => {
               <ProfileSetting ProfileDetails={profileData} />
             </div> */}
           </div>
+
+          <AgreementsCard />
         </>
       )}
 
