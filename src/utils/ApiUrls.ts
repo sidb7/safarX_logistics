@@ -160,6 +160,9 @@ const UPDATE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
 const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
+const GET_SELLER_AGREEMENT = `${SELLER_BASE_URL}/sellerAgreement/getSellerAgreement`;
+
+
 
 //Update Seller Profile
 const UPDATE_SINGLE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
@@ -744,4 +747,5 @@ export {
   GET_WALLET_TRANSACTION_FINANCE,
   COD_DETAILS_FINANCE,
   POST_SSO_URL,
+  GET_SELLER_AGREEMENT,
 };
