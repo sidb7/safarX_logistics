@@ -15,6 +15,7 @@ import RightSideModal from "../../components/CustomModal/customRightModal";
 import { ResponsiveState } from "../../utils/responsiveState";
 import BrandingModalContent from "./BrandingDetails/brandingModalContent";
 import DocumentCard from "./DocumentsForInternational/DocumentsCard";
+import sessionManager from "../../utils/sessionManager";
 
 export const Profile = () => {
   const { isLgScreen } = ResponsiveState();
@@ -136,6 +137,7 @@ export const Profile = () => {
         window.location.reload();
         // localStorage.setItem("brandDetails", "true"); // this is required while updating from accordian on home page
         // window.location.reload(); // Uncomment if needed
+        sessionManager({ brandDetails: "true" });
         // getProfileData(); // Uncomment if needed
       } else {
         toast.error(data.message);
