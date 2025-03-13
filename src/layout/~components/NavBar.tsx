@@ -7,8 +7,16 @@ import CloseMenu from "../../assets/Navbar/closeMenu.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { useSelector } from "react-redux";
-import { LARGE_LOGO, SMALL_LOGO, COMPANY_NAME } from "../../utils/ApiUrls";
+import {
+  LARGE_LOGO,
+  SMALL_LOGO,
+  COMPANY_NAME,
+  POST_SSO_URL,
+} from "../../utils/ApiUrls";
 import { sideBarMenusData } from "../../utils/dummyData";
+import { POST } from "../../utils/webService";
+import toast from "react-hot-toast";
+import sessionManager from "../../utils/sessionManager";
 
 interface INavBarProps {
   openMobileSideBar: any;
@@ -165,7 +173,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     navigate(path);
   };
 
-  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
+  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME || "shipyaari";
 
   const handleMenuClick = (index: number, element: any) => {
     // If menu is empty and path exists, navigate directly
@@ -208,12 +216,24 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     opneAndCloseChild(index, element);
   };
 
-  const opneAndCloseChild = (index: number, element: any) => {
+  const opneAndCloseChild = async (index: number, element: any) => {
     const { name, isChild } = element;
     if (name === "Help") {
-      companyName === "Shipyaari"
-        ? window.open("https://support.shipyaari.com/tickets", "_blank")
-        : window.open("https://wa.me/8700391426", "_blank");
+      if (companyName && companyName?.trim()?.toLowerCase() === "shipyaari") {
+        const { data: response }: any = await POST(POST_SSO_URL, {});
+
+        if (response?.success) {
+          window.open(response?.data, "_blank");
+        } else {
+          toast.error(response?.message);
+        }
+      } else {
+        window.open("https://wa.me/8700391426", "_blank");
+      }
+      // companyName === "Shipyaari"
+      //   // ? window.open("https://support.shipyaari.com/tickets", "_blank")
+      //   ? window.open("https://shipyaari.freshdesk.com/support/login", "_blank")  // mentioned by yuvika
+      //   : window.open("https://wa.me/8700391426", "_blank");
       return;
     }
 
@@ -242,88 +262,97 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     setIsHover(false);
   };
 
+  const { sellerInfo } = sessionManager({});
+  let sellerId = sellerInfo?.sellerId;
+
   return (
     <>
-      <nav
-        key="1"
-        onMouseEnter={handleOpner}
-        onMouseLeave={handleClose}
-        className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-20 rounded-r-lg customScroll`}
-        style={{
-          boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
-          transition: `all .2s `,
-          transitionTimingFunction: "ease-in-out",
-          width: conditinalClass.width,
-        }}
-      >
-        <div
-          className="flex w-full !h-10 mb-6"
-          onClick={() => navigate(`/dashboard/overview`)}
-        >
-          {isHover ? (
-            <img src={LARGE_LOGO} alt="" className="!w-32 !h-8" />
-          ) : (
-            <img src={SMALL_LOGO} alt="" />
-          )}
-        </div>
-        {sideBarMenus?.map((e: any, index: number) => {
-          // console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
-          if (e?.name !== "Notifications") {
-            let iconName = e?.icon?.toLowerCase() || "";
-            const iconPath =
-              require(`../../assets/Navbar/${iconName}.svg`) || "";
-            return (
-              <div className="w-full flex-col" key={index}>
-                <div
-                  key={`${e.name + index}`}
-                  className={`h-10 flex items-center rounded-lg px-2
-} w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
-                  onClick={() => {
-                    // opneAndCloseChild(index, e);
-                    handleMenuClick(index, e);
-                  }}
-                >
-                  <img
-                    src={iconPath}
-                    className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
-                    alt=""
-                  />
-                  {isHover ? (
+      {sellerId ? (
+        <>
+          {" "}
+          <nav
+            key="1"
+            onMouseEnter={handleOpner}
+            onMouseLeave={handleClose}
+            className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-20 rounded-r-lg customScroll`}
+            style={{
+              boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
+              transition: `all .2s `,
+              transitionTimingFunction: "ease-in-out",
+              width: conditinalClass.width,
+            }}
+          >
+            <div
+              className="flex w-full !h-10 mb-6"
+              onClick={() => navigate(`/dashboard/overview`)}
+            >
+              {isHover ? (
+                <img src={LARGE_LOGO} alt="" className="!w-32 !h-8" />
+              ) : (
+                <img src={SMALL_LOGO} alt="" />
+              )}
+            </div>
+            {sideBarMenus?.map((e: any, index: number) => {
+              // console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
+              if (e?.name !== "Notifications") {
+                let iconName = e?.icon?.toLowerCase() || "";
+                const iconPath =
+                  require(`../../assets/Navbar/${iconName}.svg`) || "";
+                return (
+                  <div className="w-full flex-col" key={index}>
                     <div
-                      className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize`}
+                      key={`${e.name + index}`}
+                      className={`h-10 flex items-center rounded-lg px-2
+} w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
+                      onClick={() => {
+                        // opneAndCloseChild(index, e);
+                        handleMenuClick(index, e);
+                      }}
                     >
-                      <p
-                        className={`px-2 whitespace-nowrap ${
+                      <img
+                        src={iconPath}
+                        className={`ml-[2px] ${
                           e.isActivePath ? " invert" : ""
                         }`}
-                      >
-                        {e.name}
-                      </p>
-
-                      <div
-                        className={`${
-                          e.isActivePath ? "text-white" : ""
-                        } flex items-center gap-2`}
-                      >
-                        <CustomButton
-                          icon={downArrow}
-                          showIcon={true}
-                          onlyIcon={true}
-                          className={`${
-                            e.isActivePath ? " invert" : ""
-                          } bg-white w-fit !p-0 !h-fit`}
-                          text={""}
-                          onClick={() => {}}
-                        />
-                      </div>
+                        alt=""
+                      />
+                      {isHover ? (
+                        <div
+                          className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize`}
+                        >
+                          <p
+                            className={`px-2 whitespace-nowrap ${
+                              e.isActivePath ? " invert" : ""
+                            }`}
+                          >
+                            {e.name}
+                          </p>
+                          {e.menu && e.menu.length > 0 && (
+                            <div
+                              className={`${
+                                e.isActivePath ? "text-white" : ""
+                              } flex items-center gap-2`}
+                            >
+                              <CustomButton
+                                icon={downArrow}
+                                showIcon={true}
+                                onlyIcon={true}
+                                className={`${
+                                  e.isActivePath ? " invert" : ""
+                                } bg-white w-fit !p-0 !h-fit`}
+                                text={""}
+                                onClick={() => {}}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                {e.isChild ? (
-                  <div className="flex flex-col overflow-hidden">
-                    {/* {e.menu?.map((child: any, childIndex: number) => {
+                    {e.isChild ? (
+                      <div className="flex flex-col overflow-hidden">
+                        {/* {e.menu?.map((child: any, childIndex: number) => {
                       console.log("e.target.child", e?.menu?.[1]?.name);
                       // if (e?.menu?.[1]?.name !== "Orders") {
                       return (
@@ -354,137 +383,143 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                       //   </div>
                       // );
                     })} */}
-                    {e.menu?.map((child: any, childIndex: number) => {
-                      if (e?.name === "Dashboard" && child?.name === "Orders") {
-                        return null;
-                      }
+                        {e.menu?.map((child: any, childIndex: number) => {
+                          if (
+                            e?.name === "Dashboard" &&
+                            child?.name === "Orders"
+                          ) {
+                            return null;
+                          }
 
-                      if (
-                        child?.name !== "Exception" &&
-                        child?.name !== "SY Performance" &&
-                        child?.name !== "Weight Freeze" &&
-                        child?.name !== "Credit Notes" &&
-                        child?.name !== "Channel Inventory"
-                      ) {
-                        return (
-                          <div
-                            key={childIndex}
-                            className={`py-2 pl-10 rounded-lg ${
-                              child.isActivePath ? "bg-[#E8E8E8]" : ""
-                            }`}
-                            onClick={() =>
-                              setIsActivePath(index, childIndex, child.path)
-                            }
-                          >
-                            {child.name}
-                          </div>
-                        );
-                      }
-                      return null;
-                    })}
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-            );
-          }
-        })}
-      </nav>
-      <div
-        style={{
-          transition: "backdrop-filter .2s",
-          transitionTimingFunction: "ease-in-out",
-          backdropFilter: conditinalClass.backdropFilter,
-        }}
-        className={`fixed h-screen z-10 top-0 left-0" ${
-          isHover ? "w-full" : "w-0"
-        } `}
-      ></div>
-
-      {/* Mobile Nav Bar */}
-      <>
-        <nav
-          className={`lg:hidden absolute h-full font-Open bg-white z-20 customScroll`}
-          style={{
-            boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
-            transition: `all .2s `,
-            transitionTimingFunction: "ease-in-out",
-            width: conditinalClass.mobileWidth,
-          }}
-        >
-          <div className="py-3 pl-6 pr-3 flex justify-between ">
-            <p className="text-base font-semibold leading-5 capitalize ">
-              Menu
-            </p>
-            <img
-              className="cursor-pointer !w-6 !h-6"
-              src={CloseMenu}
-              alt=""
-              onClick={() => setMobileSideBar(false)}
-            />
-          </div>
-          {sideBarMenus?.length > 0 &&
-            sideBarMenus?.map((e: any, index: number) => {
-              let iconName = e?.icon?.toLowerCase() || "";
-              const iconPath =
-                require(`../../assets/Navbar/${iconName}.svg`) || "";
-
-              return (
-                <div
-                  className="w-full flex-col px-6 py-4"
-                  key={`${e.name + index}`}
-                >
-                  <div
-                    className={`flex items-center gap-x-4 cursor-pointer rounded-lg p-4 justify-start w-full`}
-                  >
-                    <img src={iconPath} alt="" />
-                    <div
-                      className={` flex items-center justify-between w-full text-sm font-semibold leading-5 capitalize overflow-hidden`}
-                      onClick={() => {
-                        // opneAndCloseChild(index, e);
-                        handleMenuClick(index, e);
-                      }}
-                    >
-                      <p className={` whitespace-nowrap`}>{e.name} </p>
-
-                      <div className={` flex items-center gap-2`}>
-                        <CustomButton
-                          icon={downArrow}
-                          showIcon={true}
-                          onlyIcon={true}
-                          className={`
-bg-white w-fit !p-0 !h-fit`}
-                          text={""}
-                          onClick={() => {}}
-                        />
+                          if (
+                            child?.name !== "Exception" &&
+                            child?.name !== "SY Performance" &&
+                            child?.name !== "Weight Freeze" &&
+                            child?.name !== "Credit Notes" &&
+                            child?.name !== "Channel Inventory"
+                          ) {
+                            return (
+                              <div
+                                key={childIndex}
+                                className={`py-2 pl-10 rounded-lg ${
+                                  child.isActivePath ? "bg-[#E8E8E8]" : ""
+                                }`}
+                                onClick={() =>
+                                  setIsActivePath(index, childIndex, child.path)
+                                }
+                              >
+                                {child.name}
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
                       </div>
-                    </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                  {e.isChild ? (
-                    <div className="flex flex-col overflow-hidden ">
-                      {e.menu?.map((child: any, childIndex: number) => {
-                        return (
-                          <div
-                            key={`${child.path + childIndex}`}
-                            className={` rounded-lg text-sm font-semibold cursor-pointer leading-5 capitalize p-4 `}
-                            onClick={() =>
-                              setIsActivePath(index, childIndex, child.path)
-                            }
-                          >
-                            {child.name}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              );
+                );
+              }
             })}
-        </nav>
-      </>
+          </nav>
+          <div
+            style={{
+              transition: "backdrop-filter .2s",
+              transitionTimingFunction: "ease-in-out",
+              backdropFilter: conditinalClass.backdropFilter,
+            }}
+            className={`fixed h-screen z-10 top-0 left-0" ${
+              isHover ? "w-full" : "w-0"
+            } `}
+          ></div>
+          {/* Mobile Nav Bar */}
+          <>
+            <nav
+              className={`lg:hidden absolute h-full font-Open bg-white z-20 customScroll`}
+              style={{
+                boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
+                transition: `all .2s `,
+                transitionTimingFunction: "ease-in-out",
+                width: conditinalClass.mobileWidth,
+              }}
+            >
+              <div className="py-3 pl-6 pr-3 flex justify-between ">
+                <p className="text-base font-semibold leading-5 capitalize ">
+                  Menu
+                </p>
+                <img
+                  className="cursor-pointer !w-6 !h-6"
+                  src={CloseMenu}
+                  alt=""
+                  onClick={() => setMobileSideBar(false)}
+                />
+              </div>
+              {sideBarMenus?.length > 0 &&
+                sideBarMenus?.map((e: any, index: number) => {
+                  let iconName = e?.icon?.toLowerCase() || "";
+                  const iconPath =
+                    require(`../../assets/Navbar/${iconName}.svg`) || "";
+
+                  return (
+                    <div
+                      className="w-full flex-col px-6 py-4"
+                      key={`${e.name + index}`}
+                    >
+                      <div
+                        className={`flex items-center gap-x-4 cursor-pointer rounded-lg p-4 justify-start w-full`}
+                      >
+                        <img src={iconPath} alt="" />
+                        <div
+                          className={` flex items-center justify-between w-full text-sm font-semibold leading-5 capitalize overflow-hidden`}
+                          onClick={() => {
+                            // opneAndCloseChild(index, e);
+                            handleMenuClick(index, e);
+                          }}
+                        >
+                          <p className={` whitespace-nowrap`}>{e.name} </p>
+
+                          {e.menu && e.menu.length > 0 && (
+                            <div className={` flex items-center gap-2`}>
+                              <CustomButton
+                                icon={downArrow}
+                                showIcon={true}
+                                onlyIcon={true}
+                                className={`
+bg-white w-fit !p-0 !h-fit`}
+                                text={""}
+                                onClick={() => {}}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      {e.isChild ? (
+                        <div className="flex flex-col overflow-hidden ">
+                          {e.menu?.map((child: any, childIndex: number) => {
+                            return (
+                              <div
+                                key={`${child.path + childIndex}`}
+                                className={` rounded-lg text-sm font-semibold cursor-pointer leading-5 capitalize p-4 `}
+                                onClick={() =>
+                                  setIsActivePath(index, childIndex, child.path)
+                                }
+                              >
+                                {child.name}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  );
+                })}
+            </nav>
+          </>
+        </>
+      ) : null}
     </>
   );
 };

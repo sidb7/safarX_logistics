@@ -150,9 +150,12 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
   };
 
   const renderDocument = () => {
-    if (userInfo && userInfo?.businessType === "INDIVIDUAL") {
+    if (userInfo && userInfo?.businessType?.toLowerCase() === "individual") {
       return renderIndividualDocument();
-    } else if (userInfo && userInfo?.businessType === "COMPANY") {
+    } else if (
+      userInfo &&
+      userInfo?.businessType?.toLowerCase() === "company"
+    ) {
       return renderCompanyDocument();
     } else {
       return <div>No documents available</div>;

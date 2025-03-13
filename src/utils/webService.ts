@@ -8,13 +8,12 @@ axios.defaults.baseURL = SELLER_URL;
 const createHeader = (_URL: string, options = {}) => {
   // let sellerId = localStorage.getItem("sellerId");
   const { sellerInfo } = sessionManager({});
-  const sellerId = sellerInfo?.sellerId;
   let header = {
     Accept: "/",
     // Authorization: `Bearer ${localStorage.getItem(
     //   `${sellerId}_${tokenKey}`
     // )}`,
-    Authorization: `Bearer ${sellerInfo?.token}`,
+    Authorization: `Bearer ${sellerInfo?.token || null}`,
   };
   options = { ...options, headers: header };
   return { URL: _URL, options: options };

@@ -742,7 +742,7 @@ const idHelper = (
       const tagsString = tags?.join(", ");
       const tagsLength = tagsString?.length;
 
-      const showAllTags = tagsLength > 10;
+      const showAllTags = tagsLength > 0;
       // const buyerConfirmation = rowsData?.isBuyerConfirmed;
       const buyerConfirmationStatus = [
         {
@@ -773,6 +773,8 @@ const idHelper = (
           );
           // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
           // console.log("updateBuyerConfirmation", payload);
+        } else {
+          toast.error(response?.data?.message);
         }
       };
       return (
@@ -809,28 +811,39 @@ const idHelper = (
                 </div>
 
                 {showAllTags && (
-                  <div className="relative group">
-                    <div className="flex relative group w-[100px]">
-                      <div className="text-center font-Open w-full bg-[#FFF6EB] align-middle items-center text-[#FD7E14] rounded-full px-1.5 border-[#FD7E14]  font-normal leading-5 text-xs line-clamp-2">
-                        {capitalizeFirstLetter(tags[0])}
-                      </div>
-                      {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
-
-                      {tags.length > 1 && (
-                        <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                          {tags.map(
-                            (tag: string, index: Key | null | undefined) => (
-                              <p className="bg-[#FFF6EB] text-[#FD7E14] rounded-full px-2 border-[#FD7E14] shadow-inner-sm">
-                                {" "}
-                                {capitalizeFirstLetter(tag)}{" "}
-                              </p>
-                            )
-                          )}
-                        </div>
-                      )}
+                  <div className="flex ">
+                    <div className="flex  w-fit px-2  text-xs py-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
+                      {capitalizeFirstLetter(tags[0])}
                     </div>
-
-                    {/* Tooltip for hover to show all tags */}
+                    {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
+                    {tags.length > 1 && (
+                      <CustomToolTip
+                        position="bottom"
+                        content={
+                          <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-md rounded-md">
+                            {tags.map(
+                              (tag: string, index: Key | null | undefined) => (
+                                <p className="bg-white text-[#004EFF] rounded-md px-2 border-[#004EFF] border shadow-inner-sm">
+                                  {" "}
+                                  {capitalizeFirstLetter(tag)}{" "}
+                                </p>
+                              )
+                            )}
+                          </div>
+                        }
+                        showOnHover={true}
+                        bgColor="bg-white"
+                        textColor="black"
+                        left={-26}
+                        top={-8}
+                      >
+                        <img
+                          src={moreIcon}
+                          alt="editIcon"
+                          className="hover:-translate-y-[0.1rem] hover:scale-110 duration-100 cursor-pointer mx-2"
+                        />
+                      </CustomToolTip>
+                    )}
                   </div>
                 )}
               </div>
@@ -1166,7 +1179,7 @@ export const columnHelperForNewOrder = (
         const tagsString = tags?.join(", ");
         const tagsLength = tagsString?.length;
 
-        const showAllTags = tagsLength > 10;
+        const showAllTags = tagsLength > 0;
 
         const rows: any = [
           {
@@ -1281,7 +1294,6 @@ export const columnHelperForNewOrder = (
         });
 
         const buyerConfirmation = rowData?.isBuyerConfirmed;
-
         // const buyerConfirmationStatus = (buyerConfirmation: any) => {
         //   let className = "";
         //   let text = buyerConfirmation;
@@ -1321,6 +1333,7 @@ export const columnHelperForNewOrder = (
         ];
 
         let statusObj: any = { title: "" };
+
         rowsData?.status?.map((elem: any, index: any) => {
           statusObj = {
             ...statusObj,
@@ -1361,7 +1374,7 @@ export const columnHelperForNewOrder = (
         ) => {
           try {
             const payload = {
-              orderId: rowsData?.orderId,
+              orderId: rowsData?.tempOrderId,
               currentOrderStatus: latestStatus
                 ? capitalizeFirstLetter(latestStatus)
                 : "Draft",
@@ -1378,6 +1391,8 @@ export const columnHelperForNewOrder = (
               );
               // console.log(rowsData?.orderId + buyerConfirmationStatus, "STRING");
               // console.log("updateBuyerConfirmation", payload);
+            } else {
+              toast.error(response?.data?.message);
             }
           } catch (error) {
             toast.error("Failed to update order confirmation status");
@@ -2126,7 +2141,10 @@ export const columnHelpersForRest = (
     ColumnsHelper.accessor("packageType", {
       header: (props: any) => {
         return (
-          <div className="flex items-center font-Open font-semibold leading-5 text-sm">
+          <div
+            className="flex items-center font-Open font-semibold leading-5 text-sm"
+            id="selectAll"
+          >
             <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -2140,7 +2158,7 @@ export const columnHelpersForRest = (
         const { pickupAddress, service, source, orderId, otherDetails, awb } =
           info?.row?.original;
         return (
-          <div className="flex">
+          <div className="flex w-[300px]">
             <div className="flex justify-center mr-4 !my-[-6px] cursor-pointer">
               <input
                 type="checkbox"
@@ -2374,6 +2392,7 @@ export const columnHelpersForRest = (
               showOnHover={true}
               bgColor="bg-white"
               textColor="black"
+              left={-80}
             >
               <div className="mx-2 cursor-pointer">
                 <img

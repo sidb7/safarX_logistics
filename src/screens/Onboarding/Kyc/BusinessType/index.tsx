@@ -64,12 +64,13 @@ const BusinessType = (props: ITypeProps) => {
 
     if (userInfoString) {
       const userInfo = userInfoString;
-      if (userInfo.businessType) {
-        initialBusinessType = userInfo?.businessType || "";
+      if (userInfo?.businessType) {
+        initialBusinessType = userInfo?.businessType?.toLowerCase() || "";
         // localStorage.setItem(
         //   "businessType",
         //   initialBusinessType.toLocaleLowerCase()
         // );
+        sessionManager({ businessType: initialBusinessType });
       }
     }
 
@@ -91,7 +92,7 @@ const BusinessType = (props: ITypeProps) => {
     try {
       const { sellerInfo } = sessionManager({});
       // let businessType = localStorage.getItem("businessType");
-      let businessType = sellerInfo?.businessType;
+      let businessType = sellerInfo?.businessType?.toLowerCase();
       const payload = { businessType };
       setLoading(true);
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
@@ -106,7 +107,7 @@ const BusinessType = (props: ITypeProps) => {
 
         // navigate("/onboarding/kyc-photo"); // temparory hide
         // navigate("/onboarding/kyc-form");
-        if (payload.businessType === "individual") {
+        if (payload.businessType?.toLowerCase() === "individual") {
           navigate("/onboarding/kyc-terms/gst-agreement");
         } else {
           navigate("/onboarding/kyc-terms/service-agreement");

@@ -18,7 +18,6 @@ export const initSocket = (): Socket => {
   const token = sellerId
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";
-
   const sessionID = localStorage.getItem("sessionID");
   // if (sessionID && token && sellerId) {
   return io(`${SELLER_URL}`, {
@@ -28,7 +27,8 @@ export const initSocket = (): Socket => {
     path: "/socket.io",
     reconnectionDelayMax: 1000,
     auth: {
-      token: localStorage.getItem(token),
+      // token: localStorage.getItem(token),
+      token: sellerInfo?.token,
       sessionID: sessionID,
     },
     autoConnect: true,
@@ -50,7 +50,6 @@ const connectSocket = (dispatch?: any) => {
   const token = sellerId
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";
-  console.log(sellerId, token);
 
   if (token) {
     socket = initSocket();

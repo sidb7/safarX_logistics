@@ -163,7 +163,7 @@ const App = () => {
 
     //Socket Connectionu
     const connectSocket1 = async () => {
-      if (roomName) {
+      if (userInfo?.sellerId) {
         await socketCallbacks.connectSocket(dispatch);
         setIsSocketInitialized(true);
       }
@@ -335,39 +335,50 @@ const App = () => {
     }
   }, [syncTime, syncTimerObject]);
 
-  useEffect(() => {
-    const receiveMessage = (event: any) => {
-      console.log(
-        "🚀 ~ receiveMessage ~ ADMIN_URL:",
-        event.origin,
-        " ",
-        ADMIN_URL
-      );
-      // console.log("SELLER DATA", event.data);
-      const expectedOrigin = ADMIN_URL;
-      if (event.origin.includes(expectedOrigin)) {
-        const sellerData = event.data.sellerData;
-        console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
-        if (sellerData) {
-          loginFromSeller(JSON.parse(sellerData));
-        }
-      } else {
-        console.error("Unexpected origin:", event.origin);
+  const receiveMessage = (event: any) => {
+    console.log(
+      "🚀 ~ receiveMessage ~ ADMIN_URL:",
+      event.origin,
+      " ",
+      ADMIN_URL
+    );
+    const expectedOrigin = ADMIN_URL;
+    if (event.origin.includes(expectedOrigin)) {
+      const sellerData = event.data.sellerData;
+      console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
+      if (sellerData) {
+        loginFromSeller(JSON.parse(sellerData));
       }
-    };
+    } else {
+      console.error("Unexpected origin:", event.origin);
+    }
+  };
+  useEffect(() => {
+    console.log("Seller window loaded. Informing parent...");
 
-    window.addEventListener("message", receiveMessage, false);
+    setTimeout(() => {
+      if (window.opener) {
+        console.log("Ready for data");
+        window.opener.postMessage("READY_FOR_DATA", ADMIN_URL);
+      }
+    }, 1000);
+
+    window.addEventListener("message", receiveMessage);
 
     return () => {
       window.removeEventListener("message", receiveMessage);
     };
   }, []);
 
+  // Only send READY_FOR_DATA once the window is fully loaded
+
+  // Listen for sellerData from parent
+
   const loginFromSeller = (sellerData: any) => {
     // localStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
 
     //Session Storage TABID
-    const sellerInfo = sessionManager(sellerData);
+    const { sellerInfo } = sessionManager(sellerData);
     //Session Storage TABID
 
     let signInUserReducerDetails = {
@@ -402,7 +413,6 @@ const App = () => {
     const token = sellerData?.sellerId
       ? `${sellerData?.sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
       : "";
-
     if (token !== "") {
       // console.log("socketConnectedAfterlogin");
       socketCallbacks.connectSocket(dispatch);

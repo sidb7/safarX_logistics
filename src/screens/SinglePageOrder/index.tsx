@@ -165,7 +165,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     },
   ];
 
-  if (kycCheck?.businessType === "INDIVIDUAL") {
+  if (kycCheck?.businessType?.toLowerCase() === "individual") {
     const b2bIndex = orderTypeList.findIndex(
       (item: any) => item.value === "B2B"
     );
@@ -263,8 +263,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 value={order?.orderType}
                 className=" mr-2 w-[15px] cursor-pointer h-[15px]"
                 disabled={
-                  ["INDIVIDUAL"].includes(kycCheck?.businessType) ||
-                  showDownloadLebal
+                  ["individual"].includes(
+                    kycCheck?.businessType?.toLowerCase()
+                  ) || showDownloadLebal
                 }
                 checked={
                   order?.orderType === "B2B" && order?.transit === "FORWARD"
@@ -662,7 +663,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
         setDownloadLebal(true);
-        sessionStorage.clear();
+        // sessionStorage.clear();
         toast.success(data?.message || "Successfully Placed order");
       } else {
         toast.error(data?.message);
@@ -1219,7 +1220,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             <OneButton
                               onClick={() => {
                                 window.location.reload();
-                                sessionStorage.clear();
+                                // sessionStorage.clear();
                               }}
                               text={`CREATE NEW ORDER`}
                               variant="primary"

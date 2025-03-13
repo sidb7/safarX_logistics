@@ -27,7 +27,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [codModal, setCodModal] = useState({ isOpen: false, data: {} });
-  const [awbModal, setAwbModal] = useState({ isOpen: false, data: [] });
+  const [awbModal, setAwbModal] = useState({
+    isOpen: false,
+    data: [],
+    recovery: false,
+  });
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [dateRange, setDateRange]: any = useState([null, null]);
@@ -35,6 +39,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [loading, setLoading] = useState(true);
   const [codRemittedData, setCodRemittedData] = useState<any>([]);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [sortReportByDate, setSortReportByDate] = useState(-1);
 
   const arrayData = [
     { label: "Orders" },
@@ -82,7 +87,10 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     try {
       const { sellerInfo } = sessionManager({});
       setLoading(true);
-      const payload = { sellerId: +`${sellerInfo?.sellerId}` };
+      const payload = {
+        sellerId: +`${sellerInfo?.sellerId}`,
+        sort: { reportDate: sortReportByDate },
+      };
       // const payload = {
       //   sellerId: 2483, //only for testing
       // };
@@ -103,7 +111,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   };
   useEffect(() => {
     getCodRemittedDetails();
-  }, [endDate]);
+  }, [endDate, sortReportByDate]);
 
   console.log("getcodRmeittedData", codRemittedData);
   //on page change index
@@ -287,6 +295,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 setAwbModal={setAwbModal}
                 tableData={codRemittedData}
                 downloadReport={downloadReport}
+                setSortReportByDate={setSortReportByDate}
               />
             </div>
           </div>
@@ -317,13 +326,16 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           <RightSideModal
             isOpen={awbModal?.isOpen}
             onClose={() => {
-              setAwbModal({ isOpen: false, data: [] });
+              setAwbModal({ isOpen: false, data: [], recovery: false });
             }}
-            className="md:!w-[25%]"
+            className="md:!w-[45%]"
           >
             <CodRemittedAwbModal
-              onClick={() => setAwbModal({ isOpen: false, data: [] })}
-              awbs={awbModal.data}
+              onClick={() =>
+                setAwbModal({ isOpen: false, data: [], recovery: false })
+              }
+              awbs={awbModal?.data}
+              isRecovery={awbModal?.recovery}
             />
           </RightSideModal>
         </div>

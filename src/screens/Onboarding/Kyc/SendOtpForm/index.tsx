@@ -146,7 +146,8 @@ const Index = (props: ITypeProps) => {
 
   useEffect(() => {
     let btype = localStorage.getItem("businessType");
-    setBusinessType(btype);
+    const { sellerInfo } = sessionManager({});
+    setBusinessType(sellerInfo?.businessType?.toLowerCase());
   }, []);
 
   console.log("businessType", businessType);
@@ -233,12 +234,16 @@ const Index = (props: ITypeProps) => {
         setShowAaddharOtpBox(true);
         setVerifyOTP(true);
 
-        localStorage.setItem("aadharNumber", value);
-        localStorage.setItem("panNumber", panNumber);
-        localStorage.setItem("client_id", response.data.data.client_id);
+        // localStorage.setItem("aadharNumber", value);
+        // localStorage.setItem("panNumber", panNumber);
+        // localStorage.setItem("client_id", response.data.data.client_id);
+        const { sellerInfo } = sessionManager({
+          aadharNumber: value,
+          panNumber: panNumber,
+          client_id: response?.data?.data?.client_id,
+        });
         setClientId(response?.data?.data?.client_id);
-        let clientIdSession = localStorage.getItem("client_id");
-        console.log("clientIdSe", clientIdSession);
+        // let clientIdSession = localStorage.getItem("client_id");
 
         if (businessType === "individual") {
           setLoading(false);
@@ -262,14 +267,22 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         setLoading(false);
-        localStorage.setItem("gstNumber", value);
-        localStorage.setItem("panNumber", panNumber);
-        localStorage.setItem("client_id", response.data[0].data.client_id);
+        // localStorage.setItem("gstNumber", value);
+        // localStorage.setItem("panNumber", panNumber);
+        // localStorage.setItem("client_id", response.data[0].data.client_id);
+        sessionManager({
+          gstNumber: value,
+          panNumber: panNumber,
+          client_id: response?.data[0]?.data?.client_id,
+        });
         setShowgstOtpBox(true);
         setVerifyOTP(true);
         if (businessType === "business" || businessType === "company") {
           setLoading(false);
-          localStorage.setItem("client_id", response.data[0].data.client_id);
+          // localStorage.setItem("client_id", response.data[0].data.client_id);
+          sessionManager({
+            client_id: response?.data[0]?.data?.client_id,
+          });
         } else {
           setLoading(false);
         }
@@ -349,7 +362,9 @@ const Index = (props: ITypeProps) => {
   const onVerifyOtp = async () => {
     try {
       if (Number(otpNumber) !== 0) {
-        let clientId_session = localStorage.getItem("client_id");
+        const { sellerInfo } = sessionManager({});
+        // let clientId_session = localStorage.getItem("client_id");
+        let clientId_session = sellerInfo?.client_id;
         if (businessType === "individual") {
           const payload = {
             client_id: clientId_session,
@@ -538,7 +553,7 @@ const Index = (props: ITypeProps) => {
 
           <div>
             <div className="flex flex-col justify-center items-center mt-[104px]  px-5 md:px-0 gap-y-4 mb-6">
-              {businessType === "individual" ? (
+              {businessType?.toLowerCase() === "individual" ? (
                 <>
                   <div className={`${!isMdScreen ? "w-full" : ""}`}>
                     <CustomInputBox

@@ -217,13 +217,10 @@ const MyRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-
+      {/* 
       <Route>
-        <Route
-          path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
-          element={<ClientTracking />}
-        />
-      </Route>
+      
+      </Route> */}
 
       {/* onboarding routes  */}
       <Route>
@@ -1210,7 +1207,10 @@ const MyRoutes: React.FC = () => {
               // </ProtectedRoute>
             }
           />
-
+          <Route
+            path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
+            element={<ClientTracking />}
+          />
           <Route
             path="/tracking/exception-ndr"
             element={
