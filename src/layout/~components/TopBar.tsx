@@ -33,9 +33,11 @@ import {
   GET_PROFILE_URL,
   LOGOUT,
   LARGE_LOGO,
+  SMALL_LOGO,
   COMPANY_NAME,
   COD_DETAILS_FINANCE,
 } from "../../utils/ApiUrls";
+
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
 import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
@@ -52,6 +54,7 @@ import ProfileIcon from "../../assets/ProfileIconBlue.png";
 import SentryFeedback from "./SentryFeedback";
 import ReportAbugIcon from "../../assets/ReportABug.svg";
 import sessionManager from "../../utils/sessionManager";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 let socket: Socket | null = null;
 
@@ -127,6 +130,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     });
   };
 
+  const { isLgScreen } = ResponsiveState();
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
@@ -354,15 +358,18 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             <div className="flex items-center justify-self-end gap-x-3 ">
               <div className="relative">
                 <div
-                  className="flex gap-2 items-center cursor-pointer h-[36px] rounded-lg p-4 bg-[#E5EDFF]"
+                  className="hidden sm:flex gap-2 items-center cursor-pointer h-[36px] rounded-lg p-4 bg-[#E5EDFF]"
                   onClick={() => setIsPayableOpen((prev: any) => !prev)}
                 >
                   <BsCashCoin size={18} />
 
-                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
-                    <div>Payable</div>
-                    <div>₹</div>
-                    <div> {codPayable?.payableAmount?.[0] ?? 0} </div>
+                  <div className="flex  gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                    <div>Cod Payable&nbsp;</div>
+                    <div>
+                      {codPayable?.payableAmount?.[0]
+                        ? ` ₹ ${codPayable?.payableAmount?.[0]} *`
+                        : "- -"}
+                    </div>
                   </div>
                 </div>
 
@@ -736,7 +743,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <>
+            {" "}
+            <div
+              className="mt-1 p-1 cursor-pointer"
+              onClick={() => navigate("/dashboard/overview")}
+            >
+              {isLgScreen ? (
+                <img
+                  className="h-[30px] w-[100px] object-contain"
+                  src={LARGE_LOGO}
+                  alt=""
+                />
+              ) : (
+                <img className=" object-contain" src={SMALL_LOGO} alt="" />
+              )}
+            </div>{" "}
+          </>
+        )}
         {/* Open Modal on Clicking Serviceability */}
 
         <CenterModal
