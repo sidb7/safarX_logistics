@@ -21,11 +21,11 @@ const AgreementsCard: React.FC = () => {
       if (data?.success) {
         setAgreements(data.data || []);
       } else {
-        toast.error(data?.message || "Failed to fetch agreements");
+        // toast.error(data?.error || "Failed to fetch agreements");
+        console.error("Error fetching agreements:", data?.error);
       }
     } catch (error) {
       console.error("Error fetching agreements:", error);
-      toast.error("Something went wrong while fetching agreements");
     } finally {
       setIsLoading(false);
     }
