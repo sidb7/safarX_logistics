@@ -118,8 +118,8 @@ const Summary = (props: Props) => {
       ]);
     }
   }
-  console.log("latestProductDetails", latestProductDetails);
-  console.log("latesProducts", latesProducts);
+  // console.log("latestProductDetails", latestProductDetails);
+  // console.log("latesProducts", latesProducts);
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
@@ -475,8 +475,7 @@ const Summary = (props: Props) => {
               add={serviceDetails?.add}
               base={serviceDetails?.base}
               variables={serviceDetails?.variables}
-              variableServices={serviceDetails?.variableServices}  // Add this line
-
+              variableServices={serviceDetails?.variableServices} // Add this line
               cod={codInfo?.collectableAmount}
               codCharge={serviceDetails?.cod}
               tax={serviceDetails?.tax}
