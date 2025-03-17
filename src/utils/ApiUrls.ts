@@ -369,6 +369,16 @@ const UPDATETRACKINGBYBUYER = `${SELLER_BASE_URL}/tracking/updateTrackingByBuyer
 const GETALLTRACKINGBUYERREQUEST = `${SELLER_BASE_URL}/tracking/getAllTrackingBuyerRequest`;
 const BUYERREQUESTACTION = `${SELLER_BASE_URL}/tracking/buyerRequestAction`;
 
+//Lost and Damaged
+const FETCH_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersSeller`;
+const UPDATE_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/updateLDOrdersSeller`;
+const FETCH_LD_ORDERS_FOR_SEARCH = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersForSearch`;
+const UPDATE_LD_CLAIM = `${SELLER_BASE_URL}/lostAndDamage/updateClaimStatus`;
+
+
+
+
+
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
 const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
@@ -741,6 +751,10 @@ export {
   FETCH_LABELS_REPORT_LIST,
   DOWNLOAD_S3_LABEL,
   GET_COUNT_AMAZON_ORDER,
+  FETCH_LD_ORDERS,
+  UPDATE_LD_ORDERS,
+  FETCH_LD_ORDERS_FOR_SEARCH,
+  UPDATE_LD_CLAIM,
   POST_PROCESS_SHOPIFY_PLAN,
   UPDATE_ORDER_CONFIRMATION_STATUS,
   GET_ORDER_CONFIRMATION_LOG,
