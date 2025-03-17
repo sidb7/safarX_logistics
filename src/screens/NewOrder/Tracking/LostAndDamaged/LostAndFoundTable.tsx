@@ -374,30 +374,30 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         );
       },
     }),
-    columnsHelper.accessor("action", {
-      header: "Action",
-      cell: (info) => {
-        const data = info?.row?.original;
-        const isAlreadyClaimed = data?.isClaimed === true;
+    // columnsHelper.accessor("action", {
+    //   header: "Action",
+    //   cell: (info) => {
+    //     const data = info?.row?.original;
+    //     const isAlreadyClaimed = data?.isClaimed === true;
         
-        return (
-          <div>
-            {isAlreadyClaimed ? (
-              <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
-                Claimed
-              </span>
-            ) : (
-              <OneButton
-                text={isClaimingShipment ? "Processing..." : "Claim"}
-                variant="primary"
-                onClick={() => handleClaim(data)}
-                disabled={isClaimingShipment}
-              />
-            )}
-          </div>
-        );
-      },
-    }),
+    //     return (
+    //       <div>
+    //         {isAlreadyClaimed ? (
+    //           <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+    //             Claimed
+    //           </span>
+    //         ) : (
+    //           <OneButton
+    //             text={isClaimingShipment ? "Processing..." : "Claim"}
+    //             variant="primary"
+    //             onClick={() => handleClaim(data)}
+    //             disabled={isClaimingShipment}
+    //           />
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // }),
   ];
 
   return (

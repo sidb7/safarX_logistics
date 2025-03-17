@@ -18,6 +18,8 @@ import RightSideModal from "../../../../components/CustomModal/customRightModal"
 import FilterIcon from "../../../../assets/Order/FilterIcon.svg";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
 import { Spinner } from "../../../../components/Spinner";
+import PaginationComponent from "../../../../components/Pagination";
+
 
 interface FilterCondition {
   $in: any[];
@@ -35,6 +37,8 @@ interface OrderPayload {
   filterArr: FilterObject[];
   startDate?: number | null;
   endDate?: number | null;
+  skip?: number;
+  limit?: number;
 }
 
 interface FilterMenuItem {
@@ -71,6 +75,12 @@ const LostAndDamaged: React.FC = () => {
   const [filterModal, setFilterModal] = useState(false);
   const [isFilterLoading, setIsFilterLoading] = useState<boolean>(false);
 
+  // Pagination state
+const [currentPage, setCurrentPage] = useState<number>(1);
+const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+const itemsPerPageOptions = [5, 10, 20, 50];
+const [totalCount, setTotalCount] = useState<number>(0);
+
   const [filterState, setFilterState] = useState<FilterState>({
     name: "",
     menu: [], // Now typed as FilterMenuItem[]
@@ -88,6 +98,16 @@ const LostAndDamaged: React.FC = () => {
 
   const handleClick = () => {
     setIsModalOpen(true);
+  };
+
+  const handlePageChange = (data: { currentPage: number; itemsPerPage: number }) => {
+    setCurrentPage(data.currentPage);
+    setItemsPerPage(data.itemsPerPage);
+  };
+  
+  const handleItemsPerPageChange = (data: { currentPage: number; itemsPerPage: number }) => {
+    setCurrentPage(1);  // Reset to first page when changing items per page
+    setItemsPerPage(data.itemsPerPage);
   };
 
   const fetchOrderDetails = async (awb?: string) => {
@@ -170,6 +190,8 @@ const LostAndDamaged: React.FC = () => {
       const payload: OrderPayload = {
         searchValue: searchValue || awb,
         filterArr: [],
+        skip: (currentPage - 1) * itemsPerPage, // Convert page number to skip value
+        limit: itemsPerPage
       };
 
       // Add date range if present
@@ -199,6 +221,8 @@ const LostAndDamaged: React.FC = () => {
       const response = await POST(FETCH_LD_ORDERS, payload);
       if (response?.data?.success) {
         setOrderDetailsTable(response.data.data?.[0]?.data);
+        setTotalCount(response.data.data?.[0]?.totalCount || 0);  
+
       } else {
         toast.error(response?.data?.message || "Failed to fetch orders");
       }
@@ -220,6 +244,7 @@ const LostAndDamaged: React.FC = () => {
     setFilterPayLoad({
       filterArrOne: [],
     });
+    setCurrentPage(1); // Reset to page 1
     fetchOrderDetailsTable();
   };
 
@@ -524,10 +549,11 @@ const LostAndDamaged: React.FC = () => {
 
   useEffect(() => {
     fetchOrderDetailsTable();
-  }, [startDate, endDate]);
+  }, [currentPage, itemsPerPage,startDate, endDate]);
 
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {
+      setCurrentPage(1); // Reset to first page on new search
       fetchOrderDetailsTable(searchValue);
     }, 300);
 
@@ -646,6 +672,19 @@ const LostAndDamaged: React.FC = () => {
       ) : (
         <LostAndFoundTable orders={orderDetailsTable} />
       )}
+
+      {/* Pagination Component */}
+{totalCount > 0 && (
+  <PaginationComponent
+    totalItems={totalCount}
+    itemsPerPageOptions={itemsPerPageOptions}
+    onPageChange={handlePageChange}
+    onItemsPerPageChange={handleItemsPerPageChange}
+    pageNo={currentPage}
+    initialItemsPerPage={itemsPerPage}
+    className="mt-4"
+  />
+)}
 
       <CenterModal
         isOpen={isModalOpen}
@@ -1073,6 +1112,7 @@ const LostAndDamaged: React.FC = () => {
                     filterArrOne: [],
                   });
                   setIsFilterLoading(false);
+                  setCurrentPage(1); // Reset to page 1
                   fetchOrderDetailsTable();
                   setFilterModal(false);
                 }}
@@ -1088,6 +1128,7 @@ const LostAndDamaged: React.FC = () => {
                   text="APPLY"
                   onClick={() => {
                     setIsFilterLoading(true);
+                    setCurrentPage(1); // Reset to first page when applying filters
                     fetchOrderDetailsTable();
                     setFilterModal(false);
                   }}
