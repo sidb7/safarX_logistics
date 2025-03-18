@@ -51,6 +51,7 @@ import {
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
   COMPANY_NAME,
+  GET_WALLET_RECHARGE_COUPONS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -160,6 +161,9 @@ const WalletRecharge = () => {
   const [companydetails, setcompanydetails] = useState<any>(
     JSON.parse(sessionStorage.getItem("companydetails") as string)
   );
+
+  const [couponDetails, setCouponDetails] = useState<any>([]);
+  console.log("🚀 ~ WalletRecharge ~ couponDetails:", couponDetails);
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -417,10 +421,18 @@ const WalletRecharge = () => {
       amount: walletValue,
       callbackUrl: `${SELLER_WEB_URL}/wallet/view-wallet`,
     };
+    if (walletValue <= couponDetails?.minRechargeAmount) {
+    }
 
     const { data: response } = await POST(INITIAL_RECHARGE, {
       paymentObject: initialObject,
       paymentGateway: "JUSPAY",
+      couponCode:
+        couponDetails.length > 0
+          ? walletValue >= couponDetails?.minRechargeAmount
+            ? couponDetails?.couponCode
+            : ""
+          : "",
     });
     if (response?.success === true) {
       if (response?.data?.status === "NEW") {
@@ -510,6 +522,24 @@ const WalletRecharge = () => {
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
 
   console.log("companyName", companyName);
+
+  const getWalletRechargeCoupons = async () => {
+    try {
+      const { data: response } = await POST(GET_WALLET_RECHARGE_COUPONS, {});
+      // console.log("🚀 ~ getWalletRechargeCoupons ~ response:", response);
+      if (response?.success) {
+        setCouponDetails([response?.data]);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getWalletRechargeCoupons();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -693,7 +723,7 @@ const WalletRecharge = () => {
             </div> */}
             <div className="mx-5">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
-                <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
+                <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
                     <img src={Accountlogo} alt="" />
                     <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6 capitalize">
@@ -758,6 +788,19 @@ const WalletRecharge = () => {
                         })}
                     </div>
                   </div>
+                  {couponDetails?.map((coupon: any, index: number) => (
+                    <div
+                      key={index}
+                      className="border-[1px] border-[#E8E8E8] bg-[#FDF6EA] rounded-[20px] shadow-md px-4 py-3 flex flex-col gap-y-1 mt-4 w-[380px]"
+                    >
+                      <p className="font-Lato text-lg text-[#004EFF] font-semibold leading-[26px] uppercase">
+                        {coupon.couponCode}
+                      </p>
+                      <p className="font-Open text-sm  font-normal leading-5">
+                        {`Applicable on a min recharge of ${coupon.minRechargeAmount}`}
+                      </p>
+                    </div>
+                  ))}
 
                   {/* <JusPay
                     isDisabled={isDisabled}
