@@ -29,6 +29,8 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import CustomButton from "../../components/Button";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import sessionManager from "../../utils/sessionManager";
+import { COMPANY_NAME, SUPPORT_LINK } from "../../utils/ApiUrls";
+
 
 interface ITypeProps {}
 
@@ -401,6 +403,8 @@ const Index = (props: ITypeProps) => {
     })();
   }, []);
 
+  // console.log("company name ad address", COMPANY_NAME, SUPPORT_LINK, support_LINK_test)
+
   return (
     <>
       {/* {<ToastCustom message="hello i am from plan" />} */}
@@ -521,10 +525,18 @@ const Index = (props: ITypeProps) => {
                     <OneButton
                       text={"TALK TO OUR SUPPORT"}
                       onClick={() => {
-                        window.open(
-                          "https://support.shipyaari.com/tickets",
-                          "_blank"
-                        );
+                        {
+                          const supportUrl =
+                            COMPANY_NAME ===
+                            "Shipyaari"
+                              ? "https://support.shipyaari.com/tickets"
+                              : SUPPORT_LINK;
+                          window.open(supportUrl, "_blank");
+                        }
+                        // window.open(
+                        //   "https://support.shipyaari.com/tickets",
+                        //   "_blank"
+                        // );
                       }}
                       variant="primary"
                     />

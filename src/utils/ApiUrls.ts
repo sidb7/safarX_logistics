@@ -17,6 +17,7 @@ let WALLETSECRETKEY = "";
 let WHITE_COMPANYFULLNAME = "";
 let WHITE_COMPANYADDRESS = "";
 let FINANCE_URL = "";
+let SUPPORT_LINK = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -42,9 +43,10 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
-    FINANCE_URL = `${process?.env?.REACT_APP_FINANCE_URL}`;
+    FINANCE_URL = `${process.env?.REACT_APP_FINANCE_URL}`;
     break;
 
   case "test":
@@ -63,6 +65,7 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
@@ -83,6 +86,7 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${
@@ -111,6 +115,8 @@ switch (Environment) {
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
+
 
     break;
 }
@@ -698,6 +704,7 @@ export {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
+  SUPPORT_LINK,
   // CHANGE_PASSWORD,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
