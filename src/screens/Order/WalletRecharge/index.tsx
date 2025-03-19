@@ -163,7 +163,9 @@ const WalletRecharge = () => {
   );
 
   const [couponDetails, setCouponDetails] = useState<any>([]);
-  console.log("🚀 ~ WalletRecharge ~ couponDetails:", couponDetails);
+  // console.log("🚀 ~ WalletRecharge ~ couponDetails:", couponDetails);
+
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -723,7 +725,7 @@ const WalletRecharge = () => {
             </div> */}
             <div className="mx-5">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
-                <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">
+                <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[315px]">
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
                     <img src={Accountlogo} alt="" />
                     <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6 capitalize">
@@ -788,19 +790,97 @@ const WalletRecharge = () => {
                         })}
                     </div>
                   </div>
-                  {couponDetails?.map((coupon: any, index: number) => (
-                    <div
-                      key={index}
-                      className="border-[1px] border-[#E8E8E8] bg-[#FDF6EA] rounded-[20px] shadow-md px-4 py-3 flex flex-col gap-y-1 mt-4 w-[380px]"
-                    >
-                      <p className="font-Lato text-lg text-[#004EFF] font-semibold leading-[26px] uppercase">
-                        {coupon.couponCode}
-                      </p>
-                      <p className="font-Open text-sm  font-normal leading-5">
-                        {`Applicable on a min recharge of ${coupon.minRechargeAmount}`}
-                      </p>
-                    </div>
-                  ))}
+                  {/* {couponDetails?.map((coupon: any, index: number) => {
+                    const isActive = walletValue <= coupon.minRechargeAmount;
+                    return (
+                      <div
+                        key={index}
+                        className={`border-[1px]   rounded-[20px] shadow-md px-4 py-3 flex flex-col gap-y-1 mt-4 w-[380px] ${
+                          isActive
+                            ? " bg-gray-200"
+                            : " bg-[#FDF6EA] border-[#E8E8E8]"
+                        } `}
+                      >
+                        <p
+                          className={`font-Lato text-lg font-semibold leading-[26px] uppercase ${
+                            isActive ? "text-gray-500" : "text-[#004EFF]"
+                          } `}
+                        >
+                          {coupon.couponCode}
+                        </p>
+                        <p className="font-Open text-sm text-gray-600  font-normal leading-5">
+                          {`Applicable on a min recharge of ${coupon.minRechargeAmount}`}
+                        </p>
+                      </div>
+                    );
+                  })} */}
+
+                  {couponDetails.map((coupon: any, index: number) => {
+                    const isActive = walletValue >= coupon.minRechargeAmount;
+
+                    return (
+                      <div
+                        key={index}
+                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 ${
+                          isActive
+                            ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
+                            : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
+                        } hover:scale-[1.03] hover:shadow-lg`}
+                        style={{
+                          animationDelay: `${index * 100}ms`,
+                          animation: "fadeIn 0.5s ease-out forwards",
+                          opacity: 0,
+                          transform: "translateY(20px)",
+                        }}
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        {/* Content */}
+                        <div className="relative z-10 px-4 py-3">
+                          <div className="mb-1 flex items-center">
+                            <p
+                              className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
+                                isActive ? "text-blue-600" : "text-gray-500"
+                              }`}
+                            >
+                              {coupon.couponCode}
+                            </p>
+                          </div>
+
+                          <p className="mt-2 font-Noto text-sm text-gray-600 leading-5">
+                            Applicable on a min recharge of{" "}
+                            <span className="font-medium">
+                              ₹{coupon.minRechargeAmount.toLocaleString()}
+                            </span>
+                          </p>
+
+                          {/* Status message */}
+                          <div
+                            className={`mt-3 rounded-full px-3 py-1 font-Open text-xs font-medium leading-5 ${
+                              isActive
+                                ? "bg-emerald-100 text-emerald-700"
+                                : "bg-amber-100 text-amber-700"
+                            }`}
+                            style={{ width: "fit-content" }}
+                          >
+                            {isActive
+                              ? "Available to use"
+                              : "Unlock with higher balance"}
+                          </div>
+                        </div>
+
+                        {/* Hover effect */}
+                        {hoveredIndex === index && (
+                          <div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"
+                            style={{
+                              animation: "sweep 1s infinite linear",
+                            }}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
 
                   {/* <JusPay
                     isDisabled={isDisabled}
