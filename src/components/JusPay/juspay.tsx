@@ -12,10 +12,12 @@ interface IProps {
   isDisabled?: boolean;
   amount?: any;
   callbackUrl?: any;
+  couponDetails?: any;
 }
 
 const JusPay = (props: IProps) => {
-  const { isDisabled, amount, callbackUrl } = props;
+  const { isDisabled, amount, callbackUrl, couponDetails } = props;
+
   const [paymentLoader, setpaymentLoader] = useState<any>(false);
   const [loading, setLoading] = useState<any>(false);
   const dispatch = useDispatch();
@@ -38,6 +40,13 @@ const JusPay = (props: IProps) => {
       const { data: response } = await POST(INITIAL_RECHARGE, {
         paymentObject: initialObject,
         paymentGateway: "JUSPAY",
+        couponCode:
+          couponDetails.length > 0 &&
+          couponDetails[0]?.couponStatus !== "Expired"
+            ? initialObject?.amount >= couponDetails[0]?.minRechargeAmount
+              ? couponDetails[0]?.couponCode
+              : ""
+            : "",
       });
       if (response?.success === true) {
         if (response?.data?.status === "NEW") {

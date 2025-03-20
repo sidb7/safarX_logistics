@@ -429,12 +429,6 @@ const WalletRecharge = () => {
     const { data: response } = await POST(INITIAL_RECHARGE, {
       paymentObject: initialObject,
       paymentGateway: "JUSPAY",
-      couponCode:
-        couponDetails.length > 0
-          ? walletValue >= couponDetails?.minRechargeAmount
-            ? couponDetails?.couponCode
-            : ""
-          : "",
     });
     if (response?.success === true) {
       if (response?.data?.status === "NEW") {
@@ -785,6 +779,7 @@ const WalletRecharge = () => {
                               isDisabled={isDisabled}
                               amount={walletValue}
                               callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                              couponDetails={couponDetails || {}}
                             />
                           );
                         })}
@@ -821,8 +816,8 @@ const WalletRecharge = () => {
                     return (
                       <div
                         key={index}
-                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 ${
-                          isActive
+                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] ${
+                          isActive && coupon.couponStatus !== "Expired"
                             ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
                             : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
                         } hover:scale-[1.03] hover:shadow-lg`}
@@ -835,7 +830,6 @@ const WalletRecharge = () => {
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
                       >
-                        {/* Content */}
                         <div className="relative z-10 px-4 py-3">
                           <div className="mb-1 flex items-center">
                             <p
@@ -854,7 +848,6 @@ const WalletRecharge = () => {
                             </span>
                           </p>
 
-                          {/* Status message */}
                           <div
                             className={`mt-3 rounded-full px-3 py-1 font-Open text-xs font-medium leading-5 ${
                               isActive
@@ -865,11 +858,12 @@ const WalletRecharge = () => {
                           >
                             {isActive
                               ? "Available to use"
+                              : coupon.couponStatus !== "Expired"
+                              ? "Your coupon has Expired!"
                               : "Unlock with higher balance"}
                           </div>
                         </div>
 
-                        {/* Hover effect */}
                         {hoveredIndex === index && (
                           <div
                             className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"
