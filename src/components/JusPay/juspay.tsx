@@ -42,10 +42,10 @@ const JusPay = (props: IProps) => {
         paymentGateway: "JUSPAY",
         couponCode:
           couponDetails.length > 0 &&
-          couponDetails[0]?.couponStatus !== "Expired"
-            ? initialObject?.amount >= couponDetails[0]?.minRechargeAmount
-              ? couponDetails[0]?.couponCode
-              : ""
+          couponDetails[0]?.couponStatus !== "Expired" &&
+          Number(initialObject?.amount.replace(/,/g, "")) >=
+            couponDetails[0]?.minRechargeAmount
+            ? couponDetails[0]?.couponCode
             : "",
       });
       if (response?.success === true) {

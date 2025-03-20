@@ -164,7 +164,8 @@ const WalletRecharge = () => {
 
   const [couponDetails, setCouponDetails] = useState<any>([]);
   // console.log("🚀 ~ WalletRecharge ~ couponDetails:", couponDetails);
-
+  const [isActives, setIsActives] = useState(false);
+  // const isActive = walletValue >= coupon.minRechargeAmount;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -174,6 +175,18 @@ const WalletRecharge = () => {
   //     setLoading(false);
   //   }
   // };
+  useEffect(() => {
+    if (couponDetails.length > 0) {
+      if (
+        Number(walletValue.replace(/,/g, "")) >=
+        +couponDetails[0]?.minRechargeAmount
+      ) {
+        setIsActives(true);
+      } else {
+        setIsActives(false);
+      }
+    }
+  }, [walletValue, couponDetails]);
 
   // useEffect(() => {
   //   (async () => {
@@ -423,8 +436,6 @@ const WalletRecharge = () => {
       amount: walletValue,
       callbackUrl: `${SELLER_WEB_URL}/wallet/view-wallet`,
     };
-    if (walletValue <= couponDetails?.minRechargeAmount) {
-    }
 
     const { data: response } = await POST(INITIAL_RECHARGE, {
       paymentObject: initialObject,
@@ -517,7 +528,7 @@ const WalletRecharge = () => {
 
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
 
-  console.log("companyName", companyName);
+  // console.log("companyName", companyName);
 
   const getWalletRechargeCoupons = async () => {
     try {
@@ -811,13 +822,11 @@ const WalletRecharge = () => {
                   })} */}
 
                   {couponDetails.map((coupon: any, index: number) => {
-                    const isActive = walletValue >= coupon.minRechargeAmount;
-
                     return (
                       <div
                         key={index}
                         className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] ${
-                          isActive && coupon.couponStatus !== "Expired"
+                          isActives && coupon.couponStatus !== "Expired"
                             ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
                             : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
                         } hover:scale-[1.03] hover:shadow-lg`}
@@ -834,7 +843,9 @@ const WalletRecharge = () => {
                           <div className="mb-1 flex items-center">
                             <p
                               className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
-                                isActive ? "text-blue-600" : "text-gray-500"
+                                isActives && coupon.couponStatus !== "Expired"
+                                  ? "text-blue-600"
+                                  : "text-gray-500"
                               }`}
                             >
                               {coupon.couponCode}
@@ -850,15 +861,15 @@ const WalletRecharge = () => {
 
                           <div
                             className={`mt-3 rounded-full px-3 py-1 font-Open text-xs font-medium leading-5 ${
-                              isActive
+                              isActives && coupon.couponStatus !== "Expired"
                                 ? "bg-emerald-100 text-emerald-700"
                                 : "bg-amber-100 text-amber-700"
                             }`}
                             style={{ width: "fit-content" }}
                           >
-                            {isActive
+                            {isActives && coupon.couponStatus !== "Expired"
                               ? "Available to use"
-                              : coupon.couponStatus !== "Expired"
+                              : coupon.couponStatus === "Expired"
                               ? "Your coupon has Expired!"
                               : "Unlock with higher balance"}
                           </div>
