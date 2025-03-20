@@ -7,7 +7,7 @@ import PackageDetails from "./PackageDetails";
 import SummaryIcon from "../../assets/singleOrderSummary.svg";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import { capitalizeFirstLetter, commaSeparator } from "../../utils/utility";
 import OneButton from "../../components/Button/OneButton";
 import crossIcon from "../../assets/cross.svg";
 import tickIcon from "../../assets/tick.svg";
@@ -786,7 +786,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         Billable Weight
                       </span>
                       <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                        ₹ {order?.appliedWeight || 0}
+                        {order?.appliedWeight || 0} Kg
                       </span>
                     </div>
 
@@ -808,8 +808,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         onMouseEnter={() => setShowTooltip(true)}
                         onClick={() => setShowTooltip(!showTooltip)}
                       >
-                        <p className="text-[12px] font-normal font-Open lg:text-[16px]">
-                          Order Price:
+                        <p className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Order Price
                         </p>
 
                         {order?.orderType === "B2B" &&
@@ -819,8 +819,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             </span>
                           )}
                       </div>
-                      <p>
-                        {`\u20B9`} {roundedOrderPrice?.toLocaleString("en-IN")}
+                      <p className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        {`\u20B9`}{" "}
+                        {commaSeparator(
+                          order?.base + order?.add + order?.variables
+                        ) || 0}
                       </p>
 
                       {/* Tooltip for Variable Services */}
@@ -919,7 +922,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-Open text-sm text-[#000000] font-normal leading-4">
-                        GST
+                        Tax
                       </span>
                       <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
                         ₹ {order?.tax || 0}

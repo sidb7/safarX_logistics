@@ -125,7 +125,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         variables: value?.variables,
         total: value?.total,
         variableServices: value?.variableServices || {},
-        base: value?.value,
+        base: value?.base,
         add: value?.add,
       };
     });
