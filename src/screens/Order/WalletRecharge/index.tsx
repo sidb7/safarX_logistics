@@ -825,7 +825,7 @@ const WalletRecharge = () => {
                     return (
                       <div
                         key={index}
-                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] ${
+                        className={`relative overflow-hidden rounded-2xl border shadow-md md:w-[380px] ${
                           isActives && coupon.couponStatus !== "Expired"
                             ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
                             : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
