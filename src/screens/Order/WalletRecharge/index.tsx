@@ -825,16 +825,15 @@ const WalletRecharge = () => {
                     return (
                       <div
                         key={index}
-                        className={`relative overflow-hidden rounded-2xl border shadow-md md:w-[380px] ${
+                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] mt-4 ${
                           isActives && coupon.couponStatus !== "Expired"
                             ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
                             : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
                         } hover:scale-[1.03] hover:shadow-lg`}
                         style={{
-                          animationDelay: `${index * 100}ms`,
                           animation: "fadeIn 0.5s ease-out forwards",
-                          opacity: 0,
-                          transform: "translateY(20px)",
+                          opacity: 1, // Ensure visibility
+                          transform: "translateY(0px)",
                         }}
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
