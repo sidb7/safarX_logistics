@@ -7,7 +7,7 @@ import PackageDetails from "./PackageDetails";
 import SummaryIcon from "../../assets/singleOrderSummary.svg";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import { capitalizeFirstLetter, commaSeparator } from "../../utils/utility";
 import OneButton from "../../components/Button/OneButton";
 import crossIcon from "../../assets/cross.svg";
 import tickIcon from "../../assets/tick.svg";
@@ -135,6 +135,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [showAlertBox, setShowAlertBox] = useState(false);
   const [showDateAndTimeModal, setShowDateAndTimeModal] = useState(false);
   const [showPickupDate, setShowPickupDate]: any = useState("");
+  const [yaariCash, setYaariCash] = useState<any>(0);
 
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
 
@@ -770,27 +771,28 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 />
 
                 {/* <MyTable data={order?.boxInfo || []} columns={columns} /> */}
-                <div className="bg-blue-50 p-4 rounded-lg shadow-md">
-                  {/* Title Section */}
-                  {/* <div className="flex items-center justify-between">
+                {yaariCash > 0 && (
+                  <div className="bg-blue-50 p-4 rounded-lg shadow-md">
+                    {/* Title Section */}
+                    {/* <div className="flex items-center justify-between">
                     <div className="font-Open text-sm text-[#000000] font-semibold leading-5">
                       Yaari Points
                     </div>
                     <span className="text-gray-400 cursor-pointer">ℹ️</span>
                   </div> */}
 
-                  {/* Price Breakdown */}
-                  <div className="mt-[15px] space-y-2 text-gray-700">
-                    <div className="flex justify-between">
-                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
-                        Billable Weight
-                      </span>
-                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                        ₹ {order?.appliedWeight || 0}
-                      </span>
-                    </div>
+                    {/* Price Breakdown */}
+                    <div className="mt-[15px] space-y-2 text-gray-700">
+                      <div className="flex justify-between">
+                        <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Billable Weight
+                        </span>
+                        <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                          {order?.appliedWeight || 0} Kg
+                        </span>
+                      </div>
 
-                    {/* <div className="flex justify-between">
+                      {/* <div className="flex justify-between">
                       <span className="font-Open text-sm text-[#000000] font-normal leading-4">
                         Order Price{" "}
                         <span className="text-gray-400 ml-1 cursor-pointer">
@@ -801,153 +803,161 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         ₹ 450
                       </span>
                     </div> */}
-                    {/* Order Price with Tooltip */}
-                    <div className="flex justify-between relative">
-                      <div
-                        className="flex items-center cursor-pointer"
-                        onMouseEnter={() => setShowTooltip(true)}
-                        onClick={() => setShowTooltip(!showTooltip)}
-                      >
-                        <p className="text-[12px] font-normal font-Open lg:text-[16px]">
-                          Order Price:
+                      {/* Order Price with Tooltip */}
+                      <div className="flex justify-between relative">
+                        <div
+                          className="flex items-center cursor-pointer"
+                          onClick={() => setShowTooltip((prev) => !prev)}
+                        >
+                          <p className="font-Open text-sm text-[#000000] font-normal leading-4">
+                            Order Price
+                          </p>
+
+                          {order?.orderType === "B2B" &&
+                            variableServiceKeys.length > 0 && (
+                              <span className="ml-1 w-[14px] h-[14px] rounded-full p-1 bg-[#004EFF] text-white flex items-center justify-center text-xs font-bold">
+                                i
+                              </span>
+                            )}
+                        </div>
+                        <p className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                          {`\u20B9`}{" "}
+                          {commaSeparator(
+                            order?.base + order?.add + order?.variables
+                          ) || 0}
                         </p>
 
-                        {order?.orderType === "B2B" &&
-                          variableServiceKeys.length > 0 && (
-                            <span className="ml-1 w-4 h-4 rounded-full bg-[#004EFF] text-white flex items-center justify-center text-xs font-bold">
-                              i
-                            </span>
-                          )}
-                      </div>
-                      <p>
-                        {`\u20B9`} {roundedOrderPrice?.toLocaleString("en-IN")}
-                      </p>
-
-                      {/* Tooltip for Variable Services */}
-                      {showTooltip && variableServiceKeys.length > 0 && (
-                        <div
-                          ref={tooltipRef}
-                          className="absolute top-full left-0 mt-1 w-full max-w-[300px] p-3 bg-white border border-[#E0E8FF] rounded-lg shadow-lg z-10"
-                        >
-                          <div className="flex justify-between items-center mb-2 border-b border-[#E0E8FF] pb-2">
-                            <p className="text-[14px] font-medium text-[#004EFF]">
-                              Order Price Breakdown
-                            </p>
-                            <p className="text-[12px] font-medium text-[#004EFF]">
-                              Total: {`\u20B9`}{" "}
-                              {roundedOrderPrice?.toLocaleString("en-IN")}
-                            </p>
-                          </div>
-                          <div className="max-h-[250px] overflow-y-auto pr-1">
-                            {/* Base and Add charges */}
-                            <div className="border-b border-[#E0E8FF] pb-2 mb-2">
-                              <div className="flex justify-between py-1 text-[12px]">
-                                <p className="text-[12px] font-medium">
-                                  Base Charge:
-                                </p>
-                                <p>
-                                  {`\u20B9`}{" "}
-                                  {baseValue?.toLocaleString("en-IN")}
-                                </p>
-                              </div>
-                              <div className="flex justify-between py-1 text-[12px]">
-                                <p className="text-[12px] font-medium">
-                                  Additional Charge:
-                                </p>
-                                <p>
-                                  {`\u20B9`} {addValue?.toLocaleString("en-IN")}
-                                </p>
-                              </div>
+                        {/* Tooltip for Variable Services */}
+                        {showTooltip && variableServiceKeys.length > 0 && (
+                          <div
+                            ref={tooltipRef}
+                            className="absolute top-full left-0 mt-1 w-full max-w-[300px] p-3 bg-white border border-[#E0E8FF] rounded-lg shadow-lg z-10"
+                          >
+                            <div className="flex justify-between items-center mb-2 border-b border-[#E0E8FF] pb-2">
+                              <p className="text-[14px] font-medium text-[#004EFF]">
+                                Order Price Breakdown
+                              </p>
+                              <p className="text-[12px] font-medium text-[#004EFF]">
+                                Total: {`\u20B9`}{" "}
+                                {roundedOrderPrice?.toLocaleString("en-IN")}
+                              </p>
                             </div>
-
-                            {/* Variable services section */}
-                            <div className="mb-2">
-                              <div className="flex justify-between py-1 text-[12px] font-medium">
-                                <p>Variable Charges:</p>
-                                <p>
-                                  {`\u20B9`}{" "}
-                                  {/* {variablesValue?.toLocaleString("en-IN")} */}
-                                </p>
+                            <div className="max-h-[250px] overflow-y-auto pr-1">
+                              {/* Base and Add charges */}
+                              <div className="border-b border-[#E0E8FF] pb-2 mb-2">
+                                <div className="flex justify-between py-1 text-[12px]">
+                                  <p className="text-[12px] font-medium">
+                                    Base Charge:
+                                  </p>
+                                  <p>
+                                    {`\u20B9`}{" "}
+                                    {baseValue?.toLocaleString("en-IN")}
+                                  </p>
+                                </div>
+                                <div className="flex justify-between py-1 text-[12px]">
+                                  <p className="text-[12px] font-medium">
+                                    Additional Charge:
+                                  </p>
+                                  <p>
+                                    {`\u20B9`}{" "}
+                                    {addValue?.toLocaleString("en-IN")}
+                                  </p>
+                                </div>
                               </div>
 
-                              {/* List all variable service charges */}
-                              <div className="pl-2">
-                                {variableServiceKeys.map(
-                                  (key) => (
-                                    console.log("key", key),
-                                    (
-                                      <div
-                                        key={key}
-                                        className="flex justify-between py-1 text-[12px] border-b border-[#F2F6FF] last:border-0"
-                                      >
-                                        <p className="text-[12px] font-normal">
-                                          {formatLabel(key)}:
-                                        </p>
-                                        <p>
-                                          {`\u20B9`}{" "}
-                                          {(
-                                            (order?.variableServices?.[
-                                              key
-                                            ] as number) || 0
-                                          ).toLocaleString("en-IN")}
-                                        </p>
-                                      </div>
+                              {/* Variable services section */}
+                              <div className="mb-2">
+                                <div className="flex justify-between py-1 text-[12px] font-medium">
+                                  <p>Variable Charges:</p>
+                                  <p>
+                                    {`\u20B9`}{" "}
+                                    {/* {variablesValue?.toLocaleString("en-IN")} */}
+                                  </p>
+                                </div>
+
+                                {/* List all variable service charges */}
+                                <div className="pl-2">
+                                  {variableServiceKeys.map(
+                                    (key) => (
+                                      console.log("key", key),
+                                      (
+                                        <div
+                                          key={key}
+                                          className="flex justify-between py-1 text-[12px] border-b border-[#F2F6FF] last:border-0"
+                                        >
+                                          <p className="text-[12px] font-normal">
+                                            {formatLabel(key)}:
+                                          </p>
+                                          <p>
+                                            {`\u20B9`}{" "}
+                                            {(
+                                              (order?.variableServices?.[
+                                                key
+                                              ] as number) || 0
+                                            ).toLocaleString("en-IN")}
+                                          </p>
+                                        </div>
+                                      )
                                     )
-                                  )
-                                )}
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          COD Charges
+                        </span>
+                        <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                          ₹ {order?.cod || 0}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Insurance Price
+                        </span>
+                        <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                          ₹ {order?.insurance || 0}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Tax
+                        </span>
+                        <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                          ₹ {order?.tax || 0}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Yaari Cash
+                        </span>
+                        <span className="font-Open text-sm text-[#7CCA62] font-normal leading-4">
+                          - ₹ {commaSeparator(yaariCash)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
-                        COD Charges
-                      </span>
-                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                        ₹ {order?.cod || 0}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
-                        Insurance Price
-                      </span>
-                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                        ₹ {order?.insurance || 0}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
-                        GST
-                      </span>
-                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                        ₹ {order?.tax || 0}
-                      </span>
-                    </div>
-                    {/* <div className="flex justify-between text-green-600">
-                      <span className="font-Open text-sm font-semibold leading-5">
-                        Yaari Cash
-                      </span>
-                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                        -₹ 50
-                      </span>
-                    </div> */}
-                  </div>
 
-                  {/* Divider */}
-                  <hr className="my-[15px] border-gray-300" />
+                    {/* Divider */}
+                    <hr className="my-[15px] border-gray-300" />
 
-                  {/* Gross Total */}
-                  <div className="flex justify-between font-semibold text-lg">
-                    <span className="font-Open text-sm text-[#000000] font-normal leading-4">
-                      Gross Total
-                    </span>
-                    <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                      ₹ {order?.total || 0}
-                    </span>
+                    {/* Gross Total */}
+                    <div className="flex justify-between font-semibold text-lg">
+                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                        Gross Total
+                      </span>
+                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        {/* ₹ {commaSeparator(order?.total - yaariCash) || 0} */}
+                        ₹{" "}
+                        {order?.total - yaariCash < 0
+                          ? "0"
+                          : commaSeparator(order?.total - yaariCash) || "0"}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ) : (
               <>
@@ -1361,6 +1371,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       setResetOtherAddressDetails={setResetOtherAddressDetails}
                       setHighLightField={setHighLightField}
                       highLightField={highLightField}
+                      setYaariCash={setYaariCash}
                     />
                   </div>
 
