@@ -990,8 +990,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 ) : (
                   <OneButton
                     onClick={PlaceOrder}
-                    text={`Place Order ₹ ${
-                      order?.totalPrice ? order?.totalPrice.toFixed(2) : 0
+                    // text={`Place Order ₹ ${
+                    //   order?.totalPrice ? order?.totalPrice.toFixed(2) : 0
+                    // }`}
+                    text={`Place Order ${
+                      order?.totalPrice - yaariCash < 0
+                        ? "0"
+                        : commaSeparator(order?.total - yaariCash) || "0"
                     }`}
                     variant="primary"
                     className="!w-[228px]"
