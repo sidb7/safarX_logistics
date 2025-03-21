@@ -129,11 +129,11 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
     columnsHelper.accessor("clientInfo", {
       header: () => (
         <div className="flex items-center space-x-2">
-          <Checkbox
+          {/* <Checkbox
             checked={selectedRows?.length === safeOrders?.length}
             onChange={handleSelectAll}
             className="h-5 w-5"
-          />
+          /> */}
           <span>Request Id</span>
         </div>
       ),
@@ -142,16 +142,16 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         return (
           <div className="flex flex-col">
             <div className="flex items-center space-x-3 mt-3 mb-2">
-              <Checkbox
+              {/* <Checkbox
                 checked={selectedRows?.includes(clientData._id)}
                 onChange={() => handleSelectRow(clientData._id)}
                 className="h-5 w-5"
-              />
+              /> */}
               <span className="font-Open text-sm font-semibold leading-5">
                 {clientData?.sellerId}
               </span>
             </div>
-            <div className="ml-8 mb-3">
+            <div className="mb-3">
               <span className="font-Open text-xs font-normal leading-4 block">
                 Name
               </span>
