@@ -25,6 +25,7 @@ interface CustomInputWithDropDownProps {
   resetOtherAddressDetails: any;
   setResetOtherAddressDetails: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setYaariCash?: any;
 }
 
 const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
@@ -42,6 +43,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   resetOtherAddressDetails,
   setResetOtherAddressDetails,
   onChange = () => {},
+  setYaariCash,
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
   const [inputValue, setInputValue] = useState<any>(value);
@@ -82,7 +84,11 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     });
 
     if (data?.success) {
+      if (data?.yaariCash) {
+        setYaariCash(data?.yaariCash);
+      }
       let options = data?.data;
+
       options?.forEach((item: any) => {
         item.name = item?.partnerName?.replace(/\w+/g, function (w: any) {
           return w[0].toUpperCase() + w.slice(1).toLowerCase();

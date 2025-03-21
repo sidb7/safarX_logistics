@@ -28,6 +28,7 @@ interface IIndexProps {
   setResetOtherAddressDetails: any;
   setHighLightField: any;
   highLightField: any;
+  setYaariCash?: any;
 }
 
 const Index: React.FunctionComponent<IIndexProps> = ({
@@ -41,6 +42,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
   setResetOtherAddressDetails,
   setHighLightField,
   highLightField,
+  setYaariCash,
 }: IIndexProps) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   function validateForServicebility(order: any) {
@@ -172,6 +174,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
                   setShowPickupDate={setShowPickupDate}
                   resetOtherAddressDetails={resetOtherAddressDetails}
                   setResetOtherAddressDetails={setResetOtherAddressDetails}
+                  setYaariCash={setYaariCash}
                 />
               </div>
             </div>
