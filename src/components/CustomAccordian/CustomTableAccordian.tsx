@@ -760,11 +760,21 @@ const Accordion = (props: ICustomTableAccordion) => {
         awb: orderData?.awb ? orderData?.awb : "0",
       });
 
+      const sellerData = data?.data?.[0]?.data?.[0];
       const boxData = await POST(GET_SELLER_BOX);
-      const buyerConfirmationOrder = await POST(GET_ORDER_CONFIRMATION_LOG, {
-        orderId: data?.data?.[0]?.data?.[0]?.orderId,
-      });
-      console.log("buyerConfirmationOrder", buyerConfirmationOrder);
+      const buyerConfirmationPayload = {
+        orderId:
+          sellerData?.status?.length == 0 ||
+          sellerData?.status[0]?.currentStatus == "DRAFT" ||
+          sellerData?.status[0]?.currentStatus == "FAILED"
+            ? sellerData?.tempOrderId
+            : sellerData?.orderId,
+      };
+      const buyerConfirmationOrder = await POST(
+        GET_ORDER_CONFIRMATION_LOG,
+        buyerConfirmationPayload
+      );
+      // console.log("buyerConfirmationOrder", buyerConfirmationOrder);
       setOrderPayload({
         ...orderPayload,
         orderId: data?.data?.[0]?.data?.[0]?.orderId,
