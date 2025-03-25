@@ -346,9 +346,13 @@ const Index = () => {
       "amazon_state",
       "spapi_oauth_code",
     ];
+    let urlToken = "";
+    if (params?.token) {
+      urlToken = params.token;
+    } else {
+      urlToken = sellerInfo?.token;
+    }
 
-    // const urlToken = params.token;
-    const urlToken = sellerInfo?.token;
     const sellerId = params.sellerId;
 
     const header = {
@@ -398,10 +402,22 @@ const Index = () => {
             //   `${response?.data?.data[0]?.sellerId}_${tokenKey}`,
             //   urlToken
             // );
-            const { sessionId, sellerInfo } = sessionManager({
-              ...response?.data?.data[0],
-              token: urlToken,
-            });
+            let sellerData = {};
+            if (params?.token) {
+              sellerData = {
+                ...response?.data?.data[0],
+                token: urlToken,
+                name: (response?.data?.data[0]?.kycDetails?.fullName)
+                  .toString()
+                  .split(" ")[0],
+              };
+            } else {
+              sellerData = {
+                ...response?.data?.data[0],
+                token: urlToken,
+              };
+            }
+            const { sessionId, sellerInfo } = sessionManager(sellerData);
             // localStorage.setItem(
             //   "userInfo",
             //   JSON.stringify(response?.data?.data[0])

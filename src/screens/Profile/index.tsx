@@ -42,6 +42,7 @@ export const Profile = () => {
         imageUrl: data?.data?.[0]?.privateCompany?.logoUrl,
         brandName: data?.data?.[0]?.privateCompany?.brandName,
       });
+      sessionManager({ privateCompany: data?.data?.[0]?.privateCompany });
     } else {
       toast.error(data?.message);
     }
@@ -93,10 +94,18 @@ export const Profile = () => {
 
     let formData = new FormData();
     formData.append("brandName", brandingModalDetails.brandName);
-    formData.append("file", brandingModalDetails?.file);
 
-    // Check if image URL is provided
-    if (brandingModalDetails?.imageUrl) {
+    // Only append file if it exists
+    if (brandingModalDetails?.file) {
+      formData.append("file", brandingModalDetails.file);
+    }
+
+    formData.append("facebookUrl", brandingModalDetails.facebookUrl || "");
+    formData.append("instagramUrl", brandingModalDetails.instagramUrl || "");
+    formData.append("whatsappUrl", brandingModalDetails.whatsappUrl || "");
+
+    // Check if a new image is being uploaded
+    if (brandingModalDetails?.file && brandingModalDetails?.imageUrl) {
       const img = new Image();
       img.src = brandingModalDetails.imageUrl;
 
@@ -135,10 +144,15 @@ export const Profile = () => {
       if (data?.success) {
         toast.success(data.message);
         setBrandingModal(false);
-        window.location.reload();
+        sessionManager({ brandDetails: "true" });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
         // localStorage.setItem("brandDetails", "true"); // this is required while updating from accordian on home page
         // window.location.reload(); // Uncomment if needed
-        sessionManager({ brandDetails: "true" });
+
         // getProfileData(); // Uncomment if needed
       } else {
         toast.error(data.message);
