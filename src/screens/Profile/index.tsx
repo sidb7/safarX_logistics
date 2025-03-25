@@ -48,6 +48,7 @@ export const Profile = () => {
         instagramUrl: data?.data?.[0]?.privateCompany?.instagramUrl || "",
         whatsappUrl: data?.data?.[0]?.privateCompany?.whatsappUrl || "",
       });
+      sessionManager({ privateCompany: data?.data?.[0]?.privateCompany });
     } else {
       toast.error(data?.message);
     }
@@ -134,27 +135,27 @@ export const Profile = () => {
     if (!isFormValid()) {
       return toast.error("Brand name is required.");
     }
-  
+
     let formData = new FormData();
     formData.append("brandName", brandingModalDetails.brandName);
-    
+
     // Only append file if it exists
     if (brandingModalDetails?.file) {
       formData.append("file", brandingModalDetails.file);
     }
-    
+
     formData.append("facebookUrl", brandingModalDetails.facebookUrl || "");
     formData.append("instagramUrl", brandingModalDetails.instagramUrl || "");
     formData.append("whatsappUrl", brandingModalDetails.whatsappUrl || "");
-  
+
     // Check if a new image is being uploaded
     if (brandingModalDetails?.file && brandingModalDetails?.imageUrl) {
       const img = new Image();
       img.src = brandingModalDetails.imageUrl;
-  
+
       img.onload = async () => {
         const { naturalHeight: height, naturalWidth: width } = img;
-  
+
         if (height > 200 || width > 700) {
           return toast.error(
             "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
@@ -163,7 +164,7 @@ export const Profile = () => {
           await submitFormData(formData);
         }
       };
-  
+
       img.onerror = () => {
         toast.error("Failed to load the image. Please check the file.");
       };
@@ -172,9 +173,6 @@ export const Profile = () => {
       await submitFormData(formData);
     }
   };
-
-
-
 
   // Function to handle form submission
   const submitFormData = async (formData: any) => {
@@ -190,10 +188,15 @@ export const Profile = () => {
       if (data?.success) {
         toast.success(data.message);
         setBrandingModal(false);
-        window.location.reload();
+        sessionManager({ brandDetails: "true" });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
         // localStorage.setItem("brandDetails", "true"); // this is required while updating from accordian on home page
         // window.location.reload(); // Uncomment if needed
-        sessionManager({ brandDetails: "true" });
+
         // getProfileData(); // Uncomment if needed
       } else {
         toast.error(data.message);
