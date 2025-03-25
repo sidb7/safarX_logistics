@@ -292,6 +292,35 @@ const WalletRecharge = () => {
     setIsedit(true);
   };
 
+  const formatDate = (dateStr: any) => {
+    // Create a new Date object from the ISO string
+    const dateObj = new Date(dateStr);
+
+    // Get the day of the month
+    const day = dateObj.getDate();
+
+    // Function to get the day suffix (e.g., 'st', 'nd', 'rd', 'th')
+    const getDaySuffix = (day: any) => {
+      if (day > 3 && day < 21) return "th"; // special case for 11th, 12th, 13th, etc.
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    };
+
+    // Get the abbreviated month name (e.g., 'Jan', 'Feb', etc.)
+    const month = dateObj.toLocaleString("default", { month: "short" });
+
+    // Return the formatted string
+    return `${day}${getDaySuffix(day)} ${month}`;
+  };
+
   const rechargeStatusCheck = async (orderId: number) => {
     const payload = {
       // walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
@@ -843,7 +872,7 @@ const WalletRecharge = () => {
                         onMouseLeave={() => setHoveredIndex(null)}
                       >
                         <div className="relative z-10 px-4 py-3">
-                          <div className="mb-1 flex items-center">
+                          <div className="mb-1 flex justify-between items-center">
                             <p
                               className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
                                 isActives && coupon.couponStatus !== "Expired"
@@ -852,6 +881,15 @@ const WalletRecharge = () => {
                               }`}
                             >
                               {coupon.couponCode}
+                            </p>
+                            <p
+                              className={`flex px-5 py-1 rounded-xl whitespace-nowrap font-Open text-[14px] font-semibold  ${
+                                isActives && coupon.couponStatus !== "Expired"
+                                  ? "bg-emerald-100 text-emerald-600"
+                                  : "bg-gray-100 text-gray-400"
+                              }`}
+                            >
+                              {formatDate(coupon.expiryDate)}{" "}
                             </p>
                           </div>
 

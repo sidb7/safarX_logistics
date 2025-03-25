@@ -5,12 +5,16 @@ import RupeeIcon from "../../../assets/common/Rupee.svg";
 import { useState } from "react";
 import Collapsible from "react-collapsible";
 // import { Cancelled } from "../StatusComponents";
-import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
-import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
+// import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
+// import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
-import filterIconTable from "../../../assets/Transaction/filtericon.svg";
-import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
+// import filterIconTable from "../../../assets/Transaction/filtericon.svg";
+// import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
+import { date_DD_MMM_YYYY_HH_MM } from "../../../utils/dateFormater";
+import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
+import PendingIcon from "../../../assets/pendingRed.svg";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 interface ICashbackProps {
   data: {
@@ -19,86 +23,225 @@ interface ICashbackProps {
     date: string;
     time: string;
     description: string;
+    type: string;
+    yaariCashBalance: number;
+    transactionId: string;
+    status: string;
+    remark: string;
   };
 }
 
 const columnsHelper = createColumnHelper<any>();
+
 export const cashbackDetailsColumns = () => {
+  const renderStatusComponent = (status: string) => {
+    return (
+      <div>
+        <div
+          className={`inline-flex items-center text-xs justify-center gap-x-2 ${
+            status.toUpperCase() === "SUCCESS"
+              ? "bg-[#F2FAEF] border-[#7CCA62]"
+              : "bg-[#FEEEEB] border-[#F35838]"
+          }  rounded-sm border-[0.5px] px-3 py-[6px]`}
+        >
+          <img
+            src={`${
+              status.toUpperCase() === "SUCCESS" ? bookedIcon : PendingIcon
+            }`}
+            alt=""
+            width={20}
+          />
+          <span
+            className={`text-xs font-semibold font-Open leading-5  ${
+              status.toUpperCase() === "SUCCESS"
+                ? "text-[#7CCA62]"
+                : "text-[#F35838]"
+            }  items-center`}
+          >
+            {status.toUpperCase()}
+          </span>
+        </div>
+      </div>
+    );
+  };
   return [
     columnsHelper.accessor("createdAt", {
-      header: () => {
+      header: (props: any) => {
         return (
-          <div className="flex justify-between items-center min-w-[208px]">
-            <div>
-              <h1 className="text-sm font-semibold leading-5 ">Date</h1>
+          <div className="flex justify-between items-center">
+            <div className="flex justify-center items-center">
+              {/* <PartialChecked
+                checked={props.table?.getIsAllRowsSelected()}
+                onChange={props?.table?.getToggleAllRowsSelectedHandler()}
+                intermediate={props?.table?.getIsSomeRowsSelected()}
+              /> */}
+              <h1 className="font-Open font-semibold leading-5 text-sm">
+                Date
+              </h1>
             </div>
-            <div className="flex">
-              <img src={sortIconTable} alt="" />
+            {/* <div className="flex">
+              <img src={sortIconTable} alt="" onClick={handleSortClick} />
+            </div> */}
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        // console.log("timestamp", info.getValue());
+        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(info.getValue());
+
+        return (
+          <div className="flex items-center">
+            {/* <div className="flex items-center justify-center mr-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={info?.row?.getIsSelected()}
+                onChange={info?.row?.getToggleSelectedHandler()}
+              />
+            </div> */}
+            <div className="flex flex-col  whitespace-nowrap my-4 ">
+              <span className="font-Open font-normal leading-5 text-sm">
+                {formattedDateTime.split(",")[0]}
+              </span>
+              <span className="font-Open font-normal leading-5 text-sm">
+                {formattedDateTime.split(",")[1]}
+              </span>
             </div>
           </div>
         );
       },
-      cell: (info: any) => {
-        return (
-          <div className="whitespace-nowrap my-4 space-y-2">23 May 2023</div>
-        );
-      },
     }),
-    columnsHelper.accessor("received", {
+    columnsHelper.accessor("transactionId", {
       header: () => {
         return (
-          <div className="flex justify-between items-center min-w-[254px] ">
-            <h1 className="text-sm font-semibold leading-5 ">Recieved via</h1>
-            <img src={sortIconTable} alt="" />
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px] ">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Transaction ID
+            </h1>
+            {/* <img src={sortIconTable} alt="" /> */}
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="flex  whitespace-nowrap">
-            <p className="uppercase">coupon</p>
+          <div className="flex  items-center justify-between ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis font-Open font-normal leading-5 text-sm   ">
+              {info.row.original.transactionId}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip stringToBeCopied={info.row.original.transactionId} />
+            </div>
           </div>
         );
       },
     }),
-    columnsHelper.accessor("amount", {
+    columnsHelper.accessor("awb", {
       header: () => {
         return (
-          <div className="flex justify-between items-center min-w-[220px]">
-            <h1 className="text-sm font-semibold leading-5 ">Amount </h1>
+          <div className="flex whitespace-nowrap justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Tracking No
+            </h1>
+            {/* <img src={sortIconTable} alt="" /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  items-center justify-between ">
+            <div className=" font-Open font-normal leading-5 text-sm   ">
+              {info.row.original.awb}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip stringToBeCopied={info.row.original.awb} />
+            </div>
+          </div>
+        );
+      },
+    }),
 
-            <img src={sortIconTable} alt="" />
+    columnsHelper.accessor("yaariCashBalance", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Balance
+            </h1>
+            {/* <img src={sortIconTable} alt="" onClick={handleSortClick} /> */}
           </div>
         );
       },
       cell: (info: any) => {
+        let yaariCashBalance = parseFloat(info.getValue()).toFixed(2);
+
         return (
-          <div className="flex whitespace-nowrap ">
-            <span>₹ 5000</span>
+          <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
+            ₹ {yaariCashBalance}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("description", {
+
+    columnsHelper.accessor("type", {
       header: () => {
         return (
-          <div className="flex justify-between items-center min-w-[371px] ">
-            <h1>Description</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">Type</h1>
 
-            <img src={sortIconTable} alt="" />
+            {/* <img src={sortIconTable} alt="" /> */}
           </div>
         );
       },
       cell: (info: any) => {
         return (
           <div className="flex">
-            <span>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Dignissimos deleniti itaque laboriosam, voluptatibus inventore
-              iure ab! Quia asperiores laborum consequatur?
+            <span className="font-Open font-normal leading-5 text-sm">
+              {capitalizeFirstLetter(info?.row?.original?.type) || "-"}
             </span>
           </div>
         );
+      },
+    }),
+
+    columnsHelper.accessor("remark", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Remark
+            </h1>
+
+            {/* <img src={sortIconTable} alt="" /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex">
+            <span className="font-Open font-normal leading-5 text-sm">
+              {capitalizeFirstLetter(info?.row?.original?.remark) || "-"}
+            </span>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("status", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="font-Open font-semibold leading-5 text-sm">
+                Status
+              </h1>
+            </div>
+            {/* <div className="flex">
+              <img src={sortIconTable} alt="" />
+            </div> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return renderStatusComponent(info.getValue());
       },
     }),
 
