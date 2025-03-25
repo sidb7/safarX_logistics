@@ -30,9 +30,6 @@ export const Profile = () => {
     imageUrl: "",
     brandName: "",
     file: null,
-    facebookUrl: "",
-    instagramUrl: "",
-    whatsappUrl: "",
   });
 
   const getProfileData = async () => {
@@ -44,9 +41,6 @@ export const Profile = () => {
         ...brandingModalDetails,
         imageUrl: data?.data?.[0]?.privateCompany?.logoUrl,
         brandName: data?.data?.[0]?.privateCompany?.brandName,
-        facebookUrl: data?.data?.[0]?.privateCompany?.facebookUrl || "",
-        instagramUrl: data?.data?.[0]?.privateCompany?.instagramUrl || "",
-        whatsappUrl: data?.data?.[0]?.privateCompany?.whatsappUrl || "",
       });
     } else {
       toast.error(data?.message);
@@ -92,89 +86,40 @@ export const Profile = () => {
   const isFormValid = () => {
     return brandingModalDetails.brandName.trim() !== "";
   };
-  // const updateBrandingDetails = async () => {
-  //   if (!isFormValid()) {
-  //     return toast.error("All the above fields are required.");
-  //   }
-
-  //   let formData = new FormData();
-  //   formData.append("brandName", brandingModalDetails.brandName);
-  //   formData.append("file", brandingModalDetails?.file);
-  //   formData.append("facebookUrl", brandingModalDetails.facebookUrl || "");
-  //   formData.append("instagramUrl", brandingModalDetails.instagramUrl || "");
-  //   formData.append("whatsappUrl", brandingModalDetails.whatsappUrl || "");
-
-  //   // Check if image URL is provided
-  //   if (brandingModalDetails?.imageUrl) {
-  //     const img = new Image();
-  //     img.src = brandingModalDetails.imageUrl;
-
-  //     img.onload = async () => {
-  //       const { naturalHeight: height, naturalWidth: width } = img;
-
-  //       if (height > 200 || width > 700) {
-  //         return toast.error(
-  //           "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
-  //         );
-  //       } else {
-  //         await submitFormData(formData); // Call function to handle form submission
-  //       }
-  //     };
-
-  //     img.onerror = () => {
-  //       toast.error("Failed to load the image. Please check the URL or file.");
-  //     };
-  //   } else {
-  //     // If no image URL, proceed directly to form submission
-  //     await submitFormData(formData);
-  //   }
-  // };
-
   const updateBrandingDetails = async () => {
     if (!isFormValid()) {
-      return toast.error("Brand name is required.");
+      return toast.error("All the above fields are required.");
     }
-  
+
     let formData = new FormData();
     formData.append("brandName", brandingModalDetails.brandName);
-    
-    // Only append file if it exists
-    if (brandingModalDetails?.file) {
-      formData.append("file", brandingModalDetails.file);
-    }
-    
-    formData.append("facebookUrl", brandingModalDetails.facebookUrl || "");
-    formData.append("instagramUrl", brandingModalDetails.instagramUrl || "");
-    formData.append("whatsappUrl", brandingModalDetails.whatsappUrl || "");
-  
-    // Check if a new image is being uploaded
-    if (brandingModalDetails?.file && brandingModalDetails?.imageUrl) {
+    formData.append("file", brandingModalDetails?.file);
+
+    // Check if image URL is provided
+    if (brandingModalDetails?.imageUrl) {
       const img = new Image();
       img.src = brandingModalDetails.imageUrl;
-  
+
       img.onload = async () => {
         const { naturalHeight: height, naturalWidth: width } = img;
-  
+
         if (height > 200 || width > 700) {
           return toast.error(
             "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
           );
         } else {
-          await submitFormData(formData);
+          await submitFormData(formData); // Call function to handle form submission
         }
       };
-  
+
       img.onerror = () => {
-        toast.error("Failed to load the image. Please check the file.");
+        toast.error("Failed to load the image. Please check the URL or file.");
       };
     } else {
-      // If no new image is uploaded, proceed directly to form submission
+      // If no image URL, proceed directly to form submission
       await submitFormData(formData);
     }
   };
-
-
-
 
   // Function to handle form submission
   const submitFormData = async (formData: any) => {
