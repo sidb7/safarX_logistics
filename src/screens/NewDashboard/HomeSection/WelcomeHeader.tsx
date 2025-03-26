@@ -93,9 +93,12 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   const bookedCount = getCount("BOOKED") || 0;
   const notPickedCount = getCount("NOT PICKED") || 0;
   const inTransitCount = getCount("IN TRANSIT") || 0;
+  const pickedUp = getCount("PICKED UP") || 0;
   const outForDeliveryCount = getCount("OUT FOR DELIVERY") || 0;
   const exceptionCount = getCount("EXCEPTION") || 0;
   const cancelledCount = getCount("CANCELLED") || 0;
+  const cancelRequested = getCount("CANCELLED REQUESTED") || 0;
+
   return (
     <>
       <div className="px-4 py-[10px] border-1 border-[#E8E8E8] rounded-2xl shadow-md bg-[#EBFCFF] mt-[35px] mb-6 md:mb-0">
@@ -154,7 +157,7 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
                           Orders In Transit
                         </p>
                         <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
-                          {inTransitCount || "0"}
+                          {inTransitCount + pickedUp || "0"}
                         </p>
                       </div>
                     </div>
@@ -187,7 +190,7 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
                           Orders Cancelled
                         </p>
                         <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
-                          {cancelledCount || "0"}
+                          {cancelledCount + cancelRequested || "0"}
                         </p>
                       </div>
                     </div>
