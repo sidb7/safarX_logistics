@@ -1,162 +1,4 @@
-// import React from "react";
-// import WebCloseIcon from "../../../assets/CloseIcon.svg";
-// import CustomInputBox from "../../../components/Input";
-// import CustomInputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
-// import CustomButton from "../../../components/Button";
-
-// interface ITypeProps {
-//   setBrandingModal?: any;
-//   brandingModalDetails?: any;
-//   setBrandingModalDetails: any;
-//   updateBrandingDetails: any;
-//   BrandingDetails?: any;
-// }
-
-// const BrandingModalContent = (props: ITypeProps) => {
-//   const {
-//     setBrandingModal,
-//     brandingModalDetails,
-//     setBrandingModalDetails,
-//     updateBrandingDetails,
-//   } = props;
-
-//   const handleImageChange = (event: any) => {
-//     const file = event.target.files[0];
-
-//     if (file) {
-//       const url: any = URL.createObjectURL(file) || null;
-//       setBrandingModalDetails({
-//         ...brandingModalDetails,
-//         image: event.target.files[0].name,
-//         imageUrl: url,
-//         file: file,
-//       });
-//     }
-//   };
-
-//   return (
-//     <div className="flex flex-col ">
-//       <div className="flex flex-col p-5 gap-y-5">
-//         <div className="flex items-center justify-between">
-//           <p className="text-xl font-Lato font-semibold text-[#1C1C1C]">
-//             Edit Branding Details
-//           </p>
-
-//           <img
-//             src={WebCloseIcon}
-//             alt=""
-//             className="cursor-pointer"
-//             onClick={setBrandingModal}
-//           />
-//         </div>
-
-//         <div>
-//           {brandingModalDetails?.imageUrl && (
-//             <div className="w-full h-[200px] overflow-hidden flex justify-center items-center mb-5">
-//               <img
-//                 src={brandingModalDetails?.imageUrl}
-//                 alt=""
-//                 className="w-[700px] h-[200px] object-contain"
-//                 style={{
-//                   border: "1px solid #cccccc",
-//                   borderRadius: "4px",
-//                 }}
-//               />
-//             </div>
-//           )}
-
-//           <CustomInputWithFileUpload
-//             label="Upload logo"
-//             className="font-Open  "
-//             inputClassName="!w-full"
-//             type="file"
-//             onChange={handleImageChange}
-//             isRequired={false}
-//           />
-//         </div>
-
-//         <div>
-//           <CustomInputBox
-//             label="Brand Name"
-//             onChange={(e: any) =>
-//               setBrandingModalDetails({
-//                 ...brandingModalDetails,
-//                 brandName: e.target.value,
-//               })
-//             }
-//             value={brandingModalDetails.brandName}
-//           />
-//         </div>
-
-//         {/* Social Media URL Fields - these are the new additions */}
-//         <div>
-//           <CustomInputBox
-//             label="Facebook URL"
-//             onChange={(e: any) =>
-//               setBrandingModalDetails({
-//                 ...brandingModalDetails,
-//                 facebookUrl: e.target.value,
-//               })
-//             }
-//             value={brandingModalDetails.facebookUrl || ""}
-//             placeholder=""
-//           />
-//         </div>
-
-//         <div>
-//           <CustomInputBox
-//             label="Instagram URL"
-//             onChange={(e: any) =>
-//               setBrandingModalDetails({
-//                 ...brandingModalDetails,
-//                 instagramUrl: e.target.value,
-//               })
-//             }
-//             value={brandingModalDetails.instagramUrl || ""}
-//             placeholder=""
-//           />
-//         </div>
-
-//         <div>
-//           <CustomInputBox
-//             label="WhatsApp URL"
-//             onChange={(e: any) =>
-//               setBrandingModalDetails({
-//                 ...brandingModalDetails,
-//                 whatsappUrl: e.target.value,
-//               })
-//             }
-//             value={brandingModalDetails.whatsappUrl || ""}
-//             placeholder=""
-//           />
-//         </div>
-//       </div>
-
-//       <div
-//         className="hidden lg:flex justify-end shadow-lg border-[1px]  bg-[#FFFFFF] p-5 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0 "
-//         style={{ width: "-webkit-fill-available" }}
-//       >
-//         <div className="flex h-full w-full justify-end gap-x-6">
-//           <CustomButton
-//             text="Cancel"
-//             onClick={setBrandingModal}
-//             className="!w-[100px] !rounded"
-//           />
-//           <CustomButton
-//             text="Save"
-//             onClick={updateBrandingDetails}
-//             className="!w-[100px] !rounded"
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default BrandingModalContent;
-
-
-import React from "react";
+import React, { useState } from "react";
 import WebCloseIcon from "../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
@@ -178,6 +20,13 @@ const BrandingModalContent = (props: ITypeProps) => {
     updateBrandingDetails,
   } = props;
 
+  // State to track URL validation errors
+  const [urlErrors, setUrlErrors] = useState({
+    facebookUrl: "",
+    instagramUrl: "",
+    whatsappUrl: ""
+  });
+
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
 
@@ -188,6 +37,248 @@ const BrandingModalContent = (props: ITypeProps) => {
         image: event.target.files[0].name,
         imageUrl: url,
         file: file,
+      });
+    }
+  };
+
+  // URL validation functions
+  const validateFacebookUrl = (url: string) => {
+    if (!url) return true; // Empty URL is valid (optional field)
+    
+    // Normalize the URL by adding https:// if missing
+    let normalizedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      normalizedUrl = 'https://' + url;
+    }
+    
+    const regex = /^https?:\/\/(www\.)?facebook\.com\/[\w\-.]+\/?$/;
+    
+    // Update the state with normalized URL if valid
+    if (regex.test(normalizedUrl)) {
+      // Only normalize if the validation passes
+      if (normalizedUrl !== url) {
+        setTimeout(() => {
+          setBrandingModalDetails({
+            ...brandingModalDetails,
+            facebookUrl: normalizedUrl
+          });
+        }, 0);
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const validateInstagramUrl = (url: string) => {
+    if (!url) return true; // Empty URL is valid (optional field)
+    
+    // Normalize the URL by adding https:// if missing
+    let normalizedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      normalizedUrl = 'https://' + url;
+    }
+    
+    const regex = /^https?:\/\/(www\.)?instagram\.com\/[\w\-.]+\/?$/;
+    
+    // Update the state with normalized URL if valid
+    if (regex.test(normalizedUrl)) {
+      // Only normalize if the validation passes
+      if (normalizedUrl !== url) {
+        setTimeout(() => {
+          setBrandingModalDetails({
+            ...brandingModalDetails,
+            instagramUrl: normalizedUrl
+          });
+        }, 0);
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const validateWhatsappUrl = (url: string) => {
+    if (!url) return true; // Empty URL is valid (optional field)
+    
+    // Normalize the URL by adding https:// if missing
+    let normalizedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      normalizedUrl = 'https://' + url;
+    }
+    
+    // Extract the number from the URL for additional validation
+    let phoneNumber = "";
+    
+    // Try to extract from wa.me format
+    const waMatch = normalizedUrl.match(/^https?:\/\/(www\.)?wa\.me\/(\d+)\/?$/);
+    if (waMatch && waMatch[2]) {
+      phoneNumber = waMatch[2];
+    }
+    
+    // Try to extract from whatsapp.com format
+    const whatsappMatch = normalizedUrl.match(/^https?:\/\/(www\.|api\.)?whatsapp\.com\/send\?phone=(\d+)$/);
+    if (whatsappMatch && whatsappMatch[2]) {
+      phoneNumber = whatsappMatch[2];
+    }
+    
+    // Check if number is 10 digits and doesn't start with 0-6
+    if (phoneNumber) {
+      const isValidLength = phoneNumber.length === 10;
+      const startsWithValidDigit = !(/^[0-6]/).test(phoneNumber.charAt(0));
+      
+      if (isValidLength && startsWithValidDigit) {
+        // Only normalize if the validation passes
+        if (normalizedUrl !== url) {
+          setTimeout(() => {
+            setBrandingModalDetails({
+              ...brandingModalDetails,
+              whatsappUrl: normalizedUrl
+            });
+          }, 0);
+        }
+        return true;
+      }
+      return false;
+    }
+    
+    return false;
+  };
+
+  // Handle change events for URL inputs with real-time validation
+  const handleFacebookChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setBrandingModalDetails({
+      ...brandingModalDetails,
+      facebookUrl: value
+    });
+    
+    // Clear error if the field is empty or valid
+    if (!value || validateFacebookUrl(value)) {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: ""
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: "Invalid Facebook URL format. Expected: www.facebook.com/username"
+      });
+    }
+  };
+
+  const handleInstagramChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setBrandingModalDetails({
+      ...brandingModalDetails,
+      instagramUrl: value
+    });
+    
+    // Clear error if the field is empty or valid
+    if (!value || validateInstagramUrl(value)) {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: ""
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: "Invalid Instagram URL format. Expected: www.instagram.com/username"
+      });
+    }
+  };
+
+  const handleWhatsappChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setBrandingModalDetails({
+      ...brandingModalDetails,
+      whatsappUrl: value
+    });
+    
+    // Clear error if the field is empty or valid
+    if (!value || validateWhatsappUrl(value)) {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: ""
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: "Expected: wa.me/number or api.whatsapp.com/send?phone=number (10-digit number starting with 7-9)"
+      });
+    }
+  };
+
+  // Handle blur events for URL validation (keep these for initial blur validation)
+  const handleFacebookBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
+    
+    // Clear the error if field is empty
+    if (!url) {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: ""
+      });
+      return;
+    }
+    
+    if (!validateFacebookUrl(url)) {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: "Invalid Facebook URL format. Expected: www.facebook.com/username"
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: ""
+      });
+    }
+  };
+
+  const handleInstagramBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
+    
+    // Clear the error if field is empty
+    if (!url) {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: ""
+      });
+      return;
+    }
+    
+    if (!validateInstagramUrl(url)) {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: "Invalid Instagram URL format. Expected: www.instagram.com/username"
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: ""
+      });
+    }
+  };
+
+  const handleWhatsappBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
+    
+    // Clear the error if field is empty
+    if (!url) {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: ""
+      });
+      return;
+    }
+    
+    if (!validateWhatsappUrl(url)) {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: "Expected: wa.me/number or api.whatsapp.com/send?phone=number (10-digit number starting with 7-9)"
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: ""
       });
     }
   };
@@ -261,7 +352,7 @@ const BrandingModalContent = (props: ITypeProps) => {
 
           <CustomInputWithFileUpload
             label="Upload logo"
-            className="font-Open  "
+            className="font-Open"
             inputClassName="!w-full"
             type="file"
             onChange={handleImageChange}
@@ -283,43 +374,37 @@ const BrandingModalContent = (props: ITypeProps) => {
           />
         </div>
 
-        {/* Social Media URL Fields - these are the new additions */}
+        {/* Social Media URL Fields with real-time validation */}
         <div>
           <CustomInputBox
             label="Facebook URL"
-            onChange={(e: any) =>
-              setBrandingModalDetails({
-                ...brandingModalDetails,
-                facebookUrl: e.target.value,
-              })
-            }
+            onChange={handleFacebookChange}
+            onBlur={handleFacebookBlur}
             value={brandingModalDetails.facebookUrl || ""}
+            // placeholder="www.facebook.com/username"
+            errorMessage={urlErrors.facebookUrl || false}
           />
         </div>
 
         <div>
           <CustomInputBox
             label="Instagram URL"
-            onChange={(e: any) =>
-              setBrandingModalDetails({
-                ...brandingModalDetails,
-                instagramUrl: e.target.value,
-              })
-            }
+            onChange={handleInstagramChange}
+            onBlur={handleInstagramBlur}
             value={brandingModalDetails.instagramUrl || ""}
+            // placeholder="www.instagram.com/username"
+            errorMessage={urlErrors.instagramUrl || false}
           />
         </div>
 
         <div>
           <CustomInputBox
             label="WhatsApp URL"
-            onChange={(e: any) =>
-              setBrandingModalDetails({
-                ...brandingModalDetails,
-                whatsappUrl: e.target.value,
-              })
-            }
+            onChange={handleWhatsappChange}
+            onBlur={handleWhatsappBlur}
             value={brandingModalDetails.whatsappUrl || ""}
+            // placeholder="wa.me/number"
+            errorMessage={urlErrors.whatsappUrl || false}
           />
         </div>
       </div>
@@ -337,7 +422,8 @@ const BrandingModalContent = (props: ITypeProps) => {
           <CustomButton
             text="Save"
             onClick={updateBrandingDetails}
-            className="!w-[100px] !rounded"
+            className="!w-[100px] !rounded bg-[#4D83FF] text-white"
+            disabled={urlErrors.facebookUrl || urlErrors.instagramUrl || urlErrors.whatsappUrl ? true : false}
           />
         </div>
       </div>
