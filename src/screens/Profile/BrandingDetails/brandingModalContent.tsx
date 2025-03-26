@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import WebCloseIcon from "../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
@@ -20,6 +20,13 @@ const BrandingModalContent = (props: ITypeProps) => {
     updateBrandingDetails,
   } = props;
 
+  // State to track URL validation errors
+  const [urlErrors, setUrlErrors] = useState({
+    facebookUrl: "",
+    instagramUrl: "",
+    whatsappUrl: ""
+  });
+
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
 
@@ -30,6 +37,248 @@ const BrandingModalContent = (props: ITypeProps) => {
         image: event.target.files[0].name,
         imageUrl: url,
         file: file,
+      });
+    }
+  };
+
+  // URL validation functions
+  const validateFacebookUrl = (url: string) => {
+    if (!url) return true; // Empty URL is valid (optional field)
+    
+    // Normalize the URL by adding https:// if missing
+    let normalizedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      normalizedUrl = 'https://' + url;
+    }
+    
+    const regex = /^https?:\/\/(www\.)?facebook\.com\/[\w\-.]+\/?$/;
+    
+    // Update the state with normalized URL if valid
+    if (regex.test(normalizedUrl)) {
+      // Only normalize if the validation passes
+      if (normalizedUrl !== url) {
+        setTimeout(() => {
+          setBrandingModalDetails({
+            ...brandingModalDetails,
+            facebookUrl: normalizedUrl
+          });
+        }, 0);
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const validateInstagramUrl = (url: string) => {
+    if (!url) return true; // Empty URL is valid (optional field)
+    
+    // Normalize the URL by adding https:// if missing
+    let normalizedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      normalizedUrl = 'https://' + url;
+    }
+    
+    const regex = /^https?:\/\/(www\.)?instagram\.com\/[\w\-.]+\/?$/;
+    
+    // Update the state with normalized URL if valid
+    if (regex.test(normalizedUrl)) {
+      // Only normalize if the validation passes
+      if (normalizedUrl !== url) {
+        setTimeout(() => {
+          setBrandingModalDetails({
+            ...brandingModalDetails,
+            instagramUrl: normalizedUrl
+          });
+        }, 0);
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const validateWhatsappUrl = (url: string) => {
+    if (!url) return true; // Empty URL is valid (optional field)
+    
+    // Normalize the URL by adding https:// if missing
+    let normalizedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      normalizedUrl = 'https://' + url;
+    }
+    
+    // Extract the number from the URL for additional validation
+    let phoneNumber = "";
+    
+    // Try to extract from wa.me format
+    const waMatch = normalizedUrl.match(/^https?:\/\/(www\.)?wa\.me\/(\d+)\/?$/);
+    if (waMatch && waMatch[2]) {
+      phoneNumber = waMatch[2];
+    }
+    
+    // Try to extract from whatsapp.com format
+    const whatsappMatch = normalizedUrl.match(/^https?:\/\/(www\.|api\.)?whatsapp\.com\/send\?phone=(\d+)$/);
+    if (whatsappMatch && whatsappMatch[2]) {
+      phoneNumber = whatsappMatch[2];
+    }
+    
+    // Check if number is 10 digits and doesn't start with 0-6
+    if (phoneNumber) {
+      const isValidLength = phoneNumber.length === 10;
+      const startsWithValidDigit = !(/^[0-6]/).test(phoneNumber.charAt(0));
+      
+      if (isValidLength && startsWithValidDigit) {
+        // Only normalize if the validation passes
+        if (normalizedUrl !== url) {
+          setTimeout(() => {
+            setBrandingModalDetails({
+              ...brandingModalDetails,
+              whatsappUrl: normalizedUrl
+            });
+          }, 0);
+        }
+        return true;
+      }
+      return false;
+    }
+    
+    return false;
+  };
+
+  // Handle change events for URL inputs with real-time validation
+  const handleFacebookChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setBrandingModalDetails({
+      ...brandingModalDetails,
+      facebookUrl: value
+    });
+    
+    // Clear error if the field is empty or valid
+    if (!value || validateFacebookUrl(value)) {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: ""
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: "Invalid Facebook URL format. Expected: www.facebook.com/username"
+      });
+    }
+  };
+
+  const handleInstagramChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setBrandingModalDetails({
+      ...brandingModalDetails,
+      instagramUrl: value
+    });
+    
+    // Clear error if the field is empty or valid
+    if (!value || validateInstagramUrl(value)) {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: ""
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: "Invalid Instagram URL format. Expected: www.instagram.com/username"
+      });
+    }
+  };
+
+  const handleWhatsappChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setBrandingModalDetails({
+      ...brandingModalDetails,
+      whatsappUrl: value
+    });
+    
+    // Clear error if the field is empty or valid
+    if (!value || validateWhatsappUrl(value)) {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: ""
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: "Expected: wa.me/number or api.whatsapp.com/send?phone=number (10-digit number starting with 7-9)"
+      });
+    }
+  };
+
+  // Handle blur events for URL validation (keep these for initial blur validation)
+  const handleFacebookBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
+    
+    // Clear the error if field is empty
+    if (!url) {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: ""
+      });
+      return;
+    }
+    
+    if (!validateFacebookUrl(url)) {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: "Invalid Facebook URL format. Expected: www.facebook.com/username"
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        facebookUrl: ""
+      });
+    }
+  };
+
+  const handleInstagramBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
+    
+    // Clear the error if field is empty
+    if (!url) {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: ""
+      });
+      return;
+    }
+    
+    if (!validateInstagramUrl(url)) {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: "Invalid Instagram URL format. Expected: www.instagram.com/username"
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        instagramUrl: ""
+      });
+    }
+  };
+
+  const handleWhatsappBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value.trim();
+    
+    // Clear the error if field is empty
+    if (!url) {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: ""
+      });
+      return;
+    }
+    
+    if (!validateWhatsappUrl(url)) {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: "Expected: wa.me/number or api.whatsapp.com/send?phone=number (10-digit number starting with 7-9)"
+      });
+    } else {
+      setUrlErrors({
+        ...urlErrors,
+        whatsappUrl: ""
       });
     }
   };
@@ -67,7 +316,7 @@ const BrandingModalContent = (props: ITypeProps) => {
 
           <CustomInputWithFileUpload
             label="Upload logo"
-            className="font-Open  "
+            className="font-Open"
             inputClassName="!w-full"
             type="file"
             onChange={handleImageChange}
@@ -87,6 +336,40 @@ const BrandingModalContent = (props: ITypeProps) => {
             value={brandingModalDetails.brandName}
           />
         </div>
+
+        {/* Social Media URL Fields with real-time validation */}
+        <div>
+          <CustomInputBox
+            label="Facebook URL"
+            onChange={handleFacebookChange}
+            onBlur={handleFacebookBlur}
+            value={brandingModalDetails.facebookUrl || ""}
+            // placeholder="www.facebook.com/username"
+            errorMessage={urlErrors.facebookUrl || false}
+          />
+        </div>
+
+        <div>
+          <CustomInputBox
+            label="Instagram URL"
+            onChange={handleInstagramChange}
+            onBlur={handleInstagramBlur}
+            value={brandingModalDetails.instagramUrl || ""}
+            // placeholder="www.instagram.com/username"
+            errorMessage={urlErrors.instagramUrl || false}
+          />
+        </div>
+
+        <div>
+          <CustomInputBox
+            label="WhatsApp URL"
+            onChange={handleWhatsappChange}
+            onBlur={handleWhatsappBlur}
+            value={brandingModalDetails.whatsappUrl || ""}
+            // placeholder="wa.me/number"
+            errorMessage={urlErrors.whatsappUrl || false}
+          />
+        </div>
       </div>
 
       <div
@@ -102,7 +385,8 @@ const BrandingModalContent = (props: ITypeProps) => {
           <CustomButton
             text="Save"
             onClick={updateBrandingDetails}
-            className="!w-[100px] !rounded"
+            className="!w-[100px] !rounded bg-[#4D83FF] text-white"
+            disabled={urlErrors.facebookUrl || urlErrors.instagramUrl || urlErrors.whatsappUrl ? true : false}
           />
         </div>
       </div>
