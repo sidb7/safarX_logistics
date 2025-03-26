@@ -245,6 +245,7 @@ const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRech
 const GET_CODREMITTANCE_AMOUNT = `${SELLER_URL}/api/v1/wallet/getEligibleCodRemittanceAmount`;
 const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalance`;
 const GET_WALLET_RECHARGE_COUPONS = `${SELLER_URL}/api/v1/wallet/getWalletRechargeCoupons`;
+const GET_ALL_COUPONS_DATA = `${SELLER_URL}/api/v1/coupon/getActiveCoupons`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -768,4 +769,5 @@ export {
   POST_SSO_URL,
   GET_SELLER_AGREEMENT,
   GET_WALLET_RECHARGE_COUPONS,
+  GET_ALL_COUPONS_DATA,
 };
