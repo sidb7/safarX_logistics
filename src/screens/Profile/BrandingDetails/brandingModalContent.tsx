@@ -300,55 +300,19 @@ const BrandingModalContent = (props: ITypeProps) => {
         </div>
 
         <div>
-          {/* Logo Preview Section with Improved Handling */}
-          <div 
-            className="w-full h-[200px] overflow-hidden flex justify-center items-center mb-5"
-            style={{
-              border: "1px solid #cccccc",
-              borderRadius: "4px",
-              background: "#f9f9f9"
-            }}
-          >
-            {brandingModalDetails?.imageUrl && brandingModalDetails.imageUrl !== "" ? (
+          {brandingModalDetails?.imageUrl && (
+            <div className="w-full h-[200px] overflow-hidden flex justify-center items-center mb-5">
               <img
-                src={brandingModalDetails.imageUrl}
-                alt="Brand Logo"
+                src={brandingModalDetails?.imageUrl}
+                alt=""
                 className="w-[700px] h-[200px] object-contain"
-                onError={(e) => {
-                  // If image fails to load, replace with placeholder
-                  e.currentTarget.style.display = 'none';
-                  const parent = e.currentTarget.parentElement;
-                  const placeholder = parent ? parent.querySelector('.placeholder-content') as HTMLElement : null;
-                  if (placeholder) {
-                    placeholder.style.display = 'flex';
-                  }
+                style={{
+                  border: "1px solid #cccccc",
+                  borderRadius: "4px",
                 }}
               />
-            ) : null}
-            
-            {/* Placeholder content - shown by default when no image or on error */}
-            <div 
-              className={`placeholder-content flex flex-col items-center justify-center text-gray-400 ${brandingModalDetails?.imageUrl && brandingModalDetails.imageUrl !== "" ? 'hidden' : 'flex'}`}
-            >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="64" 
-                height="64" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-              <p className="mt-2 text-sm">No logo uploaded</p>
-              <p className="text-xs">Upload your brand logo below</p>
             </div>
-          </div>
+          )}
 
           <CustomInputWithFileUpload
             label="Upload logo"
@@ -358,7 +322,6 @@ const BrandingModalContent = (props: ITypeProps) => {
             onChange={handleImageChange}
             isRequired={false}
           />
-          <p className="text-xs text-gray-500 mt-1">Image size must be no larger than 200 pixels in height and 700 pixels in width</p>
         </div>
 
         <div>

@@ -483,6 +483,9 @@ const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
 // Reverse order API
 const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
 
+// Open API for delhiveryB2B jobid
+const GET_DELHIVERY_B2B_JOB = `${SELLER_BASE_URL}/order/delhiveryB2B/jobId`;
+
 // Amazon Redirect Url
 const AMAZON_REDIRECT_URL = `${SELLER_URL}/amazonCheckParams`;
 
@@ -710,6 +713,7 @@ export {
   UPLOAD_BULK_COMBOS,
   CHANGE_PASSWORD,
   REVERSE_ORDER,
+  GET_DELHIVERY_B2B_JOB,
   //  GET_ALLPARTNER_OFSELLER,
   //  UPDATE_ALLPARTNER_OF_SELLER,
   AMAZON_REDIRECT_URL,
