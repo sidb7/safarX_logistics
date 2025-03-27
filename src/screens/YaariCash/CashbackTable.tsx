@@ -5,10 +5,14 @@ import { capitalizeFirstLetterWithExclude } from "../../utils/utility";
 
 interface ICashbackTableProps {
   tablesData?: any;
+  loadingState?: any;
+  companyName?: any;
 }
 
 const CashbackTable: React.FunctionComponent<ICashbackTableProps> = ({
   tablesData,
+  loadingState,
+  companyName,
 }) => {
   function formatDate(dateStr: string) {
     const date = new Date(dateStr);
@@ -218,7 +222,7 @@ const CashbackTable: React.FunctionComponent<ICashbackTableProps> = ({
           <div
             className={`font-Open text-sm font-normal leading-5  text-[#1C1C1C] text-start`}
           >
-            {utilizationRule === "full"
+            {utilizationRule !== "full"
               ? "No restrictions on cashback utilization."
               : `max ${utilizationRule} % per order.`}
           </div>
@@ -226,17 +230,41 @@ const CashbackTable: React.FunctionComponent<ICashbackTableProps> = ({
       },
     }),
   ];
+
+  const ShimmerRow = () => {
+    return (
+      <div className="animate-pulse flex space-x-4">
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+        <div className="h-[21px] bg-gray-300 rounded w-1/4"></div>
+      </div>
+    );
+  };
   return (
     <div className="bg-white p-6 rounded-lg shadow mt-6">
       <h2 className=" text-lg lg:text-xl font-Open font-bold text-gray-800 leading-4">
         Cashback Details
       </h2>
       <div className=" mt-4">
-        <CustomTable
-          columnsData={columns}
-          rowData={tablesData || []}
-          minHeight="21vh"
-        />
+        {loadingState ? (
+          <div className="space-y-4">
+            {Array.from({ length: (tablesData?.length ?? 0) + 1 }).map(
+              (_, index) => (
+                <ShimmerRow key={index} />
+              )
+            )}
+          </div>
+        ) : (
+          <CustomTable
+            columnsData={columns}
+            rowData={tablesData || []}
+            minHeight="21vh"
+          />
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import YaariCashBalance from "./YaariCashBalance";
 import CashbackTable from "./CashbackTable";
 import UtilizationRules from "./UtilizationRules";
 import { Breadcrum } from "../../components/Layout/breadcrum";
-import { GET_ALL_COUPONS_DATA } from "../../utils/ApiUrls";
+import { GET_ALL_COUPONS_DATA, COMPANY_NAME } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import toast from "react-hot-toast";
 
@@ -11,25 +11,32 @@ interface IIndexProps {}
 
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [overallCouponData, setOverallCouponData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const companyName = COMPANY_NAME;
 
   const getAllCouponsData = async () => {
     try {
+      setLoading(true);
       const { data: response } = await POST(GET_ALL_COUPONS_DATA, {});
       if (response?.success) {
-        const couponData = response.data || [];
+        const couponData = response?.data || [];
         const summary = {
-          totalCashback: response.totalCashback,
-          remainingAmount: response.remainingAmount,
-          expiryDate: response.expiryDate,
+          totalCashback: response?.totalCashback,
+          remainingAmount: response?.remainingAmount,
+          expiryDate: response?.expiryDate,
+          latestUtilizationRule: response?.latestUtilizationRule,
         };
 
         // Storing separately in state
         setOverallCouponData({ couponData, summary });
+        setLoading(false);
       } else {
         toast.error(response?.message);
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
@@ -40,14 +47,28 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   return (
     <>
       <div className="min-h-screen bg-gray-50 pb-6 customScroll">
-        <Breadcrum label="YaariCash Dashboard" />
+        <Breadcrum
+          label={`${companyName === "Shipyaari" ? "YaariCash" : "Cashback"}`}
+        />
 
         <div className="space-y-8 px-5 ">
-          <YaariCashBalance summary={overallCouponData?.summary} />
+          <YaariCashBalance
+            summary={overallCouponData?.summary}
+            loadingState={loading}
+            companyName={companyName}
+          />
 
-          <CashbackTable tablesData={overallCouponData?.couponData} />
+          <CashbackTable
+            tablesData={overallCouponData?.couponData}
+            loadingState={loading}
+            companyName={companyName}
+          />
 
-          <UtilizationRules summary={overallCouponData?.summary} />
+          <UtilizationRules
+            summary={overallCouponData?.summary}
+            loadingState={loading}
+            companyName={companyName}
+          />
         </div>
       </div>
     </>
