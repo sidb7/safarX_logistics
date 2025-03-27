@@ -52,7 +52,7 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
       ) : (
         <p className="text-gray-600 text-base lg:text-lg font-Open font-normal lg:leading-5 mb-4">
           {`${
-            companyName === "Shipyaari"
+            companyName?.toLowerCase() === "shipyaari"
               ? "  Important information about using your YaariCash"
               : "  Important information about using your Cashback"
           }`}
@@ -92,7 +92,7 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
               <p className="text-gray-600 font-Open text-sm lg:text-base font-normal leading-7">
                 {summary?.latestUtilizationRule === "full"
                   ? `You can apply the full amount of your ${
-                      summary?.companyName === "Shipyaari"
+                      companyName?.toLowerCase() === "shipyaari"
                         ? "YaariCash"
                         : "cashback"
                     } for any order.`
@@ -100,28 +100,28 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
                   ? `You can apply a maximum of ${
                       summary?.latestUtilizationRule || 10
                     }% of your order value as ${
-                      summary?.companyName === "Shipyaari"
+                      companyName?.toLowerCase() === "shipyaari"
                         ? "YaariCash"
                         : "cashback"
                     } for any order.`
                   : index === 1
                   ? `Your ${
-                      summary?.companyName === "Shipyaari"
+                      companyName?.toLowerCase() === "shipyaari"
                         ? "YaariCash"
                         : "cashback"
                     } expires on ${formatDate(summary?.expiryDate)}.`
                   : index === 2
                   ? `${
-                      summary?.companyName === "Shipyaari"
+                      companyName?.toLowerCase() === "shipyaari"
                         ? "YaariCash"
                         : "Cashback"
                     } is non-transferable and cannot be exchanged for real cash.`
                   : `The latest ${
-                      summary?.companyName === "Shipyaari"
+                      companyName?.toLowerCase() === "shipyaari"
                         ? "YaariCash"
                         : "cashback"
                     } utilization rule for the maximum utilization amount shall be applicable for all ${
-                      summary?.companyName === "Shipyaari"
+                      companyName?.toLowerCase() === "shipyaari"
                         ? "YaariCash"
                         : "cashback"
                     } redemptions.`}
