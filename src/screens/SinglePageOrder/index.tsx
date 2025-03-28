@@ -16,7 +16,7 @@ import CustomInputBox from "../../components/Input";
 import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
 import { generateUniqueCode } from "../../utils/utility";
 import InputBox from "../../components/Input";
-import { POST } from "../../utils/webService";
+import { GET, POST } from "../../utils/webService";
 import toast from "react-hot-toast";
 import editIcon from "../../assets/Product/Edit.svg";
 import walletIcon from "../../assets/Group.svg";
@@ -27,6 +27,7 @@ import {
   FETCH_MANIFEST_DATA,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   REVERSE_ORDER,
+  GET_DELHIVERY_B2B_JOB,
 } from "../../utils/ApiUrls";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import { useNavigate } from "react-router-dom";
@@ -710,9 +711,46 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       const { data } = await POST(REVERSE_ORDER, payload);
 
       if (data?.success) {
-        const listOfawbs = data?.data[0]?.awbs.map(
-          (awb: any) => `${awb?.tracking?.awb}`
-        );
+
+        // const listOfawbs = data?.data[0]?.awbs.map(
+        //   (awb: any) => `${awb?.tracking?.awb}`
+        // );
+        
+        let listOfawbs = [];
+
+        // Check if job_id is present in the response
+        if (data?.job_id) {
+          try {
+            // Call the GET_DELHIVERY_B2B_JOB API with the job_id
+            // const jobResponse = await POST(`${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`);
+            const jobResponse:any = await new Promise((resolve) => {
+              setTimeout(async () => {
+                try {
+                  // Make the API call after 5 seconds
+                  const response = await GET(`${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`);
+                  resolve(response);
+                } catch (err) {
+                  resolve(null); 
+                }
+              }, 5000); 
+            });
+          //  console.log("jobResponse", jobResponse.data?.data?.awb);
+            if (jobResponse?.data?.data?.awb) {
+              // Extract AWBs from the job response
+              listOfawbs = [jobResponse.data?.data?.awb]
+              // console.log("listOfawbs", listOfawbs);
+
+            } 
+          } catch (jobError) {
+            console.error("Error fetching job details:", jobError);
+          }
+        } else {
+          // Process as usual if no job_id
+          listOfawbs = data?.data[0]?.awbs.map(
+            (awb:any) => `${awb?.tracking?.awb}`
+          );
+        }
+        
 
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
