@@ -230,6 +230,7 @@ const Summary = (props: Props) => {
   const products = latestOrder?.data?.[0]?.products || [];
   const boxInfo = latestOrder?.data?.[0]?.boxInfo;
   const codInfo = latestOrder?.data?.[0]?.codInfo;
+  const yaariCash = latestOrder?.data?.[0]?.yaariCash || 0;
   console.log("codInfo", codInfo);
   return (
     <div>
@@ -460,6 +461,7 @@ const Summary = (props: Props) => {
                 orderSource={orderSource}
                 orderId={orderId}
                 isMasked={isMasked}
+                yaariCash={yaariCash}
               />
             </div>
           </div>
@@ -481,6 +483,7 @@ const Summary = (props: Props) => {
               tax={serviceDetails?.tax}
               invoiceValue={codInfo?.invoiceValue}
               insurance={serviceDetails?.insurance}
+              yaariCash={yaariCash}
             />
           </div>
         </div>

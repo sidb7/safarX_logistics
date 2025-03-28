@@ -51,6 +51,7 @@ import {
   GET_CODREMITTANCE_AMOUNT,
   POST_UPDATE_WALLETBALANCE,
   COMPANY_NAME,
+  GET_WALLET_RECHARGE_COUPONS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -160,6 +161,12 @@ const WalletRecharge = () => {
   const [companydetails, setcompanydetails] = useState<any>(
     JSON.parse(sessionStorage.getItem("companydetails") as string)
   );
+
+  const [couponDetails, setCouponDetails] = useState<any>([]);
+  // console.log("🚀 ~ WalletRecharge ~ couponDetails:", couponDetails);
+  const [isActives, setIsActives] = useState(false);
+  // const isActive = walletValue >= coupon.minRechargeAmount;
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -168,6 +175,18 @@ const WalletRecharge = () => {
   //     setLoading(false);
   //   }
   // };
+  useEffect(() => {
+    if (couponDetails.length > 0) {
+      if (
+        Number(walletValue.replace(/,/g, "")) >=
+        +couponDetails[0]?.minRechargeAmount
+      ) {
+        setIsActives(true);
+      } else {
+        setIsActives(false);
+      }
+    }
+  }, [walletValue, couponDetails]);
 
   // useEffect(() => {
   //   (async () => {
@@ -271,6 +290,35 @@ const WalletRecharge = () => {
 
   const convertToEdit = () => {
     setIsedit(true);
+  };
+
+  const formatDate = (dateStr: any) => {
+    // Create a new Date object from the ISO string
+    const dateObj = new Date(dateStr);
+
+    // Get the day of the month
+    const day = dateObj.getDate();
+
+    // Function to get the day suffix (e.g., 'st', 'nd', 'rd', 'th')
+    const getDaySuffix = (day: any) => {
+      if (day > 3 && day < 21) return "th"; // special case for 11th, 12th, 13th, etc.
+      switch (day % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    };
+
+    // Get the abbreviated month name (e.g., 'Jan', 'Feb', etc.)
+    const month = dateObj.toLocaleString("default", { month: "short" });
+
+    // Return the formatted string
+    return `${day}${getDaySuffix(day)} ${month}`;
   };
 
   const rechargeStatusCheck = async (orderId: number) => {
@@ -509,7 +557,25 @@ const WalletRecharge = () => {
 
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
 
-  console.log("companyName", companyName);
+  // console.log("companyName", companyName);
+
+  const getWalletRechargeCoupons = async () => {
+    try {
+      const { data: response } = await POST(GET_WALLET_RECHARGE_COUPONS, {});
+      // console.log("🚀 ~ getWalletRechargeCoupons ~ response:", response);
+      if (response?.success) {
+        setCouponDetails([response?.data]);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getWalletRechargeCoupons();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -693,7 +759,11 @@ const WalletRecharge = () => {
             </div> */}
             <div className="mx-5">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
-                <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
+                <div
+                  className={`w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm  ${
+                    couponDetails.length > 0 ? "h-[315px]" : "h-[200px]"
+                  }`}
+                >
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
                     <img src={Accountlogo} alt="" />
                     <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6 capitalize">
@@ -753,11 +823,110 @@ const WalletRecharge = () => {
                               isDisabled={isDisabled}
                               amount={walletValue}
                               callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                              couponDetails={couponDetails || {}}
                             />
                           );
                         })}
                     </div>
                   </div>
+                  {/* {couponDetails?.map((coupon: any, index: number) => {
+                    const isActive = walletValue <= coupon.minRechargeAmount;
+                    return (
+                      <div
+                        key={index}
+                        className={`border-[1px]   rounded-[20px] shadow-md px-4 py-3 flex flex-col gap-y-1 mt-4 w-[380px] ${
+                          isActive
+                            ? " bg-gray-200"
+                            : " bg-[#FDF6EA] border-[#E8E8E8]"
+                        } `}
+                      >
+                        <p
+                          className={`font-Lato text-lg font-semibold leading-[26px] uppercase ${
+                            isActive ? "text-gray-500" : "text-[#004EFF]"
+                          } `}
+                        >
+                          {coupon.couponCode}
+                        </p>
+                        <p className="font-Open text-sm text-gray-600  font-normal leading-5">
+                          {`Applicable on a min recharge of ${coupon.minRechargeAmount}`}
+                        </p>
+                      </div>
+                    );
+                  })} */}
+
+                  {couponDetails.map((coupon: any, index: number) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] mt-4 ${
+                          isActives && coupon.couponStatus !== "Expired"
+                            ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
+                            : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
+                        } hover:scale-[1.03] hover:shadow-lg`}
+                        style={{
+                          animation: "fadeIn 0.5s ease-out forwards",
+                          opacity: 1, // Ensure visibility
+                          transform: "translateY(0px)",
+                        }}
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        <div className="relative z-10 px-4 py-3">
+                          <div className="mb-1 flex justify-between items-center">
+                            <p
+                              className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
+                                isActives && coupon.couponStatus !== "Expired"
+                                  ? "text-blue-600"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {coupon.couponCode}
+                            </p>
+                            <p
+                              className={`flex px-5 py-1 rounded-xl whitespace-nowrap font-Open text-[14px] font-semibold  ${
+                                isActives && coupon.couponStatus !== "Expired"
+                                  ? "bg-emerald-100 text-emerald-600"
+                                  : "bg-gray-100 text-gray-400"
+                              }`}
+                            >
+                              {formatDate(coupon.expiryDate)}{" "}
+                            </p>
+                          </div>
+
+                          <p className="mt-2 font-Noto text-sm text-gray-600 leading-5">
+                            Applicable on a min recharge of{" "}
+                            <span className="font-medium">
+                              ₹{coupon.minRechargeAmount.toLocaleString()}
+                            </span>
+                          </p>
+
+                          <div
+                            className={`mt-3 rounded-full px-3 py-1 font-Open text-xs font-medium leading-5 ${
+                              isActives && coupon.couponStatus !== "Expired"
+                                ? "bg-emerald-100 text-emerald-700"
+                                : "bg-amber-100 text-amber-700"
+                            }`}
+                            style={{ width: "fit-content" }}
+                          >
+                            {isActives && coupon.couponStatus !== "Expired"
+                              ? "Available to use"
+                              : coupon.couponStatus === "Expired"
+                              ? "Your coupon has Expired!"
+                              : "Unlock with higher balance"}
+                          </div>
+                        </div>
+
+                        {hoveredIndex === index && (
+                          <div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"
+                            style={{
+                              animation: "sweep 1s infinite linear",
+                            }}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
 
                   {/* <JusPay
                     isDisabled={isDisabled}
