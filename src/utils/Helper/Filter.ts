@@ -94,11 +94,11 @@ export const inputRegexFilter = async (
         // apiCall.data = decryptData(apiCall?.data?.encryptedData);
         const tempData = decryptData(apiCall?.data?.encryptedData);
 
-        if (tempData?.success) {
+        if (tempData?.success && tempData?.data?.length > 0) {
           const result = tempData;
           return result;
         } else {
-          return apiCall?.data?.message;
+          return tempData?.message;
         }
       } catch (error: any) {
         console.log("Error during API call:", error.message);

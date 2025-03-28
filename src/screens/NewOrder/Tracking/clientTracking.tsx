@@ -297,7 +297,7 @@ const Tracking = () => {
                 <div className="flex flex-col justify-center items-center">
                   <div className="flex">
                     <CustomInputBox
-                      label="Enter tracking ID"
+                      label="Enter Tracking ID"
                       value={trackingNo}
                       containerStyle="!mt-1 md:!w-[340px] lg:!w-[670px]"
                       onChange={(e) => {
