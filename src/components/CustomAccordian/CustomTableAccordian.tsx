@@ -1039,7 +1039,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         rows.push({
           title: "Payment Details",
-          "Payment Type": rowsData?.codInfo?.isCod,
+          "Payment Type": rowsData?.codInfo?.isCod ? "COD" : "Prepaid",
           "Collectable Amount": rowsData?.codInfo?.collectableAmount,
           "Invoice Value": rowsData?.codInfo?.invoiceValue?.toFixed(2),
         });
@@ -3804,97 +3804,20 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         {item.title === "Payment Details" &&
                                           index === 1 && (
                                             <div className="flex flex-col gap-y-2 border border-black-600 p-4 rounded-md">
-                                              <div>
-                                                {Object?.entries(
-                                                  orderDetails?.[
-                                                    orderDetails?.length - 4
-                                                  ]
-                                                )?.map(
-                                                  (
-                                                    eachDetail: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      index === 1 && (
-                                                        <div className="flex justify-between">
-                                                          <p className="open-sans">
-                                                            {eachDetail[0]}
-                                                          </p>
-                                                          <p className="open-sans">
-                                                            {eachDetail[1]
-                                                              ? "COD"
-                                                              : "Prepaid"}
-                                                          </p>
-                                                        </div>
-                                                      )
-                                                    );
-                                                  }
-                                                )}
-                                              </div>
-                                              <div>
-                                                {Object?.entries(
-                                                  orderDetails?.[
-                                                    orderDetails?.length - 4
-                                                  ]
-                                                )?.map(
-                                                  (
-                                                    eachDetail: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      index === 2 && (
-                                                        <div className="flex justify-between">
-                                                          <p className="open-sans">
-                                                            {eachDetail[0]}
-                                                          </p>
-                                                          <p className="open-sans">
-                                                            {
-                                                              +eachDetail?.[1]?.toFixed(
-                                                                2
-                                                              )
-                                                            }
-                                                          </p>
-                                                        </div>
-                                                      )
-                                                    );
-                                                  }
-                                                )}
-                                              </div>
-                                              <div>
-                                                {Object?.entries(
-                                                  orderDetails?.[
-                                                    orderDetails?.length - 4
-                                                  ]
-                                                )?.map(
-                                                  (
-                                                    eachDetail: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      index === 3 && (
-                                                        <div className="flex justify-between">
-                                                          <p className="open-sans">
-                                                            {eachDetail[0]}
-                                                          </p>
-                                                          <p className="open-sans">
-                                                            <input
-                                                              className="w-[44px] p-0 border"
-                                                              type="number"
-                                                              id="invoiceValue"
-                                                              defaultValue={
-                                                                eachDetail[1] &&
-                                                                (+eachDetail?.[1])?.toFixed(
-                                                                  2
-                                                                )
-                                                              }
-                                                            />
-                                                          </p>
-                                                        </div>
-                                                      )
-                                                    );
-                                                  }
-                                                )}
-                                              </div>
+                                              {Object.entries(item).map(
+                                                ([key, value]: any) => {
+                                                  return (
+                                                    <div className="flex justify-between">
+                                                      {key != "title" && (
+                                                        <>
+                                                          <div>{key}:</div>
+                                                          <div>{value}</div>
+                                                        </>
+                                                      )}
+                                                    </div>
+                                                  );
+                                                }
+                                              )}
                                             </div>
                                           )}
                                       </div>
