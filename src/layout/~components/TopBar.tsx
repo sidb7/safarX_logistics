@@ -68,7 +68,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
   const isMasked = useSelector((state: any) => state?.user?.isMasked);
   const yaariCash = useSelector((state: any) => state?.user?.yaariCash);
-  console.log("🚀 ~ yaariCash:", yaariCash)
 
   const dispatch = useDispatch();
   const { openMobileSideBar, setMobileSideBar } = props;
@@ -446,22 +445,22 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 </div>
               )}
 
-              {
-                yaariCash > 0 && (
-                  <div className="hidden lg:block">
-                    <div
+              {yaariCash > 0 && (
+                <div className="hidden lg:block">
+                  <div
                     className="flex items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
-                    onClick={() => navigate("/wallet/view-wallet")}
-                    >
+                    onClick={() => navigate("/wallet/rewards")}
+                  >
                     <img src={WalletIcon} width={35} alt="" />
                     <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                       {/* <div>₹</div> */}
-                      <div>Yaari Cash: {yaariCash?.toLocaleString("en-IN")}</div>
+                      <div>
+                        Yaari Cash: {yaariCash?.toLocaleString("en-IN")}
+                      </div>
                     </div>
                   </div>
                 </div>
-                )
-              }
+              )}
 
               {
                 // localStorage.getItem("sellerId")
