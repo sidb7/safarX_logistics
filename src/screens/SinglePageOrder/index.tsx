@@ -45,6 +45,7 @@ import Accordian from "./components/accordian";
 import MyTable from "./ShippingDetails/components/customeTableForSummary";
 import InternationalOrders from "./InternationalOrder";
 import sessionManager from "../../utils/sessionManager";
+import resetIcon from "../../assets/LostAndDamged/reset.svg";
 
 interface IIndexProps {}
 
@@ -289,6 +290,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         {isLgScreen ? (
           <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
             <div className=" flex justify-start items-center h-fit">
+            <OneButton
+                        onClick={handleReset}
+                          text="Reset"
+                          variant="secondary"
+                          className="mx-8" 
+                          showIcon={true}
+                          icon={resetIcon}
+                           iconClass="!w-4 !h-4"
+                         />
               <input
                 type="radio"
                 name="type"
@@ -386,6 +396,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           </div>
         ) : (
           <div className={`flex w-[100%] my-5 justify-end items-center`}>
+             <OneButton
+                          onClick={handleReset}
+                          text="Reset"
+                          variant="secondary"
+                          className="mx-8" 
+                          showIcon={true}
+                          icon={resetIcon}
+                         />
             <CustomDropDown
               onChange={(e) => {
                 setSelectedOrderType(e.target.value);
@@ -710,11 +728,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       const { data } = await POST(REVERSE_ORDER, payload);
 
       if (data?.success) {
-
         // const listOfawbs = data?.data[0]?.awbs.map(
         //   (awb: any) => `${awb?.tracking?.awb}`
         // );
-        
+
         let listOfawbs = [];
 
         // Check if job_id is present in the response
@@ -722,34 +739,34 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           try {
             // Call the GET_DELHIVERY_B2B_JOB API with the job_id
             // const jobResponse = await POST(`${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`);
-            const jobResponse:any = await new Promise((resolve) => {
+            const jobResponse: any = await new Promise((resolve) => {
               setTimeout(async () => {
                 try {
                   // Make the API call after 5 seconds
-                  const response = await GET(`${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`);
+                  const response = await GET(
+                    `${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`
+                  );
                   resolve(response);
                 } catch (err) {
-                  resolve(null); 
+                  resolve(null);
                 }
-              }, 5000); 
+              }, 5000);
             });
-          //  console.log("jobResponse", jobResponse.data?.data?.awb);
+            //  console.log("jobResponse", jobResponse.data?.data?.awb);
             if (jobResponse?.data?.data?.awb) {
               // Extract AWBs from the job response
-              listOfawbs = [jobResponse.data?.data?.awb]
+              listOfawbs = [jobResponse.data?.data?.awb];
               // console.log("listOfawbs", listOfawbs);
-
-            } 
+            }
           } catch (jobError) {
             console.error("Error fetching job details:", jobError);
           }
         } else {
           // Process as usual if no job_id
           listOfawbs = data?.data[0]?.awbs.map(
-            (awb:any) => `${awb?.tracking?.awb}`
+            (awb: any) => `${awb?.tracking?.awb}`
           );
         }
-        
 
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
@@ -1111,6 +1128,37 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
+
+
+const handleReset = () => {
+  // Clear session storage items
+  sessionStorage.removeItem("order");
+  sessionStorage.removeItem("paymentType");
+  sessionStorage.removeItem("pickupOtherAddressDetails");
+  sessionStorage.removeItem("DeliveryOtherAddressDetails");
+  
+  // Reset state values
+  setOrder(initialState);
+  setSelectedOrderType("");
+  setPaymentMode("PREPAID");
+  setSortServiciblity("");
+  setResetOtherAddressDetails(true);
+  setShowPickupDate("");
+  setAwbListForDownLoad([]);
+  setDownloadLebal(false);
+  
+  // Reset highlighted fields
+  setHighLightField({
+    addressDetails: false,
+    packageDetails: false,
+    orderDetails: false,
+    shippingDetails: false,
+    pickupTimeDetails: false,
+  });
+  
+  toast.success("Form data has been reset successfully");
+};
+
   useEffect(() => {
     sessionStorage.setItem("order", JSON.stringify(order));
     sessionStorage.setItem("paymentType", paymentMode);
@@ -1286,7 +1334,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             data-cy="auto-generate-order-id"
                           />
                         </div>
-
+         
                         <div
                           className={`flex gap-x-4 items-center flex-1 ${
                             !isLgScreen && " overflow-auto scroll-smooth"
@@ -1489,6 +1537,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             </span>
                             <OneButton
                               onClick={() => {
+                                sessionStorage.removeItem("order");
+                                sessionStorage.removeItem("paymentType");
+                                sessionStorage.removeItem(
+                                  "pickupOtherAddressDetails"
+                                );
+                                sessionStorage.removeItem(
+                                  "DeliveryOtherAddressDetails"
+                                );
                                 window.location.reload();
                                 // sessionStorage.clear();
                               }}
