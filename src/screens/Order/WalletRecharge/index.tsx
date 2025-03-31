@@ -566,7 +566,8 @@ const WalletRecharge = () => {
       if (response?.success) {
         setCouponDetails([response?.data]);
       } else {
-        toast.error(response?.message);
+        console.log(response?.message);
+        // toast.error(response?.message);
       }
     } catch (error) {
       console.error(error);
