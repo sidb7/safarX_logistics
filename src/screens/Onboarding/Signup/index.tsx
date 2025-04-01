@@ -590,7 +590,7 @@ const Index = () => {
                   <div>
                     <CustomInputBox
                       label="Coupon Code"
-                      maxLength={20}
+                      maxLength={100}
                       //commented as by default placeholder text is getting top of the input box
                       // tempLabel={true}
                       // placeholder=""
