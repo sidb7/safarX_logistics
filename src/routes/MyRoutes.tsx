@@ -1253,13 +1253,13 @@ const MyRoutes: React.FC = () => {
         </Route>
 
         <Route
-          path="/tracking/lostAndDamaged"
-          element={
-            <ProtectedRoute>
-              <LostAndDamaged />
-            </ProtectedRoute>
-          }
-        />
+            path="/tracking/lostanddamaged"
+            element={
+              <ProtectedRoute>
+                <LostAndDamaged />
+              </ProtectedRoute>
+            }
+          />
 
         <Route>
           <Route path="notifications" element={<Notifications />} />
