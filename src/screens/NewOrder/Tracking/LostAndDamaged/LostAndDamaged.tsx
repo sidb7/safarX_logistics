@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import centerIcon from "../../../../assets/LostAndDamged/Group 1000006836 (1).svg";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import CustomInputBox from "../../../../components/Input";
 import OneRadioButton from "../../../../components/OneRadioButton/OneRadioButton";
-import { FETCH_LD_ORDERS, UPDATE_LD_ORDERS ,FETCH_LD_ORDERS_FOR_SEARCH} from "../../../../utils/ApiUrls";
+import {
+  FETCH_LD_ORDERS,
+  UPDATE_LD_ORDERS,
+  FETCH_LD_ORDERS_FOR_SEARCH,
+} from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import toast from "react-hot-toast";
 import LostAndFoundTable from "./LostAndFoundTable";
@@ -19,7 +23,7 @@ import FilterIcon from "../../../../assets/Order/FilterIcon.svg";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
 import { Spinner } from "../../../../components/Spinner";
 import PaginationComponent from "../../../../components/Pagination";
-
+import { set } from "lodash";
 
 interface FilterCondition {
   $in: any[];
@@ -74,12 +78,18 @@ const LostAndDamaged: React.FC = () => {
 
   const [filterModal, setFilterModal] = useState(false);
   const [isFilterLoading, setIsFilterLoading] = useState<boolean>(false);
+  const [isTableLoading, setIsTableLoading] = useState<boolean>(false);
+  const [fallback, setFallback] = useState(false);
 
   // Pagination state
-const [currentPage, setCurrentPage] = useState<number>(1);
-const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-const itemsPerPageOptions = [5, 10, 20, 50];
-const [totalCount, setTotalCount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const itemsPerPageOptions = [5, 10, 20, 50,100,200,500,1000,2000,5000,10000];
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const isInitialRender = useRef(true);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+
 
   const [filterState, setFilterState] = useState<FilterState>({
     name: "",
@@ -100,13 +110,19 @@ const [totalCount, setTotalCount] = useState<number>(0);
     setIsModalOpen(true);
   };
 
-  const handlePageChange = (data: { currentPage: number; itemsPerPage: number }) => {
+  const handlePageChange = (data: {
+    currentPage: number;
+    itemsPerPage: number;
+  }) => {
     setCurrentPage(data.currentPage);
     setItemsPerPage(data.itemsPerPage);
   };
-  
-  const handleItemsPerPageChange = (data: { currentPage: number; itemsPerPage: number }) => {
-    setCurrentPage(1);  // Reset to first page when changing items per page
+
+  const handleItemsPerPageChange = (data: {
+    currentPage: number;
+    itemsPerPage: number;
+  }) => {
+    setCurrentPage(1); // Reset to first page when changing items per page
     setItemsPerPage(data.itemsPerPage);
   };
 
@@ -127,71 +143,15 @@ const [totalCount, setTotalCount] = useState<number>(0);
     }
   };
 
-  // const fetchOrderDetailsTable = async (awb?: string) => {
-  //   try {
-  //     const payload: any = {
-  //       searchValue: searchValue || awb,
-  //       filterArr: []
-  //     };
-
-  //     // Add date range if present
-  //     if (startDate && endDate) {
-  //       let startEpoch = null;
-  //       let lastendEpoch = null;
-
-  //       if (startDate instanceof Date && endDate instanceof Date) {
-  //         startDate.setHours(0, 0, 0, 0);
-  //         startEpoch = startDate.getTime();
-
-  //         endDate.setHours(23, 59, 59, 999);
-  //         const endEpoch = endDate.getTime();
-
-  //         lastendEpoch = endEpoch;
-  //       }
-  //       payload.startDate = startEpoch;
-  //       payload.endDate = lastendEpoch;
-  //     }
-
-  //     // Add filters if present
-  //     if (filterPayLoad?.filterArrOne?.length > 0) {
-  //       filterPayLoad.filterArrOne.forEach((filter: any) => {
-  //         if (filter.ldStatus?.$in?.length > 0) {
-  //           payload.filterArr.push({
-  //             ldStatus: { $in: filter.ldStatus.$in }
-  //           });
-  //         }
-  //         if (filter.isClaimed?.$in?.length > 0) {
-  //           payload.filterArr.push({
-  //             isClaimed: { $in: filter.isClaimed.$in }
-  //           });
-  //         }
-  //       });
-  //     }
-
-  //     const response = await POST(FETCH_LD_ORDERS, payload);
-  //     if (response?.data?.success) {
-  //       setOrderDetailsTable(response.data.data?.[0]?.data);
-  //       setIsFilterLoading(false);
-  //     } else {
-  //       toast.error(response?.message || "Failed to fetch orders");
-  //       setIsFilterLoading(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching order details:", error);
-  //     toast.error("An error occurred while fetching orders");
-  //     setIsFilterLoading(false);
-  //   }
-  // };
-
-  // Then update your fetchOrderDetailsTable function
   const fetchOrderDetailsTable = async (awb?: string) => {
     try {
       setIsFilterLoading(true);
+      setIsTableLoading(true);
       const payload: OrderPayload = {
         searchValue: searchValue || awb,
         filterArr: [],
         skip: (currentPage - 1) * itemsPerPage, // Convert page number to skip value
-        limit: itemsPerPage
+        limit: itemsPerPage,
       };
 
       // Add date range if present
@@ -220,10 +180,12 @@ const [totalCount, setTotalCount] = useState<number>(0);
 
       const response = await POST(FETCH_LD_ORDERS, payload);
       if (response?.data?.success) {
-        setOrderDetailsTable(response.data.data?.[0]?.data);
-        setTotalCount(response.data.data?.[0]?.totalCount || 0);  
-
+        setOrderDetailsTable(response.data?.data?.[0]?.data);
+        setTotalCount(response.data?.data?.[0]?.totalCount || 0);
       } else {
+        setOrderDetailsTable(response.data?.data?.[0]?.data || []);
+        setTotalCount(response.data?.data?.[0]?.totalCount || 0);
+        setFallback(response?.fallback);
         toast.error(response?.data?.message || "Failed to fetch orders");
       }
     } catch (error) {
@@ -231,6 +193,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
       toast.error("An error occurred while fetching orders");
     } finally {
       setIsFilterLoading(false);
+      setIsTableLoading(false);
     }
   };
 
@@ -245,7 +208,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
       filterArrOne: [],
     });
     setCurrentPage(1); // Reset to page 1
-    fetchOrderDetailsTable();
+    // fetchOrderDetailsTable();
   };
 
   // const fetchOrderDetailsTable = async (awb?: string) => {
@@ -442,6 +405,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
       if (response?.data?.success) {
         toast.success("Successfully updated!");
         handleModalClose();
+        setFormSubmitted(true); // Add this line
       } else {
         toast.error(response?.data?.message || "Failed to update order");
       }
@@ -544,12 +508,18 @@ const [totalCount, setTotalCount] = useState<number>(0);
     //   : orderDetails?.codInfo?.invoiceValue
     orderDetails,
     orderDetails?.[0]?.orderInfo?.boxInfo?.[0]?.products?.[0]?.name
-
   );
 
   useEffect(() => {
     fetchOrderDetailsTable();
-  }, [currentPage, itemsPerPage,startDate, endDate]);
+  }, [currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    // Only call API when both dates are selected or both are null
+    if ((startDate && endDate) || (startDate === null && endDate === null)) {
+      fetchOrderDetailsTable();
+    }
+  }, [startDate, endDate]);
 
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {
@@ -565,6 +535,19 @@ const [totalCount, setTotalCount] = useState<number>(0);
       getObjectWithIsActiveTrue(filterState.menu, filterState.name);
     }
   }, [filterState]);
+
+  useEffect(() => {
+    if (filterPayLoad.filterArrOne.length === 0) {
+      fetchOrderDetailsTable();
+    }
+  }, [filterPayLoad]);
+
+  useEffect(() => {
+    if (formSubmitted) {
+      fetchOrderDetailsTable(); // Refresh the data
+      setFormSubmitted(false); // Reset the flag
+    }
+  }, [formSubmitted]);
 
   useEffect(() => {
     fetchOrderDetailsTable();
@@ -586,7 +569,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
               if (update[0] === null && update[1] === null) {
                 setStartDate(null);
                 setEndDate(null);
-                fetchOrderDetailsTable();
+                // fetchOrderDetailsTable();
               } else {
                 setStartDate(update[0]);
                 setEndDate(update[1]);
@@ -643,17 +626,24 @@ const [totalCount, setTotalCount] = useState<number>(0);
       </div>
 
       {orderDetailsTable?.length != 0 && (
-        <div className="flex flex-col items-end justify-end pr-4">
+        <div className="flex flex-col items-end justify-end pr-4 ">
           <OneButton
             text="ADD SHIPMENT"
             onClick={handleClick}
-            className="max-w-[200px]"
+            className="max-w-[200px] !rounded-full"
             variant="primary"
           />
         </div>
       )}
 
-      {orderDetailsTable?.length === 0 ? (
+      {isTableLoading ? (
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-300px)]">
+          <div className="flex flex-col items-center">
+            <Spinner />
+            <p className="mt-4 text-gray-600">Loading shipment data...</p>
+          </div>
+        </div>
+      ) : fallback ? (
         <div className="flex flex-col items-center justify-center h-[calc(100vh-300px)]">
           <img src={centerIcon} alt="Lost and Damaged Icon" className="mb-4" />
 
@@ -674,43 +664,25 @@ const [totalCount, setTotalCount] = useState<number>(0);
       )}
 
       {/* Pagination Component */}
-{totalCount > 0 && (
-  <PaginationComponent
-    totalItems={totalCount}
-    itemsPerPageOptions={itemsPerPageOptions}
-    onPageChange={handlePageChange}
-    onItemsPerPageChange={handleItemsPerPageChange}
-    pageNo={currentPage}
-    initialItemsPerPage={itemsPerPage}
-    className="mt-4"
-  />
-)}
+      {totalCount > 0 && (
+        <PaginationComponent
+          totalItems={totalCount}
+          itemsPerPageOptions={itemsPerPageOptions}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          pageNo={currentPage}
+          initialItemsPerPage={itemsPerPage}
+          className="mt-4"
+        />
+      )}
 
       <CenterModal
         isOpen={isModalOpen}
         onRequestClose={handleModalClose}
         className="!h-[calc(100vh-50px)] w-[500px]"
       >
-        {/* <div className="flex justify-between items-center p-6  w<RightSideModal isOpen={filterModal} onClose={() => setFilterModal(false)}>
-  <div>
-    <LostDamagedFilter 
-      filterState={filterState}
-      setFilterState={setFilterState}
-    />
-  </div>
-</RightSideModal>-full">
-            <h2 className="text-xl font-medium">Lost And Damage</h2>
-            <button
-              onClick={handleModalClose}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="w-full p-6"> */}
-        {/* Sticky Header */}
         <div className="flex justify-between items-center p-4 mb-2 border-b bg-white w-full">
-          <h2 className="text-xl font-medium relative">Lost And Damage</h2>
+          <h2 className="text-xl font-medium relative">Lost and Damaged</h2>
           <button
             onClick={handleModalClose}
             className="text-gray-500 hover:text-gray-700 text-xl"
@@ -739,7 +711,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
                   className="font-Open text-sm font-semibold leading-5"
                   onClick={() => setSelectedOption("LOST")}
                 >
-                  LOST
+                  Lost
                 </span>
               </div>
               <div className="flex gap-x-2 items-center">
@@ -758,7 +730,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
                   className="font-Open text-sm font-semibold leading-5"
                   onClick={() => setSelectedOption("DAMAGE")}
                 >
-                  DAMAGED
+                  Damaged
                 </span>
               </div>
             </div>
@@ -772,47 +744,6 @@ const [totalCount, setTotalCount] = useState<number>(0);
               className="mb-4"
             />
 
-            {/* {orderDetails && (
-                <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                  <p className="font-medium mb-3">
-                    Package Info:{" "}
-                    {
-                      orderDetails?.orderInfo.boxInfo?.[0]?.products?.[0]
-                        ?.name
-                    }
-                  </p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm mb-2">
-                        Weight:{" "}
-                        {
-                          orderDetails?.trackingInfo?.service
-                            ?.appliedWeight
-                        }
-                      </p>
-                      <p className="text-sm">
-                        Insurance:{" "}
-                        {orderDetails?.trackingInfo.service.insurance === 0
-                          ? "No"
-                          : "Yes"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm mb-2">
-                        Invoice Value:{" "}
-                        {orderDetails?.trackingInfo.codInfo.isCod
-                          ? orderDetails?.trackingInfo.codInfo
-                              .collectableAmount
-                          : orderDetails?.trackingInfo.codInfo
-                              .invoiceValue}
-                      </p>
-                      <p className="text-sm">
-                        Booked Date: {new Date(orderDetails?.trackingInfo.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )} */}
             {orderDetails && (
               <div className="bg-gray-50 p-6 rounded-lg mb-6 shadow-sm">
                 <div className="border-b pb-4 mb-4">
@@ -895,72 +826,10 @@ const [totalCount, setTotalCount] = useState<number>(0);
               className="mb-6"
             />
 
-            {/* {selectedOption === "DAMAGE" && (
-                <div className="space-y-4 mt-4 mb-4">
-                  <div>
-                    <p className="text-sm mb-2">
-                      Upload Images (Up to 3 files)
-                    </p>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      required
-                      onChange={handleImageChange}
-                      className="w-full px-3 py-2 border rounded-lg text-sm"
-                    />
-                    {imageFiles.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {imageFiles.map((file, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center bg-gray-100 rounded-full px-3 py-1"
-                          >
-                            <span className="text-sm">{file.name}</span>
-                            <button
-                              onClick={() => removeImage(index)}
-                              className="ml-2 text-gray-500 hover:text-gray-700"
-                              type="button"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm mb-2">Upload Video (Optional)</p>
-                    <input
-                      type="file"
-                      accept="video/*"
-                      onChange={handleVideoChange}
-                      className="w-full px-3 py-2 border rounded-lg text-sm"
-                    />
-                    {videoFile && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <div className="flex items-center bg-gray-100 rounded-full px-3 py-1">
-                          <span className="text-sm">{videoFile.name}</span>
-                          <button
-                            onClick={() => setVideoFile(null)}
-                            className="ml-2 text-gray-500 hover:text-gray-700"
-                            type="button"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )} */}
-
             {selectedOption === "DAMAGE" && (
               <div className="space-y-4 mt-4 mb-4">
                 <div>
-                  {/* <p className="text-sm mb-2">
-                      Upload Images 
-                    </p> */}
+                  
                   <div className="relative w-full h-12 border border-gray-300 rounded-lg overflow-hidden">
                     <input
                       type="file"
@@ -1012,7 +881,6 @@ const [totalCount, setTotalCount] = useState<number>(0);
                   )}
                 </div>
                 <div>
-                  {/* <p className="text-sm mb-2">Upload Video </p> */}
                   <div className="relative w-full h-12 border border-gray-300 rounded-lg overflow-hidden">
                     <input
                       type="file"
@@ -1060,11 +928,11 @@ const [totalCount, setTotalCount] = useState<number>(0);
             )}
 
             <button
-              className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 text-sm font-medium disabled:bg-gray-400"
+              className="w-full bg-black text-white py-3 hover:bg-gray-800 text-sm font-medium disabled:bg-gray-400 rounded-full"
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </div>
@@ -1113,11 +981,11 @@ const [totalCount, setTotalCount] = useState<number>(0);
                   });
                   setIsFilterLoading(false);
                   setCurrentPage(1); // Reset to page 1
-                  fetchOrderDetailsTable();
+                  // fetchOrderDetailsTable();
                   setFilterModal(false);
                 }}
                 variant="secondary"
-                className="px-5"
+                className="px-5 !rounded-full"
               />
               {isFilterLoading ? (
                 <div className="flex justify-center items-center px-5">
@@ -1133,7 +1001,7 @@ const [totalCount, setTotalCount] = useState<number>(0);
                     setFilterModal(false);
                   }}
                   variant="primary"
-                  className="px-5"
+                  className="px-5 !rounded-full"
                 />
               )}
             </div>

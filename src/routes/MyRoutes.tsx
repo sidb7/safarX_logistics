@@ -1251,7 +1251,7 @@ const MyRoutes: React.FC = () => {
         </Route>
 
         <Route
-            path="/tracking/lostAndDamaged"
+            path="/tracking/lostanddamaged"
             element={
               <ProtectedRoute>
                 <LostAndDamaged />
