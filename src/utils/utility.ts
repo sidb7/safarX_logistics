@@ -488,11 +488,12 @@ export const loadRazorPayTransaction = async (
       order_id: orderId,
       handler: async (response: any) => {
         let body = {
-          orderId: response.razorpay_payment_id,
+          orderId: orderId,
           transactionId: transactionId,
           paymentGateway: "RAZORPE",
         };
-        await POST(RECHARGE_STATUS, body);
+        const { data } = await POST(RECHARGE_STATUS, body);
+
         window.location.href = redirectUrl;
       },
       prefill: {
