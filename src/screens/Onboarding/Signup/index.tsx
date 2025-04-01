@@ -58,6 +58,7 @@ const Index = () => {
     lastName: "",
     password: "",
     referalCode: genReferralCode || "",
+    couponCode: "",
   });
 
   const [signUpError, setSignUpError] = useState<any>({
@@ -66,6 +67,7 @@ const Index = () => {
     lastName: "",
     password: "",
     referalCode: "",
+    couponCode: "",
   });
 
   const signUpOnClick = async (value: any) => {
@@ -580,6 +582,55 @@ const Index = () => {
                         <img src={InfoCircle} alt="" width={10} height={10} />
                         <span className="font-normal text-[#F35838] text-xs leading-3">
                           {signUpError.referalCode}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <CustomInputBox
+                      label="Coupon Code"
+                      maxLength={100}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
+                      // placeholder=""
+                      id="couponCode"
+                      value={sellerData.couponCode}
+                      onChange={(e) => {
+                        setSignUpError({
+                          ...signUpError,
+                          couponCode: "",
+                        });
+                        setsellerData({
+                          ...sellerData,
+                          couponCode: e.target.value,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (!sellerData?.couponCode) {
+                          setSignUpError({
+                            ...signUpError,
+                            couponCode: "Please Enter Your Coupon Code",
+                          });
+                        } else if (!referalRegex.test(e.target.value)) {
+                          setSignUpError({
+                            ...signUpError,
+                            couponCode: "Enter Valid Coupon Code",
+                          });
+                        } else {
+                          setSignUpError({
+                            ...signUpError,
+                            couponCode: "",
+                          });
+                        }
+                      }}
+                      isDisabled={false}
+                    />
+                    {signUpError.couponCode !== "" && (
+                      <div className="flex items-center gap-x-1 mt-1">
+                        <img src={InfoCircle} alt="" width={10} height={10} />
+                        <span className="font-normal text-[#F35838] text-xs leading-3">
+                          {signUpError.couponCode}
                         </span>
                       </div>
                     )}

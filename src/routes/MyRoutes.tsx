@@ -182,6 +182,9 @@ import NewDashboard from "../screens/NewDashboard/index";
 import { COMPANY_NAME } from "../utils/ApiUrls";
 import BulkLabelList from "../screens/bulkLabelList/bulkLabelList";
 
+// yaaricash
+import YaariCashDashboard from "../screens/YaariCash/Index";
+
 const MyRoutes: React.FC = () => {
   return (
     <Routes>
@@ -1219,7 +1222,6 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          
 
           <Route
             path="/tracking/rto"
@@ -1277,6 +1279,16 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Transaction />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route>
+          <Route
+            path="/wallet/rewards"
+            element={
+              <ProtectedRoute>
+                <YaariCashDashboard />
               </ProtectedRoute>
             }
           />

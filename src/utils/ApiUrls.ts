@@ -117,7 +117,6 @@ switch (Environment) {
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
     SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
 
-
     break;
 }
 
@@ -167,8 +166,6 @@ const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
 const GET_SELLER_AGREEMENT = `${SELLER_BASE_URL}/sellerAgreement/getSellerAgreement`;
-
-
 
 //Update Seller Profile
 const UPDATE_SINGLE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
@@ -247,6 +244,8 @@ const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWallet
 const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRechargeUsingNeft`;
 const GET_CODREMITTANCE_AMOUNT = `${SELLER_URL}/api/v1/wallet/getEligibleCodRemittanceAmount`;
 const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalance`;
+const GET_WALLET_RECHARGE_COUPONS = `${SELLER_URL}/api/v1/wallet/getWalletRechargeCoupons`;
+const GET_ALL_COUPONS_DATA = `${SELLER_URL}/api/v1/coupon/getActiveCoupons`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -380,10 +379,6 @@ const FETCH_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersSeller`;
 const UPDATE_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/updateLDOrdersSeller`;
 const FETCH_LD_ORDERS_FOR_SEARCH = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersForSearch`;
 const UPDATE_LD_CLAIM = `${SELLER_BASE_URL}/lostAndDamage/updateClaimStatus`;
-
-
-
-
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -773,4 +768,6 @@ export {
   COD_DETAILS_FINANCE,
   POST_SSO_URL,
   GET_SELLER_AGREEMENT,
+  GET_WALLET_RECHARGE_COUPONS,
+  GET_ALL_COUPONS_DATA,
 };
