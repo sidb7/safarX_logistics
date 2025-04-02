@@ -11,6 +11,7 @@ import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import { POST } from "../../../../utils/webService";
 import { UPDATE_LD_CLAIM } from "../../../../utils/ApiUrls";
 import toast from "react-hot-toast";
+import { capitalizeFirstLetter } from "../../../../utils/utility";
 
 interface LostAndFoundTableProps {
   orders: any[];
@@ -247,11 +248,9 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       header: "Inv Value, Wt & Insurance",
       cell: (info) => {
         const data = info?.row?.original;
-        const codInfo = data?.codInfo;
+        const boxInfo = data?.orderInfo?.boxInfo[0];
         const service = data?.service;
-        const value = codInfo?.isCod
-          ? codInfo?.collectableAmount
-          : codInfo?.invoiceValue;
+        const value = boxInfo?.codInfo?.invoiceValue ;
         const weight = service?.appliedWeight;
         const hasInsurance = service?.insurance > 0;
 
@@ -323,7 +322,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         return (
           <div className="mt-3">
             <span className="text-sm font-semibold">
-              {data?.ldStatusHistory?.[0]?.reason}
+              {capitalizeFirstLetter(data?.ldStatusHistory?.[0]?.reason)}
             </span>
             <div className="mt-2 flex flex-col gap-1">
               {imagesCount > 0 && (
@@ -352,13 +351,18 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       header: "Current Tag & Remark",
       cell: (info) => {
         const data = info?.row?.original;
+        const currentStatus = data?.currentStatus;
+        let ldStatus = data?.ldStatus;
+        if(currentStatus === "LOST/DAMAGE" && !ldStatus)  {
+         ldStatus = "PARTNER";
+        }
         return (
           <div>
             <div className="mt-3">
               <span className="font-Open text-xs font-normal leading-4">
                 System:{" "}
                 <span className="font-Open text-sm font-semibold leading-5 text-[#F35838]">
-                  {data?.ldStatus}
+                  {ldStatus || "N/A"}
                 </span>
               </span>
             </div>
@@ -378,15 +382,30 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
     //   header: "Action",
     //   cell: (info) => {
     //     const data = info?.row?.original;
-    //     const isAlreadyClaimed = data?.isClaimed === true;
+    //     const isAlreadyClaimed = data?.isClaimed === true ;
+    //     const claimButton = data?.claimButton;
         
     //     return (
     //       <div>
-    //         {isAlreadyClaimed ? (
+    //         {/* {isAlreadyClaimed ? (
     //           <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
     //             Claimed
     //           </span>
     //         ) : (
+    //           <OneButton
+    //             text={isClaimingShipment ? "Processing..." : "Claim"}
+    //             variant="primary"
+    //             onClick={() => handleClaim(data)}
+    //             disabled={isClaimingShipment}
+    //           />
+    //         )}  */}
+    //         {claimButton === "DISABLED" ? (
+    //           <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium">
+    //             Expired
+    //           </span>
+    //         ) :  isAlreadyClaimed ? (<span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+    //           Claimed
+    //         </span>) : (
     //           <OneButton
     //             text={isClaimingShipment ? "Processing..." : "Claim"}
     //             variant="primary"
