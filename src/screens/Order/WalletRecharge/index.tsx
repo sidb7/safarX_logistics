@@ -895,7 +895,8 @@ const WalletRecharge = () => {
                           </div>
 
                           <p className="mt-2 font-Noto text-sm text-gray-600 leading-5">
-                            Applicable on a min recharge of{" "}
+                            Get up to ₹{coupon?.cashbackValue?.maxAmount}&nbsp;
+                            cashback on a minimum recharge of&nbsp;
                             <span className="font-medium">
                               ₹{coupon.minRechargeAmount.toLocaleString()}
                             </span>

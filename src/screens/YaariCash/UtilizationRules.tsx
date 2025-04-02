@@ -12,14 +12,18 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
   companyName,
 }) => {
   const shimmerEffect = "bg-gray-200 animate-pulse rounded-md";
-  const formatDate = (isoString: any) => {
+  const formatDate = (isoString: string) => {
     const date = new Date(isoString);
-    const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "long" });
-    const year = date.getFullYear();
+
+    const day = date.getUTCDate(); // Use UTC Date
+    const month = date.toLocaleString("en-US", {
+      month: "long",
+      timeZone: "UTC",
+    }); // Ensure UTC timeZone
+    const year = date.getUTCFullYear(); // Use UTC Full Year
 
     // Function to add ordinal suffix (st, nd, rd, th)
-    const getOrdinalSuffix = (day: any) => {
+    const getOrdinalSuffix = (day: number) => {
       if (day > 3 && day < 21) return "th"; // Covers 4th-20th
       switch (day % 10) {
         case 1:
@@ -35,6 +39,7 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
 
     return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
   };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       {/* Title */}
@@ -90,20 +95,20 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
               <div className={`${shimmerEffect} h-4 w-full`}></div>
             ) : (
               <p className="text-gray-600 font-Open text-sm lg:text-base font-normal leading-7">
-                {summary?.latestUtilizationRule === "full"
-                  ? `You can apply the full amount of your ${
-                      companyName?.toLowerCase() === "shipyaari"
-                        ? "YaariCash"
-                        : "cashback"
-                    } for any order.`
-                  : index === 0
-                  ? `You can apply a maximum of ${
-                      summary?.latestUtilizationRule || 10
-                    }% of your order value as ${
-                      companyName?.toLowerCase() === "shipyaari"
-                        ? "YaariCash"
-                        : "cashback"
-                    } for any order.`
+                {index === 0
+                  ? summary?.latestUtilizationRule?.toLowerCase() === "full"
+                    ? `You can apply the full amount of your ${
+                        companyName?.toLowerCase() === "shipyaari"
+                          ? "YaariCash"
+                          : "cashback"
+                      } for any order.`
+                    : `You can apply a maximum of ${
+                        summary?.latestUtilizationRule || 10
+                      }% of your order value as ${
+                        companyName?.toLowerCase() === "shipyaari"
+                          ? "YaariCash"
+                          : "cashback"
+                      } for any order.`
                   : index === 1
                   ? `Your ${
                       companyName?.toLowerCase() === "shipyaari"

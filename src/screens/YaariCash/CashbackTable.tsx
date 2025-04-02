@@ -220,9 +220,9 @@ const CashbackTable: React.FunctionComponent<ICashbackTableProps> = ({
         const utilizationRule = info?.row?.original?.utilizationRule;
         return (
           <div
-            className={`font-Open text-sm font-normal leading-5  text-[#1C1C1C] text-start`}
+            className={`font-Open text-sm font-normal leading-5 tracking-wide  text-[#1C1C1C] text-start`}
           >
-            {utilizationRule !== "full"
+            {utilizationRule?.toLowerCase() === "full"
               ? "No restrictions on cashback utilization."
               : `max ${utilizationRule} % per order.`}
           </div>
