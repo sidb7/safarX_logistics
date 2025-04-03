@@ -167,6 +167,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         cod: 0,
         tax: 0,
         total: 0,
+        yaariCash: 0,
       },
       images: [],
       Products: [
@@ -1074,6 +1075,9 @@ const Accordion = (props: ICustomTableAccordion) => {
           )?.toLocaleString("en-IN")}`,
           Total: `₹ ${Math.round(
             rowsData?.boxInfo?.[0]?.service?.total
+          )?.toLocaleString("en-IN")}`,
+          "yaari Cash": `₹ ${Math.round(
+            rowsData?.service?.yaariCash
           )?.toLocaleString("en-IN")}`,
         });
 
@@ -3772,6 +3776,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 }
                                                               </p>
                                                             </div>
+
                                                             <div className="flex justify-between mx-2">
                                                               <p className="font-open">
                                                                 Tax
@@ -3780,6 +3785,49 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 {item["Tax"]}
                                                               </p>
                                                             </div>
+                                                            {item?.[
+                                                              "yaari Cash"
+                                                            ] !== undefined &&
+                                                              item?.[
+                                                                "yaari Cash"
+                                                              ] !== 0 &&
+                                                              item?.[
+                                                                "yaari Cash"
+                                                              ]
+                                                                .toString()
+                                                                .trim() !==
+                                                                "" &&
+                                                              !item?.[
+                                                                "yaari Cash"
+                                                              ].includes(
+                                                                "undefined"
+                                                              ) &&
+                                                              !item?.[
+                                                                "yaari Cash"
+                                                              ].includes(
+                                                                "NaN"
+                                                              ) && ( // Check for "NaN"
+                                                                <div className="flex justify-between mx-2">
+                                                                  <p className="font-open">
+                                                                    Yaari Cash
+                                                                  </p>
+                                                                  <p className="font-open text-[#7CCA62]">
+                                                                    {console.log(
+                                                                      "Yaari Cash:",
+                                                                      item[
+                                                                        "yaari Cash"
+                                                                      ]
+                                                                    )}
+                                                                    - &nbsp;{" "}
+                                                                    {
+                                                                      item[
+                                                                        "yaari Cash"
+                                                                      ]
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              )}
+
                                                             <div className="flex justify-between mx-2">
                                                               <p className="font-open">
                                                                 Total

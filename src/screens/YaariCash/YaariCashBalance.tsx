@@ -14,14 +14,18 @@ const YaariCashBalance: React.FunctionComponent<IYaariCashBalanceProps> = ({
   companyName,
 }) => {
   const shimmerEffect = "bg-gray-200 animate-pulse rounded-md";
-  const formatDate = (isoString: any) => {
+  const formatDate = (isoString: string) => {
     const date = new Date(isoString);
-    const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "long" });
-    const year = date.getFullYear();
+
+    const day = date.getUTCDate(); // Use UTC Date
+    const month = date.toLocaleString("en-US", {
+      month: "long",
+      timeZone: "UTC",
+    }); // Ensure UTC timeZone
+    const year = date.getUTCFullYear(); // Use UTC Full Year
 
     // Function to add ordinal suffix (st, nd, rd, th)
-    const getOrdinalSuffix = (day: any) => {
+    const getOrdinalSuffix = (day: number) => {
       if (day > 3 && day < 21) return "th"; // Covers 4th-20th
       switch (day % 10) {
         case 1:
@@ -37,6 +41,7 @@ const YaariCashBalance: React.FunctionComponent<IYaariCashBalanceProps> = ({
 
     return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
   };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow mt-6">
       <div className="flex flex-col lg:flex-row justify-between gap-y-4 lg:items-center">
