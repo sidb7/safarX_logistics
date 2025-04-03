@@ -99,6 +99,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     const storedValue = sessionStorage.getItem("order");
     return storedValue !== null ? JSON.parse(storedValue) : initialState;
   });
+  const [componentKey, setComponentKey] = useState(0);
+
 
   const [highLightField, setHighLightField]: any = useState({
     addressDetails: false,
@@ -1161,6 +1163,9 @@ const handleReset = () => {
   setShowPickupDate("");
   setAwbListForDownLoad([]);
   setDownloadLebal(false);
+
+  // Force components to rebuild by giving them a new key
+  setComponentKey((prevKey:any) => prevKey + 1); 
   
   // Reset highlighted fields
   setHighLightField({
@@ -1233,6 +1238,7 @@ const handleReset = () => {
                       }
                     >
                       <AddressCardDetails
+                        key={componentKey} 
                         pickupDetails={order?.pickupDetails}
                         deliveryDetails={order?.deliveryDetails}
                         onPickupDetailsChange={handlePickupDetailsChange}
