@@ -50,7 +50,7 @@ const OneButton = (props: OneButtonProps) => {
     }
     ${
       variant === "secondary"
-        ? "bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a hover:border-0 focus:bg-[#E8E8E8] focus:border focus:border-[#A4A4A4]"
+        ? "bg-[#FFFFFF] text-[#1C1C1C] border border-[#A4A4A4] hover:bg-[#E8E8E8] hover:shadow-cardShadow2a  focus:bg-[#E8E8E8] focus:border focus:border-[#A4A4A4]"
         : ""
     }
     ${

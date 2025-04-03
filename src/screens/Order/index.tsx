@@ -592,7 +592,7 @@ const Index = () => {
             />
           </div>
 
-          <div
+          {/* <div
             ref={syncRef}
             onClick={handleSyncOrder}
             className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
@@ -604,7 +604,7 @@ const Index = () => {
             <div
               className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
             ></div>
-          </div>
+          </div> */}
           <OneButton
             text="Bulk Upload"
             onClick={() => navigate("/orders/add-bulk")}
@@ -625,16 +625,45 @@ const Index = () => {
             <></>
           )}
 
-          <div className="flex gap-3">
+          {/* <div className="flex gap-3">
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
               Amazon Fulfillment (
               {Number(unFullfillment || 0) + Number(fullfillment || 0)}/{" "}
               {Number(fullfillment || 0)})
             </span>
-            {/* <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
               Amazon unfulfillment ({unFullfillment})
-            </span> */}
+            </span>
+          </div> */}
+          <div className="flex gap-3">
+            <OneButton
+              text={`Amazon Fulfillment (${
+                Number(unFullfillment || 0) + Number(fullfillment || 0)
+              }/${Number(fullfillment || 0)})`}
+              onClick={() => {
+                /* Add your function here */
+              }}
+              variant="secondary"
+              className="!justify-start !font-medium !text-[#1C1C1C] !py-[6px] !px-[10px] !h-auto"
+              textTransform="none"
+            />
           </div>
+
+          {currentTap === "DRAFT" && (
+            <div
+              ref={syncRef}
+              onClick={handleSyncOrder}
+              className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
+            >
+              <img src={SyncIcon} alt="" width="16px" className="z-10" />
+              <span className="text-[#004EFF] z-10 text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
+                {syncChannelText}
+              </span>
+              <div
+                className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
+              ></div>
+            </div>
+          )}
 
           {isModalOpen && (
             <CenterModal
