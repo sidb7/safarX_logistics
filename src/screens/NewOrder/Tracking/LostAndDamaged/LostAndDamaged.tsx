@@ -185,7 +185,7 @@ const LostAndDamaged: React.FC = () => {
       } else {
         setOrderDetailsTable(response.data?.data?.[0]?.data || []);
         setTotalCount(response.data?.data?.[0]?.totalCount || 0);
-        setFallback(response?.fallback);
+        setFallback(response?.data?.fallback === true);
         toast.error(response?.data?.message || "Failed to fetch orders");
       }
     } catch (error) {
@@ -644,7 +644,7 @@ const LostAndDamaged: React.FC = () => {
             <p className="mt-4 text-gray-600">Loading shipment data...</p>
           </div>
         </div>
-      ) : !fallback ? (
+      ) : fallback ? (
         <div className="flex flex-col items-center justify-center h-[calc(100vh-300px)]">
           <img src={centerIcon} alt="Lost and Damaged Icon" className="mb-4" />
 
