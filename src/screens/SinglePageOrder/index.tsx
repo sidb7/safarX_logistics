@@ -101,7 +101,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   });
   const [componentKey, setComponentKey] = useState(0);
 
-
   const [highLightField, setHighLightField]: any = useState({
     addressDetails: false,
     packageDetails: false,
@@ -293,15 +292,15 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         {isLgScreen ? (
           <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
             <div className=" flex justify-start items-center h-fit">
-            <OneButton
-                        onClick={handleReset}
-                          text="Reset"
-                          variant="secondary"
-                          className="mx-8" 
-                          showIcon={true}
-                          icon={resetIcon}
-                           iconClass="!w-4 !h-4"
-                         />
+              <OneButton
+                onClick={handleReset}
+                text="Reset"
+                variant="secondary"
+                className="mx-8"
+                showIcon={true}
+                icon={resetIcon}
+                iconClass="!w-4 !h-4"
+              />
               <input
                 type="radio"
                 name="type"
@@ -399,14 +398,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           </div>
         ) : (
           <div className={`flex w-[100%] my-5 justify-end items-center`}>
-             <OneButton
-                          onClick={handleReset}
-                          text="Reset"
-                          variant="secondary"
-                          className="mx-8" 
-                          showIcon={true}
-                          icon={resetIcon}
-                         />
+            <OneButton
+              onClick={handleReset}
+              text="Reset"
+              variant="secondary"
+              className="mx-8"
+              showIcon={true}
+              icon={resetIcon}
+            />
             <CustomDropDown
               onChange={(e) => {
                 setSelectedOrderType(e.target.value);
@@ -697,6 +696,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
   const PlaceOrder = async () => {
     let payload = { ...order };
+    payload.order_placed_from = "platform";
     payload.boxInfo = payload.boxInfo.map((box: any) => {
       return {
         ...box,
@@ -722,10 +722,24 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
     }
 
-    if (walletBalance < order?.totalPrice) {
-      setShowAlertBox(true);
-      return;
+    if (
+      order?.yaariCash !== undefined &&
+      order?.yaariCash !== null &&
+      order?.yaariCash !== 0 &&
+      order?.yaariCash.toString().trim() !== "" &&
+      !order?.yaariCash.toString().includes("NaN")
+    ) {
+      if (walletBalance + order.yaariCash < order.totalPrice) {
+        setShowAlertBox(true);
+        return;
+      }
+    } else {
+      if (walletBalance < order?.totalPrice) {
+        setShowAlertBox(true);
+        return;
+      }
     }
+
     try {
       setplaceOrderLoader(true);
       const { data } = await POST(REVERSE_ORDER, payload);
@@ -828,7 +842,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 />
 
                 {/* <MyTable data={order?.boxInfo || []} columns={columns} /> */}
-                {yaariCash > 0 && (
+                {order?.yaariCash > 0 && (
                   <div className="bg-blue-50 p-4 rounded-lg shadow-md">
                     {/* Title Section */}
                     {/* <div className="flex items-center justify-between">
@@ -992,7 +1006,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                           Yaari Cash
                         </span>
                         <span className="font-Open text-sm text-[#7CCA62] font-normal leading-4">
-                          - ₹ {commaSeparator(yaariCash)}
+                          - ₹ {commaSeparator(order?.yaariCash)}
                         </span>
                       </div>
                     </div>
@@ -1008,9 +1022,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
                         {/* ₹ {commaSeparator(order?.total - yaariCash) || 0} */}
                         ₹{" "}
-                        {order?.total - yaariCash < 0
+                        {order?.total - order?.yaariCash < 0
                           ? "0"
-                          : commaSeparator(order?.total - yaariCash) || "0"}
+                          : commaSeparator(order?.total - order?.yaariCash) ||
+                            "0"}
                       </span>
                     </div>
                   </div>
@@ -1051,9 +1066,9 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     //   order?.totalPrice ? order?.totalPrice.toFixed(2) : 0
                     // }`}
                     text={`Place Order ${
-                      order?.totalPrice - yaariCash < 0
+                      order?.totalPrice - order?.yaariCash < 0
                         ? "0"
-                        : commaSeparator(order?.total - yaariCash) || "0"
+                        : commaSeparator(order?.total - order?.yaariCash) || "0"
                     }`}
                     variant="primary"
                     className="!w-[228px]"
@@ -1145,39 +1160,37 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
+  const handleReset = () => {
+    // Clear session storage items
+    sessionStorage.removeItem("order");
+    sessionStorage.removeItem("paymentType");
+    sessionStorage.removeItem("pickupOtherAddressDetails");
+    sessionStorage.removeItem("DeliveryOtherAddressDetails");
 
+    // Reset state values
+    setOrder(initialState);
+    setSelectedOrderType("");
+    setPaymentMode("PREPAID");
+    setSortServiciblity("");
+    setResetOtherAddressDetails(true);
+    setShowPickupDate("");
+    setAwbListForDownLoad([]);
+    setDownloadLebal(false);
 
-const handleReset = () => {
-  // Clear session storage items
-  sessionStorage.removeItem("order");
-  sessionStorage.removeItem("paymentType");
-  sessionStorage.removeItem("pickupOtherAddressDetails");
-  sessionStorage.removeItem("DeliveryOtherAddressDetails");
-  
-  // Reset state values
-  setOrder(initialState);
-  setSelectedOrderType("");
-  setPaymentMode("PREPAID");
-  setSortServiciblity("");
-  setResetOtherAddressDetails(true);
-  setShowPickupDate("");
-  setAwbListForDownLoad([]);
-  setDownloadLebal(false);
+    // Force components to rebuild by giving them a new key
+    setComponentKey((prevKey: any) => prevKey + 1);
 
-  // Force components to rebuild by giving them a new key
-  setComponentKey((prevKey:any) => prevKey + 1); 
-  
-  // Reset highlighted fields
-  setHighLightField({
-    addressDetails: false,
-    packageDetails: false,
-    orderDetails: false,
-    shippingDetails: false,
-    pickupTimeDetails: false,
-  });
-  
-  toast.success("Form data has been reset successfully");
-};
+    // Reset highlighted fields
+    setHighLightField({
+      addressDetails: false,
+      packageDetails: false,
+      orderDetails: false,
+      shippingDetails: false,
+      pickupTimeDetails: false,
+    });
+
+    toast.success("Form data has been reset successfully");
+  };
 
   useEffect(() => {
     sessionStorage.setItem("order", JSON.stringify(order));
@@ -1238,7 +1251,7 @@ const handleReset = () => {
                       }
                     >
                       <AddressCardDetails
-                        key={componentKey} 
+                        key={componentKey}
                         pickupDetails={order?.pickupDetails}
                         deliveryDetails={order?.deliveryDetails}
                         onPickupDetailsChange={handlePickupDetailsChange}
@@ -1355,7 +1368,7 @@ const handleReset = () => {
                             data-cy="auto-generate-order-id"
                           />
                         </div>
-         
+
                         <div
                           className={`flex gap-x-4 items-center flex-1 ${
                             !isLgScreen && " overflow-auto scroll-smooth"

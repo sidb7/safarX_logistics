@@ -167,6 +167,7 @@ const Summary = (props: Props) => {
               orderId,
             },
           ],
+          order_placed_from: "platform",
         });
 
         // Check the result of the second API call

@@ -133,6 +133,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         variableServices: value?.variableServices || {},
         base: value?.base,
         add: value?.add,
+        yaariCash: value?.yaariCash || 0,
       };
     });
     setShowPickupDate("");
@@ -238,6 +239,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                       variableServices: item?.variableServices || {},
                       base: item?.base,
                       add: item?.add,
+                      yaariCash: item?.yaariCash || 0,
                     });
                   }}
                   data-cy={`dropdown-item-${index}`}
