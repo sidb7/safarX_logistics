@@ -186,6 +186,13 @@ const WalletRecharge = () => {
       const { data: response } = await POST(INITIAL_RECHARGE, {
         paymentObject: initialObject,
         paymentGateway: "JUSPAY",
+        couponCode:
+          couponDetails.length > 0 &&
+          couponDetails[0]?.couponStatus !== "Expired" &&
+          Number(initialObject?.amount.replace(/,/g, "")) >=
+            couponDetails[0]?.minRechargeAmount
+            ? couponDetails[0]?.couponCode
+            : "",
       });
       if (response?.success === true) {
         if (response?.data?.status === "NEW") {
@@ -474,7 +481,8 @@ const WalletRecharge = () => {
     await loadPhonePeTransaction(
       walletValue,
       `${SELLER_WEB_URL}/wallet/view-wallet`,
-      `${SELLER_WEB_URL}/wallet/view-wallet`
+      `${SELLER_WEB_URL}/wallet/view-wallet`,
+      couponDetails
     );
     setLoading(false);
   };
@@ -488,7 +496,8 @@ const WalletRecharge = () => {
       COMPANY_NAME?.toUpperCase(),
       userDetails.name,
       userDetails.email,
-      redirectUrl
+      redirectUrl,
+      couponDetails
     );
     if (!options?.success && !options?.amount) {
       toast.error(options?.message);
@@ -816,7 +825,7 @@ const WalletRecharge = () => {
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
                 <div
                   className={`w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm  ${
-                    couponDetails.length > 0 ? "h-[315px]" : "h-[200px]"
+                    couponDetails.length > 0 ? "h-96" : ""
                   }`}
                 >
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
@@ -874,6 +883,7 @@ const WalletRecharge = () => {
                                 text={"Pay Now"}
                                 amt={walletValue}
                                 navigate={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                                couponDetails={couponDetails}
                               />
                             ) : (
                               "Pay Now"
@@ -1068,7 +1078,7 @@ const WalletRecharge = () => {
                 {/*Second */}
 
                 <div className="hidden lg:block">
-                  <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid my-5 border-[#E8E8E8]   shadow-sm   ">
+                  <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid my-5 border-[#E8E8E8]   shadow-sm  h-96 ">
                     {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>

@@ -710,6 +710,7 @@ export const Transaction = () => {
           <CustomTable
             rowData={data || []}
             columnsData={PassbookColumns(setSortOrder)}
+            setRowSelectedData={setRowSelectedData}
           />
         </div>
       );
