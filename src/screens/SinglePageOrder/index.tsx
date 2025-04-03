@@ -721,7 +721,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
     }
 
-    if (walletBalance < order?.totalPrice) {
+    if (
+      walletBalance < order?.totalPrice &&
+      order?.yaariCash < order?.totalPrice
+    ) {
       setShowAlertBox(true);
       return;
     }
