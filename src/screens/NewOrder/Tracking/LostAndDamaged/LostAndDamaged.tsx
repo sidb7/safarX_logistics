@@ -580,7 +580,7 @@ const LostAndDamaged: React.FC = () => {
               <DateButton
                 text="Select From & To Date"
                 onClick={() => {}}
-                className="h-[36px]"
+                className="h-[36px] !rounded-full"
                 value={
                   startDate && endDate
                     ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
@@ -599,6 +599,7 @@ const LostAndDamaged: React.FC = () => {
             }}
             customPlaceholder="Search by AWB number"
             getFullContent={() => setSearchValue("")}
+            className="!rounded-full"
           />
 
           <div className="relative">
@@ -741,7 +742,7 @@ const LostAndDamaged: React.FC = () => {
               label="Enter AWB No."
               value={awbNo}
               onChange={handleAwbChange}
-              className="mb-4"
+              className="mb-4 !rounded-full"
             />
 
             {orderDetails && (
@@ -823,14 +824,14 @@ const LostAndDamaged: React.FC = () => {
               label="Remark"
               value={remark}
               onChange={(e) => setRemark(e.target.value)}
-              className="mb-6"
+              className="mb-6 !rounded-full"
             />
 
             {selectedOption === "DAMAGE" && (
               <div className="space-y-4 mt-4 mb-4">
                 <div>
                   
-                  <div className="relative w-full h-12 border border-gray-300 rounded-lg overflow-hidden">
+                  <div className="relative w-full h-12 border border-gray-300 !rounded-full overflow-hidden">
                     <input
                       type="file"
                       accept="image/*"
@@ -881,7 +882,7 @@ const LostAndDamaged: React.FC = () => {
                   )}
                 </div>
                 <div>
-                  <div className="relative w-full h-12 border border-gray-300 rounded-lg overflow-hidden">
+                  <div className="relative w-full h-12 border border-gray-300 !rounded-full overflow-hidden">
                     <input
                       type="file"
                       accept="video/*"
