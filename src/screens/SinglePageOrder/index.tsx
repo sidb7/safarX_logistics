@@ -1017,7 +1017,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                         ₹ {order?.tax || 0}
                       </span>
                     </div>
-                    {order?.yaariCash < 0 && (
+
+                    {order?.yaariCash > 0 && (
                       <div className="flex justify-between">
                         <span className="font-Open text-sm text-[#000000] font-normal leading-4">
                           Yaari Cash
