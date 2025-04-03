@@ -185,7 +185,7 @@ const LostAndDamaged: React.FC = () => {
       } else {
         setOrderDetailsTable(response.data?.data?.[0]?.data || []);
         setTotalCount(response.data?.data?.[0]?.totalCount || 0);
-        setFallback(response?.fallback);
+        setFallback(response?.data?.fallback === true);
         toast.error(response?.data?.message || "Failed to fetch orders");
       }
     } catch (error) {
