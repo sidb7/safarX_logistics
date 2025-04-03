@@ -29,11 +29,11 @@ import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
-import Stepper from "../../../components/Stepper";
-import TickLogo from "../../../assets/common/Tick.svg";
-import GiftIcon from "../../../assets/Gift.svg";
-import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
-import CustomButton from "../../../components/Button";
+import PhonePe from "../../../assets/Payment/PhonePe_Logo.svg.png";
+import RazorPayIcon from "../../../assets/Payment/Razorpay_logo.png";
+import PaytmIcon from "../../../assets/Payment/paytmLogoPNG.png";
+import JusPayIcon from "../../../assets/Payment/juspaylogo.svg";
+
 import Done from "../../../assets/Done .svg";
 import { POST } from "../../../utils/webService";
 import {
@@ -70,7 +70,7 @@ import { useRazorpay } from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
-import JusPayIcon from "../../../assets/juspay.png";
+// import JusPayIcon from "../../../assets/juspay.png";
 import JusPay from "../../../components/JusPay/juspay";
 import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -80,7 +80,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import doneIcon from "../../../assets/Done .svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import sessionManager from "../../../utils/sessionManager";
-
+import { PaymentSlice } from "../../../redux/reducers/paymentReducer";
 const WalletRecharge = () => {
   const dispatch = useDispatch();
   const { Razorpay } = useRazorpay();
@@ -118,7 +118,7 @@ const WalletRecharge = () => {
   const [loading, setLoading] = useState(false);
   let myInterval: number | any;
   const userDetails = useSelector((state: any) => state.signin);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [openRightModal, setOpenRightModal] = useState(false);
   const [showNeftSuccessFullMsg, setShowNeftSuccessFullMsg] = useState(false);
 
@@ -158,6 +158,7 @@ const WalletRecharge = () => {
 
   const [errorMessage, setErrorMessage] = useState<any>("");
   const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
+  const [paymentGateway, setPaymentGateway] = useState<any>("");
   const [companydetails, setcompanydetails] = useState<any>(
     JSON.parse(sessionStorage.getItem("companydetails") as string)
   );
@@ -167,6 +168,42 @@ const WalletRecharge = () => {
   const [isActives, setIsActives] = useState(false);
   // const isActive = walletValue >= coupon.minRechargeAmount;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const rechargeAmountFromRedux = useSelector(
+    (state: any) => state?.payment?.amount
+  );
+  const JusPayHandler = async (
+    amountFromRedux?: any,
+    callbackUrlRedux?: any
+  ) => {
+    const callbackUrl = `${SELLER_WEB_URL}/wallet/view-wallet`;
+    if (amountFromRedux || walletValue) {
+      setLoading(true);
+      let initialObject = {
+        amount: amountFromRedux ? amountFromRedux.toString() : walletValue,
+        callbackUrl: callbackUrlRedux ? callbackUrlRedux : callbackUrl,
+      };
+
+      const { data: response } = await POST(INITIAL_RECHARGE, {
+        paymentObject: initialObject,
+        paymentGateway: "JUSPAY",
+      });
+      if (response?.success === true) {
+        if (response?.data?.status === "NEW") {
+          localStorage.setItem("order_id", response?.data?.order_id);
+          window.location.replace(response?.data?.payment_links?.web);
+          myInterval = setInterval(function () {
+            rechargeStatusCheck(response?.data?.order_id);
+          }, 500);
+          // setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+      dispatch(PaymentSlice.actions.paymentAmount(0));
+    } else {
+      toast.error("Please select amount for recharge");
+    }
+  };
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
   //   const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -187,26 +224,39 @@ const WalletRecharge = () => {
       }
     }
   }, [walletValue, couponDetails]);
+  const paymentIcons: any = {
+    RAZORPE: { src: RazorPayIcon, width: 80, height: 30 },
+    PHONEPE: { src: PhonePe, width: 80, height: 30 },
+    PAYTM: { src: PaytmIcon, width: 55, height: 30 },
+    JUSPAY: { src: JusPayIcon, width: 80, height: 30 },
+  };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       fetchCurrentWallet();
-  //       const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
-  //       if (phonePeTransactionId) {
-  //         await POST(PHONEPE_TRANSACTION_STATUS, {
-  //           orderId: phonePeTransactionId,
-  //           transactionId: phonePeTransactionId,
-  //           paymentGateway: "PHONEPE",
-  //         });
-  //         removeLocalStorage("phonePeTransactionId");
-  //         window.location.reload();
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        // fetchCurrentWallet();
+        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+        if (phonePeTransactionId) {
+          const { data } = await POST(PHONEPE_TRANSACTION_STATUS, {
+            orderId: phonePeTransactionId,
+            transactionId: phonePeTransactionId,
+            paymentGateway: "PHONEPE",
+          });
+
+          if (!data?.success) {
+            throw "Wallet Recharge Failed";
+          }
+          toast.success("Wallet Recharged Successfully");
+
+          // window.location.reload();
+        }
+      } catch (error) {
+        toast.error(error + "");
+      } finally {
+        removeLocalStorage("phonePeTransactionId");
+      }
+    })();
+  }, []);
 
   //getting the sellerID
   const { sellerInfo } = sessionManager({});
@@ -408,7 +458,7 @@ const WalletRecharge = () => {
         walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
         orderId: data?.data?.orderId,
       };
-      const datas = await POST(RECHARGE_STATUS, payload);
+      // const datas = await POST(RECHARGE_STATUS, payload);
 
       myInterval = setInterval(function () {
         rechargeStatusCheck(data?.data?.orderId);
@@ -458,24 +508,6 @@ const WalletRecharge = () => {
     const { sellerInfo } = sessionManager({});
     let temp = sellerInfo;
     setDataFromSession(temp);
-  };
-
-  const startPayments = async () => {
-    let initialObject = {
-      amount: walletValue,
-      callbackUrl: `${SELLER_WEB_URL}/wallet/view-wallet`,
-    };
-
-    const { data: response } = await POST(INITIAL_RECHARGE, {
-      paymentObject: initialObject,
-      paymentGateway: "JUSPAY",
-    });
-    if (response?.success === true) {
-      if (response?.data?.status === "NEW") {
-        localStorage.setItem("order_id", response?.data?.order_id);
-        window.location.replace(response?.data?.payment_links?.web);
-      }
-    }
   };
 
   const getWalletBalance = async () => {
@@ -582,6 +614,12 @@ const WalletRecharge = () => {
     (async () => {
       try {
         // fetchCurrentWallet();
+        if (localStorage.getItem("showToastPaytm")) {
+          toast.success("Transaction Successfull");
+
+          // Remove the flag to prevent repeated toasts
+          localStorage.removeItem("showToastPaytm");
+        }
         const juspayOrderId = getLocalStorage("order_id");
         if (juspayOrderId) {
           setPaymentLoader(true);
@@ -615,7 +653,23 @@ const WalletRecharge = () => {
     tempPaymentArr = JSON.parse(tempPaymentArr);
     setPaymentGatewayArr(tempPaymentArr);
   }, []);
+  const handlePayment = () => {
+    if (paymentGateway == "") {
+      toast.error("Please select a payment option first");
+    }
 
+    if (paymentGateway == "JUSPAY") {
+      JusPayHandler(rechargeAmountFromRedux);
+    }
+    if (paymentGateway == "RAZORPE") {
+      handleRazorPayTransaction();
+    }
+    if (paymentGateway == "PHONEPE") {
+      handlePhonePeTransaction();
+    }
+    // if (paymentGateway == "PAYTM") {
+    // }
+  };
   useEffect(() => {
     if (walletValue) {
       setIsDisabled(false);
@@ -758,7 +812,7 @@ const WalletRecharge = () => {
                 </p>
               </div>
             </div> */}
-            <div className="mx-5">
+            <div className="mx-5 ">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
                 <div
                   className={`w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm  ${
@@ -789,22 +843,70 @@ const WalletRecharge = () => {
                       onChange={(e) => setWalletValue(e.target.value)}
                     />
                   </p> */}
-                  <div className="flex">
+                  <div className="flex items-center">
                     <div>
-                      <CustomDropDown
-                        heading="Select Amount"
-                        value={walletValue}
-                        options={walletMenu}
-                        onChange={(
-                          event: React.ChangeEvent<HTMLSelectElement>
-                        ) => {
-                          setWalletValue(event.target.value);
-                        }}
-                        wrapperClass="w-[120px] md:w-[200px]"
-                        selectClassName="text-[12px] mt-6"
-                      />
+                      <div className="flex gap-x-2 items-center ">
+                        <CustomDropDown
+                          heading="Select Amount"
+                          value={walletValue}
+                          options={walletMenu}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setWalletValue(event.target.value);
+                          }}
+                          wrapperClass="w-[120px] md:w-[200px]                                                                                                                "
+                          selectClassName="text-[12px] !h-[32px] "
+                        />
+                        <div className="h-full flex items-center ">
+                          <div
+                            onClick={() => {
+                              handlePayment();
+                            }}
+                            className={`${
+                              (!walletValue || !paymentGateway) &&
+                              "!cursor-not-allowed bg-gray-500 border-0"
+                            } border items-center flex border-black px-1 text-sm py-1 bg-black text-white font-semibold  cursor-pointer`}
+                          >
+                            {paymentGateway == "PAYTM" ? (
+                              <Paytm
+                                isDisabled={isDisabled}
+                                text={"Pay Now"}
+                                amt={walletValue}
+                                navigate={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                              />
+                            ) : (
+                              "Pay Now"
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-5">
+                        <div className="text-xs text-[#777777]">
+                          Select a payment option to proceed securely.
+                        </div>
+                        <div className="flex flex-wrap gap-x-3 sm:grid sm:grid-cols-2 md:flex">
+                          {paymentGatewayArr?.map((el: any, i: number) => (
+                            <div
+                              key={i}
+                              onClick={() => setPaymentGateway(el?.paymentId)}
+                              className={`border cursor-pointer text-sm min-w-[6rem] h-8 text-center flex justify-center items-center my-2 px-2 rounded-md transition-transform ${
+                                el?.paymentId === paymentGateway
+                                  ? "border-black border-1 text-white scale-105"
+                                  : "hover:border-gray-400"
+                              }`}
+                            >
+                              {paymentIcons[el?.paymentId] ? (
+                                <img {...paymentIcons[el?.paymentId]} alt="" />
+                              ) : (
+                                el?.paymentId
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
+                    {/* <div className="w-[120px] md:w-[200px] ml-8 md:ml-0">
                       {paymentGatewayArr &&
                         paymentGatewayArr?.length >= 1 &&
                         paymentGatewayArr?.map((el: any, i: number) => {
@@ -828,7 +930,7 @@ const WalletRecharge = () => {
                             />
                           );
                         })}
-                    </div>
+                    </div> */}
                   </div>
                   {/* {couponDetails?.map((coupon: any, index: number) => {
                     const isActive = walletValue <= coupon.minRechargeAmount;
@@ -966,7 +1068,7 @@ const WalletRecharge = () => {
                 {/*Second */}
 
                 <div className="hidden lg:block">
-                  <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
+                  <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid my-5 border-[#E8E8E8]   shadow-sm   ">
                     {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
