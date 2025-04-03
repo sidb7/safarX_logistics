@@ -346,9 +346,10 @@ const Index = () => {
       "amazon_state",
       "spapi_oauth_code",
     ];
+
     let urlToken = "";
     if (params?.token) {
-      urlToken = params.token;
+      urlToken = params?.token;
     } else {
       urlToken = sellerInfo?.token;
     }

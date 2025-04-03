@@ -295,7 +295,6 @@ const WalletPayment = () => {
                 {paymentGatewayArr &&
                   paymentGatewayArr?.length >= 1 &&
                   paymentGatewayArr?.map((el: any, i: number) => {
-                    console.log("el", el);
                     return el?.paymentId === "RAZORPE" ? (
                       <div
                         onClick={handleRazorPayTransaction}

@@ -8,7 +8,7 @@ import {
 } from "../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 
-function Paytm({ text, amt, navigate, isDisabled }) {
+function Paytm({ text, amt, navigate, isDisabled, couponDetails }) {
   let urlLink = "";
   let mid = "";
   let website = "";
@@ -33,8 +33,8 @@ function Paytm({ text, amt, navigate, isDisabled }) {
     });
     if (data?.success) {
       // setShowCheckout(false);
+      localStorage.setItem("showToastPaytm", "true");
       window.location.href = navigate;
-      toast.success("Successfully Done");
     }
   };
   const CONFIG = {
@@ -111,6 +111,12 @@ function Paytm({ text, amt, navigate, isDisabled }) {
         callbackUrl: navigate,
       },
       paymentGateway: "PAYTM",
+      couponCode:
+        couponDetails.length > 0 &&
+        couponDetails[0]?.couponStatus !== "Expired" &&
+        Number(amt?.replace(/,/g, "")) >= couponDetails[0]?.minRechargeAmount
+          ? couponDetails[0]?.couponCode
+          : "",
     });
     if (data?.success) {
       setMConfig({
@@ -198,9 +204,9 @@ function Paytm({ text, amt, navigate, isDisabled }) {
       type="button"
       className={`${
         !isDisabled
-          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+          ? "!bg-opacity-50  hover:!bg-black  duration-150"
           : "!bg-opacity-50"
-      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+      } flex  justify-center items-center text-white bg-black rounded-md  w-full  hover:scale-105`}
       onClick={loadCheckoutScript}
     >
       <p className="buttonClassName lg:text-[14px] whitespace-nowrap">{text}</p>

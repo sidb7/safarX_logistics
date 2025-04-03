@@ -88,6 +88,8 @@ const LostAndDamaged: React.FC = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const isInitialRender = useRef(true);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isFirstLoadComplete, setIsFirstLoadComplete] = useState(false);
+
 
 
 
@@ -186,7 +188,11 @@ const LostAndDamaged: React.FC = () => {
         setOrderDetailsTable(response.data?.data?.[0]?.data || []);
         setTotalCount(response.data?.data?.[0]?.totalCount || 0);
         setFallback(response?.data?.fallback === true);
+        // toast.error(response?.data?.message || "Failed to fetch orders");
+        // Only show error toast if fallback is not true
+      if (!response?.data?.fallback) {
         toast.error(response?.data?.message || "Failed to fetch orders");
+      }
       }
     } catch (error) {
       console.error("Error fetching order details:", error);
@@ -510,49 +516,124 @@ const LostAndDamaged: React.FC = () => {
     orderDetails?.[0]?.orderInfo?.boxInfo?.[0]?.products?.[0]?.name
   );
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   fetchOrderDetailsTable();
+  // }, [currentPage, itemsPerPage]);
+
+  // useEffect(() => {
+  //   // Only call API when both dates are selected or both are null
+  //   if ((startDate && endDate) || (startDate === null && endDate === null)) {
+  //     fetchOrderDetailsTable();
+  //   }
+  // }, [startDate, endDate]);
+
+  // useEffect(() => {
+  //   const debounceTimeout = setTimeout(() => {
+  //     setCurrentPage(1); // Reset to first page on new search
+  //     fetchOrderDetailsTable(searchValue);
+  //   }, 300);
+
+  //   return () => clearTimeout(debounceTimeout);
+  // }, [searchValue]);
+
+  // useEffect(() => {
+  //   if (filterState?.name && filterState?.menu) {
+  //     getObjectWithIsActiveTrue(filterState.menu, filterState.name);
+  //   }
+  // }, [filterState]);
+
+  // useEffect(() => {
+  //   if (filterPayLoad.filterArrOne.length === 0) {
+  //     fetchOrderDetailsTable();
+  //   }
+  // }, [filterPayLoad]);
+
+  // useEffect(() => {
+  //   if (formSubmitted) {
+  //     fetchOrderDetailsTable(); // Refresh the data
+  //     setFormSubmitted(false); // Reset the flag
+  //   }
+  // }, [formSubmitted]);
+
+  // useEffect(() => {
+  //   fetchOrderDetailsTable();
+  // }, []);
+
+useEffect(() => {
+  console.log('Initial data fetch starting');
+  
+  const initialFetch = async () => {
+    try {
+      await fetchOrderDetailsTable();
+      setIsFirstLoadComplete(true);
+    } catch (error) {
+      console.error('Error in initial fetch:', error);
+      setIsFirstLoadComplete(true);
+    }
+  };
+  
+  initialFetch();
+}, []); 
+
+
+useEffect(() => {
+  if (isFirstLoadComplete) {
+    console.log('First load complete, enabling other effects');
+    isInitialRender.current = false;
+  }
+}, [isFirstLoadComplete]);
+
+
+useEffect(() => {
+  if (isInitialRender.current || !isFirstLoadComplete) return;
+  
+  console.log('Pagination changed, fetching data');
+  fetchOrderDetailsTable();
+}, [currentPage, itemsPerPage]);
+
+useEffect(() => {
+  if (isInitialRender.current || !isFirstLoadComplete) return;
+  
+  if ((startDate && endDate) || (startDate === null && endDate === null)) {
+    console.log('Date range changed, fetching data');
     fetchOrderDetailsTable();
-  }, [currentPage, itemsPerPage]);
+  }
+}, [startDate, endDate]);
 
-  useEffect(() => {
-    // Only call API when both dates are selected or both are null
-    if ((startDate && endDate) || (startDate === null && endDate === null)) {
-      fetchOrderDetailsTable();
-    }
-  }, [startDate, endDate]);
+useEffect(() => {
+  if (isInitialRender.current || !isFirstLoadComplete) return;
+  
+  const debounceTimeout = setTimeout(() => {
+    console.log('Search value changed, fetching data');
+    setCurrentPage(1); 
+    fetchOrderDetailsTable(searchValue);
+  }, 300);
 
-  useEffect(() => {
-    const debounceTimeout = setTimeout(() => {
-      setCurrentPage(1); // Reset to first page on new search
-      fetchOrderDetailsTable(searchValue);
-    }, 300);
+  return () => clearTimeout(debounceTimeout);
+}, [searchValue]);
 
-    return () => clearTimeout(debounceTimeout);
-  }, [searchValue]);
+useEffect(() => {
+  if (filterState?.name && filterState?.menu) {
+    getObjectWithIsActiveTrue(filterState.menu, filterState.name);
+  }
+}, [filterState]);
 
-  useEffect(() => {
-    if (filterState?.name && filterState?.menu) {
-      getObjectWithIsActiveTrue(filterState.menu, filterState.name);
-    }
-  }, [filterState]);
-
-  useEffect(() => {
-    if (filterPayLoad.filterArrOne.length === 0) {
-      fetchOrderDetailsTable();
-    }
-  }, [filterPayLoad]);
-
-  useEffect(() => {
-    if (formSubmitted) {
-      fetchOrderDetailsTable(); // Refresh the data
-      setFormSubmitted(false); // Reset the flag
-    }
-  }, [formSubmitted]);
-
-  useEffect(() => {
+useEffect(() => {
+  if (isInitialRender.current || !isFirstLoadComplete) return;
+  
+  if (filterPayLoad.filterArrOne.length === 0) {
+    console.log('All filters cleared, fetching data');
     fetchOrderDetailsTable();
-  }, []);
+  }
+}, [filterPayLoad]);
 
+useEffect(() => {
+  if (formSubmitted) {
+    console.log('Form submitted, refreshing data');
+    fetchOrderDetailsTable();
+    setFormSubmitted(false);
+  }
+}, [formSubmitted]);
   return (
     <div>
       <div className=" flex justify-between w-full">
