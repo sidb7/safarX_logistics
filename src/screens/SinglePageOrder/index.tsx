@@ -723,12 +723,23 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     }
 
     if (
-      walletBalance < order?.totalPrice &&
-      order?.yaariCash < order?.totalPrice
+      order?.yaariCash !== undefined &&
+      order?.yaariCash !== null &&
+      order?.yaariCash !== 0 &&
+      order?.yaariCash.toString().trim() !== "" &&
+      !order?.yaariCash.toString().includes("NaN")
     ) {
-      setShowAlertBox(true);
-      return;
+      if (walletBalance + order.yaariCash < order.totalPrice) {
+        setShowAlertBox(true);
+        return;
+      }
+    } else {
+      if (walletBalance < order?.totalPrice) {
+        setShowAlertBox(true);
+        return;
+      }
     }
+
     try {
       setplaceOrderLoader(true);
       const { data } = await POST(REVERSE_ORDER, payload);
