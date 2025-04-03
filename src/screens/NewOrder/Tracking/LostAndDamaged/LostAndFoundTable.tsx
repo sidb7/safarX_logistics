@@ -211,15 +211,18 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       header: "Package Details & Partner",
       cell: (info) => {
         const data = info?.row?.original;
-        const partnerInfo = data?.orderInfo?.boxInfo?.[0]?.products?.[0];
+        // const partnerInfo = data?.orderInfo?.boxInfo?.[0]?.products?.[0];
+        const partnerInfo = data?.orderInfo?.boxInfo?.[0]
         return (
           <div>
             <div className="mb-4">
-              <p className="font-Open text-xs font-normal leading-4 block mt-3">
-                Product
+              <p className="font-Open text-xs font-normal leading-4 block mt-7">
+                {}
               </p>
-              <h2 className="font-Open text-sm font-semibold leading-5 block">
-                {partnerInfo?.name || "N/A"}
+              <h2 className="font-Open text-sm font-semibold leading-5 block ">
+                {/* {partnerInfo?.name || "N/A"} */}
+                                {partnerInfo?.name || "N/A"}
+
               </h2>
             </div>
             <div className="mb-4">
@@ -322,7 +325,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         return (
           <div className="mt-3">
             <span className="text-sm font-semibold">
-              {capitalizeFirstLetter(data?.ldStatusHistory?.[0]?.reason)}
+              {capitalizeFirstLetter(data?.ldStatusHistory?.[0]?.reason) || "N/A"}
             </span>
             <div className="mt-2 flex flex-col gap-1">
               {imagesCount > 0 && (
@@ -356,6 +359,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         if(currentStatus === "LOST/DAMAGE" && !ldStatus)  {
          ldStatus = "PARTNER";
         }
+        const sellerRemark = data?.sellerRemark || "N/A";  
         return (
           <div>
             <div className="mt-3">
@@ -370,7 +374,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
               <span className="font-Open text-xs font-normal leading-4">
                 Remark:{" "}
                 <div className="font-Open text-sm font-semibold leading-5">
-                  {data?.sellerRemark || "N/A"}
+                  { Array.isArray(sellerRemark) || !sellerRemark ?  "N/A" : sellerRemark}
                 </div>
               </span>
             </div>
