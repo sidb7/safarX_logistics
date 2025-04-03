@@ -1077,7 +1077,7 @@ const Accordion = (props: ICustomTableAccordion) => {
             rowsData?.boxInfo?.[0]?.service?.total
           )?.toLocaleString("en-IN")}`,
           "yaari Cash": `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.allServices[0]?.yaariCash
+            rowsData?.service?.yaariCash
           )?.toLocaleString("en-IN")}`,
         });
 
@@ -3801,7 +3801,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 "yaari Cash"
                                                               ].includes(
                                                                 "undefined"
-                                                              ) && ( // Check if it contains "undefined"
+                                                              ) &&
+                                                              !item?.[
+                                                                "yaari Cash"
+                                                              ].includes(
+                                                                "NaN"
+                                                              ) && ( // Check for "NaN"
                                                                 <div className="flex justify-between mx-2">
                                                                   <p className="font-open">
                                                                     Yaari Cash
@@ -3813,7 +3818,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                         "yaari Cash"
                                                                       ]
                                                                     )}
-                                                                    - &nbsp;
+                                                                    - &nbsp;{" "}
                                                                     {
                                                                       item[
                                                                         "yaari Cash"
@@ -3822,6 +3827,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                   </p>
                                                                 </div>
                                                               )}
+
                                                             <div className="flex justify-between mx-2">
                                                               <p className="font-open">
                                                                 Total
