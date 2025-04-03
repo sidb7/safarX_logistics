@@ -167,6 +167,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         cod: 0,
         tax: 0,
         total: 0,
+        yaariCash: 0,
       },
       images: [],
       Products: [
@@ -1039,7 +1040,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         rows.push({
           title: "Payment Details",
-          "Payment Type": rowsData?.codInfo?.isCod,
+          "Payment Type": rowsData?.codInfo?.isCod ? "COD" : "Prepaid",
           "Collectable Amount": rowsData?.codInfo?.collectableAmount,
           "Invoice Value": rowsData?.codInfo?.invoiceValue?.toFixed(2),
         });
@@ -1074,6 +1075,9 @@ const Accordion = (props: ICustomTableAccordion) => {
           )?.toLocaleString("en-IN")}`,
           Total: `₹ ${Math.round(
             rowsData?.boxInfo?.[0]?.service?.total
+          )?.toLocaleString("en-IN")}`,
+          "yaari Cash": `₹ ${Math.round(
+            rowsData?.service?.yaariCash
           )?.toLocaleString("en-IN")}`,
         });
 
@@ -3772,6 +3776,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 }
                                                               </p>
                                                             </div>
+
                                                             <div className="flex justify-between mx-2">
                                                               <p className="font-open">
                                                                 Tax
@@ -3780,6 +3785,49 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 {item["Tax"]}
                                                               </p>
                                                             </div>
+                                                            {item?.[
+                                                              "yaari Cash"
+                                                            ] !== undefined &&
+                                                              item?.[
+                                                                "yaari Cash"
+                                                              ] !== 0 &&
+                                                              item?.[
+                                                                "yaari Cash"
+                                                              ]
+                                                                .toString()
+                                                                .trim() !==
+                                                                "" &&
+                                                              !item?.[
+                                                                "yaari Cash"
+                                                              ].includes(
+                                                                "undefined"
+                                                              ) &&
+                                                              !item?.[
+                                                                "yaari Cash"
+                                                              ].includes(
+                                                                "NaN"
+                                                              ) && ( // Check for "NaN"
+                                                                <div className="flex justify-between mx-2">
+                                                                  <p className="font-open">
+                                                                    Yaari Cash
+                                                                  </p>
+                                                                  <p className="font-open text-[#7CCA62]">
+                                                                    {console.log(
+                                                                      "Yaari Cash:",
+                                                                      item[
+                                                                        "yaari Cash"
+                                                                      ]
+                                                                    )}
+                                                                    - &nbsp;{" "}
+                                                                    {
+                                                                      item[
+                                                                        "yaari Cash"
+                                                                      ]
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              )}
+
                                                             <div className="flex justify-between mx-2">
                                                               <p className="font-open">
                                                                 Total
@@ -3804,97 +3852,20 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         {item.title === "Payment Details" &&
                                           index === 1 && (
                                             <div className="flex flex-col gap-y-2 border border-black-600 p-4 rounded-md">
-                                              <div>
-                                                {Object?.entries(
-                                                  orderDetails?.[
-                                                    orderDetails?.length - 4
-                                                  ]
-                                                )?.map(
-                                                  (
-                                                    eachDetail: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      index === 1 && (
-                                                        <div className="flex justify-between">
-                                                          <p className="open-sans">
-                                                            {eachDetail[0]}
-                                                          </p>
-                                                          <p className="open-sans">
-                                                            {eachDetail[1]
-                                                              ? "COD"
-                                                              : "Prepaid"}
-                                                          </p>
-                                                        </div>
-                                                      )
-                                                    );
-                                                  }
-                                                )}
-                                              </div>
-                                              <div>
-                                                {Object?.entries(
-                                                  orderDetails?.[
-                                                    orderDetails?.length - 4
-                                                  ]
-                                                )?.map(
-                                                  (
-                                                    eachDetail: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      index === 2 && (
-                                                        <div className="flex justify-between">
-                                                          <p className="open-sans">
-                                                            {eachDetail[0]}
-                                                          </p>
-                                                          <p className="open-sans">
-                                                            {
-                                                              +eachDetail?.[1]?.toFixed(
-                                                                2
-                                                              )
-                                                            }
-                                                          </p>
-                                                        </div>
-                                                      )
-                                                    );
-                                                  }
-                                                )}
-                                              </div>
-                                              <div>
-                                                {Object?.entries(
-                                                  orderDetails?.[
-                                                    orderDetails?.length - 4
-                                                  ]
-                                                )?.map(
-                                                  (
-                                                    eachDetail: any,
-                                                    index: any
-                                                  ) => {
-                                                    return (
-                                                      index === 3 && (
-                                                        <div className="flex justify-between">
-                                                          <p className="open-sans">
-                                                            {eachDetail[0]}
-                                                          </p>
-                                                          <p className="open-sans">
-                                                            <input
-                                                              className="w-[44px] p-0 border"
-                                                              type="number"
-                                                              id="invoiceValue"
-                                                              defaultValue={
-                                                                eachDetail[1] &&
-                                                                (+eachDetail?.[1])?.toFixed(
-                                                                  2
-                                                                )
-                                                              }
-                                                            />
-                                                          </p>
-                                                        </div>
-                                                      )
-                                                    );
-                                                  }
-                                                )}
-                                              </div>
+                                              {Object.entries(item).map(
+                                                ([key, value]: any) => {
+                                                  return (
+                                                    <div className="flex justify-between">
+                                                      {key != "title" && (
+                                                        <>
+                                                          <div>{key}:</div>
+                                                          <div>{value}</div>
+                                                        </>
+                                                      )}
+                                                    </div>
+                                                  );
+                                                }
+                                              )}
                                             </div>
                                           )}
                                       </div>
