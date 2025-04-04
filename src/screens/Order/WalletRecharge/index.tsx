@@ -354,7 +354,7 @@ const WalletRecharge = () => {
     const dateObj = new Date(dateStr);
 
     // Get the day of the month
-    const day = dateObj.getDate();
+    const day = dateObj.getUTCDate();
 
     // Function to get the day suffix (e.g., 'st', 'nd', 'rd', 'th')
     const getDaySuffix = (day: any) => {
@@ -822,10 +822,10 @@ const WalletRecharge = () => {
               </div>
             </div> */}
             <div className="mx-5 ">
-              <div className="grid lg:grid-cols-2 gap-x-[27px]">
+              <div className="grid lg:grid-cols-2 gap-x-[27px] ">
                 <div
                   className={`w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm  ${
-                    couponDetails.length > 0 ? "h-96" : ""
+                    couponDetails.length > 0 ? "h-96" : "h-fit"
                   }`}
                 >
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
@@ -875,7 +875,7 @@ const WalletRecharge = () => {
                             className={`${
                               (!walletValue || !paymentGateway) &&
                               "!cursor-not-allowed bg-gray-500 border-0"
-                            } border items-center flex border-black px-1 text-sm py-1 bg-black text-white font-semibold  cursor-pointer`}
+                            } border items-center flex border-black px-2 rounded-md text-sm py-1 bg-black text-white font-semibold  cursor-pointer`}
                           >
                             {paymentGateway == "PAYTM" ? (
                               <Paytm
@@ -886,7 +886,7 @@ const WalletRecharge = () => {
                                 couponDetails={couponDetails}
                               />
                             ) : (
-                              "Pay Now"
+                              <div className="hover:scale-105">Pay Now</div>
                             )}
                           </div>
                         </div>
@@ -900,7 +900,7 @@ const WalletRecharge = () => {
                             <div
                               key={i}
                               onClick={() => setPaymentGateway(el?.paymentId)}
-                              className={`border cursor-pointer text-sm min-w-[6rem] h-8 text-center flex justify-center items-center my-2 px-2 rounded-md transition-transform ${
+                              className={`border cursor-pointer text-sm min-w-[6rem] py-1 text-center flex justify-center items-center my-2 px-2 rounded-md transition-transform ${
                                 el?.paymentId === paymentGateway
                                   ? "border-black border-1 text-white scale-105"
                                   : "hover:border-gray-400"
@@ -1078,7 +1078,11 @@ const WalletRecharge = () => {
                 {/*Second */}
 
                 <div className="hidden lg:block">
-                  <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid my-5 border-[#E8E8E8]   shadow-sm  h-96 ">
+                  <div
+                    className={`flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid my-5 border-[#E8E8E8]   shadow-sm ${
+                      couponDetails.length > 0 ? "h-96" : ""
+                    } `}
+                  >
                     {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
@@ -1187,7 +1191,8 @@ const WalletRecharge = () => {
                         src={YaariPointsIcon}
                         alt=""
                         className="object-contain"
-                        height={170}
+                        // height={160}
+                        width={135}
                       />
                     </div>
                   </div>
