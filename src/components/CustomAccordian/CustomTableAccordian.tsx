@@ -3785,7 +3785,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 {item["Tax"]}
                                                               </p>
                                                             </div>
-                                                            {item?.[
+                                                            {/* {item?.[
                                                               "yaari Cash"
                                                             ] !== undefined &&
                                                               item?.[
@@ -3826,7 +3826,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     }
                                                                   </p>
                                                                 </div>
-                                                              )}
+                                                              )} */}
 
                                                             <div className="flex justify-between mx-2">
                                                               <p className="font-open">
