@@ -97,7 +97,8 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   const outForDeliveryCount = getCount("OUT FOR DELIVERY") || 0;
   const exceptionCount = getCount("EXCEPTION") || 0;
   const cancelledCount = getCount("CANCELLED") || 0;
-  const cancelRequested = getCount("CANCELLED REQUESTED") || 0;
+  const cancelledRequested = getCount("CANCELLED REQUESTED") || 0;
+  const cancelRequested = getCount("CANCEL REQUESTED") || 0;
 
   return (
     <>
@@ -190,7 +191,9 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
                           Orders Cancelled
                         </p>
                         <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
-                          {cancelledCount + cancelRequested || "0"}
+                          {cancelledCount +
+                            cancelRequested +
+                            cancelledRequested || "0"}
                         </p>
                       </div>
                     </div>
