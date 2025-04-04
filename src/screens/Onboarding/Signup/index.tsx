@@ -18,6 +18,7 @@ import {
   LARGE_LOGO,
   COMPANY_NAME,
   SELLER_WEB_URL,
+  POST_VERIFY_COUPON,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -41,6 +42,7 @@ import { Tooltip } from "react-tooltip";
 import * as Sentry from "@sentry/react";
 import OneButton from "../../../components/Button/OneButton";
 import sessionManager from "../../../utils/sessionManager";
+import successStatus from "../../../assets/success.svg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -51,7 +53,8 @@ const Index = () => {
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-
+  const [loadingForCoupon, setLoadingForCoupon] = useState(false);
+  const [isCouponVerified, setIsCouponVerified] = useState(false);
   const [sellerData, setsellerData] = useState({
     email: "",
     firstName: "",
@@ -188,6 +191,26 @@ const Index = () => {
       } else {
         toast.error(response?.message);
         setLoading(false);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const handleVerifyCoupon = async () => {
+    try {
+      setLoadingForCoupon(true);
+      let payload = {
+        couponCode: sellerData.couponCode,
+      };
+      const { data: response } = await POST(POST_VERIFY_COUPON, payload);
+      if (response?.success === true) {
+        toast.success(response?.message);
+        setLoadingForCoupon(false);
+        setIsCouponVerified(true);
+      } else {
+        toast.error(response?.message);
+        setLoadingForCoupon(false);
       }
     } catch (error) {
       return error;
@@ -587,51 +610,77 @@ const Index = () => {
                     )}
                   </div>
 
-                  <div>
-                    <CustomInputBox
-                      label="Coupon Code"
-                      maxLength={100}
-                      //commented as by default placeholder text is getting top of the input box
-                      // tempLabel={true}
-                      // placeholder=""
-                      id="couponCode"
-                      value={sellerData.couponCode}
-                      onChange={(e) => {
-                        setSignUpError({
-                          ...signUpError,
-                          couponCode: "",
-                        });
-                        setsellerData({
-                          ...sellerData,
-                          couponCode: e.target.value,
-                        });
-                      }}
-                      onBlur={(e) => {
-                        if (!sellerData?.couponCode) {
-                          setSignUpError({
-                            ...signUpError,
-                            couponCode: "Please Enter Your Coupon Code",
-                          });
-                        } else if (!referalRegex.test(e.target.value)) {
-                          setSignUpError({
-                            ...signUpError,
-                            couponCode: "Enter Valid Coupon Code",
-                          });
-                        } else {
+                  <div className="flex items-center gap-x-2">
+                    <div className="w-[232px]">
+                      <CustomInputBox
+                        label="Coupon Code"
+                        maxLength={100}
+                        //commented as by default placeholder text is getting top of the input box
+                        // tempLabel={true}
+                        // placeholder=""
+                        id="couponCode"
+                        value={sellerData.couponCode}
+                        onChange={(e) => {
+                          const upperCaseValue = e.target.value.toUpperCase();
                           setSignUpError({
                             ...signUpError,
                             couponCode: "",
                           });
-                        }
-                      }}
-                      isDisabled={false}
-                    />
-                    {signUpError.couponCode !== "" && (
-                      <div className="flex items-center gap-x-1 mt-1">
-                        <img src={InfoCircle} alt="" width={10} height={10} />
-                        <span className="font-normal text-[#F35838] text-xs leading-3">
-                          {signUpError.couponCode}
-                        </span>
+                          setsellerData({
+                            ...sellerData,
+                            couponCode: upperCaseValue,
+                          });
+                        }}
+                        // onBlur={(e) => {
+                        //   if (!sellerData?.couponCode) {
+                        //     setSignUpError({
+                        //       ...signUpError,
+                        //       couponCode: "Please Enter Your Coupon Code",
+                        //     });
+                        //   } else if (!referalRegex.test(e.target.value)) {
+                        //     setSignUpError({
+                        //       ...signUpError,
+                        //       couponCode: "Enter Valid Coupon Code",
+                        //     });
+                        //   } else {
+                        //     setSignUpError({
+                        //       ...signUpError,
+                        //       couponCode: "",
+                        //     });
+                        //   }
+                        // }}
+                        isDisabled={false}
+                      />
+                      {/* {signUpError.couponCode !== "" && (
+                        <div className="flex items-center gap-x-1 mt-1">
+                          <img src={InfoCircle} alt="" width={10} height={10} />
+                          <span className="font-normal text-[#F35838] text-xs leading-3">
+                            {signUpError.couponCode}
+                          </span>
+                        </div>
+                      )} */}
+                    </div>
+                    {isCouponVerified ? (
+                      <>
+                        <div className="flex gap-x-1 items-center text-center">
+                          <img src={successStatus} alt="successStatus" />
+                          <span className="text-[14px] font-normal font-Open leading-5 text-[#7CCA62] tracking-wide">
+                            VERIFIED
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div>
+                        <OneButton
+                          // onClick={(e: any) => signUpOnClick(sellerData)}
+                          onClick={handleVerifyCoupon}
+                          variant="primary"
+                          text={`${
+                            loadingForCoupon ? "Verifying..." : "Verify"
+                          }`}
+                          className="!h-[42px] !w-[90px] !p-0 !rounded-lg"
+                          disabled={loadingForCoupon}
+                        />
                       </div>
                     )}
                   </div>
