@@ -182,6 +182,28 @@ export const cashbackDetailsColumns = () => {
       },
     }),
 
+    columnsHelper.accessor("yaariCash", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Cashback
+            </h1>
+            {/* <img src={sortIconTable} alt="" onClick={handleSortClick} /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        let yaariCash = parseFloat(info.getValue()).toFixed(2);
+
+        return (
+          <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
+            ₹ {yaariCash}
+          </div>
+        );
+      },
+    }),
+
     columnsHelper.accessor("type", {
       header: () => {
         return (

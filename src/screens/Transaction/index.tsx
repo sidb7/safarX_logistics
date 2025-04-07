@@ -146,7 +146,7 @@ export const Transaction = () => {
       GET_WALLET_TRANSACTION_FINANCE,
       payload
     );
-    console.log("🚀 ~ getData ~ response:", response);
+    // console.log("🚀 ~ getData ~ response:", response);
     if (response?.success) {
       setData(response?.data || []);
       setTotalItemCount(response.total);

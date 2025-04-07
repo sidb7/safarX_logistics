@@ -445,7 +445,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 </div>
               )}
 
-              {yaariCash > 0 && (
+              {/* {yaariCash > 0 && ( */}
                 <div className="hidden lg:block">
                   <div
                     className="flex items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
@@ -455,12 +455,12 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                       {/* <div>₹</div> */}
                       <div>
-                        Yaari Cash: {yaariCash?.toLocaleString("en-IN")}
+                      Yaari Cash: {yaariCash ? yaariCash.toLocaleString("en-IN") : "0"}
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
+              {/* )} */}
 
               {
                 // localStorage.getItem("sellerId")
