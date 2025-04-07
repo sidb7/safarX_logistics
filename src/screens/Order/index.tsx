@@ -2116,10 +2116,12 @@ const Index = () => {
             </p>
           </div>
         </div>
+        <div className="overflow-y-auto max-h-[90vh]">
         <CustomTableAccordian
           getAllSellerData={infoModalContent}
           isMasked={isMasked}
         />
+        </div>
       </CustomRightModal>
 
       {/* Reverse Order Modal */}
