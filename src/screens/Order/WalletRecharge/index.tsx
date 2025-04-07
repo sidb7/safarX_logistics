@@ -253,9 +253,10 @@ const WalletRecharge = () => {
           if (!data?.success) {
             throw "Wallet Recharge Failed";
           }
+          setInterval(() => {
+            window.location.reload();
+          }, 1000);
           toast.success("Wallet Recharged Successfully");
-
-          // window.location.reload();
         }
       } catch (error) {
         toast.error(error + "");
