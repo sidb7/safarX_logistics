@@ -14,7 +14,7 @@ import CopyTooltip from "../../../components/CopyToClipboard";
 import { date_DD_MMM_YYYY_HH_MM } from "../../../utils/dateFormater";
 import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
 import PendingIcon from "../../../assets/pendingRed.svg";
-import { capitalizeFirstLetter } from "../../../utils/utility";
+import { capitalizeFirstLetter, commaSeparator } from "../../../utils/utility";
 
 interface ICashbackProps {
   data: {
@@ -160,6 +160,56 @@ export const cashbackDetailsColumns = () => {
       },
     }),
 
+    columnsHelper.accessor("credited", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Credited
+            </h1>
+            {/* <img src={sortIconTable} alt="" onClick={handleSortClick} /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        // let yaariCashBalance = parseFloat(info.getValue()).toFixed(2);
+        let type = info?.row?.original?.type;
+        let credited = parseFloat(info?.row?.original?.yaariCash).toFixed(2);
+
+        return (
+          <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
+            {/* ₹ {yaariCashBalance} */}
+            {type === "credit" ? `₹ ${commaSeparator(credited)}` : "₹ 0"}
+          </div>
+        );
+      },
+    }),
+
+    columnsHelper.accessor("debited", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <h1 className="font-Open font-semibold leading-5 text-sm">
+              Debited
+            </h1>
+            {/* <img src={sortIconTable} alt="" onClick={handleSortClick} /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        // let yaariCashBalance = parseFloat(info.getValue()).toFixed(2);
+        let type = info?.row?.original?.type;
+        let debited = parseFloat(info.row.original.yaariCash).toFixed(2);
+
+        return (
+          <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
+            {/* ₹ {yaariCashBalance} */}
+            {type === "debit" ? `₹ ${commaSeparator(debited)}` : "₹ 0"}
+          </div>
+        );
+      },
+    }),
+
     columnsHelper.accessor("yaariCashBalance", {
       header: () => {
         return (
@@ -182,48 +232,47 @@ export const cashbackDetailsColumns = () => {
       },
     }),
 
-    columnsHelper.accessor("yaariCash", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center">
-            <h1 className="font-Open font-semibold leading-5 text-sm">
-              Cashback
-            </h1>
-            {/* <img src={sortIconTable} alt="" onClick={handleSortClick} /> */}
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        let yaariCash = parseFloat(info.getValue()).toFixed(2);
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between items-center">
+    //         <h1 className="font-Open font-semibold leading-5 text-sm">
+    //           Cashback
+    //         </h1>
+    //         {/* <img src={sortIconTable} alt="" onClick={handleSortClick} /> */}
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     let yaariCash = parseFloat(info.getValue()).toFixed(2);
 
-        return (
-          <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
-            ₹ {yaariCash}
-          </div>
-        );
-      },
-    }),
+    //     return (
+    //       <div className="flex whitespace-nowrap font-Open font-normal leading-5 text-sm">
+    //         ₹ {yaariCash}
+    //       </div>
+    //     );
+    //   },
+    // }),
 
-    columnsHelper.accessor("type", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center">
-            <h1 className="font-Open font-semibold leading-5 text-sm">Type</h1>
+    // columnsHelper.accessor("type", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between items-center">
+    //         <h1 className="font-Open font-semibold leading-5 text-sm">Type</h1>
 
-            {/* <img src={sortIconTable} alt="" /> */}
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex">
-            <span className="font-Open font-normal leading-5 text-sm">
-              {capitalizeFirstLetter(info?.row?.original?.type) || "-"}
-            </span>
-          </div>
-        );
-      },
-    }),
+    //         {/* <img src={sortIconTable} alt="" /> */}
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="flex">
+    //         <span className="font-Open font-normal leading-5 text-sm">
+    //           {capitalizeFirstLetter(info?.row?.original?.type) || "-"}
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    // }),
 
     columnsHelper.accessor("remark", {
       header: () => {

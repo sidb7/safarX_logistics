@@ -249,23 +249,48 @@ const CashbackTable: React.FunctionComponent<ICashbackTableProps> = ({
       <h2 className=" text-lg lg:text-xl font-Open font-bold text-gray-800 leading-4">
         Cashback Details
       </h2>
-      <div className=" mt-4">
-        {loadingState ? (
-          <div className="space-y-4">
-            {Array.from({ length: (tablesData?.length ?? 0) + 1 }).map(
-              (_, index) => (
-                <ShimmerRow key={index} />
-              )
+
+      {tablesData !== undefined ? (
+        <>
+          {" "}
+          <div className=" mt-4">
+            {loadingState ? (
+              <div className="space-y-4">
+                {Array.from({ length: (tablesData?.length ?? 0) + 1 }).map(
+                  (_, index) => (
+                    <ShimmerRow key={index} />
+                  )
+                )}
+              </div>
+            ) : (
+              <CustomTable
+                columnsData={columns}
+                rowData={tablesData || []}
+                minHeight="21vh"
+              />
             )}
           </div>
-        ) : (
-          <CustomTable
-            columnsData={columns}
-            rowData={tablesData || []}
-            minHeight="21vh"
-          />
-        )}
-      </div>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-col items-center justify-center gap-y-2 pt-5">
+            <p className="text-lg lg:text-lg font-Open font-semibold leading-6">{`No ${
+              companyName?.toLowerCase() === "shipyaari"
+                ? "YaariCash."
+                : "cashback."
+            }`}</p>
+            <p className="text-gray-600 font-Open text-sm lg:text-base font-normal leading-7">{`Complete purchases or refer friends to earn ${
+              companyName?.toLowerCase() === "shipyaari"
+                ? "YaariCash."
+                : "cashback."
+            } Once earned,`}</p>
+            <p className="text-gray-600 font-Open text-sm lg:text-base font-normal leading-7">
+              you'll be able to apply it to future orders following the rules
+              below.
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };

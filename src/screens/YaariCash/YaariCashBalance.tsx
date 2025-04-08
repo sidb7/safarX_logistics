@@ -13,6 +13,7 @@ const YaariCashBalance: React.FunctionComponent<IYaariCashBalanceProps> = ({
   loadingState,
   companyName,
 }) => {
+  // console.log("🚀 ~ summary:", summary);
   const shimmerEffect = "bg-gray-200 animate-pulse rounded-md";
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
@@ -42,6 +43,26 @@ const YaariCashBalance: React.FunctionComponent<IYaariCashBalanceProps> = ({
     return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
   };
 
+  const getUTCDateOnly = (dateStr: string | Date) => {
+    const date = new Date(dateStr);
+    return Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate()
+    );
+  };
+
+  const expiryUTC = summary?.expiryDate
+    ? getUTCDateOnly(summary.expiryDate)
+    : null;
+  const todayUTC = getUTCDateOnly(new Date());
+
+  const isExpired = expiryUTC !== null ? expiryUTC < todayUTC : false;
+  const isExpiringSoon =
+    expiryUTC !== null &&
+    expiryUTC >= todayUTC &&
+    expiryUTC - todayUTC <= 7 * 24 * 60 * 60 * 1000;
+
   return (
     <div className="bg-white p-6 rounded-lg shadow mt-6">
       <div className="flex flex-col lg:flex-row justify-between gap-y-4 lg:items-center">
@@ -62,28 +83,60 @@ const YaariCashBalance: React.FunctionComponent<IYaariCashBalanceProps> = ({
                 }`}
               </p>
               <p className="text-xl lg:text-2xl font-Open font-bold text-gray-800 leading-8">
-                ₹ {commaSeparator(summary?.totalCashback) || 0}
+                ₹{" "}
+                {summary !== undefined
+                  ? commaSeparator(summary?.totalCashback) || 0
+                  : 0}
               </p>
             </>
           )}
         </div>
         {/* Right Section */}
-        <div className="px-4 py-3 rounded-lg border-[0.5px] border-[#faad1433] bg-[#faad141a] text-[#FAAD14] flex gap-x-2">
+        {/* <div className="px-4 py-3 rounded-lg border-[0.5px] border-[#faad1433] bg-[#faad141a] text-[#FAAD14] flex gap-x-2">
           {loadingState ? (
             <div className={`${shimmerEffect} h-5 w-64`}></div>
           ) : (
             <>
               <img src={InfoIcon} alt="Info Icon" />
               <p className="font-Open text-sm lg:text-base font-medium lg:font-semibold leading-5 tracking-wider lg:tracking-normal">
-                {`₹${commaSeparator(
-                  summary?.remainingAmount
-                )} is expiring on ${formatDate(
-                  summary?.expiryDate
-                )}. Use it before it expires!`}
+                {isExpired ? (
+                  <>Your cashback has expired.</>
+                ) : (
+                  <>
+                    {" "}
+                    {`₹${commaSeparator(
+                      summary?.remainingAmount
+                    )} is expiring on ${formatDate(
+                      summary?.expiryDate
+                    )}. Use it before it expires!`}
+                  </>
+                )}
               </p>
             </>
           )}
-        </div>
+        </div> */}
+        {(isExpired || isExpiringSoon) && (
+          <div className="px-4 py-3 rounded-lg border-[0.5px] border-[#faad1433] bg-[#faad141a] text-[#FAAD14] flex gap-x-2">
+            {loadingState ? (
+              <div className={`${shimmerEffect} h-5 w-64`}></div>
+            ) : (
+              <>
+                <img src={InfoIcon} alt="Info Icon" />
+                <p className="font-Open text-sm lg:text-base font-medium lg:font-semibold leading-5 tracking-wider lg:tracking-normal">
+                  {isExpired ? (
+                    <>Your cashback has expired.</>
+                  ) : (
+                    <>
+                      ₹{commaSeparator(summary?.remainingAmount)} is expiring on{" "}
+                      {formatDate(summary?.expiryDate)}. Use it before it
+                      expires!
+                    </>
+                  )}
+                </p>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

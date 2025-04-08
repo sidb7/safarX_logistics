@@ -21,10 +21,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       if (response?.success) {
         const couponData = response?.data || [];
         const summary = {
-          totalCashback: response?.totalCashback,
-          remainingAmount: response?.remainingAmount,
-          expiryDate: response?.expiryDate,
-          latestUtilizationRule: response?.latestUtilizationRule,
+          totalCashback: response?.totalCashback || 0,
+          remainingAmount: response?.remainingAmount || 0,
+          expiryDate: response?.expiryDate || 0,
+          latestUtilizationRule: response?.latestUtilizationRule || 0,
         };
 
         // Storing separately in state

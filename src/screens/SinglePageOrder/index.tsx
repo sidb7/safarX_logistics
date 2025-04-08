@@ -737,22 +737,27 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
     }
 
-    if (
-      order?.yaariCash !== undefined &&
-      order?.yaariCash !== null &&
-      order?.yaariCash !== 0 &&
-      order?.yaariCash.toString().trim() !== "" &&
-      !order?.yaariCash.toString().includes("NaN")
-    ) {
-      if (walletBalance + order.yaariCash < order.totalPrice) {
-        setShowAlertBox(true);
-        return;
-      }
-    } else {
-      if (walletBalance < order?.totalPrice) {
-        setShowAlertBox(true);
-        return;
-      }
+    // if (
+    //   order?.yaariCash !== undefined &&
+    //   order?.yaariCash !== null &&
+    //   order?.yaariCash !== 0 &&
+    //   order?.yaariCash.toString().trim() !== "" &&
+    //   !order?.yaariCash.toString().includes("NaN")
+    // ) {
+    //   if (walletBalance + order.yaariCash < order.totalPrice) {
+    //     setShowAlertBox(true);
+    //     return;
+    //   }
+    // } else {
+    //   if (walletBalance < order?.totalPrice) {
+    //     setShowAlertBox(true);
+    //     return;
+    //   }
+    // }
+    if (walletBalance < order?.totalPrice) {
+      setShowAlertBox(true);
+
+      return;
     }
 
     try {
