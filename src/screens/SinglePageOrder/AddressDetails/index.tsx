@@ -246,19 +246,72 @@ const AddressCardDetails: React.FunctionComponent<IAddressCardDetailsProps> = ({
   const isPickupAddressEmpty = isAddressEmpty(pickupAddress);
   const isDeliveryAddressEmpty = isAddressEmpty(deliveryAddress);
 
+  // useEffect(() => {
+  //   if (resetOtherAddressDetails) {
+  //     setPickupLandmark({});
+  //     setDeliveryLandmark({});
+  //     const timer = setTimeout(() => {
+  //       setResetOtherAddressDetails(false);
+  //     }, 3000);
+
+  //     // Clean up the timer if the component unmounts or dependencies change
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [order?.orderType, order?.transit]);
+
+
   useEffect(() => {
     if (resetOtherAddressDetails) {
+      // Reset completely to empty objects
       setPickupLandmark({});
       setDeliveryLandmark({});
+      setPickupAddress({
+        fullAddress: "",
+        pincode: 0,
+        contact: {
+          name: "",
+          mobileNo: 0,
+        }
+      });
+      setDeliveryAddress({
+        fullAddress: "",
+        pincode: 0,
+        contact: {
+          name: "",
+          mobileNo: 0,
+        },
+        gstNumber: ""
+      });
+      
+      // Also update parent components
+      onPickupDetailsChange({
+        fullAddress: "",
+        pincode: 0,
+        contact: {
+          name: "",
+          mobileNo: 0,
+        }
+      });
+      
+      onDeliveryDetailsChange({
+        fullAddress: "",
+        pincode: 0,
+        contact: {
+          name: "",
+          mobileNo: 0,
+        },
+        gstNumber: ""
+      });
+      
       const timer = setTimeout(() => {
         setResetOtherAddressDetails(false);
-      }, 3000);
-
+      }, 300);
+  
       // Clean up the timer if the component unmounts or dependencies change
       return () => clearTimeout(timer);
     }
-  }, [order?.orderType, order?.transit]);
-
+  }, [resetOtherAddressDetails, order?.orderType, order?.transit]);
+  
   useEffect(() => {
     sessionStorage.setItem(
       "pickupOtherAddressDetails",
