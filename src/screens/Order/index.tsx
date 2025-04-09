@@ -644,7 +644,7 @@ const Index = () => {
                 /* Add your function here */
               }}
               variant="secondary"
-              className="!justify-start !font-medium !text-[#1C1C1C] !py-[6px] !px-[10px] !h-auto"
+              className="!justify-start !font-medium !text-[#1C1C1C] !py-[6px] !px-[10px] !h-auto !h-auto hover:bg-[#FFFFFF] !hover:shadow-none !cursor-not-allowed"
               textTransform="none"
             />
           </div>
@@ -655,8 +655,8 @@ const Index = () => {
               onClick={handleSyncOrder}
               className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
             >
-              <img src={SyncIcon} alt="" width="16px" className="z-10" />
-              <span className="text-[#004EFF] z-10 text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
+              <img src={SyncIcon} alt="" width="16px" className="" />
+              <span className="text-[#004EFF]  text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
                 {syncChannelText}
               </span>
               <div
