@@ -25,6 +25,7 @@ interface CustomInputWithDropDownProps {
   resetOtherAddressDetails: any;
   setResetOtherAddressDetails: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setYaariCash?: any;
 }
 
 const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
@@ -42,6 +43,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
   resetOtherAddressDetails,
   setResetOtherAddressDetails,
   onChange = () => {},
+  setYaariCash,
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
   const [inputValue, setInputValue] = useState<any>(value);
@@ -82,7 +84,11 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
     });
 
     if (data?.success) {
+      if (data?.yaariCash) {
+        setYaariCash(data?.yaariCash);
+      }
       let options = data?.data;
+
       options?.forEach((item: any) => {
         item.name = item?.partnerName?.replace(/\w+/g, function (w: any) {
           return w[0].toUpperCase() + w.slice(1).toLowerCase();
@@ -116,6 +122,18 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
         serviceMode: value?.serviceMode,
         totalPrice: value?.value,
         courierPartnerServices: value?.courierPartnerServices,
+        collectableAmount: value?.collectableAmount,
+        cod: value?.cod,
+        invoiceValue: value?.invoiceValue,
+        appliedWeight: value?.appliedWeight,
+        tax: value?.tax,
+        insurance: value?.insurance,
+        variables: value?.variables,
+        total: value?.total,
+        variableServices: value?.variableServices || {},
+        base: value?.base,
+        add: value?.add,
+        yaariCash: value?.yaariCash || 0,
       };
     });
     setShowPickupDate("");
@@ -201,7 +219,7 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
             {filterData.length > 0 && sortIdentifier.length !== 0 ? (
               filterData?.map((item: any, index: number) => (
                 <div
-                  className="cursor-pointer flex botder-b justify-between items-center py-2 px-4 hover:bg-slate-100"
+                  className="cursor-pointer flex border-b justify-between items-center py-2 px-4 hover:bg-slate-100"
                   key={index}
                   onClick={(e: any) => {
                     setIsDropdownOpen(false);
@@ -210,6 +228,18 @@ const CustomSearchBoxForService: React.FC<CustomInputWithDropDownProps> = ({
                       value: item?.total,
                       serviceMode: item?.serviceMode,
                       courierPartnerServices: item?.partnerServiceName,
+                      collectableAmount: item?.collectableAmount,
+                      cod: item?.cod,
+                      invoiceValue: item?.invoiceValue,
+                      appliedWeight: item?.appliedWeight,
+                      tax: item?.tax,
+                      insurance: item?.insurance,
+                      variables: item?.variables,
+                      total: item?.total,
+                      variableServices: item?.variableServices || {},
+                      base: item?.base,
+                      add: item?.add,
+                      yaariCash: item?.yaariCash || 0,
                     });
                   }}
                   data-cy={`dropdown-item-${index}`}

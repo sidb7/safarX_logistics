@@ -412,7 +412,8 @@ export const titleCase = (str: string) => {
 export const loadPhonePeTransaction = async (
   walletValue: string,
   redirectUrl: string,
-  callbackUrl: string
+  callbackUrl: string,
+  couponDetails?: any
 ) => {
   try {
     const payload = {
@@ -422,6 +423,13 @@ export const loadPhonePeTransaction = async (
         callbackUrl,
       },
       paymentGateway: "PHONEPE",
+      couponCode:
+        couponDetails.length > 0 &&
+        couponDetails[0]?.couponStatus !== "Expired" &&
+        Number(walletValue?.replace(/,/g, "")) >=
+          couponDetails[0]?.minRechargeAmount
+          ? couponDetails[0]?.couponCode
+          : "",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
@@ -449,7 +457,8 @@ export const loadRazorPayTransaction = async (
   companyName: string,
   userName: string,
   email: string,
-  redirectUrl?: any
+  redirectUrl?: any,
+  couponDetails?: any
 ) => {
   try {
     const payload = {
@@ -458,6 +467,12 @@ export const loadRazorPayTransaction = async (
         callbackUrl: redirectUrl,
       },
       paymentGateway: "RAZORPE",
+      couponCode:
+        couponDetails.length > 0 &&
+        couponDetails[0]?.couponStatus !== "Expired" &&
+        Number(amount) >= couponDetails[0]?.minRechargeAmount
+          ? couponDetails[0]?.couponCode
+          : "",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
