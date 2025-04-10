@@ -2116,7 +2116,7 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <div className="overflow-y-auto max-h-[90vh]">
+        <div className="overflow-y-auto max-h-[80vh]">
         <CustomTableAccordian
           getAllSellerData={infoModalContent}
           isMasked={isMasked}
