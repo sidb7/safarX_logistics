@@ -163,6 +163,7 @@ interface PricingData {
   insurance?: number;
   baseWeight?: number;
   price?: number;
+  yaariCash?: number;
 }
 
 const PricingDetails: React.FunctionComponent<PricingData> = ({
@@ -179,6 +180,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   insurance = "",
   appliedWeight = "",
   appliedWeightUnit = "",
+  yaariCash = 0,
 }) => {
   // State to control tooltip visibility
   const [showTooltip, setShowTooltip] = useState(false);
@@ -191,6 +193,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   const variablesValue = +variables;
   const orderPrice = baseValue + addValue + variablesValue;
   const codChargeValue = +codCharge;
+  const yaariPrice = +yaariCash;
 
   // Round off decimal numbers to the nearest whole number
   const roundedInvoiceValue = Math.round(+invoiceValue);
@@ -199,7 +202,13 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   const roundedOrderPrice = Math.round(orderPrice);
   const roundedInsuranceValue = Math.round(+insurance);
   const roundedTaxValue = Math.round(+tax);
-  const roundedPrice = Math.round(+price);
+  const roundedYaariCash = Math.round(yaariPrice);
+  let roundedPrice = Math.round(+price);
+
+  if(roundedYaariCash > 0) {
+    // Adjust roundedPrice after Yaari Cash deduction
+    roundedPrice = roundedPrice - roundedYaariCash;
+  }
 
   // Helper function to format label from camelCase to Title Case with spaces
   const formatLabel = (label: string): string => {
@@ -363,6 +372,14 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p>
               {`\u20B9`} {roundedTaxValue?.toLocaleString("en-IN")}
+            </p>
+          </div>
+          <div className="flex justify-between">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
+              Yaari Cash:
+            </p>
+            <p>
+              {`\u20B9`} -{roundedYaariCash?.toLocaleString("en-IN")}
             </p>
           </div>
           <hr className="mt-[100px]"></hr>

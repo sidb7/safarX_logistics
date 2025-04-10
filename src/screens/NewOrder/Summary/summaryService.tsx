@@ -27,6 +27,7 @@ interface ISummaryData {
   orderSource?: any;
   orderId?: any;
   isMasked?: any;
+  yaariCash?: number;
 }
 const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceName = "",
@@ -51,6 +52,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   orderSource = "",
   orderId = "",
   isMasked,
+  yaariCash = 0,
 }) => {
   const navigate = useNavigate();
 

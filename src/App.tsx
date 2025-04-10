@@ -336,16 +336,9 @@ const App = () => {
   }, [syncTime, syncTimerObject]);
 
   const receiveMessage = (event: any) => {
-    console.log(
-      "🚀 ~ receiveMessage ~ ADMIN_URL:",
-      event.origin,
-      " ",
-      ADMIN_URL
-    );
     const expectedOrigin = ADMIN_URL;
     if (event.origin.includes(expectedOrigin)) {
       const sellerData = event.data.sellerData;
-      console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
       if (sellerData) {
         loginFromSeller(JSON.parse(sellerData));
       }

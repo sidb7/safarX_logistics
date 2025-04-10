@@ -134,6 +134,7 @@ import { Home } from "../screens/Home";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import ExceptionNdr from "../screens/NewOrder/Tracking/exceptionNdr";
+import LostAndDamaged from "../screens/NewOrder/Tracking/LostAndDamaged/LostAndDamaged";
 import Rto from "../screens/NewOrder/Tracking/Rto";
 import NdrCancellationRequest from "../screens/NewOrder/Tracking/NdrCancellationRequest";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
@@ -180,6 +181,9 @@ import EditDocuments from "../screens/Profile/DocumentsForInternational/editDocu
 import NewDashboard from "../screens/NewDashboard/index";
 import { COMPANY_NAME } from "../utils/ApiUrls";
 import BulkLabelList from "../screens/bulkLabelList/bulkLabelList";
+
+// yaaricash
+import YaariCashDashboard from "../screens/YaariCash/Index";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -1248,6 +1252,15 @@ const MyRoutes: React.FC = () => {
           />
         </Route>
 
+        <Route
+            path="/tracking/lostanddamaged"
+            element={
+              <ProtectedRoute>
+                <LostAndDamaged />
+              </ProtectedRoute>
+            }
+          />
+
         <Route>
           <Route path="notifications" element={<Notifications />} />
         </Route>
@@ -1266,6 +1279,16 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Transaction />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route>
+          <Route
+            path="/wallet/rewards"
+            element={
+              <ProtectedRoute>
+                <YaariCashDashboard />
               </ProtectedRoute>
             }
           />
