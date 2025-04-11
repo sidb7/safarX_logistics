@@ -684,7 +684,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) =>
-                  setStoreData({ ...storeData, storeUrl: e.target.value })
+                  setStoreData({ ...storeData, storeUrl: e.target.value, storeName: e.target.value })
                 }
               />
 
