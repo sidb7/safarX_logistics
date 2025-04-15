@@ -29,6 +29,12 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
   // const [isMasked, setIsMasked] = useState(false);
   const isMasked = useSelector((state: any) => state?.user?.isMasked);
 
+  const [codInfo, setCodInfo] = useState({
+    codPercentage: 0,
+    codCharges: 0,
+    codChargePreference: "",
+  });
+
   const variableColumns = [
     columnsHelper.accessor("serviceName", {
       header: (props) => {
@@ -681,6 +687,38 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 );
               }
             })}
+
+            {/* COD Pricing section - Add before Variable Charges */}
+            <div className="w-full mb-4">
+              <div className="p-4 bg-white rounded-lg shadow-md">
+                <h3 className="text-[22px] font-Lato font-semibold mb-3">
+                  COD Handling Charges
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Percentage</p>
+                    <p className="font-semibold text-lg">
+                      {logisticsInfo.codPercentage || 0}%
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Unit Price</p>
+                    <p className="font-semibold text-lg">
+                      ₹ {logisticsInfo.codCharges || 0}
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Condition</p>
+                    <p className="font-semibold text-lg">
+                      {capitalizeFirstLetter(
+                        logisticsInfo.codChargePreference || "higher"
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* variable charges code commented for now as no requirement for now */}
 
             <div className="ml-4 mt-6">
@@ -773,6 +811,37 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 </>
               )}
             </div>
+
+            <div className="w-full mb-4">
+              <div className="p-4 bg-white rounded-lg shadow-md">
+                <h3 className="text-[22px] font-Lato font-semibold mb-3">
+                  COD Handling Charges
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Percentage</p>
+                    <p className="font-semibold text-lg">
+                      {logisticsInfo.codPercentage || 0}%
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Unit Price</p>
+                    <p className="font-semibold text-lg">
+                      ₹ {logisticsInfo.codCharges || 0}
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Condition</p>
+                    <p className="font-semibold text-lg">
+                      {capitalizeFirstLetter(
+                        logisticsInfo.codChargePreference || "higher"
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* variable charges code commented for now as no requirement for now */}
 
             <div className="ml-4 mt-6">
@@ -862,6 +931,36 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 );
               }
             })}
+
+            <div className="w-full mb-4">
+              <div className="p-4 bg-white rounded-lg shadow-md">
+                <h3 className="text-[22px] font-Lato font-semibold mb-3">
+                  COD Handling Charges
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Percentage</p>
+                    <p className="font-semibold text-lg">
+                      {logisticsInfo.codPercentage || 0}%
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Unit Price</p>
+                    <p className="font-semibold text-lg">
+                      ₹ {logisticsInfo.codCharges || 0}
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Condition</p>
+                    <p className="font-semibold text-lg">
+                      {capitalizeFirstLetter(
+                        logisticsInfo.codChargePreference || "higher"
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* variable charges code commented for now as no requirement for now */}
 
             <div className="ml-4 mt-6">
@@ -953,6 +1052,36 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                 </>
               )}
             </div>
+
+            <div className="w-full mb-4">
+              <div className="p-4 bg-white rounded-lg shadow-md">
+                <h3 className="text-[22px] font-Lato font-semibold mb-3">
+                  COD Handling Charges
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Percentage</p>
+                    <p className="font-semibold text-lg">
+                      {logisticsInfo.codPercentage || 0}%
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Unit Price</p>
+                    <p className="font-semibold text-lg">
+                      ₹ {logisticsInfo.codCharges || 0}
+                    </p>
+                  </div>
+                  <div className="p-3 border border-[#E8E8E8] rounded">
+                    <p className="text-sm text-gray-500 mb-1">Condition</p>
+                    <p className="font-semibold text-lg">
+                      {capitalizeFirstLetter(
+                        logisticsInfo.codChargePreference || "higher"
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* variable charges code commented for now as no requirement for now */}
 
             <div className="ml-4 mt-6">
@@ -998,6 +1127,24 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
       return null; // Default case if no conditions are met
     }
   }
+
+  useEffect(() => {
+    if (logisticsData && logisticsData.length > 0) {
+      // Filter data based on the current selection (B2C or B2B)
+      const accountType = renderingComponents === 0 ? "B2C" : "B2B";
+      const filteredData = logisticsData.find(
+        (data: any) => data?.accountType === accountType
+      );
+
+      if (filteredData) {
+        setCodInfo({
+          codPercentage: filteredData.codPercentage || 0,
+          codCharges: filteredData.codCharges || 0,
+          codChargePreference: filteredData.codChargePreference || "HIGHER",
+        });
+      }
+    }
+  }, [logisticsData, renderingComponents]);
 
   return (
     <div>

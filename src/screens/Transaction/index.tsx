@@ -49,6 +49,7 @@ const arrayData = [
   { label: "Passbook" },
   // { label: "Cashback" },
   { label: "NEFT/IMPS/RTGS Transaction" },
+  { label: "Cashback" },
 ];
 
 export const Transaction = () => {
@@ -125,7 +126,10 @@ export const Transaction = () => {
       //   },
       // });
     }
-    payload.filter.type = renderingComponents === 1 ? "neft" : "";
+    payload.filter.type =
+      renderingComponents === 1
+        ? "neft"
+        : (payload.filter.type = renderingComponents === 2 ? "cashback" : "");
     let extraFilter = filterPayLoad?.filterArrOne;
     extraFilter?.map((el: any, i: any) => {
       if (el?.status?.$in?.length > 0) {
@@ -142,6 +146,7 @@ export const Transaction = () => {
       GET_WALLET_TRANSACTION_FINANCE,
       payload
     );
+    // console.log("🚀 ~ getData ~ response:", response);
     if (response?.success) {
       setData(response?.data || []);
       setTotalItemCount(response.total);
@@ -327,6 +332,11 @@ export const Transaction = () => {
     setStartDate(null);
     setEndDate(null);
   };
+
+const openFilterModal = () => {
+  // Set the filter modal to open
+  setFilterModal(true);
+};
 
   //column for wallet NEFT
   const columnsHelper = createColumnHelper<any>();
@@ -642,7 +652,7 @@ export const Transaction = () => {
               value={searchValue}
             /> */}
           </div>
-          {rowSelectedData.length > 0 && (
+          {rowSelectedData?.length > 0 && (
             <div className=" flex items-center ">
               <div className="rounded-md p-1 flex border border-[#A4A4A4]">
                 <div
@@ -705,13 +715,17 @@ export const Transaction = () => {
           <CustomTable
             rowData={data || []}
             columnsData={PassbookColumns(setSortOrder)}
+            setRowSelectedData={setRowSelectedData}
           />
         </div>
       );
     } else if (renderingComponents === 2) {
       return (
         <div>
-          <CustomTable rowData={data || []} columnsData={columns} />;
+          <CustomTable
+            rowData={data || []}
+            columnsData={cashbackDetailsColumns()}
+          />
         </div>
       );
     }
@@ -778,7 +792,8 @@ export const Transaction = () => {
                   <div className="hidden lg:block">{filterButton()}</div>
                   <OneButton
                     text="FILTER"
-                    onClick={() => setFilterModal(true)}
+                    // onClick={() => setFilterModal(true)}
+                    onClick={openFilterModal}
                     variant="quad"
                     showIcon={true}
                     icon={FilterIcon}

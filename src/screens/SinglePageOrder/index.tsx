@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import AddressCardDetails from "./AddressDetails";
 import ShippingDetails from "./ShippingDetails/index";
@@ -7,7 +7,7 @@ import PackageDetails from "./PackageDetails";
 import SummaryIcon from "../../assets/singleOrderSummary.svg";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import { capitalizeFirstLetter, commaSeparator } from "../../utils/utility";
 import OneButton from "../../components/Button/OneButton";
 import crossIcon from "../../assets/cross.svg";
 import tickIcon from "../../assets/tick.svg";
@@ -16,7 +16,7 @@ import CustomInputBox from "../../components/Input";
 import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
 import { generateUniqueCode } from "../../utils/utility";
 import InputBox from "../../components/Input";
-import { POST } from "../../utils/webService";
+import { GET, POST } from "../../utils/webService";
 import toast from "react-hot-toast";
 import editIcon from "../../assets/Product/Edit.svg";
 import walletIcon from "../../assets/Group.svg";
@@ -27,6 +27,7 @@ import {
   FETCH_MANIFEST_DATA,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   REVERSE_ORDER,
+  GET_DELHIVERY_B2B_JOB,
 } from "../../utils/ApiUrls";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import { useNavigate } from "react-router-dom";
@@ -44,6 +45,7 @@ import Accordian from "./components/accordian";
 import MyTable from "./ShippingDetails/components/customeTableForSummary";
 import InternationalOrders from "./InternationalOrder";
 import sessionManager from "../../utils/sessionManager";
+import resetIcon from "../../assets/LostAndDamged/reset.svg";
 
 interface IIndexProps {}
 
@@ -97,6 +99,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     const storedValue = sessionStorage.getItem("order");
     return storedValue !== null ? JSON.parse(storedValue) : initialState;
   });
+  const [componentKey, setComponentKey] = useState(0);
 
   const [highLightField, setHighLightField]: any = useState({
     addressDetails: false,
@@ -135,12 +138,17 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [showAlertBox, setShowAlertBox] = useState(false);
   const [showDateAndTimeModal, setShowDateAndTimeModal] = useState(false);
   const [showPickupDate, setShowPickupDate]: any = useState("");
+  const [yaariCash, setYaariCash] = useState<any>(0);
 
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const navigate = useNavigate();
+
+  // State to control tooltip visibility
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const orderTypeList: any = [
     {
@@ -165,6 +173,23 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     },
   ];
 
+  // Get all variable service keys and sort them
+  const variableServiceKeys = Object.keys(order?.variableServices || {}).sort();
+  const baseValue = order?.base || 0;
+  const addValue = order?.add || 0;
+  // const codValue = order?.cod || 0;
+  const variablesValue = order?.variables;
+  const orderPrice = baseValue + addValue + variablesValue;
+
+  // Round off decimal numbers to the nearest whole number
+  // const roundedInvoiceValue = Math.round(+order?.invoiceValue);
+  // const roundedCODValue = Math.round(codValue);
+  // const codChargeValuePrice = Math.round(order?.cod);
+  const roundedOrderPrice = Math.round(orderPrice);
+  // const roundedInsuranceValue = Math.round(order?.insurance);
+  // const roundedTaxValue = Math.round(order?.tax);
+  // const roundedPrice = Math.round(order?.totalPrice);
+
   if (kycCheck?.businessType?.toLowerCase() === "individual") {
     const b2bIndex = orderTypeList.findIndex(
       (item: any) => item.value === "B2B"
@@ -173,6 +198,21 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       orderTypeList[b2bIndex].disabled = true;
     }
   }
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node)
+      ) {
+        setShowTooltip(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function validateOrder(order: any) {
     const pickupDetailsValid =
@@ -211,7 +251,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
   const handlePickupTimeSelected = (pickupTime: string) => {
     setShowPickupDate(pickupTime);
-    console.log("pickupTime", pickupTime);
+    // console.log("pickupTime", pickupTime);
     const editedPickupDateForEpoch: any = pickupTime?.substring(0, 19);
     const EpochPickupDate = convertToEpoch(editedPickupDateForEpoch);
     setOrder(() => {
@@ -229,12 +269,53 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       0
     );
 
+  // Helper function to format label from camelCase to Title Case with spaces
+  const formatLabel = (label: string): string => {
+    // Handle special cases with parentheses
+    if (label.includes("(")) {
+      return (
+        label
+          .replace(/([A-Z])/g, " $1")
+          .split("(")[0]
+          .trim()
+          .replace(/^\w/, (c) => c.toUpperCase()) +
+        " (" +
+        label.split("(")[1]
+      );
+    }
+
+    // Handle cases with dots
+    if (label.includes(".")) {
+      const parts = label.split(".");
+      return (
+        parts[0].toUpperCase() +
+        " " +
+        parts[1].charAt(0).toUpperCase() +
+        parts[1].slice(1)
+      );
+    }
+
+    // Regular camelCase to Title Case
+    return label
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^\w/, (c) => c.toUpperCase());
+  };
+
   const Buttons = (className?: string) => {
     return (
       <>
         {isLgScreen ? (
           <div className="flex w-[100%] px-4 gap-x-4 justify-start items-center">
             <div className=" flex justify-start items-center h-fit">
+              <OneButton
+                onClick={handleReset}
+                text="Reset"
+                variant="secondary"
+                className="mx-8"
+                showIcon={true}
+                icon={resetIcon}
+                iconClass="!w-4 !h-4"
+              />
               <input
                 type="radio"
                 name="type"
@@ -332,6 +413,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           </div>
         ) : (
           <div className={`flex w-[100%] my-5 justify-end items-center`}>
+            <OneButton
+              onClick={handleReset}
+              text="Reset"
+              variant="secondary"
+              className="mx-8"
+              showIcon={true}
+              icon={resetIcon}
+            />
             <CustomDropDown
               onChange={(e) => {
                 setSelectedOrderType(e.target.value);
@@ -622,6 +711,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
   const PlaceOrder = async () => {
     let payload = { ...order };
+    payload.order_placed_from = "platform";
     payload.boxInfo = payload.boxInfo.map((box: any) => {
       return {
         ...box,
@@ -647,18 +737,73 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
     }
 
+    // if (
+    //   order?.yaariCash !== undefined &&
+    //   order?.yaariCash !== null &&
+    //   order?.yaariCash !== 0 &&
+    //   order?.yaariCash.toString().trim() !== "" &&
+    //   !order?.yaariCash.toString().includes("NaN")
+    // ) {
+    //   if (walletBalance + order.yaariCash < order.totalPrice) {
+    //     setShowAlertBox(true);
+    //     return;
+    //   }
+    // } else {
+    //   if (walletBalance < order?.totalPrice) {
+    //     setShowAlertBox(true);
+    //     return;
+    //   }
+    // }
     if (walletBalance < order?.totalPrice) {
       setShowAlertBox(true);
+
       return;
     }
+
     try {
       setplaceOrderLoader(true);
       const { data } = await POST(REVERSE_ORDER, payload);
 
       if (data?.success) {
-        const listOfawbs = data?.data[0]?.awbs.map(
-          (awb: any) => `${awb?.tracking?.awb}`
-        );
+        // const listOfawbs = data?.data[0]?.awbs.map(
+        //   (awb: any) => `${awb?.tracking?.awb}`
+        // );
+
+        let listOfawbs = [];
+
+        // Check if job_id is present in the response
+        if (data?.job_id) {
+          try {
+            // Call the GET_DELHIVERY_B2B_JOB API with the job_id
+            // const jobResponse = await POST(`${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`);
+            const jobResponse: any = await new Promise((resolve) => {
+              setTimeout(async () => {
+                try {
+                  // Make the API call after 5 seconds
+                  const response = await GET(
+                    `${GET_DELHIVERY_B2B_JOB}/${data?.job_id}`
+                  );
+                  resolve(response);
+                } catch (err) {
+                  resolve(null);
+                }
+              }, 5000);
+            });
+            //  console.log("jobResponse", jobResponse.data?.data?.awb);
+            if (jobResponse?.data?.data?.awb) {
+              // Extract AWBs from the job response
+              listOfawbs = [jobResponse.data?.data?.awb];
+              // console.log("listOfawbs", listOfawbs);
+            }
+          } catch (jobError) {
+            console.error("Error fetching job details:", jobError);
+          }
+        } else {
+          // Process as usual if no job_id
+          listOfawbs = data?.data[0]?.awbs.map(
+            (awb: any) => `${awb?.tracking?.awb}`
+          );
+        }
 
         setAwbListForDownLoad(listOfawbs);
         setplaceOrderLoader(false);
@@ -713,9 +858,200 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 <CustomTable
                   rowData={order?.boxInfo || []}
                   columnsData={SummaryColumns}
+                  minHeight="22vh"
                 />
 
                 {/* <MyTable data={order?.boxInfo || []} columns={columns} /> */}
+
+                <div className="bg-blue-50 p-4 rounded-lg shadow-md">
+                  {/* Title Section */}
+                  {/* <div className="flex items-center justify-between">
+                    <div className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                      Yaari Points
+                    </div>
+                    <span className="text-gray-400 cursor-pointer">ℹ️</span>
+                  </div> */}
+
+                  {/* Price Breakdown */}
+                  <div className="mt-[15px] space-y-2 text-gray-700">
+                    <div className="flex justify-between">
+                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                        Billable Weight
+                      </span>
+                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        {order?.appliedWeight || 0} Kg
+                      </span>
+                    </div>
+
+                    {/* <div className="flex justify-between">
+                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                        Order Price{" "}
+                        <span className="text-gray-400 ml-1 cursor-pointer">
+                          ℹ️
+                        </span>
+                      </span>
+                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        ₹ 450
+                      </span>
+                    </div> */}
+                    {/* Order Price with Tooltip */}
+                    <div className="flex justify-between relative">
+                      <div
+                        className="flex items-center cursor-pointer"
+                        // onClick={() => setShowTooltip((prev) => !prev)}
+                        onMouseEnter={() => setShowTooltip(true)}
+                        onClick={() => setShowTooltip(!showTooltip)}
+                      >
+                        <p className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Order Price
+                        </p>
+
+                        {order?.orderType === "B2B" &&
+                          variableServiceKeys.length > 0 && (
+                            <span className="ml-1 w-[14px] h-[14px] rounded-full p-1 bg-[#004EFF] text-white flex items-center justify-center text-xs font-bold">
+                              i
+                            </span>
+                          )}
+                      </div>
+                      <p className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        {`\u20B9`}{" "}
+                        {commaSeparator(
+                          order?.base + order?.add + order?.variables
+                        ) || 0}
+                      </p>
+
+                      {/* Tooltip for Variable Services */}
+                      {showTooltip && variableServiceKeys.length > 0 && (
+                        <div
+                          ref={tooltipRef}
+                          className="absolute top-full left-0 mt-1 w-full max-w-[300px] p-3 bg-white border border-[#E0E8FF] rounded-lg shadow-lg z-10"
+                        >
+                          <div className="flex justify-between items-center mb-2 border-b border-[#E0E8FF] pb-2">
+                            <p className="text-[14px] font-medium text-[#004EFF]">
+                              Order Price Breakdown
+                            </p>
+                            <p className="text-[12px] font-medium text-[#004EFF]">
+                              Total: {`\u20B9`}{" "}
+                              {roundedOrderPrice?.toLocaleString("en-IN")}
+                            </p>
+                          </div>
+                          <div className="max-h-[250px] overflow-y-auto pr-1">
+                            {/* Base and Add charges */}
+                            <div className="border-b border-[#E0E8FF] pb-2 mb-2">
+                              <div className="flex justify-between py-1 text-[12px]">
+                                <p className="text-[12px] font-medium">
+                                  Base Charge:
+                                </p>
+                                <p>
+                                  {`\u20B9`}{" "}
+                                  {baseValue?.toLocaleString("en-IN")}
+                                </p>
+                              </div>
+                              <div className="flex justify-between py-1 text-[12px]">
+                                <p className="text-[12px] font-medium">
+                                  Additional Charge:
+                                </p>
+                                <p>
+                                  {`\u20B9`} {addValue?.toLocaleString("en-IN")}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Variable services section */}
+                            <div className="mb-2">
+                              <div className="flex justify-between py-1 text-[12px] font-medium">
+                                <p>Variable Charges:</p>
+                                <p>
+                                  {`\u20B9`}{" "}
+                                  {/* {variablesValue?.toLocaleString("en-IN")} */}
+                                </p>
+                              </div>
+
+                              {/* List all variable service charges */}
+                              <div className="pl-2">
+                                {variableServiceKeys.map(
+                                  (key) => (
+                                    console.log("key", key),
+                                    (
+                                      <div
+                                        key={key}
+                                        className="flex justify-between py-1 text-[12px] border-b border-[#F2F6FF] last:border-0"
+                                      >
+                                        <p className="text-[12px] font-normal">
+                                          {formatLabel(key)}:
+                                        </p>
+                                        <p>
+                                          {`\u20B9`}{" "}
+                                          {(
+                                            (order?.variableServices?.[
+                                              key
+                                            ] as number) || 0
+                                          ).toLocaleString("en-IN")}
+                                        </p>
+                                      </div>
+                                    )
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                        COD Charges
+                      </span>
+                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        ₹ {order?.cod || 0}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                        Insurance Price
+                      </span>
+                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        ₹ {order?.insurance || 0}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                        Tax
+                      </span>
+                      <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                        ₹ {order?.tax || 0}
+                      </span>
+                    </div>
+
+                    {order?.yaariCash > 0 && (
+                      <div className="flex justify-between">
+                        <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                          Yaari Cash
+                        </span>
+                        <span className="font-Open text-sm text-[#7CCA62] font-normal leading-4">
+                          - ₹ {commaSeparator(order?.yaariCash)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Divider */}
+                  <hr className="my-[15px] border-gray-300" />
+
+                  {/* Gross Total */}
+                  <div className="flex justify-between font-semibold text-lg">
+                    <span className="font-Open text-sm text-[#000000] font-normal leading-4">
+                      Gross Total
+                    </span>
+                    <span className="font-Open text-sm text-[#000000] font-semibold leading-5">
+                      {/* ₹ {commaSeparator(order?.total - yaariCash) || 0} */}₹{" "}
+                      {order?.total - order?.yaariCash < 0
+                        ? "0"
+                        : commaSeparator(order?.total - order?.yaariCash) ||
+                          "0"}
+                    </span>
+                  </div>
+                </div>
               </div>
             ) : (
               <>
@@ -748,8 +1084,13 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                 ) : (
                   <OneButton
                     onClick={PlaceOrder}
-                    text={`Place Order ₹ ${
-                      order?.totalPrice ? order?.totalPrice.toFixed(2) : 0
+                    // text={`Place Order ₹ ${
+                    //   order?.totalPrice ? order?.totalPrice.toFixed(2) : 0
+                    // }`}
+                    text={`Place Order ${
+                      order?.totalPrice - order?.yaariCash < 0
+                        ? "0"
+                        : commaSeparator(order?.total - order?.yaariCash) || "0"
                     }`}
                     variant="primary"
                     className="!w-[228px]"
@@ -841,6 +1182,38 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     setSortServiciblity("");
   };
 
+  const handleReset = () => {
+    // Clear session storage items
+    sessionStorage.removeItem("order");
+    sessionStorage.removeItem("paymentType");
+    sessionStorage.removeItem("pickupOtherAddressDetails");
+    sessionStorage.removeItem("DeliveryOtherAddressDetails");
+
+    // Reset state values
+    setOrder(initialState);
+    setSelectedOrderType("");
+    setPaymentMode("PREPAID");
+    setSortServiciblity("");
+    setResetOtherAddressDetails(true);
+    setShowPickupDate("");
+    setAwbListForDownLoad([]);
+    setDownloadLebal(false);
+
+    // Force components to rebuild by giving them a new key
+    setComponentKey((prevKey: any) => prevKey + 1);
+
+    // Reset highlighted fields
+    setHighLightField({
+      addressDetails: false,
+      packageDetails: false,
+      orderDetails: false,
+      shippingDetails: false,
+      pickupTimeDetails: false,
+    });
+
+    toast.success("Form data has been reset successfully");
+  };
+
   useEffect(() => {
     sessionStorage.setItem("order", JSON.stringify(order));
     sessionStorage.setItem("paymentType", paymentMode);
@@ -900,6 +1273,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       }
                     >
                       <AddressCardDetails
+                        key={componentKey}
                         pickupDetails={order?.pickupDetails}
                         deliveryDetails={order?.deliveryDetails}
                         onPickupDetailsChange={handlePickupDetailsChange}
@@ -1129,6 +1503,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                       setResetOtherAddressDetails={setResetOtherAddressDetails}
                       setHighLightField={setHighLightField}
                       highLightField={highLightField}
+                      setYaariCash={setYaariCash}
                     />
                   </div>
 
@@ -1219,6 +1594,14 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             </span>
                             <OneButton
                               onClick={() => {
+                                sessionStorage.removeItem("order");
+                                sessionStorage.removeItem("paymentType");
+                                sessionStorage.removeItem(
+                                  "pickupOtherAddressDetails"
+                                );
+                                sessionStorage.removeItem(
+                                  "DeliveryOtherAddressDetails"
+                                );
                                 window.location.reload();
                                 // sessionStorage.clear();
                               }}

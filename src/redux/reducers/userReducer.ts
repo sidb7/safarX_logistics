@@ -8,6 +8,7 @@ interface UserState {
   loggedIn: boolean;
   isReturningUser: boolean;
   walletBalance: number;
+  yaariCash?: number;
   isMasked: boolean;
 }
 
@@ -19,6 +20,7 @@ const initialState: UserState = {
   loggedIn: false,
   isReturningUser: true,
   walletBalance: 0,
+  yaariCash: 0,
   isMasked: true,
 };
 
@@ -44,6 +46,9 @@ export const userSlice = createSlice({
     setWalletBalance: (state, action: PayloadAction<{ amt: number }>) => {
       state.walletBalance = action.payload.amt;
     },
+    setYaariCashBalance: (state, action: PayloadAction<{ amt: number }>) => {
+      state.yaariCash = action.payload.amt;
+    },
     isMasked: (state, action) => {
       state.isMasked = action.payload.isMasked;
     },
@@ -51,5 +56,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout, setWalletBalance, isMasked } = userSlice.actions;
+export const { login, logout, setWalletBalance, setYaariCashBalance, isMasked } = userSlice.actions;
 export default userSlice.reducer;

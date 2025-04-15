@@ -5,7 +5,7 @@ import {
   GlobalToast,
   GlobalToastSuccess,
 } from "../components/GlobalToast/GlobalToast";
-import { setWalletBalance } from "../redux/reducers/userReducer";
+import { setWalletBalance, setYaariCashBalance } from "../redux/reducers/userReducer";
 import { channelState } from "../redux/reducers/syncChannel";
 import sessionManager from "../utils/sessionManager";
 
@@ -59,6 +59,11 @@ const connectSocket = (dispatch?: any) => {
     socket.on("wallet_balance_update", (newBalance: string) => {
       console.log("newWalletBalance", newBalance);
       dispatch(setWalletBalance({ amt: Number(newBalance) }));
+    });
+
+    socket.on("yaari_cash_update", (newBalance: string) => {
+      console.log("newYaariCash", newBalance);
+      dispatch(setYaariCashBalance({ amt: Number(newBalance) }));
     });
 
     socket.on("bulkOrderFailed", (data: any) => {
