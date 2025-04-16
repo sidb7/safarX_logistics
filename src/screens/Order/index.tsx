@@ -177,6 +177,8 @@ const Index = () => {
     isOpen: false,
     awbNo: "",
     orderId: "",
+    orderSources: [], // Add this line
+
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
@@ -191,6 +193,7 @@ const Index = () => {
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
+    orderSources: [],
   });
   const [partnerModalData, setPartnerModalData]: any = useState({
     isOpen: false,
@@ -2091,6 +2094,7 @@ const Index = () => {
         }
         deleteTextMessage={warningMessageForCancel(cancellationModal?.payload)}
         payloadBody={cancellationModal.payload}
+        orderSources={cancellationModal.orderSources} // Add this line
         deleteURL={CANCEL_MULTIPLE_WAYBILLS}
         setIsDeleted={setIsDeleted}
         reloadData={handleTabChanges}
@@ -2101,6 +2105,7 @@ const Index = () => {
         postData={deleteModalDraftOrder?.payload}
         isOpen={deleteModalDraftOrder?.isOpen}
         reloadData={handleTabChanges}
+        orderSources={deleteModalDraftOrder?.orderSources} // Add this line
         closeModal={() => {
           setDeleteModalDraftOrder({
             ...deleteModalDraftOrder,
