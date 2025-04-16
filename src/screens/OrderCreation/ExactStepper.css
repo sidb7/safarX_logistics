@@ -1,0 +1,119 @@
+.stepper {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Default small gap between steps */
+.stepper .step:not(:first-child) {
+  margin-left: -5px;
+}
+
+.step {
+  flex: 1;
+  position: relative;
+  min-width: 150px;
+  height: 64px;
+  background-color: #e5e7eb; /* Gray background for inactive */
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+}
+
+/* First step gets standard left padding */
+.step:first-child {
+  padding-left: 16px;
+}
+
+.step.active {
+  background-color: #3b82f6; /* Blue for active */
+  color: white;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #d1d5db; /* Gray for inactive */
+  color: #6b7280;
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+.step.active .step-number {
+  background-color: white;
+  color: #3b82f6;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-title {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.step-desc {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* First step has straight left side and arrow right side */
+.step:first-child {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+  padding-right: 20px;
+  margin-right: -5px; /* Reduced overlap to create a small gap */
+}
+
+/* Middle steps have inward left side (pointing right) and arrow right side */
+.step:not(:first-child):not(:last-child) {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%);
+  padding-right: 20px;
+  padding-left: 30px;
+  margin-right: -5px; /* Reduced overlap to create a small gap */
+  margin-left: -5px;
+}
+
+/* Last step has inward left side (pointing right) and straight right side */
+.step:last-child:not(:first-child) {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20px 50%);
+  padding-left: 30px;
+  margin-left: -5px; /* Reduced overlap to create a small gap */
+}
+
+/* Arrow connector */
+.arrow {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 16px;
+}
+
+.step:not(.active) .arrow {
+  color: #d1d5db;
+}
+
+/* Completed step styling */
+.step.completed {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+/* Fix z-index to ensure proper layering */
+.step:nth-child(1) { z-index: 10; }
+.step:nth-child(2) { z-index: 9; }
+.step:nth-child(3) { z-index: 8; }
+.step:nth-child(4) { z-index: 7; }
+.step:nth-child(5) { z-index: 6; }
+.step:nth-child(6) { z-index: 5; }
+.step:nth-child(7) { z-index: 4; }
+.step:nth-child(8) { z-index: 3; }
+.step:nth-child(9) { z-index: 2; }
+.step:nth-child(10) { z-index: 1; }

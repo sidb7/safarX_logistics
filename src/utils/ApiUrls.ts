@@ -182,6 +182,11 @@ const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 const DUPLICATE_ORDER = `${SELLER_BASE_URL}/order/createDuplicateOrder`;
 const RTO_REATTEMPT = `${SELLER_BASE_URL}/order/reattemptORrtoOrder`;
 const DOWNLOAD_FAIL_REPORT = `${SELLER_BASE_URL}/fileServices/download/ERRORDETAILS`;
+const GET_PICKUP_ADDRESS_MULTIPLE_SEARCH = `${SELLER_BASE_URL}/pickupAddress/getSearchMutiple`;
+const PIN_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/markPin`;
+
+
+
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -772,4 +777,6 @@ export {
   GET_WALLET_RECHARGE_COUPONS,
   GET_ALL_COUPONS_DATA,
   POST_VERIFY_COUPON,
+  GET_PICKUP_ADDRESS_MULTIPLE_SEARCH,
+  PIN_PICKUP_ADDRESS,
 };
