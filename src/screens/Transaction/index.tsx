@@ -333,6 +333,11 @@ export const Transaction = () => {
     setEndDate(null);
   };
 
+const openFilterModal = () => {
+  // Set the filter modal to open
+  setFilterModal(true);
+};
+
   //column for wallet NEFT
   const columnsHelper = createColumnHelper<any>();
   const columns = [
@@ -787,7 +792,8 @@ export const Transaction = () => {
                   <div className="hidden lg:block">{filterButton()}</div>
                   <OneButton
                     text="FILTER"
-                    onClick={() => setFilterModal(true)}
+                    // onClick={() => setFilterModal(true)}
+                    onClick={openFilterModal}
                     variant="quad"
                     showIcon={true}
                     icon={FilterIcon}
