@@ -190,9 +190,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
     getOrderProductDetails();
 
-    if (orderType === "B2B") {
-      setPaymentMode("prepaid");
-    }
+    // if (orderType === "B2B") {
+    //   setPaymentMode("prepaid");
+    // }
   }, []);
 
   const handleRemovePackage = (boxIndex: any) => {
