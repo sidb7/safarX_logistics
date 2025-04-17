@@ -1396,7 +1396,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             !isLgScreen && " overflow-auto scroll-smooth"
                           }`}
                         >
-                          {order?.orderType === "B2C" &&
+                          {(order?.orderType === "B2C" || order?.orderType === "B2B")&&
                             order?.transit === "FORWARD" && (
                               <div className="flex justify-center items-center">
                                 <input
