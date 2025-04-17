@@ -928,7 +928,7 @@ const WalletRecharge = () => {
                           ) => {
                             setWalletValue(event.target.value);
                             if (
-                              event.target.value <
+                              Number(event.target.value.replace(/,/g, "")) <
                               verifiedCouponData?.reuiredAmount
                             ) {
                               setIsCouponVerified(false);
