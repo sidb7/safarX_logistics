@@ -413,7 +413,9 @@ export const loadPhonePeTransaction = async (
   walletValue: string,
   redirectUrl: string,
   callbackUrl: string,
-  couponDetails?: any
+  couponDetails?: any,
+  couponCode?: any,
+  selectedCoupon?: any
 ) => {
   try {
     const payload = {
@@ -423,12 +425,15 @@ export const loadPhonePeTransaction = async (
         callbackUrl,
       },
       paymentGateway: "PHONEPE",
+
       couponCode:
-        couponDetails.length > 0 &&
-        couponDetails[0]?.couponStatus !== "Expired" &&
-        Number(walletValue?.replace(/,/g, "")) >=
-          couponDetails[0]?.minRechargeAmount
-          ? couponDetails[0]?.couponCode
+        couponCode !== ""
+          ? couponCode
+          : selectedCoupon &&
+            selectedCoupon.couponStatus !== "Expired" &&
+            Number(walletValue?.replace(/,/g, "")) >=
+              selectedCoupon.minRechargeAmount
+          ? selectedCoupon.couponCode
           : "",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
@@ -458,7 +463,9 @@ export const loadRazorPayTransaction = async (
   userName: string,
   email: string,
   redirectUrl?: any,
-  couponDetails?: any
+  couponDetails?: any,
+  couponCode?: any,
+  selectedCoupon?: any
 ) => {
   try {
     const payload = {
@@ -467,11 +474,14 @@ export const loadRazorPayTransaction = async (
         callbackUrl: redirectUrl,
       },
       paymentGateway: "RAZORPE",
+
       couponCode:
-        couponDetails.length > 0 &&
-        couponDetails[0]?.couponStatus !== "Expired" &&
-        Number(amount) >= couponDetails[0]?.minRechargeAmount
-          ? couponDetails[0]?.couponCode
+        couponCode !== ""
+          ? couponCode
+          : selectedCoupon &&
+            selectedCoupon.couponStatus !== "Expired" &&
+            Number(amount) >= selectedCoupon.minRechargeAmount
+          ? selectedCoupon.couponCode
           : "",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);

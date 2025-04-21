@@ -33,7 +33,7 @@ import PhonePe from "../../../assets/Payment/PhonePe_Logo.svg.png";
 import RazorPayIcon from "../../../assets/Payment/Razorpay_logo.png";
 import PaytmIcon from "../../../assets/Payment/paytmLogoPNG.png";
 import JusPayIcon from "../../../assets/Payment/juspaylogo.svg";
-
+import successStatus from "../../../assets/success.svg";
 import Done from "../../../assets/Done .svg";
 import { POST } from "../../../utils/webService";
 import {
@@ -52,6 +52,7 @@ import {
   POST_UPDATE_WALLETBALANCE,
   COMPANY_NAME,
   GET_WALLET_RECHARGE_COUPONS,
+  POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -165,12 +166,30 @@ const WalletRecharge = () => {
 
   const [couponDetails, setCouponDetails] = useState<any>([]);
   // console.log("🚀 ~ WalletRecharge ~ couponDetails:", couponDetails);
+  const [couponCode, setCouponCode] = useState<any>("");
+  // console.log("🚀 ~ WalletRecharge ~ couponCode:", couponCode);
+  const [showCoupons, setShowCoupons] = useState(false);
+  const [loadingForCoupon, setLoadingForCoupon] = useState(false);
   const [isActives, setIsActives] = useState(false);
   // const isActive = walletValue >= coupon.minRechargeAmount;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const rechargeAmountFromRedux = useSelector(
     (state: any) => state?.payment?.amount
   );
+  const [isCouponVerified, setIsCouponVerified] = useState(false);
+  const toggleCoupons = () => {
+    // setIsOpen(!isOpen);
+    setShowCoupons(!showCoupons);
+  };
+  const [selectedCoupon, setSelectedCoupon] = useState<{
+    couponCode: string;
+    couponStatus: string;
+    expiryDate: string;
+    minRechargeAmount: number;
+    maxAmount: number;
+  } | null>(null);
+  // console.log("🚀 ~ WalletRecharge ~ selectedCoupon:", selectedCoupon);
+
   const JusPayHandler = async (
     amountFromRedux?: any,
     callbackUrlRedux?: any
@@ -186,12 +205,21 @@ const WalletRecharge = () => {
       const { data: response } = await POST(INITIAL_RECHARGE, {
         paymentObject: initialObject,
         paymentGateway: "JUSPAY",
+        // couponCode:
+        //   couponDetails.length > 0 &&
+        //   couponDetails[0]?.couponStatus !== "Expired" &&
+        //   Number(initialObject?.amount.replace(/,/g, "")) >=
+        //     couponDetails[0]?.minRechargeAmount
+        //     ? couponCode
+        //     : "",
         couponCode:
-          couponDetails.length > 0 &&
-          couponDetails[0]?.couponStatus !== "Expired" &&
-          Number(initialObject?.amount.replace(/,/g, "")) >=
-            couponDetails[0]?.minRechargeAmount
-            ? couponDetails[0]?.couponCode
+          couponCode !== ""
+            ? couponCode
+            : selectedCoupon &&
+              selectedCoupon.couponStatus !== "Expired" &&
+              Number(initialObject?.amount.replace(/,/g, "")) >=
+                selectedCoupon.minRechargeAmount
+            ? selectedCoupon.couponCode
             : "",
       });
       if (response?.success === true) {
@@ -200,6 +228,7 @@ const WalletRecharge = () => {
           window.location.replace(response?.data?.payment_links?.web);
           myInterval = setInterval(function () {
             rechargeStatusCheck(response?.data?.order_id);
+            window.location.reload();
           }, 500);
           // setLoading(false);
         }
@@ -349,7 +378,7 @@ const WalletRecharge = () => {
   const convertToEdit = () => {
     setIsedit(true);
   };
-
+  const [verifiedCouponData, setVerifiedCouponData] = useState<any>(null);
   const formatDate = (dateStr: any) => {
     // Create a new Date object from the ISO string
     const dateObj = new Date(dateStr);
@@ -377,6 +406,33 @@ const WalletRecharge = () => {
 
     // Return the formatted string
     return `${day}${getDaySuffix(day)} ${month}`;
+  };
+
+  const handleVerifyCoupon = async () => {
+    try {
+      setLoadingForCoupon(true);
+      let payload = {
+        couponCode: couponCode,
+        minRechargeAmount: walletValue,
+      };
+      const { data: response } = await POST(
+        POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
+        payload
+      );
+      if (response?.success === true) {
+        toast.success(response?.message);
+        setLoadingForCoupon(false);
+        setIsCouponVerified(true);
+        setVerifiedCouponData(response);
+      } else {
+        toast.error(response?.message);
+        setLoadingForCoupon(false);
+        setCouponCode("");
+        setVerifiedCouponData(null);
+      }
+    } catch (error) {
+      return error;
+    }
   };
 
   const rechargeStatusCheck = async (orderId: number) => {
@@ -483,7 +539,9 @@ const WalletRecharge = () => {
       walletValue,
       `${SELLER_WEB_URL}/wallet/view-wallet`,
       `${SELLER_WEB_URL}/wallet/view-wallet`,
-      couponDetails
+      couponDetails,
+      couponCode,
+      selectedCoupon
     );
     setLoading(false);
   };
@@ -498,8 +556,11 @@ const WalletRecharge = () => {
       userDetails.name,
       userDetails.email,
       redirectUrl,
-      couponDetails
+      couponDetails,
+      couponCode,
+      selectedCoupon
     );
+
     if (!options?.success && !options?.amount) {
       toast.error(options?.message);
       return;
@@ -826,7 +887,9 @@ const WalletRecharge = () => {
               <div className="grid lg:grid-cols-2 gap-x-[27px] ">
                 <div
                   className={`w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm  ${
-                    couponDetails.length > 0 ? "h-96" : "h-fit"
+                    showCoupons && couponDetails.length > 0
+                      ? "h-[490px]"
+                      : "h-fit"
                   }`}
                 >
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
@@ -864,6 +927,13 @@ const WalletRecharge = () => {
                             event: React.ChangeEvent<HTMLSelectElement>
                           ) => {
                             setWalletValue(event.target.value);
+                            if (
+                              Number(event.target.value.replace(/,/g, "")) <
+                              verifiedCouponData?.reuiredAmount
+                            ) {
+                              setIsCouponVerified(false);
+                              setCouponCode("");
+                            }
                           }}
                           wrapperClass="w-[120px] md:w-[200px]                                                                                                                "
                           selectClassName="text-[12px] !h-[32px] "
@@ -885,6 +955,8 @@ const WalletRecharge = () => {
                                 amt={walletValue}
                                 navigate={`${SELLER_WEB_URL}/wallet/view-wallet`}
                                 couponDetails={couponDetails}
+                                couponCode={couponCode}
+                                selectedCoupon={selectedCoupon}
                               />
                             ) : (
                               <div className="hover:scale-105">Pay Now</div>
@@ -900,7 +972,16 @@ const WalletRecharge = () => {
                           {paymentGatewayArr?.map((el: any, i: number) => (
                             <div
                               key={i}
-                              onClick={() => setPaymentGateway(el?.paymentId)}
+                              onClick={() => {
+                                if (couponCode !== "" && !isCouponVerified) {
+                                  toast.error(
+                                    "Coupon code entered is not verified."
+                                  );
+                                  setPaymentGateway("");
+                                } else {
+                                  setPaymentGateway(el?.paymentId);
+                                }
+                              }}
                               className={`border cursor-pointer text-sm min-w-[6rem] py-1 text-center flex justify-center items-center my-2 px-2 rounded-md transition-transform ${
                                 el?.paymentId === paymentGateway
                                   ? "border-black border-1 text-white scale-105"
@@ -968,80 +1049,221 @@ const WalletRecharge = () => {
                     );
                   })} */}
 
-                  {couponDetails.map((coupon: any, index: number) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] mt-4 ${
-                          isActives && coupon.couponStatus !== "Expired"
-                            ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
-                            : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
-                        } hover:scale-[1.03] hover:shadow-lg`}
-                        style={{
-                          animation: "fadeIn 0.5s ease-out forwards",
-                          opacity: 1, // Ensure visibility
-                          transform: "translateY(0px)",
-                        }}
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                      >
-                        <div className="relative z-10 px-4 py-3">
-                          <div className="mb-1 flex justify-between items-center">
-                            <p
-                              className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
-                                isActives && coupon.couponStatus !== "Expired"
-                                  ? "text-blue-600"
-                                  : "text-gray-500"
-                              }`}
-                            >
-                              {coupon.couponCode}
-                            </p>
-                            <p
-                              className={`flex px-5 py-1 rounded-xl whitespace-nowrap font-Open text-[14px] font-semibold  ${
-                                isActives && coupon.couponStatus !== "Expired"
-                                  ? "bg-emerald-100 text-emerald-600"
-                                  : "bg-gray-100 text-gray-400"
-                              }`}
-                            >
-                              {formatDate(coupon.expiryDate)}{" "}
-                            </p>
+                  <div className="my-5 ">
+                    <p className="text-sm text-[#323232] font-Open font-normal leading-4 mb-3">
+                      Have a Coupon Code?
+                    </p>
+                    <div className="flex items-center text-center gap-x-2 space-y-2">
+                      {/* <div className="relative mb-2">
+                    <input
+                      type="text"
+                      placeholder="Enter Here"
+                      value={couponCode}
+                      onChange={handleCouponChange}
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div> */}
+                      <div className="relative">
+                        <CustomInputBox
+                          label="Enter your Coupon Code "
+                          name=""
+                          value={couponCode}
+                          onChange={(e: any) => {
+                            const noSpacesValue = e.target.value
+                              .replace(/\s+/g, "")
+                              .toUpperCase();
+                            setCouponCode(noSpacesValue);
+                            setPaymentGateway("");
+                          }}
+                          className="md:!w-[250px]"
+                          isDisabled={
+                            selectedCoupon !== null || isCouponVerified
+                              ? true
+                              : false
+                          }
+                        />
+                        {isCouponVerified && (
+                          <div className="absolute text-[10px] my-1 text-start flex flex-wrap text-green-600">
+                            Get up to &nbsp;
+                            <b>₹{verifiedCouponData?.maxAmount}</b>
+                            &nbsp; cashback on a minimum recharge of&nbsp;₹
+                            {verifiedCouponData?.reuiredAmount}
                           </div>
-
-                          <p className="mt-2 font-Noto text-sm text-gray-600 leading-5">
-                            Get up to ₹{coupon?.cashbackValue?.maxAmount}&nbsp;
-                            cashback on a minimum recharge of&nbsp;
-                            <span className="font-medium">
-                              ₹{coupon.minRechargeAmount.toLocaleString()}
-                            </span>
-                          </p>
-
-                          <div
-                            className={`mt-3 rounded-full px-3 py-1 font-Open text-xs font-medium leading-5 ${
-                              isActives && coupon.couponStatus !== "Expired"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-amber-100 text-amber-700"
-                            }`}
-                            style={{ width: "fit-content" }}
-                          >
-                            {isActives && coupon.couponStatus !== "Expired"
-                              ? "Available to use"
-                              : coupon.couponStatus === "Expired"
-                              ? "Your coupon has Expired!"
-                              : "Unlock with higher balance"}
-                          </div>
-                        </div>
-
-                        {hoveredIndex === index && (
-                          <div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"
-                            style={{
-                              animation: "sweep 1s infinite linear",
-                            }}
-                          />
                         )}
                       </div>
-                    );
-                  })}
+
+                      {isCouponVerified ? (
+                        <>
+                          <div className="flex gap-x-1 items-center text-center">
+                            <img src={successStatus} alt="successStatus" />
+                            <span className="text-[14px] font-normal font-Open leading-5 text-[#7CCA62] tracking-wide">
+                              VERIFIED
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <OneButton
+                          type="button"
+                          onClick={handleVerifyCoupon}
+                          variant="primary"
+                          text={`${
+                            loadingForCoupon ? "Verifying..." : "Verify"
+                          }`}
+                          className=" !rounded-[20px] !py-2 !px-4"
+                          disabled={loadingForCoupon || selectedCoupon !== null}
+                        />
+                      )}
+
+                      <div
+                        className="flex gap-x-2 items-center bg-[#FFFFFF] text-[#004EFF] underline underline-offset-4 hover:bg-[#F2F6FF] hover:shadow-cardShadow2a focus:bg-[#F2F6FF] focus:border focus:border-[#CCDCFF] hover:rounded-md px-2 py-4"
+                        onClick={toggleCoupons}
+                      >
+                        {/* <OneButton
+                      type="button"
+                      onClick={toggleCoupons}
+                      variant="tertiary"
+                      text="Available Coupons"
+                      // className=" !rounded-[20px] !py-2 !px-4"
+                      disabled={loadingForCoupon}
+                    /> */}
+                        <button
+                          type="button"
+                          onClick={toggleCoupons}
+                          className="buttonClassName md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap"
+                          disabled={loadingForCoupon}
+                        >
+                          Available Coupons
+                        </button>
+
+                        <svg
+                          className={`w-4 h-4 transform ${
+                            showCoupons ? "rotate-180" : ""
+                          }`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {showCoupons &&
+                    couponDetails.map((coupon: any, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`relative overflow-hidden rounded-2xl border shadow-md transition-all duration-300 md:w-[380px] mt-4 ${
+                            isActives && coupon.couponStatus !== "Expired"
+                              ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50"
+                              : "border-gray-200 bg-gradient-to-br from-gray-50 to-slate-50"
+                          } ${
+                            selectedCoupon?.couponCode === coupon.couponCode
+                              ? "ring-2 ring-blue-500"
+                              : ""
+                          }hover:scale-[1.03] hover:shadow-lg cursor-${
+                            isActives && coupon.couponStatus !== "Expired"
+                              ? "pointer"
+                              : "not-allowed"
+                          }`}
+                          style={{
+                            animation: "fadeIn 0.5s ease-out forwards",
+                            opacity: 1, // Ensure visibility
+                            transform: "translateY(0px)",
+                          }}
+                          onMouseEnter={() => setHoveredIndex(index)}
+                          onMouseLeave={() => setHoveredIndex(null)}
+                          onClick={() => {
+                            if (
+                              isActives &&
+                              coupon.couponStatus !== "Expired"
+                            ) {
+                              if (
+                                selectedCoupon?.couponCode === coupon.couponCode
+                              ) {
+                                setSelectedCoupon(null); // Deselect
+                              } else {
+                                setIsCouponVerified(false);
+                                setCouponCode("");
+                                setSelectedCoupon({
+                                  couponCode: coupon.couponCode,
+                                  couponStatus: coupon.couponStatus,
+                                  expiryDate: coupon.expiryDate,
+                                  minRechargeAmount: coupon.minRechargeAmount,
+                                  maxAmount:
+                                    coupon?.cashbackValue?.maxAmount ?? 0,
+                                });
+                              }
+                            } else {
+                              toast.error(
+                                "This coupon is not available for selection."
+                              );
+                            }
+                          }}
+                        >
+                          <div className="relative z-10 px-4 py-3">
+                            <div className="mb-1 flex justify-between items-center">
+                              <p
+                                className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
+                                  isActives && coupon.couponStatus !== "Expired"
+                                    ? "text-blue-600"
+                                    : "text-gray-500"
+                                }`}
+                              >
+                                {coupon.couponCode}
+                              </p>
+                              <p
+                                className={`flex px-5 py-1 rounded-xl whitespace-nowrap font-Open text-[14px] font-semibold  ${
+                                  isActives && coupon.couponStatus !== "Expired"
+                                    ? "bg-emerald-100 text-emerald-600"
+                                    : "bg-gray-100 text-gray-400"
+                                }`}
+                              >
+                                {formatDate(coupon.expiryDate)}{" "}
+                              </p>
+                            </div>
+
+                            <p className="mt-2 font-Noto text-sm text-gray-600 leading-5">
+                              Get up to ₹{coupon?.cashbackValue?.maxAmount}
+                              &nbsp; cashback on a minimum recharge of&nbsp;
+                              <span className="font-medium">
+                                ₹{coupon.minRechargeAmount.toLocaleString()}
+                              </span>
+                            </p>
+
+                            <div
+                              className={`mt-3 rounded-full px-3 py-1 font-Open text-xs font-medium leading-5 ${
+                                isActives && coupon.couponStatus !== "Expired"
+                                  ? "bg-emerald-100 text-emerald-700"
+                                  : "bg-amber-100 text-amber-700"
+                              }`}
+                              style={{ width: "fit-content" }}
+                            >
+                              {isActives && coupon.couponStatus !== "Expired"
+                                ? "Available to use"
+                                : coupon.couponStatus === "Expired"
+                                ? "Your coupon has Expired!"
+                                : "Unlock with higher balance"}
+                            </div>
+                          </div>
+
+                          {hoveredIndex === index && (
+                            <div
+                              className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10"
+                              style={{
+                                animation: "sweep 1s infinite linear",
+                              }}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
 
                   {/* <JusPay
                     isDisabled={isDisabled}
@@ -1081,7 +1303,7 @@ const WalletRecharge = () => {
                 <div className="hidden lg:block">
                   <div
                     className={`flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid my-5 border-[#E8E8E8]   shadow-sm ${
-                      couponDetails.length > 0 ? "h-96" : ""
+                      showCoupons && couponDetails.length > 0 ? "h-[490px]" : ""
                     } `}
                   >
                     {/* {checkYaariPoints ? (
