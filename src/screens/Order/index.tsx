@@ -967,6 +967,7 @@ const Index = () => {
           setDeleteModalDraftOrder({
             isOpen: true,
             payload: payLoad,
+            orderSources: data?.source ? [data.source] : [], // Add order source for single order deletion
           });
         }
         break;
@@ -981,6 +982,7 @@ const Index = () => {
           setCancellationModal({
             isOpen: true,
             payload: payLoad?.awbs,
+            orderSources: data?.source ? [data.source] : [], // Add order source for single order cancellation
           });
         } else if (actionType === "download_label") {
           getSingleFile(payLoad, actionType);
