@@ -265,6 +265,7 @@ const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalan
 const GET_WALLET_RECHARGE_COUPONS = `${SELLER_URL}/api/v1/wallet/getWalletRechargeCoupons`;
 const GET_ALL_COUPONS_DATA = `${SELLER_URL}/api/v1/coupon/getActiveCoupons`;
 const POST_VERIFY_COUPON = `${SELLER_URL}/api/v1/coupon/verifyCoupon`;
+const POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE = `${SELLER_URL}/api/v1/coupon/verifyWalletRechargeCoupon`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -800,4 +801,5 @@ export {
   DELIVERY_ADDRESS_SEARCHBY,
   GET_PRODUCT_SUGGETION,
   GET_BOX_SUGGETION,
+  POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
 };

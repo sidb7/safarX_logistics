@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CloseIcon from "../../assets/CloseIcon.svg";
-import  {CustomTable}  from "../../components/Table";
+import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Tooltip } from "react-tooltip";
 import Checkbox from "../../components/CheckBox";
@@ -618,7 +618,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
   return (
     <>
       <div>
-        <div className="flex justify-between p-5">
+        <div className="flex justify-between px-5 py-4">
           <p className="font-Lato font-normal text-2xl text-[#323232] leading-8">
             Delivery Max
           </p>
@@ -629,9 +629,10 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             className="cursor-pointer"
           />
         </div>
-        <div className="h-[calc(100vh-90px)] overflow-y-scroll pb-7">
+
+        <div className="h-[calc(100vh-90px)] overflow-y-scroll pb-2">
           <div>
-            <p className="font-Open font-semibold text-lg  text-[#1C1C1C] leading-[22px] px-5 pt-5">
+            <p className="font-Open font-semibold text-md  text-[#1C1C1C] leading-[22px] px-5 pt-2">
               Setup Your Communication{" "}
               <span>
                 {`(${rateCardDetails?.rateCardName} - ${rateCardDetails?.rateCardId})`}
@@ -641,11 +642,18 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columnsData={columns}
                 rowData={communicationChannels || []}
-        
               />
             </div>
           </div>
           <div>
+            <div className="px-5 py-2 text-xs flex  bg-[#F2F4F5] mx-2 gap-1 rounded-md">
+              <b>Note:</b>&nbsp;
+              <div className="items-center text-justify">
+                For API or channel orders, the <b>&nbsp;Brand Name&nbsp;</b>{" "}
+                shared via API will take priority over the Brand Name saved in
+                the <b>&nbsp;My Profile&nbsp;</b> section.
+              </div>
+            </div>
             <p className="font-Open font-semibold text-lg  text-[#1C1C1C] leading-[22px] px-5 pt-5">
               Pricing
             </p>
@@ -653,7 +661,6 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               <CustomTable
                 columnsData={PricingColumns}
                 rowData={filteredRateCard || []}
-               
               />
             </div>
           </div>

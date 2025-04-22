@@ -245,6 +245,10 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
   const channelArr = [
     {
+      label: "Select a Zoho domain", // Clear placeholder text
+      value: "" // Empty value
+    },
+    {
       label: "Zoho.com",
       value: ".com",
     },
@@ -684,7 +688,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) =>
-                  setStoreData({ ...storeData, storeUrl: e.target.value })
+                  setStoreData({ ...storeData, storeUrl: e.target.value, storeName: e.target.value })
                 }
               />
 
@@ -731,7 +735,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                   setStoreData({ ...storeData, domain: e.target.value });
                 }}
                 options={channelArr}
-                heading="Zoho Domain"
+                // heading="Zoho Domain"
               />
 
               <p className="font-semibold">Integration Guide</p>
