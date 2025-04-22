@@ -43,6 +43,9 @@ function Paytm({
       // setShowCheckout(false);
       localStorage.setItem("showToastPaytm", "true");
       window.location.href = navigate;
+    }else{
+            window.location.href = navigate;
+
     }
   };
   const CONFIG = {
