@@ -638,7 +638,7 @@ useEffect(() => {
     <div>
       <div className=" flex justify-between w-full">
         <div>
-          <Breadcrum label="Lost and Damaged" />
+          <Breadcrum label="Lost & Damaged" />
         </div>
         <div className="flex gap-2 items-center mb-4 mr-4">
           <DatePicker
