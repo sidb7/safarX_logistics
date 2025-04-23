@@ -340,6 +340,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       case "DRAFT": {
         if (identifier === "Delete") {
           let tempOrderIds: any = "";
+          let orderSources: string[] = [];
+
           const selectAllContainer: any = document.getElementById("selectAll");
           const checkbox = selectAllContainer.querySelector(
             'input[type="checkbox"]'
@@ -351,10 +353,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             tempOrderIds = orders?.map(
               (data: any, index: any) => data?.tempOrderId
             );
+            orderSources = orders?.map((data: any) => data.source).filter(Boolean);
+
           } else {
             tempOrderIds = selectedRowdata.map(
               (data: any, index: any) => data?.original?.tempOrderId
             );
+            orderSources = selectedRowdata.map((data: any) => data?.original?.source).filter(Boolean);
           }
 
           let payload = {
@@ -365,7 +370,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return;
           }
           setDeleteModalDraftOrder &&
-            setDeleteModalDraftOrder({ isOpen: true, payload });
+            setDeleteModalDraftOrder({ isOpen: true, payload,orderSources });
         } else if (identifier === "BulkAction") {
           if (selectedRowdata.length === 0) {
             toast.error("Please Select Atleast One Order To Take Bulk Action.");
@@ -476,18 +481,33 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
             // Function to check if the checkbox is checked
             const isChecked = checkbox.checked;
+            let orderSources: string[] = [];
             if (isChecked) {
               awbNo = orders?.map((data: any, index: any) => {
                 return data.awb;
               });
+              orderSources = orders
+                ?.map((data: any) => data.source)
+                .filter(Boolean);
             } else {
               awbNo = selectedRowdata.map((data: any, index: any) => {
                 return data.original.awb;
               });
+              orderSources = selectedRowdata
+                .map((data: any) => data.original.source)
+                .filter(Boolean);
             }
 
+            const sources = isChecked
+              ? orders?.map((data: any) => data.source)
+              : selectedRowdata.map((data: any) => data.original.source);
+
             setCancellationModal &&
-              setCancellationModal({ isOpen: true, payload: awbNo });
+              setCancellationModal({
+                isOpen: true,
+                payload: awbNo,
+                orderSources: orderSources,
+              });
           } else {
             toast.error("Please select atleast one order for Cancellation");
             return;

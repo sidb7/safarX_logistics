@@ -177,6 +177,8 @@ const Index = () => {
     isOpen: false,
     awbNo: "",
     orderId: "",
+    orderSources: [], // Add this line
+
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
@@ -191,6 +193,7 @@ const Index = () => {
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
+    orderSources: [],
   });
   const [partnerModalData, setPartnerModalData]: any = useState({
     isOpen: false,
@@ -964,6 +967,7 @@ const Index = () => {
           setDeleteModalDraftOrder({
             isOpen: true,
             payload: payLoad,
+            orderSources: data?.source ? [data.source] : [], // Add order source for single order deletion
           });
         }
         break;
@@ -978,6 +982,7 @@ const Index = () => {
           setCancellationModal({
             isOpen: true,
             payload: payLoad?.awbs,
+            orderSources: data?.source ? [data.source] : [], // Add order source for single order cancellation
           });
         } else if (actionType === "download_label") {
           getSingleFile(payLoad, actionType);
@@ -2091,6 +2096,7 @@ const Index = () => {
         }
         deleteTextMessage={warningMessageForCancel(cancellationModal?.payload)}
         payloadBody={cancellationModal.payload}
+        orderSources={cancellationModal.orderSources} // Add this line
         deleteURL={CANCEL_MULTIPLE_WAYBILLS}
         setIsDeleted={setIsDeleted}
         reloadData={handleTabChanges}
@@ -2101,6 +2107,7 @@ const Index = () => {
         postData={deleteModalDraftOrder?.payload}
         isOpen={deleteModalDraftOrder?.isOpen}
         reloadData={handleTabChanges}
+        orderSources={deleteModalDraftOrder?.orderSources} // Add this line
         closeModal={() => {
           setDeleteModalDraftOrder({
             ...deleteModalDraftOrder,
