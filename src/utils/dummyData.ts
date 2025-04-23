@@ -1899,11 +1899,11 @@ export const sideBarMenusData = [
       },
       {
         id: "fghijklmno",
-        name: "Lost And Damaged Shipments",
+        name: "Lost & Damaged Shipments",
         pages: [
           {
             id: "fghijklmnop",
-            name: "Lost And Damaged Shipments",
+            name: "Lost & Damaged Shipments",
             isActive: true,
             permissions: {
               create: true,
@@ -1916,7 +1916,7 @@ export const sideBarMenusData = [
           },
         ],
         menu: [],
-        path: "tracking/lostAndDamaged",
+        path: "tracking/lostanddamaged",
         isActive: true,
         isChild: false,
         isActivePath: false,
