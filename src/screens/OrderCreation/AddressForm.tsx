@@ -905,7 +905,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
   };
 
   return (
-    <div className="flex flex-row gap-6 w-full max-w-6xl mx-auto p-4">
+    <div className="flex flex-row gap-6 w-full max-w-full mx-auto p-4">
       {/* Pickup Details Section */}
       <div className="w-1/2 bg-[#F5FBFF] rounded-lg p-6">
         <div className="flex justify-between items-center mb-4">

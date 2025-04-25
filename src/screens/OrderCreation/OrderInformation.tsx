@@ -7,22 +7,28 @@ interface OrderInformationProps {
   order: {
     orderId: string;
     orderType: string;
+    reverseState: string; // Add this new property
   };
-  setOrder: React.Dispatch<React.SetStateAction<{
-    orderId: string;
-    orderType: string;
-  }>>;
+  setOrder: React.Dispatch<
+    React.SetStateAction<{
+      orderId: string;
+      orderType: string;
+      reverseState: string; // Add this new property
+    }>
+  >;
   showDownloadLebal: boolean;
   visibility: boolean;
   setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
   setSortServiciblity: React.Dispatch<React.SetStateAction<string>>;
-  setHighLightField: React.Dispatch<React.SetStateAction<{
-    addressDetails: boolean;
-    packageDetails: boolean;
-    shippingDetails: boolean;
-    orderDetails: boolean;
-    pickupTimeDetails: boolean;
-  }>>;
+  setHighLightField: React.Dispatch<
+    React.SetStateAction<{
+      addressDetails: boolean;
+      packageDetails: boolean;
+      shippingDetails: boolean;
+      orderDetails: boolean;
+      pickupTimeDetails: boolean;
+    }>
+  >;
 }
 
 const OrderInformation: React.FC<OrderInformationProps> = ({
@@ -49,6 +55,13 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
     }
 
     return code;
+  };
+
+  const handleReverseToggle = (isReverse: boolean) => {
+    setOrder((prevState) => ({
+      ...prevState,
+      reverseState: isReverse ? "REVERSE" : "FORWARD",
+    }));
   };
 
   // Function to handle order type change
@@ -169,6 +182,43 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
               </span>
               <div className="text-gray-500">
                 (For same day and next day delivery)
+              </div>
+            </div>
+          </div>
+
+          <div className="ml-auto flex items-center">
+            <div className="flex items-center">
+              <span className="mr-3 font-semibold text-sm font-Open leading-[18px] text-[#323232]">
+                Reverse
+              </span>
+              {/* This div will handle the click events instead of using a label */}
+              <div
+                className="inline-flex relative items-center cursor-pointer"
+                onClick={() =>
+                  handleReverseToggle(order.reverseState !== "REVERSE")
+                }
+                data-cy="reverse-toggle-container"
+              >
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={order.reverseState === "REVERSE"}
+                  readOnly
+                  data-cy="reverse-toggle"
+                />
+                <div
+                  className={`w-11 h-6 rounded-full transition-colors duration-200 ${
+                    order.reverseState === "REVERSE"
+                      ? "bg-blue-600"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  <div
+                    className={`absolute top-[2px] left-[2px] bg-white border border-gray-300 rounded-full h-5 w-5 transition-transform duration-200 transform ${
+                      order.reverseState === "REVERSE" ? "translate-x-5" : ""
+                    }`}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
