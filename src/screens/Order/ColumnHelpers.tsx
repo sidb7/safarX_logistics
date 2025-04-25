@@ -1100,11 +1100,7 @@ export const columnHelperForNewOrder = (
                 <div className=" ">
                   <p className=" font-Open text-sm font-semibold leading-5">
                     {date_DD_MMM_YYYY_HH_MM_SS(
-                      source === "SHOPIFY" ||
-                        source === "WOOCOMMERCE" ||
-                        source === "ZOHO"
-                        ? createdAt
-                        : updatedAtStatus || updatedAt
+                      updatedAtStatus || updatedAt
                     )}
                   </p>
                 </div>
@@ -1455,7 +1451,13 @@ export const columnHelperForNewOrder = (
                   {source === "SHOPIFY" ||
                   source === "WOOCOMMERCE" ||
                   source === "ZOHO"
-                    ? date_DD_MMM_YYYY_HH_MM_SS(createdAt)
+                    ?  
+                    <div>
+                      Order created on Channel: 
+                      <div>
+                    {date_DD_MMM_YYYY_HH_MM_SS(createdAt)}
+                      </div>
+                    </div> 
                     : time}
                 </div>
 
