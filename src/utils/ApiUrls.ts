@@ -210,6 +210,8 @@ const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryAddress`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 const SET_WEIGHT_INFO_ORDER = `${SELLER_BASE_URL}/order/setWeightInfoForOrder`;
+const GET_TRANSPORTER_ID = `${SELLER_BASE_URL}/partners/transporterId`;
+
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
 // const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
@@ -802,4 +804,5 @@ export {
   GET_PRODUCT_SUGGETION,
   GET_BOX_SUGGETION,
   POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
+  GET_TRANSPORTER_ID,
 };

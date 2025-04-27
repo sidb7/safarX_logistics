@@ -9,6 +9,8 @@ import OrderFormB2B from "./OrderFormB2B";
 import PaymentInformation from "./PaymentInformation";
 import OrderSummary from "./OrderSummary";
 import OneButton from "../../components/Button/OneButton";
+import EWayBillCard from "./EWayBillCard";
+import ShippingServiceSelector from "./ShippingServiceSelector";
 
 // Define BoxData interface to match what comes from OrderForm
 interface BoxInfo {
@@ -286,6 +288,25 @@ function OrderCreation() {
     }
   };
 
+  // Function to calculate total invoice value from all boxes // check for correct or delete it
+const calculateTotalInvoiceValue = () => {
+  if (order.orderType === "B2C") {
+    // For B2C orders, sum up all product total prices in all boxes
+    return boxesData.reduce((total, box) => {
+      return total + box.products.reduce((boxTotal, product) => {
+        return boxTotal + (Number(product.totalPrice) || 0);
+      }, 0);
+    }, 0);
+  } else {
+    // For B2B orders, sum up all package total prices in all boxes
+    return b2bBoxesData.reduce((total, box) => {
+      return total + box.packages.reduce((boxTotal, pkg) => {
+        return boxTotal + (Number(pkg.totalPrice) || 0);
+      }, 0);
+    }, 0);
+  }
+};
+
   // Function to handle proceeding to next step
   const handleProceedToNextStep = () => {
     setActiveStep(2);
@@ -419,8 +440,13 @@ function OrderCreation() {
           </div>
         ) : (
           <div>
-            <h3 className="text-lg font-medium mb-4">Select Shipping Method</h3>
-            {/* Add shipping options here */}
+            <h2 className="text-2xl font-semibold mb-4">
+              Shipping Options
+            </h2>
+            {/* <EWayBillCard totalInvoiceValue={calculateTotalInvoiceValue()} /> */}
+            <EWayBillCard totalInvoiceValue= {51000} />
+            <ShippingServiceSelector/>
+
           </div>
         )}
       </div>
