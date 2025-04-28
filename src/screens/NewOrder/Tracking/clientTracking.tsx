@@ -173,7 +173,8 @@ const Tracking = () => {
       setLoading(true);
 
       const result = await inputRegexFilter(trackingNo, path);
-
+      console.log("result", result);
+      
       //mapping the new data
       if (result?.success) {
         const res = result?.data?.[0]?.trackingInfo?.map(
@@ -206,6 +207,8 @@ const Tracking = () => {
         setAllAwbs([...allAwbs, trackingNo]);
         const flattenedLogs = allProcessedLogs.flat();
       } else {
+        setTrackingState([]);
+        setAllAwbs([]);
         toast.error(result);
       }
     } catch (error: any) {

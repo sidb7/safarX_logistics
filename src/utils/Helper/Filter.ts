@@ -93,6 +93,7 @@ export const inputRegexFilter = async (
 
         // apiCall.data = decryptData(apiCall?.data?.encryptedData);
         const tempData = decryptData(apiCall?.data?.encryptedData);
+        console.log("tempData", JSON.stringify(tempData));
 
         if (tempData?.success && tempData?.data?.length > 0) {
           const result = tempData;
