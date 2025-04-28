@@ -43,7 +43,10 @@ const Card = (props: any) => {
         } else if (channel.channel === "BASE") {
           const url = `https://base.com/en-IN/register`;
           window.location.href = url;
-        } else {
+        } else if (channel.channel === "SHOPIFY_APP") {
+          const url = `https://apps.shopify.com/blaze-2`;
+          window.location.href = url;
+        }else {
           setModalData({ isOpen: true, modalData: channel });
         }
     }

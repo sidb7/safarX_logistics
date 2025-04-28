@@ -412,7 +412,10 @@ export const titleCase = (str: string) => {
 export const loadPhonePeTransaction = async (
   walletValue: string,
   redirectUrl: string,
-  callbackUrl: string
+  callbackUrl: string,
+  couponDetails?: any,
+  couponCode?: any,
+  selectedCoupon?: any
 ) => {
   try {
     const payload = {
@@ -422,6 +425,16 @@ export const loadPhonePeTransaction = async (
         callbackUrl,
       },
       paymentGateway: "PHONEPE",
+
+      couponCode:
+        couponCode !== ""
+          ? couponCode
+          : selectedCoupon &&
+            selectedCoupon.couponStatus !== "Expired" &&
+            Number(walletValue?.replace(/,/g, "")) >=
+              selectedCoupon.minRechargeAmount
+          ? selectedCoupon.couponCode
+          : "",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
@@ -449,7 +462,10 @@ export const loadRazorPayTransaction = async (
   companyName: string,
   userName: string,
   email: string,
-  redirectUrl?: any
+  redirectUrl?: any,
+  couponDetails?: any,
+  couponCode?: any,
+  selectedCoupon?: any
 ) => {
   try {
     const payload = {
@@ -458,6 +474,15 @@ export const loadRazorPayTransaction = async (
         callbackUrl: redirectUrl,
       },
       paymentGateway: "RAZORPE",
+
+      couponCode:
+        couponCode !== ""
+          ? couponCode
+          : selectedCoupon &&
+            selectedCoupon.couponStatus !== "Expired" &&
+            Number(amount) >= selectedCoupon.minRechargeAmount
+          ? selectedCoupon.couponCode
+          : "",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
@@ -488,11 +513,12 @@ export const loadRazorPayTransaction = async (
       order_id: orderId,
       handler: async (response: any) => {
         let body = {
-          orderId: response.razorpay_payment_id,
-          transactionId: transactionId,
+          orderId: orderId,
+          transactionId: response.razorpay_payment_id,
           paymentGateway: "RAZORPE",
         };
-        await POST(RECHARGE_STATUS, body);
+        const { data } = await POST(RECHARGE_STATUS, body);
+        // console.log(data, "RAZORPE");
         window.location.href = redirectUrl;
       },
       prefill: {

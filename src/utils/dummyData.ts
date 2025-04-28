@@ -659,6 +659,14 @@ export const dummyTransactionFilterData = [
 export const ChannelIntegrationCarts = {
   title: "Carts",
   channels: [
+    {
+      name: "STORE_NAME",
+      icon: ShopifyIconApp,
+      iconLg: ShopifyIconLgApp,
+      integrated: false,
+      storesIntegrated: 5,
+      channel: "SHOPIFY_APP",
+    },
     // {
     //   name: "STORE_NAME",
     //   icon: ShopifyIcon,
@@ -707,14 +715,6 @@ export const ChannelIntegrationCarts = {
       storesIntegrated: 5,
       channel: "EASYECOM",
     },
-    // {
-    //   name: "STORE_NAME",
-    //   icon: ShopifyIconApp,
-    //   iconLg: ShopifyIconLgApp,
-    //   integrated: false,
-    //   storesIntegrated: 5,
-    //   channel: "SHOPIFY_APP",
-    // },
     {
       name: "STORE_NAME",
       icon: ClickpostIcon,
@@ -1893,6 +1893,30 @@ export const sideBarMenusData = [
         ],
         menu: [],
         path: "/tracking/exception-ndr",
+        isActive: true,
+        isChild: false,
+        isActivePath: false,
+      },
+      {
+        id: "fghijklmno",
+        name: "Lost & Damaged Shipments",
+        pages: [
+          {
+            id: "fghijklmnop",
+            name: "Lost & Damaged Shipments",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "tracking/lostanddamaged",
         isActive: true,
         isChild: false,
         isActivePath: false,

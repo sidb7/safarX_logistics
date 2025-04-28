@@ -168,7 +168,10 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     // so dailyrpeortnumber, utrNO needs to given in payload too ,
 
     try {
-      const { data: response } = await POST(DOWNLOAD_COD_REMITTED);
+      const report = {
+        reportNumber : reportNumber || ''
+      }
+      const { data: response } = await POST(DOWNLOAD_COD_REMITTED, report);
 
       if (response?.success && response?.data?.orders?.length > 0) {
         const formattedData = response?.data?.orders?.map((order: any) => {
@@ -182,6 +185,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
             DeliveryDate: order?.deliveryDate,
             PrivateCompanyId: order?.privateCompanyId,
             Status: order?.status,
+            DueDate: order?.dueDate,
             ReportNumber: order?.reportNumber,
             UtrNo: order?.utrNo,
           };

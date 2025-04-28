@@ -177,6 +177,8 @@ const Index = () => {
     isOpen: false,
     awbNo: "",
     orderId: "",
+    orderSources: [], // Add this line
+
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
@@ -191,6 +193,7 @@ const Index = () => {
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
+    orderSources: [],
   });
   const [partnerModalData, setPartnerModalData]: any = useState({
     isOpen: false,
@@ -592,7 +595,7 @@ const Index = () => {
             />
           </div>
 
-          <div
+          {/* <div
             ref={syncRef}
             onClick={handleSyncOrder}
             className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
@@ -604,7 +607,7 @@ const Index = () => {
             <div
               className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
             ></div>
-          </div>
+          </div> */}
           <OneButton
             text="Bulk Upload"
             onClick={() => navigate("/orders/add-bulk")}
@@ -625,16 +628,45 @@ const Index = () => {
             <></>
           )}
 
-          <div className="flex gap-3">
+          {/* <div className="flex gap-3">
             <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] border-[#A4A4A4]   font-medium text-[#1C1C1C]">
               Amazon Fulfillment (
               {Number(unFullfillment || 0) + Number(fullfillment || 0)}/{" "}
               {Number(fullfillment || 0)})
             </span>
-            {/* <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
+            <span className="flex flex-1 min-w-fit items-center py-[6px] rounded-md px-[10px] border-[1px] cursor-pointer border-[#A4A4A4]   font-medium text-[#1C1C1C]">
               Amazon unfulfillment ({unFullfillment})
-            </span> */}
+            </span>
+          </div> */}
+          <div className="flex gap-3">
+            <OneButton
+              text={`Amazon Fulfillment (${
+                Number(unFullfillment || 0) + Number(fullfillment || 0)
+              }/${Number(fullfillment || 0)})`}
+              onClick={() => {
+                /* Add your function here */
+              }}
+              variant="secondary"
+              className="!justify-start !font-medium !text-[#1C1C1C] !py-[6px] !px-[10px] !h-auto !h-auto hover:bg-[#FFFFFF] !hover:shadow-none !cursor-not-allowed"
+              textTransform="none"
+            />
           </div>
+
+          {currentTap === "DRAFT" && (
+            <div
+              ref={syncRef}
+              onClick={handleSyncOrder}
+              className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
+            >
+              <img src={SyncIcon} alt="" width="16px" className="z-10" />
+              <span className="text-[#004EFF] z-10  text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
+                {syncChannelText}
+              </span>
+              <div
+                className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
+              ></div>
+            </div>
+          )}
 
           {isModalOpen && (
             <CenterModal
@@ -935,6 +967,7 @@ const Index = () => {
           setDeleteModalDraftOrder({
             isOpen: true,
             payload: payLoad,
+            orderSources: data?.source ? [data.source] : [], // Add order source for single order deletion
           });
         }
         break;
@@ -949,6 +982,7 @@ const Index = () => {
           setCancellationModal({
             isOpen: true,
             payload: payLoad?.awbs,
+            orderSources: data?.source ? [data.source] : [], // Add order source for single order cancellation
           });
         } else if (actionType === "download_label") {
           getSingleFile(payLoad, actionType);
@@ -2062,6 +2096,7 @@ const Index = () => {
         }
         deleteTextMessage={warningMessageForCancel(cancellationModal?.payload)}
         payloadBody={cancellationModal.payload}
+        orderSources={cancellationModal.orderSources} // Add this line
         deleteURL={CANCEL_MULTIPLE_WAYBILLS}
         setIsDeleted={setIsDeleted}
         reloadData={handleTabChanges}
@@ -2072,6 +2107,7 @@ const Index = () => {
         postData={deleteModalDraftOrder?.payload}
         isOpen={deleteModalDraftOrder?.isOpen}
         reloadData={handleTabChanges}
+        orderSources={deleteModalDraftOrder?.orderSources} // Add this line
         closeModal={() => {
           setDeleteModalDraftOrder({
             ...deleteModalDraftOrder,
@@ -2116,10 +2152,12 @@ const Index = () => {
             </p>
           </div>
         </div>
+        <div className="overflow-y-auto max-h-[70vh]">
         <CustomTableAccordian
           getAllSellerData={infoModalContent}
           isMasked={isMasked}
         />
+        </div>
       </CustomRightModal>
 
       {/* Reverse Order Modal */}

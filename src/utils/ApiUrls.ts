@@ -17,6 +17,7 @@ let WALLETSECRETKEY = "";
 let WHITE_COMPANYFULLNAME = "";
 let WHITE_COMPANYADDRESS = "";
 let FINANCE_URL = "";
+let SUPPORT_LINK = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -42,9 +43,10 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
-    FINANCE_URL = `${process?.env?.REACT_APP_FINANCE_URL}`;
+    FINANCE_URL = `${process.env?.REACT_APP_FINANCE_URL}`;
     break;
 
   case "test":
@@ -63,6 +65,7 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
@@ -83,6 +86,7 @@ switch (Environment) {
     SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
     LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
     COMPANY_NAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${
@@ -111,6 +115,7 @@ switch (Environment) {
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
+    SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
 
     break;
 }
@@ -161,8 +166,6 @@ const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
 const GET_SELLER_AGREEMENT = `${SELLER_BASE_URL}/sellerAgreement/getSellerAgreement`;
-
-
 
 //Update Seller Profile
 const UPDATE_SINGLE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
@@ -241,6 +244,10 @@ const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWallet
 const WALLET_RECHARGE_USING_NEFT = `${SELLER_URL}/api/v1/wallet/manualWalletRechargeUsingNeft`;
 const GET_CODREMITTANCE_AMOUNT = `${SELLER_URL}/api/v1/wallet/getEligibleCodRemittanceAmount`;
 const POST_UPDATE_WALLETBALANCE = `${SELLER_URL}/api/v1/wallet/updateWalletBalance`;
+const GET_WALLET_RECHARGE_COUPONS = `${SELLER_URL}/api/v1/wallet/getWalletRechargeCoupons`;
+const GET_ALL_COUPONS_DATA = `${SELLER_URL}/api/v1/coupon/getActiveCoupons`;
+const POST_VERIFY_COUPON = `${SELLER_URL}/api/v1/coupon/verifyCoupon`;
+const POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE = `${SELLER_URL}/api/v1/coupon/verifyWalletRechargeCoupon`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -369,6 +376,12 @@ const UPDATETRACKINGBYBUYER = `${SELLER_BASE_URL}/tracking/updateTrackingByBuyer
 const GETALLTRACKINGBUYERREQUEST = `${SELLER_BASE_URL}/tracking/getAllTrackingBuyerRequest`;
 const BUYERREQUESTACTION = `${SELLER_BASE_URL}/tracking/buyerRequestAction`;
 
+//Lost and Damaged
+const FETCH_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersSeller`;
+const UPDATE_LD_ORDERS = `${SELLER_BASE_URL}/lostAndDamage/updateLDOrdersSeller`;
+const FETCH_LD_ORDERS_FOR_SEARCH = `${SELLER_BASE_URL}/lostAndDamage/fetchLDOrdersForSearch`;
+const UPDATE_LD_CLAIM = `${SELLER_BASE_URL}/lostAndDamage/updateClaimStatus`;
+
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
 const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
@@ -466,6 +479,9 @@ const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
 
 // Reverse order API
 const REVERSE_ORDER = `${SELLER_BASE_URL}/order/placeOrderApiV3`;
+
+// Open API for delhiveryB2B jobid
+const GET_DELHIVERY_B2B_JOB = `${SELLER_BASE_URL}/order/delhiveryB2B/jobId`;
 
 // Amazon Redirect Url
 const AMAZON_REDIRECT_URL = `${SELLER_URL}/amazonCheckParams`;
@@ -688,11 +704,13 @@ export {
   SMALL_LOGO,
   LARGE_LOGO,
   COMPANY_NAME,
+  SUPPORT_LINK,
   // CHANGE_PASSWORD,
   GET_COMBO_PRODUCT_SHEET,
   UPLOAD_BULK_COMBOS,
   CHANGE_PASSWORD,
   REVERSE_ORDER,
+  GET_DELHIVERY_B2B_JOB,
   //  GET_ALLPARTNER_OFSELLER,
   //  UPDATE_ALLPARTNER_OF_SELLER,
   AMAZON_REDIRECT_URL,
@@ -741,6 +759,10 @@ export {
   FETCH_LABELS_REPORT_LIST,
   DOWNLOAD_S3_LABEL,
   GET_COUNT_AMAZON_ORDER,
+  FETCH_LD_ORDERS,
+  UPDATE_LD_ORDERS,
+  FETCH_LD_ORDERS_FOR_SEARCH,
+  UPDATE_LD_CLAIM,
   POST_PROCESS_SHOPIFY_PLAN,
   UPDATE_ORDER_CONFIRMATION_STATUS,
   GET_ORDER_CONFIRMATION_LOG,
@@ -748,4 +770,8 @@ export {
   COD_DETAILS_FINANCE,
   POST_SSO_URL,
   GET_SELLER_AGREEMENT,
+  GET_WALLET_RECHARGE_COUPONS,
+  GET_ALL_COUPONS_DATA,
+  POST_VERIFY_COUPON,
+  POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
 };

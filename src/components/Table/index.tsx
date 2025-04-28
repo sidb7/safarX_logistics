@@ -17,11 +17,18 @@ interface ITablePropTypes {
   setRowSelectedData?: any;
   currentPage: number;
   pageSize: number;
+  minHeight?: string;
 }
 
 const CustomTable = (props: any) => {
-  const { rowData, columnsData, entityId, setRowSelectedData, setIsMenuOpen } =
-    props;
+  const {
+    rowData,
+    columnsData,
+    entityId,
+    setRowSelectedData,
+    setIsMenuOpen,
+    minHeight,
+  } = props;
   const columns = React.useMemo<Array<ColumnDef<any>>>(
     () => columnsData,
     [columnsData, rowData]
@@ -67,7 +74,7 @@ const CustomTable = (props: any) => {
       ref={parentRef}
       style={{
         maxHeight: "calc(100vh - 300px)",
-        minHeight: "50vh",
+        minHeight: minHeight ? minHeight : "50vh",
         overflow: "auto",
         scrollbarWidth: "thin",
       }}

@@ -357,6 +357,9 @@ const MainCommonHelper = (navigate: any = "") => {
                     info?.row?.original?.deliveryAddress?.fullAddress
                   )}
                 </span>
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {info?.row?.original?.deliveryAddress?.contact?.emailId}
+                </div>
 
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
@@ -812,7 +815,7 @@ const idHelper = (
 
                 {showAllTags && (
                   <div className="flex ">
-                    <div className="flex  w-fit px-2  text-xs py-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
+                    <div className="flex  w-fit px-1 text-xs py-0 m-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
                       {capitalizeFirstLetter(tags[0])}
                     </div>
                     {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
@@ -854,7 +857,7 @@ const idHelper = (
                     return (
                       e.value === buyerConfirmation && (
                         <p
-                          className={`px-2 py-1 w-fit  text-xs font-medium text-center  rounded-full ${e.class}`}
+                          className={`px-2 py-1 w-fit  text-xs font-medium text-center rounded-md ${e.class}`}
                         >
                           {e.value}
                         </p>
@@ -1100,11 +1103,7 @@ export const columnHelperForNewOrder = (
                 <div className=" ">
                   <p className=" font-Open text-sm font-semibold leading-5">
                     {date_DD_MMM_YYYY_HH_MM_SS(
-                      source === "SHOPIFY" ||
-                        source === "WOOCOMMERCE" ||
-                        source === "ZOHO"
-                        ? createdAt
-                        : updatedAtStatus || updatedAt
+                      updatedAtStatus || updatedAt
                     )}
                   </p>
                 </div>
@@ -1455,7 +1454,13 @@ export const columnHelperForNewOrder = (
                   {source === "SHOPIFY" ||
                   source === "WOOCOMMERCE" ||
                   source === "ZOHO"
-                    ? date_DD_MMM_YYYY_HH_MM_SS(createdAt)
+                    ?  
+                    <div>
+                      Order created on Channel: 
+                      <div>
+                    {date_DD_MMM_YYYY_HH_MM_SS(createdAt)}
+                      </div>
+                    </div> 
                     : time}
                 </div>
 
@@ -1673,7 +1678,9 @@ export const columnHelperForNewOrder = (
                     info?.row?.original?.deliveryAddress?.fullAddress
                   )}
                 </span>
-
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {info?.row?.original?.deliveryAddress?.contact?.emailId}
+                </div>
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
                 </div>

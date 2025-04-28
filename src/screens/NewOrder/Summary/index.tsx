@@ -118,8 +118,8 @@ const Summary = (props: Props) => {
       ]);
     }
   }
-  console.log("latestProductDetails", latestProductDetails);
-  console.log("latesProducts", latesProducts);
+  // console.log("latestProductDetails", latestProductDetails);
+  // console.log("latesProducts", latesProducts);
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
@@ -167,6 +167,7 @@ const Summary = (props: Props) => {
               orderId,
             },
           ],
+          order_placed_from: "platform",
         });
 
         // Check the result of the second API call
@@ -230,6 +231,7 @@ const Summary = (props: Props) => {
   const products = latestOrder?.data?.[0]?.products || [];
   const boxInfo = latestOrder?.data?.[0]?.boxInfo;
   const codInfo = latestOrder?.data?.[0]?.codInfo;
+  const yaariCash = latestOrder?.data?.[0]?.yaariCash || 0;
   console.log("codInfo", codInfo);
   return (
     <div>
@@ -460,6 +462,7 @@ const Summary = (props: Props) => {
                 orderSource={orderSource}
                 orderId={orderId}
                 isMasked={isMasked}
+                yaariCash={yaariCash}
               />
             </div>
           </div>
@@ -475,13 +478,13 @@ const Summary = (props: Props) => {
               add={serviceDetails?.add}
               base={serviceDetails?.base}
               variables={serviceDetails?.variables}
-              variableServices={serviceDetails?.variableServices}  // Add this line
-
+              variableServices={serviceDetails?.variableServices} // Add this line
               cod={codInfo?.collectableAmount}
               codCharge={serviceDetails?.cod}
               tax={serviceDetails?.tax}
               invoiceValue={codInfo?.invoiceValue}
               insurance={serviceDetails?.insurance}
+              yaariCash={yaariCash}
             />
           </div>
         </div>

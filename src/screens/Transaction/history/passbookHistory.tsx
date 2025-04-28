@@ -253,7 +253,7 @@ export const PassbookColumns = (setSortOrder: any) => {
               )}
             </span>
 
-            {info?.row?.original?.orderId.length > 3 && (
+            {info?.row?.original?.orderId?.length > 3 && (
               <div className="absolute left-0 line-clamp-3 top-full mt-1 w-[200px] p-2 bg-white text-gray-600 text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
                 {info?.row?.original?.orderId}
               </div>
@@ -403,7 +403,7 @@ export const PassbookColumns = (setSortOrder: any) => {
             <span className="font-Open font-normal leading-5 text-xs line-clamp-2">
               {info?.row?.original?.description}
             </span>
-            {info?.row?.original?.description.length > 15 && (
+            {info?.row?.original?.description?.length > 15 && (
               <div className="absolute left-0 line-clamp-3 top-full mt-1 w-[200px] p-2 bg-white text-gray-600 text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10">
                 {info?.row?.original?.description}
               </div>

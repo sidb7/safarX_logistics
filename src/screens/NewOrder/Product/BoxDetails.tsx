@@ -385,7 +385,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   <>
                     <Checkbox
                       label="COD"
-                      disabled={orderType !== "B2C"}
+                      // disabled={orderType !== "B2C"}
                       name="cod"
                       checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
                       checked={isOrderCOD}
