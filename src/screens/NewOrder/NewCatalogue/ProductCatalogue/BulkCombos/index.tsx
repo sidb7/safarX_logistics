@@ -41,7 +41,7 @@ const BulkUpload = (props: ITypeProps) => {
     formData.append("file", uploadFile);
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
 
       const { data: response } = await POST(UPLOAD_BULK_COMBOS, formData, {
         headers: {
