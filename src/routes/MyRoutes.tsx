@@ -100,6 +100,7 @@ import WalletRecharge from "../screens/Order/WalletRecharge";
 import WalletMain from "../../src/screens/Onboarding/WalletRecharge/walletMain";
 import WalletDetails from "../../src/screens/Onboarding/WalletRecharge/walletDetails";
 import WalletPayment from "../screens/Onboarding/WalletRecharge/walletPayment";
+import ViewWallet from "../screens/Order/WalletRecharge/ViewWallet";
 
 // import Layout from "../layout";
 // import { CommonLayout } from "../layout/layout";
@@ -649,7 +650,8 @@ const MyRoutes: React.FC = () => {
             path="/wallet/view-wallet"
             element={
               <ProtectedRoute>
-                <WalletRecharge />
+                {/* <WalletRecharge /> */}
+                <ViewWallet />
               </ProtectedRoute>
             }
           />
@@ -1253,13 +1255,13 @@ const MyRoutes: React.FC = () => {
         </Route>
 
         <Route
-            path="/tracking/lostanddamaged"
-            element={
-              <ProtectedRoute>
-                <LostAndDamaged />
-              </ProtectedRoute>
-            }
-          />
+          path="/tracking/lostanddamaged"
+          element={
+            <ProtectedRoute>
+              <LostAndDamaged />
+            </ProtectedRoute>
+          }
+        />
 
         <Route>
           <Route path="notifications" element={<Notifications />} />
