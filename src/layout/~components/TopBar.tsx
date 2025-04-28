@@ -628,29 +628,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           ₹ {quickData?.walletBalance}
                         </span> */}
                         </div>
-
-                        {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
-                          <div
-                            className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                            onClick={() => navigate("/wallet/view-wallet")}
-                          >
-                            <img
-                              src={YaariIcon}
-                              alt=""
-                              className="self-center"
-                              width={"40px"}
-                              height={"40px"}
-                            />
-                            <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                              Yaari Points
-                            </span>
-                            <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
-                              {0}
-                            </span>
-                          </div>
-                        ) : (
-                          <></>
-                        )}
                         <div
                           className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                           onClick={() => navigate("/tracking")}
@@ -697,34 +674,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                             Create an order
                           </span>
                         </div>
-
-                        {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
-                          <>
-                            {companyName === "Shipyaari" ? (
-                              <a
-                                className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                                href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <img
-                                  src={SyAppIcon}
-                                  alt=""
-                                  className="self-center"
-                                  width={"40px"}
-                                  height={"40px"}
-                                />
-                                <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                                  Shipyaari App
-                                </span>
-                              </a>
-                            ) : (
-                              <></>
-                            )}
-                          </>
-                        ) : (
-                          <></>
-                        )}
                         <div
                           className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                           onClick={handleReportBugClick}
