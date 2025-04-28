@@ -8,7 +8,15 @@ import {
 } from "../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 
-function Paytm({ text, amt, navigate, isDisabled, couponDetails }) {
+function Paytm({
+  text,
+  amt,
+  navigate,
+  isDisabled,
+  couponDetails,
+  couponCode,
+  selectedCoupon,
+}) {
   let urlLink = "";
   let mid = "";
   let website = "";
@@ -35,6 +43,9 @@ function Paytm({ text, amt, navigate, isDisabled, couponDetails }) {
       // setShowCheckout(false);
       localStorage.setItem("showToastPaytm", "true");
       window.location.href = navigate;
+    }else{
+            window.location.href = navigate;
+
     }
   };
   const CONFIG = {
@@ -111,11 +122,19 @@ function Paytm({ text, amt, navigate, isDisabled, couponDetails }) {
         callbackUrl: navigate,
       },
       paymentGateway: "PAYTM",
+      // couponCode:
+      //   couponDetails.length > 0 &&
+      //   couponDetails[0]?.couponStatus !== "Expired" &&
+      //   Number(amt?.replace(/,/g, "")) >= couponDetails[0]?.minRechargeAmount
+      //     ? couponCode
+      //     : "",
       couponCode:
-        couponDetails.length > 0 &&
-        couponDetails[0]?.couponStatus !== "Expired" &&
-        Number(amt?.replace(/,/g, "")) >= couponDetails[0]?.minRechargeAmount
-          ? couponDetails[0]?.couponCode
+        couponCode !== ""
+          ? couponCode
+          : selectedCoupon &&
+            selectedCoupon.couponStatus !== "Expired" &&
+            Number(amt?.replace(/,/g, "")) >= selectedCoupon.minRechargeAmount
+          ? selectedCoupon.couponCode
           : "",
     });
     if (data?.success) {
