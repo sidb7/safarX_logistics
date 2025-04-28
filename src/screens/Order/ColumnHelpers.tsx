@@ -357,6 +357,9 @@ const MainCommonHelper = (navigate: any = "") => {
                     info?.row?.original?.deliveryAddress?.fullAddress
                   )}
                 </span>
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {info?.row?.original?.deliveryAddress?.contact?.emailId}
+                </div>
 
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
@@ -1675,7 +1678,9 @@ export const columnHelperForNewOrder = (
                     info?.row?.original?.deliveryAddress?.fullAddress
                   )}
                 </span>
-
+                <div className="font-Open font-normal leading-5 text-sm">
+                  {info?.row?.original?.deliveryAddress?.contact?.emailId}
+                </div>
                 <div className="font-Open font-normal leading-5 text-sm">
                   {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
                 </div>
