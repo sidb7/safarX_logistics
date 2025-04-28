@@ -173,7 +173,6 @@ const Tracking = () => {
       setLoading(true);
 
       const result = await inputRegexFilter(trackingNo, path);
-      console.log("result", result);
       
       //mapping the new data
       if (result?.success) {
