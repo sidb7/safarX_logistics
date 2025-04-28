@@ -173,7 +173,7 @@ const Tracking = () => {
       setLoading(true);
 
       const result = await inputRegexFilter(trackingNo, path);
-
+      
       //mapping the new data
       if (result?.success) {
         const res = result?.data?.[0]?.trackingInfo?.map(
@@ -206,6 +206,8 @@ const Tracking = () => {
         setAllAwbs([...allAwbs, trackingNo]);
         const flattenedLogs = allProcessedLogs.flat();
       } else {
+        setTrackingState([]);
+        setAllAwbs([]);
         toast.error(result);
       }
     } catch (error: any) {
@@ -297,7 +299,7 @@ const Tracking = () => {
                 <div className="flex flex-col justify-center items-center">
                   <div className="flex">
                     <CustomInputBox
-                      label="Enter tracking ID"
+                      label="Enter Tracking ID"
                       value={trackingNo}
                       containerStyle="!mt-1 md:!w-[340px] lg:!w-[670px]"
                       onChange={(e) => {
