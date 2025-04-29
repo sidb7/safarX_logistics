@@ -444,7 +444,8 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
       case "PHONEPE":
         return handlePhonePeTransaction();
       default:
-        return toast.error("Unsupported payment gateway selected");
+        // return toast.error("Unsupported payment gateway selected");
+        break;
     }
   };
 
