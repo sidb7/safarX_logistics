@@ -104,11 +104,12 @@ function ProductModal({ onClose, setOrder, index }: any) {
   };
 
   const addProductToCatalogue = async () => {
-    const { length, breadth, height, deadWeight } = boxInputData;
+    const { length, breadth, height, deadWeight , unitTax } = boxInputData;
     const parsedLength = +length;
     const parsedBreadth = +breadth;
     const parsedHeight = +height;
     const parsedDeadWeight = +deadWeight;
+    const productTax = unitTax ? +unitTax : 0;
     const volumetricWeight = +calculateVolumeWeight(
       parsedLength,
       parsedBreadth,
@@ -120,6 +121,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
       ...boxInputData,
       volumetricWeight,
       appliedWeight,
+      unitTax: productTax
     };
 
     const { data: response } = await POST(CREATE_BULK_PRODUCT, {
@@ -140,7 +142,7 @@ function ProductModal({ onClose, setOrder, index }: any) {
     const parsedHeight = +height;
     const parsedDeadWeight = +deadWeight;
     const parsedUnitPrice = +unitPrice;
-    const parsedUnitTax = +unitTax;
+    const parsedUnitTax = unitTax ? +unitTax : 0;
     const volumetricWeight = +calculateVolumeWeight(
       parsedLength,
       parsedBreadth,
@@ -295,10 +297,10 @@ function ProductModal({ onClose, setOrder, index }: any) {
                       <div>
                         <InputBox
                           label="Tax"
-                          value={boxInputData?.unitTax}
+                          value={boxInputData?.unitTax ?? 0}
                           name="unitTax"
                           inputType="text"
-                          isDisabled={true}
+                          isDisabled={false}
                           onChange={(e: any) => {
                             if (!isNaN(e.target.value)) {
                               onChangeHandler(e);
