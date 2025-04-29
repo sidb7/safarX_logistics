@@ -7,6 +7,7 @@ module.exports = {
       Noto: ["Noto Sans", "sans-serif"],
       Open: ["Open Sans", "sans-serif"],
       Arial: ["arial", "sans-serif"],
+      DMOpen: ["DM Sans", "sans-serif"],
     },
     extend: {
       boxShadow: {
