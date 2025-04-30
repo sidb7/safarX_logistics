@@ -1041,7 +1041,9 @@ export const columnHelperForNewOrder = (
                         </span>
                       </Link>
                     )}
-                    <CopyTooltip stringToBeCopied={tempOrderId} />
+                    <CopyTooltip
+                      stringToBeCopied={trackingLink || tempOrderId}
+                    />
                   </div>
                 </div>
               )}
