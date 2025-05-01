@@ -28,6 +28,7 @@ const CustomTable = (props: any) => {
     setRowSelectedData,
     setIsMenuOpen,
     minHeight,
+    rowHeight,
   } = props;
   const columns = React.useMemo<Array<ColumnDef<any>>>(
     () => columnsData,
@@ -101,7 +102,9 @@ const CustomTable = (props: any) => {
       </div>
       <div
         style={{
-          height: `${virtualizer.getTotalSize() + 40}px`, // Add padding (e.g., 20px each for top and bottom)
+          height: rowHeight
+            ? `${rowHeight}px`
+            : `${virtualizer.getTotalSize() + 40}px`, // Add padding (e.g., 20px each for top and bottom)
           paddingTop: "20px", // Top padding
           paddingBottom: "20px", // Bottom padding
         }}
@@ -145,7 +148,9 @@ const CustomTable = (props: any) => {
                   }
                   data-index={virtualRow.index}
                   style={{
-                    height: `${virtualRow.size}px`,
+                    height: rowHeight
+                      ? `${rowHeight}px`
+                      : `${virtualRow.size}px`,
                     transform: `translateY(${
                       virtualRow.start - index * virtualRow.size
                     }px)`,

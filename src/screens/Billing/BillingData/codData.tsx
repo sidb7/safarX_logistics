@@ -25,43 +25,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
   downloadReport,
   setSortReportByDate,
 }) => {
-  console.log("tableDatacodData", tableData);
   const columnsHelper = createColumnHelper<any>();
-  // const [data, setData] = useState([
-  //   {
-  //     reportDate: "24 Jul 2023",
-  //     reportRefNo: "COD456787Shipyaari",
-  //     CodAmount: "373,757.0",
-  //     addonCharges: "0.00",
-  //     settlementAmount: "0.00",
-  //     outStandingAmount: "0.00",
-  //     holdAmount: "0.00",
-  //     recoveryAmount: "0.00",
-  //     codRecharge: "0.00",
-  //   },
-  //   {
-  //     reportDate: "24 Jul 2023",
-  //     reportRefNo: "COD456787Shipyaari",
-  //     CodAmount: "373,757.0",
-  //     addonCharges: "0.00",
-  //     settlementAmount: "0.00",
-  //     outStandingAmount: "0.00",
-  //     holdAmount: "0.00",
-  //     recoveryAmount: "0.00",
-  //     codRecharge: "0.00",
-  //   },
-  //   {
-  //     reportDate: "24 Jul 2023",
-  //     reportRefNo: "COD456787Shipyaari",
-  //     CodAmount: "373,757.0",
-  //     addonCharges: "0.00",
-  //     settlementAmount: "0.00",
-  //     outStandingAmount: "0.00",
-  //     holdAmount: "0.00",
-  //     recoveryAmount: "0.00",
-  //     codRecharge: "0.00",
-  //   },
-  // ]);
   const billingOrdersHeading = [
     columnsHelper.accessor("reportDate", {
       header: () => {
@@ -157,66 +121,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         );
       },
     }),
-    columnsHelper.accessor("settlementAmount", {
-      header: () => {
-        return (
-          <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-              Settlement Amount
-            </p>
-            <img className="cursor-pointer" src={sortIcon} alt="" />
-          </div>
-        );
-      },
 
-      cell: (info: any) => {
-        return (
-          <div className="font-Open font-normal leading-4 text-xs ">
-            <p>₹{info.row.original?.settlementAmount || 0}</p>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("outStandingAmount", {
-      header: () => {
-        return (
-          <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-              OutStanding Amount
-            </p>
-            <img className="cursor-pointer" src={sortIcon} alt="" />
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <div className="font-Open font-normal leading-4 text-xs ">
-            <p>₹{info.row.original?.outStandingAmount || 0}</p>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("holdAmount", {
-      header: () => {
-        return (
-          <div className="flex justify-between ">
-            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-              Hold Amount
-            </p>
-            <img className="cursor-pointer" src={sortIcon} alt="" />
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <div className="font-Open font-normal leading-4 text-xs ">
-            <p>₹{info.row.original?.holdAmount || 0}</p>
-          </div>
-        );
-      },
-    }),
     columnsHelper.accessor("recoveryAmount", {
       header: () => {
         return (
@@ -336,7 +241,9 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
             }
           >
             {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
-            <p className="text-[#5958FF] cursor-pointer">{awbCount} AWB</p>
+            <p className="text-[#5958FF] text-xs cursor-pointer">
+              {awbCount} AWB
+            </p>
           </div>
         );
       },
@@ -370,7 +277,9 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
             }
           >
             {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
-            <p className="text-[#5958FF] cursor-pointer">{awbCount} AWB</p>
+            <p className="text-[#5958FF] text-xs cursor-pointer">
+              {awbCount} AWB
+            </p>
           </div>
         );
       },
@@ -404,17 +313,17 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
   const fixedCol = ["reportDate", "actions"];
   return (
     <div>
-      <CustomTableWithScroll
+      {/* <CustomTableWithScroll
         columns={billingOrdersHeading}
         data={tableData}
         fixedData={fixedCol}
-      />
+      /> */}
 
-      {/* <CustomTable
+      <CustomTable
         columnsData={billingOrdersHeading}
         rowData={tableData}
         // fixedData={fixedCol}
-      /> */}
+      />
     </div>
   );
 };
