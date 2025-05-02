@@ -136,7 +136,7 @@ const Tracking = () => {
 
       const { data: response } = await GET(urlWithTrackingNo);
 
-      if (response?.success) {
+      if (response?.success && response?.data?.length > 0) {
         const { invalidTrackingInfo, trackingInfo } = response?.data?.[0];
 
         setTrackingState(trackingInfo);
@@ -202,7 +202,7 @@ const Tracking = () => {
               <div className="flex flex-col basis-3/4">
                 <div className="flex items-center">
                   <InputBox
-                    label="Enter tracking ID"
+                    label="Enter Tracking ID"
                     value={trackingNo}
                     onChange={(event) => handletrackingNoChange(event)}
                     className=""

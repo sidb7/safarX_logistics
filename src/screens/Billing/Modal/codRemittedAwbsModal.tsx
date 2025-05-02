@@ -2,159 +2,78 @@ import React, { useEffect, useState } from "react";
 import crossIcon from "../../../assets/cross.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../../components/Table";
-import PaginationComponent from "../../../components/Pagination";
+import { SearchBox } from "../../../components/SearchBox";
+import CopyTooltip from "../../../components/CopyToClipboard";
 
-function CodRemittedAwbModal({
-  onClick,
-  awbs,
-  isRecovery,
-}: {
-  onClick: any;
-  awbs: string[];
-  isRecovery: any;
-}) {
-  console.log("onClickawbModal", onClick);
-  const columnsHelper = createColumnHelper<any>();
-  // const [totalItemCount, setTotalItemCount] = useState(awbs?.length);
-  const [data, setData] = useState<any>([]);
+function CodRemittedAwbModal({ onClick, awbs, isRecovery }: any) {
+  const columnsHelper = createColumnHelper();
+  const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const tableData = awbs?.map((trackingId, index) => ({
-      trackingId,
-    }));
-    setData(tableData);
-  }, []);
+    setData(awbs?.map((trackingId: any) => ({ trackingId })) || []);
+  }, [awbs]);
 
-  console.log("tableDataAWBmodal", data);
+  const filteredData = data.filter((item: any) => {
+    if (searchTerm != "") {
+      const searchTerms = searchTerm.split(/[ ,]+/).filter(Boolean);
+      return searchTerms.some((term) =>
+        item.trackingId.toLowerCase().includes(term.toLowerCase())
+      );
+    } else {
+      return data;
+    }
+  });
 
   const billingOrdersHeading = [
-    // columnsHelper.accessor("shipyaariId", {
-    //   header: () => {
-    //     return (
-    //       <div className="flex justify-between ">
-    //         <h1 className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-    //           Shipyaari Id
-    //         </h1>
-    //       </div>
-    //     );
-    //   },
-    //   cell: (info: any) => {
-    //     return (
-    //       <div className="py-4">
-    //         <p className="font-Open text-sm font-normal leading-5">
-    //           {info.row.original?.tempOrderId}
-    //         </p>
-    //       </div>
-    //     );
-    //   },
-    // }),
     columnsHelper.accessor("trackingId", {
-      header: () => {
-        return (
-          <div className="flex justify-between ">
-            <h1 className="font-Open text-sm font-semibold leading-5 text-[#1C1C1C] self-center ">
-              Tracking ID
-            </h1>
+      header: () => null,
+      cell: (info: any) => (
+        <div className="flex justify-between px-4">
+          <div className="font-Open text-sm font-normal flex items-center !p-0 !m-0">
+            {info.row.original?.trackingId || "No Tracking ID"}
           </div>
-        );
-      },
-
-      cell: (info: any) => {
-        console.log("info>>awbModal", info.row.original);
-        return (
-          <div>
-            <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original?.trackingId || "No Tracking ID"}
-            </p>
-          </div>
-        );
-      },
+          <p>
+            {" "}
+            <CopyTooltip
+              stringToBeCopied={info.row.original?.trackingId ?? ""}
+            />
+          </p>
+        </div>
+      ),
     }),
-    // columnsHelper.accessor("Status", {
-    //   header: () => {
-    //     return (
-    //       <div className="flex justify-between">
-    //         <h1 className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
-    //           Status
-    //         </h1>
-    //       </div>
-    //     );
-    //   },
-
-    //   cell: (info: any) => {
-    //     return (
-    //       <div className="">
-    //         <p className="font-Open text-sm font-normal leading-5">
-    //           {info.row.original?.Status}
-    //         </p>
-    //       </div>
-    //     );
-    //   },
-    // }),
-    // columnsHelper.accessor("invoiceValue", {
-    //   header: () => {
-    //     return (
-    //       <div className="flex justify-between ">
-    //         <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
-    //           Invoice Value
-    //         </p>
-    //         <img className="cursor-pointer" alt="" />
-    //       </div>
-    //     );
-    //   },
-
-    //   cell: (info: any) => {
-    //     return (
-    //       <div className="">
-    //         <p>₹ {info.row?.original?.invoiceValue}</p>
-    //       </div>
-    //     );
-    //   },
-    // }),
   ];
 
   return (
-    <div className="">
-      <div className="flex items-center w-[100%] justify-between p-5">
-        <div className="flex items-center gap-x-3">
-          <p className="font-semibold text-2xl">
-            {isRecovery ? "Cod Recovery AWBs" : "Cod Remitted AWBs"}
-          </p>
-        </div>
-        <div className="">
-          <img
-            src={crossIcon}
-            alt=""
-            onClick={onClick}
-            className="cursor-pointer w-[24px]"
-          />
-        </div>
+    <div>
+      <div className="flex items-center justify-between p-5">
+        <p className="font-semibold text-2xl">
+          {isRecovery ? "Cod Recovery AWBs" : "Cod Remitted AWBs"}
+        </p>
+        <img
+          src={crossIcon}
+          alt="Close"
+          onClick={onClick}
+          className="cursor-pointer w-[24px]"
+        />
       </div>
-      <div>
-        <div>
-          {/* {isLoading ? (
-            <div className="h-[450px] flex justify-center items-center">
-              <Spinner />
-            </div>
-          ) : ( */}
-          <div className="overflow-x-auto mt-5 mx-6">
-            <CustomTable
-              rowData={data || []}
-              columnsData={billingOrdersHeading}
-            />
-          </div>
-        </div>
-
-        {/* {totalItemCount > 0 && (
-          <PaginationComponent
-            totalItems={totalItemCount}
-            itemsPerPageOptions={[
-              10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
-            ]}
-            onPageChange={onPageIndexChange}
-            onItemsPerPageChange={onPerPageItemChange}
-          />
-        )} */}
+      <div className="px-6 flex justify-between">
+        <div className="font-semibold text-lg">Tracking IDs</div>
+        <SearchBox
+          customPlaceholder="Search tracking ID"
+          label="Search"
+          value={searchTerm}
+          onChange={(e: any) => setSearchTerm(e.target.value)}
+          getFullContent={() => setSearchTerm("")}
+        />
+      </div>
+      <div className="overflow-x-auto mt-2 mx-6">
+        <CustomTable
+          rowData={filteredData}
+          columnsData={billingOrdersHeading}
+          minHeight="80vh"
+          rowHeight={50}
+        />
       </div>
     </div>
   );

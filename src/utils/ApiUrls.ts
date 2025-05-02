@@ -268,6 +268,7 @@ const GET_WALLET_RECHARGE_COUPONS = `${SELLER_URL}/api/v1/wallet/getWalletRechar
 const GET_ALL_COUPONS_DATA = `${SELLER_URL}/api/v1/coupon/getActiveCoupons`;
 const POST_VERIFY_COUPON = `${SELLER_URL}/api/v1/coupon/verifyCoupon`;
 const POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE = `${SELLER_URL}/api/v1/coupon/verifyWalletRechargeCoupon`;
+const GET_WALLET_BALANCES_DATA = `${SELLER_URL}/api/v1/wallet/listWalletBalances`;
 
 // wallet / manualWalletRechargeUsingNeft;
 
@@ -528,6 +529,7 @@ const UPDATE_ORDER_CONFIRMATION_STATUS = `${SELLER_BASE_URL}/order/updateOrderCo
 //Finance APP
 const GET_WALLET_TRANSACTION_FINANCE = `${BASE_FINANCE__SELLER_API}/ledger/wallet/amount`;
 const COD_DETAILS_FINANCE = `${BASE_FINANCE__SELLER_API}/cod-details`;
+const COD_REMITTANCE_FINANCE = `${BASE_FINANCE__SELLER_API}/cod/remitted`;
 
 // SSO URL
 const POST_SSO_URL = `${SELLER_BASE_URL}/seller/sso/reirect`;
@@ -788,6 +790,7 @@ export {
   GET_ORDER_CONFIRMATION_LOG,
   GET_WALLET_TRANSACTION_FINANCE,
   COD_DETAILS_FINANCE,
+  COD_REMITTANCE_FINANCE,
   POST_SSO_URL,
   GET_SELLER_AGREEMENT,
   GET_WALLET_RECHARGE_COUPONS,
@@ -805,4 +808,5 @@ export {
   GET_BOX_SUGGETION,
   POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
   GET_TRANSPORTER_ID,
+  GET_WALLET_BALANCES_DATA,
 };
