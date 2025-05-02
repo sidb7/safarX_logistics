@@ -1,5 +1,3 @@
-
-
 import { useState, ReactNode, useEffect } from "react";
 import FloatingLabelInput from "./FloatingLabelInput"; // Make sure this path matches your actual file structure
 import OneButton from "../../components/Button/OneButton";
@@ -84,7 +82,9 @@ interface AddressFormProps {
   deliveryAddress: Address | any;
   setDeliveryAddress: React.Dispatch<React.SetStateAction<Address | any>>;
   isLoading: { pickup: boolean; delivery: boolean };
-  setIsLoading: React.Dispatch<React.SetStateAction<{ pickup: boolean; delivery: boolean }>>;
+  setIsLoading: React.Dispatch<
+    React.SetStateAction<{ pickup: boolean; delivery: boolean }>
+  >;
   pickupSearchResults: Address[];
   // setPickupSearchResults: React.Dispatch<React.SetStateAction<Address[]>>;
   setPickupSearchResults: any;
@@ -96,6 +96,36 @@ interface AddressFormProps {
   setShowPickupSearchResults: React.Dispatch<React.SetStateAction<boolean>>;
   showDeliverySearchResults: boolean;
   setShowDeliverySearchResults: React.Dispatch<React.SetStateAction<boolean>>;
+  formErrors: {
+    pickup: {
+      contactNo: boolean;
+      address: boolean;
+      name: boolean;
+      pincode: boolean;
+      city: boolean;
+      state: boolean;
+      addressLine1: boolean;
+      addressLine2: boolean;
+      landmark: boolean;
+      gstNo: boolean;
+      email: boolean;
+    };
+    delivery: {
+      contactNo: boolean; 
+      address: boolean;
+      name: boolean;
+      pincode: boolean;
+      city: boolean;
+      state: boolean;
+      addressLine1: boolean;
+      addressLine2: boolean;
+      landmark: boolean;
+      gstNo: boolean;
+      email: boolean;
+    };
+  };
+  orderType: string; // B2C or B2B
+  clearFieldError: (formType: "pickup" | "delivery", field: string) => void; // New prop
 }
 
 const AddressForm: React.FC<AddressFormProps> = ({
@@ -125,13 +155,10 @@ const AddressForm: React.FC<AddressFormProps> = ({
   setShowPickupSearchResults,
   showDeliverySearchResults,
   setShowDeliverySearchResults,
+  formErrors,
+  orderType,
+  clearFieldError,
 }) => {
- 
-
- 
-
-
-
   // Modal states
   const [searchQuery, setSearchQuery] = useState("");
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -148,7 +175,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
   } | null>(null);
 
   // Add to existing state declarations
- 
+
   const [searchInputLoading, setSearchInputLoading] = useState({
     pickup: { contactNo: false, name: false, pincode: false },
     delivery: { contactNo: false, name: false, pincode: false },
@@ -362,6 +389,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
       ...prev,
       [field]: value,
     }));
+    clearFieldError("pickup", field);
 
     // If the field is one of our searchable fields and has 3 or more characters, trigger search
     if (["contactNo", "name", "pincode"].includes(field) && value.length >= 3) {
@@ -395,6 +423,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
       ...prev,
       [field]: value,
     }));
+    clearFieldError("delivery", field);
 
     // If the field is one of our searchable fields and has 3 or more characters, trigger search
     if (["contactNo", "name", "pincode"].includes(field) && value.length >= 3) {
@@ -949,6 +978,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                 }
                 onFocus={() => handleInputFocus("pickup", "contactNo")}
                 onBlur={handleInputBlur}
+                error={formErrors.pickup.contactNo}
+                errorMessage="Contact number is required"
               />
               {renderFloatingSearchResults(
                 "pickup",
@@ -964,6 +995,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
               onChangeCallback={(value) =>
                 handlePickupInputChange("address", value)
               }
+                error={formErrors.pickup.address}
+  errorMessage="Address is required"
             />
 
             {/* Magic Fill Button */}
@@ -1014,6 +1047,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                   }
                   onFocus={() => handleInputFocus("pickup", "name")}
                   onBlur={handleInputBlur}
+                   error={formErrors.pickup.name}
+  errorMessage="Name is required"
                 />
                 {renderFloatingSearchResults(
                   "pickup",
@@ -1037,6 +1072,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                   }
                   onFocus={() => handleInputFocus("pickup", "pincode")}
                   onBlur={handleInputBlur}
+                   error={formErrors.pickup.pincode}
+  errorMessage="Pin code is required"
                 />
                 {renderFloatingSearchResults(
                   "pickup",
@@ -1075,6 +1112,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handlePickupInputChange("city", value)
                       }
+                      error={formErrors.pickup.city}
+  errorMessage="City is required"
                     />
                     <FloatingLabelInput
                       placeholder="State"
@@ -1082,6 +1121,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handlePickupInputChange("state", value)
                       }
+                      error={formErrors.pickup.state}
+  errorMessage="State is required"
                     />
                   </div>
 
@@ -1093,6 +1134,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handlePickupInputChange("addressLine1", value)
                       }
+                      error={formErrors.pickup.addressLine1}
+  errorMessage="Address Line 1 is required"
                     />
                     <FloatingLabelInput
                       placeholder="Address Line 2"
@@ -1100,6 +1143,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handlePickupInputChange("addressLine2", value)
                       }
+                       error={formErrors.pickup.addressLine2}
+  errorMessage="Address Line 2 is required"
                     />
                   </div>
 
@@ -1111,13 +1156,18 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handlePickupInputChange("landmark", value)
                       }
+                       error={formErrors.pickup.landmark}
+  errorMessage="Landmark is required"
                     />
                     <FloatingLabelInput
-                      placeholder="GST No (If Available)"
-                      value={pickupFormValues.gstNo}
+  placeholder={orderType === "B2B" ? "GST No (Required)" : "GST No (If Available)"}
+  value={pickupFormValues.gstNo}
                       onChangeCallback={(value) =>
                         handlePickupInputChange("gstNo", value)
                       }
+                      error={formErrors.pickup.gstNo}
+  errorMessage="GST No is required for B2B orders"
+                      
                     />
                   </div>
 
@@ -1129,6 +1179,9 @@ const AddressForm: React.FC<AddressFormProps> = ({
                     onChangeCallback={(value) =>
                       handlePickupInputChange("email", value)
                     }
+                    error={formErrors.pickup.email}
+  errorMessage="Email is required"
+
                   />
                 </div>
               )}
@@ -1189,6 +1242,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                 }
                 onFocus={() => handleInputFocus("delivery", "contactNo")}
                 onBlur={handleInputBlur}
+                error={formErrors.delivery.contactNo}
+  errorMessage="Contact number is required"
               />
               {renderFloatingSearchResults(
                 "delivery",
@@ -1204,6 +1259,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
               onChangeCallback={(value) =>
                 handleDeliveryInputChange("address", value)
               }
+               error={formErrors.delivery.address}
+  errorMessage="Address is required"
             />
 
             {/* Magic Fill Button */}
@@ -1254,6 +1311,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                   }
                   onFocus={() => handleInputFocus("delivery", "name")}
                   onBlur={handleInputBlur}
+                  error={formErrors.delivery.name}
+  errorMessage="Name is required"
                 />
                 {renderFloatingSearchResults(
                   "delivery",
@@ -1277,6 +1336,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                   }
                   onFocus={() => handleInputFocus("delivery", "pincode")}
                   onBlur={handleInputBlur}
+                   error={formErrors.delivery.pincode}
+  errorMessage="Pin code is required"
                 />
                 {renderFloatingSearchResults(
                   "delivery",
@@ -1315,6 +1376,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("city", value)
                       }
+                      error={formErrors.delivery.city}
+  errorMessage="City is required"
                     />
                     <FloatingLabelInput
                       placeholder="State"
@@ -1322,6 +1385,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("state", value)
                       }
+                       error={formErrors.delivery.state}
+  errorMessage="State is required"
                     />
                   </div>
 
@@ -1333,6 +1398,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("addressLine1", value)
                       }
+                      error={formErrors.delivery.addressLine1}
+  errorMessage="Address Line 1 is required"
                     />
                     <FloatingLabelInput
                       placeholder="Address Line 2"
@@ -1340,6 +1407,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("addressLine2", value)
                       }
+                      error={formErrors.delivery.addressLine2}
+  errorMessage="Address Line 2 is required"
                     />
                   </div>
 
@@ -1351,13 +1420,17 @@ const AddressForm: React.FC<AddressFormProps> = ({
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("landmark", value)
                       }
+                      error={formErrors.delivery.landmark}
+  errorMessage="Landmark is required"
                     />
                     <FloatingLabelInput
-                      placeholder="GST No (If Available)"
-                      value={deliveryFormValues.gstNo}
+  placeholder={orderType === "B2B" ? "GST No (Required)" : "GST No (If Available)"}
+  value={deliveryFormValues.gstNo}
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("gstNo", value)
                       }
+                      error={formErrors.delivery.gstNo}
+  errorMessage="GST No is required for B2B orders"
                     />
                   </div>
 
@@ -1369,6 +1442,8 @@ const AddressForm: React.FC<AddressFormProps> = ({
                     onChangeCallback={(value) =>
                       handleDeliveryInputChange("email", value)
                     }
+                    error={formErrors.delivery.email}
+  errorMessage="Email is required"
                   />
                 </div>
               )}
@@ -1494,7 +1569,3 @@ const AddressForm: React.FC<AddressFormProps> = ({
 };
 
 export default AddressForm;
-
-
-
-
