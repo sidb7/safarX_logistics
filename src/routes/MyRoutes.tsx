@@ -186,6 +186,7 @@ import BulkLabelList from "../screens/bulkLabelList/bulkLabelList";
 // yaaricash
 import YaariCashDashboard from "../screens/YaariCash/Index";
 import OrderCreation from "../screens/OrderCreation/OrderCreation";
+import OrderBooked from "../screens/OrderCreation/OrderBooked";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -577,6 +578,14 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                <OrderCreation/>
+              </ProtectedRoute>
+            }
+          />
+            <Route
+            path="/orders/booked"
+            element={
+              <ProtectedRoute>
+               <OrderBooked/>
               </ProtectedRoute>
             }
           />
