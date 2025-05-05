@@ -2785,7 +2785,24 @@ function OrderCreation() {
         toast.success("Order placed successfully!");
         // Redirect to order confirmation or list page
         // navigate("/orders/list");
-        navigate("/orders/booked");
+        // const awbs = response.data.data[0]?.awbs || [];
+        const awbNumbers = response.data.data[0]?.awbs?.map((item:any) => item.tracking?.awb).filter(Boolean) || [];
+
+
+
+        // navigate("/orders/booked");
+        navigate("/orders/booked", {
+          state: {
+            source: orderSource,
+            orderId: tempOrderId,
+            awbNumbers: awbNumbers,
+            // awbs: awbs,
+            // courierPartner: selectedServiceDetails.partnerName,
+            // courierPartnerService: selectedServiceDetails.partnerServiceName,
+            // // Add any other data you might need
+            // orderDetails: response.data.data[0]
+          }
+        });
       } else {
         toast.error(response?.data?.message || "Failed to place order");
       }
@@ -2796,6 +2813,9 @@ function OrderCreation() {
       setIsSubmitting(false);
     }
   };
+
+  
+
 
   // Helper function to prepare box info for REVERSE_ORDER API
   const prepareBoxInfoForReverseOrder = () => {
