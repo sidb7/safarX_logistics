@@ -10,7 +10,12 @@ import CodData from "./BillingData/codData";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import ShipmentDetailModal from "./Modal/shipmentDetailModal";
 import { POST } from "../../utils/webService";
-import { DOWNLOAD_COD_REMITTED, GET_COD_REMITTED } from "../../utils/ApiUrls";
+import {
+  COD_DETAILS_FINANCE,
+  COD_REMITTANCE_FINANCE,
+  DOWNLOAD_COD_REMITTED,
+  GET_COD_REMITTED,
+} from "../../utils/ApiUrls";
 import CodRemittedAwbModal from "./Modal/codRemittedAwbsModal";
 import ReactDatePicker from "react-datepicker";
 import { convertXMLToXLSX } from "../../utils/helper";
@@ -20,6 +25,7 @@ import DateButton from "../../components/Button/DateButton";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import sessionManager from "../../utils/sessionManager";
+import { Spinner } from "flowbite-react";
 
 interface IInvoiceProps {}
 
@@ -40,16 +46,18 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [codRemittedData, setCodRemittedData] = useState<any>([]);
   const [isDownloading, setIsDownloading] = useState(false);
   const [sortReportByDate, setSortReportByDate] = useState(-1);
+  const [itemsPerPage, setItemPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const arrayData = [
     { label: "Orders" },
     { label: "Invoice" },
     // { label: "Credit Note" },
-    { label: "Cod" },
+    { label: "COD" },
   ];
-
+  const [codReportData, setCodReportData] = useState<any>([]);
   const [isActive, setIsActive] = useState<any>(false);
-
+  const [searchValue, setSearchValue] = useState("");
   const getCurrentPath = () => {
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
@@ -61,13 +69,99 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   };
 
   const dataCurrentPath = getCurrentPath() as string[];
-  console.log("dataCurrentPath", dataCurrentPath);
+
+  const getCodPayableData = async () => {
+    try {
+      const { data } = await POST(COD_DETAILS_FINANCE, {});
+
+      if (data?.success) {
+        const codPayableData = data?.data;
+        const {
+          deliveredCod = {},
+          rtoCod = {},
+          pickupCod = {},
+          intransitCod = {},
+          paidCod = {},
+          payableAmount = [],
+          recovery = {},
+          codRechargeAmount = 0,
+          payableAmountWithDate = [],
+        } = codPayableData || {};
+
+        const totalUpcomingCount = Array.isArray(payableAmountWithDate)
+          ? payableAmountWithDate.reduce(
+              (sum, ele) => sum + (ele?.count || 0),
+              0
+            )
+          : 0;
+
+        const totalPayableAmount = Array.isArray(payableAmountWithDate)
+          ? payableAmountWithDate.reduce(
+              (sum, ele) => sum + (ele?.remitableAmount || 0),
+              0
+            )
+          : 0;
+
+        const codDashboardData = [
+          {
+            title: "Picked Up",
+            amount: pickupCod.amount || 0,
+            count: pickupCod.count || 0,
+          },
+          {
+            title: "In Transit",
+            amount: intransitCod.amount || 0,
+            count: intransitCod.count || 0,
+          },
+          {
+            title: "Delivered",
+            amount: deliveredCod.amount || 0,
+            count: deliveredCod.count || 0,
+          },
+
+          {
+            title: "RTO",
+            amount: rtoCod.amount || 0,
+            count: rtoCod.count || 0,
+          },
+          {
+            title: "Amount Paid",
+            amount: paidCod.amount || 0,
+            count: paidCod.count || 0,
+          },
+
+          {
+            title: "COD Payable *",
+            payableAmountWithDate,
+            totalPayableAmount,
+            totalUpcomingCount,
+          },
+
+          {
+            title: "To Recover",
+            amount: recovery.amount || 0,
+            count: recovery.count || 0,
+          },
+          {
+            title: "Wallet Recharge",
+            amount: codRechargeAmount,
+          },
+        ];
+
+        setCodReportData(codDashboardData);
+      } else {
+        // throw "Failed to fetch COD data";
+      }
+    } catch (error: any) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     if (dataCurrentPath[1] === "cod") {
       setIsActive(checkPageAuthorized("Cod"));
     }
-  });
+  }, []);
 
   const render = (id: any) => {
     if (id === 0) {
@@ -87,15 +181,21 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     try {
       const { sellerInfo } = sessionManager({});
       setLoading(true);
+
       const payload = {
+        startDate: startDate ? new Date(startDate).getTime() : null,
+        endDate: endDate ? new Date(endDate).getTime() : null,
         sellerId: +`${sellerInfo?.sellerId}`,
         sort: { reportDate: sortReportByDate },
+        skip: (currentPage - 1) * itemsPerPage,
+        limit: itemsPerPage,
+        search: searchValue,
       };
       // const payload = {
       //   sellerId: 2483, //only for testing
       // };
 
-      const { data: response } = await POST(GET_COD_REMITTED, payload);
+      const { data: response } = await POST(COD_REMITTANCE_FINANCE, payload);
 
       if (response?.success) {
         setCodRemittedData(response?.data);
@@ -110,51 +210,39 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     }
   };
   useEffect(() => {
+    getCodPayableData();
+  }, []);
+  useEffect(() => {
     getCodRemittedDetails();
-  }, [endDate, sortReportByDate]);
+  }, [endDate, sortReportByDate, currentPage, itemsPerPage]);
 
-  console.log("getcodRmeittedData", codRemittedData);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      getCodRemittedDetails();
+    }, 800); // debounce delay in ms
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchValue]);
+
   //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = (data: any) => {
+    // console.log(data);
+    setCurrentPage(data?.currentPage);
+  };
 
   // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = (data: any) => {
+    // console.log(data);
+    setItemPerPage(data?.itemsPerPage);
+    setCurrentPage(1);
+  };
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
     render(id);
   };
-
-  // const fetchReport = async () => {
-  //   if (!codRemittedData || codRemittedData.length === 0) {
-  //     toast.error("No data available to download");
-  //     return;
-  //   }
-
-  //   const formattedData = codRemittedData.map((payment: any) => {
-  //     const shipmentReportDate = payment.reportNumber || "N/A";
-
-  //     const crn = `COD${shipmentReportDate}`;
-
-  //     return {
-  //       ClientId: payment.sellerId || "",
-  //       Amount: payment?.details?.codAmountRemittable || "N/A",
-  //       Paid: payment?.details?.codAmountRemitted || "N/A",
-  //       BeneAccountNumber: payment.bankDetails?.bankAccountNumber || "",
-  //       Email: payment.sellerEmail || "",
-  //       ReceiverIFSC: payment.bankDetails?.ifscCode,
-  //       UTRno: payment?.details?.utrNo || "",
-  //       CRN: crn,
-  //     };
-  //   });
-
-  //   const date = new Date();
-  //   const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-  //     .toString()
-  //     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-
-  //   await convertXMLToXLSX(formattedData, `BankData_${formattedDate}.xlsx`);
-  // };
 
   const handleClear = () => {
     setDateRange([null, null]);
@@ -169,8 +257,8 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
 
     try {
       const report = {
-        reportNumber : reportNumber || ''
-      }
+        reportNumber: reportNumber || "",
+      };
       const { data: response } = await POST(DOWNLOAD_COD_REMITTED, report);
 
       if (response?.success && response?.data?.orders?.length > 0) {
@@ -212,8 +300,8 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
       {isActive || isActive === undefined ? (
         <div>
           <Breadcrum label="Billing" />
-          <div className="customScroll">
-            <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
+          <div className="">
+            <div className="flex justify-between mx-4 mb-2">
               <div>
                 <ScrollNav
                   arrayData={arrayData}
@@ -223,33 +311,21 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 />
               </div>
               <div className="flex justify-end gap-x-2  ">
-                <div>
-                  {/* <SearchBox label="Search" value="" onChange={() => {}} /> */}
+                <div className="w-full">
+                  <SearchBox
+                    customPlaceholder="Search by AWB / Report No. "
+                    label="Search"
+                    value={searchValue}
+                    onChange={(e: any) => {
+                      setSearchValue(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    getFullContent={() => {
+                      setSearchValue("");
+                    }}
+                  />
                 </div>
                 <div className="">
-                  {/* <ReactDatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update: any) => {
-                  setDateRange(update);
-                  if (update[0] === null && update[1] === null) {
-                    // Explicitly set startDate and endDate to null when cleared
-                    setStartDate(null);
-                    setEndDate(null);
-                    // fetchCodRemittanceData();
-                  } else {
-                    // Update startDate and endDate based on the selected range
-                    setStartDate(update[0]);
-                    setEndDate(update[1]);
-                  }
-                }}
-                isClearable={true}
-                placeholderText="Select From & To Date"
-                className="cursor-pointer h-12 border-solid border-2 datepickerCss  pl-6"
-                dateFormat="dd/MM/yyyy"
-              /> */}
-
                   <DatePicker
                     selectsRange={true}
                     startDate={startDate}
@@ -293,14 +369,112 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                 </div>
               </div>
             </div>
-            <div className="mx-4">
-              <CodData
-                setCodModal={setCodModal}
-                setAwbModal={setAwbModal}
-                tableData={codRemittedData}
-                downloadReport={downloadReport}
-                setSortReportByDate={setSortReportByDate}
-              />
+            <div className="mx-4  justify-start">
+              <div className="flex mb-2 justify-start flex-wrap gap-3 w-full  item rounded-md">
+                {codReportData?.map((ele: any) => {
+                  return (
+                    <div className="border min-w-[160px] min-h-[75px] shadow-md  flex rounded-md px-3 py-1 ">
+                      {ele?.payableAmountWithDate !== undefined ? (
+                        ele?.payableAmountWithDate.length > 0 ? (
+                          <div>
+                            <div className="text-sm text-[#878787]">
+                              {ele?.title ?? "--"}
+                            </div>
+                            <div>
+                              {ele?.payableAmountWithDate.map(
+                                (item: any, idx: number) => (
+                                  <div
+                                    key={idx}
+                                    className="flex text-xs min-w-[140px] font-semibold mt-0.5 justify-between"
+                                  >
+                                    <div>
+                                      {item?.date
+                                        ? new Date(
+                                            item.date
+                                          ).toLocaleDateString("en-GB", {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "2-digit",
+                                          })
+                                        : "--"}
+                                    </div>
+                                    <div>
+                                      ₹{" "}
+                                      {item?.remitableAmount != null
+                                        ? Number(item.remitableAmount)
+                                            .toFixed(2)
+                                            .toLocaleString()
+                                        : "--"}
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
+
+                            {/* Footer */}
+                            <div className="border-t border-gray-300 mt-2 pt-1 flex text-xs font-semibold justify-between">
+                              <div>Total :</div>
+                              <div>
+                                ₹{" "}
+                                {ele?.totalPayableAmount != null
+                                  ? Number(ele.totalPayableAmount)
+                                      .toFixed(2)
+                                      .toLocaleString()
+                                  : "--"}
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-sm text-[#878787]">
+                            {ele?.title ?? "--"}
+                            <div className="text-red-500 text-xs mt-1">
+                              No upcoming payables
+                            </div>
+                          </div>
+                        )
+                      ) : (
+                        <div className="relative">
+                          <div className="text-sm text-[#878787]">
+                            {ele?.title ?? "--"}
+                          </div>
+
+                          <div className="flex items-center min-h-[60px]">
+                            <div>
+                              <div className="font-bold">
+                                ₹{" "}
+                                {ele?.amount != null
+                                  ? Number(ele.amount)
+                                      .toFixed(2)
+                                      .toLocaleString()
+                                  : "--"}
+                              </div>
+                              {(ele?.count != undefined ||
+                                ele?.count != null) && (
+                                <div className="text-sm text-[#878787]">
+                                  No. of Awbs: <b>{ele?.count ?? "--"}</b>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {loading ? (
+                <div className="w-full h-96 flex items-center justify-center">
+                  <Spinner />{" "}
+                </div>
+              ) : (
+                <CodData
+                  setCodModal={setCodModal}
+                  setAwbModal={setAwbModal}
+                  tableData={codRemittedData}
+                  downloadReport={downloadReport}
+                  setSortReportByDate={setSortReportByDate}
+                />
+              )}
             </div>
           </div>
 
@@ -332,7 +506,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
             onClose={() => {
               setAwbModal({ isOpen: false, data: [], recovery: false });
             }}
-            className="md:!w-[45%]"
+            className="md:!w-[40%]"
           >
             <CodRemittedAwbModal
               onClick={() =>
