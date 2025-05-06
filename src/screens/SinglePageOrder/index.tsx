@@ -78,7 +78,7 @@ const initialState: any = {
   orderId: "",
   eWayBillNo: 0,
   awb: "",
-  brandName: "Google",
+  brandName: "",
   brandLogo: "",
 };
 
