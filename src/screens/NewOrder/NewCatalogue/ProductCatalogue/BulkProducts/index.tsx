@@ -202,7 +202,7 @@ const BulkUpload = (props: ITypeProps) => {
   const downloadSampleProducts = async () => {
     const { data } = await POST(GET_PRODUCTS, {
       skip: 0,
-      limit: 1000,
+      limit: 10000,
       pageNo: 1,
     });
 
