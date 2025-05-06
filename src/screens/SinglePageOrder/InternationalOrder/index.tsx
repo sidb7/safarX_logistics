@@ -53,7 +53,7 @@ const InternationalOrders: React.FunctionComponent<
     orderId: "",
     eWayBillNo: 0,
     awb: "",
-    brandName: "Google",
+    brandName: "",
     brandLogo: "",
   };
   const columnsHelper = createColumnHelper<any>();
