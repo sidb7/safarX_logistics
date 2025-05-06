@@ -1,6 +1,4 @@
 
-
-
 // import React, { useState, useEffect } from 'react';
 // import { POST } from '../../utils/webService';
 // import { GET_LATEST_ORDER } from '../../utils/ApiUrls';
@@ -43,27 +41,39 @@
 //   shippingDetails?: ShippingDetailsProps;
 //   tempOrderId?: string;
 //   orderSource?: string;
+//   // Added prop to track the selected service
+//   selectedServiceId?: string;
 // }
 
 // const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
-//   const { tempOrderId, orderSource } = props;
+//   const { tempOrderId, orderSource, selectedServiceId } = props;
   
 //   const [isLoading, setIsLoading] = useState<boolean>(false);
 //   const [error, setError] = useState<string | null>(null);
 //   const [orderData, setOrderData] = useState<any>(null);
 
-//   // Fetch the latest order data when component mounts or when tempOrderId/orderSource changes
+//   // Fetch the latest order data with a short delay to ensure backend processing is complete
 //   useEffect(() => {
 //     // Only fetch if tempOrderId and orderSource are provided
 //     if (tempOrderId && orderSource) {
-//       fetchLatestOrder();
+//       // Clear any previous data when selection changes
+//       setOrderData(null);
+      
+//       // Set loading state immediately
+//       setIsLoading(true);
+      
+//       // Add a short delay to allow backend to process the service selection
+//       const timer = setTimeout(() => {
+//         fetchLatestOrder();
+//       }, 500); // 500ms delay
+      
+//       return () => clearTimeout(timer);
 //     }
-//   }, [tempOrderId, orderSource]);
+//   }, [tempOrderId, orderSource, selectedServiceId]); // Added selectedServiceId as dependency
 
 //   const fetchLatestOrder = async () => {
 //     if (!tempOrderId || !orderSource) return;
 
-//     setIsLoading(true);
 //     setError(null);
 
 //     try {
@@ -152,8 +162,8 @@
 //     }
 //   } = props;
 
-//   // Display loading state
-//   if (isLoading) {
+//   // Display loading state 
+//   if (isLoading || orderData === null) {
 //     return (
 //       <div className="w-full mx-auto bg-[#F9F9F9] rounded-lg shadow-md p-6">
 //         <div className="flex items-center justify-center py-10">
@@ -423,7 +433,6 @@ interface SummaryForOrderProps {
   shippingDetails?: ShippingDetailsProps;
   tempOrderId?: string;
   orderSource?: string;
-  // Added prop to track the selected service
   selectedServiceId?: string;
 }
 
@@ -433,25 +442,55 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const [retryCount, setRetryCount] = useState<number>(0);
+  const [lastSelectedServiceId, setLastSelectedServiceId] = useState<string | undefined>(undefined);
 
-  // Fetch the latest order data with a short delay to ensure backend processing is complete
+  // Fetch the latest order data with a mechanism to handle server processing delay
   useEffect(() => {
-    // Only fetch if tempOrderId and orderSource are provided
-    if (tempOrderId && orderSource) {
-      // Clear any previous data when selection changes
+    // Only fetch if tempOrderId and orderSource are provided and if selectedServiceId has changed
+    if (tempOrderId && orderSource && selectedServiceId && 
+        (selectedServiceId !== lastSelectedServiceId || orderData === null)) {
+      // Clear previous data when selection changes
       setOrderData(null);
       
       // Set loading state immediately
       setIsLoading(true);
       
-      // Add a short delay to allow backend to process the service selection
+      // Update the last selected service ID
+      setLastSelectedServiceId(selectedServiceId);
+      
+      // Reset retry count when selection changes
+      setRetryCount(0);
+      
+      // Add a longer delay to allow backend to process the service selection
       const timer = setTimeout(() => {
         fetchLatestOrder();
-      }, 500); // 500ms delay
+      }, 1000); // 1000ms delay - increased from 500ms
       
       return () => clearTimeout(timer);
     }
-  }, [tempOrderId, orderSource, selectedServiceId]); // Added selectedServiceId as dependency
+  }, [tempOrderId, orderSource, selectedServiceId]); 
+
+  // Implement retries for fetching data if necessary fields are missing
+  useEffect(() => {
+    if (orderData && !isValidOrderData(orderData) && retryCount < 3) {
+      const timer = setTimeout(() => {
+        console.log(`Retrying fetch, attempt ${retryCount + 1}`);
+        setRetryCount(prev => prev + 1);
+        fetchLatestOrder();
+      }, 1500); // Increasing delay for each retry
+      
+      return () => clearTimeout(timer);
+    }
+  }, [orderData, retryCount]);
+
+  // Helper function to validate if order data has all required fields
+  const isValidOrderData = (data: any) => {
+    // Check if key shipping details fields are present and not N/A
+    return data.shippingDetails.courier !== "N/A" && 
+           data.shippingDetails.grandTotal !== "N/A" &&
+           data.packageDetails.totalWeight !== "N/A";
+  };
 
   const fetchLatestOrder = async () => {
     if (!tempOrderId || !orderSource) return;
@@ -459,6 +498,8 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
     setError(null);
 
     try {
+      console.log(`Fetching order data for service ID: ${selectedServiceId}, attempt: ${retryCount + 1}`);
+      
       const response = await POST(GET_LATEST_ORDER, {
         tempOrderId: tempOrderId,
         source: orderSource
@@ -512,7 +553,26 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
           }
         };
         
-        setOrderData(transformedData);
+        // Check if the returned data includes the selected service
+        const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
+        console.log(`Received data for service: ${fetchedOrder.service?.partnerServiceId}, Selected: ${selectedServiceId}, Match: ${hasSelectedService}`);
+        
+        if (hasSelectedService) {
+          // We got the correct data for our selected service
+          setOrderData(transformedData);
+          setRetryCount(0); // Reset retry count on successful match
+        } else if (retryCount < 3) {
+          // If data doesn't match our selected service, we'll retry
+          console.log("Service data doesn't match selection, will retry");
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+            fetchLatestOrder();
+          }, 1500);
+        } else {
+          // After retries, use whatever data we got
+          console.log("Using available data after retries");
+          setOrderData(transformedData);
+        }
       } else {
         setError(response?.data?.message || "Failed to fetch order data");
       }
@@ -522,6 +582,13 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Manual retry button handler
+  const handleRetry = () => {
+    setRetryCount(0);
+    setIsLoading(true);
+    fetchLatestOrder();
   };
 
   // Use passed props if available, otherwise use fetched data
@@ -553,7 +620,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span className="ml-2 text-gray-600">Loading order details...</span>
+          <span className="ml-2 text-gray-600">Loading order details for the selected service...</span>
         </div>
       </div>
     );
@@ -570,7 +637,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             </svg>
             <p>{error}</p>
             <button 
-              onClick={fetchLatestOrder}
+              onClick={handleRetry}
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
               Retry

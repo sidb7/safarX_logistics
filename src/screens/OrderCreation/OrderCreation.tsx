@@ -2694,9 +2694,20 @@ function OrderCreation() {
   };
 
   // Add this handler function to receive selected service data
+  // const handleServiceSelect = (service: any) => {
+    
+  //   setSelectedServiceDetails(service);
+  //   console.log("Selected service:", service);
+  // };
   const handleServiceSelect = (service: any) => {
-    setSelectedServiceDetails(service);
-    console.log("Selected service:", service);
+    // Reset the orderData in SummaryForOrder component when a new service is selected
+    setSelectedServiceDetails(null);
+    
+    // Short delay to ensure UI updates before setting the new service
+    setTimeout(() => {
+      setSelectedServiceDetails(service);
+      // console.log("Selected service:", service);
+    }, 100);
   };
 
   // Add this function to handle placing the order after service selection
@@ -3141,8 +3152,10 @@ function OrderCreation() {
               <SummaryForOrder
                 tempOrderId={tempOrderId}
                 orderSource={orderSource}
-                key={selectedServiceDetails.partnerServiceId}
+               
                 selectedServiceId={selectedServiceDetails.partnerServiceId} // Pass the selected service ID
+                key={`${selectedServiceDetails.partnerServiceId}-${Date.now()}`}
+
               />
             )}
 
