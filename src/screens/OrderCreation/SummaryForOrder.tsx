@@ -1,4 +1,5 @@
 
+
 // import React, { useState, useEffect } from 'react';
 // import { POST } from '../../utils/webService';
 // import { GET_LATEST_ORDER } from '../../utils/ApiUrls';
@@ -41,7 +42,6 @@
 //   shippingDetails?: ShippingDetailsProps;
 //   tempOrderId?: string;
 //   orderSource?: string;
-//   // Added prop to track the selected service
 //   selectedServiceId?: string;
 // }
 
@@ -51,25 +51,55 @@
 //   const [isLoading, setIsLoading] = useState<boolean>(false);
 //   const [error, setError] = useState<string | null>(null);
 //   const [orderData, setOrderData] = useState<any>(null);
+//   const [retryCount, setRetryCount] = useState<number>(0);
+//   const [lastSelectedServiceId, setLastSelectedServiceId] = useState<string | undefined>(undefined);
 
-//   // Fetch the latest order data with a short delay to ensure backend processing is complete
+//   // Fetch the latest order data with a mechanism to handle server processing delay
 //   useEffect(() => {
-//     // Only fetch if tempOrderId and orderSource are provided
-//     if (tempOrderId && orderSource) {
-//       // Clear any previous data when selection changes
+//     // Only fetch if tempOrderId and orderSource are provided and if selectedServiceId has changed
+//     if (tempOrderId && orderSource && selectedServiceId && 
+//         (selectedServiceId !== lastSelectedServiceId || orderData === null)) {
+//       // Clear previous data when selection changes
 //       setOrderData(null);
       
 //       // Set loading state immediately
 //       setIsLoading(true);
       
-//       // Add a short delay to allow backend to process the service selection
+//       // Update the last selected service ID
+//       setLastSelectedServiceId(selectedServiceId);
+      
+//       // Reset retry count when selection changes
+//       setRetryCount(0);
+      
+//       // Add a longer delay to allow backend to process the service selection
 //       const timer = setTimeout(() => {
 //         fetchLatestOrder();
-//       }, 500); // 500ms delay
+//       }, 1000); // 1000ms delay - increased from 500ms
       
 //       return () => clearTimeout(timer);
 //     }
-//   }, [tempOrderId, orderSource, selectedServiceId]); // Added selectedServiceId as dependency
+//   }, [tempOrderId, orderSource, selectedServiceId]); 
+
+//   // Implement retries for fetching data if necessary fields are missing
+//   useEffect(() => {
+//     if (orderData && !isValidOrderData(orderData) && retryCount < 3) {
+//       const timer = setTimeout(() => {
+//         console.log(`Retrying fetch, attempt ${retryCount + 1}`);
+//         setRetryCount(prev => prev + 1);
+//         fetchLatestOrder();
+//       }, 1500); // Increasing delay for each retry
+      
+//       return () => clearTimeout(timer);
+//     }
+//   }, [orderData, retryCount]);
+
+//   // Helper function to validate if order data has all required fields
+//   const isValidOrderData = (data: any) => {
+//     // Check if key shipping details fields are present and not N/A
+//     return data.shippingDetails.courier !== "N/A" && 
+//            data.shippingDetails.grandTotal !== "N/A" &&
+//            data.packageDetails.totalWeight !== "N/A";
+//   };
 
 //   const fetchLatestOrder = async () => {
 //     if (!tempOrderId || !orderSource) return;
@@ -77,6 +107,8 @@
 //     setError(null);
 
 //     try {
+//       console.log(`Fetching order data for service ID: ${selectedServiceId}, attempt: ${retryCount + 1}`);
+      
 //       const response = await POST(GET_LATEST_ORDER, {
 //         tempOrderId: tempOrderId,
 //         source: orderSource
@@ -130,7 +162,26 @@
 //           }
 //         };
         
-//         setOrderData(transformedData);
+//         // Check if the returned data includes the selected service
+//         const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
+//         console.log(`Received data for service: ${fetchedOrder.service?.partnerServiceId}, Selected: ${selectedServiceId}, Match: ${hasSelectedService}`);
+        
+//         if (hasSelectedService) {
+//           // We got the correct data for our selected service
+//           setOrderData(transformedData);
+//           setRetryCount(0); // Reset retry count on successful match
+//         } else if (retryCount < 3) {
+//           // If data doesn't match our selected service, we'll retry
+//           console.log("Service data doesn't match selection, will retry");
+//           setTimeout(() => {
+//             setRetryCount(prev => prev + 1);
+//             fetchLatestOrder();
+//           }, 1500);
+//         } else {
+//           // After retries, use whatever data we got
+//           console.log("Using available data after retries");
+//           setOrderData(transformedData);
+//         }
 //       } else {
 //         setError(response?.data?.message || "Failed to fetch order data");
 //       }
@@ -140,6 +191,13 @@
 //     } finally {
 //       setIsLoading(false);
 //     }
+//   };
+
+//   // Manual retry button handler
+//   const handleRetry = () => {
+//     setRetryCount(0);
+//     setIsLoading(true);
+//     fetchLatestOrder();
 //   };
 
 //   // Use passed props if available, otherwise use fetched data
@@ -171,7 +229,7 @@
 //             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
 //             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 //           </svg>
-//           <span className="ml-2 text-gray-600">Loading order details...</span>
+//           <span className="ml-2 text-gray-600">Loading order details for the selected service...</span>
 //         </div>
 //       </div>
 //     );
@@ -188,7 +246,7 @@
 //             </svg>
 //             <p>{error}</p>
 //             <button 
-//               onClick={fetchLatestOrder}
+//               onClick={handleRetry}
 //               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
 //             >
 //               Retry
@@ -390,19 +448,21 @@
 // };
 
 // export default SummaryForOrder;
-
 import React, { useState, useEffect } from 'react';
 import { POST } from '../../utils/webService';
 import { GET_LATEST_ORDER } from '../../utils/ApiUrls';
 
+// --- Component Prop Interfaces ---
 interface PickupDetailsProps {
   name: string;
   phone: string;
+  address?: string;
 }
-
+// ... (other props interfaces: DeliveryDetailsProps, PackageDetailsProps, ShippingDetailsProps, SummaryForOrderProps)
 interface DeliveryDetailsProps {
   name: string;
   phone: string;
+  address?: string;
 }
 
 interface PackageDetailsProps {
@@ -436,185 +496,274 @@ interface SummaryForOrderProps {
   selectedServiceId?: string;
 }
 
+// --- API Interfaces ---
+interface ApiAddressContact {
+  name?: string;
+  mobileNo?: string;
+}
+// ... (other API interfaces: ApiWorkingDays, ApiAddress, ApiServiceDetails, ApiBoxInfo, ApiCodInfo, ApiInsuranceInfo, ApiOrderData, ApiPostResponse)
+interface ApiWorkingDays {
+  [key: string]: boolean; 
+}
+
+interface ApiAddress {
+  contact?: ApiAddressContact;
+  flatNo?: string;
+  locality?: string;
+  sector?: string;
+  landmark?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  pincode?: string;
+  gstNumber?: string;
+  workingDays?: ApiWorkingDays;
+  workingHours?: string;
+}
+
+interface ApiServiceDetails {
+  appliedWeight?: number;
+  partnerName?: string;
+  serviceMode?: string;
+  base?: number;
+  total?: number;
+  variables?: number;
+  cod?: number;
+  tax?: number;
+  partnerServiceId?: string;
+}
+
+interface ApiBoxInfo {
+  [key: string]: any; 
+}
+
+interface ApiCodInfo {
+  invoiceValue?: number;
+  isCod?: boolean;
+}
+
+interface ApiInsuranceInfo {
+  isInsured?: boolean;
+}
+
+interface ApiOrderData {
+  pickupAddress?: ApiAddress;
+  deliveryAddress?: ApiAddress;
+  boxInfo?: ApiBoxInfo[];
+  service?: ApiServiceDetails;
+  codInfo?: ApiCodInfo;
+  insurance?: ApiInsuranceInfo;
+  zone?: string;
+  yaariCash?: number;
+}
+
+interface ApiPostResponse {
+  success: boolean;
+  data: ApiOrderData[];
+  message?: string;
+}
+
+
+// --- Transformed Data Interface ---
+interface TransformedOrderData {
+  pickupDetails: PickupDetailsProps;
+  deliveryDetails: DeliveryDetailsProps;
+  packageDetails: PackageDetailsProps;
+  shippingDetails: ShippingDetailsProps;
+}
+
+// NEW: Function to format address specifically for tooltip (excluding GST, working days/hours)
+const formatAddressForTooltip = (addressObj?: ApiAddress): string => {
+  if (!addressObj) return "Address not available";
+
+  const parts: string[] = [
+    addressObj.flatNo,
+    addressObj.locality,
+    addressObj.sector,
+    addressObj.landmark,
+    (addressObj.city || addressObj.state || addressObj.country) ? `${addressObj.city || ''}, ${addressObj.state || ''}, ${addressObj.country || ''}`.replace(/ , /g, ', ').replace(/^, |, $/g, '') : undefined,
+    addressObj.pincode ? `Pincode: ${addressObj.pincode}` : undefined
+  ].filter((part?: string): part is string => part !== undefined && part.trim() !== "" && part !== ", ,");
+  
+  return parts.length > 0 ? parts.join("\n") : "Address details incomplete";
+};
+
+
 const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
   const { tempOrderId, orderSource, selectedServiceId } = props;
-  
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [orderData, setOrderData] = useState<any>(null);
+  const [orderData, setOrderData] = useState<TransformedOrderData | null>(null);
   const [retryCount, setRetryCount] = useState<number>(0);
   const [lastSelectedServiceId, setLastSelectedServiceId] = useState<string | undefined>(undefined);
 
-  // Fetch the latest order data with a mechanism to handle server processing delay
   useEffect(() => {
-    // Only fetch if tempOrderId and orderSource are provided and if selectedServiceId has changed
-    if (tempOrderId && orderSource && selectedServiceId && 
+    if (tempOrderId && orderSource && selectedServiceId &&
         (selectedServiceId !== lastSelectedServiceId || orderData === null)) {
-      // Clear previous data when selection changes
       setOrderData(null);
-      
-      // Set loading state immediately
       setIsLoading(true);
-      
-      // Update the last selected service ID
       setLastSelectedServiceId(selectedServiceId);
-      
-      // Reset retry count when selection changes
       setRetryCount(0);
-      
-      // Add a longer delay to allow backend to process the service selection
       const timer = setTimeout(() => {
         fetchLatestOrder();
-      }, 1000); // 1000ms delay - increased from 500ms
-      
+      }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [tempOrderId, orderSource, selectedServiceId]); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, [tempOrderId, orderSource, selectedServiceId, lastSelectedServiceId, orderData]);
 
-  // Implement retries for fetching data if necessary fields are missing
   useEffect(() => {
     if (orderData && !isValidOrderData(orderData) && retryCount < 3) {
       const timer = setTimeout(() => {
         console.log(`Retrying fetch, attempt ${retryCount + 1}`);
         setRetryCount(prev => prev + 1);
         fetchLatestOrder();
-      }, 1500); // Increasing delay for each retry
-      
+      }, 1500 + retryCount * 500); 
       return () => clearTimeout(timer);
     }
-  }, [orderData, retryCount]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderData, retryCount]); 
 
-  // Helper function to validate if order data has all required fields
-  const isValidOrderData = (data: any) => {
-    // Check if key shipping details fields are present and not N/A
-    return data.shippingDetails.courier !== "N/A" && 
+  const isValidOrderData = (data: TransformedOrderData): boolean => {
+    return data.shippingDetails.courier !== "N/A" &&
            data.shippingDetails.grandTotal !== "N/A" &&
            data.packageDetails.totalWeight !== "N/A";
   };
 
-  const fetchLatestOrder = async () => {
+  const fetchLatestOrder = async (): Promise<void> => {
     if (!tempOrderId || !orderSource) return;
-
     setError(null);
-
     try {
-      console.log(`Fetching order data for service ID: ${selectedServiceId}, attempt: ${retryCount + 1}`);
-      
-      const response = await POST(GET_LATEST_ORDER, {
+      console.log(`Workspaceing order data for service ID: ${selectedServiceId}, attempt: ${retryCount + 1}`);
+      const response: { data?: ApiPostResponse } = await POST(GET_LATEST_ORDER, {
         tempOrderId: tempOrderId,
         source: orderSource
       });
 
       if (response?.data?.success) {
-        const fetchedOrder = response.data.data[0];
-        
-        // Transform the API response into the format expected by this component
-        const transformedData = {
+        const fetchedOrder: ApiOrderData | undefined = response.data.data[0];
+        if (!fetchedOrder) {
+            setError("No order data found in the response.");
+            setIsLoading(false);
+            return;
+        }
+        // MODIFIED: Use new formatter for tooltip addresses
+        const pickupAddressForTooltip = formatAddressForTooltip(fetchedOrder.pickupAddress);
+        const deliveryAddressForTooltip = formatAddressForTooltip(fetchedOrder.deliveryAddress);
+
+        const transformedData: TransformedOrderData = {
           pickupDetails: {
             name: fetchedOrder.pickupAddress?.contact?.name || "N/A",
-            phone: fetchedOrder.pickupAddress?.contact?.mobileNo ? 
-              `+91 ${fetchedOrder.pickupAddress.contact.mobileNo}` : "N/A"
+            phone: fetchedOrder.pickupAddress?.contact?.mobileNo ?
+              `+91 ${fetchedOrder.pickupAddress.contact.mobileNo}` : "N/A",
+            address: pickupAddressForTooltip // Assign simplified address
           },
           deliveryDetails: {
             name: fetchedOrder.deliveryAddress?.contact?.name || "N/A",
-            phone: fetchedOrder.deliveryAddress?.contact?.mobileNo ? 
-              `+91 ${fetchedOrder.deliveryAddress.contact.mobileNo}` : "N/A"
+            phone: fetchedOrder.deliveryAddress?.contact?.mobileNo ?
+              `+91 ${fetchedOrder.deliveryAddress.contact.mobileNo}` : "N/A",
+            address: deliveryAddressForTooltip // Assign simplified address
           },
           packageDetails: {
             boxes: fetchedOrder.boxInfo?.length || 0,
-            totalWeight: fetchedOrder.service?.appliedWeight ? 
+            totalWeight: fetchedOrder.service?.appliedWeight ?
               `${fetchedOrder.service.appliedWeight} kg` : "N/A",
-            invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ? 
+            invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ?
               `₹ ${fetchedOrder.codInfo.invoiceValue}` : "N/A",
-            insurance: fetchedOrder.insurance?.isInsured !== undefined ? 
+            insurance: fetchedOrder.insurance?.isInsured !== undefined ?
               (fetchedOrder.insurance.isInsured ? "Yes" : "No") : "N/A"
           },
           shippingDetails: {
             courier: fetchedOrder.service?.partnerName || "N/A",
-            courierType: fetchedOrder.service?.serviceMode ? 
+            courierType: fetchedOrder.service?.serviceMode ?
               `(${fetchedOrder.service.serviceMode} Service)` : "N/A",
             zone: fetchedOrder.zone || "N/A",
-            paymentMode: fetchedOrder.codInfo?.isCod !== undefined ? 
+            paymentMode: fetchedOrder.codInfo?.isCod !== undefined ?
               (fetchedOrder.codInfo.isCod ? "COD" : "Prepaid") : "N/A",
-            basePrice: fetchedOrder.service?.base !== undefined ? 
+            basePrice: fetchedOrder.service?.base !== undefined ?
               `₹ ${fetchedOrder.service.base}` : "N/A",
-            grandTotal: fetchedOrder.service?.total !== undefined ? 
+            grandTotal: fetchedOrder.service?.total !== undefined ?
               `₹ ${Math.round(fetchedOrder.service.total)}` : "N/A",
-            variableCharges: fetchedOrder.service?.variables !== undefined ? 
+            variableCharges: fetchedOrder.service?.variables !== undefined ?
               `₹ ${fetchedOrder.service.variables}` : "N/A",
-            codHandlingFees: fetchedOrder.service?.cod !== undefined ? 
+            codHandlingFees: fetchedOrder.service?.cod !== undefined ?
               `₹ ${fetchedOrder.service.cod}` : "N/A",
-            yaariCash: fetchedOrder.yaariCash !== undefined ? 
+            yaariCash: fetchedOrder.yaariCash !== undefined ?
               `₹ ${fetchedOrder.yaariCash}` : "N/A",
-            shippingCost: fetchedOrder.service?.total !== undefined ? 
+            shippingCost: fetchedOrder.service?.total !== undefined ?
               `₹ ${fetchedOrder.service.total}` : "N/A",
-            gstPercentage: fetchedOrder.service?.tax !== undefined && fetchedOrder.service?.total !== undefined ? 
-              Number((fetchedOrder.service.tax / (fetchedOrder.service.total - fetchedOrder.service.tax) * 100).toFixed(0)) : 0
+            gstPercentage: (fetchedOrder.service?.tax !== undefined && fetchedOrder.service?.total !== undefined && (fetchedOrder.service.total - fetchedOrder.service.tax !== 0)) ?
+              Number(((fetchedOrder.service.tax / (fetchedOrder.service.total - fetchedOrder.service.tax)) * 100).toFixed(0)) : 0
           }
         };
-        
-        // Check if the returned data includes the selected service
         const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
-        console.log(`Received data for service: ${fetchedOrder.service?.partnerServiceId}, Selected: ${selectedServiceId}, Match: ${hasSelectedService}`);
-        
         if (hasSelectedService) {
-          // We got the correct data for our selected service
           setOrderData(transformedData);
-          setRetryCount(0); // Reset retry count on successful match
+          setRetryCount(0); 
         } else if (retryCount < 3) {
-          // If data doesn't match our selected service, we'll retry
-          console.log("Service data doesn't match selection, will retry");
-          setTimeout(() => {
-            setRetryCount(prev => prev + 1);
-            fetchLatestOrder();
-          }, 1500);
+          setTimeout(() => { setRetryCount(prev => prev + 1); }, 1500);
         } else {
-          // After retries, use whatever data we got
-          console.log("Using available data after retries");
-          setOrderData(transformedData);
+          setOrderData(transformedData); 
         }
       } else {
         setError(response?.data?.message || "Failed to fetch order data");
       }
-    } catch (err) {
-      console.error("Error fetching order details:", err);
-      setError("An error occurred while fetching order data");
+    } catch (err: any) { 
+      const message = err?.message || "An error occurred while fetching order data";
+      setError(message);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Manual retry button handler
-  const handleRetry = () => {
+  
+  // This original formatAddress can be kept if used elsewhere, or removed if not.
+  // For this specific request, it's effectively replaced by formatAddressForTooltip for the tooltip's direct data source.
+  const formatAddress = (addressObj?: ApiAddress): string => {
+    if (!addressObj) return "Address not available";
+    const parts: string[] = [
+      addressObj.flatNo,
+      addressObj.locality,
+      addressObj.sector,
+      addressObj.landmark,
+      (addressObj.city || addressObj.state || addressObj.country) ? `${addressObj.city || ''}, ${addressObj.state || ''}, ${addressObj.country || ''}`.replace(/ , /g, ', ').replace(/^, |, $/g, '') : undefined,
+      addressObj.pincode ? `Pincode: ${addressObj.pincode}` : undefined
+    ].filter((part?: string): part is string => part !== undefined && part.trim() !== "" && part !== ", ,");
+    if (addressObj.gstNumber && addressObj.gstNumber.trim() !== "") {
+      parts.push(`GST: ${addressObj.gstNumber}`);
+    }
+    if (addressObj.workingDays) {
+      const days = Object.entries(addressObj.workingDays)
+        .filter(([_, isActive]: [string, boolean]) => isActive)
+        .map(([day]: [string, boolean]) => day.charAt(0).toUpperCase() + day.slice(1))
+        .join(", ");
+      if (days && addressObj.workingHours) {
+        parts.push(`Working: ${days} from ${addressObj.workingHours}`);
+      }
+    }
+    return parts.length > 0 ? parts.join("\n") : "Address details incomplete";
+  };
+  
+  const handleRetry = (): void => {
     setRetryCount(0);
     setIsLoading(true);
+    setError(null); 
     fetchLatestOrder();
   };
 
-  // Use passed props if available, otherwise use fetched data
-  const {
-    pickupDetails = orderData?.pickupDetails || { name: "N/A", phone: "N/A" },
-    deliveryDetails = orderData?.deliveryDetails || { name: "N/A", phone: "N/A" },
-    packageDetails = orderData?.packageDetails || { boxes: 0, totalWeight: "N/A", invoice: "N/A", insurance: "N/A" },
-    shippingDetails = orderData?.shippingDetails || {
-      courier: "N/A", 
-      courierType: "N/A", 
-      zone: "N/A", 
-      paymentMode: "N/A", 
-      basePrice: "N/A", 
-      grandTotal: "N/A", 
-      variableCharges: "N/A", 
-      codHandlingFees: "N/A", 
-      yaariCash: "N/A", 
-      shippingCost: "N/A", 
-      gstPercentage: 0
-    }
-  } = props;
+  // MODIFIED: Default fallbacks use formatAddressForTooltip
+  const pickupDetailsToRender: PickupDetailsProps = props.pickupDetails || orderData?.pickupDetails || { name: "N/A", phone: "N/A", address: formatAddressForTooltip(undefined) };
+  const deliveryDetailsToRender: DeliveryDetailsProps = props.deliveryDetails || orderData?.deliveryDetails || { name: "N/A", phone: "N/A", address: formatAddressForTooltip(undefined) };
+  const packageDetailsToRender: PackageDetailsProps = props.packageDetails || orderData?.packageDetails || { boxes: 0, totalWeight: "N/A", invoice: "N/A", insurance: "N/A" };
+  const shippingDetailsToRender: ShippingDetailsProps = props.shippingDetails || orderData?.shippingDetails || {
+    courier: "N/A", courierType: "N/A", zone: "N/A", paymentMode: "N/A",
+    basePrice: "N/A", grandTotal: "N/A", variableCharges: "N/A",
+    codHandlingFees: "N/A", yaariCash: "N/A", shippingCost: "N/A", gstPercentage: 0
+  };
 
-  // Display loading state 
-  if (isLoading || orderData === null) {
+  if (isLoading && !orderData) { 
     return (
-      <div className="w-full mx-auto bg-[#F9F9F9] rounded-lg shadow-md p-6">
+      <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
         <div className="flex items-center justify-center py-10">
           <svg className="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -626,17 +775,16 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
     );
   }
 
-  // Display error state
-  if (error) {
+  if (error && !orderData) { 
     return (
-      <div className="w-full mx-auto bg-[#F9F9F9] rounded-lg shadow-md p-6">
+      <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
         <div className="flex items-center justify-center py-6">
           <div className="text-red-500 text-center">
             <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <p>{error}</p>
-            <button 
+            <button
               onClick={handleRetry}
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
@@ -649,17 +797,15 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
   }
 
   return (
-    <div className="w-full mx-auto bg-[#F9F9F9] rounded-lg shadow-md p-6">
-      {/* Header with title and B2C shipment badge side by side */}
+    <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
       <div className="flex items-center mb-6">
-        <h1 className="font-Lato font-semibold text-xl leading-[26px] tracking-normal mr-4">Your Order Summary</h1>
-        <div className="bg-blue-100 text-blue-800 rounded-full px-4 py-1 font-Open font-semibold text-xs leading-5 tracking-normal text-center align-middle capitalize">
+        <h1 className="font-semibold text-xl leading-7 mr-4">Your Order Summary</h1>
+        <div className="bg-blue-100 text-blue-800 rounded-full px-4 py-1 font-semibold text-xs leading-5 text-center capitalize">
           B2C Shipment
         </div>
       </div>
 
-      {/* Pickup and Delivery Details always side by side */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Pickup Details */}
         <div>
           <div className="flex items-start mb-3">
@@ -670,14 +816,55 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
               </svg>
             </div>
             <div>
-              <h2 className="font-Open font-semibold text-base leading-5 tracking-normal capitalize">Pickup Details</h2>
+              <h2 className="font-semibold text-base leading-5 capitalize">Pickup Details</h2>
               <div className="flex items-center mt-2">
-                <p className="font-Open font-semibold text-sm leading-[18px] tracking-normal capitalize text-gray-700">{pickupDetails.name}</p>
-                <svg className="w-4 h-4 text-gray-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <p className="font-semibold text-sm leading-5 capitalize text-gray-700">{pickupDetailsToRender.name}</p>
+                {/* MODIFIED Inlined Tooltip for Pickup Address */}
+                {(!pickupDetailsToRender.address || pickupDetailsToRender.address === "Address not available" || pickupDetailsToRender.address === "Address details incomplete") ? (
+                  <span 
+                    className="ml-1 text-gray-400 cursor-not-allowed"
+                    aria-label="Pickup Address (details not available)"
+                    role="img"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
+                ) : (
+                  <div className="relative group inline-flex items-center">
+                    <button 
+                      type="button"
+                      className="ml-1 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      aria-label="View Pickup Address"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </button>
+                    <div 
+                      className="absolute left-full top-1/2 transform -translate-y-1/2 ml-3 
+                                 w-max max-w-[280px] sm:max-w-xs md:max-w-sm 
+                                 bg-slate-800/95 text-white  /* MODIFIED: transparency and positioning */
+                                 text-sm rounded-lg shadow-xl p-3 
+                                 opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                                 invisible group-hover:visible z-50 pointer-events-none"
+                      role="tooltip"
+                    >
+                      <h4 className="font-bold text-base mb-1.5 leading-tight">Pickup Address</h4>
+                      <p className="whitespace-pre-line text-xs sm:text-sm leading-snug">{pickupDetailsToRender.address}</p>
+                      {/* MODIFIED: Arrow pointing left */}
+                      <div className="absolute top-1/2 right-full 
+                                      transform -translate-y-1/2 
+                                      w-0 h-0
+                                      border-t-4 border-t-transparent
+                                      border-b-4 border-b-transparent
+                                      border-r-4 border-r-slate-800/95"> {/* Match bg with opacity */}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <p className="text-gray-600 mt-1 font-Open font-normal text-sm leading-5 tracking-normal">{pickupDetails.phone}</p>
+              <p className="text-gray-600 mt-1 font-normal text-sm leading-5">{pickupDetailsToRender.phone}</p>
             </div>
           </div>
         </div>
@@ -692,21 +879,62 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
               </svg>
             </div>
             <div>
-              <h2 className="font-Open font-semibold text-base leading-5 tracking-normal capitalize">Delivery Details</h2>
+              <h2 className="font-semibold text-base leading-5 capitalize">Delivery Details</h2>
               <div className="flex items-center mt-2">
-                <p className="font-medium text-gray-700">{deliveryDetails.name}</p>
-                <svg className="w-4 h-4 text-gray-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <p className="font-semibold text-sm leading-5 capitalize text-gray-700">{deliveryDetailsToRender.name}</p>
+                {/* MODIFIED Inlined Tooltip for Delivery Address */}
+                {(!deliveryDetailsToRender.address || deliveryDetailsToRender.address === "Address not available" || deliveryDetailsToRender.address === "Address details incomplete") ? (
+                  <span 
+                    className="ml-1 text-gray-400 cursor-not-allowed"
+                    aria-label="Delivery Address (details not available)"
+                    role="img"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
+                ) : (
+                  <div className="relative group inline-flex items-center">
+                    <button 
+                      type="button"
+                      className="ml-1 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      aria-label="View Delivery Address"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </button>
+                    <div 
+                      className="absolute left-full top-1/2 transform -translate-y-1/2 ml-3
+                                 w-max max-w-[280px] sm:max-w-xs md:max-w-sm 
+                                 bg-slate-800/95 text-white /* MODIFIED: transparency and positioning */
+                                 text-sm rounded-lg shadow-xl p-3 
+                                 opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                                 invisible group-hover:visible z-50 pointer-events-none"
+                      role="tooltip"
+                    >
+                      <h4 className="font-bold text-base mb-1.5 leading-tight">Delivery Address</h4>
+                      <p className="whitespace-pre-line text-xs sm:text-sm leading-snug">{deliveryDetailsToRender.address}</p>
+                      {/* MODIFIED: Arrow pointing left */}
+                      <div className="absolute top-1/2 right-full
+                                      transform -translate-y-1/2 
+                                      w-0 h-0
+                                      border-t-4 border-t-transparent
+                                      border-b-4 border-b-transparent
+                                      border-r-4 border-r-slate-800/95"> {/* Match bg with opacity */}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <p className="text-gray-600 mt-1">{deliveryDetails.phone}</p>
+              <p className="text-gray-600 mt-1 font-normal text-sm leading-5">{deliveryDetailsToRender.phone}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-6 mb-6">
-        {/* Package Details */}
+      {/* ... (Package Details and Shipping Details sections remain unchanged) ... */}
+       <div className="border-t border-gray-200 pt-6 mb-6">
         <div className="flex items-start mb-4">
           <div className="mr-2 mt-1">
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -714,31 +942,30 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             </svg>
           </div>
           <div className="w-full">
-            <h2 className="font-Open font-semibold text-base leading-5 tracking-normal capitalize">Package Details</h2>
-            
+            <h2 className="font-semibold text-base leading-5 capitalize">Package Details</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Boxes</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {packageDetails.boxes || "N/A"}
+                <p className="text-gray-500 font-normal text-sm leading-5">Boxes</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {packageDetailsToRender.boxes || "N/A"}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Total Weight</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {packageDetails.totalWeight}
+                <p className="text-gray-500 font-normal text-sm leading-5">Total Weight</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {packageDetailsToRender.totalWeight}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Invoice</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {packageDetails.invoice}
+                <p className="text-gray-500 font-normal text-sm leading-5">Invoice</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {packageDetailsToRender.invoice}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Insurance</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {packageDetails.insurance}
+                <p className="text-gray-500 font-normal text-sm leading-5">Insurance</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {packageDetailsToRender.insurance}
                 </p>
               </div>
             </div>
@@ -747,7 +974,6 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
       </div>
 
       <div className="border-t border-gray-200 pt-6">
-        {/* Shipping Details with reorganized layout */}
         <div className="flex items-start mb-4">
           <div className="mr-2 mt-1">
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -756,77 +982,76 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             </svg>
           </div>
           <div className="w-full">
-            <h2 className="font-Open font-semibold text-base leading-5 tracking-normal capitalize mb-4">Shipping Details</h2>
-            
-            {/* First row: Courier, Payment Mode, Base Price, Grand Total */}
-            <div className="grid grid-cols-4 gap-4 mb-6">
+            <h2 className="font-semibold text-base leading-5 capitalize mb-4">Shipping Details</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Courier</p>
+                <p className="text-gray-500 font-normal text-sm leading-5">Courier</p>
                 <div>
-                  <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                    {shippingDetails.courier}
+                  <p className="text-gray-800 font-semibold text-base leading-6">
+                    {shippingDetailsToRender.courier}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {shippingDetails.courierType !== "N/A" ? shippingDetails.courierType : ""}
+                    {shippingDetailsToRender.courierType !== "N/A" ? shippingDetailsToRender.courierType : ""}
                   </p>
                   <p className="text-sm text-gray-600">
-                    {shippingDetails.zone !== "N/A" ? shippingDetails.zone : ""}
+                    {shippingDetailsToRender.zone !== "N/A" ? shippingDetailsToRender.zone : ""}
                   </p>
                 </div>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Payment Mode</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {shippingDetails.paymentMode}
+                <p className="text-gray-500 font-normal text-sm leading-5">Payment Mode</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {shippingDetailsToRender.paymentMode}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Base Price</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {shippingDetails.basePrice}
+                <p className="text-gray-500 font-normal text-sm leading-5">Base Price</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {shippingDetailsToRender.basePrice}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Grand Total</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {shippingDetails.grandTotal}
+                <p className="text-gray-500 font-normal text-sm leading-5">Grand Total</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {shippingDetailsToRender.grandTotal}
                 </p>
               </div>
             </div>
             
-            {/* Second row: Variable Charges, COD Handling Fees, YaariCash, Shipping Cost */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Variable Charges</p>
+                <p className="text-gray-500 font-normal text-sm leading-5">Variable Charges</p>
                 <div className="flex items-center">
-                  <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                    {shippingDetails.variableCharges}
+                  <p className="text-gray-800 font-semibold text-base leading-6">
+                    {shippingDetailsToRender.variableCharges}
                   </p>
-                  <svg className="w-4 h-4 text-gray-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  {shippingDetailsToRender.variableCharges !== "N/A" && (
+                     <svg className="w-4 h-4 text-gray-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                     </svg>
+                  )}
                 </div>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">COD Handling Fees</p>
-                <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                  {shippingDetails.codHandlingFees}
+                <p className="text-gray-500 font-normal text-sm leading-5">COD Handling Fees</p>
+                <p className="text-gray-800 font-semibold text-base leading-6">
+                  {shippingDetailsToRender.codHandlingFees}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">YaariCash</p>
-                <p className={`font-bold ${shippingDetails.yaariCash !== "N/A" ? "text-green-500" : "text-gray-800"}`}>
-                  {shippingDetails.yaariCash}
+                <p className="text-gray-500 font-normal text-sm leading-5">YaariCash</p>
+                <p className={`font-semibold text-base leading-6 ${shippingDetailsToRender.yaariCash !== "N/A" && parseFloat(shippingDetailsToRender.yaariCash.replace("₹ ", "").replace(/,/g, '')) > 0 ? "text-green-500" : "text-gray-800"}`}>
+                  {shippingDetailsToRender.yaariCash}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500 font-Open font-normal text-sm leading-5 tracking-normal">Shipping Cost</p>
+                <p className="text-gray-500 font-normal text-sm leading-5">Shipping Cost</p>
                 <div>
-                  <p className="text-gray-800 font-Open font-semibold text-base leading-[22px] tracking-normal">
-                    {shippingDetails.shippingCost}
+                  <p className="text-gray-800 font-semibold text-base leading-6">
+                    {shippingDetailsToRender.shippingCost}
                   </p>
-                  {shippingDetails.gstPercentage > 0 && (
-                    <p className="text-xs text-gray-500">(inc {shippingDetails.gstPercentage}% GST)</p>
+                  {shippingDetailsToRender.gstPercentage > 0 && (
+                    <p className="text-xs text-gray-500">(inc {shippingDetailsToRender.gstPercentage}% GST)</p>
                   )}
                 </div>
               </div>

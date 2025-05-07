@@ -1108,6 +1108,22 @@ const OrderForm: React.FC<OrderFormProps> = ({
     productId: number,
     suggestion: ProductSuggestion
   ): void => {
+    // Clear all validation errors for this product
+  if (clearFieldError && currentBox) {
+    // Clear product name error
+     // Only clear errors for fields that have values in the suggestion
+     if (suggestion.name) clearFieldError(currentBox.id, `product-${productId}-name`);
+     if (suggestion.qty) clearFieldError(currentBox.id, `product-${productId}-quantity`);
+     if (suggestion.unitPrice) clearFieldError(currentBox.id, `product-${productId}-unitPrice`);
+     if (suggestion.deadWeight) clearFieldError(currentBox.id, `product-${productId}-unitWeight`);
+     if (suggestion.length) clearFieldError(currentBox.id, `product-${productId}-length`);
+     if (suggestion.breadth) clearFieldError(currentBox.id, `product-${productId}-breadth`);
+     if (suggestion.height) clearFieldError(currentBox.id, `product-${productId}-height`);
+     if (suggestion.unitTax) clearFieldError(currentBox.id, `product-${productId}-tax`);
+     // Discount is usually not in suggestions, so don't clear that error
+     if (suggestion.hsnCode) clearFieldError(currentBox.id, `product-${productId}-hsn`);
+     if (suggestion.sku) clearFieldError(currentBox.id, `product-${productId}-sku`);
+  }
     setBoxes((prevBoxes) => {
       if (allBoxesIdentical) {
         // Apply to all boxes in identical mode
@@ -1282,6 +1298,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
   // Select a box suggestion
   const selectBoxSuggestion = (suggestion: BoxSuggestion): void => {
+     // Clear box dimension validation errors
+  if (clearFieldError && currentBox) {
+    if (suggestion.name) clearFieldError(currentBox.id, `box-name`);
+    if (suggestion.length) clearFieldError(currentBox.id, `box-length`);
+    if (suggestion.breadth) clearFieldError(currentBox.id, `box-breadth`);
+    if (suggestion.height) clearFieldError(currentBox.id, `box-height`);
+    if (suggestion.deadWeight) clearFieldError(currentBox.id, `box-weight`);
+  }
     setBoxes((prevBoxes) => {
       if (allBoxesIdentical) {
         // Apply to all boxes in identical mode
@@ -2318,6 +2342,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             placeholder="Qty"
                             value={product.quantity.toString()}
                             type="number"
+                            showNumberControls={true} // Add this prop only for quantity fields
+
                             onChangeCallback={(value) => {
                               if (
                                 validationErrors[currentBox.id]?.[
@@ -2518,7 +2544,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                       </div>
 
                       {/* Second row: Total Price and Total Wt aligned right */}
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-2 mt-6">
                         <div className="w-32">
                           <FloatingLabelInput
                             placeholder="Total Price"

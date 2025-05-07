@@ -253,6 +253,20 @@
 //     delivery: false,
 //   });
 
+//   // Add new validation errors state
+//   const [phoneValidationErrors, setPhoneValidationErrors] = useState({
+//     pickup: false,
+//     delivery: false
+//   });
+
+//   // Function to validate phone number - 10 digits starting with 6, 7, 8, or 9
+//   const isValidPhoneNumber = (phone: string): boolean => {
+//     // Remove any non-digit characters (like spaces, dashes, etc.)
+//     const cleanPhone = phone.replace(/\D/g, '');
+//     const phoneRegex = /^[6-9]\d{9}$/;
+//     return phoneRegex.test(cleanPhone);
+//   };
+
 //   // Fetch default pickup address on component mount
 //   useEffect(() => {
 //     fetchDefaultPickupAddress();
@@ -582,6 +596,25 @@
 //         ...prev,
 //         pickup: !!address.pickupAddressId
 //       }));
+//       // Validate phone number if available
+//       if (formValues.contactNo) {
+//         setPhoneValidationErrors(prev => ({
+//           ...prev,
+//           pickup: !isValidPhoneNumber(formValues.contactNo)
+//         }));
+//       }
+//       // Clear all validation errors for pickup fields
+//     clearFieldError("pickup", "contactNo");
+//     clearFieldError("pickup", "address");
+//     clearFieldError("pickup", "name");
+//     clearFieldError("pickup", "pincode");
+//     clearFieldError("pickup", "city");
+//     clearFieldError("pickup", "state");
+//     clearFieldError("pickup", "addressLine1");
+//     clearFieldError("pickup", "addressLine2");
+//     clearFieldError("pickup", "landmark");
+//     clearFieldError("pickup", "gstNo");
+//     clearFieldError("pickup", "email");
 //       closePickupModal();
 //     } else if (currentModalType === "delivery") {
 //       // Update delivery form values
@@ -593,6 +626,28 @@
 //         ...prev,
 //         delivery: !!address.deliveryAddressId
 //       }));
+//       // Validate phone number if available
+//       if (formValues.contactNo) {
+//         setPhoneValidationErrors(prev => ({
+//           ...prev,
+//           delivery: !isValidPhoneNumber(formValues.contactNo)
+//         }));
+//       }
+
+//         // Clear all validation errors for delivery fields
+//     clearFieldError("delivery", "contactNo");
+//     clearFieldError("delivery", "address");
+//     clearFieldError("delivery", "name");
+//     clearFieldError("delivery", "pincode");
+//     clearFieldError("delivery", "city");
+//     clearFieldError("delivery", "state");
+//     clearFieldError("delivery", "addressLine1");
+//     clearFieldError("delivery", "addressLine2");
+//     clearFieldError("delivery", "landmark");
+//     clearFieldError("delivery", "gstNo");
+//     clearFieldError("delivery", "email");
+
+
 //       closeDeliveryModal();
 //     }
 //   };
@@ -603,6 +658,16 @@
 //       [field]: value,
 //     }));
 //     clearFieldError("pickup", field);
+
+//     // Special handling for contact number validation
+//     if (field === "contactNo") {
+//       // Validate phone number
+//       const isValid = value.length === 0 || isValidPhoneNumber(value);
+//       setPhoneValidationErrors(prev => ({
+//         ...prev,
+//         pickup: !isValid
+//       }));
+//     }
 
 //     // If we're changing any field, address may not be saved anymore
 //     if (savedAddresses.pickup) {
@@ -632,6 +697,16 @@
 //       [field]: value,
 //     }));
 //     clearFieldError("delivery", field);
+
+//     // Special handling for contact number validation
+//     if (field === "contactNo") {
+//       // Validate phone number
+//       const isValid = value.length === 0 || isValidPhoneNumber(value);
+//       setPhoneValidationErrors(prev => ({
+//         ...prev,
+//         delivery: !isValid
+//       }));
+//     }
 
 //     // If we're changing any field, address may not be saved anymore
 //     if (savedAddresses.delivery) {
@@ -1037,6 +1112,13 @@
 //         ...prev,
 //         pickup: !!address.pickupAddressId
 //       }));
+//       // Validate phone number
+//       if (formValues.contactNo) {
+//         setPhoneValidationErrors(prev => ({
+//           ...prev,
+//           pickup: !isValidPhoneNumber(formValues.contactNo)
+//         }));
+//       }
 //     } else {
 //       // Update delivery form values
 //       setDeliveryFormValues(formValues);
@@ -1049,6 +1131,13 @@
 //         ...prev,
 //         delivery: !!address.deliveryAddressId
 //       }));
+//       // Validate phone number
+//       if (formValues.contactNo) {
+//         setPhoneValidationErrors(prev => ({
+//           ...prev,
+//           delivery: !isValidPhoneNumber(formValues.contactNo)
+//         }));
+//       }
 //     }
 //   };
 
@@ -1173,6 +1262,12 @@
 //       return;
 //     }
 
+//     // Validate phone number
+//     if (!isValidPhoneNumber(pickupFormValues.contactNo)) {
+//       toast.error("Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9");
+//       return;
+//     }
+
 //     setIsSavingAddress({ ...isSavingAddress, pickup: true });
 
 //     try {
@@ -1250,6 +1345,12 @@
 //       !deliveryFormValues.addressLine1.trim()
 //     ) {
 //       toast.error("Please fill in all required fields");
+//       return;
+//     }
+
+//     // Validate phone number
+//     if (!isValidPhoneNumber(deliveryFormValues.contactNo)) {
+//       toast.error("Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9");
 //       return;
 //     }
 
@@ -1382,8 +1483,8 @@
 //                 }
 //                 onFocus={() => handleInputFocus("pickup", "contactNo")}
 //                 onBlur={handleInputBlur}
-//                 error={formErrors.pickup.contactNo}
-//                 errorMessage="Contact number is required"
+//                 error={formErrors.pickup.contactNo || phoneValidationErrors.pickup}
+//                 errorMessage={phoneValidationErrors.pickup ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
 //               />
 //               {renderFloatingSearchResults(
 //                 "pickup",
@@ -1639,8 +1740,8 @@
 //                 }
 //                 onFocus={() => handleInputFocus("delivery", "contactNo")}
 //                 onBlur={handleInputBlur}
-//                 error={formErrors.delivery.contactNo}
-//                 errorMessage="Contact number is required"
+//                 error={formErrors.delivery.contactNo || phoneValidationErrors.delivery}
+//                 errorMessage={phoneValidationErrors.delivery ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
 //               />
 //               {renderFloatingSearchResults(
 //                 "delivery",
@@ -1948,6 +2049,7 @@
 // };
 
 // export default AddressForm;
+
 import { useState, ReactNode, useEffect, useRef } from "react";
 import FloatingLabelInput from "./FloatingLabelInput"; 
 import OneButton from "../../components/Button/OneButton";
@@ -1965,7 +2067,8 @@ import {
   DELIVERY_ADDRESS_SEARCHBY,
   ADD_PICKUP_ADDRESS_CATALOGUE,
   ADD_DELIVERY_ADDRESS,
-  VERIFY_ADDRESS
+  VERIFY_ADDRESS,
+  GET_PINCODE_DATA
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast"; // Assuming this is available since it's used in OrderForm
@@ -2116,7 +2219,7 @@ interface AddressFormProps {
       addressLine2: boolean;
       landmark: boolean;
       gstNo: boolean;
-      email: boolean;
+      // email: boolean;
     };
     delivery: {
       contactNo: boolean; 
@@ -2129,7 +2232,7 @@ interface AddressFormProps {
       addressLine2: boolean;
       landmark: boolean;
       gstNo: boolean;
-      email: boolean;
+      // email: boolean;
     };
   };
   orderType: string; // B2C or B2B
@@ -2204,6 +2307,12 @@ const AddressForm: React.FC<AddressFormProps> = ({
 
   // Add new validation errors state
   const [phoneValidationErrors, setPhoneValidationErrors] = useState({
+    pickup: false,
+    delivery: false
+  });
+
+  // Add new state for pincode loading
+  const [isPincodeLoading, setIsPincodeLoading] = useState({
     pickup: false,
     delivery: false
   });
@@ -2351,6 +2460,73 @@ const handleDeliveryMagicFill = async () => {
     setIsMagicFilling(prev => ({ ...prev, delivery: false }));
   }
 };
+
+  // Function to fetch pincode data from API
+  const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
+    if (!pincode || pincode.length < 6) return;
+    
+    // Set loading state for the pincode
+    if (addressType === "pickup") {
+      setIsPincodeLoading({ ...isPincodeLoading, pickup: true });
+    } else {
+      setIsPincodeLoading({ ...isPincodeLoading, delivery: true });
+    }
+    
+    try {
+      const payload = {
+        pincode: pincode
+      };
+      
+      const response = await POST(GET_PINCODE_DATA, payload);
+      
+      if (response?.data?.success && response.data.data.length > 0) {
+        const pincodeData = response.data.data[0];
+        
+        // Update form values based on response
+        if (addressType === "pickup") {
+          setPickupFormValues(prev => ({
+            ...prev,
+            city: pincodeData.city || prev.city,
+            state: pincodeData.state || prev.state,
+          }));
+          
+          // Clear any errors in the updated fields
+          clearFieldError("pickup", "city");
+          clearFieldError("pickup", "state");
+          
+          // Ensure pickup details are shown after auto-filling
+          if (!showPickupDetails) {
+            setShowPickupDetails(true);
+          }
+        } else {
+          setDeliveryFormValues(prev => ({
+            ...prev,
+            city: pincodeData.city || prev.city,
+            state: pincodeData.state || prev.state,
+          }));
+          
+          // Clear any errors in the updated fields
+          clearFieldError("delivery", "city");
+          clearFieldError("delivery", "state");
+          
+          // Ensure delivery details are shown after auto-filling
+          if (!showDeliveryDetails) {
+            setShowDeliveryDetails(true);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching pincode data for ${addressType}:`, error);
+    } finally {
+      // Clear loading state
+      if (addressType === "pickup") {
+        setIsPincodeLoading({ ...isPincodeLoading, pickup: false });
+      } else {
+        setIsPincodeLoading({ ...isPincodeLoading, delivery: false });
+      }
+    }
+  };
+
   // Fetch default pickup address
   const fetchDefaultPickupAddress = async () => {
     setIsLoading((prev) => ({ ...prev, pickup: true }));
@@ -2552,6 +2728,18 @@ const handleDeliveryMagicFill = async () => {
           pickup: !isValidPhoneNumber(formValues.contactNo)
         }));
       }
+      // Clear all validation errors for pickup fields
+    clearFieldError("pickup", "contactNo");
+    clearFieldError("pickup", "address");
+    clearFieldError("pickup", "name");
+    clearFieldError("pickup", "pincode");
+    clearFieldError("pickup", "city");
+    clearFieldError("pickup", "state");
+    clearFieldError("pickup", "addressLine1");
+    clearFieldError("pickup", "addressLine2");
+    clearFieldError("pickup", "landmark");
+    clearFieldError("pickup", "gstNo");
+    // clearFieldError("pickup", "email");
       closePickupModal();
     } else if (currentModalType === "delivery") {
       // Update delivery form values
@@ -2570,6 +2758,20 @@ const handleDeliveryMagicFill = async () => {
           delivery: !isValidPhoneNumber(formValues.contactNo)
         }));
       }
+
+      // Clear all validation errors for delivery fields
+    clearFieldError("delivery", "contactNo");
+    clearFieldError("delivery", "address");
+    clearFieldError("delivery", "name");
+    clearFieldError("delivery", "pincode");
+    clearFieldError("delivery", "city");
+    clearFieldError("delivery", "state");
+    clearFieldError("delivery", "addressLine1");
+    clearFieldError("delivery", "addressLine2");
+    clearFieldError("delivery", "landmark");
+    clearFieldError("delivery", "gstNo");
+    // clearFieldError("delivery", "email");
+
       closeDeliveryModal();
     }
   };
@@ -2591,19 +2793,24 @@ const handleDeliveryMagicFill = async () => {
       }));
     }
 
+    // Special handling for pincode - fetch city and state data
+    if (field === "pincode" && value.length === 6) {
+      fetchPincodeData(value, "pickup");
+    }
+
     // If we're changing any field, address may not be saved anymore
     if (savedAddresses.pickup) {
       setSavedAddresses(prev => ({ ...prev, pickup: false }));
     }
 
-    // If the field is one of our searchable fields and has 3 or more characters, trigger search
-    if (["contactNo", "name", "pincode"].includes(field) && value.length >= 3) {
+    // If the field is contactNo or name and has 3 or more characters, trigger search
+    if (["contactNo", "name"].includes(field) && value.length >= 3) {
       searchAddressByField(
         "pickup",
         field as "contactNo" | "name" | "pincode",
         value
       );
-    } else if (["contactNo", "name", "pincode"].includes(field)) {
+    } else if (["contactNo", "name"].includes(field)) {
       // Clear search results if less than 3 characters
       setPickupSearchResults([]);
       setShowPickupSearchResults(false);
@@ -2630,19 +2837,24 @@ const handleDeliveryMagicFill = async () => {
       }));
     }
 
+    // Special handling for pincode - fetch city and state data
+    if (field === "pincode" && value.length === 6) {
+      fetchPincodeData(value, "delivery");
+    }
+
     // If we're changing any field, address may not be saved anymore
     if (savedAddresses.delivery) {
       setSavedAddresses(prev => ({ ...prev, delivery: false }));
     }
 
-    // If the field is one of our searchable fields and has 3 or more characters, trigger search
-    if (["contactNo", "name", "pincode"].includes(field) && value.length >= 3) {
+    // If the field is contactNo or name and has 3 or more characters, trigger search
+    if (["contactNo", "name"].includes(field) && value.length >= 3) {
       searchAddressByField(
         "delivery",
         field as "contactNo" | "name" | "pincode",
         value
       );
-    } else if (["contactNo", "name", "pincode"].includes(field)) {
+    } else if (["contactNo", "name"].includes(field)) {
       // Clear search results if less than 3 characters
       setDeliverySearchResults([]);
       setShowDeliverySearchResults(false);
@@ -2992,7 +3204,7 @@ const handleDeliveryMagicFill = async () => {
     setActiveSearchField({ type, field });
 
     // Only show search results if the active field has some content and is one we search on
-    if (["contactNo", "name", "pincode"].includes(field)) {
+    if (["contactNo", "name"].includes(field)) {
       const value =
         type === "pickup" ? pickupFormValues[field] : deliveryFormValues[field];
 
@@ -3140,21 +3352,6 @@ const handleDeliveryMagicFill = async () => {
                     </span>
                     <span className="text-sm text-gray-600 truncate">
                       {formatAddress(address)}
-                    </span>
-                  </div>
-                )}
-
-                {field === "pincode" && (
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      {address.pincode || address.pincodeStr}
-                    </span>
-                    <span className="text-sm text-gray-600">
-                      {address.city}
-                      {address.state ? `, ${address.state}` : ""}
-                    </span>
-                    <span className="text-sm text-gray-600">
-                      {getName(address)} | {getContactNo(address)}
                     </span>
                   </div>
                 )}
@@ -3469,26 +3666,17 @@ const handleDeliveryMagicFill = async () => {
                 <FloatingLabelInput
                   placeholder="Pin code"
                   icon={
-                    searchInputLoading.pickup.pincode ? (
+                    isPincodeLoading.pickup ? (
                       <LoadingIcon />
-                    ) : (
-                      <SearchIcon />
-                    )
+                    ) : null
                   }
                   value={pickupFormValues.pincode}
                   onChangeCallback={(value) =>
                     handlePickupInputChange("pincode", value)
                   }
-                  onFocus={() => handleInputFocus("pickup", "pincode")}
-                  onBlur={handleInputBlur}
-                   error={formErrors.pickup.pincode}
-                   errorMessage="Pin code is required"
+                  error={formErrors.pickup.pincode}
+                  errorMessage="Pin code is required"
                 />
-                {renderFloatingSearchResults(
-                  "pickup",
-                  "pincode",
-                  pickupSearchResults
-                )}
               </div>
             </div>
 
@@ -3587,8 +3775,8 @@ const handleDeliveryMagicFill = async () => {
                     onChangeCallback={(value) =>
                       handlePickupInputChange("email", value)
                     }
-                    error={formErrors.pickup.email}
-                    errorMessage="Email is required"
+                    // error={formErrors.pickup.email}
+                    // errorMessage="Email is required"
                   />
                 </div>
               )}
@@ -3726,26 +3914,17 @@ const handleDeliveryMagicFill = async () => {
                 <FloatingLabelInput
                   placeholder="Pin code"
                   icon={
-                    searchInputLoading.delivery.pincode ? (
+                    isPincodeLoading.delivery ? (
                       <LoadingIcon />
-                    ) : (
-                      <SearchIcon />
-                    )
+                    ) : null
                   }
                   value={deliveryFormValues.pincode}
                   onChangeCallback={(value) =>
                     handleDeliveryInputChange("pincode", value)
                   }
-                  onFocus={() => handleInputFocus("delivery", "pincode")}
-                  onBlur={handleInputBlur}
-                   error={formErrors.delivery.pincode}
-                   errorMessage="Pin code is required"
+                  error={formErrors.delivery.pincode}
+                  errorMessage="Pin code is required"
                 />
-                {renderFloatingSearchResults(
-                  "delivery",
-                  "pincode",
-                  deliverySearchResults
-                )}
               </div>
             </div>
 
@@ -3844,8 +4023,8 @@ const handleDeliveryMagicFill = async () => {
                     onChangeCallback={(value) =>
                       handleDeliveryInputChange("email", value)
                     }
-                    error={formErrors.delivery.email}
-                    errorMessage="Email is required"
+                    // error={formErrors.delivery.email}
+                    // errorMessage="Email is required"
                   />
                 </div>
               )}

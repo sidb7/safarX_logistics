@@ -2,8 +2,8 @@
 
 // import React, { useState, useEffect } from 'react';
 // import { toast } from 'react-hot-toast';
-// import { POST } from '../../utils/webService'; // Adjust path as needed
-// import { GET_COURIER_PARTNER_SERVICE, SET_PARTNER_SERVICE_INFO } from '../../utils/ApiUrls'; // Added SET_PARTNER_SERVICE_INFO
+// import { POST } from '../../utils/webService';
+// import { GET_COURIER_PARTNER_SERVICE, SET_PARTNER_SERVICE_INFO } from '../../utils/ApiUrls';
 
 // // Interface for service item from API
 // interface ShippingService {
@@ -30,6 +30,7 @@
 //     partnerServiceName: string;
 //     companyServiceId: string;
 //     companyServiceName: string;
+//     partnerName: string;
 //   }) => void;
 // }
 
@@ -43,7 +44,7 @@
 //   const [selectedService, setSelectedService] = useState<string | null>(null);
 //   const [services, setServices] = useState<ShippingService[]>([]);
 //   const [isLoading, setIsLoading] = useState(false);
-//   const [isSubmittingService, setIsSubmittingService] = useState(false); // New state for service submission
+//   const [isSubmittingService, setIsSubmittingService] = useState(false);
 //   const [error, setError] = useState<string | null>(null);
   
 //   // Fetch shipping service options from API
@@ -217,26 +218,22 @@
 //   const fastestServiceId = getFastestServiceInFilter()?.partnerServiceId;
 //   const bestValueServiceId = getBestValueServiceInFilter()?.partnerServiceId;
   
-//   // Handle service selection and call SET_PARTNER_SERVICE_INFO API
+//   // Handle service selection and call SET_PARTNER_SERVICE_INFO API with better error handling
 //   const handleServiceSelect = async (serviceId: string) => {
+//     // Don't do anything if we're already submitting or if this service is already selected
+//     if (isSubmittingService || selectedService === serviceId) {
+//       return;
+//     }
+    
 //     setSelectedService(serviceId);
     
 //     const selected = services.find(service => service.partnerServiceId === serviceId);
     
 //     if (selected && tempOrderId && orderSource) {
-//       // First call the onServiceSelect callback to update parent component state
-//       if (onServiceSelect) {
-//         onServiceSelect({
-//           partnerServiceId: selected.partnerServiceId,
-//           partnerServiceName: selected.partnerServiceName,
-//           companyServiceId: selected.companyServiceId,
-//           companyServiceName: selected.companyServiceName
-//         });
-//       }
-      
-//       // Then call the SET_PARTNER_SERVICE_INFO API
 //       setIsSubmittingService(true);
+      
 //       try {
+//         // Prepare payload for API
 //         const servicePayload = {
 //           partnerServiceId: selected.partnerServiceId,
 //           partnerServiceName: selected.partnerServiceName,
@@ -246,11 +243,25 @@
 //           source: orderSource,
 //         };
 
+//         console.log('Selecting service:', selected.partnerServiceName);
+        
 //         // Call the API to set partner service info
 //         const response = await POST(SET_PARTNER_SERVICE_INFO, servicePayload);
 
 //         if (response?.data?.success) {
+//           // Only call onServiceSelect after successful API call
 //           toast.success("Shipping service selected successfully!");
+          
+//           // Call the callback with the complete service data including partnerName
+//           if (onServiceSelect) {
+//             onServiceSelect({
+//               partnerServiceId: selected.partnerServiceId,
+//               partnerServiceName: selected.partnerServiceName,
+//               companyServiceId: selected.companyServiceId,
+//               companyServiceName: selected.companyServiceName,
+//               partnerName: selected.partnerName, // Include the partner name
+//             });
+//           }
 //         } else {
 //           toast.error(response?.data?.message || "Failed to select shipping service");
 //           // Reset selection if API call fails
@@ -263,6 +274,17 @@
 //         setSelectedService(null);
 //       } finally {
 //         setIsSubmittingService(false);
+//       }
+//     } else if (selected) {
+//       // For demo/development without API calls
+//       if (onServiceSelect) {
+//         onServiceSelect({
+//           partnerServiceId: selected.partnerServiceId,
+//           partnerServiceName: selected.partnerServiceName,
+//           companyServiceId: selected.companyServiceId,
+//           companyServiceName: selected.companyServiceName,
+//           partnerName: selected.partnerName,
+//         });
 //       }
 //     }
 //   };
@@ -451,6 +473,7 @@
 // };
 
 // export default ShippingServiceSelector;
+
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
@@ -858,7 +881,18 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
                   selectedService === service.partnerServiceId
                     ? 'border-blue-500 border-2' 
                     : 'border-gray-200 hover:border-gray-300'
-                }`}
+                } cursor-pointer`}
+                onClick={() => !isSubmittingService && handleServiceSelect(service.partnerServiceId)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    !isSubmittingService && handleServiceSelect(service.partnerServiceId);
+                  }
+                }}
+                aria-checked={selectedService === service.partnerServiceId}
+                aria-label={`Select ${service.partnerName} ${service.partnerServiceName}`}
               >
                 <div className="flex items-center">
                   <input
@@ -867,8 +901,9 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
                     name="shipping-service"
                     className="h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500"
                     checked={selectedService === service.partnerServiceId}
-                    onChange={() => handleServiceSelect(service.partnerServiceId)}
+                    onChange={() => {}} // onChange is required for controlled components, but we handle it in the parent div
                     disabled={isSubmittingService}
+                    onClick={(e) => e.stopPropagation()} // Prevent triggering the parent div's onClick when clicking directly on the radio
                   />
                   
                   <div className="ml-4">

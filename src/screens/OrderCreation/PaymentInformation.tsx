@@ -30,8 +30,9 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
               onChange={(e) => setPaymentMethod(e.target.value)}
               className="w-full pl-4 pr-10 py-4 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-Open text-sm"
             >
-              <option value="Cash on Delivery">Cash on Delivery</option>
               <option value="Prepaid">Prepaid</option>
+              <option value="Cash on Delivery">Cash on Delivery</option>
+              
             </select>
             <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,10 +70,11 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 checked={insuranceOption === "withInsurance"}
                 onChange={() => setInsuranceOption("withInsurance")}
                 className="h-5 w-5 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
+                disabled={true} // Disable this option for now
               />
             </div>
             <div className="text-sm">
-              <p className="font-medium text-gray-900">Protect with Insurance (Additional Charges Apply)</p>
+              <p className="font-medium text-gray-900">Protect with Insurance (coming soon)</p>
               <p className="text-gray-500">Covers loss, theft, and damage during transit. Charges are subject to applicable terms.</p>
             </div>
           </span>
