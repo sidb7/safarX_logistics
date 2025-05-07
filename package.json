@@ -37,7 +37,7 @@
     "paytm-blink-checkout-react": "^0.0.4",
     "react": "18.2.0",
     "react-apexcharts": "^1.4.1",
-"react-chrono": "^2.4.2",
+    "react-chrono": "^2.2.4",
     "react-collapsible": "^2.10.0",
     "react-datepicker": "^4.14.1",
     "react-dnd": "^16.0.1",
