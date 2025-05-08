@@ -1,3 +1,5 @@
+
+
 // import { useState, useEffect, useRef } from "react";
 // import FloatingLabelInput from "./FloatingLabelInput";
 // import { ChevronUp, ChevronDown, Trash, Bookmark, Package } from "./Icons";
@@ -58,9 +60,11 @@
 //       [fieldId: string]: boolean;
 //     };
 //   };
+//   clearFieldError?: (boxId: number, fieldId: string) => void;
+
 // }
 
-// const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {}  }) => {
+// const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {},clearFieldError = () => {}  }) => {
 //   const [boxCount, setBoxCount] = useState<number>(1);
 //   const [boxes, setBoxes] = useState<Box[]>([
 //     {
@@ -776,10 +780,15 @@
 //                             <FloatingLabelInput
 //                               placeholder="Package Name"
 //                               value={pkg.name.toString()}
-//                               onChangeCallback={(value) =>
+//                               onChangeCallback={(value) =>{
+//                                 if (validationErrors[box.id]?.[`package-${pkg.id}-name`]) {
+//                                   clearFieldError(box.id, `package-${pkg.id}-name`);
+//                                 }
 //                                 handlePackageNameSearch(box.id, pkg.id, value)
-//                               }
+//                               }}
 //                               icon={<img src={searchIcon} alt="Search" />}
+//                               error={validationErrors[box.id]?.[`package-${pkg.id}-name`] || false}
+//                               errorMessage="Required"
 //                             />
 
 //                             {/* Package Name Search Results Dropdown */}
@@ -826,14 +835,19 @@
 //                               placeholder="Qty"
 //                               value={pkg.quantity.toString()}
 //                               type="number"
-//                               onChangeCallback={(value) =>
+//                               onChangeCallback={(value) =>{
+//                                 if (validationErrors[box.id]?.[`package-${pkg.id}-quantity`]) {
+//                                   clearFieldError(box.id, `package-${pkg.id}-quantity`);
+//                                 }
 //                                 updatePackageField(
 //                                   box.id,
 //                                   pkg.id,
 //                                   "quantity",
 //                                   value
 //                                 )
-//                               }
+//                               }}
+//                               error={validationErrors[box.id]?.[`package-${pkg.id}-quantity`] || false}
+//                               errorMessage="Required"
 //                             />
 //                           </div>
 
@@ -843,14 +857,19 @@
 //                               placeholder="Unit Price"
 //                               value={pkg.unitPrice.toString()}
 //                               type="number"
-//                               onChangeCallback={(value) =>
+//                               onChangeCallback={(value) =>{
+//                                 if (validationErrors[box.id]?.[`package-${pkg.id}-unitPrice`]) {
+//                                   clearFieldError(box.id, `package-${pkg.id}-unitPrice`);
+//                                 }
 //                                 updatePackageField(
 //                                   box.id,
 //                                   pkg.id,
 //                                   "unitPrice",
 //                                   value
 //                                 )
-//                               }
+//                               }}
+//                               error={validationErrors[box.id]?.[`package-${pkg.id}-unitPrice`] || false}
+//                               errorMessage="Required"
 //                             />
 //                           </div>
 
@@ -860,14 +879,19 @@
 //                               placeholder="Unit Wt (kg)"
 //                               value={pkg.unitWeight.toString()}
 //                               type="number"
-//                               onChangeCallback={(value) =>
+//                               onChangeCallback={(value) =>{
+//                                 if (validationErrors[box.id]?.[`package-${pkg.id}-unitWeight`]) {
+//                                   clearFieldError(box.id, `package-${pkg.id}-unitWeight`);
+//                                 }
 //                                 updatePackageField(
 //                                   box.id,
 //                                   pkg.id,
 //                                   "unitWeight",
 //                                   value
 //                                 )
-//                               }
+//                               }}
+//                               error={validationErrors[box.id]?.[`package-${pkg.id}-unitWeight`] || false}
+//                               errorMessage="Required"
 //                             />
 //                           </div>
 //                         </div>
@@ -1073,14 +1097,19 @@
 //                             placeholder="L"
 //                             value={pkg.length.toString()}
 //                             type="number"
-//                             onChangeCallback={(value) =>
+//                             onChangeCallback={(value) =>{
+//                               if (validationErrors[box.id]?.[`package-${pkg.id}-length`]) {
+//                                 clearFieldError(box.id, `package-${pkg.id}-length`);
+//                               }
 //                               updatePackageField(
 //                                 box.id,
 //                                 pkg.id,
 //                                 "length",
 //                                 value
 //                               )
-//                             }
+//                             }}
+//                             error={validationErrors[box.id]?.[`package-${pkg.id}-length`] || false}
+//                             errorMessage="Required"
 //                           />
 //                         </div>
 //                         <div className="w-[5%]">
@@ -1088,14 +1117,19 @@
 //                             placeholder="B"
 //                             value={pkg.breadth.toString()}
 //                             type="number"
-//                             onChangeCallback={(value) =>
+//                             onChangeCallback={(value) =>{
+//                               if (validationErrors[box.id]?.[`package-${pkg.id}-breadth`]) {
+//                                 clearFieldError(box.id, `package-${pkg.id}-breadth`);
+//                               }
 //                               updatePackageField(
 //                                 box.id,
 //                                 pkg.id,
 //                                 "breadth",
 //                                 value
 //                               )
-//                             }
+//                             }}
+//                             error={validationErrors[box.id]?.[`package-${pkg.id}-breadth`] || false}
+//                             errorMessage="Required"
 //                           />
 //                         </div>
 //                         <div className="w-[5%]">
@@ -1103,14 +1137,19 @@
 //                             placeholder="H"
 //                             value={pkg.height.toString()}
 //                             type="number"
-//                             onChangeCallback={(value) =>
+//                             onChangeCallback={(value) =>{
+//                               if (validationErrors[box.id]?.[`package-${pkg.id}-height`]) {
+//                                 clearFieldError(box.id, `package-${pkg.id}-height`);
+//                               }
 //                               updatePackageField(
 //                                 box.id,
 //                                 pkg.id,
 //                                 "height",
 //                                 value
 //                               )
-//                             }
+//                             }}
+//                             error={validationErrors[box.id]?.[`package-${pkg.id}-height`] || false}
+//                             errorMessage="Required"
 //                           />
 //                         </div>
 //                       </div>
@@ -1213,6 +1252,7 @@
 // export default OrderFormB2B;
 
 
+
 import { useState, useEffect, useRef } from "react";
 import FloatingLabelInput from "./FloatingLabelInput";
 import { ChevronUp, ChevronDown, Trash, Bookmark, Package } from "./Icons";
@@ -1223,6 +1263,39 @@ import OneButton from "../../components/Button/OneButton";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 import searchIcon from "../../assets/Search.svg";
+
+
+// Add these constants at the top of your OrderFormB2B file, after imports
+const STORAGE_KEYS = {
+  B2B_BOXES: 'order-form-b2b-boxes',
+  B2B_BOX_COUNT: 'order-form-b2b-box-count',
+  B2B_CATALOG_PRODUCTS: 'order-form-b2b-catalog-products',
+  B2B_PACKAGE_NAME_SEARCH: 'order-form-b2b-package-name-search',
+  B2B_PACKAGE_SEARCH_RESULTS: 'order-form-b2b-package-search-results',
+  B2B_FILTERED_PACKAGE_RESULTS: 'order-form-b2b-filtered-package-results',
+  B2B_SAVED_STATES: 'order-form-b2b-saved-states',
+};
+
+// Add this function before the component definition
+const loadInitialState = () => {
+  const savedBoxes = localStorage.getItem(STORAGE_KEYS.B2B_BOXES);
+  const savedBoxCount = localStorage.getItem(STORAGE_KEYS.B2B_BOX_COUNT);
+  const savedCatalogProducts = localStorage.getItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS);
+  const savedPackageNameSearch = localStorage.getItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH);
+  const savedShowPackageSearchResults = localStorage.getItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS);
+  const savedFilteredPackageResults = localStorage.getItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS);
+  const savedStates = localStorage.getItem(STORAGE_KEYS.B2B_SAVED_STATES);
+
+  return {
+    boxes: savedBoxes ? JSON.parse(savedBoxes) : null,
+    boxCount: savedBoxCount ? parseInt(savedBoxCount) : 1,
+    catalogProducts: savedCatalogProducts ? JSON.parse(savedCatalogProducts) : [],
+    packageNameSearch: savedPackageNameSearch ? JSON.parse(savedPackageNameSearch) : {},
+    showPackageSearchResults: savedShowPackageSearchResults ? JSON.parse(savedShowPackageSearchResults) : {},
+    filteredPackageResults: savedFilteredPackageResults ? JSON.parse(savedFilteredPackageResults) : {},
+    savedStates: savedStates ? JSON.parse(savedStates) : {}
+  };
+};
 
 // Define types
 interface BoxPackage {
@@ -1278,9 +1351,42 @@ interface OrderFormB2BProps {
 }
 
 const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {},clearFieldError = () => {}  }) => {
-  const [boxCount, setBoxCount] = useState<number>(1);
-  const [boxes, setBoxes] = useState<Box[]>([
-    {
+  const initialState = loadInitialState();
+
+  // const [boxCount, setBoxCount] = useState<number>(1);
+  const [boxCount, setBoxCount] = useState<number>(() => {
+    return initialState.boxCount || 1;
+  });
+  // const [boxes, setBoxes] = useState<Box[]>([
+  //   {
+  //     id: 1,
+  //     packages: [
+  //       {
+  //         id: 1,
+  //         name: "",
+  //         quantity: "",
+  //         unitPrice: "",
+  //         unitWeight: "",
+  //         totalWeight: "",
+  //         totalPrice: "",
+  //         tax: "0",
+  //         discount: "0",
+  //         hsn: "",
+  //         sku: "",
+  //         length: "",
+  //         breadth: "",
+  //         height: "",
+  //         isExpanded: true,
+  //         isSaved: false,
+  //       },
+  //     ],
+  //     searchQuery: "",
+  //   },
+  // ]);
+
+  const [boxes, setBoxes] = useState<Box[]>(() => {
+    if (initialState.boxes) return initialState.boxes;
+    return [{
       id: 1,
       packages: [
         {
@@ -1303,16 +1409,19 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
         },
       ],
       searchQuery: "",
-    },
-  ]);
+    }];
+  });
 
   // State for package catalog modal
   const [isPackageCatalogModalOpen, setIsPackageCatalogModalOpen] =
     useState<boolean>(false);
   const [currentBoxId, setCurrentBoxId] = useState<number | null>(null);
   const [currentPackageId, setCurrentPackageId] = useState<number | null>(null);
+  // const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
+  //   []
+  // );
   const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
-    []
+    initialState.catalogProducts || []
   );
   const [filteredCatalogProducts, setFilteredCatalogProducts] = useState<
     ProductCatalogItem[]
@@ -1324,15 +1433,24 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   const [loading, setLoading] = useState<boolean>(false);
 
   // State for package name inline search
+  // const [packageNameSearch, setPackageNameSearch] = useState<{
+  //   [packageId: string]: string;
+  // }>({});
   const [packageNameSearch, setPackageNameSearch] = useState<{
     [packageId: string]: string;
-  }>({});
+  }>(initialState.packageNameSearch || {});
+  // const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
+  //   [packageId: string]: boolean;
+  // }>({});
   const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
     [packageId: string]: boolean;
-  }>({});
+  }>(initialState.showPackageSearchResults || {});
+  // const [filteredPackageResults, setFilteredPackageResults] = useState<{
+  //   [packageId: string]: ProductCatalogItem[];
+  // }>({});
   const [filteredPackageResults, setFilteredPackageResults] = useState<{
     [packageId: string]: ProductCatalogItem[];
-  }>({});
+  }>(initialState.filteredPackageResults || {});
 
   // Ref for handling click outside search results
   const packageSearchRefs = useRef<{
@@ -1382,6 +1500,46 @@ useEffect(() => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showPackageSearchResults]);
+
+  // Add these useEffect hooks after your existing state declarations
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEYS.B2B_BOXES, JSON.stringify(boxes));
+}, [boxes]);
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEYS.B2B_BOX_COUNT, boxCount.toString());
+}, [boxCount]);
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
+}, [catalogProducts]);
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
+}, [packageNameSearch]);
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
+}, [showPackageSearchResults]);
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
+}, [filteredPackageResults]);
+
+// Save any other relevant state that needs persistence
+useEffect(() => {
+  const savedStates = {
+    selectedCatalogProducts,
+    currentBoxId,
+    currentPackageId,
+    searchQuery,
+    loading,
+    isPackageCatalogModalOpen
+  };
+  localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
+}, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
+
+
 
   // Handle box count changes
   const decreaseBoxCount = (): void => {
@@ -2463,3 +2621,4 @@ useEffect(() => {
 };
 
 export default OrderFormB2B;
+

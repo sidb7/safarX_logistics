@@ -30,6 +30,45 @@ import OneButton from "../../components/Button/OneButton";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 
+
+
+
+
+
+const STORAGE_KEYS = {
+  BOX_DATA: 'order-form-box-data',
+  BOX_COUNT: 'order-form-box-count',
+  SELECTED_BOX: 'order-form-selected-box',
+  ALL_BOXES_IDENTICAL: 'order-form-all-boxes-identical',
+  PRODUCT_SUGGESTIONS: 'order-form-product-suggestions',
+  BOX_SUGGESTIONS: 'order-form-box-suggestions',
+  SAVED_PRODUCTS: 'order-form-saved-products',
+  SAVED_BOX: 'order-form-saved-box',
+};
+
+// 2. Add initial state loading function
+const loadInitialState = () => {
+  const savedBoxData = localStorage.getItem(STORAGE_KEYS.BOX_DATA);
+  const savedBoxCount = localStorage.getItem(STORAGE_KEYS.BOX_COUNT);
+  const savedSelectedBox = localStorage.getItem(STORAGE_KEYS.SELECTED_BOX);
+  const savedAllBoxesIdentical = localStorage.getItem(STORAGE_KEYS.ALL_BOXES_IDENTICAL);
+  const savedProductSuggestions = localStorage.getItem(STORAGE_KEYS.PRODUCT_SUGGESTIONS);
+  const savedBoxSuggestions = localStorage.getItem(STORAGE_KEYS.BOX_SUGGESTIONS);
+  const savedProducts = localStorage.getItem(STORAGE_KEYS.SAVED_PRODUCTS);
+  const savedBox = localStorage.getItem(STORAGE_KEYS.SAVED_BOX);
+
+  return {
+    boxData: savedBoxData ? JSON.parse(savedBoxData) : null,
+    boxCount: savedBoxCount ? parseInt(savedBoxCount) : 1,
+    selectedBox: savedSelectedBox ? parseInt(savedSelectedBox) : 1,
+    allBoxesIdentical: savedAllBoxesIdentical ? JSON.parse(savedAllBoxesIdentical) : false,
+    productSuggestions: savedProductSuggestions ? JSON.parse(savedProductSuggestions) : null,
+    boxSuggestions: savedBoxSuggestions ? JSON.parse(savedBoxSuggestions) : null,
+    savedProductsState: savedProducts ? JSON.parse(savedProducts) : null,
+    savedBoxState: savedBox ? JSON.parse(savedBox) : false,
+  };
+};
+
 // Define types
 interface BoxInfo {
   l: string | number;
@@ -132,13 +171,27 @@ const OrderForm: React.FC<OrderFormProps> = ({
   validationErrors = {},
   clearFieldError = () => {},
 }) => {
-  const [boxCount, setBoxCount] = useState<number>(1);
-  const [selectedBox, setSelectedBox] = useState<number>(1);
-  const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(false);
-  const [productSuggestions, setProductSuggestions] = useState<
-    ProductSuggestion[]
-  >([]);
-  const [boxSuggestions, setBoxSuggestions] = useState<BoxSuggestion[]>([]);
+  const initialState = loadInitialState();
+
+  // const [boxCount, setBoxCount] = useState<number>(1);
+  const [boxCount, setBoxCount] = useState<number>(initialState.boxCount);
+
+  // const [selectedBox, setSelectedBox] = useState<number>(1);
+  const [selectedBox, setSelectedBox] = useState<number>(initialState.selectedBox);
+
+  // const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(false);
+  const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(initialState.allBoxesIdentical);
+
+  // const [productSuggestions, setProductSuggestions] = useState<
+  //   ProductSuggestion[]
+  // >([]);
+  const [productSuggestions, setProductSuggestions] = useState<ProductSuggestion[]>(
+    initialState.productSuggestions || []
+  );
+  // const [boxSuggestions, setBoxSuggestions] = useState<BoxSuggestion[]>([]);
+  const [boxSuggestions, setBoxSuggestions] = useState<BoxSuggestion[]>(
+    initialState.boxSuggestions || []
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [isProductCatalogModalOpen, setIsProductCatalogModalOpen] =
     useState<boolean>(false);
@@ -170,10 +223,15 @@ const OrderForm: React.FC<OrderFormProps> = ({
   >([]);
   const [boxCatalogLoading, setBoxCatalogLoading] = useState<boolean>(false);
 
+  // const [savedProducts, setSavedProducts] = useState<{
+  //   [productId: number]: boolean;
+  // }>({});
   const [savedProducts, setSavedProducts] = useState<{
     [productId: number]: boolean;
-  }>({});
-  const [savedBox, setSavedBox] = useState<boolean>(false);
+  }>(initialState.savedProductsState || {});
+  // const [savedBox, setSavedBox] = useState<boolean>(false);
+  const [savedBox, setSavedBox] = useState<boolean>(initialState.savedBoxState);
+
 
   // Store visible product suggestions for each product
   const [visibleProductSuggestions, setVisibleProductSuggestions] = useState<{
@@ -186,43 +244,82 @@ const OrderForm: React.FC<OrderFormProps> = ({
   >([]);
 
   // Store boxes and their products in a single state
-  const [boxes, setBoxes] = useState<BoxData[]>([
-    {
-      id: 1,
-      dimensions: {
-        l: "",
-        b: "",
-        h: "",
-        weight: "",
-        name: "",
-        isManuallyEdited: false, // Initialize flag
-      },
-      products: [
-        {
-          id: 1,
+  // const [boxes, setBoxes] = useState<BoxData[]>([
+  //   {
+  //     id: 1,
+  //     dimensions: {
+  //       l: "",
+  //       b: "",
+  //       h: "",
+  //       weight: "",
+  //       name: "",
+  //       isManuallyEdited: false, // Initialize flag
+  //     },
+  //     products: [
+  //       {
+  //         id: 1,
+  //         name: "",
+  //         quantity: "",
+  //         unitPrice: "",
+  //         unitWeight: "",
+  //         totalPrice: "",
+  //         totalWeight: "",
+  //         isExpanded: true, // Default to expanded
+  //         boxInfo: {
+  //           l: "",
+  //           b: "",
+  //           h: "",
+  //           discount: "",
+  //           tax: "",
+  //           hsn: "",
+  //           sku: "",
+  //         },
+  //         selectedSuggestion: null,
+  //         isManuallyEdited: false, // Initialize flag
+  //       },
+  //     ],
+  //     selectedBoxSuggestion: null,
+  //   },
+  // ]);
+  const [boxes, setBoxes] = useState<BoxData[]>(
+    initialState.boxData || [
+      {
+        id: 1,
+        dimensions: {
+          l: "",
+          b: "",
+          h: "",
+          weight: "",
           name: "",
-          quantity: "",
-          unitPrice: "",
-          unitWeight: "",
-          totalPrice: "",
-          totalWeight: "",
-          isExpanded: true, // Default to expanded
-          boxInfo: {
-            l: "",
-            b: "",
-            h: "",
-            discount: "",
-            tax: "",
-            hsn: "",
-            sku: "",
-          },
-          selectedSuggestion: null,
-          isManuallyEdited: false, // Initialize flag
+          isManuallyEdited: false,
         },
-      ],
-      selectedBoxSuggestion: null,
-    },
-  ]);
+        products: [
+          {
+            id: 1,
+            name: "",
+            quantity: "",
+            unitPrice: "",
+            unitWeight: "",
+            totalPrice: "",
+            totalWeight: "",
+            isExpanded: true,
+            boxInfo: {
+              l: "",
+              b: "",
+              h: "",
+              discount: "",
+              tax: "",
+              hsn: "",
+              sku: "",
+            },
+            selectedSuggestion: null,
+            isManuallyEdited: false,
+          },
+        ],
+        selectedBoxSuggestion: null,
+      },
+    ]
+  );
 
   // New state for inline search functionality
   const [productNameSearch, setProductNameSearch] = useState<{
@@ -333,6 +430,38 @@ const OrderForm: React.FC<OrderFormProps> = ({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.BOX_DATA, JSON.stringify(boxes));
+  }, [boxes]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.BOX_COUNT, boxCount.toString());
+  }, [boxCount]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SELECTED_BOX, selectedBox.toString());
+  }, [selectedBox]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.ALL_BOXES_IDENTICAL, JSON.stringify(allBoxesIdentical));
+  }, [allBoxesIdentical]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.PRODUCT_SUGGESTIONS, JSON.stringify(productSuggestions));
+  }, [productSuggestions]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.BOX_SUGGESTIONS, JSON.stringify(boxSuggestions));
+  }, [boxSuggestions]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SAVED_PRODUCTS, JSON.stringify(savedProducts));
+  }, [savedProducts]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SAVED_BOX, JSON.stringify(savedBox));
+  }, [savedBox]);
 
   // Fetch box suggestions from API
   const fetchBoxSuggestions = async () => {
