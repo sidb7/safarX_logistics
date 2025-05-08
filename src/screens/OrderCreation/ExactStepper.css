@@ -18,6 +18,7 @@
   color: #6b7280;
   display: flex;
   align-items: center;
+  transition: all 0.3s ease;
 }
 
 /* First step gets standard left padding */
@@ -28,6 +29,16 @@
 .step.active {
   background-color: #3b82f6; /* Blue for active */
   color: white;
+}
+
+/* Keep completed steps greyed out */
+.step.completed:not(.active) {
+  background-color: #e5e7eb; /* Keep gray background */
+  color: #6b7280; /* Keep gray text */
+}
+
+.step.disabled {
+  opacity: 0.6;
 }
 
 .step-number {
@@ -41,11 +52,35 @@
   color: #6b7280;
   margin-right: 12px;
   font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .step.active .step-number {
   background-color: white;
   color: #3b82f6;
+}
+
+/* Keep completed step number circle background gray, but make tick mark visible */
+.step.completed:not(.active) .step-number {
+  background-color: #d1d5db; /* Keep gray background */
+  color: #374151; /* Darker gray for the tick mark to be visible */
+}
+
+/* Tick mark animation */
+.tick-mark {
+  transition: all 0.3s ease;
+}
+
+.tick-path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: drawTick 0.5s ease-in-out forwards;
+}
+
+@keyframes drawTick {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .step-content {
@@ -56,11 +91,13 @@
 .step-title {
   font-weight: 500;
   font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .step-desc {
   font-size: 12px;
   opacity: 0.8;
+  transition: all 0.3s ease;
 }
 
 /* First step has straight left side and arrow right side */
@@ -86,26 +123,6 @@
   margin-left: -5px; /* Reduced overlap to create a small gap */
 }
 
-/* Arrow connector */
-.arrow {
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-  font-size: 16px;
-}
-
-.step:not(.active) .arrow {
-  color: #d1d5db;
-}
-
-/* Completed step styling */
-.step.completed {
-  background-color: #e5e7eb;
-  color: #6b7280;
-}
-
 /* Fix z-index to ensure proper layering */
 .step:nth-child(1) { z-index: 10; }
 .step:nth-child(2) { z-index: 9; }
@@ -118,4 +135,13 @@
 .step:nth-child(9) { z-index: 2; }
 .step:nth-child(10) { z-index: 1; }
 
+/* Hover effects for clickable steps */
+.step:not(.disabled):hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
 
+.step.disabled:hover {
+  transform: none;
+  filter: none;
+}

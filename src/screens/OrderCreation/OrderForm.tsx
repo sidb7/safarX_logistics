@@ -118,7 +118,7 @@ interface BoxSuggestion {
 
 // Add props interface to receive and send data to parent OrderCreation component
 interface OrderFormProps {
-  onBoxDataUpdate?: (boxes: BoxData[]) => void;
+  onBoxDataUpdate?: (boxes: BoxData[], metadata: { allBoxesIdentical: boolean, boxCount: number }) => void;
   validationErrors?: {
     [boxId: number]: {
       [fieldId: string]: boolean;
@@ -283,9 +283,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
   // Notify parent component when box data changes
   useEffect(() => {
     if (onBoxDataUpdate) {
-      onBoxDataUpdate(boxes);
+      onBoxDataUpdate(boxes,{ allBoxesIdentical, boxCount });
     }
-  }, [boxes, onBoxDataUpdate]);
+  }, [boxes, onBoxDataUpdate, allBoxesIdentical, boxCount]);
 
   // Get current box data - always use the first box when identical
   const currentBox = allBoxesIdentical

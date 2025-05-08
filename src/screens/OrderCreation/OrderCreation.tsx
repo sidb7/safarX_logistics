@@ -254,6 +254,10 @@ function OrderCreation() {
     };
   }>({});
   ////////////////////////////////
+  //////state for qty key ////
+  const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(false);
+const [boxCount, setBoxCount] = useState<number>(1);
+  //////////////////////
 
   const steps = [
     {
@@ -269,8 +273,10 @@ function OrderCreation() {
   ];
 
   // Handle box data updates from OrderForm
-  const handleBoxDataUpdate = useCallback((boxes: BoxData[]) => {
+  const handleBoxDataUpdate = useCallback((boxes: BoxData[],metadata: { allBoxesIdentical: boolean, boxCount: number }) => {
     setBoxesData(boxes);
+    setAllBoxesIdentical(metadata.allBoxesIdentical);
+  setBoxCount(metadata.boxCount);
 
     // Also update packageDetails if at least one box exists
     if (boxes.length > 0) {
@@ -401,9 +407,18 @@ function OrderCreation() {
   const prepareBoxInfoPayload = () => {
     // Determine which box data to use based on order type
     const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+     // Add these console logs
+  // console.log("prepareBoxInfoPayload - orderType:", order.orderType);
+  // console.log("prepareBoxInfoPayload - allBoxesIdentical:", allBoxesIdentical);
+  // console.log("prepareBoxInfoPayload - boxes.length:", boxes.length);
+
+    const boxesToProcess = (order.orderType === "B2C" && allBoxesIdentical) ? [boxes[0]] : boxes;
+
+    // console.log("prepareBoxInfoPayload - boxesToProcess.length:", boxesToProcess.length);
+
 
     // Transform boxes to the expected format for ADD_BOX_INFO API
-    const transformedBoxes = boxes.map((box) => {
+    const transformedBoxes = boxesToProcess.map((box) => {
       // For B2C boxes
       if (order.orderType === "B2C") {
         const b2cBox = box as BoxData;
@@ -431,6 +446,7 @@ function OrderCreation() {
           price: 0, // Optional field
           currency: "INR", // Required field
           divisor: 5000, // Required field for volumetric calculation
+          qty: allBoxesIdentical ? boxCount : 1,
           products: b2cBox.products.map((product) => ({
             name: product.name,
             qty: Number(product.quantity) || 1,
@@ -548,6 +564,7 @@ function OrderCreation() {
         };
       }
     });
+    // console.log("All transformed boxes:", JSON.stringify(transformedBoxes, null, 2));
 
     return transformedBoxes;
   };
@@ -560,7 +577,9 @@ function OrderCreation() {
   ) => {
     // Standard divisor for volumetric weight calculation
     const divisor = 5000;
-    return (length * breadth * height) / divisor;
+    const weight = (length * breadth * height) / divisor;
+    return parseFloat(weight.toFixed(4));
+
   };
 
   // Function to handle proceeding to next step
@@ -1288,6 +1307,9 @@ function OrderCreation() {
         source: source,
       };
 
+      // console.log("Complete boxesInfoPayload:", JSON.stringify(boxesInfoPayload, null, 2));
+
+
       const boxInfoResponse = await POST(ADD_BOX_INFO, boxesInfoPayload);
 
       if (boxInfoResponse?.data?.success) {
@@ -1461,8 +1483,21 @@ function OrderCreation() {
     // Determine which box data to use based on order type
     const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
 
+    // Add these console logs
+  // console.log("prepareBoxInfoForReverseOrder - orderType:", order.orderType);
+  // console.log("prepareBoxInfoForReverseOrder - allBoxesIdentical:", allBoxesIdentical);
+  // console.log("prepareBoxInfoForReverseOrder - boxes.length:", boxes.length);
+
+
+
+
+    const boxesToProcess = (order.orderType === "B2C" && allBoxesIdentical) ? [boxes[0]] : boxes;
+
+    // console.log("prepareBoxInfoForReverseOrder - boxesToProcess.length:", boxesToProcess.length);
+
+
     // Transform boxes to the format expected by REVERSE_ORDER API
-    return boxes.map((box, index) => {
+    return boxesToProcess.map((box, index) => {
       // For B2C boxes
       if (order.orderType === "B2C") {
         const b2cBox = box as BoxData;
@@ -1482,6 +1517,7 @@ function OrderCreation() {
           breadth: b2cBox.dimensions.b || 1,
           height: b2cBox.dimensions.h || 1,
           measureUnit: "cm",
+          qty: allBoxesIdentical ? boxCount : 1,
           products: b2cBox.products.map((product) => ({
             name: product.name || "Product",
             category: "General", // Default category if not available
