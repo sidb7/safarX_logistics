@@ -5,7 +5,7 @@ import tableCheckboxFilter from "../../assets/Darkstore/tableCheckboxFilter.png"
 import { POST } from "../../utils/webService";
 import { ca } from "date-fns/locale";
 import OnePagination from "../../components/OnePagination/OnePagination";
-import { set } from "lodash";
+import { filter, set } from "lodash";
 
 enum TableColumnType {
   Darkstore = "dark_store",
@@ -20,6 +20,9 @@ function Dropdown({
   filterList,
   setFilterList,
   resetFilter,
+  updateFilterQuery,
+  selectedColumn,
+  filterQuery,
 }: {
   open: TableColumnType | false;
   setOpen: (value: TableColumnType | false) => void;
@@ -27,8 +30,25 @@ function Dropdown({
   filterList: any;
   setFilterList: any;
   resetFilter: (item: TableColumnType) => void;
+  updateFilterQuery: (data: {
+    type: TableColumnType;
+    item: string;
+    newFilterItem: boolean;
+  }) => void;
+  selectedColumn: string | null;
+  filterQuery: any;
 }) {
   const dropdownRef: any = useRef(null);
+  const [checkedFilterItems, setCheckedFilterITems] = useState<any>([]);
+  useEffect(() => {
+    if (open) {
+      filterQuery.map((item: any) => {
+        if (Object.keys(item)[0] === columnType) {
+          setCheckedFilterITems(item[columnType]["$in"]);
+        }
+      });
+    }
+  }, [open, filterQuery]);
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -46,6 +66,14 @@ function Dropdown({
 
   if (open !== columnType) return null;
 
+  const handleCheck = (item: any) => {
+    updateFilterQuery({
+      type: columnType,
+      item,
+      newFilterItem: !checkedFilterItems.includes(item),
+    });
+  };
+
   return (
     <div
       ref={dropdownRef}
@@ -61,10 +89,20 @@ function Dropdown({
               <input
                 type="checkbox"
                 className="form-checkbox accent-[#0A65FF] h-[16px] w-[16px]"
+                checked={
+                  checkedFilterItems.length != 0 &&
+                  checkedFilterItems.includes(item)
+                }
+                onChange={() => {
+                  handleCheck(item);
+                }}
               />
               {item}
             </div>
           ))}
+        {filterList.length === 0 && (
+          <div className="animate-pulse bg-gray-200 rounded-md h-24 w-full mb-4" />
+        )}
       </div>
       <div className="border-t py-2 mt-2 flex justify-between px-2">
         <button
@@ -86,6 +124,7 @@ function DarkstoreTable() {
   const [limit, setLimit] = useState<number>(20);
   const [darkStoreData, setDarkStoreData] = useState<any>([]);
   const [filterList, setFilterList] = useState<any>([]);
+  const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [filterQuery, setFilterQuery] = useState<any>([
     {
       sku: {
@@ -106,20 +145,33 @@ function DarkstoreTable() {
 
   const ColumnsHelper = createColumnHelper<any>();
 
-  useEffect(() => {
-    const fetchDarkstoreInventory = async () => {
-      try {
-        const GET_DARKSTORE_DETAILS =
-          "http://localhost:8010/api/v1/darkStore/getInventory";
-        const { data: response } = await POST(GET_DARKSTORE_DETAILS, {
-          pageNo,
-          limit,
+  const fetchDarkstoreInventory = async (updatedQuery?: any) => {
+    try {
+      let filterArr = updatedQuery;
+      if (!updatedQuery) {
+        filterArr = filterQuery.filter((item: any) => {
+          return item[Object.keys(item)[0]]["$in"].length > 0;
         });
-        setDarkStoreData(response.data);
-      } catch (err) {
-        console.log(err);
       }
-    };
+      console.log("filterArr", filterArr);
+      const GET_DARKSTORE_DETAILS =
+        "http://localhost:8010/api/v1/darkStore/getInventory";
+      const { data: response } = await POST(GET_DARKSTORE_DETAILS, {
+        pageNo,
+        limit,
+        filterArr,
+      });
+
+      setDarkStoreData(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchDarkstoreInventory();
+  }, [filterQuery]);
+
+  useEffect(() => {
     fetchDarkstoreInventory();
   }, []);
 
@@ -143,6 +195,8 @@ function DarkstoreTable() {
       }
       return item;
     });
+
+    fetchDarkstoreInventory(updatedQuery);
     setFilterQuery(updatedQuery);
   };
 
@@ -198,14 +252,18 @@ function DarkstoreTable() {
 
   const fetchFilterList = async (type: TableColumnType) => {
     try {
-      const GET_DARKSTORE_DETAILS =
+      const filterArr = filterQuery.filter((item: any) => {
+        return item[Object.keys(item)[0]]["$in"].length > 0;
+      });
+      const GET_DARKSTORE_FILTER_DETAILS =
         "http://localhost:8010/api/v1/darkStore/getFilterOptions";
-      const { data: response } = await POST(GET_DARKSTORE_DETAILS, {
+      const { data: response } = await POST(GET_DARKSTORE_FILTER_DETAILS, {
         filterType: type,
+        filterArr,
       });
 
-      console.log(response.data, "response.data");
       setFilterList(response.data);
+      setSelectedColumn(type);
     } catch (err) {
       console.log(err);
     }
@@ -245,6 +303,9 @@ function DarkstoreTable() {
               filterList={filterList}
               setFilterList={setFilterList}
               resetFilter={resetFilter}
+              updateFilterQuery={updateFilterQuery}
+              selectedColumn={selectedColumn}
+              filterQuery={filterQuery}
             />
           </div>
         );
@@ -291,6 +352,9 @@ function DarkstoreTable() {
               filterList={filterList}
               setFilterList={setFilterList}
               resetFilter={resetFilter}
+              updateFilterQuery={updateFilterQuery}
+              selectedColumn={selectedColumn}
+              filterQuery={filterQuery}
             />
           </div>
         );
@@ -335,6 +399,9 @@ function DarkstoreTable() {
               filterList={filterList}
               setFilterList={setFilterList}
               resetFilter={resetFilter}
+              updateFilterQuery={updateFilterQuery}
+              selectedColumn={selectedColumn}
+              filterQuery={filterQuery}
             />
           </div>
         );
