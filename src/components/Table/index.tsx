@@ -18,6 +18,11 @@ interface ITablePropTypes {
   currentPage: number;
   pageSize: number;
   minHeight?: string;
+  rowStyling?: any;
+  rowClassName?: string;
+  headerStyling?: any;
+  headerClassName?: string;
+  rowCellClassName?: string;
 }
 
 const CustomTable = (props: any) => {
@@ -29,6 +34,11 @@ const CustomTable = (props: any) => {
     setIsMenuOpen,
     minHeight,
     rowHeight,
+    rowClassName,
+    rowStyling,
+    headerStyling,
+    headerClassName,
+    rowCellClassName,
   } = props;
   const columns = React.useMemo<Array<ColumnDef<any>>>(
     () => columnsData,
@@ -111,7 +121,10 @@ const CustomTable = (props: any) => {
         className="w-full"
       >
         <table className="w-full bg-white tableContainerStyle ">
-          <thead className="border-b border-[#E8E8E8]">
+          <thead
+            className="border-b border-[#E8E8E8]"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.02)", height: "50px" }}
+          >
             {table.getHeaderGroups()?.map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers?.map((header) => {
@@ -141,13 +154,17 @@ const CustomTable = (props: any) => {
               const row = rows[virtualRow.index];
               return (
                 <tr
-                  className="group shadow-md rounded-lg	hover:bg-slate-200"
+                  className={
+                    "group shadow-md rounded-lg	hover:bg-slate-200 " +
+                    rowClassName
+                  }
                   key={row.id}
                   id={
                     entityId === undefined ? "" : `${entityId[index]}-${index}`
                   }
                   data-index={virtualRow.index}
                   style={{
+                    ...rowStyling,
                     height: rowHeight
                       ? `${rowHeight}px`
                       : `${virtualRow.size}px`,
@@ -160,7 +177,10 @@ const CustomTable = (props: any) => {
                     return (
                       <td
                         key={cell.id}
-                        className="px-3 text-left font-normal text-[#1C1C1C] border-none "
+                        className={
+                          "px-3 text-left font-normal text-[#1C1C1C] border-none " +
+                          rowCellClassName
+                        }
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
