@@ -72,13 +72,56 @@ const BulkUpload = (props: ITypeProps) => {
     setTransitType(event.target.value);
   };
 
+  // const handleFileUpload = async () => {
+  //   if (!uploadFile) {
+  //     toast.error("Please select a file to upload.");
+  //     return;
+  //   }
+  //   let placeOrderBollean: any = placeOrder == "Place Order" ? true : false;
+  //   let uuid = uuidv4();
+  //   let formData = new FormData();
+  //   formData.append("file", uploadFile);
+  //   formData.append("orderType", selectedOption);
+  //   formData.append("placeOrder", placeOrderBollean);
+  //   // Append transit type only if the selected option is "B2C"
+  //   if (selectedOption === "B2C") {
+  //     formData.append("transit", transitType);
+  //   }
+
+  //   try {
+  //     setIsLoading(true);
+
+  //     const { data: response } = await POST(BULK_UPLOAD, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+
+  //     if (response?.success) {
+  //       toast.success(response?.message);
+  //       if (placeOrder === "Place Order")
+  //         window.location.replace("/orders/view-orders?activeTab=booked");
+  //       else window.location.replace("/orders/view-orders?activeTab=draft");
+  //     } else {
+  //       toast.error(response?.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //     toast.error("An error occurred during file upload.");
+  //   } finally {
+  //     setIsLoading(false);
+  //     await new Promise((resolve) => setTimeout(resolve, 800));
+
+  //     // navigate("/orders/view-orders");
+  //   }
+  // };
+
   const handleFileUpload = async () => {
     if (!uploadFile) {
       toast.error("Please select a file to upload.");
       return;
     }
     let placeOrderBollean: any = placeOrder == "Place Order" ? true : false;
-    let uuid = uuidv4();
     let formData = new FormData();
     formData.append("file", uploadFile);
     formData.append("orderType", selectedOption);
@@ -91,28 +134,51 @@ const BulkUpload = (props: ITypeProps) => {
     try {
       setIsLoading(true);
 
-      const { data: response } = await POST(BULK_UPLOAD, formData, {
+      const response = await POST(BULK_UPLOAD, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      if (response?.success) {
-        toast.success(response?.message);
+      if (response?.data?.success) {
+        toast.success(response?.data?.message);
         if (placeOrder === "Place Order")
           window.location.replace("/orders/view-orders?activeTab=booked");
         else window.location.replace("/orders/view-orders?activeTab=draft");
       } else {
-        toast.error(response?.message);
+        // Check if there's an error file URL in the response
+        if (
+          response?.data?.message ===
+            "Error in the file. Please download error file" &&
+          response?.data?.data
+        ) {
+          toast.error("Error in the file. Downloading error report...");
+
+          // Automatically open the error file URL
+          window.open(response?.data?.data, "_blank");
+        } else {
+          // Regular error without a file to download
+          toast.error(response?.data?.message || "An error occurred");
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error uploading file:", error);
-      toast.error("An error occurred during file upload.");
+      // Check if the error response contains an error file URL
+      if (
+        error?.response?.data?.message ===
+          "Error in the file. Please download error file" &&
+        error?.response?.data?.data
+      ) {
+        toast.error("Error in the file. Downloading error report...");
+
+        // Automatically open the error file URL
+        window.open(error.response.data.data, "_blank");
+      } else {
+        toast.error("An error occurred during file upload.");
+      }
     } finally {
       setIsLoading(false);
       await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // navigate("/orders/view-orders");
     }
   };
 
@@ -272,7 +338,7 @@ const BulkUpload = (props: ITypeProps) => {
                   or Drop files here
                 </p>
                 <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
-                  only CSV files are supported
+                  only XLSX files are supported
                 </p>
               </div>
 
