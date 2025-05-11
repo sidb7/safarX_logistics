@@ -1265,7 +1265,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                   ...product,
                   selectedSuggestion: suggestion,
                   name: suggestion.name,
-                  quantity: suggestion.qty,
+                  quantity: 1,
                   unitPrice: suggestion.unitPrice,
                   unitWeight: suggestion.deadWeight,
                   // Calculate total price and weight
@@ -1299,7 +1299,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     ...product,
                     selectedSuggestion: suggestion,
                     name: suggestion.name,
-                    quantity: suggestion.qty,
+                    quantity: 1,
                     unitPrice: suggestion.unitPrice,
                     unitWeight: suggestion.deadWeight,
                     // Calculate total price and weight
@@ -1777,45 +1777,351 @@ const OrderForm: React.FC<OrderFormProps> = ({
   //   closeProductCatalogModal();
   // };
 
-  const handleProceedClick = () => {
-    // Get all selected products
-    const selectedProducts = catalogProducts.filter(
-      (product: any) => selectedCatalogProducts[product._id]
-    );
+  // const handleProceedClick = () => {
+  //   // Get all selected products
+  //   const selectedProducts = catalogProducts.filter(
+  //     (product: any) => selectedCatalogProducts[product._id]
+  //   );
   
-    // Add them to the current box
-    if (selectedProducts.length > 0) {
-      setBoxes((prevBoxes) => {
-        if (allBoxesIdentical) {
-          // Apply to all boxes in identical mode
-          return prevBoxes.map((box) => {
-            // Find empty products in this box (products with no name)
+  //   // Add them to the current box
+  //   if (selectedProducts.length > 0) {
+  //     setBoxes((prevBoxes) => {
+  //       if (allBoxesIdentical) {
+  //         // Apply to all boxes in identical mode
+  //         return prevBoxes.map((box) => {
+  //           // Find empty products in this box (products with no name)
+  //           const emptyProducts = box.products.filter(
+  //             (p) => !p.name || p.name.trim() === ""
+  //           );
+            
+  //           // Clone the existing products
+  //           let updatedProducts = [...box.products];
+  
+  //           // First, replace empty products with selected products
+  //           let remainingSelected = [...selectedProducts];
+  //           if (emptyProducts.length > 0) {
+  //             updatedProducts = updatedProducts.map((product) => {
+  //               // If this is an empty product and we have selected products to use
+  //               if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
+  //                 const selectedProduct = remainingSelected.shift();
+                  
+  //                 if (selectedProduct) {
+  //                   // Mark this product as saved
+  //                   setSavedProducts((prev) => ({
+  //                     ...prev,
+  //                     [product.id]: true,
+  //                   }));
+                    
+  //                   return {
+  //                     ...product, // Keep the existing ID
+  //                     name: selectedProduct.name || "",
+  //                     quantity:  1,
+  //                     unitPrice: selectedProduct.unitPrice || 0,
+  //                     unitWeight: selectedProduct.deadWeight || 0,
+  //                     totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
+  //                     totalWeight: (selectedProduct.qty || 1) * (selectedProduct.deadWeight || 0),
+  //                     isExpanded: true,
+  //                     selectedSuggestion: selectedProduct as ProductSuggestion,
+  //                     boxInfo: {
+  //                       l: selectedProduct.length || 0,
+  //                       b: selectedProduct.breadth || 0,
+  //                       h: selectedProduct.height || 0,
+  //                       discount: "",
+  //                       tax: selectedProduct.unitTax || 0,
+  //                       hsn: selectedProduct.hsnCode || "",
+  //                       sku: selectedProduct.sku || "",
+  //                     },
+  //                     isManuallyEdited: false, // Not manually edited since from catalog
+  //                   };
+  //                 }
+  //               }
+  //               return product;
+  //             });
+  //           }
+  
+  //           // If we still have selected products to add, add them as new products
+  //           if (remainingSelected.length > 0) {
+  //             // Find the maximum product ID to ensure unique IDs for new products
+  //             let maxId = Math.max(...updatedProducts.map((p) => p.id));
+  
+  //             // Add remaining selected products as new products
+  //             remainingSelected.forEach((product: any) => {
+  //               if (product) {
+  //                 maxId++;
+  //                 updatedProducts.push({
+  //                   id: maxId,
+  //                   name: product.name || "",
+  //                   quantity:  1,
+  //                   unitPrice: product.unitPrice || 0,
+  //                   unitWeight: product.deadWeight || 0,
+  //                   totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+  //                   totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+  //                   isExpanded: true,
+  //                   selectedSuggestion: product as ProductSuggestion,
+  //                   boxInfo: {
+  //                     l: product.length || 0,
+  //                     b: product.breadth || 0,
+  //                     h: product.height || 0,
+  //                     discount: "",
+  //                     tax: product.unitTax || 0,
+  //                     hsn: product.hsnCode || "",
+  //                     sku: product.sku || "",
+  //                   },
+  //                   isManuallyEdited: false, // Not manually edited since from catalog
+  //                 });
+  
+  //                 // Mark each new product as saved
+  //                 setSavedProducts((prev) => ({
+  //                   ...prev,
+  //                   [maxId]: true,
+  //                 }));
+  //               }
+  //             });
+  //           }
+  
+  //           return {
+  //             ...box,
+  //             products: updatedProducts,
+  //           };
+  //         });
+  //       } else {
+  //         // For non-identical boxes - similar logic but only for selected box
+  //         return prevBoxes.map((box) => {
+  //           if (box.id === selectedBox) {
+  //             // Find empty products in this box
+  //             const emptyProducts = box.products.filter(
+  //               (p) => !p.name || p.name.trim() === ""
+  //             );
+              
+  //             // Clone the existing products
+  //             let updatedProducts = [...box.products];
+  
+  //             // First, replace empty products with selected products
+  //             let remainingSelected = [...selectedProducts];
+  //             if (emptyProducts.length > 0) {
+  //               updatedProducts = updatedProducts.map((product) => {
+  //                 if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
+  //                   const selectedProduct = remainingSelected.shift();
+                    
+  //                   if (selectedProduct) {
+  //                     // Mark this product as saved
+  //                     setSavedProducts((prev) => ({
+  //                       ...prev,
+  //                       [product.id]: true,
+  //                     }));
+                      
+  //                     return {
+  //                       ...product, // Keep the existing ID
+  //                       name: selectedProduct.name || "",
+  //                       quantity:  1,
+  //                       unitPrice: selectedProduct.unitPrice || 0,
+  //                       unitWeight: selectedProduct.deadWeight || 0,
+  //                       totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
+  //                       totalWeight: (selectedProduct.qty || 1) * (selectedProduct.deadWeight || 0),
+  //                       isExpanded: true,
+  //                       selectedSuggestion: selectedProduct as ProductSuggestion,
+  //                       boxInfo: {
+  //                         l: selectedProduct.length || 0,
+  //                         b: selectedProduct.breadth || 0,
+  //                         h: selectedProduct.height || 0,
+  //                         discount: "",
+  //                         tax: selectedProduct.unitTax || 0,
+  //                         hsn: selectedProduct.hsnCode || "",
+  //                         sku: selectedProduct.sku || "",
+  //                       },
+  //                       isManuallyEdited: false, // Not manually edited since from catalog
+  //                     };
+  //                   }
+  //                 }
+  //                 return product;
+  //               });
+  //             }
+  
+  //             // Only add new products if we still have remaining selected products
+  //             if (remainingSelected.length > 0) {
+  //               let maxId = Math.max(...updatedProducts.map((p) => p.id));
+  //               remainingSelected.forEach((product: any) => {
+  //                 if (product) {
+  //                   maxId++;
+  //                   updatedProducts.push({
+  //                     id: maxId,
+  //                     name: product.name || "",
+  //                     quantity:  1,
+  //                     unitPrice: product.unitPrice || 0,
+  //                     unitWeight: product.deadWeight || 0,
+  //                     totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+  //                     totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+  //                     isExpanded: true,
+  //                     selectedSuggestion: product as ProductSuggestion,
+  //                     boxInfo: {
+  //                       l: product.length || 0,
+  //                       b: product.breadth || 0,
+  //                       h: product.height || 0,
+  //                       discount: "",
+  //                       tax: product.unitTax || 0,
+  //                       hsn: product.hsnCode || "",
+  //                       sku: product.sku || "",
+  //                     },
+  //                     isManuallyEdited: false,
+  //                   });
+  
+  //                   setSavedProducts((prev) => ({
+  //                     ...prev,
+  //                     [maxId]: true,
+  //                   }));
+  //                 }
+  //               });
+  //             }
+  
+  //             return {
+  //               ...box,
+  //               products: updatedProducts,
+  //             };
+  //           }
+  //           return box;
+  //         });
+  //       }
+  //     });
+  //   }
+  
+  //   // Close the modal
+  //   closeProductCatalogModal();
+  // };
+
+  // Replace the handleProceedClick function with this improved version
+
+const handleProceedClick = () => {
+  // Get all selected products
+  const selectedProducts = catalogProducts.filter(
+    (product: any) => selectedCatalogProducts[product._id]
+  );
+
+  // Collect product IDs that need to be marked as saved
+  const newSavedIds: { [id: number]: boolean } = {};
+  
+  // Add them to the current box
+  if (selectedProducts.length > 0) {
+    setBoxes((prevBoxes) => {
+      if (allBoxesIdentical) {
+        // Apply to all boxes in identical mode
+        return prevBoxes.map((box) => {
+          // Find empty products in this box (products with no name)
+          const emptyProducts = box.products.filter(
+            (p) => !p.name || p.name.trim() === ""
+          );
+          
+          // Clone the existing products
+          let updatedProducts = [...box.products];
+
+          // First, replace empty products with selected products
+          let remainingSelected = [...selectedProducts];
+          if (emptyProducts.length > 0) {
+            updatedProducts = updatedProducts.map((product) => {
+              // If this is an empty product and we have selected products to use
+              if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
+                const selectedProduct = remainingSelected.shift();
+                
+                if (selectedProduct) {
+                  // Add product ID to be marked as saved
+                  newSavedIds[product.id] = true;
+                  
+                  return {
+                    ...product, // Keep the existing ID
+                    name: selectedProduct.name || "",
+                    quantity: 1,
+                    unitPrice: selectedProduct.unitPrice || 0,
+                    unitWeight: selectedProduct.deadWeight || 0,
+                    totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
+                    totalWeight: (selectedProduct.qty || 1) * (selectedProduct.deadWeight || 0),
+                    isExpanded: true,
+                    selectedSuggestion: selectedProduct as ProductSuggestion,
+                    boxInfo: {
+                      l: selectedProduct.length || 0,
+                      b: selectedProduct.breadth || 0,
+                      h: selectedProduct.height || 0,
+                      discount: "",
+                      tax: selectedProduct.unitTax || 0,
+                      hsn: selectedProduct.hsnCode || "",
+                      sku: selectedProduct.sku || "",
+                    },
+                    isManuallyEdited: false, // Not manually edited since from catalog
+                  };
+                }
+              }
+              return product;
+            });
+          }
+
+          // If we still have selected products to add, add them as new products
+          if (remainingSelected.length > 0) {
+            // Find the maximum product ID to ensure unique IDs for new products
+            let maxId = Math.max(...updatedProducts.map((p) => p.id));
+
+            // Add remaining selected products as new products
+            remainingSelected.forEach((product: any) => {
+              if (product) {
+                maxId++;
+                
+                // Add product ID to be marked as saved
+                newSavedIds[maxId] = true;
+                
+                updatedProducts.push({
+                  id: maxId,
+                  name: product.name || "",
+                  quantity: 1,
+                  unitPrice: product.unitPrice || 0,
+                  unitWeight: product.deadWeight || 0,
+                  totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+                  totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+                  isExpanded: true,
+                  selectedSuggestion: product as ProductSuggestion,
+                  boxInfo: {
+                    l: product.length || 0,
+                    b: product.breadth || 0,
+                    h: product.height || 0,
+                    discount: "",
+                    tax: product.unitTax || 0,
+                    hsn: product.hsnCode || "",
+                    sku: product.sku || "",
+                  },
+                  isManuallyEdited: false, // Not manually edited since from catalog
+                });
+              }
+            });
+          }
+
+          return {
+            ...box,
+            products: updatedProducts,
+          };
+        });
+      } else {
+        // For non-identical boxes - similar logic but only for selected box
+        return prevBoxes.map((box) => {
+          if (box.id === selectedBox) {
+            // Find empty products in this box
             const emptyProducts = box.products.filter(
               (p) => !p.name || p.name.trim() === ""
             );
             
             // Clone the existing products
             let updatedProducts = [...box.products];
-  
+
             // First, replace empty products with selected products
             let remainingSelected = [...selectedProducts];
             if (emptyProducts.length > 0) {
               updatedProducts = updatedProducts.map((product) => {
-                // If this is an empty product and we have selected products to use
                 if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
                   const selectedProduct = remainingSelected.shift();
                   
                   if (selectedProduct) {
-                    // Mark this product as saved
-                    setSavedProducts((prev) => ({
-                      ...prev,
-                      [product.id]: true,
-                    }));
+                    // Add product ID to be marked as saved
+                    newSavedIds[product.id] = true;
                     
                     return {
                       ...product, // Keep the existing ID
                       name: selectedProduct.name || "",
-                      quantity: selectedProduct.qty || 1,
+                      quantity: 1,
                       unitPrice: selectedProduct.unitPrice || 0,
                       unitWeight: selectedProduct.deadWeight || 0,
                       totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
@@ -1838,20 +2144,21 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 return product;
               });
             }
-  
-            // If we still have selected products to add, add them as new products
+
+            // Only add new products if we still have remaining selected products
             if (remainingSelected.length > 0) {
-              // Find the maximum product ID to ensure unique IDs for new products
               let maxId = Math.max(...updatedProducts.map((p) => p.id));
-  
-              // Add remaining selected products as new products
               remainingSelected.forEach((product: any) => {
                 if (product) {
                   maxId++;
+                  
+                  // Add product ID to be marked as saved
+                  newSavedIds[maxId] = true;
+                  
                   updatedProducts.push({
                     id: maxId,
                     name: product.name || "",
-                    quantity: product.qty || 1,
+                    quantity: 1,
                     unitPrice: product.unitPrice || 0,
                     unitWeight: product.deadWeight || 0,
                     totalPrice: (product.qty || 1) * (product.unitPrice || 0),
@@ -1867,127 +2174,36 @@ const OrderForm: React.FC<OrderFormProps> = ({
                       hsn: product.hsnCode || "",
                       sku: product.sku || "",
                     },
-                    isManuallyEdited: false, // Not manually edited since from catalog
+                    isManuallyEdited: false,
                   });
-  
-                  // Mark each new product as saved
-                  setSavedProducts((prev) => ({
-                    ...prev,
-                    [maxId]: true,
-                  }));
                 }
               });
             }
-  
+
             return {
               ...box,
               products: updatedProducts,
             };
-          });
-        } else {
-          // For non-identical boxes - similar logic but only for selected box
-          return prevBoxes.map((box) => {
-            if (box.id === selectedBox) {
-              // Find empty products in this box
-              const emptyProducts = box.products.filter(
-                (p) => !p.name || p.name.trim() === ""
-              );
-              
-              // Clone the existing products
-              let updatedProducts = [...box.products];
-  
-              // First, replace empty products with selected products
-              let remainingSelected = [...selectedProducts];
-              if (emptyProducts.length > 0) {
-                updatedProducts = updatedProducts.map((product) => {
-                  if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
-                    const selectedProduct = remainingSelected.shift();
-                    
-                    if (selectedProduct) {
-                      // Mark this product as saved
-                      setSavedProducts((prev) => ({
-                        ...prev,
-                        [product.id]: true,
-                      }));
-                      
-                      return {
-                        ...product, // Keep the existing ID
-                        name: selectedProduct.name || "",
-                        quantity: selectedProduct.qty || 1,
-                        unitPrice: selectedProduct.unitPrice || 0,
-                        unitWeight: selectedProduct.deadWeight || 0,
-                        totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
-                        totalWeight: (selectedProduct.qty || 1) * (selectedProduct.deadWeight || 0),
-                        isExpanded: true,
-                        selectedSuggestion: selectedProduct as ProductSuggestion,
-                        boxInfo: {
-                          l: selectedProduct.length || 0,
-                          b: selectedProduct.breadth || 0,
-                          h: selectedProduct.height || 0,
-                          discount: "",
-                          tax: selectedProduct.unitTax || 0,
-                          hsn: selectedProduct.hsnCode || "",
-                          sku: selectedProduct.sku || "",
-                        },
-                        isManuallyEdited: false, // Not manually edited since from catalog
-                      };
-                    }
-                  }
-                  return product;
-                });
-              }
-  
-              // Only add new products if we still have remaining selected products
-              if (remainingSelected.length > 0) {
-                let maxId = Math.max(...updatedProducts.map((p) => p.id));
-                remainingSelected.forEach((product: any) => {
-                  if (product) {
-                    maxId++;
-                    updatedProducts.push({
-                      id: maxId,
-                      name: product.name || "",
-                      quantity: product.qty || 1,
-                      unitPrice: product.unitPrice || 0,
-                      unitWeight: product.deadWeight || 0,
-                      totalPrice: (product.qty || 1) * (product.unitPrice || 0),
-                      totalWeight: (product.qty || 1) * (product.deadWeight || 0),
-                      isExpanded: true,
-                      selectedSuggestion: product as ProductSuggestion,
-                      boxInfo: {
-                        l: product.length || 0,
-                        b: product.breadth || 0,
-                        h: product.height || 0,
-                        discount: "",
-                        tax: product.unitTax || 0,
-                        hsn: product.hsnCode || "",
-                        sku: product.sku || "",
-                      },
-                      isManuallyEdited: false,
-                    });
-  
-                    setSavedProducts((prev) => ({
-                      ...prev,
-                      [maxId]: true,
-                    }));
-                  }
-                });
-              }
-  
-              return {
-                ...box,
-                products: updatedProducts,
-              };
-            }
-            return box;
-          });
-        }
-      });
-    }
-  
-    // Close the modal
-    closeProductCatalogModal();
-  };
+          }
+          return box;
+        });
+      }
+    });
+    
+    // After state update, update all saved products at once
+    setTimeout(() => {
+      if (Object.keys(newSavedIds).length > 0) {
+        setSavedProducts((prev) => ({
+          ...prev,
+          ...newSavedIds
+        }));
+      }
+    }, 0);
+  }
 
+  // Close the modal
+  closeProductCatalogModal();
+};
   const closeProductCatalogModal = () => {
     setIsProductCatalogModalOpen(false);
   };
@@ -2680,6 +2896,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             value={product.totalPrice.toString()}
                             type="number"
                             counter="₹"
+                            readOnly={true}
                           />
                         </div>
                         <div className="w-32">
@@ -2687,6 +2904,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             placeholder="Total Wt (kg)"
                             value={product.totalWeight.toString()}
                             type="number"
+                            readOnly={true}
                           />
                         </div>
                       </div>

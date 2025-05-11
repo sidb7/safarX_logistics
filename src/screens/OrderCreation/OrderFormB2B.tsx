@@ -1796,6 +1796,43 @@ useEffect(() => {
   };
 
   // Select a package from search results
+  // const selectPackageFromSearch = (
+  //   boxId: number,
+  //   packageId: number,
+  //   product: ProductCatalogItem
+  // ) => {
+  //   // Update the package with the selected product
+  //   setBoxes((prevBoxes) =>
+  //     prevBoxes.map((box) => {
+  //       if (box.id === boxId) {
+  //         return {
+  //           ...box,
+  //           packages: box.packages.map((pkg) => {
+  //             if (pkg.id === packageId) {
+  //               return {
+  //                 ...pkg,
+  //                 name: product.name || product.title || "",
+  //                 quantity: product.qty || 1,
+  //                 unitPrice: product.unitPrice || 0,
+  //                 unitWeight: product.deadWeight || 0,
+  //                 totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+  //                 totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+  //                 tax: product.unitTax?.toString() || "0",
+  //                 hsn: product.hsnCode || "",
+  //                 sku: product.sku || "",
+  //                 length: product.length || "",
+  //                 breadth: product.breadth || "",
+  //                 height: product.height || "",
+  //                 isSaved: true,
+  //               };
+  //             }
+  //             return pkg;
+  //           }),
+  //         };
+  //       }
+  //       return box;
+  //     })
+  //   );
   const selectPackageFromSearch = (
     boxId: number,
     packageId: number,
@@ -1833,6 +1870,31 @@ useEffect(() => {
         return box;
       })
     );
+  
+    // Clear validation errors only for fields that have received values
+    if (clearFieldError) {
+      if (product.name || product.title) {
+        clearFieldError(boxId, `package-${packageId}-name`);
+      }
+      if (product.qty) {
+        clearFieldError(boxId, `package-${packageId}-quantity`);
+      }
+      if (product.unitPrice) {
+        clearFieldError(boxId, `package-${packageId}-unitPrice`);
+      }
+      if (product.deadWeight) {
+        clearFieldError(boxId, `package-${packageId}-unitWeight`);
+      }
+      if (product.length) {
+        clearFieldError(boxId, `package-${packageId}-length`);
+      }
+      if (product.breadth) {
+        clearFieldError(boxId, `package-${packageId}-breadth`);
+      }
+      if (product.height) {
+        clearFieldError(boxId, `package-${packageId}-height`);
+      }
+    }
 
     // Close the search results dropdown
     const uniqueId = `${boxId}-${packageId}`;
@@ -1841,6 +1903,8 @@ useEffect(() => {
       [uniqueId]: false,
     }));
   };
+
+  
 
   // Fetch catalog products if not already loaded
   const fetchCatalogProducts = async () => {
@@ -1932,19 +1996,72 @@ useEffect(() => {
   };
 
   // Handle "Proceed" click in catalog modal
+  // const handleProceedClick = () => {
+  //   // Get all selected products
+  //   const selectedProducts = catalogProducts.filter(
+  //     (product) => selectedCatalogProducts[product._id]
+  //   );
+
+  //   if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
+  //     setBoxes((prevBoxes) => {
+  //       return prevBoxes.map((box) => {
+  //         if (box.id === currentBoxId) {
+  //           // Instead of adding multiple products, replace the current package with the first selected product
+  //           const selectedProduct = selectedProducts[0];
+
+  //           return {
+  //             ...box,
+  //             packages: box.packages.map((pkg) => {
+  //               if (pkg.id === currentPackageId) {
+  //                 return {
+  //                   ...pkg,
+  //                   name: selectedProduct.name || selectedProduct.title || "",
+  //                   quantity: selectedProduct.qty || 1,
+  //                   unitPrice: selectedProduct.unitPrice || 0,
+  //                   unitWeight: selectedProduct.deadWeight || 0,
+  //                   totalPrice:
+  //                     (selectedProduct.qty || 1) *
+  //                     (selectedProduct.unitPrice || 0),
+  //                   totalWeight:
+  //                     (selectedProduct.qty || 1) *
+  //                     (selectedProduct.deadWeight || 0),
+  //                   tax: selectedProduct.unitTax?.toString() || "0",
+  //                   hsn: selectedProduct.hsnCode || "",
+  //                   sku: selectedProduct.sku || "",
+  //                   length: selectedProduct.length || "",
+  //                   breadth: selectedProduct.breadth || "",
+  //                   height: selectedProduct.height || "",
+  //                   isSaved: true,
+  //                 };
+  //               }
+  //               return pkg;
+  //             }),
+  //           };
+  //         }
+  //         return box;
+  //       });
+  //     });
+  //   }
+
+    
+
+  //   // Close the modal
+  //   closePackageCatalogModal();
+  // };
+
   const handleProceedClick = () => {
     // Get all selected products
     const selectedProducts = catalogProducts.filter(
       (product) => selectedCatalogProducts[product._id]
     );
-
+  
     if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
       setBoxes((prevBoxes) => {
         return prevBoxes.map((box) => {
           if (box.id === currentBoxId) {
             // Instead of adding multiple products, replace the current package with the first selected product
             const selectedProduct = selectedProducts[0];
-
+  
             return {
               ...box,
               packages: box.packages.map((pkg) => {
@@ -1977,8 +2094,35 @@ useEffect(() => {
           return box;
         });
       });
+  
+      // Clear validation errors only for fields that have received values
+      if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
+        const selectedProduct = selectedProducts[0];
+        
+        if (selectedProduct.name || selectedProduct.title) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
+        }
+        if (selectedProduct.qty) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-quantity`);
+        }
+        if (selectedProduct.unitPrice) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-unitPrice`);
+        }
+        if (selectedProduct.deadWeight) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-unitWeight`);
+        }
+        if (selectedProduct.length) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-length`);
+        }
+        if (selectedProduct.breadth) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-breadth`);
+        }
+        if (selectedProduct.height) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-height`);
+        }
+      }
     }
-
+  
     // Close the modal
     closePackageCatalogModal();
   };

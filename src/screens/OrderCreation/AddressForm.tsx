@@ -3602,6 +3602,8 @@ const handleDeliveryMagicFill = async () => {
                 }
                 onFocus={() => handleInputFocus("pickup", "contactNo")}
                 onBlur={handleInputBlur}
+                isPhoneField={true} // Add this prop
+
                 error={formErrors.pickup.contactNo || phoneValidationErrors.pickup}
                 errorMessage={phoneValidationErrors.pickup ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
               />
@@ -3676,6 +3678,8 @@ const handleDeliveryMagicFill = async () => {
                   }
                   error={formErrors.pickup.pincode}
                   errorMessage="Pin code is required"
+                  isPincodeField={true} // Add this prop
+
                 />
               </div>
             </div>
@@ -3711,6 +3715,8 @@ const handleDeliveryMagicFill = async () => {
                       }
                       error={formErrors.pickup.city}
                       errorMessage="City is required"
+                      readOnly={true} // Add this
+
                     />
                     <FloatingLabelInput
                       placeholder="State"
@@ -3720,6 +3726,8 @@ const handleDeliveryMagicFill = async () => {
                       }
                       error={formErrors.pickup.state}
                       errorMessage="State is required"
+                      readOnly={true} // Add this
+
                     />
                   </div>
 
@@ -3852,6 +3860,7 @@ const handleDeliveryMagicFill = async () => {
                 onBlur={handleInputBlur}
                 error={formErrors.delivery.contactNo || phoneValidationErrors.delivery}
                 errorMessage={phoneValidationErrors.delivery ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
+                isPhoneField={true} // Add this prop
               />
               {renderFloatingSearchResults(
                 "delivery",
@@ -3924,6 +3933,8 @@ const handleDeliveryMagicFill = async () => {
                   }
                   error={formErrors.delivery.pincode}
                   errorMessage="Pin code is required"
+                  isPincodeField={true} // Add this prop
+
                 />
               </div>
             </div>
@@ -3959,6 +3970,8 @@ const handleDeliveryMagicFill = async () => {
                       }
                       error={formErrors.delivery.city}
                       errorMessage="City is required"
+                      readOnly={true} // Add this
+
                     />
                     <FloatingLabelInput
                       placeholder="State"
@@ -3968,6 +3981,8 @@ const handleDeliveryMagicFill = async () => {
                       }
                        error={formErrors.delivery.state}
                        errorMessage="State is required"
+                       readOnly={true} // Add this
+
                     />
                   </div>
 
