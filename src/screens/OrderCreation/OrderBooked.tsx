@@ -142,7 +142,7 @@
 //   const [orderDetails, setOrderDetails] = useState<OrderData | null>(null);
 //   const [loading, setLoading] = useState<boolean>(true);
 //   const [showAllProducts, setShowAllProducts] = useState<boolean>(false);
-//   const [activeTab, setActiveTab] = useState<TabType>('invoice');
+//   const [activeTab, setActiveTab] = useState<TabType>('shipping');
 //   const [pdfData, setPdfData] = useState<{ [key in 'invoice' | 'shipping' | 'manifest']: string }>({
 //     invoice: '',
 //     shipping: '',
@@ -157,6 +157,8 @@
 //     isLoading: boolean;
 //     identifier?: string; 
 //   }>({ isLoading: false });
+//   const [showEmailModal, setShowEmailModal] = useState<boolean>(false);
+//   const [emailInput, setEmailInput] = useState<string>('');
 
 //   const source = passedData?.source || "";
 //   const orderId = passedData?.orderId || "";
@@ -379,157 +381,55 @@
 //     return orderDetails?.service?.partnerName || "N/A";
 //   };
 
-//   // Download PDF direct from API
-//   const downloadPdf = async (type: 'invoice' | 'shipping' | 'manifest') => {
-//     const awbNumbers = getAllAwbNumbers();
-    
-//     if (awbNumbers.length === 0) {
-//       console.error(`No AWB numbers available to download ${type}`);
-//       return;
-//     }
-    
-//     setDownloadLoading({
-//       isLoading: true,
-//       identifier: `Download_${type}`
-//     });
-    
-//     try {
-//       let endpoint;
-//       let filename;
-      
-//       switch (type) {
-//         case 'invoice':
-//           endpoint = FETCH_MULTI_TAX_REPORT_DOWNLOAD;
-//           filename = 'Tax_Invoice.pdf';
-//           break;
-//         case 'shipping':
-//           endpoint = FETCH_LABELS_REPORT_DOWNLOAD;
-//           filename = 'Shipping_Label.pdf';
-//           break;
-//         case 'manifest':
-//           endpoint = FETCH_MANIFEST_DATA;
-//           filename = 'Manifest.pdf';
-//           break;
-//       }
-      
-//       const { sellerInfo } = sessionManager({});
-//       const payload = { awbs: awbNumbers };
-      
-//       let headers = {
-//         Accept: "*/*",
-//         Authorization: `Bearer ${sellerInfo?.token}`,
-//         "Content-Type": "application/json",
+//   // Handle print
+//   const handlePrint = () => {
+//     const printWindow = window.open('', '', 'height=600,width=800');
+//     if (printWindow && pdfData[activeTab]) {
+//       printWindow.document.write(`
+//         <html>
+//           <head>
+//             <title>Print ${activeTab}</title>
+//           </head>
+//           <body>
+//             <iframe src="data:application/pdf;base64,${pdfData[activeTab]}" width="100%" height="100%" style="border: none;"></iframe>
+//           </body>
+//         </html>
+//       `);
+//       printWindow.document.close();
+//       printWindow.onload = function() {
+//         printWindow.print();
 //       };
-      
-//       const response = await fetch(endpoint, {
-//         method: "POST",
-//         headers: headers,
-//         body: JSON.stringify(payload),
-//       });
-      
-//       if (!response.ok) {
-//         console.error(`Error downloading ${type}:`, response);
-//         return;
-//       }
-      
-//       const blob = await response.blob();
-      
-//       // For labels, check content type
-//       if (type === 'shipping' && blob.type === 'image/png') {
-//         filename = 'Shipping_Label.png';
-//       }
-      
-//       const url = URL.createObjectURL(blob);
-//       const a = document.createElement('a');
-//       a.href = url;
-//       a.download = filename;
-//       a.click();
-      
-//       // Clean up
-//       URL.revokeObjectURL(url);
-//     } catch (error) {
-//       console.error(`Error downloading ${type}:`, error);
-//     } finally {
-//       setDownloadLoading({
-//         isLoading: false,
-//         identifier: ''
-//       });
 //     }
 //   };
 
-//   // Render PDF viewer
-//   const renderPdfViewer = (type: 'invoice' | 'shipping' | 'manifest') => {
-//     if (loadingPdf[type]) {
-//       return <div className="flex justify-center items-center h-64">
-//         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-//         <span className="ml-2">Loading {type}...</span>
-//       </div>;
+//   // Handle email
+//   const handleEmail = () => {
+//     const customerEmail = orderDetails?.deliveryAddress?.contact?.emailId || '';
+//     if (customerEmail) {
+//       // You can customize this based on your backend email service
+//       // This is just a placeholder for the email functionality
+//       console.log('Email functionality to be implemented for:', customerEmail);
+//       // window.open(`mailto:${customerEmail}?subject=Order Documents&body=Please find attached your ${activeTab} document.`);
+//     } else {
+//       setShowEmailModal(true);
 //     }
-
-//     if (!pdfData[type]) {
-//       return (
-//         <div className="flex justify-center items-center h-64 flex-col">
-//           <p className="mb-4">No {type} data available</p>
-//           <button 
-//             onClick={() => fetchPdfData(type)}
-//             className="px-4 py-2 bg-blue-500 text-white rounded-md"
-//           >
-//             Load {type.charAt(0).toUpperCase() + type.slice(1)}
-//           </button>
-//         </div>
-//       );
-//     }
-
-//     return (
-//       <div className="flex flex-col">
-//         <div className="h-[calc(70vh)] overflow-hidden mb-4 border rounded">
-//           <iframe
-//             src={`data:application/pdf;base64,${pdfData[type]}`}
-//             className="w-full h-full"
-//             title={`${type} PDF`}
-//           />
-//         </div>
-//         <div className="flex justify-between">
-//           <button 
-//             onClick={() => fetchPdfData(type)}
-//             className="px-4 py-2 border border-gray-300 rounded-md flex items-center"
-//           >
-//             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-//             </svg>
-//             Refresh
-//           </button>
-//           <button 
-//             onClick={() => downloadPdf(type)}
-//             className={`px-4 py-2 bg-blue-500 text-white rounded-md flex items-center ${downloadLoading.isLoading && downloadLoading.identifier === `Download_${type}` ? 'opacity-75 cursor-not-allowed' : ''}`}
-//             disabled={downloadLoading.isLoading && downloadLoading.identifier === `Download_${type}`}
-//           >
-//             {downloadLoading.isLoading && downloadLoading.identifier === `Download_${type}` ? (
-//               <>
-//                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-//                 Downloading...
-//               </>
-//             ) : (
-//               <>
-//                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-//                 </svg>
-//                 Download {type.charAt(0).toUpperCase() + type.slice(1)}
-//               </>
-//             )}
-//           </button>
-//         </div>
-//       </div>
-//     );
 //   };
 
-//   // We no longer need the renderTabContent function as we're showing both summary and document tabs simultaneously
-//   // Each tab content is directly rendered in the layout
-
-//   // We no longer need the renderOrderSummary function as the summary section is directly included in the layout
+//   // Handle email submission
+//   const handleEmailSubmit = () => {
+//     if (emailInput && emailInput.includes('@')) {
+//       // You can customize this based on your backend email service
+//       console.log('Email functionality to be implemented for custom email:', emailInput);
+//       // window.open(`mailto:${emailInput}?subject=Order Documents&body=Please find attached your ${activeTab} document.`);
+//       setShowEmailModal(false);
+//       setEmailInput('');
+//     } else {
+//       alert('Please enter a valid email address');
+//     }
+//   };
 
 //   return (
-//     <div className="p-6 w-full mx-auto">
+//     <div className="p-6 w-full mx-auto relative">
 //       {loading ? (
 //         <div className="flex justify-center items-center h-64">
 //           <p>Loading order details...</p>
@@ -633,7 +533,7 @@
 //             <div className="p-4 bg-gray-50">
 //               <button 
 //                 onClick={handleBackClick}
-//                 className="w-full flex items-center justify-center py-2 border border-gray-300 rounded-md"
+//                 className="w-full flex items-center justify-center py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
 //               >
 //                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 //                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -648,12 +548,6 @@
 //             {/* Tab Navigation */}
 //             <div className="flex border-b">
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
-//                 onClick={() => setActiveTab('invoice')}
-//               >
-//                 Invoice
-//               </button>
-//               <button
 //                 className={`flex-1 py-3 text-center ${activeTab === 'shipping' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('shipping')}
 //               >
@@ -664,6 +558,12 @@
 //                 onClick={() => setActiveTab('manifest')}
 //               >
 //                 Manifest
+//               </button>
+//               <button
+//                 className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 onClick={() => setActiveTab('invoice')}
+//               >
+//                 Invoice
 //               </button>
 //             </div>
             
@@ -693,31 +593,64 @@
 //                       title={`${activeTab} PDF`}
 //                     />
 //                   </div>
-//                   <div className="mt-auto">
+//                   <div className="mt-auto flex gap-4">
 //                     <button 
-//                       onClick={() => downloadPdf(activeTab)}
-//                       className={`w-full px-4 py-2 bg-blue-500 text-white rounded-md flex items-center justify-center ${
-//                         downloadLoading.isLoading && downloadLoading.identifier === `Download_${activeTab}` ? 'opacity-75 cursor-not-allowed' : ''
-//                       }`}
-//                       disabled={downloadLoading.isLoading && downloadLoading.identifier === `Download_${activeTab}`}
+//                       onClick={handleEmail}
+//                       className="flex-1 px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
 //                     >
-//                       {downloadLoading.isLoading && downloadLoading.identifier === `Download_${activeTab}` ? (
-//                         <>
-//                           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-//                           Downloading...
-//                         </>
-//                       ) : (
-//                         <>
-//                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-//                           </svg>
-//                           Download {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-//                         </>
-//                       )}
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+//                       </svg>
+//                       Email
+//                     </button>
+//                     <button 
+//                       onClick={handlePrint}
+//                       className="flex-1 px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+//                     >
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2z" />
+//                       </svg>
+//                       Print
 //                     </button>
 //                   </div>
 //                 </>
 //               )}
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Email Modal */}
+//       {showEmailModal && (
+//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+//           <div className="bg-white rounded-lg p-6 w-96 max-w-md">
+//             <h3 className="text-lg font-semibold mb-4">Enter Email Address</h3>
+//             <p className="text-sm text-gray-600 mb-4">
+//               Customer email not available. Please enter an email address to send the {activeTab}.
+//             </p>
+//             <input
+//               type="email"
+//               value={emailInput}
+//               onChange={(e) => setEmailInput(e.target.value)}
+//               placeholder="Enter email address"
+//               className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+//             />
+//             <div className="flex gap-4">
+//               <button
+//                 onClick={() => {
+//                   setShowEmailModal(false);
+//                   setEmailInput('');
+//                 }}
+//                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
+//               >
+//                 Cancel
+//               </button>
+//               <button
+//                 onClick={handleEmailSubmit}
+//                 className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
+//               >
+//                 Send Email
+//               </button>
 //             </div>
 //           </div>
 //         </div>
@@ -728,12 +661,13 @@
 
 // export default OrderBooked;
 
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import OneButton from "../../components/Button/OneButton";
 import { POST } from "../../utils/webService";
 import { 
-  GET_LATEST_ORDER, 
+  GET_SELLER_ORDER_SUMMARY, 
   FETCH_LABELS_REPORT_DOWNLOAD, 
   FETCH_MANIFEST_DATA, 
   FETCH_MULTI_TAX_REPORT_DOWNLOAD 
@@ -894,17 +828,17 @@ function OrderBooked() {
   const fetchOrderDetails = async () => {
     try {
       const payload = {
-        tempOrderId: orderId,
+        orderId: orderId,
         source: source,
       };
 
       console.log("Fetching order details with payload:", payload);
-      const response = await POST(GET_LATEST_ORDER, payload);
+      const response = await POST(GET_SELLER_ORDER_SUMMARY, payload);
 
-      if (response?.data?.success && response?.data?.data?.length > 0) {
+      if (response?.data?.status && response?.data?.data?.length > 0) {
         // Access the first order in the data array
-        setOrderDetails(response.data.data[0]);
-        console.log("Order details found:", response.data.data[0]);
+        setOrderDetails(response.data.data[0].data[0]);
+        console.log("Order details found:", response.data.data[0].data[0]);
       } else {
         console.error("API Error or no data:", response?.data);
       }

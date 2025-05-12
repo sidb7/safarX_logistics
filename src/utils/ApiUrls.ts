@@ -192,6 +192,7 @@ const PICKUP_ADDRESS_SEARCHBY = `${SELLER_BASE_URL}/pickupAddress/getSearchBy`;
 const DELIVERY_ADDRESS_SEARCHBY = `${SELLER_BASE_URL}/deliveryAddress/getSearchBy`;
 const GET_PRODUCT_SUGGETION = `${SELLER_BASE_URL}/order/suggestionProduct`;
 const GET_BOX_SUGGETION = `${SELLER_BASE_URL}/order/suggestionBox`;
+const GET_SELLER_ORDER_SUMMARY = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 
 
@@ -809,4 +810,5 @@ export {
   POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
   GET_TRANSPORTER_ID,
   GET_WALLET_BALANCES_DATA,
+  GET_SELLER_ORDER_SUMMARY
 };

@@ -463,6 +463,15 @@ const OrderForm: React.FC<OrderFormProps> = ({
     localStorage.setItem(STORAGE_KEYS.SAVED_BOX, JSON.stringify(savedBox));
   }, [savedBox]);
 
+
+  // Helper function to calculate total price of products in a box
+const calculateBoxTotalPrice = (box: BoxData): number => {
+  return box.products.reduce((total, product) => {
+    const productTotal = Number(product.totalPrice) || 0;
+    return total + productTotal;
+  }, 0);
+};
+
   // Fetch box suggestions from API
   const fetchBoxSuggestions = async () => {
     setLoading(true);
@@ -1998,6 +2007,9 @@ const handleProceedClick = () => {
 
   // Collect product IDs that need to be marked as saved
   const newSavedIds: { [id: number]: boolean } = {};
+
+  // Track new product IDs to set suggestions for
+  const newProductIds: number[] = [];
   
   // Add them to the current box
   if (selectedProducts.length > 0) {
@@ -2024,6 +2036,8 @@ const handleProceedClick = () => {
                 if (selectedProduct) {
                   // Add product ID to be marked as saved
                   newSavedIds[product.id] = true;
+                  // Add to list of products needing suggestions
+newProductIds.push(product.id);
                   
                   return {
                     ...product, // Keep the existing ID
@@ -2198,7 +2212,22 @@ const handleProceedClick = () => {
           ...newSavedIds
         }));
       }
+      // Initialize product suggestions for new products
+if (newProductIds.length > 0) {
+  setVisibleProductSuggestions((prev) => {
+    const updates:any = {};
+    newProductIds.forEach(productId => {
+      updates[productId] = productSuggestions.slice(0, 3);
+    });
+    return {
+      ...prev,
+      ...updates
+    };
+  });
+}
     }, 0);
+
+    
   }
 
   // Close the modal
@@ -3546,6 +3575,27 @@ const handleProceedClick = () => {
                 />
               </div>
             </div>
+            {/* New inputs for Total Price and Collectible Amount */}
+<div className="grid grid-cols-2 gap-6 mt-6">
+  <div>
+    <FloatingLabelInput
+      placeholder="Total Price"
+      value={calculateBoxTotalPrice(currentBox).toString()}
+      type="number"
+      counter="₹"
+      readOnly={true}
+    />
+  </div>
+  <div>
+    <FloatingLabelInput
+      placeholder="Collectible Amount"
+      value={calculateBoxTotalPrice(currentBox).toString()}
+      type="number"
+      counter="₹"
+      readOnly={true}
+    />
+  </div>
+</div>
           </div>
         </div>
       </div>
