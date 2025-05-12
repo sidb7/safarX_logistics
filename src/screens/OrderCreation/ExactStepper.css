@@ -27,7 +27,7 @@
 }
 
 .step.active {
-  background-color: #3b82f6; /* Blue for active */
+  background-color:black; /* Blue for active */
   color: white;
 }
 
@@ -57,7 +57,7 @@
 
 .step.active .step-number {
   background-color: white;
-  color: #3b82f6;
+  color: black;
 }
 
 /* Keep completed step number circle background gray, but make tick mark visible */

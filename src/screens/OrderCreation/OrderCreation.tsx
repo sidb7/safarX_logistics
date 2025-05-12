@@ -333,6 +333,9 @@ function OrderCreation() {
   const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(false);
   const [boxCount, setBoxCount] = useState<number>(1);
 
+  // Add this state variable for COD//////
+const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
+
   const [isLoadingExistingOrder, setIsLoadingExistingOrder] = useState(false);
   const [hasLoadedExistingOrder, setHasLoadedExistingOrder] = useState(false);
 
@@ -464,11 +467,14 @@ function OrderCreation() {
   const handleBoxDataUpdate = useCallback(
     (
       boxes: BoxData[],
-      metadata: { allBoxesIdentical: boolean; boxCount: number }
+      metadata: { allBoxesIdentical: boolean; boxCount: number,totalCollectibleAmount: number; }
     ) => {
       setBoxesData(boxes);
       setAllBoxesIdentical(metadata.allBoxesIdentical);
       setBoxCount(metadata.boxCount);
+      setTotalCollectibleAmount(metadata.totalCollectibleAmount);
+
+
 
       // Also update packageDetails if at least one box exists
       if (boxes.length > 0) {
@@ -1046,7 +1052,10 @@ function OrderCreation() {
         boxInfo: prepareBoxInfoPayload(),
         codInfo: {
           isCod: paymentMethod === "Cash on Delivery",
-          collectableAmount: Number(collectibleAmount) || 0,
+          // collectableAmount: Number(collectibleAmount) || 0,
+          collectableAmount: paymentMethod === "Cash on Delivery" 
+      ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
+      : 0,
           invoiceValue: calculateTotalInvoiceValue(),
         },
         insurance: {
@@ -1229,10 +1238,13 @@ function OrderCreation() {
           })),
           codInfo: {
             isCod: paymentMethod === "Cash on Delivery",
-            collectableAmount:
-              paymentMethod === "Cash on Delivery"
-                ? Number(collectibleAmount) || 0
-                : 0,
+            // collectableAmount:
+            //   paymentMethod === "Cash on Delivery"
+            //     ? Number(collectibleAmount) || 0
+            //     : 0,
+            collectableAmount: paymentMethod === "Cash on Delivery"
+    ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
+    : 0,
             invoiceValue: invoiceValue || 0,
           },
           podInfo: {
@@ -1319,15 +1331,29 @@ function OrderCreation() {
     }
   };
 
+  // useEffect(() => {
+  //   // Only set the collectible amount if payment method is Cash on Delivery
+  //   if (paymentMethod === "Cash on Delivery") {
+  //     // Get the total invoice value
+  //     const invoiceValue = calculateTotalInvoiceValue();
+  //     // Set collectible amount to the invoice value (as a string)
+  //     setCollectibleAmount(invoiceValue.toString());
+  //   }
+  // }, [paymentMethod, boxesData, b2bBoxesData, order.orderType]);
+
   useEffect(() => {
     // Only set the collectible amount if payment method is Cash on Delivery
     if (paymentMethod === "Cash on Delivery") {
-      // Get the total invoice value
-      const invoiceValue = calculateTotalInvoiceValue();
-      // Set collectible amount to the invoice value (as a string)
-      setCollectibleAmount(invoiceValue.toString());
+      if (order.orderType === "B2C") {
+        // For B2C orders, use the totalCollectibleAmount from OrderForm
+        setCollectibleAmount(totalCollectibleAmount.toString());
+      } else {
+        // For other order types, use calculateTotalInvoiceValue
+        const invoiceValue = calculateTotalInvoiceValue();
+        setCollectibleAmount(invoiceValue.toString());
+      }
     }
-  }, [paymentMethod, boxesData, b2bBoxesData, order.orderType]);
+  }, [paymentMethod, totalCollectibleAmount, boxesData, b2bBoxesData, order.orderType]);
 
   return (
     <div className="p-6">
@@ -1413,6 +1439,8 @@ function OrderCreation() {
                     onBoxDataUpdate={handleBoxDataUpdate}
                     validationErrors={boxValidationErrors}
                     clearFieldError={clearBoxFieldError}
+                    paymentMethod={paymentMethod}
+
                   />
                 ) : (
                   <OrderFormB2B

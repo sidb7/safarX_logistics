@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect, useRef } from "react";
 import FloatingLabelInput from "./FloatingLabelInput";
 import {
@@ -30,20 +28,16 @@ import OneButton from "../../components/Button/OneButton";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 
-
-
-
-
-
 const STORAGE_KEYS = {
-  BOX_DATA: 'order-form-box-data',
-  BOX_COUNT: 'order-form-box-count',
-  SELECTED_BOX: 'order-form-selected-box',
-  ALL_BOXES_IDENTICAL: 'order-form-all-boxes-identical',
-  PRODUCT_SUGGESTIONS: 'order-form-product-suggestions',
-  BOX_SUGGESTIONS: 'order-form-box-suggestions',
-  SAVED_PRODUCTS: 'order-form-saved-products',
-  SAVED_BOX: 'order-form-saved-box',
+  BOX_DATA: "order-form-box-data",
+  BOX_COUNT: "order-form-box-count",
+  SELECTED_BOX: "order-form-selected-box",
+  ALL_BOXES_IDENTICAL: "order-form-all-boxes-identical",
+  PRODUCT_SUGGESTIONS: "order-form-product-suggestions",
+  BOX_SUGGESTIONS: "order-form-box-suggestions",
+  SAVED_PRODUCTS: "order-form-saved-products",
+  SAVED_BOX: "order-form-saved-box",
+  TOTAL_COLLECTIBLE_AMOUNT: "order-form-total-collectible-amount", // New storage key
 };
 
 // 2. Add initial state loading function
@@ -51,21 +45,39 @@ const loadInitialState = () => {
   const savedBoxData = localStorage.getItem(STORAGE_KEYS.BOX_DATA);
   const savedBoxCount = localStorage.getItem(STORAGE_KEYS.BOX_COUNT);
   const savedSelectedBox = localStorage.getItem(STORAGE_KEYS.SELECTED_BOX);
-  const savedAllBoxesIdentical = localStorage.getItem(STORAGE_KEYS.ALL_BOXES_IDENTICAL);
-  const savedProductSuggestions = localStorage.getItem(STORAGE_KEYS.PRODUCT_SUGGESTIONS);
-  const savedBoxSuggestions = localStorage.getItem(STORAGE_KEYS.BOX_SUGGESTIONS);
+  const savedAllBoxesIdentical = localStorage.getItem(
+    STORAGE_KEYS.ALL_BOXES_IDENTICAL
+  );
+  const savedProductSuggestions = localStorage.getItem(
+    STORAGE_KEYS.PRODUCT_SUGGESTIONS
+  );
+  const savedBoxSuggestions = localStorage.getItem(
+    STORAGE_KEYS.BOX_SUGGESTIONS
+  );
   const savedProducts = localStorage.getItem(STORAGE_KEYS.SAVED_PRODUCTS);
   const savedBox = localStorage.getItem(STORAGE_KEYS.SAVED_BOX);
+  const savedTotalCollectibleAmount = localStorage.getItem(
+    STORAGE_KEYS.TOTAL_COLLECTIBLE_AMOUNT
+  );
 
   return {
     boxData: savedBoxData ? JSON.parse(savedBoxData) : null,
     boxCount: savedBoxCount ? parseInt(savedBoxCount) : 1,
     selectedBox: savedSelectedBox ? parseInt(savedSelectedBox) : 1,
-    allBoxesIdentical: savedAllBoxesIdentical ? JSON.parse(savedAllBoxesIdentical) : false,
-    productSuggestions: savedProductSuggestions ? JSON.parse(savedProductSuggestions) : null,
-    boxSuggestions: savedBoxSuggestions ? JSON.parse(savedBoxSuggestions) : null,
+    allBoxesIdentical: savedAllBoxesIdentical
+      ? JSON.parse(savedAllBoxesIdentical)
+      : false,
+    productSuggestions: savedProductSuggestions
+      ? JSON.parse(savedProductSuggestions)
+      : null,
+    boxSuggestions: savedBoxSuggestions
+      ? JSON.parse(savedBoxSuggestions)
+      : null,
     savedProductsState: savedProducts ? JSON.parse(savedProducts) : null,
     savedBoxState: savedBox ? JSON.parse(savedBox) : false,
+    totalCollectibleAmount: savedTotalCollectibleAmount
+      ? parseFloat(savedTotalCollectibleAmount)
+      : 0,
   };
 };
 
@@ -90,6 +102,7 @@ interface Product {
   totalWeight: string | number;
   boxInfo: BoxInfo;
   isExpanded: boolean;
+  isAdditionalInfoVisible: boolean; // New property to track additional info visibility
   selectedSuggestion: ProductSuggestion | null;
   isManuallyEdited: boolean; // New flag to track if product was manually edited
 }
@@ -108,6 +121,7 @@ interface BoxData {
   dimensions: BoxDimensions;
   products: Product[];
   selectedBoxSuggestion: BoxSuggestion | null;
+  collectibleAmount: string | number; // New field to track collectible amount per box
 }
 
 interface ProductSuggestion {
@@ -157,19 +171,28 @@ interface BoxSuggestion {
 
 // Add props interface to receive and send data to parent OrderCreation component
 interface OrderFormProps {
-  onBoxDataUpdate?: (boxes: BoxData[], metadata: { allBoxesIdentical: boolean, boxCount: number }) => void;
+  onBoxDataUpdate?: (
+    boxes: BoxData[],
+    metadata: {
+      allBoxesIdentical: boolean;
+      boxCount: number;
+      totalCollectibleAmount: number;
+    }
+  ) => void;
   validationErrors?: {
     [boxId: number]: {
       [fieldId: string]: boolean;
     };
   };
   clearFieldError?: (boxId: number, fieldId: string) => void;
+  paymentMethod?: string; // Add payment method prop
 }
 
 const OrderForm: React.FC<OrderFormProps> = ({
   onBoxDataUpdate,
   validationErrors = {},
   clearFieldError = () => {},
+  paymentMethod = "Prepaid", // Default to Prepaid
 }) => {
   const initialState = loadInitialState();
 
@@ -177,17 +200,21 @@ const OrderForm: React.FC<OrderFormProps> = ({
   const [boxCount, setBoxCount] = useState<number>(initialState.boxCount);
 
   // const [selectedBox, setSelectedBox] = useState<number>(1);
-  const [selectedBox, setSelectedBox] = useState<number>(initialState.selectedBox);
+  const [selectedBox, setSelectedBox] = useState<number>(
+    initialState.selectedBox
+  );
 
   // const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(false);
-  const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(initialState.allBoxesIdentical);
+  const [allBoxesIdentical, setAllBoxesIdentical] = useState<boolean>(
+    initialState.allBoxesIdentical
+  );
 
   // const [productSuggestions, setProductSuggestions] = useState<
   //   ProductSuggestion[]
   // >([]);
-  const [productSuggestions, setProductSuggestions] = useState<ProductSuggestion[]>(
-    initialState.productSuggestions || []
-  );
+  const [productSuggestions, setProductSuggestions] = useState<
+    ProductSuggestion[]
+  >(initialState.productSuggestions || []);
   // const [boxSuggestions, setBoxSuggestions] = useState<BoxSuggestion[]>([]);
   const [boxSuggestions, setBoxSuggestions] = useState<BoxSuggestion[]>(
     initialState.boxSuggestions || []
@@ -232,7 +259,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
   // const [savedBox, setSavedBox] = useState<boolean>(false);
   const [savedBox, setSavedBox] = useState<boolean>(initialState.savedBoxState);
 
-
   // Store visible product suggestions for each product
   const [visibleProductSuggestions, setVisibleProductSuggestions] = useState<{
     [productId: number]: ProductSuggestion[];
@@ -242,6 +268,11 @@ const OrderForm: React.FC<OrderFormProps> = ({
   const [visibleBoxSuggestions, setVisibleBoxSuggestions] = useState<
     BoxSuggestion[]
   >([]);
+
+  // 4. Add a state for the total collectible amount in the component
+  const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(
+    initialState.totalCollectibleAmount || 0
+  );
 
   // Store boxes and their products in a single state
   // const [boxes, setBoxes] = useState<BoxData[]>([
@@ -303,6 +334,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
             totalPrice: "",
             totalWeight: "",
             isExpanded: true,
+            isAdditionalInfoVisible: true, // Initialize with additional info visible
             boxInfo: {
               l: "",
               b: "",
@@ -317,6 +349,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
           },
         ],
         selectedBoxSuggestion: null,
+        collectibleAmount: "", // Initialize with empty string
       },
     ]
   );
@@ -380,9 +413,19 @@ const OrderForm: React.FC<OrderFormProps> = ({
   // Notify parent component when box data changes
   useEffect(() => {
     if (onBoxDataUpdate) {
-      onBoxDataUpdate(boxes,{ allBoxesIdentical, boxCount });
+      onBoxDataUpdate(boxes, {
+        allBoxesIdentical,
+        boxCount,
+        totalCollectibleAmount,
+      });
     }
-  }, [boxes, onBoxDataUpdate, allBoxesIdentical, boxCount]);
+  }, [
+    boxes,
+    onBoxDataUpdate,
+    allBoxesIdentical,
+    boxCount,
+    totalCollectibleAmount,
+  ]);
 
   // Get current box data - always use the first box when identical
   const currentBox = allBoxesIdentical
@@ -444,33 +487,60 @@ const OrderForm: React.FC<OrderFormProps> = ({
   }, [selectedBox]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.ALL_BOXES_IDENTICAL, JSON.stringify(allBoxesIdentical));
+    localStorage.setItem(
+      STORAGE_KEYS.ALL_BOXES_IDENTICAL,
+      JSON.stringify(allBoxesIdentical)
+    );
   }, [allBoxesIdentical]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.PRODUCT_SUGGESTIONS, JSON.stringify(productSuggestions));
+    localStorage.setItem(
+      STORAGE_KEYS.PRODUCT_SUGGESTIONS,
+      JSON.stringify(productSuggestions)
+    );
   }, [productSuggestions]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.BOX_SUGGESTIONS, JSON.stringify(boxSuggestions));
+    localStorage.setItem(
+      STORAGE_KEYS.BOX_SUGGESTIONS,
+      JSON.stringify(boxSuggestions)
+    );
   }, [boxSuggestions]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.SAVED_PRODUCTS, JSON.stringify(savedProducts));
+    localStorage.setItem(
+      STORAGE_KEYS.SAVED_PRODUCTS,
+      JSON.stringify(savedProducts)
+    );
   }, [savedProducts]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.SAVED_BOX, JSON.stringify(savedBox));
   }, [savedBox]);
+  useEffect(() => {
+    setBoxes((prevBoxes) => {
+      return prevBoxes.map((box) => {
+        const newTotalPrice = calculateBoxTotalPrice(box);
 
+        return {
+          ...box,
+          collectibleAmount: newTotalPrice,
+        };
+      });
+    });
+  }, [
+    boxes
+      .map((box) => box.products.map((p) => p.totalPrice).join(","))
+      .join("|"),
+  ]);
 
   // Helper function to calculate total price of products in a box
-const calculateBoxTotalPrice = (box: BoxData): number => {
-  return box.products.reduce((total, product) => {
-    const productTotal = Number(product.totalPrice) || 0;
-    return total + productTotal;
-  }, 0);
-};
+  const calculateBoxTotalPrice = (box: BoxData): number => {
+    return box.products.reduce((total, product) => {
+      const productTotal = Number(product.totalPrice) || 0;
+      return total + productTotal;
+    }, 0);
+  };
 
   // Fetch box suggestions from API
   const fetchBoxSuggestions = async () => {
@@ -507,6 +577,29 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
     fetchProductSuggestions();
     fetchBoxSuggestions();
   }, []);
+
+  // 6. Add a useEffect to update totalCollectibleAmount when any box's collectibleAmount changes
+  useEffect(() => {
+    // Calculate total collectible amount from all boxes
+    const total = boxes.reduce((sum, box) => {
+      // If collectibleAmount is empty/not set, use the box's total price instead
+      let boxCollectible = Number(box.collectibleAmount);
+      if (isNaN(boxCollectible) || boxCollectible === 0) {
+        boxCollectible = calculateBoxTotalPrice(box);
+      }
+      return sum + boxCollectible;
+    }, 0);
+
+    setTotalCollectibleAmount(total);
+  }, [boxes]);
+
+  // 7. Add useEffect to save totalCollectibleAmount to localStorage
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEYS.TOTAL_COLLECTIBLE_AMOUNT,
+      totalCollectibleAmount.toString()
+    );
+  }, [totalCollectibleAmount]);
 
   // Handle product name search input
   const handleProductNameSearch = (productId: number, value: string) => {
@@ -614,6 +707,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
             selectedBoxSuggestion: currentBoxData.selectedBoxSuggestion
               ? { ...currentBoxData.selectedBoxSuggestion }
               : null,
+            collectibleAmount: currentBoxData.collectibleAmount, // Copy collectible amount
           }))
         );
       }
@@ -654,6 +748,50 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
     }
   };
 
+  // 8. Add a function to handle collectible amount changes
+  const handleCollectibleAmountChange = (value: string): void => {
+    setBoxes((prevBoxes) => {
+      if (allBoxesIdentical) {
+        // Update all boxes in identical mode
+        const numericValue = value === "" ? value : Number(value);
+
+        return prevBoxes.map((box) => ({
+          ...box,
+          collectibleAmount: numericValue,
+        }));
+      } else {
+        // Update only the selected box
+        return prevBoxes.map((box) => {
+          if (box.id === selectedBox) {
+            return {
+              ...box,
+              collectibleAmount: value === "" ? value : Number(value),
+            };
+          }
+          return box;
+        });
+      }
+    });
+  };
+
+  // 13. Add a function to sync collectible amount with total price when products change
+  const syncCollectibleAmountWithTotalPrice = (
+    updatedBoxes: BoxData[]
+  ): BoxData[] => {
+    return updatedBoxes.map((box) => {
+      // Only sync if collectible amount is empty or the user didn't manually set it
+      const boxCollectible = Number(box.collectibleAmount);
+      if (isNaN(boxCollectible) || boxCollectible === 0) {
+        const totalPrice = calculateBoxTotalPrice(box);
+        return {
+          ...box,
+          collectibleAmount: totalPrice,
+        };
+      }
+      return box;
+    });
+  };
+
   const increaseBoxCount = (): void => {
     const newCount = boxCount + 1;
     setBoxCount(newCount);
@@ -671,6 +809,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
             selectedBoxSuggestion: templateBox.selectedBoxSuggestion
               ? { ...templateBox.selectedBoxSuggestion }
               : null,
+            collectibleAmount: templateBox.collectibleAmount, // Copy collectible amount
           },
         ];
       } else {
@@ -697,6 +836,8 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
                 totalPrice: "",
                 totalWeight: "",
                 isExpanded: true,
+                isAdditionalInfoVisible: true, // Initialize with additional info visible
+
                 boxInfo: {
                   l: "",
                   b: "",
@@ -711,6 +852,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               },
             ],
             selectedBoxSuggestion: null,
+            collectibleAmount: "", // Initialize with empty string
           },
         ];
       }
@@ -720,6 +862,48 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   const handleBoxSelect = (boxNumber: number): void => {
     setSelectedBox(boxNumber);
   };
+
+  // const toggleAdditionalInfo = (productId: number): void => {
+  //   setBoxes((prevBoxes) => {
+  //     if (allBoxesIdentical) {
+  //       // Apply to all boxes in identical mode
+  //       return prevBoxes.map((box) => {
+  //         return {
+  //           ...box,
+  //           products: box.products.map((product) => {
+  //             if (product.id === productId) {
+  //               return {
+  //                 ...product,
+  //                 isExpanded: !product.isExpanded,
+  //               };
+  //             }
+  //             return product;
+  //           }),
+  //         };
+  //       });
+  //     } else {
+  //       // Original behavior for non-identical boxes
+  //       return prevBoxes.map((box) => {
+  //         if (box.id === selectedBox) {
+  //           return {
+  //             ...box,
+  //             products: box.products.map((product) => {
+  //               if (product.id === productId) {
+  //                 return {
+  //                   ...product,
+  //                   isExpanded: !product.isExpanded,
+  //                 };
+  //               }
+  //               return product;
+  //             }),
+  //           };
+  //         }
+  //         return box;
+  //       });
+  //     }
+  //   });
+  // };
+  
 
   const toggleAdditionalInfo = (productId: number): void => {
     setBoxes((prevBoxes) => {
@@ -732,7 +916,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               if (product.id === productId) {
                 return {
                   ...product,
-                  isExpanded: !product.isExpanded,
+                  isAdditionalInfoVisible: !product.isAdditionalInfoVisible,
                 };
               }
               return product;
@@ -749,7 +933,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
                 if (product.id === productId) {
                   return {
                     ...product,
-                    isExpanded: !product.isExpanded,
+                    isAdditionalInfoVisible: !product.isAdditionalInfoVisible,
                   };
                 }
                 return product;
@@ -761,6 +945,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
       }
     });
   };
+
 
   const toggleProductExpansion = (productId: number): void => {
     setBoxes((prevBoxes) => {
@@ -832,6 +1017,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
                 totalPrice: "",
                 totalWeight: "",
                 isExpanded: true,
+                isAdditionalInfoVisible: true, // Initialize with additional info visible
                 boxInfo: {
                   l: "",
                   b: "",
@@ -874,6 +1060,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
                   totalPrice: "",
                   totalWeight: "",
                   isExpanded: true,
+                  isAdditionalInfoVisible: true, // Initialize with additional info visible
                   boxInfo: {
                     l: "",
                     b: "",
@@ -958,33 +1145,37 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   const removeProduct = (productId: number): void => {
     // Create a mapping of old product IDs to new sequential IDs
     const idMapping: { [oldId: number]: number } = {};
-    
+
     setBoxes((prevBoxes) => {
       if (allBoxesIdentical) {
         // Apply to all boxes in identical mode
         return prevBoxes.map((box) => {
           if (box.products.length > 1) {
             // If multiple products, remove the selected one and renumber remaining products
-            const filteredProducts = box.products.filter(product => product.id !== productId);
-            
+            const filteredProducts = box.products.filter(
+              (product) => product.id !== productId
+            );
+
             // Create renumbered products with sequential IDs
-            const renumberedProducts = filteredProducts.map((product, index) => {
-              const newId = index + 1;
-              
-              // Store mapping from old ID to new ID (for the first box only)
-              if (box.id === 1) {
-                idMapping[product.id] = newId;
+            const renumberedProducts = filteredProducts.map(
+              (product, index) => {
+                const newId = index + 1;
+
+                // Store mapping from old ID to new ID (for the first box only)
+                if (box.id === 1) {
+                  idMapping[product.id] = newId;
+                }
+
+                return {
+                  ...product,
+                  id: newId,
+                };
               }
-              
-              return {
-                ...product,
-                id: newId
-              };
-            });
-            
+            );
+
             return {
               ...box,
-              products: renumberedProducts
+              products: renumberedProducts,
             };
           } else {
             // If only one product, reset its data instead of removing it
@@ -1025,24 +1216,28 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
           if (box.id === selectedBox) {
             if (box.products.length > 1) {
               // If multiple products, remove the selected one and renumber remaining products
-              const filteredProducts = box.products.filter(product => product.id !== productId);
-              
+              const filteredProducts = box.products.filter(
+                (product) => product.id !== productId
+              );
+
               // Create renumbered products with sequential IDs
-              const renumberedProducts = filteredProducts.map((product, index) => {
-                const newId = index + 1;
-                
-                // Store mapping from old ID to new ID
-                idMapping[product.id] = newId;
-                
-                return {
-                  ...product,
-                  id: newId
-                };
-              });
-              
+              const renumberedProducts = filteredProducts.map(
+                (product, index) => {
+                  const newId = index + 1;
+
+                  // Store mapping from old ID to new ID
+                  idMapping[product.id] = newId;
+
+                  return {
+                    ...product,
+                    id: newId,
+                  };
+                }
+              );
+
               return {
                 ...box,
-                products: renumberedProducts
+                products: renumberedProducts,
               };
             } else {
               // If only one product, reset its data instead of removing it
@@ -1081,27 +1276,31 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
         });
       }
     });
-  
+
     // Update all state variables that reference product IDs
     setTimeout(() => {
       // We use setTimeout to ensure the boxes state has been updated first
-      
+
       // Check if the product was the only one in a box (was reset but not removed)
       const isOnlyProductReset = (() => {
         let result = false;
-        
+
         // Check if this was the only product in the current box
-        const currentBox = allBoxesIdentical ? 
-          boxes[0] : 
-          boxes.find(box => box.id === selectedBox);
-          
-        if (currentBox && currentBox.products.length === 1 && currentBox.products[0].id === productId) {
+        const currentBox = allBoxesIdentical
+          ? boxes[0]
+          : boxes.find((box) => box.id === selectedBox);
+
+        if (
+          currentBox &&
+          currentBox.products.length === 1 &&
+          currentBox.products[0].id === productId
+        ) {
           result = true;
         }
-        
+
         return result;
       })();
-      
+
       // If it was the only product and was reset (not removed), we keep its suggestions
       if (isOnlyProductReset) {
         // Only clear the saved state for this product
@@ -1110,31 +1309,31 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
           delete updated[productId];
           return updated;
         });
-        
+
         // Clear the product name search
         setProductNameSearch((prev) => {
           const updated = { ...prev };
           updated[productId] = ""; // Set to empty string instead of deleting
           return updated;
         });
-        
+
         // Hide any active search results
         setShowProductSearchResults((prev) => {
           const updated = { ...prev };
           updated[productId] = false; // Hide results instead of deleting
           return updated;
         });
-        
+
         // Keep the filtered results and visible suggestions intact
         // No need to modify filteredProductResults and visibleProductSuggestions
-      } 
+      }
       // Normal case - product was removed (not just reset)
       else {
         // Remove the deleted product ID from all state variables
         setSavedProducts((prev) => {
           const updated = { ...prev };
           delete updated[productId];
-          
+
           // Remap remaining products using the ID mapping
           const remapped: { [id: number]: boolean } = {};
           Object.entries(updated).forEach(([oldIdStr, value]) => {
@@ -1143,15 +1342,15 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               remapped[idMapping[oldId]] = value;
             }
           });
-          
+
           return remapped;
         });
-  
+
         // Clear search state for the deleted product and remap others
         setProductNameSearch((prev) => {
           const updated = { ...prev };
           delete updated[productId];
-          
+
           const remapped: { [id: number]: string } = {};
           Object.entries(updated).forEach(([oldIdStr, value]) => {
             const oldId = parseInt(oldIdStr);
@@ -1159,14 +1358,14 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               remapped[idMapping[oldId]] = value;
             }
           });
-          
+
           return remapped;
         });
-  
+
         setShowProductSearchResults((prev) => {
           const updated = { ...prev };
           delete updated[productId];
-          
+
           const remapped: { [id: number]: boolean } = {};
           Object.entries(updated).forEach(([oldIdStr, value]) => {
             const oldId = parseInt(oldIdStr);
@@ -1174,14 +1373,14 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               remapped[idMapping[oldId]] = value;
             }
           });
-          
+
           return remapped;
         });
-  
+
         setFilteredProductResults((prev) => {
           const updated = { ...prev };
           delete updated[productId];
-          
+
           const remapped: { [id: number]: ProductSuggestion[] } = {};
           Object.entries(updated).forEach(([oldIdStr, value]) => {
             const oldId = parseInt(oldIdStr);
@@ -1189,14 +1388,14 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               remapped[idMapping[oldId]] = value;
             }
           });
-          
+
           return remapped;
         });
-        
+
         setVisibleProductSuggestions((prev) => {
           const updated = { ...prev };
           delete updated[productId];
-          
+
           const remapped: { [id: number]: ProductSuggestion[] } = {};
           Object.entries(updated).forEach(([oldIdStr, value]) => {
             const oldId = parseInt(oldIdStr);
@@ -1204,7 +1403,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
               remapped[idMapping[oldId]] = value;
             }
           });
-          
+
           return remapped;
         });
       }
@@ -1247,21 +1446,31 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
     suggestion: ProductSuggestion
   ): void => {
     // Clear all validation errors for this product
-  if (clearFieldError && currentBox) {
-    // Clear product name error
-     // Only clear errors for fields that have values in the suggestion
-     if (suggestion.name) clearFieldError(currentBox.id, `product-${productId}-name`);
-     if (suggestion.qty) clearFieldError(currentBox.id, `product-${productId}-quantity`);
-     if (suggestion.unitPrice) clearFieldError(currentBox.id, `product-${productId}-unitPrice`);
-     if (suggestion.deadWeight) clearFieldError(currentBox.id, `product-${productId}-unitWeight`);
-     if (suggestion.length) clearFieldError(currentBox.id, `product-${productId}-length`);
-     if (suggestion.breadth) clearFieldError(currentBox.id, `product-${productId}-breadth`);
-     if (suggestion.height) clearFieldError(currentBox.id, `product-${productId}-height`);
-     if (suggestion.unitTax) clearFieldError(currentBox.id, `product-${productId}-tax`);
-     // Discount is usually not in suggestions, so don't clear that error
-     if (suggestion.hsnCode) clearFieldError(currentBox.id, `product-${productId}-hsn`);
-     if (suggestion.sku) clearFieldError(currentBox.id, `product-${productId}-sku`);
-  }
+    if (clearFieldError && currentBox) {
+      // Clear product name error
+      // Only clear errors for fields that have values in the suggestion
+      if (suggestion.name)
+        clearFieldError(currentBox.id, `product-${productId}-name`);
+      if (suggestion.qty)
+        clearFieldError(currentBox.id, `product-${productId}-quantity`);
+      if (suggestion.unitPrice)
+        clearFieldError(currentBox.id, `product-${productId}-unitPrice`);
+      if (suggestion.deadWeight)
+        clearFieldError(currentBox.id, `product-${productId}-unitWeight`);
+      if (suggestion.length)
+        clearFieldError(currentBox.id, `product-${productId}-length`);
+      if (suggestion.breadth)
+        clearFieldError(currentBox.id, `product-${productId}-breadth`);
+      if (suggestion.height)
+        clearFieldError(currentBox.id, `product-${productId}-height`);
+      if (suggestion.unitTax)
+        clearFieldError(currentBox.id, `product-${productId}-tax`);
+      // Discount is usually not in suggestions, so don't clear that error
+      if (suggestion.hsnCode)
+        clearFieldError(currentBox.id, `product-${productId}-hsn`);
+      if (suggestion.sku)
+        clearFieldError(currentBox.id, `product-${productId}-sku`);
+    }
     setBoxes((prevBoxes) => {
       if (allBoxesIdentical) {
         // Apply to all boxes in identical mode
@@ -1436,14 +1645,14 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
 
   // Select a box suggestion
   const selectBoxSuggestion = (suggestion: BoxSuggestion): void => {
-     // Clear box dimension validation errors
-  if (clearFieldError && currentBox) {
-    if (suggestion.name) clearFieldError(currentBox.id, `box-name`);
-    if (suggestion.length) clearFieldError(currentBox.id, `box-length`);
-    if (suggestion.breadth) clearFieldError(currentBox.id, `box-breadth`);
-    if (suggestion.height) clearFieldError(currentBox.id, `box-height`);
-    if (suggestion.deadWeight) clearFieldError(currentBox.id, `box-weight`);
-  }
+    // Clear box dimension validation errors
+    if (clearFieldError && currentBox) {
+      if (suggestion.name) clearFieldError(currentBox.id, `box-name`);
+      if (suggestion.length) clearFieldError(currentBox.id, `box-length`);
+      if (suggestion.breadth) clearFieldError(currentBox.id, `box-breadth`);
+      if (suggestion.height) clearFieldError(currentBox.id, `box-height`);
+      if (suggestion.deadWeight) clearFieldError(currentBox.id, `box-weight`);
+    }
     setBoxes((prevBoxes) => {
       if (allBoxesIdentical) {
         // Apply to all boxes in identical mode
@@ -1791,7 +2000,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //   const selectedProducts = catalogProducts.filter(
   //     (product: any) => selectedCatalogProducts[product._id]
   //   );
-  
+
   //   // Add them to the current box
   //   if (selectedProducts.length > 0) {
   //     setBoxes((prevBoxes) => {
@@ -1802,10 +2011,10 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //           const emptyProducts = box.products.filter(
   //             (p) => !p.name || p.name.trim() === ""
   //           );
-            
+
   //           // Clone the existing products
   //           let updatedProducts = [...box.products];
-  
+
   //           // First, replace empty products with selected products
   //           let remainingSelected = [...selectedProducts];
   //           if (emptyProducts.length > 0) {
@@ -1813,14 +2022,14 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //               // If this is an empty product and we have selected products to use
   //               if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
   //                 const selectedProduct = remainingSelected.shift();
-                  
+
   //                 if (selectedProduct) {
   //                   // Mark this product as saved
   //                   setSavedProducts((prev) => ({
   //                     ...prev,
   //                     [product.id]: true,
   //                   }));
-                    
+
   //                   return {
   //                     ...product, // Keep the existing ID
   //                     name: selectedProduct.name || "",
@@ -1847,12 +2056,12 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //               return product;
   //             });
   //           }
-  
+
   //           // If we still have selected products to add, add them as new products
   //           if (remainingSelected.length > 0) {
   //             // Find the maximum product ID to ensure unique IDs for new products
   //             let maxId = Math.max(...updatedProducts.map((p) => p.id));
-  
+
   //             // Add remaining selected products as new products
   //             remainingSelected.forEach((product: any) => {
   //               if (product) {
@@ -1878,7 +2087,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //                   },
   //                   isManuallyEdited: false, // Not manually edited since from catalog
   //                 });
-  
+
   //                 // Mark each new product as saved
   //                 setSavedProducts((prev) => ({
   //                   ...prev,
@@ -1887,7 +2096,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //               }
   //             });
   //           }
-  
+
   //           return {
   //             ...box,
   //             products: updatedProducts,
@@ -1901,24 +2110,24 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //             const emptyProducts = box.products.filter(
   //               (p) => !p.name || p.name.trim() === ""
   //             );
-              
+
   //             // Clone the existing products
   //             let updatedProducts = [...box.products];
-  
+
   //             // First, replace empty products with selected products
   //             let remainingSelected = [...selectedProducts];
   //             if (emptyProducts.length > 0) {
   //               updatedProducts = updatedProducts.map((product) => {
   //                 if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
   //                   const selectedProduct = remainingSelected.shift();
-                    
+
   //                   if (selectedProduct) {
   //                     // Mark this product as saved
   //                     setSavedProducts((prev) => ({
   //                       ...prev,
   //                       [product.id]: true,
   //                     }));
-                      
+
   //                     return {
   //                       ...product, // Keep the existing ID
   //                       name: selectedProduct.name || "",
@@ -1945,7 +2154,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //                 return product;
   //               });
   //             }
-  
+
   //             // Only add new products if we still have remaining selected products
   //             if (remainingSelected.length > 0) {
   //               let maxId = Math.max(...updatedProducts.map((p) => p.id));
@@ -1973,7 +2182,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //                     },
   //                     isManuallyEdited: false,
   //                   });
-  
+
   //                   setSavedProducts((prev) => ({
   //                     ...prev,
   //                     [maxId]: true,
@@ -1981,7 +2190,7 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //                 }
   //               });
   //             }
-  
+
   //             return {
   //               ...box,
   //               products: updatedProducts,
@@ -1992,132 +2201,36 @@ const calculateBoxTotalPrice = (box: BoxData): number => {
   //       }
   //     });
   //   }
-  
+
   //   // Close the modal
   //   closeProductCatalogModal();
   // };
 
   // Replace the handleProceedClick function with this improved version
 
-const handleProceedClick = () => {
-  // Get all selected products
-  const selectedProducts = catalogProducts.filter(
-    (product: any) => selectedCatalogProducts[product._id]
-  );
+  const handleProceedClick = () => {
+    // Get all selected products
+    const selectedProducts = catalogProducts.filter(
+      (product: any) => selectedCatalogProducts[product._id]
+    );
 
-  // Collect product IDs that need to be marked as saved
-  const newSavedIds: { [id: number]: boolean } = {};
+    // Collect product IDs that need to be marked as saved
+    const newSavedIds: { [id: number]: boolean } = {};
 
-  // Track new product IDs to set suggestions for
-  const newProductIds: number[] = [];
-  
-  // Add them to the current box
-  if (selectedProducts.length > 0) {
-    setBoxes((prevBoxes) => {
-      if (allBoxesIdentical) {
-        // Apply to all boxes in identical mode
-        return prevBoxes.map((box) => {
-          // Find empty products in this box (products with no name)
-          const emptyProducts = box.products.filter(
-            (p) => !p.name || p.name.trim() === ""
-          );
-          
-          // Clone the existing products
-          let updatedProducts = [...box.products];
+    // Track new product IDs to set suggestions for
+    const newProductIds: number[] = [];
 
-          // First, replace empty products with selected products
-          let remainingSelected = [...selectedProducts];
-          if (emptyProducts.length > 0) {
-            updatedProducts = updatedProducts.map((product) => {
-              // If this is an empty product and we have selected products to use
-              if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
-                const selectedProduct = remainingSelected.shift();
-                
-                if (selectedProduct) {
-                  // Add product ID to be marked as saved
-                  newSavedIds[product.id] = true;
-                  // Add to list of products needing suggestions
-newProductIds.push(product.id);
-                  
-                  return {
-                    ...product, // Keep the existing ID
-                    name: selectedProduct.name || "",
-                    quantity: 1,
-                    unitPrice: selectedProduct.unitPrice || 0,
-                    unitWeight: selectedProduct.deadWeight || 0,
-                    totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
-                    totalWeight: (selectedProduct.qty || 1) * (selectedProduct.deadWeight || 0),
-                    isExpanded: true,
-                    selectedSuggestion: selectedProduct as ProductSuggestion,
-                    boxInfo: {
-                      l: selectedProduct.length || 0,
-                      b: selectedProduct.breadth || 0,
-                      h: selectedProduct.height || 0,
-                      discount: "",
-                      tax: selectedProduct.unitTax || 0,
-                      hsn: selectedProduct.hsnCode || "",
-                      sku: selectedProduct.sku || "",
-                    },
-                    isManuallyEdited: false, // Not manually edited since from catalog
-                  };
-                }
-              }
-              return product;
-            });
-          }
-
-          // If we still have selected products to add, add them as new products
-          if (remainingSelected.length > 0) {
-            // Find the maximum product ID to ensure unique IDs for new products
-            let maxId = Math.max(...updatedProducts.map((p) => p.id));
-
-            // Add remaining selected products as new products
-            remainingSelected.forEach((product: any) => {
-              if (product) {
-                maxId++;
-                
-                // Add product ID to be marked as saved
-                newSavedIds[maxId] = true;
-                
-                updatedProducts.push({
-                  id: maxId,
-                  name: product.name || "",
-                  quantity: 1,
-                  unitPrice: product.unitPrice || 0,
-                  unitWeight: product.deadWeight || 0,
-                  totalPrice: (product.qty || 1) * (product.unitPrice || 0),
-                  totalWeight: (product.qty || 1) * (product.deadWeight || 0),
-                  isExpanded: true,
-                  selectedSuggestion: product as ProductSuggestion,
-                  boxInfo: {
-                    l: product.length || 0,
-                    b: product.breadth || 0,
-                    h: product.height || 0,
-                    discount: "",
-                    tax: product.unitTax || 0,
-                    hsn: product.hsnCode || "",
-                    sku: product.sku || "",
-                  },
-                  isManuallyEdited: false, // Not manually edited since from catalog
-                });
-              }
-            });
-          }
-
-          return {
-            ...box,
-            products: updatedProducts,
-          };
-        });
-      } else {
-        // For non-identical boxes - similar logic but only for selected box
-        return prevBoxes.map((box) => {
-          if (box.id === selectedBox) {
-            // Find empty products in this box
+    // Add them to the current box
+    if (selectedProducts.length > 0) {
+      setBoxes((prevBoxes) => {
+        if (allBoxesIdentical) {
+          // Apply to all boxes in identical mode
+          return prevBoxes.map((box) => {
+            // Find empty products in this box (products with no name)
             const emptyProducts = box.products.filter(
               (p) => !p.name || p.name.trim() === ""
             );
-            
+
             // Clone the existing products
             let updatedProducts = [...box.products];
 
@@ -2125,21 +2238,31 @@ newProductIds.push(product.id);
             let remainingSelected = [...selectedProducts];
             if (emptyProducts.length > 0) {
               updatedProducts = updatedProducts.map((product) => {
-                if ((!product.name || product.name.trim() === "") && remainingSelected.length > 0) {
+                // If this is an empty product and we have selected products to use
+                if (
+                  (!product.name || product.name.trim() === "") &&
+                  remainingSelected.length > 0
+                ) {
                   const selectedProduct = remainingSelected.shift();
-                  
+
                   if (selectedProduct) {
                     // Add product ID to be marked as saved
                     newSavedIds[product.id] = true;
-                    
+                    // Add to list of products needing suggestions
+                    newProductIds.push(product.id);
+
                     return {
                       ...product, // Keep the existing ID
                       name: selectedProduct.name || "",
                       quantity: 1,
                       unitPrice: selectedProduct.unitPrice || 0,
                       unitWeight: selectedProduct.deadWeight || 0,
-                      totalPrice: (selectedProduct.qty || 1) * (selectedProduct.unitPrice || 0),
-                      totalWeight: (selectedProduct.qty || 1) * (selectedProduct.deadWeight || 0),
+                      totalPrice:
+                        (selectedProduct.qty || 1) *
+                        (selectedProduct.unitPrice || 0),
+                      totalWeight:
+                        (selectedProduct.qty || 1) *
+                        (selectedProduct.deadWeight || 0),
                       isExpanded: true,
                       selectedSuggestion: selectedProduct as ProductSuggestion,
                       boxInfo: {
@@ -2159,16 +2282,19 @@ newProductIds.push(product.id);
               });
             }
 
-            // Only add new products if we still have remaining selected products
+            // If we still have selected products to add, add them as new products
             if (remainingSelected.length > 0) {
+              // Find the maximum product ID to ensure unique IDs for new products
               let maxId = Math.max(...updatedProducts.map((p) => p.id));
+
+              // Add remaining selected products as new products
               remainingSelected.forEach((product: any) => {
                 if (product) {
                   maxId++;
-                  
+
                   // Add product ID to be marked as saved
                   newSavedIds[maxId] = true;
-                  
+
                   updatedProducts.push({
                     id: maxId,
                     name: product.name || "",
@@ -2178,6 +2304,8 @@ newProductIds.push(product.id);
                     totalPrice: (product.qty || 1) * (product.unitPrice || 0),
                     totalWeight: (product.qty || 1) * (product.deadWeight || 0),
                     isExpanded: true,
+                    isAdditionalInfoVisible: true, // Initialize with additional info visible
+
                     selectedSuggestion: product as ProductSuggestion,
                     boxInfo: {
                       l: product.length || 0,
@@ -2188,7 +2316,7 @@ newProductIds.push(product.id);
                       hsn: product.hsnCode || "",
                       sku: product.sku || "",
                     },
-                    isManuallyEdited: false,
+                    isManuallyEdited: false, // Not manually edited since from catalog
                   });
                 }
               });
@@ -2198,41 +2326,140 @@ newProductIds.push(product.id);
               ...box,
               products: updatedProducts,
             };
-          }
-          return box;
-        });
-      }
-    });
-    
-    // After state update, update all saved products at once
-    setTimeout(() => {
-      if (Object.keys(newSavedIds).length > 0) {
-        setSavedProducts((prev) => ({
-          ...prev,
-          ...newSavedIds
-        }));
-      }
-      // Initialize product suggestions for new products
-if (newProductIds.length > 0) {
-  setVisibleProductSuggestions((prev) => {
-    const updates:any = {};
-    newProductIds.forEach(productId => {
-      updates[productId] = productSuggestions.slice(0, 3);
-    });
-    return {
-      ...prev,
-      ...updates
-    };
-  });
-}
-    }, 0);
+          });
+        } else {
+          // For non-identical boxes - similar logic but only for selected box
+          return prevBoxes.map((box) => {
+            if (box.id === selectedBox) {
+              // Find empty products in this box
+              const emptyProducts = box.products.filter(
+                (p) => !p.name || p.name.trim() === ""
+              );
 
-    
-  }
+              // Clone the existing products
+              let updatedProducts = [...box.products];
 
-  // Close the modal
-  closeProductCatalogModal();
-};
+              // First, replace empty products with selected products
+              let remainingSelected = [...selectedProducts];
+              if (emptyProducts.length > 0) {
+                updatedProducts = updatedProducts.map((product) => {
+                  if (
+                    (!product.name || product.name.trim() === "") &&
+                    remainingSelected.length > 0
+                  ) {
+                    const selectedProduct = remainingSelected.shift();
+
+                    if (selectedProduct) {
+                      // Add product ID to be marked as saved
+                      newSavedIds[product.id] = true;
+
+                      return {
+                        ...product, // Keep the existing ID
+                        name: selectedProduct.name || "",
+                        quantity: 1,
+                        unitPrice: selectedProduct.unitPrice || 0,
+                        unitWeight: selectedProduct.deadWeight || 0,
+                        totalPrice:
+                          (selectedProduct.qty || 1) *
+                          (selectedProduct.unitPrice || 0),
+                        totalWeight:
+                          (selectedProduct.qty || 1) *
+                          (selectedProduct.deadWeight || 0),
+                        isExpanded: true,
+                        selectedSuggestion:
+                          selectedProduct as ProductSuggestion,
+                        boxInfo: {
+                          l: selectedProduct.length || 0,
+                          b: selectedProduct.breadth || 0,
+                          h: selectedProduct.height || 0,
+                          discount: "",
+                          tax: selectedProduct.unitTax || 0,
+                          hsn: selectedProduct.hsnCode || "",
+                          sku: selectedProduct.sku || "",
+                        },
+                        isManuallyEdited: false, // Not manually edited since from catalog
+                      };
+                    }
+                  }
+                  return product;
+                });
+              }
+
+              // Only add new products if we still have remaining selected products
+              if (remainingSelected.length > 0) {
+                let maxId = Math.max(...updatedProducts.map((p) => p.id));
+                remainingSelected.forEach((product: any) => {
+                  if (product) {
+                    maxId++;
+
+                    // Add product ID to be marked as saved
+                    newSavedIds[maxId] = true;
+
+                    updatedProducts.push({
+                      id: maxId,
+                      name: product.name || "",
+                      quantity: 1,
+                      unitPrice: product.unitPrice || 0,
+                      unitWeight: product.deadWeight || 0,
+                      totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+                      totalWeight:
+                        (product.qty || 1) * (product.deadWeight || 0),
+                      isExpanded: true,
+                      isAdditionalInfoVisible: true, // Initialize with additional info visible
+
+                      selectedSuggestion: product as ProductSuggestion,
+                      boxInfo: {
+                        l: product.length || 0,
+                        b: product.breadth || 0,
+                        h: product.height || 0,
+                        discount: "",
+                        tax: product.unitTax || 0,
+                        hsn: product.hsnCode || "",
+                        sku: product.sku || "",
+                      },
+                      isManuallyEdited: false,
+                    });
+                  }
+                });
+              }
+
+              return {
+                ...box,
+                products: updatedProducts,
+              };
+            }
+            return box;
+          });
+        }
+      });
+
+      // After state update, update all saved products at once
+      setTimeout(() => {
+        if (Object.keys(newSavedIds).length > 0) {
+          setSavedProducts((prev) => ({
+            ...prev,
+            ...newSavedIds,
+          }));
+        }
+        // Initialize product suggestions for new products
+        if (newProductIds.length > 0) {
+          setVisibleProductSuggestions((prev) => {
+            const updates: any = {};
+            newProductIds.forEach((productId) => {
+              updates[productId] = productSuggestions.slice(0, 3);
+            });
+            return {
+              ...prev,
+              ...updates,
+            };
+          });
+        }
+      }, 0);
+    }
+
+    // Close the modal
+    closeProductCatalogModal();
+  };
   const closeProductCatalogModal = () => {
     setIsProductCatalogModalOpen(false);
   };
@@ -2717,7 +2944,6 @@ if (newProductIds.length > 0) {
                             value={product.quantity.toString()}
                             type="number"
                             showNumberControls={true} // Add this prop only for quantity fields
-
                             onChangeCallback={(value) => {
                               if (
                                 validationErrors[currentBox.id]?.[
@@ -2946,17 +3172,17 @@ if (newProductIds.length > 0) {
                         onClick={() => toggleAdditionalInfo(product.id)}
                       >
                         <div className="font-medium text-gray-700">
-                          {product.isExpanded ? "Hide" : "Show"} Additional
+                          {product.isAdditionalInfoVisible ? "Hide" : "Show"} Additional
                           Information
                         </div>
-                        {product.isExpanded ? (
+                        {product.isAdditionalInfoVisible ? (
                           <ChevronUp className="w-5 h-5 text-gray-500" />
                         ) : (
                           <ChevronDown className="w-5 h-5 text-gray-500" />
                         )}
                       </div>
 
-                      {product.isExpanded && (
+                      {product.isAdditionalInfoVisible && (
                         <div className="flex gap-2">
                           <div className="flex items-center gap-2">
                             <div className="!w-14">
@@ -3520,9 +3746,12 @@ if (newProductIds.length > 0) {
                   placeholder="L"
                   value={currentBox.dimensions.l.toString()}
                   type="number"
-                  onChangeCallback={(value) => { if (validationErrors[currentBox.id]?.[`box-length`]) {
-                    clearFieldError(currentBox.id, `box-length`);
-                  }  updateBoxDimensions("l", value)}}
+                  onChangeCallback={(value) => {
+                    if (validationErrors[currentBox.id]?.[`box-length`]) {
+                      clearFieldError(currentBox.id, `box-length`);
+                    }
+                    updateBoxDimensions("l", value);
+                  }}
                   error={
                     validationErrors[currentBox.id]?.[`box-length`] || false
                   }
@@ -3534,9 +3763,12 @@ if (newProductIds.length > 0) {
                   placeholder="B"
                   value={currentBox.dimensions.b.toString()}
                   type="number"
-                  onChangeCallback={(value) =>{if (validationErrors[currentBox.id]?.[`box-breadth`]) {
-                    clearFieldError(currentBox.id, `box-breadth`);
-                  } updateBoxDimensions("b", value)}}
+                  onChangeCallback={(value) => {
+                    if (validationErrors[currentBox.id]?.[`box-breadth`]) {
+                      clearFieldError(currentBox.id, `box-breadth`);
+                    }
+                    updateBoxDimensions("b", value);
+                  }}
                   error={
                     validationErrors[currentBox.id]?.[`box-breadth`] || false
                   }
@@ -3548,9 +3780,12 @@ if (newProductIds.length > 0) {
                   placeholder="H"
                   value={currentBox.dimensions.h.toString()}
                   type="number"
-                  onChangeCallback={(value) => { if (validationErrors[currentBox.id]?.[`box-height`]) {
-                    clearFieldError(currentBox.id, `box-height`);
-                  } updateBoxDimensions("h", value)}}
+                  onChangeCallback={(value) => {
+                    if (validationErrors[currentBox.id]?.[`box-height`]) {
+                      clearFieldError(currentBox.id, `box-height`);
+                    }
+                    updateBoxDimensions("h", value);
+                  }}
                   error={
                     validationErrors[currentBox.id]?.[`box-height`] || false
                   }
@@ -3562,12 +3797,12 @@ if (newProductIds.length > 0) {
                   placeholder="Weight (kg)"
                   value={currentBox.dimensions.weight.toString()}
                   type="number"
-                  onChangeCallback={(value) =>{
+                  onChangeCallback={(value) => {
                     if (validationErrors[currentBox.id]?.[`box-weight`]) {
                       clearFieldError(currentBox.id, `box-weight`);
                     }
-                    updateBoxDimensions("weight", value)}
-                  }
+                    updateBoxDimensions("weight", value);
+                  }}
                   error={
                     validationErrors[currentBox.id]?.[`box-weight`] || false
                   }
@@ -3576,26 +3811,45 @@ if (newProductIds.length > 0) {
               </div>
             </div>
             {/* New inputs for Total Price and Collectible Amount */}
-<div className="grid grid-cols-2 gap-6 mt-6">
-  <div>
-    <FloatingLabelInput
-      placeholder="Total Price"
-      value={calculateBoxTotalPrice(currentBox).toString()}
-      type="number"
-      counter="₹"
-      readOnly={true}
-    />
-  </div>
-  <div>
-    <FloatingLabelInput
+            <div className="grid grid-cols-2 gap-6 mt-6">
+              <div>
+                <FloatingLabelInput
+                  placeholder="Total Price"
+                  value={calculateBoxTotalPrice(currentBox).toString()}
+                  type="number"
+                  counter="₹"
+                  readOnly={true}
+                />
+              </div>
+              <div>
+                {/* <FloatingLabelInput
       placeholder="Collectible Amount"
       value={calculateBoxTotalPrice(currentBox).toString()}
       type="number"
       counter="₹"
-      readOnly={true}
-    />
+    /> */}
+              { paymentMethod === "Cash on Delivery" &&( <FloatingLabelInput
+                  placeholder="Collectible Amount"
+                  value={
+                    currentBox.collectibleAmount.toString() ||
+                    calculateBoxTotalPrice(currentBox).toString()
+                  }
+                  type="number"
+                  counter="₹"
+                  onChangeCallback={handleCollectibleAmountChange}
+                />)}
+              </div>
+
+              {/* <div className="mt-6 bg-white rounded-md p-4 border border-gray-200">
+  <h3 className="text-lg font-medium mb-4">Order Summary</h3>
+  <div className="flex justify-between items-center">
+    <div className="text-gray-700">
+      <p>Total Collectible Amount ({boxCount} {boxCount === 1 ? 'box' : 'boxes'})</p>
+    </div>
+    <div className="text-xl font-semibold">₹ {totalCollectibleAmount.toFixed(2)}</div>
   </div>
-</div>
+</div> */}
+            </div>
           </div>
         </div>
       </div>
@@ -3669,21 +3923,21 @@ if (newProductIds.length > 0) {
                       )}
                     </button> */}
                     <button
-  onClick={() => toggleProductSelection(product._id)}
-  className={`px-4 py-2 rounded-full w-24 flex items-center justify-center ${
-    selectedCatalogProducts[product._id]
-      ? "bg-white text-black border border-black" // Added black border
-      : "bg-black text-white"
-  }`}
->
-  {selectedCatalogProducts[product._id] ? (
-    <Trash className="w-4 h-4" /> // Just the trash icon centered
-  ) : (
-    <span className="flex items-center">
-      <span className="mr-1">+</span> Add
-    </span>
-  )}
-</button>
+                      onClick={() => toggleProductSelection(product._id)}
+                      className={`px-4 py-2 rounded-full w-24 flex items-center justify-center ${
+                        selectedCatalogProducts[product._id]
+                          ? "bg-white text-black border border-black" // Added black border
+                          : "bg-black text-white"
+                      }`}
+                    >
+                      {selectedCatalogProducts[product._id] ? (
+                        <Trash className="w-4 h-4" /> // Just the trash icon centered
+                      ) : (
+                        <span className="flex items-center">
+                          <span className="mr-1">+</span> Add
+                        </span>
+                      )}
+                    </button>
                   </div>
                 ))}
               </div>
