@@ -792,6 +792,8 @@ interface LocationState {
   source?: string;
   orderId?: string;
   awbNumbers?: string[]; // Array of AWB numbers
+  tempOrderId?: string; // Add this for backward compatibility
+
 }
 
 type TabType = 'invoice' | 'shipping' | 'manifest';
@@ -1010,7 +1012,7 @@ function OrderBooked() {
 
   // Handle back button click
   const handleBackClick = () => {
-    navigate("/dashboard");
+    navigate("/dashboard/overview");
   };
 
   // Get customer name

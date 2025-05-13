@@ -769,11 +769,11 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
     const badges = [];
     
     if (serviceId === fastestServiceId) {
-      badges.push({ text: 'Fastest', color: 'bg-green-100 text-green-600' });
+      badges.push({ text: 'Fastest', color: 'bg-green-100 text-green-600 border border-green-600' });
     }
     
     if (serviceId === bestValueServiceId) {
-      badges.push({ text: 'Best Value', color: 'bg-blue-100 text-blue-600' });
+      badges.push({ text: 'Best Value', color: 'bg-blue-100 text-blue-600 border border-blue-600' });
     }
     
     return badges;
@@ -782,9 +782,9 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
   // Helper function to get the service mode badge
   const getServiceModeBadge = (mode: string) => {
     if (mode === 'AIR') {
-      return { text: 'Air', color: 'bg-[#F7F7F8] text-black font-semibold text-sm leading-5 text-center align-middle capitalize font-open px-4' };
+      return { text: 'Air', color: 'bg-[#F7F7F8] text-black font-semibold text-sm leading-5 text-center align-middle capitalize font-open px-4 border border-gray-300' };
     } else if (mode === 'SURFACE') {
-      return { text: 'Surface', color: 'bg-[#F7F7F8] text-black font-semibold text-sm leading-5 text-center align-middle capitalize font-open' };
+      return { text: 'Surface', color: 'bg-[#F7F7F8] text-black font-semibold text-sm leading-5 text-center align-middle capitalize font-open border border-gray-300' };
     }
     return null;
   };
@@ -903,18 +903,18 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
                     checked={selectedService === service.partnerServiceId}
                     onChange={() => {}} // onChange is required for controlled components, but we handle it in the parent div
                     disabled={isSubmittingService}
-                    onClick={(e) => e.stopPropagation()} // Prevent triggering the parent div's onClick when clicking directly on the radio
+                    // onClick={(e) => e.stopPropagation()} // Prevent triggering the parent div's onClick when clicking directly on the radio
                   />
                   
                   <div className="ml-4">
                     <div className="flex items-center flex-wrap">
                       <span className="font-semibold text-base leading-snug tracking-normal mr-1">{service.partnerName} {service.partnerServiceName}</span>
-                      <div className="flex items-center ml-1 mr-1">
+                      {/* <div className="flex items-center ml-1 mr-1">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
                         <span className="text-yellow-600 font-semibold text-sm leading-5 tracking-normal text-center align-middle capitalize">4.5</span>
-                      </div>
+                      </div> */}
                       
                       {/* Service Mode Badge */}
                       {service.serviceMode && (

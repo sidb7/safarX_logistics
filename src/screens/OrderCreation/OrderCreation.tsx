@@ -65,6 +65,8 @@ interface BoxData {
   dimensions: BoxDimensions;
   products: Product[];
   selectedBoxSuggestion: any | null;
+  collectibleAmount: string | number; // Make sure this property is included
+
 }
 
 interface BoxPackage {
@@ -550,6 +552,8 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         },
         products: products,
         selectedBoxSuggestion: null,
+        collectibleAmount: "", // Add collectibleAmount property
+
       };
     });
 
@@ -615,6 +619,11 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
           0
         );
 
+          // Use the individual box collectible amount if available
+      const boxCollectibleAmount = paymentMethod === "Cash on Delivery" 
+      ? (Number(b2cBox.collectibleAmount) || invoiceValue) 
+      : 0;
+
         return {
           boxId: b2cBox.selectedBoxSuggestion?.boxId || uuidv4(),
           name: b2cBox.dimensions.name || `Box ${b2cBox.id}`,
@@ -656,7 +665,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
             isCod: paymentMethod === "Cash on Delivery",
             collectableAmount:
               paymentMethod === "Cash on Delivery"
-                ? (Number(collectibleAmount) || 0) / boxes.length
+                ? boxCollectibleAmount
                 : 0,
             invoiceValue: invoiceValue,
           },
@@ -1174,11 +1183,14 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
           response.data.data[0]?.awbs
             ?.map((item: any) => item.tracking?.awb)
             .filter(Boolean) || [];
+        // Extract the actual orderId from the response
+        const actualOrderId = response.data.data[0]?.orderId;
 
         navigate("/orders/booked", {
           state: {
             source: orderSource,
-            orderId: tempOrderId,
+            orderId: actualOrderId, // Using the actual orderId from response instead of tempOrderId
+            tempOrderId: tempOrderId,
             awbNumbers: awbNumbers,
           },
         });
@@ -1209,6 +1221,11 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
           (total, product) => total + (Number(product.totalPrice) || 0),
           0
         );
+
+          // Use the individual box collectible amount if available
+      const boxCollectibleAmount = paymentMethod === "Cash on Delivery" 
+      ? (Number(b2cBox.collectibleAmount) || invoiceValue) 
+      : 0;
 
         // Get the first product for example purposes (or combine all)
         const firstProduct = b2cBox.products[0] || {};
@@ -1242,9 +1259,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
             //   paymentMethod === "Cash on Delivery"
             //     ? Number(collectibleAmount) || 0
             //     : 0,
-            collectableAmount: paymentMethod === "Cash on Delivery"
-    ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
-    : 0,
+            collectableAmount: boxCollectibleAmount,
             invoiceValue: invoiceValue || 0,
           },
           podInfo: {
