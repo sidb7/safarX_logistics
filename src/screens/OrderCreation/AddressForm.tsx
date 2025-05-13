@@ -2072,6 +2072,8 @@ import {
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast"; // Assuming this is available since it's used in OrderForm
+import sessionManager from "../../utils/sessionManager";
+
 
 // Import the Save and Bookmark icons like in OrderForm
 const Save = ({ className = "w-5 h-5" }) => (
@@ -2316,6 +2318,17 @@ const AddressForm: React.FC<AddressFormProps> = ({
     pickup: false,
     delivery: false
   });
+  const [gstValidationErrors, setGstValidationErrors] = useState({
+  pickup: false,
+  delivery: false
+});
+const [gstInitialized, setGstInitialized] = useState(false);
+const [gstSetFromAddress, setGstSetFromAddress] = useState(false);
+const gstFromSessionAttempted = useRef(false);
+
+
+
+
 
   // Function to validate phone number - 10 digits starting with 6, 7, 8, or 9
   const isValidPhoneNumber = (phone: string): boolean => {
@@ -2324,6 +2337,68 @@ const AddressForm: React.FC<AddressFormProps> = ({
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(cleanPhone);
   };
+   
+  const sessionData = sessionManager({});
+  const { sellerInfo } = sessionManager({});
+  console.log("Session Data:", sessionData);
+  console.log("Seller Info:", sellerInfo);
+
+  // useEffect(() => {
+  //   // Check for GST number in the correct path: sellerInfo.kycDetails.gstNumber
+  //   if (sellerInfo?.kycDetails?.gstNumber) {
+  //     console.log("Found GST in session:", sellerInfo.kycDetails.gstNumber);
+      
+  //     // Update the pickup form state with the GST number
+  //     setPickupFormValues(prev => ({
+  //       ...prev,
+  //       gstNo: sellerInfo.kycDetails.gstNumber
+  //     }));
+      
+  //     // Clear any validation error for GST
+  //     clearFieldError("pickup", "gstNo");
+  //   }
+  // }, [sellerInfo, setPickupFormValues, clearFieldError]);
+  // useEffect(() => {
+  //   // Only set the GST once when component mounts, and only if not already set
+  //   if (sellerInfo?.kycDetails?.gstNumber && !gstInitialized && !pickupFormValues.gstNo) {
+  //     console.log("Setting GST from session:", sellerInfo.kycDetails.gstNumber);
+      
+  //     // Update the pickup form state with the GST number
+  //     setPickupFormValues(prev => ({
+  //       ...prev,
+  //       gstNo: sellerInfo.kycDetails.gstNumber
+  //     }));
+      
+  //     // Mark as initialized so we don't override user edits
+  //     setGstInitialized(true);
+      
+  //     // Clear any validation error for GST
+  //     clearFieldError("pickup", "gstNo");
+  //   }
+  // }, [sellerInfo, pickupFormValues.gstNo, gstInitialized, setPickupFormValues, clearFieldError]);
+   // Only run once on mount to potentially set GST from session
+   useEffect(() => {
+    // Only try to set from session once, and only if not already set
+    if (sellerInfo?.kycDetails?.gstNumber && 
+        !gstFromSessionAttempted.current && 
+        !pickupFormValues.gstNo) {
+      
+      console.log("Setting GST from session:", sellerInfo.kycDetails.gstNumber);
+      setPickupFormValues(prev => ({
+        ...prev,
+        gstNo: sellerInfo.kycDetails.gstNumber
+      }));
+      
+      clearFieldError("pickup", "gstNo");
+    }
+    
+    // Mark that we've attempted to set GST from session, regardless of result
+    gstFromSessionAttempted.current = true;
+    
+    // Only run this effect once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   // Fetch default pickup address on component mount
   useEffect(() => {
@@ -2712,6 +2787,11 @@ const handleDeliveryMagicFill = async () => {
     const formValues = extractFormValues(address);
 
     if (currentModalType === "pickup") {
+        // If address doesn't have GST but session does, and user hasn't entered one
+        if (!address.gstNo && !formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
+          formValues.gstNo = sellerInfo.kycDetails.gstNumber;
+        }
+        
       // Update pickup form values
       setPickupFormValues(formValues);
       // Also store the original address object if needed
@@ -3235,6 +3315,11 @@ const handleDeliveryMagicFill = async () => {
     const formValues = extractFormValues(address);
 
     if (type === "pickup") {
+            // If search result doesn't have GST but session does, and user hasn't entered one
+            if (!address.gstNo && !formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
+              formValues.gstNo = sellerInfo.kycDetails.gstNumber;
+            }
+      
       // Update pickup form values
       setPickupFormValues(formValues);
       // Also store the original address object if needed
@@ -4011,7 +4096,7 @@ const handleDeliveryMagicFill = async () => {
                   {/* Landmark and GST - GST is user input only */}
                   <div className="grid grid-cols-2 gap-4">
                     <FloatingLabelInput
-                      placeholder="Landmark (Optional)"
+                      placeholder="Landmark "
                       value={deliveryFormValues.landmark}
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("landmark", value)
