@@ -1,5 +1,7 @@
 
 
+
+
 // import { useState, useEffect, useRef } from "react";
 // import FloatingLabelInput from "./FloatingLabelInput";
 // import { ChevronUp, ChevronDown, Trash, Bookmark, Package } from "./Icons";
@@ -10,6 +12,39 @@
 // import toast from "react-hot-toast";
 // import { v4 as uuidv4 } from "uuid";
 // import searchIcon from "../../assets/Search.svg";
+
+
+// // Add these constants at the top of your OrderFormB2B file, after imports
+// const STORAGE_KEYS = {
+//   B2B_BOXES: 'order-form-b2b-boxes',
+//   B2B_BOX_COUNT: 'order-form-b2b-box-count',
+//   B2B_CATALOG_PRODUCTS: 'order-form-b2b-catalog-products',
+//   B2B_PACKAGE_NAME_SEARCH: 'order-form-b2b-package-name-search',
+//   B2B_PACKAGE_SEARCH_RESULTS: 'order-form-b2b-package-search-results',
+//   B2B_FILTERED_PACKAGE_RESULTS: 'order-form-b2b-filtered-package-results',
+//   B2B_SAVED_STATES: 'order-form-b2b-saved-states',
+// };
+
+// // Add this function before the component definition
+// const loadInitialState = () => {
+//   const savedBoxes = localStorage.getItem(STORAGE_KEYS.B2B_BOXES);
+//   const savedBoxCount = localStorage.getItem(STORAGE_KEYS.B2B_BOX_COUNT);
+//   const savedCatalogProducts = localStorage.getItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS);
+//   const savedPackageNameSearch = localStorage.getItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH);
+//   const savedShowPackageSearchResults = localStorage.getItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS);
+//   const savedFilteredPackageResults = localStorage.getItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS);
+//   const savedStates = localStorage.getItem(STORAGE_KEYS.B2B_SAVED_STATES);
+
+//   return {
+//     boxes: savedBoxes ? JSON.parse(savedBoxes) : null,
+//     boxCount: savedBoxCount ? parseInt(savedBoxCount) : 1,
+//     catalogProducts: savedCatalogProducts ? JSON.parse(savedCatalogProducts) : [],
+//     packageNameSearch: savedPackageNameSearch ? JSON.parse(savedPackageNameSearch) : {},
+//     showPackageSearchResults: savedShowPackageSearchResults ? JSON.parse(savedShowPackageSearchResults) : {},
+//     filteredPackageResults: savedFilteredPackageResults ? JSON.parse(savedFilteredPackageResults) : {},
+//     savedStates: savedStates ? JSON.parse(savedStates) : {}
+//   };
+// };
 
 // // Define types
 // interface BoxPackage {
@@ -65,9 +100,42 @@
 // }
 
 // const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {},clearFieldError = () => {}  }) => {
-//   const [boxCount, setBoxCount] = useState<number>(1);
-//   const [boxes, setBoxes] = useState<Box[]>([
-//     {
+//   const initialState = loadInitialState();
+
+//   // const [boxCount, setBoxCount] = useState<number>(1);
+//   const [boxCount, setBoxCount] = useState<number>(() => {
+//     return initialState.boxCount || 1;
+//   });
+//   // const [boxes, setBoxes] = useState<Box[]>([
+//   //   {
+//   //     id: 1,
+//   //     packages: [
+//   //       {
+//   //         id: 1,
+//   //         name: "",
+//   //         quantity: "",
+//   //         unitPrice: "",
+//   //         unitWeight: "",
+//   //         totalWeight: "",
+//   //         totalPrice: "",
+//   //         tax: "0",
+//   //         discount: "0",
+//   //         hsn: "",
+//   //         sku: "",
+//   //         length: "",
+//   //         breadth: "",
+//   //         height: "",
+//   //         isExpanded: true,
+//   //         isSaved: false,
+//   //       },
+//   //     ],
+//   //     searchQuery: "",
+//   //   },
+//   // ]);
+
+//   const [boxes, setBoxes] = useState<Box[]>(() => {
+//     if (initialState.boxes) return initialState.boxes;
+//     return [{
 //       id: 1,
 //       packages: [
 //         {
@@ -90,16 +158,19 @@
 //         },
 //       ],
 //       searchQuery: "",
-//     },
-//   ]);
+//     }];
+//   });
 
 //   // State for package catalog modal
 //   const [isPackageCatalogModalOpen, setIsPackageCatalogModalOpen] =
 //     useState<boolean>(false);
 //   const [currentBoxId, setCurrentBoxId] = useState<number | null>(null);
 //   const [currentPackageId, setCurrentPackageId] = useState<number | null>(null);
+//   // const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
+//   //   []
+//   // );
 //   const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
-//     []
+//     initialState.catalogProducts || []
 //   );
 //   const [filteredCatalogProducts, setFilteredCatalogProducts] = useState<
 //     ProductCatalogItem[]
@@ -111,15 +182,24 @@
 //   const [loading, setLoading] = useState<boolean>(false);
 
 //   // State for package name inline search
+//   // const [packageNameSearch, setPackageNameSearch] = useState<{
+//   //   [packageId: string]: string;
+//   // }>({});
 //   const [packageNameSearch, setPackageNameSearch] = useState<{
 //     [packageId: string]: string;
-//   }>({});
+//   }>(initialState.packageNameSearch || {});
+//   // const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
+//   //   [packageId: string]: boolean;
+//   // }>({});
 //   const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
 //     [packageId: string]: boolean;
-//   }>({});
+//   }>(initialState.showPackageSearchResults || {});
+//   // const [filteredPackageResults, setFilteredPackageResults] = useState<{
+//   //   [packageId: string]: ProductCatalogItem[];
+//   // }>({});
 //   const [filteredPackageResults, setFilteredPackageResults] = useState<{
 //     [packageId: string]: ProductCatalogItem[];
-//   }>({});
+//   }>(initialState.filteredPackageResults || {});
 
 //   // Ref for handling click outside search results
 //   const packageSearchRefs = useRef<{
@@ -169,6 +249,46 @@
 //       document.removeEventListener("mousedown", handleClickOutside);
 //     };
 //   }, [showPackageSearchResults]);
+
+//   // Add these useEffect hooks after your existing state declarations
+// useEffect(() => {
+//   localStorage.setItem(STORAGE_KEYS.B2B_BOXES, JSON.stringify(boxes));
+// }, [boxes]);
+
+// useEffect(() => {
+//   localStorage.setItem(STORAGE_KEYS.B2B_BOX_COUNT, boxCount.toString());
+// }, [boxCount]);
+
+// useEffect(() => {
+//   localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
+// }, [catalogProducts]);
+
+// useEffect(() => {
+//   localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
+// }, [packageNameSearch]);
+
+// useEffect(() => {
+//   localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
+// }, [showPackageSearchResults]);
+
+// useEffect(() => {
+//   localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
+// }, [filteredPackageResults]);
+
+// // Save any other relevant state that needs persistence
+// useEffect(() => {
+//   const savedStates = {
+//     selectedCatalogProducts,
+//     currentBoxId,
+//     currentPackageId,
+//     searchQuery,
+//     loading,
+//     isPackageCatalogModalOpen
+//   };
+//   localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
+// }, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
+
+
 
 //   // Handle box count changes
 //   const decreaseBoxCount = (): void => {
@@ -425,6 +545,43 @@
 //   };
 
 //   // Select a package from search results
+//   // const selectPackageFromSearch = (
+//   //   boxId: number,
+//   //   packageId: number,
+//   //   product: ProductCatalogItem
+//   // ) => {
+//   //   // Update the package with the selected product
+//   //   setBoxes((prevBoxes) =>
+//   //     prevBoxes.map((box) => {
+//   //       if (box.id === boxId) {
+//   //         return {
+//   //           ...box,
+//   //           packages: box.packages.map((pkg) => {
+//   //             if (pkg.id === packageId) {
+//   //               return {
+//   //                 ...pkg,
+//   //                 name: product.name || product.title || "",
+//   //                 quantity: product.qty || 1,
+//   //                 unitPrice: product.unitPrice || 0,
+//   //                 unitWeight: product.deadWeight || 0,
+//   //                 totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+//   //                 totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+//   //                 tax: product.unitTax?.toString() || "0",
+//   //                 hsn: product.hsnCode || "",
+//   //                 sku: product.sku || "",
+//   //                 length: product.length || "",
+//   //                 breadth: product.breadth || "",
+//   //                 height: product.height || "",
+//   //                 isSaved: true,
+//   //               };
+//   //             }
+//   //             return pkg;
+//   //           }),
+//   //         };
+//   //       }
+//   //       return box;
+//   //     })
+//   //   );
 //   const selectPackageFromSearch = (
 //     boxId: number,
 //     packageId: number,
@@ -462,6 +619,31 @@
 //         return box;
 //       })
 //     );
+  
+//     // Clear validation errors only for fields that have received values
+//     if (clearFieldError) {
+//       if (product.name || product.title) {
+//         clearFieldError(boxId, `package-${packageId}-name`);
+//       }
+//       if (product.qty) {
+//         clearFieldError(boxId, `package-${packageId}-quantity`);
+//       }
+//       if (product.unitPrice) {
+//         clearFieldError(boxId, `package-${packageId}-unitPrice`);
+//       }
+//       if (product.deadWeight) {
+//         clearFieldError(boxId, `package-${packageId}-unitWeight`);
+//       }
+//       if (product.length) {
+//         clearFieldError(boxId, `package-${packageId}-length`);
+//       }
+//       if (product.breadth) {
+//         clearFieldError(boxId, `package-${packageId}-breadth`);
+//       }
+//       if (product.height) {
+//         clearFieldError(boxId, `package-${packageId}-height`);
+//       }
+//     }
 
 //     // Close the search results dropdown
 //     const uniqueId = `${boxId}-${packageId}`;
@@ -470,6 +652,8 @@
 //       [uniqueId]: false,
 //     }));
 //   };
+
+  
 
 //   // Fetch catalog products if not already loaded
 //   const fetchCatalogProducts = async () => {
@@ -561,19 +745,72 @@
 //   };
 
 //   // Handle "Proceed" click in catalog modal
+//   // const handleProceedClick = () => {
+//   //   // Get all selected products
+//   //   const selectedProducts = catalogProducts.filter(
+//   //     (product) => selectedCatalogProducts[product._id]
+//   //   );
+
+//   //   if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
+//   //     setBoxes((prevBoxes) => {
+//   //       return prevBoxes.map((box) => {
+//   //         if (box.id === currentBoxId) {
+//   //           // Instead of adding multiple products, replace the current package with the first selected product
+//   //           const selectedProduct = selectedProducts[0];
+
+//   //           return {
+//   //             ...box,
+//   //             packages: box.packages.map((pkg) => {
+//   //               if (pkg.id === currentPackageId) {
+//   //                 return {
+//   //                   ...pkg,
+//   //                   name: selectedProduct.name || selectedProduct.title || "",
+//   //                   quantity: selectedProduct.qty || 1,
+//   //                   unitPrice: selectedProduct.unitPrice || 0,
+//   //                   unitWeight: selectedProduct.deadWeight || 0,
+//   //                   totalPrice:
+//   //                     (selectedProduct.qty || 1) *
+//   //                     (selectedProduct.unitPrice || 0),
+//   //                   totalWeight:
+//   //                     (selectedProduct.qty || 1) *
+//   //                     (selectedProduct.deadWeight || 0),
+//   //                   tax: selectedProduct.unitTax?.toString() || "0",
+//   //                   hsn: selectedProduct.hsnCode || "",
+//   //                   sku: selectedProduct.sku || "",
+//   //                   length: selectedProduct.length || "",
+//   //                   breadth: selectedProduct.breadth || "",
+//   //                   height: selectedProduct.height || "",
+//   //                   isSaved: true,
+//   //                 };
+//   //               }
+//   //               return pkg;
+//   //             }),
+//   //           };
+//   //         }
+//   //         return box;
+//   //       });
+//   //     });
+//   //   }
+
+    
+
+//   //   // Close the modal
+//   //   closePackageCatalogModal();
+//   // };
+
 //   const handleProceedClick = () => {
 //     // Get all selected products
 //     const selectedProducts = catalogProducts.filter(
 //       (product) => selectedCatalogProducts[product._id]
 //     );
-
+  
 //     if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
 //       setBoxes((prevBoxes) => {
 //         return prevBoxes.map((box) => {
 //           if (box.id === currentBoxId) {
 //             // Instead of adding multiple products, replace the current package with the first selected product
 //             const selectedProduct = selectedProducts[0];
-
+  
 //             return {
 //               ...box,
 //               packages: box.packages.map((pkg) => {
@@ -606,8 +843,35 @@
 //           return box;
 //         });
 //       });
+  
+//       // Clear validation errors only for fields that have received values
+//       if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
+//         const selectedProduct = selectedProducts[0];
+        
+//         if (selectedProduct.name || selectedProduct.title) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
+//         }
+//         if (selectedProduct.qty) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-quantity`);
+//         }
+//         if (selectedProduct.unitPrice) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-unitPrice`);
+//         }
+//         if (selectedProduct.deadWeight) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-unitWeight`);
+//         }
+//         if (selectedProduct.length) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-length`);
+//         }
+//         if (selectedProduct.breadth) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-breadth`);
+//         }
+//         if (selectedProduct.height) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-height`);
+//         }
+//       }
 //     }
-
+  
 //     // Close the modal
 //     closePackageCatalogModal();
 //   };
@@ -1252,7 +1516,6 @@
 // export default OrderFormB2B;
 
 
-
 import { useState, useEffect, useRef } from "react";
 import FloatingLabelInput from "./FloatingLabelInput";
 import { ChevronUp, ChevronDown, Trash, Bookmark, Package } from "./Icons";
@@ -1350,40 +1613,14 @@ interface OrderFormB2BProps {
 
 }
 
-const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {},clearFieldError = () => {}  }) => {
+const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {}, clearFieldError = () => {} }) => {
   const initialState = loadInitialState();
 
   // const [boxCount, setBoxCount] = useState<number>(1);
   const [boxCount, setBoxCount] = useState<number>(() => {
     return initialState.boxCount || 1;
   });
-  // const [boxes, setBoxes] = useState<Box[]>([
-  //   {
-  //     id: 1,
-  //     packages: [
-  //       {
-  //         id: 1,
-  //         name: "",
-  //         quantity: "",
-  //         unitPrice: "",
-  //         unitWeight: "",
-  //         totalWeight: "",
-  //         totalPrice: "",
-  //         tax: "0",
-  //         discount: "0",
-  //         hsn: "",
-  //         sku: "",
-  //         length: "",
-  //         breadth: "",
-  //         height: "",
-  //         isExpanded: true,
-  //         isSaved: false,
-  //       },
-  //     ],
-  //     searchQuery: "",
-  //   },
-  // ]);
-
+  
   const [boxes, setBoxes] = useState<Box[]>(() => {
     if (initialState.boxes) return initialState.boxes;
     return [{
@@ -1417,9 +1654,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
     useState<boolean>(false);
   const [currentBoxId, setCurrentBoxId] = useState<number | null>(null);
   const [currentPackageId, setCurrentPackageId] = useState<number | null>(null);
-  // const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
-  //   []
-  // );
+  
   const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
     initialState.catalogProducts || []
   );
@@ -1432,22 +1667,14 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   }>({});
   const [loading, setLoading] = useState<boolean>(false);
 
-  // State for package name inline search
-  // const [packageNameSearch, setPackageNameSearch] = useState<{
-  //   [packageId: string]: string;
-  // }>({});
   const [packageNameSearch, setPackageNameSearch] = useState<{
     [packageId: string]: string;
   }>(initialState.packageNameSearch || {});
-  // const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
-  //   [packageId: string]: boolean;
-  // }>({});
+  
   const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
     [packageId: string]: boolean;
   }>(initialState.showPackageSearchResults || {});
-  // const [filteredPackageResults, setFilteredPackageResults] = useState<{
-  //   [packageId: string]: ProductCatalogItem[];
-  // }>({});
+  
   const [filteredPackageResults, setFilteredPackageResults] = useState<{
     [packageId: string]: ProductCatalogItem[];
   }>(initialState.filteredPackageResults || {});
@@ -1458,18 +1685,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   }>({});
 
   // Notify parent component when box data changes
-//   useEffect(() => {
-//     if (onBoxDataUpdate) {
-//       // Only pass the required box data without the searchQuery field
-//       const boxesForParent = boxes.map((box) => ({
-//         id: box.id,
-//         packages: box.packages,
-//       }));
-//       onBoxDataUpdate(boxesForParent as Box[]);
-//     }
-//   }, [boxes, onBoxDataUpdate]);
-// Notify parent component when box data changes
-useEffect(() => {
+  useEffect(() => {
     if (onBoxDataUpdate) {
       // Pass the complete boxes data to the parent component
       onBoxDataUpdate(boxes);
@@ -1493,8 +1709,6 @@ useEffect(() => {
       });
     }
 
-    
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -1502,42 +1716,42 @@ useEffect(() => {
   }, [showPackageSearchResults]);
 
   // Add these useEffect hooks after your existing state declarations
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEYS.B2B_BOXES, JSON.stringify(boxes));
-}, [boxes]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.B2B_BOXES, JSON.stringify(boxes));
+  }, [boxes]);
 
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEYS.B2B_BOX_COUNT, boxCount.toString());
-}, [boxCount]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.B2B_BOX_COUNT, boxCount.toString());
+  }, [boxCount]);
 
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
-}, [catalogProducts]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
+  }, [catalogProducts]);
 
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
-}, [packageNameSearch]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
+  }, [packageNameSearch]);
 
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
-}, [showPackageSearchResults]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
+  }, [showPackageSearchResults]);
 
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
-}, [filteredPackageResults]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
+  }, [filteredPackageResults]);
 
-// Save any other relevant state that needs persistence
-useEffect(() => {
-  const savedStates = {
-    selectedCatalogProducts,
-    currentBoxId,
-    currentPackageId,
-    searchQuery,
-    loading,
-    isPackageCatalogModalOpen
-  };
-  localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
-}, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
+  // Save any other relevant state that needs persistence
+  useEffect(() => {
+    const savedStates = {
+      selectedCatalogProducts,
+      currentBoxId,
+      currentPackageId,
+      searchQuery,
+      loading,
+      isPackageCatalogModalOpen
+    };
+    localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
+  }, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
 
 
 
@@ -1795,44 +2009,6 @@ useEffect(() => {
     }
   };
 
-  // Select a package from search results
-  // const selectPackageFromSearch = (
-  //   boxId: number,
-  //   packageId: number,
-  //   product: ProductCatalogItem
-  // ) => {
-  //   // Update the package with the selected product
-  //   setBoxes((prevBoxes) =>
-  //     prevBoxes.map((box) => {
-  //       if (box.id === boxId) {
-  //         return {
-  //           ...box,
-  //           packages: box.packages.map((pkg) => {
-  //             if (pkg.id === packageId) {
-  //               return {
-  //                 ...pkg,
-  //                 name: product.name || product.title || "",
-  //                 quantity: product.qty || 1,
-  //                 unitPrice: product.unitPrice || 0,
-  //                 unitWeight: product.deadWeight || 0,
-  //                 totalPrice: (product.qty || 1) * (product.unitPrice || 0),
-  //                 totalWeight: (product.qty || 1) * (product.deadWeight || 0),
-  //                 tax: product.unitTax?.toString() || "0",
-  //                 hsn: product.hsnCode || "",
-  //                 sku: product.sku || "",
-  //                 length: product.length || "",
-  //                 breadth: product.breadth || "",
-  //                 height: product.height || "",
-  //                 isSaved: true,
-  //               };
-  //             }
-  //             return pkg;
-  //           }),
-  //         };
-  //       }
-  //       return box;
-  //     })
-  //   );
   const selectPackageFromSearch = (
     boxId: number,
     packageId: number,
@@ -1987,67 +2163,71 @@ useEffect(() => {
     }
   };
 
-  // Toggle product selection in catalog
-  const toggleProductSelection = (productId: string) => {
-    setSelectedCatalogProducts((prev) => ({
-      ...prev,
-      [productId]: !prev[productId],
-    }));
+  // Modified to directly add product and close modal
+  const selectProduct = (product: ProductCatalogItem) => {
+    if (currentBoxId && currentPackageId) {
+      // Update the box with the selected product
+      setBoxes((prevBoxes) => {
+        return prevBoxes.map((box) => {
+          if (box.id === currentBoxId) {
+            return {
+              ...box,
+              packages: box.packages.map((pkg) => {
+                if (pkg.id === currentPackageId) {
+                  return {
+                    ...pkg,
+                    name: product.name || product.title || "",
+                    quantity: product.qty || 1,
+                    unitPrice: product.unitPrice || 0,
+                    unitWeight: product.deadWeight || 0,
+                    totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+                    totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+                    tax: product.unitTax?.toString() || "0",
+                    hsn: product.hsnCode || "",
+                    sku: product.sku || "",
+                    length: product.length || "",
+                    breadth: product.breadth || "",
+                    height: product.height || "",
+                    isSaved: true,
+                  };
+                }
+                return pkg;
+              }),
+            };
+          }
+          return box;
+        });
+      });
+      
+      // Clear validation errors for fields that have received values
+      if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
+        if (product.name || product.title) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
+        }
+        if (product.qty) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-quantity`);
+        }
+        if (product.unitPrice) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-unitPrice`);
+        }
+        if (product.deadWeight) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-unitWeight`);
+        }
+        if (product.length) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-length`);
+        }
+        if (product.breadth) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-breadth`);
+        }
+        if (product.height) {
+          clearFieldError(currentBoxId, `package-${currentPackageId}-height`);
+        }
+      }
+      
+      // Close the modal
+      closePackageCatalogModal();
+    }
   };
-
-  // Handle "Proceed" click in catalog modal
-  // const handleProceedClick = () => {
-  //   // Get all selected products
-  //   const selectedProducts = catalogProducts.filter(
-  //     (product) => selectedCatalogProducts[product._id]
-  //   );
-
-  //   if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
-  //     setBoxes((prevBoxes) => {
-  //       return prevBoxes.map((box) => {
-  //         if (box.id === currentBoxId) {
-  //           // Instead of adding multiple products, replace the current package with the first selected product
-  //           const selectedProduct = selectedProducts[0];
-
-  //           return {
-  //             ...box,
-  //             packages: box.packages.map((pkg) => {
-  //               if (pkg.id === currentPackageId) {
-  //                 return {
-  //                   ...pkg,
-  //                   name: selectedProduct.name || selectedProduct.title || "",
-  //                   quantity: selectedProduct.qty || 1,
-  //                   unitPrice: selectedProduct.unitPrice || 0,
-  //                   unitWeight: selectedProduct.deadWeight || 0,
-  //                   totalPrice:
-  //                     (selectedProduct.qty || 1) *
-  //                     (selectedProduct.unitPrice || 0),
-  //                   totalWeight:
-  //                     (selectedProduct.qty || 1) *
-  //                     (selectedProduct.deadWeight || 0),
-  //                   tax: selectedProduct.unitTax?.toString() || "0",
-  //                   hsn: selectedProduct.hsnCode || "",
-  //                   sku: selectedProduct.sku || "",
-  //                   length: selectedProduct.length || "",
-  //                   breadth: selectedProduct.breadth || "",
-  //                   height: selectedProduct.height || "",
-  //                   isSaved: true,
-  //                 };
-  //               }
-  //               return pkg;
-  //             }),
-  //           };
-  //         }
-  //         return box;
-  //       });
-  //     });
-  //   }
-
-    
-
-  //   // Close the modal
-  //   closePackageCatalogModal();
-  // };
 
   const handleProceedClick = () => {
     // Get all selected products
@@ -2210,19 +2390,56 @@ useEffect(() => {
     }
   };
 
-  // Add this function to delete a specific box
+  // Modified deleteBox function to clear fields instead of disabling when there's only one box
+  // Also handles renumbering boxes after deletion
   const deleteBox = (boxId: any) => {
-    // Don't allow deletion if there's only one box
     if (boxCount <= 1) {
-      toast.error("At least one box is required");
-      return;
+      // Clear all fields in the only box instead of deleting it
+      setBoxes((prevBoxes) => 
+        prevBoxes.map((box) => {
+          if (box.id === boxId) {
+            return {
+              ...box,
+              packages: box.packages.map(pkg => ({
+                ...pkg,
+                name: "",
+                quantity: "",
+                unitPrice: "",
+                unitWeight: "",
+                totalWeight: "",
+                totalPrice: "",
+                tax: "0",
+                discount: "0",
+                hsn: "",
+                sku: "",
+                length: "",
+                breadth: "",
+                height: "",
+                isSaved: false
+              }))
+            };
+          }
+          return box;
+        })
+      );
+      
+      // Inform the user that fields were cleared
+      toast.success("Box fields have been cleared");
+    } else {
+      // For multiple boxes, delete and then renumber the remaining boxes sequentially
+      setBoxes((prevBoxes) => {
+        // First filter out the box to be deleted
+        const remainingBoxes = prevBoxes.filter((box) => box.id !== boxId);
+        
+        // Then renumber the remaining boxes sequentially (1, 2, 3, ...)
+        return remainingBoxes.map((box, index) => ({
+          ...box,
+          id: index + 1,
+        }));
+      });
+      
+      setBoxCount((prevCount) => prevCount - 1);
     }
-
-    // Remove the box from the boxes array
-    setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
-
-    // Decrease the box count
-    setBoxCount((prevCount) => prevCount - 1);
   };
 
   return (
@@ -2254,7 +2471,6 @@ useEffect(() => {
         {boxes.map((box) => (
           <div key={box.id}>
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-              {/* Packages - filtered by search query */}
               {/* Packages - filtered by search query */}
               {getFilteredPackages(box).map((pkg) => (
                 <div
@@ -2430,30 +2646,16 @@ useEffect(() => {
                               className="w-5 h-5"
                             />
                           </button>
-                          {/* <button
-              onClick={() => removePackage(box.id, pkg.id)}
-              className={`p-2 ${pkg.id === 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-500 cursor-pointer"}`}
-              title={pkg.id === 1 ? "First package cannot be deleted" : "Delete package"}
-              disabled={pkg.id === 1}
-            >
-              <Trash className="w-5 h-5" />
-            </button> */}
+                          
+                          {/* Updated delete button - always enabled */}
                           <button
                             onClick={() => deleteBox(box.id)}
-                            className={`p-2 ${
-                              boxCount <= 1
-                                ? "text-gray-300 cursor-not-allowed"
-                                : "text-gray-500 cursor-pointer"
-                            }`}
-                            title={
-                              boxCount <= 1
-                                ? "Cannot delete the only box"
-                                : "Delete box"
-                            }
-                            disabled={boxCount <= 1}
+                            className="p-2 text-gray-500 cursor-pointer"
+                            title={boxCount <= 1 ? "Clear box fields" : "Delete box"}
                           >
                             <Trash className="w-5 h-5" />
                           </button>
+                          
                           <OneButton
                             text="Package Catalog"
                             onClick={() =>
@@ -2466,85 +2668,6 @@ useEffect(() => {
                           />
                         </div>
                       </div>
-
-                      {/* Second row with remaining inputs */}
-                      {/* <div className="grid grid-cols-12 gap-4 mb-4">
-          <div className="col-span-2">
-            <FloatingLabelInput
-              placeholder="Tax"
-              value={pkg.tax.toString()}
-              type="number"
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "tax", value)}
-            />
-          </div>
-          <div className="col-span-2">
-            <FloatingLabelInput
-              placeholder="Disc % (₹)"
-              value={pkg.discount.toString()}
-              type="number"
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "discount", value)}
-            />
-          </div>
-          <div className="col-span-2">
-            <FloatingLabelInput
-              placeholder="HSN"
-              value={pkg.hsn}
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "hsn", value)}
-            />
-          </div>
-          <div className="col-span-2">
-            <FloatingLabelInput
-              placeholder="SKU"
-              value={pkg.sku}
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "sku", value)}
-            />
-          </div>
-          <div className="col-span-2">
-            <FloatingLabelInput
-              placeholder="Total Wt (kg)"
-              value={pkg.totalWeight.toString()}
-              type="number"
-              counter="kg"
-            />
-          </div>
-          <div className="col-span-2">
-            <FloatingLabelInput
-              placeholder="Total Price"
-              value={pkg.totalPrice.toString()}
-              type="number"
-              counter="₹"
-            />
-          </div>
-        </div>
-
-        
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-1">
-            <FloatingLabelInput
-              placeholder="L"
-              value={pkg.length.toString()}
-              type="number"
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "length", value)}
-            />
-          </div>
-          <div className="col-span-1">
-            <FloatingLabelInput
-              placeholder="B"
-              value={pkg.breadth.toString()}
-              type="number"
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "breadth", value)}
-            />
-          </div>
-          <div className="col-span-1">
-            <FloatingLabelInput
-              placeholder="H"
-              value={pkg.height.toString()}
-              type="number"
-              onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "height", value)}
-            />
-          </div>
-          
-        </div> */}
 
                       {/* All inputs in a single flex row */}
                       <div className="flex flex-wrap gap-4 mb-4 pl-72">
@@ -2597,6 +2720,7 @@ useEffect(() => {
                             value={pkg.totalWeight.toString()}
                             type="number"
                             counter="kg"
+                            readOnly={true}
                           />
                         </div>
                         <div className="w-[12%]">
@@ -2605,6 +2729,8 @@ useEffect(() => {
                             value={pkg.totalPrice.toString()}
                             type="number"
                             counter="₹"
+                            readOnly={true}
+
                           />
                         </div>
                         <div className="w-[5%]">
@@ -2728,35 +2854,17 @@ useEffect(() => {
                       </p>
                     </div>
                     <button
-                      onClick={() => toggleProductSelection(product._id)}
-                      className={`px-4 py-2 rounded-full ${
-                        selectedCatalogProducts[product._id]
-                          ? "bg-red-500 text-white"
-                          : "bg-black text-white"
-                      }`}
+                      onClick={() => selectProduct(product)}
+                      className="px-4 py-2 rounded-full bg-black text-white"
                     >
-                      {selectedCatalogProducts[product._id] ? (
-                        <span className="flex items-center">
-                          <Trash className="w-4 h-4 mr-1" /> Delete
-                        </span>
-                      ) : (
-                        <span className="flex items-center">
-                          <span className="mr-1">+</span> Add
-                        </span>
-                      )}
+                      <span className="flex items-center">
+                        <span className="mr-1">+</span> Add
+                      </span>
                     </button>
                   </div>
                 ))}
               </div>
             )}
-          </div>
-          <div className="p-4 border-t border-gray-200 flex justify-end">
-            <button
-              onClick={handleProceedClick}
-              className="px-6 py-3 bg-black text-white rounded-full"
-            >
-              Proceed
-            </button>
           </div>
         </div>
       </CenterModal>

@@ -59,6 +59,7 @@ const loadInitialState = () => {
   const savedTotalCollectibleAmount = localStorage.getItem(
     STORAGE_KEYS.TOTAL_COLLECTIBLE_AMOUNT
   );
+  
 
   return {
     boxData: savedBoxData ? JSON.parse(savedBoxData) : null,
@@ -122,6 +123,8 @@ interface BoxData {
   products: Product[];
   selectedBoxSuggestion: BoxSuggestion | null;
   collectibleAmount: string | number; // New field to track collectible amount per box
+  isCollectibleManuallyEdited?: boolean;
+
 }
 
 interface ProductSuggestion {
@@ -273,6 +276,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
   const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(
     initialState.totalCollectibleAmount || 0
   );
+
+  const [isEditingCollectible, setIsEditingCollectible] = useState(false);
+
 
   // Store boxes and their products in a single state
   // const [boxes, setBoxes] = useState<BoxData[]>([
@@ -517,11 +523,29 @@ const OrderForm: React.FC<OrderFormProps> = ({
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.SAVED_BOX, JSON.stringify(savedBox));
   }, [savedBox]);
+  // useEffect(() => {
+  //   setBoxes((prevBoxes) => {
+  //     return prevBoxes.map((box) => {
+  //       const newTotalPrice = calculateBoxTotalPrice(box);
+
+  //       return {
+  //         ...box,
+  //         collectibleAmount: newTotalPrice,
+  //       };
+  //     });
+  //   });
+  // }, [
+  //   boxes
+  //     .map((box) => box.products.map((p) => p.totalPrice).join(","))
+  //     .join("|"),
+  // ]);
   useEffect(() => {
     setBoxes((prevBoxes) => {
       return prevBoxes.map((box) => {
         const newTotalPrice = calculateBoxTotalPrice(box);
-
+        if (box.isCollectibleManuallyEdited) {
+          return box; // don't overwrite
+        }
         return {
           ...box,
           collectibleAmount: newTotalPrice,
@@ -533,6 +557,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
       .map((box) => box.products.map((p) => p.totalPrice).join(","))
       .join("|"),
   ]);
+  
 
   // Helper function to calculate total price of products in a box
   const calculateBoxTotalPrice = (box: BoxData): number => {
@@ -758,6 +783,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
         return prevBoxes.map((box) => ({
           ...box,
           collectibleAmount: numericValue,
+          isCollectibleManuallyEdited: true,
+
         }));
       } else {
         // Update only the selected box
@@ -766,6 +793,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
             return {
               ...box,
               collectibleAmount: value === "" ? value : Number(value),
+              isCollectibleManuallyEdited: true,
+
             };
           }
           return box;
@@ -3828,7 +3857,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
       type="number"
       counter="₹"
     /> */}
-              { paymentMethod === "Cash on Delivery" &&( <FloatingLabelInput
+              {/* { paymentMethod === "Cash on Delivery" &&( <FloatingLabelInput
                   placeholder="Collectible Amount"
                   value={
                     currentBox.collectibleAmount.toString() ||
@@ -3837,7 +3866,28 @@ const OrderForm: React.FC<OrderFormProps> = ({
                   type="number"
                   counter="₹"
                   onChangeCallback={handleCollectibleAmountChange}
-                />)}
+                />)} */}
+
+{ paymentMethod === "Cash on Delivery" &&( <FloatingLabelInput
+  placeholder="Collectible Amount"
+  value={
+    isEditingCollectible ? 
+    currentBox.collectibleAmount.toString() :
+    (currentBox.collectibleAmount || calculateBoxTotalPrice(currentBox)).toString()
+  
+  }
+  type="number"
+  counter="₹"
+  onChangeCallback={handleCollectibleAmountChange}
+  onFocus={() => setIsEditingCollectible(true)}
+  onBlur={() => {
+    setIsEditingCollectible(false);
+    // If they left it empty, default to calculated price
+    if (!currentBox.collectibleAmount) {
+      handleCollectibleAmountChange(calculateBoxTotalPrice(currentBox).toString());
+    }
+  }}
+/>)}
               </div>
 
               {/* <div className="mt-6 bg-white rounded-md p-4 border border-gray-200">
