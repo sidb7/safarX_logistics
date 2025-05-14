@@ -2330,6 +2330,8 @@ const gstFromSessionAttempted = useRef(false);
 
 
 
+
+
   // Function to validate phone number - 10 digits starting with 6, 7, 8, or 9
   const isValidPhoneNumber = (phone: string): boolean => {
     // Remove any non-digit characters (like spaces, dashes, etc.)
@@ -2857,6 +2859,31 @@ const handleDeliveryMagicFill = async () => {
   };
 
   const handlePickupInputChange = (field: keyof FormValues, value: string) => {
+
+    let newValue = value;
+  
+    // Special handling for GST number
+    if (field === "gstNo") {
+      // Remove non-alphanumeric characters
+      newValue = value.replace(/[^a-zA-Z0-9]/g, '');
+      // Convert to uppercase
+      newValue = newValue.toUpperCase();
+      // Limit to 15 characters
+      newValue = newValue.slice(0, 15);
+      
+      // Add validation error if GST is entered but not exactly 15 chars for B2B
+      if (orderType === "B2B" && newValue.length > 0 && newValue.length !== 15) {
+        setGstValidationErrors(prev => ({
+          ...prev,
+          pickup: true
+        }));
+      } else {
+        setGstValidationErrors(prev => ({
+          ...prev,
+          pickup: false
+        }));
+      }
+    }
     setPickupFormValues((prev) => ({
       ...prev,
       [field]: value,
@@ -2903,6 +2930,35 @@ const handleDeliveryMagicFill = async () => {
     field: keyof FormValues,
     value: string
   ) => {
+
+    let newValue = value;
+  
+  // Special handling for GST number
+  if (field === "gstNo") {
+    // Remove non-alphanumeric characters
+    newValue = value.replace(/[^a-zA-Z0-9]/g, '');
+    // Convert to uppercase
+    newValue = newValue.toUpperCase();
+    // Limit to 15 characters
+    newValue = newValue.slice(0, 15);
+    
+    // Add validation error if GST is entered but not exactly 15 chars for B2B
+    if (orderType === "B2B" && newValue.length > 0 && newValue.length !== 15) {
+      setGstValidationErrors(prev => ({
+        ...prev,
+        delivery: true
+      }));
+    } else {
+      setGstValidationErrors(prev => ({
+        ...prev,
+        delivery: false
+      }));
+    }
+  }
+  
+
+
+
     setDeliveryFormValues((prev) => ({
       ...prev,
       [field]: value,
@@ -3857,8 +3913,15 @@ const handleDeliveryMagicFill = async () => {
                       onChangeCallback={(value) =>
                         handlePickupInputChange("gstNo", value)
                       }
-                      error={formErrors.pickup.gstNo}
-                      errorMessage="GST No is required for B2B orders"
+                      // error={formErrors.pickup.gstNo}
+                      error={formErrors.pickup.gstNo || gstValidationErrors.pickup}
+
+                      // errorMessage="GST No is required for B2B orders"
+                      errorMessage={gstValidationErrors.pickup 
+                        ? "GST number must be exactly 15 characters" 
+                        : "GST No is required for B2B orders"}
+
+                        maxLength={15}
                     />
                   </div>
 
@@ -4112,8 +4175,15 @@ const handleDeliveryMagicFill = async () => {
                       onChangeCallback={(value) =>
                         handleDeliveryInputChange("gstNo", value)
                       }
-                      error={formErrors.delivery.gstNo}
-                      errorMessage="GST No is required for B2B orders"
+                      // error={formErrors.delivery.gstNo}
+                      error={formErrors.delivery.gstNo || gstValidationErrors.delivery}
+
+                      // errorMessage="GST No is required for B2B orders"
+                      errorMessage={gstValidationErrors.delivery 
+                        ? "GST number must be exactly 15 characters" 
+                        : "GST No is required for B2B orders"}
+
+                        maxLength={15}
                     />
                   </div>
 

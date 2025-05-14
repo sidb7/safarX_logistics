@@ -13,10 +13,10 @@
 //   onBlur?: () => void;
 //   error?: boolean;
 //   errorMessage?: string;
-//   showNumberControls?: boolean; // New prop to show quantity controls
-//   isPhoneField?: boolean; // Add this new prop
-//   isPincodeField?: boolean; // Add this new prop
-//   readOnly?: boolean; // Add this new prop
+//   showNumberControls?: boolean;
+//   isPhoneField?: boolean;
+//   isPincodeField?: boolean;
+//   readOnly?: boolean;
 // }
 
 // const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
@@ -30,10 +30,10 @@
 //   onBlur,
 //   error = false,
 //   errorMessage = "This field is required",
-//   showNumberControls = false, // Default to false
-//   isPhoneField = false, // Add default value
-//   isPincodeField = false, // Add default value
-//   readOnly = false, // Add default value
+//   showNumberControls = false,
+//   isPhoneField = false,
+//   isPincodeField = false,
+//   readOnly = false,
 // }) => {
 //   const [isFocused, setIsFocused] = useState(false);
 //   const [internalValue, setInternalValue] = useState(value);
@@ -54,28 +54,29 @@
 
 //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //     let newValue = e.target.value;
-//     // Add this validation for phone fields
+    
+//     // Handle different field types
 //     if (isPhoneField) {
 //       // Only allow digits
 //       newValue = newValue.replace(/\D/g, "");
-
 //       // Limit to 10 digits
 //       newValue = newValue.slice(0, 10);
-//     }
-
-//     // Pincode field validation
-//     if (isPincodeField) {
+//     } else if (isPincodeField) {
 //       // Only allow digits
 //       newValue = newValue.replace(/\D/g, "");
-
 //       // Limit to 6 digits
 //       newValue = newValue.slice(0, 6);
-
 //       // Ensure it doesn't start with zero
 //       if (newValue.length > 0 && newValue[0] === "0") {
 //         newValue = newValue.substring(1);
 //       }
+//     } else if (type === "number") {
+//       // For number fields, prevent negative values
+//       if (newValue.startsWith("-")) {
+//         newValue = newValue.substring(1);
+//       }
 //     }
+    
 //     setInternalValue(newValue);
 
 //     // Call the callback if provided
@@ -100,7 +101,19 @@
 //     }
 //   };
 
-//   // New handlers for number controls
+//   // Prevent mouse wheel from changing number input value
+//   const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+//     if (type === "number") {
+//       e.preventDefault();
+//       // Make sure the input doesn't lose focus
+//       if (inputRef.current) {
+//         inputRef.current.blur();
+//         inputRef.current.focus();
+//       }
+//     }
+//   };
+
+//   // Number control handlers
 //   const incrementValue = () => {
 //     if (type === "number") {
 //       const currentValue = parseFloat(internalValue) || 0;
@@ -133,26 +146,6 @@
 //             {icon}
 //           </div>
 //         )}
-//         {/* <input
-//           ref={inputRef}
-//           type={type}
-//           value={internalValue}
-//           onChange={handleChange}
-//           onFocus={handleFocus}
-//           onBlur={handleBlur}
-//           readOnly={readOnly} // Add this
-//           className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
-//             counter ? "pr-10" : showNumberControls && type === "number" ? "pr-8" : "pr-4"
-//           } py-4 border ${
-//             error ? "border-red-500" : "border-gray-300"
-//           } rounded-md focus:outline-none focus:ring-2 ${
-//             error ? "focus:ring-red-500" : "focus:ring-blue-500"
-//           } font-Open text-sm ${
-//             hasValue
-//               ? "font-semibold text-[#1C1C1C]"
-//               : "font-normal text-gray-500"
-//           }`}
-//         /> */}
 //         <input
 //           ref={inputRef}
 //           type={type}
@@ -160,7 +153,9 @@
 //           onChange={handleChange}
 //           onFocus={handleFocus}
 //           onBlur={handleBlur}
-//           readOnly={readOnly} // Add this
+//           onWheel={handleWheel}
+//           readOnly={readOnly}
+//           min="0" // Prevent negative values
 //           className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
 //             counter
 //               ? "pr-10"
@@ -175,7 +170,7 @@
 //             hasValue
 //               ? "font-semibold text-[#1C1C1C]"
 //               : "font-normal text-gray-500"
-//           } ${readOnly ? "bg-gray-50 cursor-not-allowed" : ""}`} // Add styling for readOnly
+//           } ${readOnly ? "bg-gray-50 cursor-not-allowed" : ""}`}
 //         />
 
 //         {/* Integrated Number Controls - inside the input */}
@@ -294,6 +289,7 @@ interface FloatingLabelInputProps {
   isPhoneField?: boolean;
   isPincodeField?: boolean;
   readOnly?: boolean;
+  maxLength?: number; // Added maxLength prop
 }
 
 const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
@@ -311,6 +307,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
   isPhoneField = false,
   isPincodeField = false,
   readOnly = false,
+  maxLength, // Added maxLength parameter
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
@@ -433,6 +430,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
           onWheel={handleWheel}
           readOnly={readOnly}
           min="0" // Prevent negative values
+          maxLength={maxLength} // Apply maxLength prop
           className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
             counter
               ? "pr-10"
