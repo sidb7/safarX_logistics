@@ -978,6 +978,7 @@ export const columnHelperForNewOrder = (
           awb,
           createdAt,
           isBuyerConfirmed,
+          trackingLink,
         } = info?.row?.original;
         // const AWB = otherDetails?.awbNo
         let updatedAtStatus = 0;
@@ -1021,7 +1022,10 @@ export const columnHelperForNewOrder = (
                       </div>
                     ) : (
                       <Link
-                        to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}&orderId=${orderId}`}
+                        to={
+                          trackingLink ||
+                          `/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}&orderId=${orderId}`
+                        }
                         className="underline text-blue-500 cursor-pointer"
                       >
                         <span
@@ -1029,11 +1033,17 @@ export const columnHelperForNewOrder = (
                           data-tooltip-id="my-tooltip-inline"
                           data-tooltip-content="Complete Order"
                         >
-                          {tempOrderId}
+                          {trackingLink
+                            ? trackingLink.length > 18
+                              ? `${trackingLink.substring(0, 18)}...`
+                              : trackingLink
+                            : tempOrderId}
                         </span>
                       </Link>
                     )}
-                    <CopyTooltip stringToBeCopied={tempOrderId} />
+                    <CopyTooltip
+                      stringToBeCopied={trackingLink || tempOrderId}
+                    />
                   </div>
                 </div>
               )}
@@ -1102,9 +1112,7 @@ export const columnHelperForNewOrder = (
                 </span>
                 <div className=" ">
                   <p className=" font-Open text-sm font-semibold leading-5">
-                    {date_DD_MMM_YYYY_HH_MM_SS(
-                      updatedAtStatus || updatedAt
-                    )}
+                    {date_DD_MMM_YYYY_HH_MM_SS(updatedAtStatus || updatedAt)}
                   </p>
                 </div>
               </div>
@@ -1453,15 +1461,14 @@ export const columnHelperForNewOrder = (
                 <div className="font-Open font-semibold leading-5 text-sm">
                   {source === "SHOPIFY" ||
                   source === "WOOCOMMERCE" ||
-                  source === "ZOHO"
-                    ?  
+                  source === "ZOHO" ? (
                     <div>
-                      Order created on Channel: 
-                      <div>
-                    {date_DD_MMM_YYYY_HH_MM_SS(createdAt)}
-                      </div>
-                    </div> 
-                    : time}
+                      Order created on Channel:
+                      <div>{date_DD_MMM_YYYY_HH_MM_SS(createdAt)}</div>
+                    </div>
+                  ) : (
+                    time
+                  )}
                 </div>
 
                 {showAllTags && (
