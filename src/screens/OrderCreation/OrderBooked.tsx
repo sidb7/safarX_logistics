@@ -1112,7 +1112,7 @@ function OrderBooked() {
               
               <div className="mb-6">
                 <h2 className="text-lg font-semibold mb-2">Order Details</h2>
-                <p><span className="font-medium">Order ID:</span> ORD-{orderDetails?.tempOrderId || "N/A"}</p>
+                <p><span className="font-medium">Order ID:</span> {orderDetails?.orderId || "N/A"}</p>
                 <p><span className="font-medium">Date & Time:</span> {formatDate(orderDetails?.createdAt)}</p>
                 <p><span className="font-medium">Status:</span> <span className="text-green-500">{getLatestStatus()}</span></p>
                 <p><span className="font-medium">Order Type:</span> {orderDetails?.orderType || "N/A"}</p>

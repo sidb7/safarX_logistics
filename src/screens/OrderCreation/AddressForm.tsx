@@ -2873,6 +2873,8 @@ const handleDeliveryMagicFill = async () => {
       }));
     }
 
+    
+
     // Special handling for pincode - fetch city and state data
     if (field === "pincode" && value.length === 6) {
       fetchPincodeData(value, "pickup");

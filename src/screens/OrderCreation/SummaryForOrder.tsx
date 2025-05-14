@@ -619,6 +619,7 @@
 import React, { useState, useEffect } from 'react';
 import { POST } from '../../utils/webService';
 import { GET_LATEST_ORDER } from '../../utils/ApiUrls';
+import { Spinner } from '../../components/Spinner';
 
 // --- Component Prop Interfaces ---
 interface PickupDetailsProps {
@@ -964,21 +965,31 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
 
   if (error && !orderData) { 
     return (
-      <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-center py-6">
-          <div className="text-red-500 text-center">
-            <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p>{error}</p>
-            <button
-              onClick={handleRetry}
-              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            >
-              Retry
-            </button>
-          </div>
+      // <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
+      //   <div className="flex items-center justify-center py-6">
+      //     <div className="text-red-500 text-center">
+      //       <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      //         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      //       </svg>
+      //       <p>{error}</p>
+      //       <button
+      //         onClick={handleRetry}
+      //         className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+      //       >
+      //         Retry
+      //       </button>
+      //     </div>
+      //   </div>
+      // </div>
+      <div>
+                    <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
+        <div className="flex flex-col items-center justify-center py-10">
+          <Spinner parentClassName="mb-4" />
+          <span className="text-gray-600">Processing your order...</span>
         </div>
+      </div>
+
+
       </div>
     );
   }

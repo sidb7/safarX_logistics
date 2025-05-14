@@ -1079,7 +1079,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
 
       // Call POST_SET_ORDER_ID independently
       const orderIdPayload = {
-        orderId: "",
+        orderId: order.orderId,
         eWayBillNo: "",
         tempOrderId: tempId,
         source: source,
@@ -1505,7 +1505,12 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         ) : (
           <div>
             <h2 className="text-2xl font-semibold mb-4">Shipping Options</h2>
-            <EWayBillCard totalInvoiceValue={calculateTotalInvoiceValue()} />
+            <EWayBillCard 
+            totalInvoiceValue={calculateTotalInvoiceValue()}
+            tempOrderId={tempOrderId}
+            source={orderSource}
+            orderId={order.orderId}
+             />
             <ShippingServiceSelector
               tempOrderId={tempOrderId}
               orderSource={orderSource}
