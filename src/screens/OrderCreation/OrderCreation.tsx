@@ -125,6 +125,16 @@ const generateUniqueCode = (minLength: number, maxLength: number) => {
 
   return code;
 };
+// Helper function to check if a value is empty or zero
+const isEmptyOrZero = (value:any) => {
+  if (value === undefined || value === null) return true;
+  
+  // Convert to string and trim
+  const strValue = String(value).trim();
+  
+  // Check if empty string or "0"
+  return strValue === "" || strValue === "0";
+};
 
 function OrderCreation() {
   const navigate = useNavigate();
@@ -809,32 +819,58 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
     setBoxValidationErrors({});
 
     // Check required fields for pickup form
+    // const pickupErrors = {
+    //   contactNo: !pickupFormValues.contactNo.trim(),
+    //   address: !pickupFormValues.address.trim(),
+    //   name: !pickupFormValues.name.trim(),
+    //   pincode: !pickupFormValues.pincode.trim(),
+    //   city: !pickupFormValues.city.trim(),
+    //   state: !pickupFormValues.state.trim(),
+    //   addressLine1: !pickupFormValues.addressLine1.trim(),
+    //   addressLine2: !pickupFormValues.addressLine2.trim(),
+    //   landmark: !pickupFormValues.landmark.trim(),
+    //   gstNo: order.orderType === "B2B" && !pickupFormValues.gstNo.trim(),
+    //   email: false,
+    // };
     const pickupErrors = {
-      contactNo: !pickupFormValues.contactNo.trim(),
-      address: !pickupFormValues.address.trim(),
-      name: !pickupFormValues.name.trim(),
-      pincode: !pickupFormValues.pincode.trim(),
-      city: !pickupFormValues.city.trim(),
-      state: !pickupFormValues.state.trim(),
-      addressLine1: !pickupFormValues.addressLine1.trim(),
-      addressLine2: !pickupFormValues.addressLine2.trim(),
-      landmark: !pickupFormValues.landmark.trim(),
-      gstNo: order.orderType === "B2B" && !pickupFormValues.gstNo.trim(),
+      contactNo: isEmptyOrZero(pickupFormValues.contactNo),
+      address: isEmptyOrZero(pickupFormValues.address),
+      name: isEmptyOrZero(pickupFormValues.name),
+      pincode: isEmptyOrZero(pickupFormValues.pincode),
+      city: isEmptyOrZero(pickupFormValues.city),
+      state: isEmptyOrZero(pickupFormValues.state),
+      addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
+      addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
+      landmark: isEmptyOrZero(pickupFormValues.landmark),
+      gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
       email: false,
     };
 
     // Check required fields for delivery form
+    // const deliveryErrors = {
+    //   contactNo: !deliveryFormValues.contactNo.trim(),
+    //   address: !deliveryFormValues.address.trim(),
+    //   name: !deliveryFormValues.name.trim(),
+    //   pincode: !deliveryFormValues.pincode.trim(),
+    //   city: !deliveryFormValues.city.trim(),
+    //   state: !deliveryFormValues.state.trim(),
+    //   addressLine1: !deliveryFormValues.addressLine1.trim(),
+    //   addressLine2: !deliveryFormValues.addressLine2.trim(),
+    //   landmark: !deliveryFormValues.landmark.trim(),
+    //   gstNo: order.orderType === "B2B" && !deliveryFormValues.gstNo.trim(),
+    //   email: false,
+    // };
     const deliveryErrors = {
-      contactNo: !deliveryFormValues.contactNo.trim(),
-      address: !deliveryFormValues.address.trim(),
-      name: !deliveryFormValues.name.trim(),
-      pincode: !deliveryFormValues.pincode.trim(),
-      city: !deliveryFormValues.city.trim(),
-      state: !deliveryFormValues.state.trim(),
-      addressLine1: !deliveryFormValues.addressLine1.trim(),
-      addressLine2: !deliveryFormValues.addressLine2.trim(),
-      landmark: !deliveryFormValues.landmark.trim(),
-      gstNo: order.orderType === "B2B" && !deliveryFormValues.gstNo.trim(),
+      contactNo: isEmptyOrZero(deliveryFormValues.contactNo),
+      address: isEmptyOrZero(deliveryFormValues.address),
+      name: isEmptyOrZero(deliveryFormValues.name),
+      pincode: isEmptyOrZero(deliveryFormValues.pincode),
+      city: isEmptyOrZero(deliveryFormValues.city),
+      state: isEmptyOrZero(deliveryFormValues.state),
+      addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
+      addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
+      landmark: isEmptyOrZero(deliveryFormValues.landmark),
+      gstNo: order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
       email: false,
     };
 
@@ -862,25 +898,42 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
 
     if (order.orderType === "B2C") {
       // Validate B2C boxes
+      // boxesData.forEach((box) => {
+      //   newBoxErrors[box.id] = {};
+
+      //   // Check box dimensions
+      //   if (!box.dimensions.name) newBoxErrors[box.id][`box-name`] = true;
+      //   if (!box.dimensions.l) newBoxErrors[box.id][`box-length`] = true;
+      //   if (!box.dimensions.b) newBoxErrors[box.id][`box-breadth`] = true;
+      //   if (!box.dimensions.h) newBoxErrors[box.id][`box-height`] = true;
+
+      //   // Check each product
+      //   box.products.forEach((product) => {
+      //     if (!product.name)
+      //       newBoxErrors[box.id][`product-${product.id}-name`] = true;
+      //     if (!product.quantity)
+      //       newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
+      //     if (!product.unitPrice)
+      //       newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
+      //     if (!product.unitWeight)
+      //       newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+      //   });
+      // });
       boxesData.forEach((box) => {
         newBoxErrors[box.id] = {};
-
+      
         // Check box dimensions
-        if (!box.dimensions.name) newBoxErrors[box.id][`box-name`] = true;
-        if (!box.dimensions.l) newBoxErrors[box.id][`box-length`] = true;
-        if (!box.dimensions.b) newBoxErrors[box.id][`box-breadth`] = true;
-        if (!box.dimensions.h) newBoxErrors[box.id][`box-height`] = true;
-
+        if (isEmptyOrZero(box.dimensions.name)) newBoxErrors[box.id][`box-name`] = true;
+        if (isEmptyOrZero(box.dimensions.l)) newBoxErrors[box.id][`box-length`] = true;
+        if (isEmptyOrZero(box.dimensions.b)) newBoxErrors[box.id][`box-breadth`] = true;
+        if (isEmptyOrZero(box.dimensions.h)) newBoxErrors[box.id][`box-height`] = true;
+      
         // Check each product
         box.products.forEach((product) => {
-          if (!product.name)
-            newBoxErrors[box.id][`product-${product.id}-name`] = true;
-          if (!product.quantity)
-            newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
-          if (!product.unitPrice)
-            newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
-          if (!product.unitWeight)
-            newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+          if (isEmptyOrZero(product.name)) newBoxErrors[box.id][`product-${product.id}-name`] = true;
+          if (isEmptyOrZero(product.quantity)) newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
+          if (isEmptyOrZero(product.unitPrice)) newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
+          if (isEmptyOrZero(product.unitWeight)) newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
         });
       });
     } else {
@@ -889,21 +942,31 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         newBoxErrors[box.id] = {};
 
         // Check each package
-        box.packages.forEach((pkg) => {
-          if (!pkg.name) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
-          if (!pkg.quantity)
-            newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
-          if (!pkg.unitPrice)
-            newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
-          if (!pkg.unitWeight)
-            newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
-          if (!pkg.length)
-            newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
-          if (!pkg.breadth)
-            newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
-          if (!pkg.height)
-            newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
-        });
+        // box.packages.forEach((pkg) => {
+        //   if (!pkg.name) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
+        //   if (!pkg.quantity)
+        //     newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
+        //   if (!pkg.unitPrice)
+        //     newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
+        //   if (!pkg.unitWeight)
+        //     newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
+        //   if (!pkg.length)
+        //     newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
+        //   if (!pkg.breadth)
+        //     newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
+        //   if (!pkg.height)
+        //     newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+        // });
+         // Check each package
+  box.packages.forEach((pkg) => {
+    if (isEmptyOrZero(pkg.name)) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
+    if (isEmptyOrZero(pkg.quantity)) newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
+    if (isEmptyOrZero(pkg.unitPrice)) newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
+    if (isEmptyOrZero(pkg.unitWeight)) newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
+    if (isEmptyOrZero(pkg.length)) newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
+    if (isEmptyOrZero(pkg.breadth)) newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
+    if (isEmptyOrZero(pkg.height)) newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+  });
       });
     }
 

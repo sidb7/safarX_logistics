@@ -50,6 +50,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
               type="number"
               value={collectibleAmount}
               onChangeCallback={setCollectibleAmount}
+              readOnly={true}
             />
           </div>
         )}
