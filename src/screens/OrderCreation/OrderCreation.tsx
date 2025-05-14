@@ -786,385 +786,714 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   };
 
   // Handle proceeding to next step
-  const handleProceedToNextStep = async () => {
-    // Reset previous validation errors
-    setFormErrors({
-      pickup: {
-        contactNo: false,
-        address: false,
-        name: false,
-        pincode: false,
-        city: false,
-        state: false,
-        addressLine1: false,
-        addressLine2: false,
-        landmark: false,
-        gstNo: false,
-        email: false,
-      },
-      delivery: {
-        contactNo: false,
-        address: false,
-        name: false,
-        pincode: false,
-        city: false,
-        state: false,
-        addressLine1: false,
-        addressLine2: false,
-        landmark: false,
-        gstNo: false,
-        email: false,
-      },
-    });
-    setBoxValidationErrors({});
+  // const handleProceedToNextStep = async () => {
+  //   // Reset previous validation errors
+  //   setFormErrors({
+  //     pickup: {
+  //       contactNo: false,
+  //       address: false,
+  //       name: false,
+  //       pincode: false,
+  //       city: false,
+  //       state: false,
+  //       addressLine1: false,
+  //       addressLine2: false,
+  //       landmark: false,
+  //       gstNo: false,
+  //       email: false,
+  //     },
+  //     delivery: {
+  //       contactNo: false,
+  //       address: false,
+  //       name: false,
+  //       pincode: false,
+  //       city: false,
+  //       state: false,
+  //       addressLine1: false,
+  //       addressLine2: false,
+  //       landmark: false,
+  //       gstNo: false,
+  //       email: false,
+  //     },
+  //   });
+  //   setBoxValidationErrors({});
 
-    // Check required fields for pickup form
-    // const pickupErrors = {
-    //   contactNo: !pickupFormValues.contactNo.trim(),
-    //   address: !pickupFormValues.address.trim(),
-    //   name: !pickupFormValues.name.trim(),
-    //   pincode: !pickupFormValues.pincode.trim(),
-    //   city: !pickupFormValues.city.trim(),
-    //   state: !pickupFormValues.state.trim(),
-    //   addressLine1: !pickupFormValues.addressLine1.trim(),
-    //   addressLine2: !pickupFormValues.addressLine2.trim(),
-    //   landmark: !pickupFormValues.landmark.trim(),
-    //   gstNo: order.orderType === "B2B" && !pickupFormValues.gstNo.trim(),
-    //   email: false,
-    // };
-    const pickupErrors = {
-      contactNo: isEmptyOrZero(pickupFormValues.contactNo),
-      address: isEmptyOrZero(pickupFormValues.address),
-      name: isEmptyOrZero(pickupFormValues.name),
-      pincode: isEmptyOrZero(pickupFormValues.pincode),
-      city: isEmptyOrZero(pickupFormValues.city),
-      state: isEmptyOrZero(pickupFormValues.state),
-      addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
-      addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
-      landmark: isEmptyOrZero(pickupFormValues.landmark),
-      gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
-      email: false,
-    };
+  //   // Check required fields for pickup form
+  //   // const pickupErrors = {
+  //   //   contactNo: !pickupFormValues.contactNo.trim(),
+  //   //   address: !pickupFormValues.address.trim(),
+  //   //   name: !pickupFormValues.name.trim(),
+  //   //   pincode: !pickupFormValues.pincode.trim(),
+  //   //   city: !pickupFormValues.city.trim(),
+  //   //   state: !pickupFormValues.state.trim(),
+  //   //   addressLine1: !pickupFormValues.addressLine1.trim(),
+  //   //   addressLine2: !pickupFormValues.addressLine2.trim(),
+  //   //   landmark: !pickupFormValues.landmark.trim(),
+  //   //   gstNo: order.orderType === "B2B" && !pickupFormValues.gstNo.trim(),
+  //   //   email: false,
+  //   // };
+  //   const pickupErrors = {
+  //     contactNo: isEmptyOrZero(pickupFormValues.contactNo),
+  //     address: isEmptyOrZero(pickupFormValues.address),
+  //     name: isEmptyOrZero(pickupFormValues.name),
+  //     pincode: isEmptyOrZero(pickupFormValues.pincode),
+  //     city: isEmptyOrZero(pickupFormValues.city),
+  //     state: isEmptyOrZero(pickupFormValues.state),
+  //     addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
+  //     addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
+  //     landmark: isEmptyOrZero(pickupFormValues.landmark),
+  //     gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
+  //     email: false,
+  //   };
 
-    // Check required fields for delivery form
-    // const deliveryErrors = {
-    //   contactNo: !deliveryFormValues.contactNo.trim(),
-    //   address: !deliveryFormValues.address.trim(),
-    //   name: !deliveryFormValues.name.trim(),
-    //   pincode: !deliveryFormValues.pincode.trim(),
-    //   city: !deliveryFormValues.city.trim(),
-    //   state: !deliveryFormValues.state.trim(),
-    //   addressLine1: !deliveryFormValues.addressLine1.trim(),
-    //   addressLine2: !deliveryFormValues.addressLine2.trim(),
-    //   landmark: !deliveryFormValues.landmark.trim(),
-    //   gstNo: order.orderType === "B2B" && !deliveryFormValues.gstNo.trim(),
-    //   email: false,
-    // };
-    const deliveryErrors = {
-      contactNo: isEmptyOrZero(deliveryFormValues.contactNo),
-      address: isEmptyOrZero(deliveryFormValues.address),
-      name: isEmptyOrZero(deliveryFormValues.name),
-      pincode: isEmptyOrZero(deliveryFormValues.pincode),
-      city: isEmptyOrZero(deliveryFormValues.city),
-      state: isEmptyOrZero(deliveryFormValues.state),
-      addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
-      addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
-      landmark: isEmptyOrZero(deliveryFormValues.landmark),
-      gstNo: order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
-      email: false,
-    };
+  //   // Check required fields for delivery form
+  //   // const deliveryErrors = {
+  //   //   contactNo: !deliveryFormValues.contactNo.trim(),
+  //   //   address: !deliveryFormValues.address.trim(),
+  //   //   name: !deliveryFormValues.name.trim(),
+  //   //   pincode: !deliveryFormValues.pincode.trim(),
+  //   //   city: !deliveryFormValues.city.trim(),
+  //   //   state: !deliveryFormValues.state.trim(),
+  //   //   addressLine1: !deliveryFormValues.addressLine1.trim(),
+  //   //   addressLine2: !deliveryFormValues.addressLine2.trim(),
+  //   //   landmark: !deliveryFormValues.landmark.trim(),
+  //   //   gstNo: order.orderType === "B2B" && !deliveryFormValues.gstNo.trim(),
+  //   //   email: false,
+  //   // };
+  //   const deliveryErrors = {
+  //     contactNo: isEmptyOrZero(deliveryFormValues.contactNo),
+  //     address: isEmptyOrZero(deliveryFormValues.address),
+  //     name: isEmptyOrZero(deliveryFormValues.name),
+  //     pincode: isEmptyOrZero(deliveryFormValues.pincode),
+  //     city: isEmptyOrZero(deliveryFormValues.city),
+  //     state: isEmptyOrZero(deliveryFormValues.state),
+  //     addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
+  //     addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
+  //     landmark: isEmptyOrZero(deliveryFormValues.landmark),
+  //     gstNo: order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
+  //     email: false,
+  //   };
 
-    // Check if there are any validation errors in address forms
-    const hasPickupErrors = Object.values(pickupErrors).some((error) => error);
-    const hasDeliveryErrors = Object.values(deliveryErrors).some(
-      (error) => error
-    );
+  //   // Check if there are any validation errors in address forms
+  //   const hasPickupErrors = Object.values(pickupErrors).some((error) => error);
+  //   const hasDeliveryErrors = Object.values(deliveryErrors).some(
+  //     (error) => error
+  //   );
 
-    // Update validation error states for address forms
-    setFormErrors({
-      pickup: pickupErrors,
-      delivery: deliveryErrors,
-    });
+  //   // Update validation error states for address forms
+  //   setFormErrors({
+  //     pickup: pickupErrors,
+  //     delivery: deliveryErrors,
+  //   });
 
-    setValidationErrors({
-      pickup: hasPickupErrors,
-      delivery: hasDeliveryErrors,
-    });
+  //   setValidationErrors({
+  //     pickup: hasPickupErrors,
+  //     delivery: hasDeliveryErrors,
+  //   });
 
-    // Validate box data based on order type
-    let hasBoxErrors = false;
-    const newBoxErrors: { [boxId: number]: { [fieldId: string]: boolean } } =
-      {};
+  //   // Validate box data based on order type
+  //   let hasBoxErrors = false;
+  //   const newBoxErrors: { [boxId: number]: { [fieldId: string]: boolean } } =
+  //     {};
 
-    if (order.orderType === "B2C") {
-      // Validate B2C boxes
-      // boxesData.forEach((box) => {
-      //   newBoxErrors[box.id] = {};
+  //   if (order.orderType === "B2C") {
+  //     // Validate B2C boxes
+  //     // boxesData.forEach((box) => {
+  //     //   newBoxErrors[box.id] = {};
 
-      //   // Check box dimensions
-      //   if (!box.dimensions.name) newBoxErrors[box.id][`box-name`] = true;
-      //   if (!box.dimensions.l) newBoxErrors[box.id][`box-length`] = true;
-      //   if (!box.dimensions.b) newBoxErrors[box.id][`box-breadth`] = true;
-      //   if (!box.dimensions.h) newBoxErrors[box.id][`box-height`] = true;
+  //     //   // Check box dimensions
+  //     //   if (!box.dimensions.name) newBoxErrors[box.id][`box-name`] = true;
+  //     //   if (!box.dimensions.l) newBoxErrors[box.id][`box-length`] = true;
+  //     //   if (!box.dimensions.b) newBoxErrors[box.id][`box-breadth`] = true;
+  //     //   if (!box.dimensions.h) newBoxErrors[box.id][`box-height`] = true;
 
-      //   // Check each product
-      //   box.products.forEach((product) => {
-      //     if (!product.name)
-      //       newBoxErrors[box.id][`product-${product.id}-name`] = true;
-      //     if (!product.quantity)
-      //       newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
-      //     if (!product.unitPrice)
-      //       newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
-      //     if (!product.unitWeight)
-      //       newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
-      //   });
-      // });
-      boxesData.forEach((box) => {
-        newBoxErrors[box.id] = {};
+  //     //   // Check each product
+  //     //   box.products.forEach((product) => {
+  //     //     if (!product.name)
+  //     //       newBoxErrors[box.id][`product-${product.id}-name`] = true;
+  //     //     if (!product.quantity)
+  //     //       newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
+  //     //     if (!product.unitPrice)
+  //     //       newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
+  //     //     if (!product.unitWeight)
+  //     //       newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+  //     //   });
+  //     // });
+  //     boxesData.forEach((box) => {
+  //       newBoxErrors[box.id] = {};
       
-        // Check box dimensions
-        if (isEmptyOrZero(box.dimensions.name)) newBoxErrors[box.id][`box-name`] = true;
-        if (isEmptyOrZero(box.dimensions.l)) newBoxErrors[box.id][`box-length`] = true;
-        if (isEmptyOrZero(box.dimensions.b)) newBoxErrors[box.id][`box-breadth`] = true;
-        if (isEmptyOrZero(box.dimensions.h)) newBoxErrors[box.id][`box-height`] = true;
+  //       // Check box dimensions
+  //       if (isEmptyOrZero(box.dimensions.name)) newBoxErrors[box.id][`box-name`] = true;
+  //       if (isEmptyOrZero(box.dimensions.l)) newBoxErrors[box.id][`box-length`] = true;
+  //       if (isEmptyOrZero(box.dimensions.b)) newBoxErrors[box.id][`box-breadth`] = true;
+  //       if (isEmptyOrZero(box.dimensions.h)) newBoxErrors[box.id][`box-height`] = true;
       
-        // Check each product
-        box.products.forEach((product) => {
-          if (isEmptyOrZero(product.name)) newBoxErrors[box.id][`product-${product.id}-name`] = true;
-          if (isEmptyOrZero(product.quantity)) newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
-          if (isEmptyOrZero(product.unitPrice)) newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
-          if (isEmptyOrZero(product.unitWeight)) newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
-        });
-      });
-    } else {
-      // Validate B2B boxes
-      b2bBoxesData.forEach((box) => {
-        newBoxErrors[box.id] = {};
+  //       // Check each product
+  //       box.products.forEach((product) => {
+  //         if (isEmptyOrZero(product.name)) newBoxErrors[box.id][`product-${product.id}-name`] = true;
+  //         if (isEmptyOrZero(product.quantity)) newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
+  //         if (isEmptyOrZero(product.unitPrice)) newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
+  //         if (isEmptyOrZero(product.unitWeight)) newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+  //       });
+  //     });
+  //   } else {
+  //     // Validate B2B boxes
+  //     b2bBoxesData.forEach((box) => {
+  //       newBoxErrors[box.id] = {};
 
-        // Check each package
-        // box.packages.forEach((pkg) => {
-        //   if (!pkg.name) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
-        //   if (!pkg.quantity)
-        //     newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
-        //   if (!pkg.unitPrice)
-        //     newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
-        //   if (!pkg.unitWeight)
-        //     newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
-        //   if (!pkg.length)
-        //     newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
-        //   if (!pkg.breadth)
-        //     newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
-        //   if (!pkg.height)
-        //     newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
-        // });
-         // Check each package
-  box.packages.forEach((pkg) => {
-    if (isEmptyOrZero(pkg.name)) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
-    if (isEmptyOrZero(pkg.quantity)) newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
-    if (isEmptyOrZero(pkg.unitPrice)) newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
-    if (isEmptyOrZero(pkg.unitWeight)) newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
-    if (isEmptyOrZero(pkg.length)) newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
-    if (isEmptyOrZero(pkg.breadth)) newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
-    if (isEmptyOrZero(pkg.height)) newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+  //       // Check each package
+  //       // box.packages.forEach((pkg) => {
+  //       //   if (!pkg.name) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
+  //       //   if (!pkg.quantity)
+  //       //     newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
+  //       //   if (!pkg.unitPrice)
+  //       //     newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
+  //       //   if (!pkg.unitWeight)
+  //       //     newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
+  //       //   if (!pkg.length)
+  //       //     newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
+  //       //   if (!pkg.breadth)
+  //       //     newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
+  //       //   if (!pkg.height)
+  //       //     newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+  //       // });
+  //        // Check each package
+  // box.packages.forEach((pkg) => {
+  //   if (isEmptyOrZero(pkg.name)) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
+  //   if (isEmptyOrZero(pkg.quantity)) newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
+  //   if (isEmptyOrZero(pkg.unitPrice)) newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
+  //   if (isEmptyOrZero(pkg.unitWeight)) newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
+  //   if (isEmptyOrZero(pkg.length)) newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
+  //   if (isEmptyOrZero(pkg.breadth)) newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
+  //   if (isEmptyOrZero(pkg.height)) newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+  // });
+  //     });
+  //   }
+
+  //   // Check if there are any box errors
+  //   for (const boxId in newBoxErrors) {
+  //     if (Object.keys(newBoxErrors[boxId]).length > 0) {
+  //       hasBoxErrors = true;
+  //       break;
+  //     }
+  //   }
+
+  //   // Set box validation errors
+  //   setBoxValidationErrors(newBoxErrors);
+
+  //   // If there are validation errors, show a toast and return
+  //   if (hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
+  //     toast.error("Please fill in all required fields");
+
+  //     // Automatically expand details sections if they contain errors
+  //     if (hasPickupErrors && !showPickupDetails) {
+  //       setShowPickupDetails(true);
+  //     }
+
+  //     if (hasDeliveryErrors && !showDeliveryDetails) {
+  //       setShowDeliveryDetails(true);
+  //     }
+
+  //     // Scroll to the top of the form to show validation errors
+  //     window.scrollTo({ top: 0, behavior: "smooth" });
+  //     return;
+  //   }
+
+  //   // Check if box data exists for order
+  //   if (
+  //     (order.orderType === "B2C" && boxesData.length === 0) ||
+  //     (order.orderType === "B2B" && b2bBoxesData.length === 0)
+  //   ) {
+  //     toast.error("Please add at least one package to your order");
+  //     return;
+  //   }
+
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     // Create pickup address payload
+  //     const pickupAddressPayload = {
+  //       fullAddress: pickupFormValues.address,
+  //       flatNo: pickupFormValues.addressLine1,
+  //       locality: pickupFormValues.addressLine2,
+  //       landmark: pickupFormValues.landmark,
+  //       pincode: pickupFormValues.pincode,
+  //       city: pickupFormValues.city,
+  //       state: pickupFormValues.state,
+  //       country: "India",
+  //       addressType: "warehouse",
+  //       workingDays: {
+  //         monday: true,
+  //         tuesday: true,
+  //         wednesday: true,
+  //         thursday: true,
+  //         friday: true,
+  //         saturday: true,
+  //         sunday: true,
+  //       },
+  //       workingHours: "09:00",
+  //       contact: {
+  //         name: pickupFormValues.name,
+  //         mobileNo: pickupFormValues.contactNo,
+  //         emailId: pickupFormValues.email,
+  //         type: "warehouse associate",
+  //       },
+  //       pickupDate: new Date().getTime(),
+  //     };
+
+  //     // Step 1: Submit pickup information
+  //     const response = await POST(ADD_PICKUP_LOCATION, {
+  //       pickupAddress: pickupAddressPayload,
+  //       returnAddress: pickupAddressPayload,
+  //       branding: {
+  //         id: uuidv4(),
+  //         name: "",
+  //         logo: "",
+  //         address: "",
+  //         contact: { name: "", mobileNo: "" },
+  //         isActive: false,
+  //       },
+  //       transit: order.reverseState,
+  //       orderType: order.orderType,
+  //     });
+
+  //     if (!response?.data?.success) {
+  //       toast.error(
+  //         response?.data?.message || "Failed to submit pickup information"
+  //       );
+  //       return;
+  //     }
+
+  //     const tempId = response.data.data[0]?.tempOrderId;
+  //     const source = response.data.data[0]?.source;
+
+  //     // Save these values for subsequent API calls
+  //     setTempOrderId(tempId);
+  //     setOrderSource(source);
+
+  //     // Create delivery address payload
+  //     const deliveryAddressPayload = {
+  //       recipientType: "consumer",
+  //       fullAddress: deliveryFormValues.address,
+  //       flatNo: deliveryFormValues.addressLine1,
+  //       locality: deliveryFormValues.addressLine2,
+  //       landmark: deliveryFormValues.landmark,
+  //       pincode: deliveryFormValues.pincode,
+  //       city: deliveryFormValues.city,
+  //       state: deliveryFormValues.state,
+  //       country: "India",
+  //       addressType: "warehouse",
+  //       workingDays: {
+  //         monday: true,
+  //         tuesday: true,
+  //         wednesday: true,
+  //         thursday: true,
+  //         friday: true,
+  //         saturday: true,
+  //         sunday: true,
+  //       },
+  //       workingHours: "09:00",
+  //       contact: {
+  //         name: deliveryFormValues.name,
+  //         mobileNo: deliveryFormValues.contactNo,
+  //         emailId: deliveryFormValues.email,
+  //         type: "warehouse associate",
+  //       },
+  //     };
+
+  //     // Step 2: Submit delivery information
+  //     const deliveryResponse = await POST(ADD_DELIVERY_LOCATION, {
+  //       deliveryAddress: deliveryAddressPayload,
+  //       billingAddress: deliveryAddressPayload,
+  //       orderType: order.orderType,
+  //       gstNumber: deliveryFormValues.gstNo || "",
+  //       tempOrderId: tempId,
+  //       source: source,
+  //     });
+
+  //     if (!deliveryResponse?.data?.success) {
+  //       toast.error(
+  //         deliveryResponse?.data?.message ||
+  //           "Failed to submit delivery information"
+  //       );
+  //       return;
+  //     }
+
+  //     // Step 3: Submit box information
+  //     const boxesInfoPayload = {
+  //       boxInfo: prepareBoxInfoPayload(),
+  //       codInfo: {
+  //         isCod: paymentMethod === "Cash on Delivery",
+  //         // collectableAmount: Number(collectibleAmount) || 0,
+  //         collectableAmount: paymentMethod === "Cash on Delivery" 
+  //     ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
+  //     : 0,
+  //         invoiceValue: calculateTotalInvoiceValue(),
+  //       },
+  //       insurance: {
+  //         isInsured: insuranceOption === "withInsurance",
+  //         amount: 0,
+  //       },
+  //       tempOrderId: tempId,
+  //       source: source,
+  //     };
+
+  //     const boxInfoResponse = await POST(ADD_BOX_INFO, boxesInfoPayload);
+
+  //     // Call POST_SET_ORDER_ID independently
+  //     const orderIdPayload = {
+  //       orderId: order.orderId,
+  //       eWayBillNo: "",
+  //       tempOrderId: tempId,
+  //       source: source,
+  //     };
+  //     await POST(POST_SET_ORDER_ID, orderIdPayload);
+
+  //     if (boxInfoResponse?.data?.success) {
+  //       // Proceed to next step on success
+  //       setActiveStep(2);
+  //       toast.success("Order information submitted successfully!");
+  //     } else {
+  //       toast.error(
+  //         boxInfoResponse?.data?.message || "Failed to submit box information"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error in order submission:", error);
+  //     toast.error("An error occurred while processing your order");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+  // Handle proceeding to next step
+const handleProceedToNextStep = async () => {
+  // Reset previous validation errors
+  setFormErrors({
+    pickup: {
+      contactNo: false,
+      address: false,
+      name: false,
+      pincode: false,
+      city: false,
+      state: false,
+      addressLine1: false,
+      addressLine2: false,
+      landmark: false,
+      gstNo: false,
+      email: false,
+    },
+    delivery: {
+      contactNo: false,
+      address: false,
+      name: false,
+      pincode: false,
+      city: false,
+      state: false,
+      addressLine1: false,
+      addressLine2: false,
+      landmark: false,
+      gstNo: false,
+      email: false,
+    },
   });
-      });
-    }
+  setBoxValidationErrors({});
 
-    // Check if there are any box errors
-    for (const boxId in newBoxErrors) {
-      if (Object.keys(newBoxErrors[boxId]).length > 0) {
-        hasBoxErrors = true;
-        break;
-      }
-    }
-
-    // Set box validation errors
-    setBoxValidationErrors(newBoxErrors);
-
-    // If there are validation errors, show a toast and return
-    if (hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
-      toast.error("Please fill in all required fields");
-
-      // Automatically expand details sections if they contain errors
-      if (hasPickupErrors && !showPickupDetails) {
-        setShowPickupDetails(true);
-      }
-
-      if (hasDeliveryErrors && !showDeliveryDetails) {
-        setShowDeliveryDetails(true);
-      }
-
-      // Scroll to the top of the form to show validation errors
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-
-    // Check if box data exists for order
-    if (
-      (order.orderType === "B2C" && boxesData.length === 0) ||
-      (order.orderType === "B2B" && b2bBoxesData.length === 0)
-    ) {
-      toast.error("Please add at least one package to your order");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      // Create pickup address payload
-      const pickupAddressPayload = {
-        fullAddress: pickupFormValues.address,
-        flatNo: pickupFormValues.addressLine1,
-        locality: pickupFormValues.addressLine2,
-        landmark: pickupFormValues.landmark,
-        pincode: pickupFormValues.pincode,
-        city: pickupFormValues.city,
-        state: pickupFormValues.state,
-        country: "India",
-        addressType: "warehouse",
-        workingDays: {
-          monday: true,
-          tuesday: true,
-          wednesday: true,
-          thursday: true,
-          friday: true,
-          saturday: true,
-          sunday: true,
-        },
-        workingHours: "09:00",
-        contact: {
-          name: pickupFormValues.name,
-          mobileNo: pickupFormValues.contactNo,
-          emailId: pickupFormValues.email,
-          type: "warehouse associate",
-        },
-        pickupDate: new Date().getTime(),
-      };
-
-      // Step 1: Submit pickup information
-      const response = await POST(ADD_PICKUP_LOCATION, {
-        pickupAddress: pickupAddressPayload,
-        returnAddress: pickupAddressPayload,
-        branding: {
-          id: uuidv4(),
-          name: "",
-          logo: "",
-          address: "",
-          contact: { name: "", mobileNo: "" },
-          isActive: false,
-        },
-        transit: order.reverseState,
-        orderType: order.orderType,
-      });
-
-      if (!response?.data?.success) {
-        toast.error(
-          response?.data?.message || "Failed to submit pickup information"
-        );
-        return;
-      }
-
-      const tempId = response.data.data[0]?.tempOrderId;
-      const source = response.data.data[0]?.source;
-
-      // Save these values for subsequent API calls
-      setTempOrderId(tempId);
-      setOrderSource(source);
-
-      // Create delivery address payload
-      const deliveryAddressPayload = {
-        recipientType: "consumer",
-        fullAddress: deliveryFormValues.address,
-        flatNo: deliveryFormValues.addressLine1,
-        locality: deliveryFormValues.addressLine2,
-        landmark: deliveryFormValues.landmark,
-        pincode: deliveryFormValues.pincode,
-        city: deliveryFormValues.city,
-        state: deliveryFormValues.state,
-        country: "India",
-        addressType: "warehouse",
-        workingDays: {
-          monday: true,
-          tuesday: true,
-          wednesday: true,
-          thursday: true,
-          friday: true,
-          saturday: true,
-          sunday: true,
-        },
-        workingHours: "09:00",
-        contact: {
-          name: deliveryFormValues.name,
-          mobileNo: deliveryFormValues.contactNo,
-          emailId: deliveryFormValues.email,
-          type: "warehouse associate",
-        },
-      };
-
-      // Step 2: Submit delivery information
-      const deliveryResponse = await POST(ADD_DELIVERY_LOCATION, {
-        deliveryAddress: deliveryAddressPayload,
-        billingAddress: deliveryAddressPayload,
-        orderType: order.orderType,
-        gstNumber: deliveryFormValues.gstNo || "",
-        tempOrderId: tempId,
-        source: source,
-      });
-
-      if (!deliveryResponse?.data?.success) {
-        toast.error(
-          deliveryResponse?.data?.message ||
-            "Failed to submit delivery information"
-        );
-        return;
-      }
-
-      // Step 3: Submit box information
-      const boxesInfoPayload = {
-        boxInfo: prepareBoxInfoPayload(),
-        codInfo: {
-          isCod: paymentMethod === "Cash on Delivery",
-          // collectableAmount: Number(collectibleAmount) || 0,
-          collectableAmount: paymentMethod === "Cash on Delivery" 
-      ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
-      : 0,
-          invoiceValue: calculateTotalInvoiceValue(),
-        },
-        insurance: {
-          isInsured: insuranceOption === "withInsurance",
-          amount: 0,
-        },
-        tempOrderId: tempId,
-        source: source,
-      };
-
-      const boxInfoResponse = await POST(ADD_BOX_INFO, boxesInfoPayload);
-
-      // Call POST_SET_ORDER_ID independently
-      const orderIdPayload = {
-        orderId: order.orderId,
-        eWayBillNo: "",
-        tempOrderId: tempId,
-        source: source,
-      };
-      await POST(POST_SET_ORDER_ID, orderIdPayload);
-
-      if (boxInfoResponse?.data?.success) {
-        // Proceed to next step on success
-        setActiveStep(2);
-        toast.success("Order information submitted successfully!");
-      } else {
-        toast.error(
-          boxInfoResponse?.data?.message || "Failed to submit box information"
-        );
-      }
-    } catch (error) {
-      console.error("Error in order submission:", error);
-      toast.error("An error occurred while processing your order");
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Check required fields for pickup form
+  const pickupErrors = {
+    contactNo: isEmptyOrZero(pickupFormValues.contactNo),
+    address: isEmptyOrZero(pickupFormValues.address),
+    name: isEmptyOrZero(pickupFormValues.name),
+    pincode: isEmptyOrZero(pickupFormValues.pincode),
+    city: isEmptyOrZero(pickupFormValues.city),
+    state: isEmptyOrZero(pickupFormValues.state),
+    addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
+    addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
+    landmark: isEmptyOrZero(pickupFormValues.landmark),
+    gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
+    email: false,
   };
+
+  // Check required fields for delivery form
+  const deliveryErrors = {
+    contactNo: isEmptyOrZero(deliveryFormValues.contactNo),
+    address: isEmptyOrZero(deliveryFormValues.address),
+    name: isEmptyOrZero(deliveryFormValues.name),
+    pincode: isEmptyOrZero(deliveryFormValues.pincode),
+    city: isEmptyOrZero(deliveryFormValues.city),
+    state: isEmptyOrZero(deliveryFormValues.state),
+    addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
+    addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
+    landmark: isEmptyOrZero(deliveryFormValues.landmark),
+    gstNo: order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
+    email: false,
+  };
+
+  // Check if there are any validation errors in address forms
+  const hasPickupErrors = Object.values(pickupErrors).some((error) => error);
+  const hasDeliveryErrors = Object.values(deliveryErrors).some(
+    (error) => error
+  );
+
+  // Update validation error states for address forms
+  setFormErrors({
+    pickup: pickupErrors,
+    delivery: deliveryErrors,
+  });
+
+  setValidationErrors({
+    pickup: hasPickupErrors,
+    delivery: hasDeliveryErrors,
+  });
+
+  // Validate box data based on order type
+  let hasBoxErrors = false;
+  const newBoxErrors: { [boxId: number]: { [fieldId: string]: boolean } } =
+    {};
+
+  if (order.orderType === "B2C") {
+    // Validate B2C boxes
+    boxesData.forEach((box) => {
+      newBoxErrors[box.id] = {};
+    
+      // Check box dimensions
+      if (isEmptyOrZero(box.dimensions.name)) newBoxErrors[box.id][`box-name`] = true;
+      if (isEmptyOrZero(box.dimensions.l)) newBoxErrors[box.id][`box-length`] = true;
+      if (isEmptyOrZero(box.dimensions.b)) newBoxErrors[box.id][`box-breadth`] = true;
+      if (isEmptyOrZero(box.dimensions.h)) newBoxErrors[box.id][`box-height`] = true;
+    
+      // Check each product
+      box.products.forEach((product) => {
+        if (isEmptyOrZero(product.name)) newBoxErrors[box.id][`product-${product.id}-name`] = true;
+        if (isEmptyOrZero(product.quantity)) newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
+        if (isEmptyOrZero(product.unitPrice)) newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
+        if (isEmptyOrZero(product.unitWeight)) newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+      });
+    });
+  } else {
+    // Validate B2B boxes
+    b2bBoxesData.forEach((box) => {
+      newBoxErrors[box.id] = {};
+
+      // Check each package
+      box.packages.forEach((pkg) => {
+        if (isEmptyOrZero(pkg.name)) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
+        if (isEmptyOrZero(pkg.quantity)) newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
+        if (isEmptyOrZero(pkg.unitPrice)) newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
+        if (isEmptyOrZero(pkg.unitWeight)) newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
+        if (isEmptyOrZero(pkg.length)) newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
+        if (isEmptyOrZero(pkg.breadth)) newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
+        if (isEmptyOrZero(pkg.height)) newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+      });
+    });
+  }
+
+  // Check if there are any box errors
+  for (const boxId in newBoxErrors) {
+    if (Object.keys(newBoxErrors[boxId]).length > 0) {
+      hasBoxErrors = true;
+      break;
+    }
+  }
+
+  // Set box validation errors
+  setBoxValidationErrors(newBoxErrors);
+
+  // If there are validation errors, show a toast and return
+  if (hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
+    toast.error("Please fill in all required fields");
+
+    // Automatically expand details sections if they contain errors
+    if (hasPickupErrors && !showPickupDetails) {
+      setShowPickupDetails(true);
+    }
+
+    if (hasDeliveryErrors && !showDeliveryDetails) {
+      setShowDeliveryDetails(true);
+    }
+
+    // Scroll to the top of the form to show validation errors
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  // Check if box data exists for order
+  if (
+    (order.orderType === "B2C" && boxesData.length === 0) ||
+    (order.orderType === "B2B" && b2bBoxesData.length === 0)
+  ) {
+    toast.error("Please add at least one package to your order");
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    // Check localStorage for existing tempOrderId and source
+    const existingTempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
+    const existingSource = localStorage.getItem(STORAGE_KEYS.ORDER_SOURCE);
+
+    // Create pickup address payload
+    const pickupAddressPayload = {
+      fullAddress: pickupFormValues.address,
+      flatNo: pickupFormValues.addressLine1,
+      locality: pickupFormValues.addressLine2,
+      landmark: pickupFormValues.landmark,
+      pincode: pickupFormValues.pincode,
+      city: pickupFormValues.city,
+      state: pickupFormValues.state,
+      country: "India",
+      addressType: "warehouse",
+      workingDays: {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
+      },
+      workingHours: "09:00",
+      contact: {
+        name: pickupFormValues.name,
+        mobileNo: pickupFormValues.contactNo,
+        emailId: pickupFormValues.email,
+        type: "warehouse associate",
+      },
+      pickupDate: new Date().getTime(),
+    };
+
+    // Create the main payload and include tempOrderId and source if they exist
+    const payload:any = {
+      pickupAddress: pickupAddressPayload,
+      returnAddress: pickupAddressPayload,
+      branding: {
+        id: uuidv4(),
+        name: "",
+        logo: "",
+        address: "",
+        contact: { name: "", mobileNo: "" },
+        isActive: false,
+      },
+      transit: order.reverseState,
+      orderType: order.orderType,
+    };
+
+    // Add tempOrderId and source to payload if they exist
+    if (existingTempOrderId && existingSource) {
+      payload.tempOrderId = existingTempOrderId;
+      payload.source = existingSource;
+    }
+
+    // Step 1: Submit pickup information
+    const response = await POST(ADD_PICKUP_LOCATION, payload);
+
+    if (!response?.data?.success) {
+      toast.error(
+        response?.data?.message || "Failed to submit pickup information"
+      );
+      return;
+    }
+
+    const tempId = response.data.data[0]?.tempOrderId;
+    const source = response.data.data[0]?.source;
+
+    // Save these values for subsequent API calls
+    setTempOrderId(tempId);
+    setOrderSource(source);
+
+    // Create delivery address payload
+    const deliveryAddressPayload = {
+      recipientType: "consumer",
+      fullAddress: deliveryFormValues.address,
+      flatNo: deliveryFormValues.addressLine1,
+      locality: deliveryFormValues.addressLine2,
+      landmark: deliveryFormValues.landmark,
+      pincode: deliveryFormValues.pincode,
+      city: deliveryFormValues.city,
+      state: deliveryFormValues.state,
+      country: "India",
+      addressType: "warehouse",
+      workingDays: {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
+      },
+      workingHours: "09:00",
+      contact: {
+        name: deliveryFormValues.name,
+        mobileNo: deliveryFormValues.contactNo,
+        emailId: deliveryFormValues.email,
+        type: "warehouse associate",
+      },
+    };
+
+    // Step 2: Submit delivery information
+    const deliveryResponse = await POST(ADD_DELIVERY_LOCATION, {
+      deliveryAddress: deliveryAddressPayload,
+      billingAddress: deliveryAddressPayload,
+      orderType: order.orderType,
+      gstNumber: deliveryFormValues.gstNo || "",
+      tempOrderId: tempId,
+      source: source,
+    });
+
+    if (!deliveryResponse?.data?.success) {
+      toast.error(
+        deliveryResponse?.data?.message ||
+          "Failed to submit delivery information"
+      );
+      return;
+    }
+
+    // Step 3: Submit box information
+    const boxesInfoPayload = {
+      boxInfo: prepareBoxInfoPayload(),
+      codInfo: {
+        isCod: paymentMethod === "Cash on Delivery",
+        collectableAmount: paymentMethod === "Cash on Delivery" 
+          ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
+          : 0,
+        invoiceValue: calculateTotalInvoiceValue(),
+      },
+      insurance: {
+        isInsured: insuranceOption === "withInsurance",
+        amount: 0,
+      },
+      tempOrderId: tempId,
+      source: source,
+    };
+
+    const boxInfoResponse = await POST(ADD_BOX_INFO, boxesInfoPayload);
+
+    // Call POST_SET_ORDER_ID independently
+    const orderIdPayload = {
+      orderId: order.orderId,
+      eWayBillNo: "",
+      tempOrderId: tempId,
+      source: source,
+    };
+    await POST(POST_SET_ORDER_ID, orderIdPayload);
+
+    if (boxInfoResponse?.data?.success) {
+      // Proceed to next step on success
+      setActiveStep(2);
+      toast.success("Order information submitted successfully!");
+    } else {
+      toast.error(
+        boxInfoResponse?.data?.message || "Failed to submit box information"
+      );
+    }
+  } catch (error) {
+    console.error("Error in order submission:", error);
+    toast.error("An error occurred while processing your order");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const clearBoxFieldError = (boxId: number, fieldId: string) => {
     setBoxValidationErrors((prev) => {
@@ -1207,6 +1536,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
           contact: {
             name: pickupFormValues.name,
             mobileNo: parseInt(pickupFormValues.contactNo),
+            email: pickupFormValues.email || "",
           },
         },
         deliveryDetails: {
@@ -1215,6 +1545,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
           contact: {
             name: deliveryFormValues.name,
             mobileNo: parseInt(deliveryFormValues.contactNo),
+            email: deliveryFormValues.email   || "",
           },
           gstNumber: deliveryFormValues.gstNo || "",
         },

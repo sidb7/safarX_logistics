@@ -653,6 +653,9 @@ interface ShippingDetailsProps {
   shippingCost: string;
   gstPercentage: number;
   variableServices: any; // Added for tooltip
+  orderType?: string; // Add orderType field
+  revisedShippingCost?: string; // Add field for the revised shipping cost
+
 }
 
 interface SummaryForOrderProps {
@@ -726,6 +729,8 @@ interface ApiOrderData {
   insurance?: ApiInsuranceInfo;
   zone?: string;
   yaariCash?: number;
+  orderType?: string; // Add orderType field
+
 }
 
 interface ApiPostResponse {
@@ -802,6 +807,111 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
            data.packageDetails.totalWeight !== "N/A";
   };
 
+  // const fetchLatestOrder = async (): Promise<void> => {
+  //   if (!tempOrderId || !orderSource) return;
+  //   setError(null);
+  //   try {
+  //     console.log(`Workspaceing order data for service ID: ${selectedServiceId}, attempt: ${retryCount + 1}`);
+  //     const response: { data?: ApiPostResponse } = await POST(GET_LATEST_ORDER, {
+  //       tempOrderId: tempOrderId,
+  //       source: orderSource
+  //     });
+
+  //     if (response?.data?.success) {
+  //       const fetchedOrder: ApiOrderData | undefined = response.data.data[0];
+  //       if (!fetchedOrder) {
+  //           setError("No order data found in the response.");
+  //           setIsLoading(false);
+  //           return;
+  //       }
+  //       const pickupAddressForTooltip = formatAddressForTooltip(fetchedOrder.pickupAddress);
+  //       const deliveryAddressForTooltip = formatAddressForTooltip(fetchedOrder.deliveryAddress);
+
+  //       // Calculate order price (base + add + variables)
+  //       const basePrice = fetchedOrder.service?.base || 0;
+  //       const addPrice = fetchedOrder.service?.add || 0;
+  //       const variablesPrice = fetchedOrder.service?.variables || 0;
+  //       const orderPrice = basePrice + addPrice + variablesPrice;
+
+  //       // Calculate YaariCash discount on shipping
+  //     const yaariCashValue = fetchedOrder.yaariCash || 0;
+  //     const shippingCostValue = fetchedOrder.service?.total || 0;
+  //     let revisedShippingCostValue = null;
+
+  //     // Only calculate revised cost if yaariCash > 0
+  //     if (yaariCashValue > 0 && shippingCostValue > 0) {
+  //       revisedShippingCostValue = Math.max(0, shippingCostValue - yaariCashValue);
+  //     }
+
+  //       const transformedData: TransformedOrderData = {
+  //         pickupDetails: {
+  //           name: fetchedOrder.pickupAddress?.contact?.name || "N/A",
+  //           phone: fetchedOrder.pickupAddress?.contact?.mobileNo ?
+  //             `+91 ${fetchedOrder.pickupAddress.contact.mobileNo}` : "N/A",
+  //           address: pickupAddressForTooltip
+  //         },
+  //         deliveryDetails: {
+  //           name: fetchedOrder.deliveryAddress?.contact?.name || "N/A",
+  //           phone: fetchedOrder.deliveryAddress?.contact?.mobileNo ?
+  //             `+91 ${fetchedOrder.deliveryAddress.contact.mobileNo}` : "N/A",
+  //           address: deliveryAddressForTooltip
+  //         },
+  //         packageDetails: {
+  //           boxes: fetchedOrder.boxInfo?.length || 0,
+  //           totalWeight: fetchedOrder.service?.appliedWeight ?
+  //             `${fetchedOrder.service.appliedWeight} kg` : "N/A",
+  //           invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ?
+  //             `₹ ${fetchedOrder.codInfo.invoiceValue}` : "N/A",
+  //           insurance: fetchedOrder.insurance?.isInsured !== undefined ?
+  //             (fetchedOrder.insurance.isInsured ? "Yes" : "No") : "N/A"
+  //         },
+  //         shippingDetails: {
+  //           courier: fetchedOrder.service?.partnerName || "N/A",
+  //           courierType: fetchedOrder.service?.serviceMode ?
+  //             `(${fetchedOrder.service.serviceMode} Service)` : "N/A",
+  //           zone: fetchedOrder.zone || "N/A",
+  //           paymentMode: fetchedOrder.codInfo?.isCod !== undefined ?
+  //             (fetchedOrder.codInfo.isCod ? "COD" : "Prepaid") : "N/A",
+  //           collectibleAmount: fetchedOrder.codInfo?.collectableAmount !== undefined ? // Changed from basePrice
+  //             `₹ ${fetchedOrder.codInfo.collectableAmount}` : "N/A",
+  //           orderPrice: orderPrice !== undefined ? // Changed from grandTotal
+  //             `₹ ${Math.round(orderPrice)}` : "N/A",
+  //           variableCharges: fetchedOrder.service?.variables !== undefined ?
+  //             `₹ ${fetchedOrder.service.variables}` : "N/A",
+  //           codHandlingFees: fetchedOrder.service?.cod !== undefined ?
+  //             `₹ ${fetchedOrder.service.cod}` : "N/A",
+  //           yaariCash: fetchedOrder.yaariCash !== undefined ?
+  //             `₹ ${fetchedOrder.yaariCash}` : "N/A",
+  //           shippingCost: fetchedOrder.service?.total !== undefined ?
+  //             `₹ ${fetchedOrder.service.total}` : "N/A",
+  //           gstPercentage: (fetchedOrder.service?.tax !== undefined && fetchedOrder.service?.total !== undefined && (fetchedOrder.service.total - fetchedOrder.service.tax !== 0)) ?
+  //             Number(((fetchedOrder.service.tax / (fetchedOrder.service.total - fetchedOrder.service.tax)) * 100).toFixed(0)) : 0,
+  //           variableServices: fetchedOrder.service?.variableServices || {} ,// Added for tooltip
+  //           orderType: fetchedOrder.orderType || "N/A" // Add orderType with default fallback
+
+  //         }
+  //       };
+  //       const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
+  //       if (hasSelectedService) {
+  //         setOrderData(transformedData);
+  //         setRetryCount(0); 
+  //       } else if (retryCount < 3) {
+  //         setTimeout(() => { setRetryCount(prev => prev + 1); }, 1500);
+  //       } else {
+  //         setOrderData(transformedData); 
+  //       }
+  //     } else {
+  //       setError(response?.data?.message || "Failed to fetch order data");
+  //     }
+  //   } catch (err: any) { 
+  //     const message = err?.message || "An error occurred while fetching order data";
+  //     setError(message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+
   const fetchLatestOrder = async (): Promise<void> => {
     if (!tempOrderId || !orderSource) return;
     setError(null);
@@ -811,7 +921,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
         tempOrderId: tempOrderId,
         source: orderSource
       });
-
+  
       if (response?.data?.success) {
         const fetchedOrder: ApiOrderData | undefined = response.data.data[0];
         if (!fetchedOrder) {
@@ -821,13 +931,23 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
         }
         const pickupAddressForTooltip = formatAddressForTooltip(fetchedOrder.pickupAddress);
         const deliveryAddressForTooltip = formatAddressForTooltip(fetchedOrder.deliveryAddress);
-
+  
         // Calculate order price (base + add + variables)
         const basePrice = fetchedOrder.service?.base || 0;
         const addPrice = fetchedOrder.service?.add || 0;
         const variablesPrice = fetchedOrder.service?.variables || 0;
         const orderPrice = basePrice + addPrice + variablesPrice;
-
+  
+        // Calculate YaariCash discount on shipping
+        const yaariCashValue = fetchedOrder.yaariCash || 0;
+        const shippingCostValue = fetchedOrder.service?.total || 0;
+        let revisedShippingCostValue = null;
+  
+        // Only calculate revised cost if yaariCash > 0
+        if (yaariCashValue > 0 && shippingCostValue > 0) {
+          revisedShippingCostValue = Math.max(0, shippingCostValue - yaariCashValue);
+        }
+  
         const transformedData: TransformedOrderData = {
           pickupDetails: {
             name: fetchedOrder.pickupAddress?.contact?.name || "N/A",
@@ -857,9 +977,9 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             zone: fetchedOrder.zone || "N/A",
             paymentMode: fetchedOrder.codInfo?.isCod !== undefined ?
               (fetchedOrder.codInfo.isCod ? "COD" : "Prepaid") : "N/A",
-            collectibleAmount: fetchedOrder.codInfo?.collectableAmount !== undefined ? // Changed from basePrice
+            collectibleAmount: fetchedOrder.codInfo?.collectableAmount !== undefined ?
               `₹ ${fetchedOrder.codInfo.collectableAmount}` : "N/A",
-            orderPrice: orderPrice !== undefined ? // Changed from grandTotal
+            orderPrice: orderPrice !== undefined ?
               `₹ ${Math.round(orderPrice)}` : "N/A",
             variableCharges: fetchedOrder.service?.variables !== undefined ?
               `₹ ${fetchedOrder.service.variables}` : "N/A",
@@ -869,9 +989,12 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
               `₹ ${fetchedOrder.yaariCash}` : "N/A",
             shippingCost: fetchedOrder.service?.total !== undefined ?
               `₹ ${fetchedOrder.service.total}` : "N/A",
+            revisedShippingCost: revisedShippingCostValue !== null ?
+              `₹ ${revisedShippingCostValue}` : undefined,
             gstPercentage: (fetchedOrder.service?.tax !== undefined && fetchedOrder.service?.total !== undefined && (fetchedOrder.service.total - fetchedOrder.service.tax !== 0)) ?
               Number(((fetchedOrder.service.tax / (fetchedOrder.service.total - fetchedOrder.service.tax)) * 100).toFixed(0)) : 0,
-            variableServices: fetchedOrder.service?.variableServices || {} // Added for tooltip
+            variableServices: fetchedOrder.service?.variableServices || {},
+            orderType: fetchedOrder.orderType || "N/A" // Add orderType with default fallback
           }
         };
         const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
@@ -946,7 +1069,8 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
     courier: "N/A", courierType: "N/A", zone: "N/A", paymentMode: "N/A",
     collectibleAmount: "N/A", orderPrice: "N/A", variableCharges: "N/A", // Changed property names
     codHandlingFees: "N/A", yaariCash: "N/A", shippingCost: "N/A", gstPercentage: 0,
-    variableServices: {} // Added for tooltip
+    variableServices: {}, // Added for tooltip
+    orderType: "N/A"
   };
 
   if (isLoading && !orderData) { 
@@ -999,7 +1123,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
       <div className="flex items-center mb-6">
         <h1 className="font-semibold text-xl leading-7 mr-4">Your Order Summary</h1>
         <div className="bg-blue-100 text-blue-800 rounded-full px-4 py-1 font-semibold text-xs leading-5 text-center capitalize">
-          B2C Shipment
+        {shippingDetailsToRender.orderType} Shipment
         </div>
       </div>
 
@@ -1276,7 +1400,10 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
                 <p className="text-gray-500 font-normal text-sm leading-5">Shipping Cost</p>
                 <div>
                   <p className="text-gray-800 font-semibold text-base leading-6">
-                    {shippingDetailsToRender.shippingCost}
+                    {/* {shippingDetailsToRender.shippingCost} */}
+                    {parseFloat(shippingDetailsToRender.yaariCash.replace('₹ ', '')) > 0 && shippingDetailsToRender.revisedShippingCost
+        ? `₹ ${Number(parseFloat(shippingDetailsToRender.revisedShippingCost.replace('₹ ', '')).toFixed(2))}`
+        : `₹ ${Number(parseFloat(shippingDetailsToRender.shippingCost.replace('₹ ', '')).toFixed(2))}`}
                   </p>
                   {shippingDetailsToRender.gstPercentage > 0 && (
                     <p className="text-xs text-gray-500">(inc {shippingDetailsToRender.gstPercentage}% GST)</p>
