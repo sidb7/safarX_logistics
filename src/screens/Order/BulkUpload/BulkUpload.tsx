@@ -13,7 +13,7 @@ import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { BULK_UPLOAD } from "../../../utils/ApiUrls";
+import { BULK_UPLOAD, Environment } from "../../../utils/ApiUrls";
 import { Spinner } from "../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -207,7 +207,13 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const renderHeaderComponent = () => {
-    const baseUrl = "https://sy-seller.s3.ap-south-1.amazonaws.com/files/";
+    let baseUrl;
+
+    if (Environment === "prod") {
+      baseUrl = "https://sy-seller.s3.ap-south-1.amazonaws.com/files/";
+    } else {
+      baseUrl = "https://systage.s3.ap-south-1.amazonaws.com/files/";
+    }
 
     const downloadUrlB2B = `${baseUrl}BULK_B2B_ORDER.xlsx`;
     const downloadUrlB2C = `${baseUrl}BULK_B2C_ORDER.xlsx`;
