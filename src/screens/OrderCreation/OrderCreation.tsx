@@ -424,6 +424,47 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
     }
   }, [activeStep, selectedServiceDetails]);
 
+  useEffect(() => {
+    const checkExistingOrder = async () => {
+      const existingTempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
+      const existingSource = localStorage.getItem(STORAGE_KEYS.ORDER_SOURCE);
+      
+      if (existingTempOrderId && existingSource) {
+        setIsLoadingExistingOrder(true);
+        try {
+          // Call GET_LATEST_ORDER API with the stored values
+          const response = await GET(GET_LATEST_ORDER, {
+            tempOrderId: existingTempOrderId,
+            source: existingSource
+          });
+          
+          if (!response?.data?.success) {
+            // If API fails, clear all localStorage and refresh page
+            console.log("Failed to get latest order, clearing data and refreshing");
+            clearSavedOrderData();
+            window.location.reload();
+          } else {
+            // API succeeded, set hasLoadedExistingOrder flag
+            setHasLoadedExistingOrder(true);
+            console.log("Successfully loaded existing order");
+          }
+        } catch (error) {
+          console.error("Error loading existing order:", error);
+          // On error, clear localStorage and refresh
+          clearSavedOrderData();
+          window.location.reload();
+        } finally {
+          setIsLoadingExistingOrder(false);
+        }
+      }
+    };
+    
+    // Only run this check once when component mounts
+    if (!hasLoadedExistingOrder && !isLoadingExistingOrder) {
+      checkExistingOrder();
+    }
+  }, [hasLoadedExistingOrder, isLoadingExistingOrder]);
+
   // Function to clear all saved data (call when order is successfully placed)
   const clearSavedOrderData = () => {
     Object.values(STORAGE_KEYS).forEach((key) => {
