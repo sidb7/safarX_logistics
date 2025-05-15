@@ -28,7 +28,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
-              className="w-full pl-4 pr-10 py-4 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-Open text-sm"
+              className="w-full pl-4 pr-10 py-4 border border-gray-300 rounded-2xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-Open text-sm"
             >
               <option value="Prepaid">Prepaid</option>
               <option value="Cash on Delivery">Cash on Delivery</option>

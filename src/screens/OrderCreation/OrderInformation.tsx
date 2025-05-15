@@ -88,10 +88,10 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
             isRightIcon={true}
             containerStyle=""
             rightIcon={AutoGenerateIcon}
-            className={`!text-base !font-semibold`}
+            className={`!text-base !font-semibold !pr-36 !rounded-2xl`}
             imageClassName="!h-[12px] !z-0 !w-[113px] !top-[40%] "
             value={order?.orderId || ""}
-            maxLength={12}
+            maxLength={50}
             label="Order ID"
             onChange={(e) => {
               setOrder((prevState) => {
