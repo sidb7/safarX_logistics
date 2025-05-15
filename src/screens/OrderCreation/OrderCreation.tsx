@@ -1589,10 +1589,13 @@ const handleProceedToNextStep = async () => {
           },
         });
       } else {
+        setSelectedServiceDetails(null);
+  localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
         toast.error(response?.data?.message || "Failed to place order");
       }
     } catch (error) {
-      console.error("Error placing order:", error);
+      setSelectedServiceDetails(null);
+  localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
       toast.error("An error occurred while placing your order");
     } finally {
       setIsSubmitting(false);

@@ -702,6 +702,8 @@ interface Product {
 interface Service {
   partnerName?: string;
   total: number;
+  yaariCash:any;
+  totalAfterCashback:any;
 }
 
 interface BoxInfo {
@@ -1007,6 +1009,11 @@ function OrderBooked() {
 
   // Get shipping charges
   const getShippingCharges = (): number => {
+
+    // return orderDetails?.service?.total || 0;
+    if (orderDetails?.service?.yaariCash > 0) {
+      return orderDetails?.service?.totalAfterCashback || 0;
+    }
     return orderDetails?.service?.total || 0;
   };
 
