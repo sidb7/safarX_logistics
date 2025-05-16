@@ -627,46 +627,221 @@ const OrderForm: React.FC<OrderFormProps> = ({
   }, [totalCollectibleAmount]);
 
   // Handle product name search input
-  const handleProductNameSearch = (productId: number, value: string) => {
-    setProductNameSearch((prev) => ({
-      ...prev,
-      [productId]: value,
-    }));
+  // const handleProductNameSearch = (productId: number, value: string) => {
+  //   setProductNameSearch((prev) => ({
+  //     ...prev,
+  //     [productId]: value,
+  //   }));
 
-    // Show search results dropdown
-    setShowProductSearchResults((prev) => ({
-      ...prev,
-      [productId]: true,
-    }));
+  //   // Show search results dropdown
+  //   setShowProductSearchResults((prev) => ({
+  //     ...prev,
+  //     [productId]: true,
+  //   }));
 
-    // Filter product suggestions based on search input
-    if (value.trim() === "") {
+  //   // Filter product suggestions based on search input
+  //   if (value.trim() === "") {
+  //     setFilteredProductResults((prev) => ({
+  //       ...prev,
+  //       [productId]: [],
+  //     }));
+  //   } else {
+  //     const filtered = productSuggestions.filter((product) =>
+  //       product.name.toLowerCase().includes(value.toLowerCase())
+  //     );
+  //     setFilteredProductResults((prev) => ({
+  //       ...prev,
+  //       [productId]: filtered.slice(0, 5), // Limit to top 5 matches
+  //     }));
+  //   }
+
+  //   // Update the product name
+  //   handleProductNameChange(productId, value);
+  // };
+
+  // Updated function to directly call API when searching for products
+const handleProductNameSearch = async (productId: number, value: string) => {
+  // Update the product name in the boxes state
+  setProductNameSearch((prev) => ({
+    ...prev,
+    [productId]: value,
+  }));
+
+  // Show search results dropdown
+  setShowProductSearchResults((prev) => ({
+    ...prev,
+    [productId]: true,
+  }));
+
+  // Update the product name
+  handleProductNameChange(productId, value);
+
+  // If search value is empty, don't make API call
+  if (value.trim() === "") {
+    setFilteredProductResults((prev) => ({
+      ...prev,
+      [productId]: [],
+    }));
+    return;
+  }
+
+  try {
+    // Call API directly to get fresh product results
+    const payload = {
+      skip: 0,
+      limit: 10, // Limit to top 10 matches for better performance
+      pageNo: 1,
+      sort: { _id: -1 },
+      searchValue: value, // Use the search value directly
+    };
+
+    const response = await POST(GET_PRODUCTS, payload);
+
+    if (response?.data?.success) {
+      // Format API response to match ProductSuggestion interface
+      const apiResults = response.data.data.map((item: any) => ({
+        productId: item._id || item.productId || "",
+        name: item.name || item.title || "",
+        companyId: item.companyId || "",
+        privateCompanyId: item.privateCompanyId || 0,
+        sellerId: item.sellerId || 0,
+        category: item.category || "",
+        length: item.length || 0,
+        breadth: item.breadth || 0,
+        height: item.height || 0,
+        appliedWeight: item.appliedWeight || 0,
+        deadWeight: item.deadWeight || 0,
+        volumetricWeight: item.volumetricWeight || 0,
+        unitPrice: item.unitPrice || 0,
+        unitTax: item.unitTax || 0,
+        qty: item.qty || 1,
+        sku: item.sku || "",
+        hsnCode: item.hsnCode || "",
+        selected: false,
+        weightUnit: item.weightUnit || "kg",
+        measureUnit: item.measureUnit || "cm",
+        currency: item.currency || "INR",
+        divisor: item.divisor || 5000,
+        variantId: item.variantId || "",
+        images: item.images || [],
+      }));
+
       setFilteredProductResults((prev) => ({
         ...prev,
-        [productId]: [],
+        [productId]: apiResults,
       }));
     } else {
+      // If API call fails, fall back to local filtering
       const filtered = productSuggestions.filter((product) =>
         product.name.toLowerCase().includes(value.toLowerCase())
       );
+      
       setFilteredProductResults((prev) => ({
         ...prev,
-        [productId]: filtered.slice(0, 5), // Limit to top 5 matches
+        [productId]: filtered.slice(0, 5),
       }));
     }
-
-    // Update the product name
-    handleProductNameChange(productId, value);
-  };
+  } catch (error) {
+    console.error("Error searching products:", error);
+    
+    // Fall back to local filtering on error
+    const filtered = productSuggestions.filter((product) =>
+      product.name.toLowerCase().includes(value.toLowerCase())
+    );
+    
+    setFilteredProductResults((prev) => ({
+      ...prev,
+      [productId]: filtered.slice(0, 5),
+    }));
+  }
+};
 
   // Handle box name search input
-  const handleBoxNameSearch = (value: string) => {
-    setBoxNameSearch(value);
+  // const handleBoxNameSearch = (value: string) => {
+  //   setBoxNameSearch(value);
 
-    // Show search results dropdown
-    setShowBoxSearchResults(true);
+  //   // Show search results dropdown
+  //   setShowBoxSearchResults(true);
 
-    // Filter box suggestions based on search input
+  //   // Filter box suggestions based on search input
+  //   if (value.trim() === "") {
+  //     setFilteredBoxResults([]);
+  //   } else {
+  //     const filtered = boxSuggestions.filter((box) =>
+  //       box.name.toLowerCase().includes(value.toLowerCase())
+  //     );
+  //     setFilteredBoxResults(filtered.slice(0, 5)); // Limit to top 5 matches
+  //   }
+
+  //   // Update the box name
+  //   updateBoxDimensions("name", value);
+  // };
+
+  // Updated function to directly call API when searching for boxes
+const handleBoxNameSearch = async (value: string) => {
+  // Update the box name input value
+  setBoxNameSearch(value);
+
+  // Show search results dropdown
+  setShowBoxSearchResults(true);
+
+  // Update the box dimensions name
+  updateBoxDimensions("name", value);
+
+  // If search value is empty, don't make API call
+  if (value.trim() === "") {
+    setFilteredBoxResults([]);
+    return;
+  }
+
+  try {
+    // Call API directly to get fresh box results
+    const payload = {
+      skip: 0,
+      limit: 10, // Limit to top 10 matches for better performance
+      pageNo: 1,
+      sort: { _id: -1 },
+      searchValue: value, // Use the search value directly
+    };
+
+    const response = await POST(GET_SELLER_BOX, payload);
+
+    if (response?.data?.success) {
+      // Transform the API response to match the BoxSuggestion interface
+      const apiResults: BoxSuggestion[] = response.data.data.map((box: any) => ({
+        boxId: box.boxId || box._id || "",
+        name: box.name || "",
+        appliedWeight: box.appliedWeight || 0,
+        deadWeight: box.deadWeight || 0,
+        volumetricWeight: box.volumetricWeight || 0,
+        length: box.length || 0,
+        breadth: box.breadth || 0,
+        height: box.height || 0,
+        weightUnit: box.weightUnit || "kg",
+        measureUnit: box.measureUnit || "cm",
+        price: box.price || 0,
+        currency: box.currency || "INR",
+        divisor: box.divisor || 5000,
+        color: box.color || "",
+        isFragile: box.isFragile || false,
+      }));
+
+      setFilteredBoxResults(apiResults);
+    } else {
+      // If API call fails, fall back to local filtering
+      if (value.trim() === "") {
+        setFilteredBoxResults([]);
+      } else {
+        const filtered = boxSuggestions.filter((box) =>
+          box.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredBoxResults(filtered.slice(0, 5)); // Limit to top 5 matches
+      }
+    }
+  } catch (error) {
+    console.error("Error searching boxes:", error);
+    
+    // Fall back to local filtering on error
     if (value.trim() === "") {
       setFilteredBoxResults([]);
     } else {
@@ -675,10 +850,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
       );
       setFilteredBoxResults(filtered.slice(0, 5)); // Limit to top 5 matches
     }
-
-    // Update the box name
-    updateBoxDimensions("name", value);
-  };
+  }
+};
 
   // Select a product from search results
   const selectProductFromSearch = (
@@ -2533,9 +2706,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
             unitPrice: Number(product.unitPrice) || 0,
             unitTax: Number(product.boxInfo.tax) || 0,
             deadWeight: Number(product.unitWeight) || 0,
-            length: product.boxInfo.l.toString(),
-            breadth: product.boxInfo.b.toString(),
-            height: product.boxInfo.h.toString(),
+            length: product.boxInfo.l.toString() || 1,
+            breadth: product.boxInfo.b.toString() || 1,
+            height: product.boxInfo.h.toString() || 1,
             sku: product.boxInfo.sku || "",
             measureUnit: "cm",
             weightUnit: "kg",
@@ -2599,7 +2772,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
         length: currentBoxData.dimensions.l.toString(),
         breadth: currentBoxData.dimensions.b.toString(),
         height: currentBoxData.dimensions.h.toString(),
-        deadWeight: currentBoxData.dimensions.weight.toString(),
+        deadWeight: currentBoxData.dimensions.weight.toString() || 0.01,
         color: "brown", // Default color
         price: "0", // Default price or use a specific field if available
       };
