@@ -72,50 +72,6 @@ const BulkUpload = (props: ITypeProps) => {
     setTransitType(event.target.value);
   };
 
-  // const handleFileUpload = async () => {
-  //   if (!uploadFile) {
-  //     toast.error("Please select a file to upload.");
-  //     return;
-  //   }
-  //   let placeOrderBollean: any = placeOrder == "Place Order" ? true : false;
-  //   let uuid = uuidv4();
-  //   let formData = new FormData();
-  //   formData.append("file", uploadFile);
-  //   formData.append("orderType", selectedOption);
-  //   formData.append("placeOrder", placeOrderBollean);
-  //   // Append transit type only if the selected option is "B2C"
-  //   if (selectedOption === "B2C") {
-  //     formData.append("transit", transitType);
-  //   }
-
-  //   try {
-  //     setIsLoading(true);
-
-  //     const { data: response } = await POST(BULK_UPLOAD, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-
-  //     if (response?.success) {
-  //       toast.success(response?.message);
-  //       if (placeOrder === "Place Order")
-  //         window.location.replace("/orders/view-orders?activeTab=booked");
-  //       else window.location.replace("/orders/view-orders?activeTab=draft");
-  //     } else {
-  //       toast.error(response?.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error uploading file:", error);
-  //     toast.error("An error occurred during file upload.");
-  //   } finally {
-  //     setIsLoading(false);
-  //     await new Promise((resolve) => setTimeout(resolve, 800));
-
-  //     // navigate("/orders/view-orders");
-  //   }
-  // };
-
   const handleFileUpload = async () => {
     if (!uploadFile) {
       toast.error("Please select a file to upload.");
