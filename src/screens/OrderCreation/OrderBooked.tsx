@@ -1001,7 +1001,7 @@ function OrderBooked() {
       if (order?.awbs && order.awbs.length > 0) {
         order.awbs.forEach(awbItem => {
           if (awbItem.tracking?.awb && !awbs.includes(awbItem.tracking.awb)) {
-            awbs.push(awbItem.tracking.awb);
+            awbs.push(awbItem.tracking.awb?.toString());
           }
         });
       }
