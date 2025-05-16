@@ -209,6 +209,7 @@ const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
 const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupAddress`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryAddress`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
+const GET_SERVICE_NEW = `${SELLER_BASE_URL}/order/getService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 const SET_WEIGHT_INFO_ORDER = `${SELLER_BASE_URL}/order/setWeightInfoForOrder`;
 const GET_TRANSPORTER_ID = `${SELLER_BASE_URL}/partners/transporterId`;
@@ -582,6 +583,7 @@ export {
   ADD_PICKUP_LOCATION,
   ADD_DELIVERY_LOCATION,
   GET_COURIER_PARTNER_SERVICE,
+  GET_SERVICE_NEW,
   POST_PRODUCT_URL,
   FILE_UPLOAD,
   SET_PARTNER_SERVICE_INFO,

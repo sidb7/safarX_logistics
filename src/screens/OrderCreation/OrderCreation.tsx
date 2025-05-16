@@ -21,6 +21,7 @@ import {
   REVERSE_ORDER,
   GET_LATEST_ORDER,
   POST_SET_ORDER_ID,
+  GET_SERVICE_NEW,
 } from "../../utils/ApiUrls";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";

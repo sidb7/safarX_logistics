@@ -478,7 +478,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { POST } from '../../utils/webService';
-import { GET_COURIER_PARTNER_SERVICE, SET_PARTNER_SERVICE_INFO } from '../../utils/ApiUrls';
+import { GET_COURIER_PARTNER_SERVICE, SET_PARTNER_SERVICE_INFO,GET_SERVICE_NEW } from '../../utils/ApiUrls';
 
 // Interface for service item from API
 interface ShippingService {
@@ -615,7 +615,7 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
       };
       
       // Use your existing API utility function
-      const { data: response } = await POST(GET_COURIER_PARTNER_SERVICE, payload);
+      const { data: response } = await POST(GET_SERVICE_NEW, payload);
       
       if (response?.success) {
         setServices(response.data);
