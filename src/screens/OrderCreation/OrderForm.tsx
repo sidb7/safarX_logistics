@@ -2410,6 +2410,26 @@ const handleBoxNameSearch = async (value: string) => {
 
   // Replace the handleProceedClick function with this improved version
 
+  const hasBoxErrors = (boxId:any) => {
+    if (!validationErrors) return false;
+    
+    // Check if there are any validation errors for this box
+    const boxErrors = validationErrors[boxId];
+    return boxErrors && Object.keys(boxErrors).length > 0;
+  };
+  
+  const hasAnyBoxErrors = () => {
+    if (!validationErrors) return false;
+    
+    // Check if any box has validation errors
+    for (const boxId in validationErrors) {
+      if (Object.keys(validationErrors[boxId]).length > 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const handleProceedClick = () => {
     // Get all selected products
     const selectedProducts = catalogProducts.filter(
@@ -2832,7 +2852,7 @@ const handleBoxNameSearch = async (value: string) => {
   };
 
   return (
-    <div className="w-full mx-auto p-4 bg-gray-50">
+    <div className="w-full mx-auto p-4 bg-gray-50" id="box-form-area">
       {/* Box Count Control */}
       <div className="flex items-center mb-6">
         <div className="text-gray-800 font-medium mr-4">
@@ -2869,7 +2889,11 @@ const handleBoxNameSearch = async (value: string) => {
       <div className="overflow-x-auto mb-8">
         {allBoxesIdentical ? (
           <div className="flex items-center">
-            <button className="px-4 py-2 border bg-gray-200 border-gray-400 rounded">
+            <button className={`px-4 py-2 border ${
+          hasBoxErrors(1) 
+          ? "bg-red-100 border-red-400 text-red-700" 
+          : "bg-gray-200 border-gray-400"
+        } rounded`}>
               Box 1
             </button>
             <span className="ml-3 text-gray-600 flex items-center bg-blue-50 px-3 py-1 rounded-md">
@@ -2884,10 +2908,12 @@ const handleBoxNameSearch = async (value: string) => {
                 key={boxNum}
                 onClick={() => handleBoxSelect(boxNum)}
                 className={`px-4 py-2 border ${
-                  selectedBox === boxNum
+                  hasBoxErrors(boxNum)
+                  ? "bg-red-100 border-red-400 text-red-700" 
+                  : selectedBox === boxNum
                     ? "bg-gray-200 border-gray-400"
                     : "bg-white border-gray-300"
-                } rounded`}
+                } rounded-md`}
               >
                 {boxNum === selectedBox ? `Box ${boxNum}` : `Box ${boxNum}`}
               </button>
@@ -4078,7 +4104,7 @@ const handleBoxNameSearch = async (value: string) => {
       </div>
 
       {/* Product Catalog Modal */}
-      <CenterModal
+      {/* <CenterModal
         isOpen={isProductCatalogModalOpen}
         onRequestClose={closeProductCatalogModal}
         contentLabel="Product Catalog"
@@ -4127,24 +4153,7 @@ const handleBoxNameSearch = async (value: string) => {
                         {product.length} x {product.breadth} x {product.height}
                       </p>
                     </div>
-                    {/* <button
-                      onClick={() => toggleProductSelection(product._id)}
-                      className={`px-4 py-2 rounded-full ${
-                        selectedCatalogProducts[product._id]
-                          ? "bg-red-500 text-white"
-                          : "bg-black text-white"
-                      }`}
-                    >
-                      {selectedCatalogProducts[product._id] ? (
-                        <span className="flex items-center">
-                          <Trash className="w-4 h-4 mr-1" /> Delete
-                        </span>
-                      ) : (
-                        <span className="flex items-center">
-                          <span className="mr-1">+</span> Add
-                        </span>
-                      )}
-                    </button> */}
+                   
                     <button
                       onClick={() => toggleProductSelection(product._id)}
                       className={`px-4 py-2 rounded-full w-24 flex items-center justify-center ${
@@ -4175,10 +4184,98 @@ const handleBoxNameSearch = async (value: string) => {
             </button>
           </div>
         </div>
-      </CenterModal>
+      </CenterModal> */}
+      {/* Product Catalog Modal */}
+      {/* Product Catalog Modal */}
+<CenterModal
+  isOpen={isProductCatalogModalOpen}
+  onRequestClose={closeProductCatalogModal}
+  contentLabel="Product Catalog"
+  shouldCloseOnOverlayClick={true}
+>
+  <div className="w-full h-full flex flex-col">
+    <div className="flex justify-between items-center p-4 border-b border-gray-200">
+      <h2 className="text-xl font-medium">Product Catalog</h2>
+      <button
+        onClick={closeProductCatalogModal}
+        className="text-gray-500 hover:text-gray-700 text-xl"
+      >
+        ×
+      </button>
+    </div>
+    <div className="p-4 border-b border-gray-200">
+      <FloatingLabelInput
+        placeholder="Search using Product Name"
+        value={searchQuery}
+        onChangeCallback={handleSearchChange}
+        icon={<img src={searchIcon} alt="Search" />}
+      />
+    </div>
+    <div className="flex-grow px-4 pt-4 overflow-auto">
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <p>Loading products...</p>
+        </div>
+      ) : filteredCatalogProducts.length === 0 ? (
+        <div className="flex justify-center items-center h-full">
+          <p>No products found</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow-md border border-gray-100 mb-4">
+          <div className="divide-y divide-gray-100">
+            {filteredCatalogProducts.map((product: any) => (
+              <div
+                key={product._id}
+                className="p-4 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="flex-1">
+                    <h3 className="font-medium">
+                      {product.name || product.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      ₹ {product.unitPrice} | {product.deadWeight} kg |{" "}
+                      {product.length} x {product.breadth} x {product.height}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => toggleProductSelection(product._id)}
+                    className={`px-4 py-2 rounded-full w-24 flex items-center justify-center ${
+                      selectedCatalogProducts[product._id]
+                        ? "bg-white text-black border border-black" 
+                        : "bg-black text-white"
+                    }`}
+                  >
+                    {selectedCatalogProducts[product._id] ? (
+                      <Trash className="w-4 h-4" />
+                    ) : (
+                      <span className="flex items-center">
+                        <span className="mr-1">+</span> Add
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+    <div className="p-4 border-t border-gray-200 flex justify-end">
+      <button
+        onClick={handleProceedClick}
+        className="px-6 py-3 bg-black text-white rounded-full"
+      >
+        Proceed
+      </button>
+    </div>
+  </div>
+</CenterModal>
+
+
 
       {/* Box Catalog Modal */}
-      <CenterModal
+      {/* <CenterModal
         isOpen={isBoxCatalogModalOpen}
         onRequestClose={closeBoxCatalogModal}
         contentLabel="Box Catalog"
@@ -4239,7 +4336,75 @@ const handleBoxNameSearch = async (value: string) => {
             )}
           </div>
         </div>
-      </CenterModal>
+      </CenterModal> */}
+      {/* Box Catalog Modal */}
+<CenterModal
+  isOpen={isBoxCatalogModalOpen}
+  onRequestClose={closeBoxCatalogModal}
+  contentLabel="Box Catalog"
+  shouldCloseOnOverlayClick={true}
+>
+  <div className="w-full h-full flex flex-col">
+    <div className="flex justify-between items-center p-4 border-b border-gray-200">
+      <h2 className="text-xl font-medium">Box Catalog</h2>
+      <button
+        onClick={closeBoxCatalogModal}
+        className="text-gray-500 hover:text-gray-700 text-xl"
+      >
+        ×
+      </button>
+    </div>
+    <div className="p-4 border-b border-gray-200">
+      <FloatingLabelInput
+        placeholder="Search using name, mobile number, pincode"
+        value={boxSearchQuery}
+        onChangeCallback={handleBoxSearchChange}
+        icon={<img src={searchIcon} alt="Search" />}
+      />
+    </div>
+    <div className="flex-grow px-4 pt-4 overflow-auto">
+      {boxCatalogLoading ? (
+        <div className="flex justify-center items-center h-full">
+          <p>Loading...</p>
+        </div>
+      ) : filteredCatalogBoxes.length === 0 ? (
+        <div className="flex justify-center items-center h-full">
+          <p>No boxes found</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow-md border border-gray-100 mb-4">
+          <div className="divide-y divide-gray-100">
+            {filteredCatalogBoxes.map((box) => (
+              <div
+                key={box.boxId}
+                className="p-4 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="flex-1">
+                    <h3 className="font-medium">{box.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      {box.deadWeight} {box.weightUnit} | {box.length} x{" "}
+                      {box.breadth} x {box.height} {box.measureUnit}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleBoxSelection(box)}
+                    className="px-4 py-2 rounded-full bg-black text-white w-24 flex items-center justify-center"
+                  >
+                    <span className="flex items-center">
+                      <span className="mr-1">+</span> Add
+                    </span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+   
+  </div>
+</CenterModal>
 
       {/* Confirmation Modal for Identical Boxes */}
       <CenterModal
