@@ -2605,31 +2605,73 @@ const handleDeliveryMagicFill = async () => {
   };
 
   // Fetch default pickup address
-  const fetchDefaultPickupAddress = async () => {
-    setIsLoading((prev) => ({ ...prev, pickup: true }));
-    try {
-      const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
+  // const fetchDefaultPickupAddress = async () => {
+  //   setIsLoading((prev) => ({ ...prev, pickup: true }));
+  //   try {
+  //     const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
 
-      if (response?.data?.success && response.data.data) {
-        const address = response.data.data;
-        // Set pickup address object
-        setPickupAddress(address);
+  //     if (response?.data?.success && response.data.data) {
+  //       const address = response.data.data;
+  //       // Set pickup address object
+  //       setPickupAddress(address);
 
-        // Extract and set form values
-        const formValues = extractFormValues(address);
-        setPickupFormValues(formValues);
+  //       // Extract and set form values
+  //       const formValues = extractFormValues(address);
+  //       setPickupFormValues(formValues);
 
-        // If address is already saved in system, mark it as saved
-        if (address.pickupAddressId) {
-          setSavedAddresses(prev => ({ ...prev, pickup: true }));
-        }
+  //       // If address is already saved in system, mark it as saved
+  //       if (address.pickupAddressId) {
+  //         setSavedAddresses(prev => ({ ...prev, pickup: true }));
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching default pickup address:", error);
+  //   } finally {
+  //     setIsLoading((prev) => ({ ...prev, pickup: false }));
+  //   }
+  // };
+  // Update the fetchDefaultPickupAddress function in AddressForm.js
+const fetchDefaultPickupAddress = async () => {
+  setIsLoading((prev) => ({ ...prev, pickup: true }));
+  try {
+    // Store the current GST value from localStorage before making the API call
+    const existingGstNo = pickupFormValues.gstNo;
+    
+    const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
+
+    if (response?.data?.success && response.data.data) {
+      const address = response.data.data;
+      // Set pickup address object
+      setPickupAddress(address);
+
+      // Extract and set form values
+      const formValues = extractFormValues(address);
+      
+      // Prioritized GST number handling:
+      // 1. Use API response GST if available
+      // 2. If not, use localStorage GST if available
+      // 3. If neither is available, fall back to sellerInfo GST
+      if (!formValues.gstNo && existingGstNo) {
+        // API didn't return a GST, but we have one in localStorage
+        formValues.gstNo = existingGstNo;
+      } else if (!formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
+        // No GST from API or localStorage, try sellerInfo
+        formValues.gstNo = sellerInfo.kycDetails.gstNumber;
       }
-    } catch (error) {
-      console.error("Error fetching default pickup address:", error);
-    } finally {
-      setIsLoading((prev) => ({ ...prev, pickup: false }));
+      
+      setPickupFormValues(formValues);
+
+      // If address is already saved in system, mark it as saved
+      if (address.pickupAddressId) {
+        setSavedAddresses(prev => ({ ...prev, pickup: true }));
+      }
     }
-  };
+  } catch (error) {
+    console.error("Error fetching default pickup address:", error);
+  } finally {
+    setIsLoading((prev) => ({ ...prev, pickup: false }));
+  }
+};
 
   // Fetch default delivery address
   const fetchDefaultDeliveryAddress = async () => {

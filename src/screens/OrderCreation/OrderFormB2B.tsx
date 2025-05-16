@@ -1962,52 +1962,114 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   };
 
   // Handle package name search input
-  const handlePackageNameSearch = (
-    boxId: number,
-    packageId: number,
-    value: string
-  ) => {
-    // Update the package name in the state directly
-    updatePackageField(boxId, packageId, "name", value);
+  // const handlePackageNameSearch = (
+  //   boxId: number,
+  //   packageId: number,
+  //   value: string
+  // ) => {
+  //   // Update the package name in the state directly
+  //   updatePackageField(boxId, packageId, "name", value);
 
-    // Also update our search tracking state
-    const uniqueId = `${boxId}-${packageId}`;
-    setPackageNameSearch((prev) => ({
+  //   // Also update our search tracking state
+  //   const uniqueId = `${boxId}-${packageId}`;
+  //   setPackageNameSearch((prev) => ({
+  //     ...prev,
+  //     [uniqueId]: value,
+  //   }));
+
+  //   // Show search results dropdown
+  //   setShowPackageSearchResults((prev) => ({
+  //     ...prev,
+  //     [uniqueId]: true,
+  //   }));
+
+  //   // Filter products based on search input
+  //   if (value.trim() === "") {
+  //     setFilteredPackageResults((prev) => ({
+  //       ...prev,
+  //       [uniqueId]: [],
+  //     }));
+  //   } else {
+  //     // Get filtered products from the catalog
+  //     const filtered = catalogProducts.filter(
+  //       (product) =>
+  //         product.name?.toLowerCase().includes(value.toLowerCase()) ||
+  //         product.title?.toLowerCase().includes(value.toLowerCase())
+  //     );
+
+  //     setFilteredPackageResults((prev) => ({
+  //       ...prev,
+  //       [uniqueId]: filtered.slice(0, 5), // Limit to top 5 matches
+  //     }));
+
+  //     // If we don't have catalog products locally, fetch them
+  //     if (catalogProducts.length === 0) {
+  //       fetchCatalogProducts();
+  //     }
+  //   }
+  // };
+  // Handle package name search input
+const handlePackageNameSearch = async (
+  boxId: number,
+  packageId: number,
+  value: string
+) => {
+  // Update the package name in the state directly
+  updatePackageField(boxId, packageId, "name", value);
+
+  // Also update our search tracking state
+  const uniqueId = `${boxId}-${packageId}`;
+  setPackageNameSearch((prev) => ({
+    ...prev,
+    [uniqueId]: value,
+  }));
+
+  // Show search results dropdown
+  setShowPackageSearchResults((prev) => ({
+    ...prev,
+    [uniqueId]: true,
+  }));
+
+  // If empty search, clear results
+  if (value.trim() === "") {
+    setFilteredPackageResults((prev) => ({
       ...prev,
-      [uniqueId]: value,
+      [uniqueId]: [],
     }));
+    return;
+  }
+  
+  // Call API directly with search query
+  try {
+    const payload = {
+      skip: 0,
+      limit: 5, // Limit to top 5 matches
+      pageNo: 1,
+      sort: { _id: -1 },
+      searchValue: value,
+    };
 
-    // Show search results dropdown
-    setShowPackageSearchResults((prev) => ({
-      ...prev,
-      [uniqueId]: true,
-    }));
+    const response = await POST(GET_PRODUCTS, payload);
 
-    // Filter products based on search input
-    if (value.trim() === "") {
+    if (response?.data?.success) {
+      setFilteredPackageResults((prev) => ({
+        ...prev,
+        [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
+      }));
+    } else {
       setFilteredPackageResults((prev) => ({
         ...prev,
         [uniqueId]: [],
       }));
-    } else {
-      // Get filtered products from the catalog
-      const filtered = catalogProducts.filter(
-        (product) =>
-          product.name?.toLowerCase().includes(value.toLowerCase()) ||
-          product.title?.toLowerCase().includes(value.toLowerCase())
-      );
-
-      setFilteredPackageResults((prev) => ({
-        ...prev,
-        [uniqueId]: filtered.slice(0, 5), // Limit to top 5 matches
-      }));
-
-      // If we don't have catalog products locally, fetch them
-      if (catalogProducts.length === 0) {
-        fetchCatalogProducts();
-      }
     }
-  };
+  } catch (error) {
+    console.error("Error searching products:", error);
+    setFilteredPackageResults((prev) => ({
+      ...prev,
+      [uniqueId]: [],
+    }));
+  }
+};
 
   const selectPackageFromSearch = (
     boxId: number,
