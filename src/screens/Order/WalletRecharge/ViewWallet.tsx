@@ -503,23 +503,62 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
     getWalletBalanceData();
   }, []);
 
+  // useEffect(() => {
+  //   if (couponDetails.length > 0) {
+  //     if (
+  //       Number(amount.replace(/,/g, "")) >= +couponDetails[0]?.minRechargeAmount
+  //     ) {
+  //       setIsActives(true);
+  //     } else {
+  //       setIsActives(false);
+  //     }
+  //   }
+  // }, [amount, couponDetails]);
+
   useEffect(() => {
     if (couponDetails.length > 0) {
-      if (
-        Number(amount.replace(/,/g, "")) >= +couponDetails[0]?.minRechargeAmount
-      ) {
+      const currentAmount = Number(amount.replace(/,/g, ""));
+      const minRechargeAmount = couponDetails[0]?.minRechargeAmount;
+
+      // Check if the amount satisfies the coupon limit
+      if (currentAmount >= minRechargeAmount) {
         setIsActives(true);
       } else {
         setIsActives(false);
+
+        // Deselect the coupon if the amount is below the limit
+        if (selectedCoupon) {
+          toast.error(
+            `Amount is below the minimum recharge limit for the selected coupon. Deselecting the coupon.`
+          );
+          setSelectedCoupon(null);
+          setCouponCode("");
+          setIsCouponVerified(false);
+        }
+        // Check if the amount satisfies the coupon limit for verifiedCouponData
+        if (verifiedCouponData) {
+          const minRechargeAmount = verifiedCouponData?.reuiredAmount || 0;
+          if (currentAmount >= minRechargeAmount) {
+            setIsActives(true);
+          } else {
+            setIsActives(false);
+            toast.error(
+              `Amount is below the minimum recharge limit for the verified coupon. Resetting the coupon verification.`
+            );
+            setVerifiedCouponData(null);
+            setCouponCode("");
+            setIsCouponVerified(false);
+          }
+        }
       }
     }
-  }, [amount, couponDetails]);
+  }, [amount, couponDetails, selectedCoupon, verifiedCouponData]);
 
   return (
     <>
       <div>
         <Breadcrum
-          label="Recharge Wallet"
+          label="Wallet Recharge"
           component={
             <>
               <OneButton
