@@ -1151,7 +1151,7 @@ function OrderBooked() {
       console.log("FETCH_BULK_LABELS_REPORT_DOWNLOAD API called successfully");
       
       // Show toast notification
-      toast.success("Email Sent");
+      toast.success("The email has been sent to your registered email address.");
     } catch (error) {
       console.error("Error calling bulk labels API:", error);
     } finally {
@@ -1350,7 +1350,7 @@ function OrderBooked() {
                       title={`${activeTab} PDF`}
                     />
                   </div>
-                  <div className="mt-auto flex gap-4">
+                  {activeTab === 'shipping' && (<div className="mt-auto flex gap-4">
                     <button 
                       onClick={handleEmail}
                       disabled={emailLoading}
@@ -1370,7 +1370,7 @@ function OrderBooked() {
                         </>
                       )}
                     </button>
-                  </div>
+                  </div>)}
                 </>
               )}
             </div>

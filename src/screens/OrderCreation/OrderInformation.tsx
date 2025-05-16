@@ -186,7 +186,7 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
             </div>
           </div>
 
-          <div className="ml-auto flex items-center">
+          {order.orderType !== "B2B" &&(<div className="ml-auto flex items-center">
             <div className="flex items-center">
               <span className="mr-3 font-semibold text-sm font-Open leading-[18px] text-[#323232]">
                 Reverse
@@ -221,7 +221,8 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div>)}
+
         </div>
       </div>
     </>
