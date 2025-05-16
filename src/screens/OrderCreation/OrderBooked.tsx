@@ -989,7 +989,9 @@ function OrderBooked() {
   const getAllAwbNumbers = (): string[] => {
     // First, check if AWB numbers were passed from OrderCreation
     if (passedData?.awbNumbers && passedData.awbNumbers.length > 0) {
-      return passedData.awbNumbers;
+      // return passedData.awbNumbers;
+      return passedData.awbNumbers.map(awb => awb.toString());
+
     }
     
     // Otherwise, try to extract them from the orderDetails
@@ -1000,7 +1002,7 @@ function OrderBooked() {
       // Check if AWBs exist in order
       if (order?.awbs && order.awbs.length > 0) {
         order.awbs.forEach(awbItem => {
-          if (awbItem.tracking?.awb && !awbs.includes(awbItem.tracking.awb)) {
+          if (awbItem.tracking?.awb && !awbs.includes(awbItem.tracking.awb.toString())) {
             awbs.push(awbItem.tracking.awb?.toString());
           }
         });
@@ -1008,14 +1010,14 @@ function OrderBooked() {
       
       // Check status or boxInfo for AWBs
       order?.status?.forEach(status => {
-        if (status.awb && !awbs.includes(status.awb)) {
-          awbs.push(status.awb);
+        if (status.awb && !awbs.includes(status.awb.toString())) {
+          awbs.push(status.awb.toString());
         }
       });
       
       order?.boxInfo?.forEach(box => {
-        if (box.tracking?.awb && !awbs.includes(box.tracking.awb)) {
-          awbs.push(box.tracking.awb);
+        if (box.tracking?.awb && !awbs.includes(box.tracking.awb.toString())) {
+          awbs.push(box.tracking.awb.toString());
         }
       });
     });
