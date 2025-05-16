@@ -935,7 +935,7 @@ const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-xl font-semibold">₹ {service.total}</div>
+                  <div className="text-xl font-semibold">₹ {service.total.toFixed(2)}</div>
                   <div className="text-gray-500 text-sm">inc GST</div>
                 </div>
               </div>
