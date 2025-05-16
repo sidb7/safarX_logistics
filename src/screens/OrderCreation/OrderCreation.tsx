@@ -434,7 +434,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         setIsLoadingExistingOrder(true);
         try {
           // Call GET_LATEST_ORDER API with the stored values
-          const response = await GET(GET_LATEST_ORDER, {
+          const response = await POST(GET_LATEST_ORDER, {
             tempOrderId: existingTempOrderId,
             source: existingSource
           });
