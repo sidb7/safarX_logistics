@@ -1197,7 +1197,7 @@ function OrderBooked() {
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
           {/* Order Summary Card - Left Side */}
-          <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
             <div className="p-6 border-b">
               <h1 className="text-2xl font-bold mb-2">Order Summary</h1>
               
@@ -1301,7 +1301,7 @@ function OrderBooked() {
           </div>
           
           {/* Document Tabs - Right Side */}
-          <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+          <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden flex flex-col border border-gray-200">
             {/* Tab Navigation */}
             <div className="flex border-b">
               <button
