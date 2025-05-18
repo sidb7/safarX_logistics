@@ -2631,11 +2631,52 @@ const handleDeliveryMagicFill = async () => {
   //   }
   // };
   // Update the fetchDefaultPickupAddress function in AddressForm.js
+// const fetchDefaultPickupAddress = async () => {
+//   setIsLoading((prev) => ({ ...prev, pickup: true }));
+//   try {
+//     // Store the current GST value from localStorage before making the API call
+//     const existingGstNo = pickupFormValues.gstNo;
+    
+//     const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
+
+//     if (response?.data?.success && response.data.data) {
+//       const address = response.data.data;
+//       // Set pickup address object
+//       setPickupAddress(address);
+
+//       // Extract and set form values
+//       const formValues = extractFormValues(address);
+      
+//       // Prioritized GST number handling:
+//       // 1. Use API response GST if available
+//       // 2. If not, use localStorage GST if available
+//       // 3. If neither is available, fall back to sellerInfo GST
+//       if (!formValues.gstNo && existingGstNo) {
+//         // API didn't return a GST, but we have one in localStorage
+//         formValues.gstNo = existingGstNo;
+//       } else if (!formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
+//         // No GST from API or localStorage, try sellerInfo
+//         formValues.gstNo = sellerInfo.kycDetails.gstNumber;
+//       }
+      
+//       setPickupFormValues(formValues);
+
+//       // If address is already saved in system, mark it as saved
+//       if (address.pickupAddressId) {
+//         setSavedAddresses(prev => ({ ...prev, pickup: true }));
+//       }
+//     }
+//   } catch (error) {
+//     console.error("Error fetching default pickup address:", error);
+//   } finally {
+//     setIsLoading((prev) => ({ ...prev, pickup: false }));
+//   }
+// };
 const fetchDefaultPickupAddress = async () => {
   setIsLoading((prev) => ({ ...prev, pickup: true }));
   try {
-    // Store the current GST value from localStorage before making the API call
-    const existingGstNo = pickupFormValues.gstNo;
+    // Store current form values before API call
+    const currentFormValues = { ...pickupFormValues };
     
     const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
 
@@ -2644,22 +2685,26 @@ const fetchDefaultPickupAddress = async () => {
       // Set pickup address object
       setPickupAddress(address);
 
-      // Extract and set form values
-      const formValues = extractFormValues(address);
+      // Extract values from API response
+      const apiFormValues = extractFormValues(address);
       
-      // Prioritized GST number handling:
-      // 1. Use API response GST if available
-      // 2. If not, use localStorage GST if available
-      // 3. If neither is available, fall back to sellerInfo GST
-      if (!formValues.gstNo && existingGstNo) {
-        // API didn't return a GST, but we have one in localStorage
-        formValues.gstNo = existingGstNo;
-      } else if (!formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
-        // No GST from API or localStorage, try sellerInfo
-        formValues.gstNo = sellerInfo.kycDetails.gstNumber;
-      }
+      // Create a merged object that prioritizes current values
+      // that have been modified by the user
+      const mergedValues = {
+        ...apiFormValues,
+        // Keep current values for fields that have been modified
+        pincode: currentFormValues.pincode || apiFormValues.pincode,
+        city: currentFormValues.city || apiFormValues.city,
+        state: currentFormValues.state || apiFormValues.state,
+        addressLine1: currentFormValues.addressLine1 || apiFormValues.addressLine1,
+        addressLine2: currentFormValues.addressLine2 || apiFormValues.addressLine2,
+        landmark: currentFormValues.landmark || apiFormValues.landmark,
+        gstNo: currentFormValues.gstNo || apiFormValues.gstNo || 
+               (sellerInfo?.kycDetails?.gstNumber || ""),
+      };
       
-      setPickupFormValues(formValues);
+      // Update form values with merged data
+      setPickupFormValues(mergedValues);
 
       // If address is already saved in system, mark it as saved
       if (address.pickupAddressId) {
