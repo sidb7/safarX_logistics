@@ -243,8 +243,8 @@ function OrderCreation() {
     initialDeliveryFormValues
   );
 
-  const [pickupAddress, setPickupAddress] = useState(null);
-  const [deliveryAddress, setDeliveryAddress] = useState(null);
+  const [pickupAddress, setPickupAddress] = useState<any>(null);
+  const [deliveryAddress, setDeliveryAddress] = useState<any>(null);
   const [isLoading, setIsLoading] = useState({
     pickup: false,
     delivery: false,
@@ -1402,6 +1402,8 @@ const handleProceedToNextStep = async () => {
         type: "warehouse associate",
       },
       pickupDate: new Date().getTime(),
+      pickupAddressId: pickupAddress?.pickupAddressId || undefined
+
     };
 
     // Create the main payload and include tempOrderId and source if they exist
@@ -1471,6 +1473,7 @@ const handleProceedToNextStep = async () => {
         emailId: deliveryFormValues.email,
         type: "warehouse associate",
       },
+      deliveryAddressId: deliveryAddress?.deliveryAddressId || undefined,
     };
 
     // Step 2: Submit delivery information
