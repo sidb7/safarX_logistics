@@ -39,7 +39,6 @@
 //   variableServices: any; // Added for tooltip
 //   orderType?: string; // Add orderType field
 //   revisedShippingCost?: string; // Add field for the revised shipping cost
-
 // }
 
 // interface SummaryForOrderProps {
@@ -91,6 +90,7 @@
 // }
 
 // interface ApiBoxInfo {
+//   service?: ApiServiceDetails;
 //   [key: string]: any; 
 // }
 
@@ -114,7 +114,6 @@
 //   zone?: string;
 //   yaariCash?: number;
 //   orderType?: string; // Add orderType field
-
 // }
 
 // interface ApiPostResponse {
@@ -191,111 +190,6 @@
 //            data.packageDetails.totalWeight !== "N/A";
 //   };
 
-//   // const fetchLatestOrder = async (): Promise<void> => {
-//   //   if (!tempOrderId || !orderSource) return;
-//   //   setError(null);
-//   //   try {
-//   //     console.log(`Workspaceing order data for service ID: ${selectedServiceId}, attempt: ${retryCount + 1}`);
-//   //     const response: { data?: ApiPostResponse } = await POST(GET_LATEST_ORDER, {
-//   //       tempOrderId: tempOrderId,
-//   //       source: orderSource
-//   //     });
-
-//   //     if (response?.data?.success) {
-//   //       const fetchedOrder: ApiOrderData | undefined = response.data.data[0];
-//   //       if (!fetchedOrder) {
-//   //           setError("No order data found in the response.");
-//   //           setIsLoading(false);
-//   //           return;
-//   //       }
-//   //       const pickupAddressForTooltip = formatAddressForTooltip(fetchedOrder.pickupAddress);
-//   //       const deliveryAddressForTooltip = formatAddressForTooltip(fetchedOrder.deliveryAddress);
-
-//   //       // Calculate order price (base + add + variables)
-//   //       const basePrice = fetchedOrder.service?.base || 0;
-//   //       const addPrice = fetchedOrder.service?.add || 0;
-//   //       const variablesPrice = fetchedOrder.service?.variables || 0;
-//   //       const orderPrice = basePrice + addPrice + variablesPrice;
-
-//   //       // Calculate YaariCash discount on shipping
-//   //     const yaariCashValue = fetchedOrder.yaariCash || 0;
-//   //     const shippingCostValue = fetchedOrder.service?.total || 0;
-//   //     let revisedShippingCostValue = null;
-
-//   //     // Only calculate revised cost if yaariCash > 0
-//   //     if (yaariCashValue > 0 && shippingCostValue > 0) {
-//   //       revisedShippingCostValue = Math.max(0, shippingCostValue - yaariCashValue);
-//   //     }
-
-//   //       const transformedData: TransformedOrderData = {
-//   //         pickupDetails: {
-//   //           name: fetchedOrder.pickupAddress?.contact?.name || "N/A",
-//   //           phone: fetchedOrder.pickupAddress?.contact?.mobileNo ?
-//   //             `+91 ${fetchedOrder.pickupAddress.contact.mobileNo}` : "N/A",
-//   //           address: pickupAddressForTooltip
-//   //         },
-//   //         deliveryDetails: {
-//   //           name: fetchedOrder.deliveryAddress?.contact?.name || "N/A",
-//   //           phone: fetchedOrder.deliveryAddress?.contact?.mobileNo ?
-//   //             `+91 ${fetchedOrder.deliveryAddress.contact.mobileNo}` : "N/A",
-//   //           address: deliveryAddressForTooltip
-//   //         },
-//   //         packageDetails: {
-//   //           boxes: fetchedOrder.boxInfo?.length || 0,
-//   //           totalWeight: fetchedOrder.service?.appliedWeight ?
-//   //             `${fetchedOrder.service.appliedWeight} kg` : "N/A",
-//   //           invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ?
-//   //             `₹ ${fetchedOrder.codInfo.invoiceValue}` : "N/A",
-//   //           insurance: fetchedOrder.insurance?.isInsured !== undefined ?
-//   //             (fetchedOrder.insurance.isInsured ? "Yes" : "No") : "N/A"
-//   //         },
-//   //         shippingDetails: {
-//   //           courier: fetchedOrder.service?.partnerName || "N/A",
-//   //           courierType: fetchedOrder.service?.serviceMode ?
-//   //             `(${fetchedOrder.service.serviceMode} Service)` : "N/A",
-//   //           zone: fetchedOrder.zone || "N/A",
-//   //           paymentMode: fetchedOrder.codInfo?.isCod !== undefined ?
-//   //             (fetchedOrder.codInfo.isCod ? "COD" : "Prepaid") : "N/A",
-//   //           collectibleAmount: fetchedOrder.codInfo?.collectableAmount !== undefined ? // Changed from basePrice
-//   //             `₹ ${fetchedOrder.codInfo.collectableAmount}` : "N/A",
-//   //           orderPrice: orderPrice !== undefined ? // Changed from grandTotal
-//   //             `₹ ${Math.round(orderPrice)}` : "N/A",
-//   //           variableCharges: fetchedOrder.service?.variables !== undefined ?
-//   //             `₹ ${fetchedOrder.service.variables}` : "N/A",
-//   //           codHandlingFees: fetchedOrder.service?.cod !== undefined ?
-//   //             `₹ ${fetchedOrder.service.cod}` : "N/A",
-//   //           yaariCash: fetchedOrder.yaariCash !== undefined ?
-//   //             `₹ ${fetchedOrder.yaariCash}` : "N/A",
-//   //           shippingCost: fetchedOrder.service?.total !== undefined ?
-//   //             `₹ ${fetchedOrder.service.total}` : "N/A",
-//   //           gstPercentage: (fetchedOrder.service?.tax !== undefined && fetchedOrder.service?.total !== undefined && (fetchedOrder.service.total - fetchedOrder.service.tax !== 0)) ?
-//   //             Number(((fetchedOrder.service.tax / (fetchedOrder.service.total - fetchedOrder.service.tax)) * 100).toFixed(0)) : 0,
-//   //           variableServices: fetchedOrder.service?.variableServices || {} ,// Added for tooltip
-//   //           orderType: fetchedOrder.orderType || "N/A" // Add orderType with default fallback
-
-//   //         }
-//   //       };
-//   //       const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
-//   //       if (hasSelectedService) {
-//   //         setOrderData(transformedData);
-//   //         setRetryCount(0); 
-//   //       } else if (retryCount < 3) {
-//   //         setTimeout(() => { setRetryCount(prev => prev + 1); }, 1500);
-//   //       } else {
-//   //         setOrderData(transformedData); 
-//   //       }
-//   //     } else {
-//   //       setError(response?.data?.message || "Failed to fetch order data");
-//   //     }
-//   //   } catch (err: any) { 
-//   //     const message = err?.message || "An error occurred while fetching order data";
-//   //     setError(message);
-//   //   } finally {
-//   //     setIsLoading(false);
-//   //   }
-//   // };
-
-
 //   const fetchLatestOrder = async (): Promise<void> => {
 //     if (!tempOrderId || !orderSource) return;
 //     setError(null);
@@ -316,20 +210,61 @@
 //         const pickupAddressForTooltip = formatAddressForTooltip(fetchedOrder.pickupAddress);
 //         const deliveryAddressForTooltip = formatAddressForTooltip(fetchedOrder.deliveryAddress);
   
-//         // Calculate order price (base + add + variables)
-//         const basePrice = fetchedOrder.service?.base || 0;
-//         const addPrice = fetchedOrder.service?.add || 0;
-//         const variablesPrice = fetchedOrder.service?.variables || 0;
-//         const orderPrice = basePrice + addPrice + variablesPrice;
-  
-//         // Calculate YaariCash discount on shipping
+//         // Initialize totals for aggregating values from all boxes
+//         let totalBasePrice = 0;
+//         let totalAddPrice = 0;
+//         let totalVariablesPrice = 0;
+//         let totalCodHandlingFees = 0;
+//         let totalShippingCostValue = 0;
+//         let totalTaxValue = 0;
+//         let totalAppliedWeight = 0;
+        
+//         // YaariCash is at the order level, not box level
 //         const yaariCashValue = fetchedOrder.yaariCash || 0;
-//         const shippingCostValue = fetchedOrder.service?.total || 0;
+        
+//         // Gather all variable services from all boxes
+//         const allVariableServices: Record<string, any> = {};
+        
+//         // Loop through all boxes to calculate totals
+//         if (fetchedOrder.boxInfo && Array.isArray(fetchedOrder.boxInfo) && fetchedOrder.boxInfo.length > 0) {
+//           fetchedOrder.boxInfo.forEach(box => {
+//             if (box.service) {
+//               totalBasePrice += box.service.base || 0;
+//               totalAddPrice += box.service.add || 0;
+//               totalVariablesPrice += box.service.variables || 0;
+//               totalCodHandlingFees += box.service.cod || 0;
+//               totalShippingCostValue += box.service.total || 0;
+//               totalTaxValue += box.service.tax || 0;
+//               totalAppliedWeight += box.service.appliedWeight || 0;
+              
+//               // Merge variable services from this box
+//               if (box.service.variableServices && typeof box.service.variableServices === 'object') {
+//                 Object.entries(box.service.variableServices).forEach(([key, value]) => {
+//                   if (allVariableServices[key]) {
+//                     // If key already exists, add to the value if it's a number
+//                     if (typeof allVariableServices[key] === 'number' && typeof value === 'number') {
+//                       allVariableServices[key] += value;
+//                     } else {
+//                       // For non-numeric values, append with a separator
+//                       allVariableServices[key] = `${allVariableServices[key]}; ${value}`;
+//                     }
+//                   } else {
+//                     // First time seeing this key
+//                     allVariableServices[key] = value;
+//                   }
+//                 });
+//               }
+//             }
+//           });
+//         }
+        
+//         // Calculate total order price from components
+//         const totalOrderPrice = totalBasePrice + totalAddPrice + totalVariablesPrice;
+        
+//         // Calculate revised shipping cost if YaariCash is applied
 //         let revisedShippingCostValue = null;
-  
-//         // Only calculate revised cost if yaariCash > 0
-//         if (yaariCashValue > 0 && shippingCostValue > 0) {
-//           revisedShippingCostValue = Math.max(0, shippingCostValue - yaariCashValue);
+//         if (yaariCashValue > 0 && totalShippingCostValue > 0) {
+//           revisedShippingCostValue = Math.max(0, totalShippingCostValue - yaariCashValue);
 //         }
   
 //         const transformedData: TransformedOrderData = {
@@ -347,14 +282,15 @@
 //           },
 //           packageDetails: {
 //             boxes: fetchedOrder.boxInfo?.length || 0,
-//             totalWeight: fetchedOrder.service?.appliedWeight ?
-//               `${fetchedOrder.service.appliedWeight} kg` : "N/A",
+//             totalWeight: totalAppliedWeight > 0 ?
+//               `${totalAppliedWeight} kg` : "N/A",
 //             invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ?
 //               `₹ ${fetchedOrder.codInfo.invoiceValue}` : "N/A",
 //             insurance: fetchedOrder.insurance?.isInsured !== undefined ?
 //               (fetchedOrder.insurance.isInsured ? "Yes" : "No") : "N/A"
 //           },
 //           shippingDetails: {
+//             // Use top-level service info for courier details
 //             courier: fetchedOrder.service?.partnerName || "N/A",
 //             courierType: fetchedOrder.service?.serviceMode ?
 //               `(${fetchedOrder.service.serviceMode} Service)` : "N/A",
@@ -363,24 +299,21 @@
 //               (fetchedOrder.codInfo.isCod ? "COD" : "Prepaid") : "N/A",
 //             collectibleAmount: fetchedOrder.codInfo?.collectableAmount !== undefined ?
 //               `₹ ${fetchedOrder.codInfo.collectableAmount}` : "N/A",
-//             orderPrice: orderPrice !== undefined ?
-//               `₹ ${Math.round(orderPrice)}` : "N/A",
-//             variableCharges: fetchedOrder.service?.variables !== undefined ?
-//               `₹ ${fetchedOrder.service.variables}` : "N/A",
-//             codHandlingFees: fetchedOrder.service?.cod !== undefined ?
-//               `₹ ${fetchedOrder.service.cod}` : "N/A",
-//             yaariCash: fetchedOrder.yaariCash !== undefined ?
-//               `₹ ${fetchedOrder.yaariCash}` : "N/A",
-//             shippingCost: fetchedOrder.service?.total !== undefined ?
-//               `₹ ${fetchedOrder.service.total}` : "N/A",
+//             // Use aggregated totals from all boxes
+//             orderPrice: `₹ ${Math.round(totalOrderPrice)}`,
+//             variableCharges: `₹ ${totalVariablesPrice}`,
+//             codHandlingFees: `₹ ${totalCodHandlingFees}`,
+//             yaariCash: `₹ ${yaariCashValue}`,
+//             shippingCost: `₹ ${totalShippingCostValue}`,
 //             revisedShippingCost: revisedShippingCostValue !== null ?
 //               `₹ ${revisedShippingCostValue}` : undefined,
-//             gstPercentage: (fetchedOrder.service?.tax !== undefined && fetchedOrder.service?.total !== undefined && (fetchedOrder.service.total - fetchedOrder.service.tax !== 0)) ?
-//               Number(((fetchedOrder.service.tax / (fetchedOrder.service.total - fetchedOrder.service.tax)) * 100).toFixed(0)) : 0,
-//             variableServices: fetchedOrder.service?.variableServices || {},
-//             orderType: fetchedOrder.orderType || "N/A" // Add orderType with default fallback
+//             gstPercentage: (totalTaxValue > 0 && totalShippingCostValue > 0 && (totalShippingCostValue - totalTaxValue !== 0)) ?
+//               Number(((totalTaxValue / (totalShippingCostValue - totalTaxValue)) * 100).toFixed(0)) : 0,
+//             variableServices: allVariableServices,
+//             orderType: fetchedOrder.orderType || "N/A" 
 //           }
 //         };
+        
 //         const hasSelectedService = fetchedOrder.service?.partnerServiceId === selectedServiceId;
 //         if (hasSelectedService) {
 //           setOrderData(transformedData);
@@ -473,31 +406,13 @@
 
 //   if (error && !orderData) { 
 //     return (
-//       // <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
-//       //   <div className="flex items-center justify-center py-6">
-//       //     <div className="text-red-500 text-center">
-//       //       <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-//       //         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-//       //       </svg>
-//       //       <p>{error}</p>
-//       //       <button
-//       //         onClick={handleRetry}
-//       //         className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-//       //       >
-//       //         Retry
-//       //       </button>
-//       //     </div>
-//       //   </div>
-//       // </div>
 //       <div>
-//                     <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
-//         <div className="flex flex-col items-center justify-center py-10">
-//           <Spinner parentClassName="mb-4" />
-//           <span className="text-gray-600">Processing your order...</span>
+//         <div className="w-full mx-auto bg-gray-50 rounded-lg shadow-md p-6">
+//           <div className="flex flex-col items-center justify-center py-10">
+//             <Spinner parentClassName="mb-4" />
+//             <span className="text-gray-600">Processing your order...</span>
+//           </div>
 //         </div>
-//       </div>
-
-
 //       </div>
 //     );
 //   }
@@ -784,10 +699,9 @@
 //                 <p className="text-gray-500 font-normal text-sm leading-5">Shipping Cost</p>
 //                 <div>
 //                   <p className="text-gray-800 font-semibold text-base leading-6">
-//                     {/* {shippingDetailsToRender.shippingCost} */}
 //                     {parseFloat(shippingDetailsToRender.yaariCash.replace('₹ ', '')) > 0 && shippingDetailsToRender.revisedShippingCost
-//         ? `₹ ${Number(parseFloat(shippingDetailsToRender.revisedShippingCost.replace('₹ ', '')).toFixed(2))}`
-//         : `₹ ${Number(parseFloat(shippingDetailsToRender.shippingCost.replace('₹ ', '')).toFixed(2))}`}
+//             ? `₹ ${Number(parseFloat(shippingDetailsToRender.revisedShippingCost.replace('₹ ', '')).toFixed(2))}`
+//             : `₹ ${Number(parseFloat(shippingDetailsToRender.shippingCost.replace('₹ ', '')).toFixed(2))}`}
 //                   </p>
 //                   {shippingDetailsToRender.gstPercentage > 0 && (
 //                     <p className="text-xs text-gray-500">(inc {shippingDetailsToRender.gstPercentage}% GST)</p>
@@ -1014,7 +928,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
         const pickupAddressForTooltip = formatAddressForTooltip(fetchedOrder.pickupAddress);
         const deliveryAddressForTooltip = formatAddressForTooltip(fetchedOrder.deliveryAddress);
   
-        // Initialize totals for aggregating values from all boxes
+        // Initialize totals for aggregating values
         let totalBasePrice = 0;
         let totalAddPrice = 0;
         let totalVariablesPrice = 0;
@@ -1026,40 +940,66 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
         // YaariCash is at the order level, not box level
         const yaariCashValue = fetchedOrder.yaariCash || 0;
         
-        // Gather all variable services from all boxes
+        // Gather all variable services
         const allVariableServices: Record<string, any> = {};
         
-        // Loop through all boxes to calculate totals
+        // Check if this is a B2B order
+        const isB2BOrder = fetchedOrder.orderType === "B2B";
+        
+        // Process box info according to order type
         if (fetchedOrder.boxInfo && Array.isArray(fetchedOrder.boxInfo) && fetchedOrder.boxInfo.length > 0) {
-          fetchedOrder.boxInfo.forEach(box => {
-            if (box.service) {
-              totalBasePrice += box.service.base || 0;
-              totalAddPrice += box.service.add || 0;
-              totalVariablesPrice += box.service.variables || 0;
-              totalCodHandlingFees += box.service.cod || 0;
-              totalShippingCostValue += box.service.total || 0;
-              totalTaxValue += box.service.tax || 0;
-              totalAppliedWeight += box.service.appliedWeight || 0;
+          // For B2B orders, only use the first box
+          if (isB2BOrder && fetchedOrder.boxInfo[0]) {
+            const firstBox = fetchedOrder.boxInfo[0];
+            if (firstBox.service) {
+              totalBasePrice = firstBox.service.base || 0;
+              totalAddPrice = firstBox.service.add || 0;
+              totalVariablesPrice = firstBox.service.variables || 0;
+              totalCodHandlingFees = firstBox.service.cod || 0;
+              totalShippingCostValue = firstBox.service.total || 0;
+              totalTaxValue = firstBox.service.tax || 0;
+              totalAppliedWeight = firstBox.service.appliedWeight || 0;
               
-              // Merge variable services from this box
-              if (box.service.variableServices && typeof box.service.variableServices === 'object') {
-                Object.entries(box.service.variableServices).forEach(([key, value]) => {
-                  if (allVariableServices[key]) {
-                    // If key already exists, add to the value if it's a number
-                    if (typeof allVariableServices[key] === 'number' && typeof value === 'number') {
-                      allVariableServices[key] += value;
-                    } else {
-                      // For non-numeric values, append with a separator
-                      allVariableServices[key] = `${allVariableServices[key]}; ${value}`;
-                    }
-                  } else {
-                    // First time seeing this key
-                    allVariableServices[key] = value;
-                  }
+              // Get variable services from first box only
+              if (firstBox.service.variableServices && typeof firstBox.service.variableServices === 'object') {
+                Object.entries(firstBox.service.variableServices).forEach(([key, value]) => {
+                  allVariableServices[key] = value;
                 });
               }
             }
-          });
+          } 
+          // For non-B2B orders, aggregate from all boxes as before
+          else {
+            fetchedOrder.boxInfo.forEach(box => {
+              if (box.service) {
+                totalBasePrice += box.service.base || 0;
+                totalAddPrice += box.service.add || 0;
+                totalVariablesPrice += box.service.variables || 0;
+                totalCodHandlingFees += box.service.cod || 0;
+                totalShippingCostValue += box.service.total || 0;
+                totalTaxValue += box.service.tax || 0;
+                totalAppliedWeight += box.service.appliedWeight || 0;
+                
+                // Merge variable services from this box
+                if (box.service.variableServices && typeof box.service.variableServices === 'object') {
+                  Object.entries(box.service.variableServices).forEach(([key, value]) => {
+                    if (allVariableServices[key]) {
+                      // If key already exists, add to the value if it's a number
+                      if (typeof allVariableServices[key] === 'number' && typeof value === 'number') {
+                        allVariableServices[key] += value;
+                      } else {
+                        // For non-numeric values, append with a separator
+                        allVariableServices[key] = `${allVariableServices[key]}; ${value}`;
+                      }
+                    } else {
+                      // First time seeing this key
+                      allVariableServices[key] = value;
+                    }
+                  });
+                }
+              }
+            });
+          }
         }
         
         // Calculate total order price from components
