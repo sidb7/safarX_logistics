@@ -67,7 +67,6 @@ interface BoxData {
   products: Product[];
   selectedBoxSuggestion: any | null;
   collectibleAmount: string | number; // Make sure this property is included
-
 }
 
 interface BoxPackage {
@@ -78,6 +77,7 @@ interface BoxPackage {
   unitWeight: string | number;
   totalWeight: string | number;
   totalPrice: string | number;
+  collectibleAmount: string | number;
   tax: string | number;
   discount: string | number;
   hsn: string;
@@ -127,12 +127,12 @@ const generateUniqueCode = (minLength: number, maxLength: number) => {
   return code;
 };
 // Helper function to check if a value is empty or zero
-const isEmptyOrZero = (value:any) => {
+const isEmptyOrZero = (value: any) => {
   if (value === undefined || value === null) return true;
-  
+
   // Convert to string and trim
   const strValue = String(value).trim();
-  
+
   // Check if empty string or "0"
   return strValue === "" || strValue === "0";
 };
@@ -347,7 +347,8 @@ function OrderCreation() {
   const [boxCount, setBoxCount] = useState<number>(1);
 
   // Add this state variable for COD//////
-const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
+  const [totalCollectibleAmount, setTotalCollectibleAmount] =
+    useState<number>(0);
 
   const [isLoadingExistingOrder, setIsLoadingExistingOrder] = useState(false);
   const [hasLoadedExistingOrder, setHasLoadedExistingOrder] = useState(false);
@@ -427,21 +428,25 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
 
   useEffect(() => {
     const checkExistingOrder = async () => {
-      const existingTempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
+      const existingTempOrderId = localStorage.getItem(
+        STORAGE_KEYS.TEMP_ORDER_ID
+      );
       const existingSource = localStorage.getItem(STORAGE_KEYS.ORDER_SOURCE);
-      
+
       if (existingTempOrderId && existingSource) {
         setIsLoadingExistingOrder(true);
         try {
           // Call GET_LATEST_ORDER API with the stored values
           const response = await POST(GET_LATEST_ORDER, {
             tempOrderId: existingTempOrderId,
-            source: existingSource
+            source: existingSource,
           });
-          
+
           if (!response?.data?.success) {
             // If API fails, clear all localStorage and refresh page
-            console.log("Failed to get latest order, clearing data and refreshing");
+            console.log(
+              "Failed to get latest order, clearing data and refreshing"
+            );
             clearSavedOrderData();
             window.location.reload();
           } else {
@@ -459,7 +464,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         }
       }
     };
-    
+
     // Only run this check once when component mounts
     if (!hasLoadedExistingOrder && !isLoadingExistingOrder) {
       checkExistingOrder();
@@ -521,14 +526,16 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   const handleBoxDataUpdate = useCallback(
     (
       boxes: BoxData[],
-      metadata: { allBoxesIdentical: boolean; boxCount: number,totalCollectibleAmount: number; }
+      metadata: {
+        allBoxesIdentical: boolean;
+        boxCount: number;
+        totalCollectibleAmount: number;
+      }
     ) => {
       setBoxesData(boxes);
       setAllBoxesIdentical(metadata.allBoxesIdentical);
       setBoxCount(metadata.boxCount);
       setTotalCollectibleAmount(metadata.totalCollectibleAmount);
-
-
 
       // Also update packageDetails if at least one box exists
       if (boxes.length > 0) {
@@ -559,12 +566,101 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   );
 
   // Handle B2B box data updates from OrderFormB2B
+  // const handleB2BBoxDataUpdate = useCallback((boxes: B2BBox[]) => {
+  //   // Store the original B2B boxes data
+  //   setB2BBoxesData(boxes);
+
+  //   // Convert B2B box format to BoxData format for OrderSummary
+  //   const convertedBoxes: BoxData[] = boxes.map((box) => {
+  //     // Convert each package to a product
+  //     const products: Product[] = box.packages.map((pkg) => ({
+  //       id: pkg.id,
+  //       name: pkg.name,
+  //       quantity: pkg.quantity,
+  //       unitPrice: pkg.unitPrice,
+  //       unitWeight: pkg.unitWeight,
+  //       totalPrice: pkg.totalPrice,
+  //       totalWeight: pkg.totalWeight,
+  //       isExpanded: pkg.isExpanded,
+  //       selectedSuggestion: null,
+  //       isManuallyEdited: !pkg.isSaved,
+  //       boxInfo: {
+  //         l: pkg.length,
+  //         b: pkg.breadth,
+  //         h: pkg.height,
+  //         discount: pkg.discount,
+  //         tax: pkg.tax,
+  //         hsn: pkg.hsn,
+  //         sku: pkg.sku,
+  //       },
+  //     }));
+
+  //     // Create the converted BoxData
+  //     return {
+  //       id: box.id,
+  //       dimensions: {
+  //         l: box.packages[0]?.length || 0,
+  //         b: box.packages[0]?.breadth || 0,
+  //         h: box.packages[0]?.height || 0,
+  //         weight: box.packages.reduce(
+  //           (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+  //           0
+  //         ),
+  //         name: `Box ${box.id}`,
+  //         isManuallyEdited: false,
+  //       },
+  //       products: products,
+  //       selectedBoxSuggestion: null,
+  //       collectibleAmount: "", // Add collectibleAmount property
+
+  //     };
+  //   });
+
+  //   // Update the boxesData state with the converted data
+  //   setBoxesData(convertedBoxes);
+
+  //   // Also update packageDetails if at least one box exists
+  //   if (boxes.length > 0) {
+  //     const firstBox = boxes[0];
+  //     const firstPackage = firstBox.packages[0];
+
+  //     if (firstPackage) {
+  //       setPackageDetails({
+  //         packageType: `Box ${firstBox.id}`,
+  //         weight: firstPackage.totalWeight?.toString() || "",
+  //         dimensions: {
+  //           length: firstPackage.length?.toString() || "",
+  //           width: firstPackage.breadth?.toString() || "",
+  //           height: firstPackage.height?.toString() || "",
+  //         },
+  //         itemDescription: firstPackage.name?.toString() || "",
+  //         itemValue: firstPackage.totalPrice?.toString() || "",
+  //         totalItems: firstBox.packages.length.toString(),
+  //       });
+  //     }
+  //   }
+  // }, []);
+  // Improved handleB2BBoxDataUpdate function in OrderCreation component
   const handleB2BBoxDataUpdate = useCallback((boxes: B2BBox[]) => {
     // Store the original B2B boxes data
     setB2BBoxesData(boxes);
 
+    // Calculate total collectible amount from all packages in all boxes
+    let totalB2BCollectibleAmount = 0;
+
     // Convert B2B box format to BoxData format for OrderSummary
     const convertedBoxes: BoxData[] = boxes.map((box) => {
+      // Calculate total collectible amount for this box
+      const boxCollectibleAmount = box.packages.reduce(
+        (total, pkg) =>
+          total +
+          (Number(pkg.collectibleAmount) || Number(pkg.totalPrice) || 0),
+        0
+      );
+
+      // Add to running total
+      totalB2BCollectibleAmount += boxCollectibleAmount;
+
       // Convert each package to a product
       const products: Product[] = box.packages.map((pkg) => ({
         id: pkg.id,
@@ -588,7 +684,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         },
       }));
 
-      // Create the converted BoxData
+      // Create the converted BoxData with collectibleAmount included
       return {
         id: box.id,
         dimensions: {
@@ -604,13 +700,15 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
         },
         products: products,
         selectedBoxSuggestion: null,
-        collectibleAmount: "", // Add collectibleAmount property
-
+        collectibleAmount: boxCollectibleAmount.toString(), // Set collectible amount for this box
       };
     });
 
     // Update the boxesData state with the converted data
     setBoxesData(convertedBoxes);
+
+    // Update the total collectible amount for B2B orders
+    setTotalCollectibleAmount(totalB2BCollectibleAmount);
 
     // Also update packageDetails if at least one box exists
     if (boxes.length > 0) {
@@ -658,163 +756,327 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   };
 
   // Helper function to prepare box data for API
-  const prepareBoxInfoPayload = () => {
-    const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
-    const boxesToProcess =
-      order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
+  // const prepareBoxInfoPayload = () => {
+  //   const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+  //   const boxesToProcess =
+  //     order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
 
-    const transformedBoxes = boxesToProcess.map((box) => {
-      if (order.orderType === "B2C") {
-        const b2cBox = box as BoxData;
-        const invoiceValue = b2cBox.products.reduce(
-          (total, product) => total + (Number(product.totalPrice) || 0),
-          0
-        );
+  //   const transformedBoxes = boxesToProcess.map((box) => {
+  //     if (order.orderType === "B2C") {
+  //       const b2cBox = box as BoxData;
+  //       const invoiceValue = b2cBox.products.reduce(
+  //         (total, product) => total + (Number(product.totalPrice) || 0),
+  //         0
+  //       );
 
-          // Use the individual box collectible amount if available
-      const boxCollectibleAmount = paymentMethod === "Cash on Delivery" 
-      ? (Number(b2cBox.collectibleAmount) || invoiceValue) 
-      : 0;
+  //         // Use the individual box collectible amount if available
+  //     const boxCollectibleAmount = paymentMethod === "Cash on Delivery"
+  //     ? (Number(b2cBox.collectibleAmount) || invoiceValue)
+  //     : 0;
 
-        return {
-          boxId: b2cBox.selectedBoxSuggestion?.boxId || uuidv4(),
-          name: b2cBox.dimensions.name || `Box ${b2cBox.id}`,
-          length: b2cBox.dimensions.l,
-          breadth: b2cBox.dimensions.b,
-          height: b2cBox.dimensions.h,
-          deadWeight: b2cBox.dimensions.weight || 0.1,
-          appliedWeight: b2cBox.dimensions.weight || 0.1,
-          volumetricWeight: calculateVolumetricWeight(
-            Number(b2cBox.dimensions.l || 0),
-            Number(b2cBox.dimensions.b || 0),
-            Number(b2cBox.dimensions.h || 0)
-          ),
-          weightUnit: "kg",
+  //       return {
+  //         boxId: b2cBox.selectedBoxSuggestion?.boxId || uuidv4(),
+  //         name: b2cBox.dimensions.name || `Box ${b2cBox.id}`,
+  //         length: b2cBox.dimensions.l,
+  //         breadth: b2cBox.dimensions.b,
+  //         height: b2cBox.dimensions.h,
+  //         deadWeight: b2cBox.dimensions.weight || 0.1,
+  //         appliedWeight: b2cBox.dimensions.weight || 0.1,
+  //         volumetricWeight: calculateVolumetricWeight(
+  //           Number(b2cBox.dimensions.l || 0),
+  //           Number(b2cBox.dimensions.b || 0),
+  //           Number(b2cBox.dimensions.h || 0)
+  //         ),
+  //         weightUnit: "kg",
+  //         measureUnit: "cm",
+  //         color: "black",
+  //         price: 0,
+  //         currency: "INR",
+  //         divisor: 5000,
+  //         qty: allBoxesIdentical ? boxCount : 1,
+  //         products: b2cBox.products.map((product) => ({
+  //           name: product.name,
+  //           qty: Number(product.quantity) || 1,
+  //           unitPrice: Number(product.unitPrice) || 0,
+  //           unitTax: Number(product.boxInfo.tax) || 0,
+  //           deadWeight: Number(product.unitWeight) || 0,
+  //           appliedWeight: Number(product.unitWeight) || 0,
+  //           volumetricWeight: 0,
+  //           length: product.boxInfo.l || 1,
+  //           breadth: product.boxInfo.b || 1,
+  //           height: product.boxInfo.h || 1,
+  //           sku: product.boxInfo.sku || "",
+  //           hsnCode: product.boxInfo.hsn || "",
+  //           measureUnit: "cm",
+  //           weightUnit: "kg",
+  //           currency: "INR",
+  //         })),
+  //         codInfo: {
+  //           isCod: paymentMethod === "Cash on Delivery",
+  //           collectableAmount:
+  //             paymentMethod === "Cash on Delivery"
+  //               ? boxCollectibleAmount
+  //               : 0,
+  //           invoiceValue: invoiceValue,
+  //         },
+  //         insurance: {
+  //           isInsured: insuranceOption === "withInsurance",
+  //           amount: 0,
+  //         },
+  //         isFragile: false,
+  //         podInfo: {
+  //           isPod: false,
+  //         },
+  //         tracking: {
+  //           awb: "",
+  //           label: "",
+  //           status: [],
+  //         },
+  //       };
+  //     } else {
+  //       const b2bBox = box as B2BBox;
+  //       const invoiceValue = b2bBox.packages.reduce(
+  //         (total, pkg) => total + (Number(pkg.totalPrice) || 0),
+  //         0
+  //       );
+
+  //       const firstPackage = b2bBox.packages[0] || {};
+
+  //       return {
+  //         boxId: uuidv4(),
+  //         name: `Box ${b2bBox.id}`,
+  //         length: firstPackage.length || 1,
+  //         breadth: firstPackage.breadth || 1,
+  //         height: firstPackage.height || 1,
+  //         deadWeight:
+  //           b2bBox.packages.reduce(
+  //             (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+  //             0
+  //           ) || 0.1,
+  //         appliedWeight:
+  //           b2bBox.packages.reduce(
+  //             (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+  //             0
+  //           ) || 0.1,
+  //         volumetricWeight: calculateVolumetricWeight(
+  //           Number(firstPackage.length || 0),
+  //           Number(firstPackage.breadth || 0),
+  //           Number(firstPackage.height || 0)
+  //         ),
+  //         weightUnit: "kg",
+  //         measureUnit: "cm",
+  //         color: "black",
+  //         price: 0,
+  //         currency: "INR",
+  //         divisor: 5000,
+  //         products: b2bBox.packages.map((pkg) => ({
+  //           name: pkg.name,
+  //           qty: Number(pkg.quantity) || 1,
+  //           unitPrice: Number(pkg.unitPrice) || 0,
+  //           unitTax: Number(pkg.tax) || 0,
+  //           deadWeight: Number(pkg.unitWeight) || 0.1,
+  //           appliedWeight: Number(pkg.unitWeight) || 0.1,
+  //           volumetricWeight: 0,
+  //           length: pkg.length || 1,
+  //           breadth: pkg.breadth || 1,
+  //           height: pkg.height || 1,
+  //           sku: pkg.sku || "",
+  //           hsnCode: pkg.hsn || "",
+  //           measureUnit: "cm",
+  //           weightUnit: "kg",
+  //           currency: "INR",
+  //         })),
+  //         codInfo: {
+  //           isCod: paymentMethod === "Cash on Delivery",
+  //           collectableAmount:
+  //             paymentMethod === "Cash on Delivery"
+  //               ? (Number(collectibleAmount) || 0) / boxes.length
+  //               : 0,
+  //           invoiceValue: invoiceValue,
+  //         },
+  //         insurance: {
+  //           isInsured: insuranceOption === "withInsurance",
+  //           amount: 0,
+  //         },
+  //         isFragile: false,
+  //         podInfo: {
+  //           isPod: false,
+  //         },
+  //         tracking: {
+  //           awb: "",
+  //           label: "",
+  //           status: [],
+  //         },
+  //       };
+  //     }
+  //   });
+
+  //   return transformedBoxes;
+  // };
+  // Updated prepareBoxInfoPayload function in OrderCreation component
+  // prepareBoxInfoPayload with changes ONLY for B2B section
+const prepareBoxInfoPayload = () => {
+  const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+  const boxesToProcess =
+    order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
+
+  const transformedBoxes = boxesToProcess.map((box) => {
+    if (order.orderType === "B2C") {
+      // *** B2C SECTION - COMPLETELY UNCHANGED ***
+      const b2cBox = box as BoxData;
+      const invoiceValue = b2cBox.products.reduce(
+        (total, product) => total + (Number(product.totalPrice) || 0),
+        0
+      );
+
+      return {
+        boxId: b2cBox.selectedBoxSuggestion?.boxId || uuidv4(),
+        name: b2cBox.dimensions.name || `Box ${b2cBox.id}`,
+        length: b2cBox.dimensions.l,
+        breadth: b2cBox.dimensions.b,
+        height: b2cBox.dimensions.h,
+        deadWeight: b2cBox.dimensions.weight || 0.1,
+        appliedWeight: b2cBox.dimensions.weight || 0.1,
+        volumetricWeight: calculateVolumetricWeight(
+          Number(b2cBox.dimensions.l || 0),
+          Number(b2cBox.dimensions.b || 0),
+          Number(b2cBox.dimensions.h || 0)
+        ),
+        weightUnit: "kg",
+        measureUnit: "cm",
+        color: "black",
+        price: 0,
+        currency: "INR",
+        divisor: 5000,
+        qty: allBoxesIdentical ? boxCount : 1,
+        products: b2cBox.products.map((product) => ({
+          name: product.name,
+          qty: Number(product.quantity) || 1,
+          unitPrice: Number(product.unitPrice) || 0,
+          unitTax: Number(product.boxInfo.tax) || 0,
+          deadWeight: Number(product.unitWeight) || 0,
+          appliedWeight: Number(product.unitWeight) || 0,
+          volumetricWeight: 0,
+          length: product.boxInfo.l || 1,
+          breadth: product.boxInfo.b || 1,
+          height: product.boxInfo.h || 1,
+          sku: product.boxInfo.sku || "",
+          hsnCode: product.boxInfo.hsn || "",
           measureUnit: "cm",
-          color: "black",
-          price: 0,
-          currency: "INR",
-          divisor: 5000,
-          qty: allBoxesIdentical ? boxCount : 1,
-          products: b2cBox.products.map((product) => ({
-            name: product.name,
-            qty: Number(product.quantity) || 1,
-            unitPrice: Number(product.unitPrice) || 0,
-            unitTax: Number(product.boxInfo.tax) || 0,
-            deadWeight: Number(product.unitWeight) || 0,
-            appliedWeight: Number(product.unitWeight) || 0,
-            volumetricWeight: 0,
-            length: product.boxInfo.l || 1,
-            breadth: product.boxInfo.b || 1,
-            height: product.boxInfo.h || 1,
-            sku: product.boxInfo.sku || "",
-            hsnCode: product.boxInfo.hsn || "",
-            measureUnit: "cm",
-            weightUnit: "kg",
-            currency: "INR",
-          })),
-          codInfo: {
-            isCod: paymentMethod === "Cash on Delivery",
-            collectableAmount:
-              paymentMethod === "Cash on Delivery"
-                ? boxCollectibleAmount
-                : 0,
-            invoiceValue: invoiceValue,
-          },
-          insurance: {
-            isInsured: insuranceOption === "withInsurance",
-            amount: 0,
-          },
-          isFragile: false,
-          podInfo: {
-            isPod: false,
-          },
-          tracking: {
-            awb: "",
-            label: "",
-            status: [],
-          },
-        };
-      } else {
-        const b2bBox = box as B2BBox;
-        const invoiceValue = b2bBox.packages.reduce(
-          (total, pkg) => total + (Number(pkg.totalPrice) || 0),
-          0
-        );
-
-        const firstPackage = b2bBox.packages[0] || {};
-
-        return {
-          boxId: uuidv4(),
-          name: `Box ${b2bBox.id}`,
-          length: firstPackage.length || 1,
-          breadth: firstPackage.breadth || 1,
-          height: firstPackage.height || 1,
-          deadWeight:
-            b2bBox.packages.reduce(
-              (total, pkg) => total + (Number(pkg.totalWeight) || 0),
-              0
-            ) || 0.1,
-          appliedWeight:
-            b2bBox.packages.reduce(
-              (total, pkg) => total + (Number(pkg.totalWeight) || 0),
-              0
-            ) || 0.1,
-          volumetricWeight: calculateVolumetricWeight(
-            Number(firstPackage.length || 0),
-            Number(firstPackage.breadth || 0),
-            Number(firstPackage.height || 0)
-          ),
           weightUnit: "kg",
-          measureUnit: "cm",
-          color: "black",
-          price: 0,
           currency: "INR",
-          divisor: 5000,
-          products: b2bBox.packages.map((pkg) => ({
-            name: pkg.name,
-            qty: Number(pkg.quantity) || 1,
-            unitPrice: Number(pkg.unitPrice) || 0,
-            unitTax: Number(pkg.tax) || 0,
-            deadWeight: Number(pkg.unitWeight) || 0.1,
-            appliedWeight: Number(pkg.unitWeight) || 0.1,
-            volumetricWeight: 0,
-            length: pkg.length || 1,
-            breadth: pkg.breadth || 1,
-            height: pkg.height || 1,
-            sku: pkg.sku || "",
-            hsnCode: pkg.hsn || "",
-            measureUnit: "cm",
-            weightUnit: "kg",
-            currency: "INR",
-          })),
-          codInfo: {
-            isCod: paymentMethod === "Cash on Delivery",
-            collectableAmount:
-              paymentMethod === "Cash on Delivery"
-                ? (Number(collectibleAmount) || 0) / boxes.length
-                : 0,
-            invoiceValue: invoiceValue,
-          },
-          insurance: {
-            isInsured: insuranceOption === "withInsurance",
-            amount: 0,
-          },
-          isFragile: false,
-          podInfo: {
-            isPod: false,
-          },
-          tracking: {
-            awb: "",
-            label: "",
-            status: [],
-          },
-        };
-      }
-    });
+        })),
+        codInfo: {
+          isCod: paymentMethod === "Cash on Delivery",
+          collectableAmount:
+            paymentMethod === "Cash on Delivery"
+              ? Number(collectibleAmount) || 0
+              : 0,
+          invoiceValue: invoiceValue,
+        },
+        insurance: {
+          isInsured: insuranceOption === "withInsurance",
+          amount: 0,
+        },
+        isFragile: false,
+        podInfo: {
+          isPod: false,
+        },
+        tracking: {
+          awb: "",
+          label: "",
+          status: [],
+        },
+      };
+    } else {
+      // *** B2B SECTION - WITH CHANGES FOR COLLECTIBLE AMOUNT ***
+      const b2bBox = box as B2BBox;
+      const invoiceValue = b2bBox.packages.reduce(
+        (total, pkg) => total + (Number(pkg.totalPrice) || 0),
+        0
+      );
 
-    return transformedBoxes;
-  };
+      // Calculate collectible amount for this B2B box
+      const boxCollectibleAmount = b2bBox.packages.reduce(
+        (total, pkg) => total + (Number(pkg.collectibleAmount) || Number(pkg.totalPrice) || 0),
+        0
+      );
+
+      const firstPackage = b2bBox.packages[0] || {};
+
+      return {
+        boxId: uuidv4(),
+        name: `Box ${b2bBox.id}`,
+        length: firstPackage.length || 1,
+        breadth: firstPackage.breadth || 1,
+        height: firstPackage.height || 1,
+        deadWeight:
+          b2bBox.packages.reduce(
+            (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+            0
+          ) || 0.1,
+        appliedWeight:
+          b2bBox.packages.reduce(
+            (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+            0
+          ) || 0.1,
+        volumetricWeight: calculateVolumetricWeight(
+          Number(firstPackage.length || 0),
+          Number(firstPackage.breadth || 0),
+          Number(firstPackage.height || 0)
+        ),
+        weightUnit: "kg",
+        measureUnit: "cm",
+        color: "black",
+        price: 0,
+        currency: "INR",
+        divisor: 5000,
+        products: b2bBox.packages.map((pkg) => ({
+          name: pkg.name,
+          qty: Number(pkg.quantity) || 1,
+          unitPrice: Number(pkg.unitPrice) || 0,
+          unitTax: Number(pkg.tax) || 0,
+          deadWeight: Number(pkg.unitWeight) || 0.1,
+          appliedWeight: Number(pkg.unitWeight) || 0.1,
+          volumetricWeight: 0,
+          length: pkg.length || 1,
+          breadth: pkg.breadth || 1,
+          height: pkg.height || 1,
+          sku: pkg.sku || "",
+          hsnCode: pkg.hsn || "",
+          measureUnit: "cm",
+          weightUnit: "kg",
+          currency: "INR",
+        })),
+        codInfo: {
+          isCod: paymentMethod === "Cash on Delivery",
+          collectableAmount:
+            paymentMethod === "Cash on Delivery"
+              ? paymentMethod === "Cash on Delivery" 
+                ? boxCollectibleAmount  // Use calculated box collectible amount
+                : 0
+              : 0,
+          invoiceValue: invoiceValue,
+        },
+        insurance: {
+          isInsured: insuranceOption === "withInsurance",
+          amount: 0,
+        },
+        isFragile: false,
+        podInfo: {
+          isPod: false,
+        },
+        tracking: {
+          awb: "",
+          label: "",
+          status: [],
+        },
+      };
+    }
+  });
+
+  return transformedBoxes;
+};
 
   // Helper function to calculate volumetric weight
   const calculateVolumetricWeight = (
@@ -963,13 +1225,13 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   //     // });
   //     boxesData.forEach((box) => {
   //       newBoxErrors[box.id] = {};
-      
+
   //       // Check box dimensions
   //       if (isEmptyOrZero(box.dimensions.name)) newBoxErrors[box.id][`box-name`] = true;
   //       if (isEmptyOrZero(box.dimensions.l)) newBoxErrors[box.id][`box-length`] = true;
   //       if (isEmptyOrZero(box.dimensions.b)) newBoxErrors[box.id][`box-breadth`] = true;
   //       if (isEmptyOrZero(box.dimensions.h)) newBoxErrors[box.id][`box-height`] = true;
-      
+
   //       // Check each product
   //       box.products.forEach((product) => {
   //         if (isEmptyOrZero(product.name)) newBoxErrors[box.id][`product-${product.id}-name`] = true;
@@ -1167,7 +1429,7 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   //       codInfo: {
   //         isCod: paymentMethod === "Cash on Delivery",
   //         // collectableAmount: Number(collectibleAmount) || 0,
-  //         collectableAmount: paymentMethod === "Cash on Delivery" 
+  //         collectableAmount: paymentMethod === "Cash on Delivery"
   //     ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
   //     : 0,
   //         invoiceValue: calculateTotalInvoiceValue(),
@@ -1208,337 +1470,357 @@ const [totalCollectibleAmount, setTotalCollectibleAmount] = useState<number>(0);
   //   }
   // };
   // Handle proceeding to next step
-const handleProceedToNextStep = async () => {
-  // Reset previous validation errors
-  setFormErrors({
-    pickup: {
-      contactNo: false,
-      address: false,
-      name: false,
-      pincode: false,
-      city: false,
-      state: false,
-      addressLine1: false,
-      addressLine2: false,
-      landmark: false,
-      gstNo: false,
+  const handleProceedToNextStep = async () => {
+    // Reset previous validation errors
+    setFormErrors({
+      pickup: {
+        contactNo: false,
+        address: false,
+        name: false,
+        pincode: false,
+        city: false,
+        state: false,
+        addressLine1: false,
+        addressLine2: false,
+        landmark: false,
+        gstNo: false,
+        email: false,
+      },
+      delivery: {
+        contactNo: false,
+        address: false,
+        name: false,
+        pincode: false,
+        city: false,
+        state: false,
+        addressLine1: false,
+        addressLine2: false,
+        landmark: false,
+        gstNo: false,
+        email: false,
+      },
+    });
+    setBoxValidationErrors({});
+
+    // Check required fields for pickup form
+    const pickupErrors = {
+      contactNo: isEmptyOrZero(pickupFormValues.contactNo),
+      address: isEmptyOrZero(pickupFormValues.address),
+      name: isEmptyOrZero(pickupFormValues.name),
+      pincode: isEmptyOrZero(pickupFormValues.pincode),
+      city: isEmptyOrZero(pickupFormValues.city),
+      state: isEmptyOrZero(pickupFormValues.state),
+      addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
+      addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
+      landmark: isEmptyOrZero(pickupFormValues.landmark),
+      gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
       email: false,
-    },
-    delivery: {
-      contactNo: false,
-      address: false,
-      name: false,
-      pincode: false,
-      city: false,
-      state: false,
-      addressLine1: false,
-      addressLine2: false,
-      landmark: false,
-      gstNo: false,
+    };
+
+    // Check required fields for delivery form
+    const deliveryErrors = {
+      contactNo: isEmptyOrZero(deliveryFormValues.contactNo),
+      address: isEmptyOrZero(deliveryFormValues.address),
+      name: isEmptyOrZero(deliveryFormValues.name),
+      pincode: isEmptyOrZero(deliveryFormValues.pincode),
+      city: isEmptyOrZero(deliveryFormValues.city),
+      state: isEmptyOrZero(deliveryFormValues.state),
+      addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
+      addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
+      landmark: isEmptyOrZero(deliveryFormValues.landmark),
+      gstNo:
+        order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
       email: false,
-    },
-  });
-  setBoxValidationErrors({});
+    };
 
-  // Check required fields for pickup form
-  const pickupErrors = {
-    contactNo: isEmptyOrZero(pickupFormValues.contactNo),
-    address: isEmptyOrZero(pickupFormValues.address),
-    name: isEmptyOrZero(pickupFormValues.name),
-    pincode: isEmptyOrZero(pickupFormValues.pincode),
-    city: isEmptyOrZero(pickupFormValues.city),
-    state: isEmptyOrZero(pickupFormValues.state),
-    addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
-    addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
-    landmark: isEmptyOrZero(pickupFormValues.landmark),
-    gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
-    email: false,
-  };
+    // Check if there are any validation errors in address forms
+    const hasPickupErrors = Object.values(pickupErrors).some((error) => error);
+    const hasDeliveryErrors = Object.values(deliveryErrors).some(
+      (error) => error
+    );
 
-  // Check required fields for delivery form
-  const deliveryErrors = {
-    contactNo: isEmptyOrZero(deliveryFormValues.contactNo),
-    address: isEmptyOrZero(deliveryFormValues.address),
-    name: isEmptyOrZero(deliveryFormValues.name),
-    pincode: isEmptyOrZero(deliveryFormValues.pincode),
-    city: isEmptyOrZero(deliveryFormValues.city),
-    state: isEmptyOrZero(deliveryFormValues.state),
-    addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
-    addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
-    landmark: isEmptyOrZero(deliveryFormValues.landmark),
-    gstNo: order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
-    email: false,
-  };
+    // Update validation error states for address forms
+    setFormErrors({
+      pickup: pickupErrors,
+      delivery: deliveryErrors,
+    });
 
-  // Check if there are any validation errors in address forms
-  const hasPickupErrors = Object.values(pickupErrors).some((error) => error);
-  const hasDeliveryErrors = Object.values(deliveryErrors).some(
-    (error) => error
-  );
+    setValidationErrors({
+      pickup: hasPickupErrors,
+      delivery: hasDeliveryErrors,
+    });
 
-  // Update validation error states for address forms
-  setFormErrors({
-    pickup: pickupErrors,
-    delivery: deliveryErrors,
-  });
+    // Validate box data based on order type
+    let hasBoxErrors = false;
+    const newBoxErrors: { [boxId: number]: { [fieldId: string]: boolean } } =
+      {};
 
-  setValidationErrors({
-    pickup: hasPickupErrors,
-    delivery: hasDeliveryErrors,
-  });
+    if (order.orderType === "B2C") {
+      // Validate B2C boxes
+      boxesData.forEach((box) => {
+        newBoxErrors[box.id] = {};
 
-  // Validate box data based on order type
-  let hasBoxErrors = false;
-  const newBoxErrors: { [boxId: number]: { [fieldId: string]: boolean } } =
-    {};
+        // Check box dimensions
+        if (isEmptyOrZero(box.dimensions.name))
+          newBoxErrors[box.id][`box-name`] = true;
+        if (isEmptyOrZero(box.dimensions.l))
+          newBoxErrors[box.id][`box-length`] = true;
+        if (isEmptyOrZero(box.dimensions.b))
+          newBoxErrors[box.id][`box-breadth`] = true;
+        if (isEmptyOrZero(box.dimensions.h))
+          newBoxErrors[box.id][`box-height`] = true;
 
-  if (order.orderType === "B2C") {
-    // Validate B2C boxes
-    boxesData.forEach((box) => {
-      newBoxErrors[box.id] = {};
-    
-      // Check box dimensions
-      if (isEmptyOrZero(box.dimensions.name)) newBoxErrors[box.id][`box-name`] = true;
-      if (isEmptyOrZero(box.dimensions.l)) newBoxErrors[box.id][`box-length`] = true;
-      if (isEmptyOrZero(box.dimensions.b)) newBoxErrors[box.id][`box-breadth`] = true;
-      if (isEmptyOrZero(box.dimensions.h)) newBoxErrors[box.id][`box-height`] = true;
-    
-      // Check each product
-      box.products.forEach((product) => {
-        if (isEmptyOrZero(product.name)) newBoxErrors[box.id][`product-${product.id}-name`] = true;
-        if (isEmptyOrZero(product.quantity)) newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
-        if (isEmptyOrZero(product.unitPrice)) newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
-        if (isEmptyOrZero(product.unitWeight)) newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+        // Check each product
+        box.products.forEach((product) => {
+          if (isEmptyOrZero(product.name))
+            newBoxErrors[box.id][`product-${product.id}-name`] = true;
+          if (isEmptyOrZero(product.quantity))
+            newBoxErrors[box.id][`product-${product.id}-quantity`] = true;
+          if (isEmptyOrZero(product.unitPrice))
+            newBoxErrors[box.id][`product-${product.id}-unitPrice`] = true;
+          if (isEmptyOrZero(product.unitWeight))
+            newBoxErrors[box.id][`product-${product.id}-unitWeight`] = true;
+        });
       });
-    });
-  } else {
-    // Validate B2B boxes
-    b2bBoxesData.forEach((box) => {
-      newBoxErrors[box.id] = {};
-
-      // Check each package
-      box.packages.forEach((pkg) => {
-        if (isEmptyOrZero(pkg.name)) newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
-        if (isEmptyOrZero(pkg.quantity)) newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
-        if (isEmptyOrZero(pkg.unitPrice)) newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
-        if (isEmptyOrZero(pkg.unitWeight)) newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
-        if (isEmptyOrZero(pkg.length)) newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
-        if (isEmptyOrZero(pkg.breadth)) newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
-        if (isEmptyOrZero(pkg.height)) newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
-      });
-    });
-  }
-
-  // Check if there are any box errors
-  for (const boxId in newBoxErrors) {
-    if (Object.keys(newBoxErrors[boxId]).length > 0) {
-      hasBoxErrors = true;
-      break;
-    }
-  }
-
-  // Set box validation errors
-  setBoxValidationErrors(newBoxErrors);
-
-  // If there are validation errors, show a toast and return
-  if (hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
-    toast.error("Please fill in all required fields");
-
-    // Automatically expand details sections if they contain errors
-    if (hasPickupErrors && !showPickupDetails) {
-      setShowPickupDetails(true);
-    }
-
-    if (hasDeliveryErrors && !showDeliveryDetails) {
-      setShowDeliveryDetails(true);
-    }
-
-    // Scroll to the top of the form to show validation errors
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    return;
-  }
-
-  // Check if box data exists for order
-  if (
-    (order.orderType === "B2C" && boxesData.length === 0) ||
-    (order.orderType === "B2B" && b2bBoxesData.length === 0)
-  ) {
-    toast.error("Please add at least one package to your order");
-    return;
-  }
-
-  setIsSubmitting(true);
-
-  try {
-    // Check localStorage for existing tempOrderId and source
-    const existingTempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
-    const existingSource = localStorage.getItem(STORAGE_KEYS.ORDER_SOURCE);
-
-    // Create pickup address payload
-    const pickupAddressPayload = {
-      fullAddress: pickupFormValues.address,
-      flatNo: pickupFormValues.addressLine1,
-      locality: pickupFormValues.addressLine2,
-      landmark: pickupFormValues.landmark,
-      pincode: pickupFormValues.pincode,
-      city: pickupFormValues.city,
-      state: pickupFormValues.state,
-      country: "India",
-      addressType: "warehouse",
-      workingDays: {
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true,
-        sunday: true,
-      },
-      workingHours: "09:00",
-      contact: {
-        name: pickupFormValues.name,
-        mobileNo: pickupFormValues.contactNo,
-        emailId: pickupFormValues.email,
-        type: "warehouse associate",
-      },
-      pickupDate: new Date().getTime(),
-      pickupAddressId: pickupAddress?.pickupAddressId || undefined
-
-    };
-
-    // Create the main payload and include tempOrderId and source if they exist
-    const payload:any = {
-      pickupAddress: pickupAddressPayload,
-      returnAddress: pickupAddressPayload,
-      branding: {
-        id: uuidv4(),
-        name: "",
-        logo: "",
-        address: "",
-        contact: { name: "", mobileNo: "" },
-        isActive: false,
-      },
-      transit: order.reverseState,
-      orderType: order.orderType,
-    };
-
-    // Add tempOrderId and source to payload if they exist
-    if (existingTempOrderId && existingSource) {
-      payload.tempOrderId = existingTempOrderId;
-      payload.source = existingSource;
-    }
-
-    // Step 1: Submit pickup information
-    const response = await POST(ADD_PICKUP_LOCATION, payload);
-
-    if (!response?.data?.success) {
-      toast.error(
-        response?.data?.message || "Failed to submit pickup information"
-      );
-      return;
-    }
-
-    const tempId = response.data.data[0]?.tempOrderId;
-    const source = response.data.data[0]?.source;
-
-    // Save these values for subsequent API calls
-    setTempOrderId(tempId);
-    setOrderSource(source);
-
-    // Create delivery address payload
-    const deliveryAddressPayload = {
-      recipientType: "consumer",
-      fullAddress: deliveryFormValues.address,
-      flatNo: deliveryFormValues.addressLine1,
-      locality: deliveryFormValues.addressLine2,
-      landmark: deliveryFormValues.landmark,
-      pincode: deliveryFormValues.pincode,
-      city: deliveryFormValues.city,
-      state: deliveryFormValues.state,
-      country: "India",
-      addressType: "warehouse",
-      workingDays: {
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true,
-        sunday: true,
-      },
-      workingHours: "09:00",
-      contact: {
-        name: deliveryFormValues.name,
-        mobileNo: deliveryFormValues.contactNo,
-        emailId: deliveryFormValues.email,
-        type: "warehouse associate",
-      },
-      deliveryAddressId: deliveryAddress?.deliveryAddressId || undefined,
-    };
-
-    // Step 2: Submit delivery information
-    const deliveryResponse = await POST(ADD_DELIVERY_LOCATION, {
-      deliveryAddress: deliveryAddressPayload,
-      billingAddress: deliveryAddressPayload,
-      orderType: order.orderType,
-      gstNumber: deliveryFormValues.gstNo || "",
-      tempOrderId: tempId,
-      source: source,
-    });
-
-    if (!deliveryResponse?.data?.success) {
-      toast.error(
-        deliveryResponse?.data?.message ||
-          "Failed to submit delivery information"
-      );
-      return;
-    }
-
-    // Step 3: Submit box information
-    const boxesInfoPayload = {
-      boxInfo: prepareBoxInfoPayload(),
-      codInfo: {
-        isCod: paymentMethod === "Cash on Delivery",
-        collectableAmount: paymentMethod === "Cash on Delivery" 
-          ? (order.orderType === "B2C" ? totalCollectibleAmount : Number(collectibleAmount) || 0)
-          : 0,
-        invoiceValue: calculateTotalInvoiceValue(),
-      },
-      insurance: {
-        isInsured: insuranceOption === "withInsurance",
-        amount: 0,
-      },
-      tempOrderId: tempId,
-      source: source,
-    };
-
-    const boxInfoResponse = await POST(ADD_BOX_INFO, boxesInfoPayload);
-
-    // Call POST_SET_ORDER_ID independently
-    const orderIdPayload = {
-      orderId: order.orderId,
-      eWayBillNo: "",
-      tempOrderId: tempId,
-      source: source,
-    };
-    await POST(POST_SET_ORDER_ID, orderIdPayload);
-
-    if (boxInfoResponse?.data?.success) {
-      // Proceed to next step on success
-      setActiveStep(2);
-      toast.success("Order information submitted successfully!");
     } else {
-      toast.error(
-        boxInfoResponse?.data?.message || "Failed to submit box information"
-      );
+      // Validate B2B boxes
+      b2bBoxesData.forEach((box) => {
+        newBoxErrors[box.id] = {};
+
+        // Check each package
+        box.packages.forEach((pkg) => {
+          if (isEmptyOrZero(pkg.name))
+            newBoxErrors[box.id][`package-${pkg.id}-name`] = true;
+          if (isEmptyOrZero(pkg.quantity))
+            newBoxErrors[box.id][`package-${pkg.id}-quantity`] = true;
+          if (isEmptyOrZero(pkg.unitPrice))
+            newBoxErrors[box.id][`package-${pkg.id}-unitPrice`] = true;
+          if (isEmptyOrZero(pkg.unitWeight))
+            newBoxErrors[box.id][`package-${pkg.id}-unitWeight`] = true;
+          if (isEmptyOrZero(pkg.length))
+            newBoxErrors[box.id][`package-${pkg.id}-length`] = true;
+          if (isEmptyOrZero(pkg.breadth))
+            newBoxErrors[box.id][`package-${pkg.id}-breadth`] = true;
+          if (isEmptyOrZero(pkg.height))
+            newBoxErrors[box.id][`package-${pkg.id}-height`] = true;
+        });
+      });
     }
-  } catch (error) {
-    console.error("Error in order submission:", error);
-    toast.error("An error occurred while processing your order");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+
+    // Check if there are any box errors
+    for (const boxId in newBoxErrors) {
+      if (Object.keys(newBoxErrors[boxId]).length > 0) {
+        hasBoxErrors = true;
+        break;
+      }
+    }
+
+    // Set box validation errors
+    setBoxValidationErrors(newBoxErrors);
+
+    // If there are validation errors, show a toast and return
+    if (hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
+      toast.error("Please fill in all required fields");
+
+      // Automatically expand details sections if they contain errors
+      if (hasPickupErrors && !showPickupDetails) {
+        setShowPickupDetails(true);
+      }
+
+      if (hasDeliveryErrors && !showDeliveryDetails) {
+        setShowDeliveryDetails(true);
+      }
+
+      // Scroll to the top of the form to show validation errors
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    // Check if box data exists for order
+    if (
+      (order.orderType === "B2C" && boxesData.length === 0) ||
+      (order.orderType === "B2B" && b2bBoxesData.length === 0)
+    ) {
+      toast.error("Please add at least one package to your order");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Check localStorage for existing tempOrderId and source
+      const existingTempOrderId = localStorage.getItem(
+        STORAGE_KEYS.TEMP_ORDER_ID
+      );
+      const existingSource = localStorage.getItem(STORAGE_KEYS.ORDER_SOURCE);
+
+      // Create pickup address payload
+      const pickupAddressPayload = {
+        fullAddress: pickupFormValues.address,
+        flatNo: pickupFormValues.addressLine1,
+        locality: pickupFormValues.addressLine2,
+        landmark: pickupFormValues.landmark,
+        pincode: pickupFormValues.pincode,
+        city: pickupFormValues.city,
+        state: pickupFormValues.state,
+        country: "India",
+        addressType: "warehouse",
+        workingDays: {
+          monday: true,
+          tuesday: true,
+          wednesday: true,
+          thursday: true,
+          friday: true,
+          saturday: true,
+          sunday: true,
+        },
+        workingHours: "09:00",
+        contact: {
+          name: pickupFormValues.name,
+          mobileNo: pickupFormValues.contactNo,
+          emailId: pickupFormValues.email,
+          type: "warehouse associate",
+        },
+        pickupDate: new Date().getTime(),
+        pickupAddressId: pickupAddress?.pickupAddressId || undefined,
+      };
+
+      // Create the main payload and include tempOrderId and source if they exist
+      const payload: any = {
+        pickupAddress: pickupAddressPayload,
+        returnAddress: pickupAddressPayload,
+        branding: {
+          id: uuidv4(),
+          name: "",
+          logo: "",
+          address: "",
+          contact: { name: "", mobileNo: "" },
+          isActive: false,
+        },
+        transit: order.reverseState,
+        orderType: order.orderType,
+      };
+
+      // Add tempOrderId and source to payload if they exist
+      if (existingTempOrderId && existingSource) {
+        payload.tempOrderId = existingTempOrderId;
+        payload.source = existingSource;
+      }
+
+      // Step 1: Submit pickup information
+      const response = await POST(ADD_PICKUP_LOCATION, payload);
+
+      if (!response?.data?.success) {
+        toast.error(
+          response?.data?.message || "Failed to submit pickup information"
+        );
+        return;
+      }
+
+      const tempId = response.data.data[0]?.tempOrderId;
+      const source = response.data.data[0]?.source;
+
+      // Save these values for subsequent API calls
+      setTempOrderId(tempId);
+      setOrderSource(source);
+
+      // Create delivery address payload
+      const deliveryAddressPayload = {
+        recipientType: "consumer",
+        fullAddress: deliveryFormValues.address,
+        flatNo: deliveryFormValues.addressLine1,
+        locality: deliveryFormValues.addressLine2,
+        landmark: deliveryFormValues.landmark,
+        pincode: deliveryFormValues.pincode,
+        city: deliveryFormValues.city,
+        state: deliveryFormValues.state,
+        country: "India",
+        addressType: "warehouse",
+        workingDays: {
+          monday: true,
+          tuesday: true,
+          wednesday: true,
+          thursday: true,
+          friday: true,
+          saturday: true,
+          sunday: true,
+        },
+        workingHours: "09:00",
+        contact: {
+          name: deliveryFormValues.name,
+          mobileNo: deliveryFormValues.contactNo,
+          emailId: deliveryFormValues.email,
+          type: "warehouse associate",
+        },
+        deliveryAddressId: deliveryAddress?.deliveryAddressId || undefined,
+      };
+
+      // Step 2: Submit delivery information
+      const deliveryResponse = await POST(ADD_DELIVERY_LOCATION, {
+        deliveryAddress: deliveryAddressPayload,
+        billingAddress: deliveryAddressPayload,
+        orderType: order.orderType,
+        gstNumber: deliveryFormValues.gstNo || "",
+        tempOrderId: tempId,
+        source: source,
+      });
+
+      if (!deliveryResponse?.data?.success) {
+        toast.error(
+          deliveryResponse?.data?.message ||
+            "Failed to submit delivery information"
+        );
+        return;
+      }
+
+      // Step 3: Submit box information
+      const boxesInfoPayload = {
+        boxInfo: prepareBoxInfoPayload(),
+        codInfo: {
+          isCod: paymentMethod === "Cash on Delivery",
+          collectableAmount:
+            paymentMethod === "Cash on Delivery"
+              ? order.orderType === "B2C"
+                ? totalCollectibleAmount
+                : Number(collectibleAmount) || 0
+              : 0,
+          invoiceValue: calculateTotalInvoiceValue(),
+        },
+        insurance: {
+          isInsured: insuranceOption === "withInsurance",
+          amount: 0,
+        },
+        tempOrderId: tempId,
+        source: source,
+      };
+
+      const boxInfoResponse = await POST(ADD_BOX_INFO, boxesInfoPayload);
+
+      // Call POST_SET_ORDER_ID independently
+      const orderIdPayload = {
+        orderId: order.orderId,
+        eWayBillNo: "",
+        tempOrderId: tempId,
+        source: source,
+      };
+      await POST(POST_SET_ORDER_ID, orderIdPayload);
+
+      if (boxInfoResponse?.data?.success) {
+        // Proceed to next step on success
+        setActiveStep(2);
+        toast.success("Order information submitted successfully!");
+      } else {
+        toast.error(
+          boxInfoResponse?.data?.message || "Failed to submit box information"
+        );
+      }
+    } catch (error) {
+      console.error("Error in order submission:", error);
+      toast.error("An error occurred while processing your order");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const clearBoxFieldError = (boxId: number, fieldId: string) => {
     setBoxValidationErrors((prev) => {
@@ -1590,7 +1872,7 @@ const handleProceedToNextStep = async () => {
           contact: {
             name: deliveryFormValues.name,
             mobileNo: parseInt(deliveryFormValues.contactNo),
-            email: deliveryFormValues.email   || "",
+            email: deliveryFormValues.email || "",
           },
           gstNumber: deliveryFormValues.gstNo || "",
         },
@@ -1635,12 +1917,12 @@ const handleProceedToNextStep = async () => {
         });
       } else {
         setSelectedServiceDetails(null);
-  localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
+        localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
         toast.error(response?.data?.message || "Failed to place order");
       }
     } catch (error) {
       setSelectedServiceDetails(null);
-  localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
       toast.error("An error occurred while placing your order");
     } finally {
       setIsSubmitting(false);
@@ -1648,121 +1930,235 @@ const handleProceedToNextStep = async () => {
   };
 
   // Helper function to prepare box info for REVERSE_ORDER API
-  const prepareBoxInfoForReverseOrder = () => {
-    // Determine which box data to use based on order type
-    const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
-    const boxesToProcess =
-      order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
+  // const prepareBoxInfoForReverseOrder = () => {
+  //   // Determine which box data to use based on order type
+  //   const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+  //   const boxesToProcess =
+  //     order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
 
-    // Transform boxes to the format expected by REVERSE_ORDER API
-    return boxesToProcess.map((box, index) => {
-      // For B2C boxes
-      if (order.orderType === "B2C") {
-        const b2cBox = box as BoxData;
-        const invoiceValue = b2cBox.products.reduce(
-          (total, product) => total + (Number(product.totalPrice) || 0),
-          0
-        );
+  //   // Transform boxes to the format expected by REVERSE_ORDER API
+  //   return boxesToProcess.map((box, index) => {
+  //     // For B2C boxes
+  //     if (order.orderType === "B2C") {
+  //       const b2cBox = box as BoxData;
+  //       const invoiceValue = b2cBox.products.reduce(
+  //         (total, product) => total + (Number(product.totalPrice) || 0),
+  //         0
+  //       );
 
-          // Use the individual box collectible amount if available
-      const boxCollectibleAmount = paymentMethod === "Cash on Delivery" 
-      ? (Number(b2cBox.collectibleAmount) || invoiceValue) 
-      : 0;
+  //       // Use the individual box collectible amount if available
+  //       const boxCollectibleAmount =
+  //         paymentMethod === "Cash on Delivery"
+  //           ? Number(b2cBox.collectibleAmount) || invoiceValue
+  //           : 0;
 
-        // Get the first product for example purposes (or combine all)
-        const firstProduct = b2cBox.products[0] || {};
+  //       // Get the first product for example purposes (or combine all)
+  //       const firstProduct = b2cBox.products[0] || {};
 
-        return {
-          name: `box_${index + 1}`,
-          weightUnit: "Kg",
-          deadWeight: b2cBox.dimensions.weight || 1,
-          length: b2cBox.dimensions.l || 1,
-          breadth: b2cBox.dimensions.b || 1,
-          height: b2cBox.dimensions.h || 1,
+  //       return {
+  //         name: `box_${index + 1}`,
+  //         weightUnit: "Kg",
+  //         deadWeight: b2cBox.dimensions.weight || 1,
+  //         length: b2cBox.dimensions.l || 1,
+  //         breadth: b2cBox.dimensions.b || 1,
+  //         height: b2cBox.dimensions.h || 1,
+  //         measureUnit: "cm",
+  //         qty: allBoxesIdentical ? boxCount : 1,
+  //         products: b2cBox.products.map((product) => ({
+  //           name: product.name || "Product",
+  //           category: "General",
+  //           sku: product.boxInfo.sku || "sku",
+  //           qty: Number(product.quantity) || 1,
+  //           unitPrice: Number(product.unitPrice) || 0,
+  //           unitTax: Number(product.boxInfo.tax) || 0,
+  //           weightUnit: "kg",
+  //           deadWeight: Number(product.unitWeight) || 1,
+  //           length: product.boxInfo.l || 1,
+  //           breadth: product.boxInfo.b || 1,
+  //           height: product.boxInfo.h || 1,
+  //           measureUnit: "cm",
+  //         })),
+  //         codInfo: {
+  //           isCod: paymentMethod === "Cash on Delivery",
+  //           // collectableAmount:
+  //           //   paymentMethod === "Cash on Delivery"
+  //           //     ? Number(collectibleAmount) || 0
+  //           //     : 0,
+  //           collectableAmount: boxCollectibleAmount,
+  //           invoiceValue: invoiceValue || 0,
+  //         },
+  //         podInfo: {
+  //           isPod: false,
+  //         },
+  //         insurance: insuranceOption === "withInsurance",
+  //       };
+  //     }
+  //     // For B2B boxes
+  //     else {
+  //       const b2bBox = box as B2BBox;
+  //       const invoiceValue = b2bBox.packages.reduce(
+  //         (total, pkg) => total + (Number(pkg.totalPrice) || 0),
+  //         0
+  //       );
+
+  //       // Get the first package for reference
+  //       const firstPackage = b2bBox.packages[0] || {};
+
+  //       return {
+  //         name: `box_${index + 1}`,
+  //         weightUnit: "Kg",
+  //         deadWeight:
+  //           b2bBox.packages.reduce(
+  //             (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+  //             0
+  //           ) || 1,
+  //         length: firstPackage.length || 1,
+  //         breadth: firstPackage.breadth || 1,
+  //         height: firstPackage.height || 1,
+  //         measureUnit: "cm",
+  //         products: b2bBox.packages.map((pkg) => ({
+  //           name: pkg.name || "Package",
+  //           category: "General",
+  //           sku: pkg.sku || "sku",
+  //           qty: Number(pkg.quantity) || 1,
+  //           unitPrice: Number(pkg.unitPrice) || 0,
+  //           unitTax: Number(pkg.tax) || 0,
+  //           weightUnit: "kg",
+  //           deadWeight: Number(pkg.unitWeight) || 1,
+  //           length: pkg.length || 1,
+  //           breadth: pkg.breadth || 1,
+  //           height: pkg.height || 1,
+  //           measureUnit: "cm",
+  //         })),
+  //         codInfo: {
+  //           isCod: paymentMethod === "Cash on Delivery",
+  //           collectableAmount:
+  //             paymentMethod === "Cash on Delivery"
+  //               ? Number(collectibleAmount) || 0
+  //               : 0,
+  //           invoiceValue: invoiceValue || 0,
+  //         },
+  //         podInfo: {
+  //           isPod: false,
+  //         },
+  //         insurance: insuranceOption === "withInsurance",
+  //       };
+  //     }
+  //   });
+  // };
+  // prepareBoxInfoForReverseOrder with changes ONLY for B2B section
+const prepareBoxInfoForReverseOrder = () => {
+  // Determine which box data to use based on order type
+  const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+  const boxesToProcess =
+    order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
+
+  // Transform boxes to the format expected by REVERSE_ORDER API
+  return boxesToProcess.map((box, index) => {
+    // For B2C boxes - COMPLETELY UNCHANGED
+    if (order.orderType === "B2C") {
+      const b2cBox = box as BoxData;
+      const invoiceValue = b2cBox.products.reduce(
+        (total, product) => total + (Number(product.totalPrice) || 0),
+        0
+      );
+
+      // Get the first product for example purposes (or combine all)
+      const firstProduct = b2cBox.products[0] || {};
+
+      return {
+        name: `box_${index + 1}`,
+        weightUnit: "Kg",
+        deadWeight: b2cBox.dimensions.weight || 1,
+        length: b2cBox.dimensions.l || 1,
+        breadth: b2cBox.dimensions.b || 1,
+        height: b2cBox.dimensions.h || 1,
+        measureUnit: "cm",
+        qty: allBoxesIdentical ? boxCount : 1,
+        products: b2cBox.products.map((product) => ({
+          name: product.name || "Product",
+          category: "General",
+          sku: product.boxInfo.sku || "sku",
+          qty: Number(product.quantity) || 1,
+          unitPrice: Number(product.unitPrice) || 0,
+          unitTax: Number(product.boxInfo.tax) || 0,
+          weightUnit: "kg",
+          deadWeight: Number(product.unitWeight) || 1,
+          length: product.boxInfo.l || 1,
+          breadth: product.boxInfo.b || 1,
+          height: product.boxInfo.h || 1,
           measureUnit: "cm",
-          qty: allBoxesIdentical ? boxCount : 1,
-          products: b2cBox.products.map((product) => ({
-            name: product.name || "Product",
-            category: "General",
-            sku: product.boxInfo.sku || "sku",
-            qty: Number(product.quantity) || 1,
-            unitPrice: Number(product.unitPrice) || 0,
-            unitTax: Number(product.boxInfo.tax) || 0,
-            weightUnit: "kg",
-            deadWeight: Number(product.unitWeight) || 1,
-            length: product.boxInfo.l || 1,
-            breadth: product.boxInfo.b || 1,
-            height: product.boxInfo.h || 1,
-            measureUnit: "cm",
-          })),
-          codInfo: {
-            isCod: paymentMethod === "Cash on Delivery",
-            // collectableAmount:
-            //   paymentMethod === "Cash on Delivery"
-            //     ? Number(collectibleAmount) || 0
-            //     : 0,
-            collectableAmount: boxCollectibleAmount,
-            invoiceValue: invoiceValue || 0,
-          },
-          podInfo: {
-            isPod: false,
-          },
-          insurance: insuranceOption === "withInsurance",
-        };
-      }
-      // For B2B boxes
-      else {
-        const b2bBox = box as B2BBox;
-        const invoiceValue = b2bBox.packages.reduce(
-          (total, pkg) => total + (Number(pkg.totalPrice) || 0),
-          0
-        );
+        })),
+        codInfo: {
+          isCod: paymentMethod === "Cash on Delivery",
+          collectableAmount:
+            paymentMethod === "Cash on Delivery"
+              ? Number(collectibleAmount) || 0
+              : 0,
+          invoiceValue: invoiceValue || 0,
+        },
+        podInfo: {
+          isPod: false,
+        },
+        insurance: insuranceOption === "withInsurance",
+      };
+    }
+    // For B2B boxes - WITH CHANGES FOR COLLECTIBLE AMOUNT
+    else {
+      const b2bBox = box as B2BBox;
+      const invoiceValue = b2bBox.packages.reduce(
+        (total, pkg) => total + (Number(pkg.totalPrice) || 0),
+        0
+      );
 
-        // Get the first package for reference
-        const firstPackage = b2bBox.packages[0] || {};
+      // Calculate collectible amount for this B2B box
+      const boxCollectibleAmount = b2bBox.packages.reduce(
+        (total, pkg) => total + (Number(pkg.collectibleAmount) || Number(pkg.totalPrice) || 0),
+        0
+      );
 
-        return {
-          name: `box_${index + 1}`,
-          weightUnit: "Kg",
-          deadWeight:
-            b2bBox.packages.reduce(
-              (total, pkg) => total + (Number(pkg.totalWeight) || 0),
-              0
-            ) || 1,
-          length: firstPackage.length || 1,
-          breadth: firstPackage.breadth || 1,
-          height: firstPackage.height || 1,
+      // Get the first package for reference
+      const firstPackage = b2bBox.packages[0] || {};
+
+      return {
+        name: `box_${index + 1}`,
+        weightUnit: "Kg",
+        deadWeight:
+          b2bBox.packages.reduce(
+            (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+            0
+          ) || 1,
+        length: firstPackage.length || 1,
+        breadth: firstPackage.breadth || 1,
+        height: firstPackage.height || 1,
+        measureUnit: "cm",
+        products: b2bBox.packages.map((pkg) => ({
+          name: pkg.name || "Package",
+          category: "General",
+          sku: pkg.sku || "sku",
+          qty: Number(pkg.quantity) || 1,
+          unitPrice: Number(pkg.unitPrice) || 0,
+          unitTax: Number(pkg.tax) || 0,
+          weightUnit: "kg",
+          deadWeight: Number(pkg.unitWeight) || 1,
+          length: pkg.length || 1,
+          breadth: pkg.breadth || 1,
+          height: pkg.height || 1,
           measureUnit: "cm",
-          products: b2bBox.packages.map((pkg) => ({
-            name: pkg.name || "Package",
-            category: "General",
-            sku: pkg.sku || "sku",
-            qty: Number(pkg.quantity) || 1,
-            unitPrice: Number(pkg.unitPrice) || 0,
-            unitTax: Number(pkg.tax) || 0,
-            weightUnit: "kg",
-            deadWeight: Number(pkg.unitWeight) || 1,
-            length: pkg.length || 1,
-            breadth: pkg.breadth || 1,
-            height: pkg.height || 1,
-            measureUnit: "cm",
-          })),
-          codInfo: {
-            isCod: paymentMethod === "Cash on Delivery",
-            collectableAmount:
-              paymentMethod === "Cash on Delivery"
-                ? Number(collectibleAmount) || 0
-                : 0,
-            invoiceValue: invoiceValue || 0,
-          },
-          podInfo: {
-            isPod: false,
-          },
-          insurance: insuranceOption === "withInsurance",
-        };
-      }
-    });
-  };
+        })),
+        codInfo: {
+          isCod: paymentMethod === "Cash on Delivery",
+          collectableAmount: paymentMethod === "Cash on Delivery" ? boxCollectibleAmount : 0,
+          invoiceValue: invoiceValue || 0,
+        },
+        podInfo: {
+          isPod: false,
+        },
+        insurance: insuranceOption === "withInsurance",
+      };
+    }
+  });
+};
 
   // Clear field error function
   const clearFieldError = (formType: "pickup" | "delivery", field: string) => {
@@ -1806,11 +2202,19 @@ const handleProceedToNextStep = async () => {
         setCollectibleAmount(totalCollectibleAmount.toString());
       } else {
         // For other order types, use calculateTotalInvoiceValue
-        const invoiceValue = calculateTotalInvoiceValue();
-        setCollectibleAmount(invoiceValue.toString());
+        // const invoiceValue = calculateTotalInvoiceValue();
+        // setCollectibleAmount(invoiceValue.toString());
+        setCollectibleAmount(totalCollectibleAmount.toString());
+
       }
     }
-  }, [paymentMethod, totalCollectibleAmount, boxesData, b2bBoxesData, order.orderType]);
+  }, [
+    paymentMethod,
+    totalCollectibleAmount,
+    boxesData,
+    b2bBoxesData,
+    order.orderType,
+  ]);
 
   return (
     <div className="p-6">
@@ -1897,7 +2301,6 @@ const handleProceedToNextStep = async () => {
                     validationErrors={boxValidationErrors}
                     clearFieldError={clearBoxFieldError}
                     paymentMethod={paymentMethod}
-
                   />
                 ) : (
                   <OrderFormB2B
@@ -1905,6 +2308,7 @@ const handleProceedToNextStep = async () => {
                     onBoxDataUpdate={handleB2BBoxDataUpdate}
                     validationErrors={boxValidationErrors}
                     clearFieldError={clearBoxFieldError}
+                    paymentMethod={paymentMethod} 
                   />
                 )}
               </Collapsible>
@@ -1947,12 +2351,12 @@ const handleProceedToNextStep = async () => {
         ) : (
           <div>
             <h2 className="text-2xl font-semibold mb-4">Shipping Options</h2>
-            <EWayBillCard 
-            totalInvoiceValue={calculateTotalInvoiceValue()}
-            tempOrderId={tempOrderId}
-            source={orderSource}
-            orderId={order.orderId}
-             />
+            <EWayBillCard
+              totalInvoiceValue={calculateTotalInvoiceValue()}
+              tempOrderId={tempOrderId}
+              source={orderSource}
+              orderId={order.orderId}
+            />
             <ShippingServiceSelector
               tempOrderId={tempOrderId}
               orderSource={orderSource}

@@ -1,7 +1,3 @@
-
-
-
-
 // import { useState, useEffect, useRef } from "react";
 // import FloatingLabelInput from "./FloatingLabelInput";
 // import { ChevronUp, ChevronDown, Trash, Bookmark, Package } from "./Icons";
@@ -12,7 +8,6 @@
 // import toast from "react-hot-toast";
 // import { v4 as uuidv4 } from "uuid";
 // import searchIcon from "../../assets/Search.svg";
-
 
 // // Add these constants at the top of your OrderFormB2B file, after imports
 // const STORAGE_KEYS = {
@@ -99,39 +94,13 @@
 
 // }
 
-// const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {},clearFieldError = () => {}  }) => {
+// const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {}, clearFieldError = () => {} }) => {
 //   const initialState = loadInitialState();
 
 //   // const [boxCount, setBoxCount] = useState<number>(1);
 //   const [boxCount, setBoxCount] = useState<number>(() => {
 //     return initialState.boxCount || 1;
 //   });
-//   // const [boxes, setBoxes] = useState<Box[]>([
-//   //   {
-//   //     id: 1,
-//   //     packages: [
-//   //       {
-//   //         id: 1,
-//   //         name: "",
-//   //         quantity: "",
-//   //         unitPrice: "",
-//   //         unitWeight: "",
-//   //         totalWeight: "",
-//   //         totalPrice: "",
-//   //         tax: "0",
-//   //         discount: "0",
-//   //         hsn: "",
-//   //         sku: "",
-//   //         length: "",
-//   //         breadth: "",
-//   //         height: "",
-//   //         isExpanded: true,
-//   //         isSaved: false,
-//   //       },
-//   //     ],
-//   //     searchQuery: "",
-//   //   },
-//   // ]);
 
 //   const [boxes, setBoxes] = useState<Box[]>(() => {
 //     if (initialState.boxes) return initialState.boxes;
@@ -166,9 +135,7 @@
 //     useState<boolean>(false);
 //   const [currentBoxId, setCurrentBoxId] = useState<number | null>(null);
 //   const [currentPackageId, setCurrentPackageId] = useState<number | null>(null);
-//   // const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
-//   //   []
-//   // );
+
 //   const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
 //     initialState.catalogProducts || []
 //   );
@@ -181,22 +148,14 @@
 //   }>({});
 //   const [loading, setLoading] = useState<boolean>(false);
 
-//   // State for package name inline search
-//   // const [packageNameSearch, setPackageNameSearch] = useState<{
-//   //   [packageId: string]: string;
-//   // }>({});
 //   const [packageNameSearch, setPackageNameSearch] = useState<{
 //     [packageId: string]: string;
 //   }>(initialState.packageNameSearch || {});
-//   // const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
-//   //   [packageId: string]: boolean;
-//   // }>({});
+
 //   const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
 //     [packageId: string]: boolean;
 //   }>(initialState.showPackageSearchResults || {});
-//   // const [filteredPackageResults, setFilteredPackageResults] = useState<{
-//   //   [packageId: string]: ProductCatalogItem[];
-//   // }>({});
+
 //   const [filteredPackageResults, setFilteredPackageResults] = useState<{
 //     [packageId: string]: ProductCatalogItem[];
 //   }>(initialState.filteredPackageResults || {});
@@ -207,18 +166,7 @@
 //   }>({});
 
 //   // Notify parent component when box data changes
-// //   useEffect(() => {
-// //     if (onBoxDataUpdate) {
-// //       // Only pass the required box data without the searchQuery field
-// //       const boxesForParent = boxes.map((box) => ({
-// //         id: box.id,
-// //         packages: box.packages,
-// //       }));
-// //       onBoxDataUpdate(boxesForParent as Box[]);
-// //     }
-// //   }, [boxes, onBoxDataUpdate]);
-// // Notify parent component when box data changes
-// useEffect(() => {
+//   useEffect(() => {
 //     if (onBoxDataUpdate) {
 //       // Pass the complete boxes data to the parent component
 //       onBoxDataUpdate(boxes);
@@ -242,8 +190,6 @@
 //       });
 //     }
 
-    
-
 //     document.addEventListener("mousedown", handleClickOutside);
 //     return () => {
 //       document.removeEventListener("mousedown", handleClickOutside);
@@ -251,44 +197,42 @@
 //   }, [showPackageSearchResults]);
 
 //   // Add these useEffect hooks after your existing state declarations
-// useEffect(() => {
-//   localStorage.setItem(STORAGE_KEYS.B2B_BOXES, JSON.stringify(boxes));
-// }, [boxes]);
+//   useEffect(() => {
+//     localStorage.setItem(STORAGE_KEYS.B2B_BOXES, JSON.stringify(boxes));
+//   }, [boxes]);
 
-// useEffect(() => {
-//   localStorage.setItem(STORAGE_KEYS.B2B_BOX_COUNT, boxCount.toString());
-// }, [boxCount]);
+//   useEffect(() => {
+//     localStorage.setItem(STORAGE_KEYS.B2B_BOX_COUNT, boxCount.toString());
+//   }, [boxCount]);
 
-// useEffect(() => {
-//   localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
-// }, [catalogProducts]);
+//   useEffect(() => {
+//     localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
+//   }, [catalogProducts]);
 
-// useEffect(() => {
-//   localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
-// }, [packageNameSearch]);
+//   useEffect(() => {
+//     localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
+//   }, [packageNameSearch]);
 
-// useEffect(() => {
-//   localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
-// }, [showPackageSearchResults]);
+//   useEffect(() => {
+//     localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
+//   }, [showPackageSearchResults]);
 
-// useEffect(() => {
-//   localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
-// }, [filteredPackageResults]);
+//   useEffect(() => {
+//     localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
+//   }, [filteredPackageResults]);
 
-// // Save any other relevant state that needs persistence
-// useEffect(() => {
-//   const savedStates = {
-//     selectedCatalogProducts,
-//     currentBoxId,
-//     currentPackageId,
-//     searchQuery,
-//     loading,
-//     isPackageCatalogModalOpen
-//   };
-//   localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
-// }, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
-
-
+//   // Save any other relevant state that needs persistence
+//   useEffect(() => {
+//     const savedStates = {
+//       selectedCatalogProducts,
+//       currentBoxId,
+//       currentPackageId,
+//       searchQuery,
+//       loading,
+//       isPackageCatalogModalOpen
+//     };
+//     localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
+//   }, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
 
 //   // Handle box count changes
 //   const decreaseBoxCount = (): void => {
@@ -497,91 +441,115 @@
 //   };
 
 //   // Handle package name search input
-//   const handlePackageNameSearch = (
-//     boxId: number,
-//     packageId: number,
-//     value: string
-//   ) => {
-//     // Update the package name in the state directly
-//     updatePackageField(boxId, packageId, "name", value);
+//   // const handlePackageNameSearch = (
+//   //   boxId: number,
+//   //   packageId: number,
+//   //   value: string
+//   // ) => {
+//   //   // Update the package name in the state directly
+//   //   updatePackageField(boxId, packageId, "name", value);
 
-//     // Also update our search tracking state
-//     const uniqueId = `${boxId}-${packageId}`;
-//     setPackageNameSearch((prev) => ({
+//   //   // Also update our search tracking state
+//   //   const uniqueId = `${boxId}-${packageId}`;
+//   //   setPackageNameSearch((prev) => ({
+//   //     ...prev,
+//   //     [uniqueId]: value,
+//   //   }));
+
+//   //   // Show search results dropdown
+//   //   setShowPackageSearchResults((prev) => ({
+//   //     ...prev,
+//   //     [uniqueId]: true,
+//   //   }));
+
+//   //   // Filter products based on search input
+//   //   if (value.trim() === "") {
+//   //     setFilteredPackageResults((prev) => ({
+//   //       ...prev,
+//   //       [uniqueId]: [],
+//   //     }));
+//   //   } else {
+//   //     // Get filtered products from the catalog
+//   //     const filtered = catalogProducts.filter(
+//   //       (product) =>
+//   //         product.name?.toLowerCase().includes(value.toLowerCase()) ||
+//   //         product.title?.toLowerCase().includes(value.toLowerCase())
+//   //     );
+
+//   //     setFilteredPackageResults((prev) => ({
+//   //       ...prev,
+//   //       [uniqueId]: filtered.slice(0, 5), // Limit to top 5 matches
+//   //     }));
+
+//   //     // If we don't have catalog products locally, fetch them
+//   //     if (catalogProducts.length === 0) {
+//   //       fetchCatalogProducts();
+//   //     }
+//   //   }
+//   // };
+//   // Handle package name search input
+// const handlePackageNameSearch = async (
+//   boxId: number,
+//   packageId: number,
+//   value: string
+// ) => {
+//   // Update the package name in the state directly
+//   updatePackageField(boxId, packageId, "name", value);
+
+//   // Also update our search tracking state
+//   const uniqueId = `${boxId}-${packageId}`;
+//   setPackageNameSearch((prev) => ({
+//     ...prev,
+//     [uniqueId]: value,
+//   }));
+
+//   // Show search results dropdown
+//   setShowPackageSearchResults((prev) => ({
+//     ...prev,
+//     [uniqueId]: true,
+//   }));
+
+//   // If empty search, clear results
+//   if (value.trim() === "") {
+//     setFilteredPackageResults((prev) => ({
 //       ...prev,
-//       [uniqueId]: value,
+//       [uniqueId]: [],
 //     }));
+//     return;
+//   }
 
-//     // Show search results dropdown
-//     setShowPackageSearchResults((prev) => ({
-//       ...prev,
-//       [uniqueId]: true,
-//     }));
+//   // Call API directly with search query
+//   try {
+//     const payload = {
+//       skip: 0,
+//       limit: 5, // Limit to top 5 matches
+//       pageNo: 1,
+//       sort: { _id: -1 },
+//       searchValue: value,
+//     };
 
-//     // Filter products based on search input
-//     if (value.trim() === "") {
+//     const response = await POST(GET_PRODUCTS, payload);
+
+//     if (response?.data?.success) {
+//       setFilteredPackageResults((prev) => ({
+//         ...prev,
+//         [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
+//       }));
+//     } else {
 //       setFilteredPackageResults((prev) => ({
 //         ...prev,
 //         [uniqueId]: [],
 //       }));
-//     } else {
-//       // Get filtered products from the catalog
-//       const filtered = catalogProducts.filter(
-//         (product) =>
-//           product.name?.toLowerCase().includes(value.toLowerCase()) ||
-//           product.title?.toLowerCase().includes(value.toLowerCase())
-//       );
-
-//       setFilteredPackageResults((prev) => ({
-//         ...prev,
-//         [uniqueId]: filtered.slice(0, 5), // Limit to top 5 matches
-//       }));
-
-//       // If we don't have catalog products locally, fetch them
-//       if (catalogProducts.length === 0) {
-//         fetchCatalogProducts();
-//       }
 //     }
-//   };
+//   } catch (error) {
+//     console.error("Error searching products:", error);
+//     setFilteredPackageResults((prev) => ({
+//       ...prev,
+//       [uniqueId]: [],
+//     }));
+//   }
+// };
 
-//   // Select a package from search results
-//   // const selectPackageFromSearch = (
-//   //   boxId: number,
-//   //   packageId: number,
-//   //   product: ProductCatalogItem
-//   // ) => {
-//   //   // Update the package with the selected product
-//   //   setBoxes((prevBoxes) =>
-//   //     prevBoxes.map((box) => {
-//   //       if (box.id === boxId) {
-//   //         return {
-//   //           ...box,
-//   //           packages: box.packages.map((pkg) => {
-//   //             if (pkg.id === packageId) {
-//   //               return {
-//   //                 ...pkg,
-//   //                 name: product.name || product.title || "",
-//   //                 quantity: product.qty || 1,
-//   //                 unitPrice: product.unitPrice || 0,
-//   //                 unitWeight: product.deadWeight || 0,
-//   //                 totalPrice: (product.qty || 1) * (product.unitPrice || 0),
-//   //                 totalWeight: (product.qty || 1) * (product.deadWeight || 0),
-//   //                 tax: product.unitTax?.toString() || "0",
-//   //                 hsn: product.hsnCode || "",
-//   //                 sku: product.sku || "",
-//   //                 length: product.length || "",
-//   //                 breadth: product.breadth || "",
-//   //                 height: product.height || "",
-//   //                 isSaved: true,
-//   //               };
-//   //             }
-//   //             return pkg;
-//   //           }),
-//   //         };
-//   //       }
-//   //       return box;
-//   //     })
-//   //   );
 //   const selectPackageFromSearch = (
 //     boxId: number,
 //     packageId: number,
@@ -619,7 +587,7 @@
 //         return box;
 //       })
 //     );
-  
+
 //     // Clear validation errors only for fields that have received values
 //     if (clearFieldError) {
 //       if (product.name || product.title) {
@@ -652,8 +620,6 @@
 //       [uniqueId]: false,
 //     }));
 //   };
-
-  
 
 //   // Fetch catalog products if not already loaded
 //   const fetchCatalogProducts = async () => {
@@ -736,81 +702,85 @@
 //     }
 //   };
 
-//   // Toggle product selection in catalog
-//   const toggleProductSelection = (productId: string) => {
-//     setSelectedCatalogProducts((prev) => ({
-//       ...prev,
-//       [productId]: !prev[productId],
-//     }));
+//   // Modified to directly add product and close modal
+//   const selectProduct = (product: ProductCatalogItem) => {
+//     if (currentBoxId && currentPackageId) {
+//       // Update the box with the selected product
+//       setBoxes((prevBoxes) => {
+//         return prevBoxes.map((box) => {
+//           if (box.id === currentBoxId) {
+//             return {
+//               ...box,
+//               packages: box.packages.map((pkg) => {
+//                 if (pkg.id === currentPackageId) {
+//                   return {
+//                     ...pkg,
+//                     name: product.name || product.title || "",
+//                     quantity: product.qty || 1,
+//                     unitPrice: product.unitPrice || 0,
+//                     unitWeight: product.deadWeight || 0,
+//                     totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+//                     totalWeight: (product.qty || 1) * (product.deadWeight || 0),
+//                     tax: product.unitTax?.toString() || "0",
+//                     hsn: product.hsnCode || "",
+//                     sku: product.sku || "",
+//                     length: product.length || "",
+//                     breadth: product.breadth || "",
+//                     height: product.height || "",
+//                     isSaved: true,
+//                   };
+//                 }
+//                 return pkg;
+//               }),
+//             };
+//           }
+//           return box;
+//         });
+//       });
+
+//       // Clear validation errors for fields that have received values
+//       if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
+//         if (product.name || product.title) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
+//         }
+//         if (product.qty) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-quantity`);
+//         }
+//         if (product.unitPrice) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-unitPrice`);
+//         }
+//         if (product.deadWeight) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-unitWeight`);
+//         }
+//         if (product.length) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-length`);
+//         }
+//         if (product.breadth) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-breadth`);
+//         }
+//         if (product.height) {
+//           clearFieldError(currentBoxId, `package-${currentPackageId}-height`);
+//         }
+//       }
+
+//       // Close the modal
+//       closePackageCatalogModal();
+//     }
 //   };
-
-//   // Handle "Proceed" click in catalog modal
-//   // const handleProceedClick = () => {
-//   //   // Get all selected products
-//   //   const selectedProducts = catalogProducts.filter(
-//   //     (product) => selectedCatalogProducts[product._id]
-//   //   );
-
-//   //   if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
-//   //     setBoxes((prevBoxes) => {
-//   //       return prevBoxes.map((box) => {
-//   //         if (box.id === currentBoxId) {
-//   //           // Instead of adding multiple products, replace the current package with the first selected product
-//   //           const selectedProduct = selectedProducts[0];
-
-//   //           return {
-//   //             ...box,
-//   //             packages: box.packages.map((pkg) => {
-//   //               if (pkg.id === currentPackageId) {
-//   //                 return {
-//   //                   ...pkg,
-//   //                   name: selectedProduct.name || selectedProduct.title || "",
-//   //                   quantity: selectedProduct.qty || 1,
-//   //                   unitPrice: selectedProduct.unitPrice || 0,
-//   //                   unitWeight: selectedProduct.deadWeight || 0,
-//   //                   totalPrice:
-//   //                     (selectedProduct.qty || 1) *
-//   //                     (selectedProduct.unitPrice || 0),
-//   //                   totalWeight:
-//   //                     (selectedProduct.qty || 1) *
-//   //                     (selectedProduct.deadWeight || 0),
-//   //                   tax: selectedProduct.unitTax?.toString() || "0",
-//   //                   hsn: selectedProduct.hsnCode || "",
-//   //                   sku: selectedProduct.sku || "",
-//   //                   length: selectedProduct.length || "",
-//   //                   breadth: selectedProduct.breadth || "",
-//   //                   height: selectedProduct.height || "",
-//   //                   isSaved: true,
-//   //                 };
-//   //               }
-//   //               return pkg;
-//   //             }),
-//   //           };
-//   //         }
-//   //         return box;
-//   //       });
-//   //     });
-//   //   }
-
-    
-
-//   //   // Close the modal
-//   //   closePackageCatalogModal();
-//   // };
 
 //   const handleProceedClick = () => {
 //     // Get all selected products
 //     const selectedProducts = catalogProducts.filter(
 //       (product) => selectedCatalogProducts[product._id]
 //     );
-  
+
 //     if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
 //       setBoxes((prevBoxes) => {
 //         return prevBoxes.map((box) => {
 //           if (box.id === currentBoxId) {
 //             // Instead of adding multiple products, replace the current package with the first selected product
 //             const selectedProduct = selectedProducts[0];
-  
+
 //             return {
 //               ...box,
 //               packages: box.packages.map((pkg) => {
@@ -843,11 +813,11 @@
 //           return box;
 //         });
 //       });
-  
+
 //       // Clear validation errors only for fields that have received values
 //       if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
 //         const selectedProduct = selectedProducts[0];
-        
+
 //         if (selectedProduct.name || selectedProduct.title) {
 //           clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
 //         }
@@ -871,7 +841,7 @@
 //         }
 //       }
 //     }
-  
+
 //     // Close the modal
 //     closePackageCatalogModal();
 //   };
@@ -959,19 +929,56 @@
 //     }
 //   };
 
-//   // Add this function to delete a specific box
+//   // Modified deleteBox function to clear fields instead of disabling when there's only one box
+//   // Also handles renumbering boxes after deletion
 //   const deleteBox = (boxId: any) => {
-//     // Don't allow deletion if there's only one box
 //     if (boxCount <= 1) {
-//       toast.error("At least one box is required");
-//       return;
+//       // Clear all fields in the only box instead of deleting it
+//       setBoxes((prevBoxes) =>
+//         prevBoxes.map((box) => {
+//           if (box.id === boxId) {
+//             return {
+//               ...box,
+//               packages: box.packages.map(pkg => ({
+//                 ...pkg,
+//                 name: "",
+//                 quantity: "",
+//                 unitPrice: "",
+//                 unitWeight: "",
+//                 totalWeight: "",
+//                 totalPrice: "",
+//                 tax: "0",
+//                 discount: "0",
+//                 hsn: "",
+//                 sku: "",
+//                 length: "",
+//                 breadth: "",
+//                 height: "",
+//                 isSaved: false
+//               }))
+//             };
+//           }
+//           return box;
+//         })
+//       );
+
+//       // Inform the user that fields were cleared
+//       toast.success("Box fields have been cleared");
+//     } else {
+//       // For multiple boxes, delete and then renumber the remaining boxes sequentially
+//       setBoxes((prevBoxes) => {
+//         // First filter out the box to be deleted
+//         const remainingBoxes = prevBoxes.filter((box) => box.id !== boxId);
+
+//         // Then renumber the remaining boxes sequentially (1, 2, 3, ...)
+//         return remainingBoxes.map((box, index) => ({
+//           ...box,
+//           id: index + 1,
+//         }));
+//       });
+
+//       setBoxCount((prevCount) => prevCount - 1);
 //     }
-
-//     // Remove the box from the boxes array
-//     setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
-
-//     // Decrease the box count
-//     setBoxCount((prevCount) => prevCount - 1);
 //   };
 
 //   return (
@@ -1003,7 +1010,6 @@
 //         {boxes.map((box) => (
 //           <div key={box.id}>
 //             <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-//               {/* Packages - filtered by search query */}
 //               {/* Packages - filtered by search query */}
 //               {getFilteredPackages(box).map((pkg) => (
 //                 <div
@@ -1179,30 +1185,16 @@
 //                               className="w-5 h-5"
 //                             />
 //                           </button>
-//                           {/* <button
-//               onClick={() => removePackage(box.id, pkg.id)}
-//               className={`p-2 ${pkg.id === 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-500 cursor-pointer"}`}
-//               title={pkg.id === 1 ? "First package cannot be deleted" : "Delete package"}
-//               disabled={pkg.id === 1}
-//             >
-//               <Trash className="w-5 h-5" />
-//             </button> */}
+
+//                           {/* Updated delete button - always enabled */}
 //                           <button
 //                             onClick={() => deleteBox(box.id)}
-//                             className={`p-2 ${
-//                               boxCount <= 1
-//                                 ? "text-gray-300 cursor-not-allowed"
-//                                 : "text-gray-500 cursor-pointer"
-//                             }`}
-//                             title={
-//                               boxCount <= 1
-//                                 ? "Cannot delete the only box"
-//                                 : "Delete box"
-//                             }
-//                             disabled={boxCount <= 1}
+//                             className="p-2 text-gray-500 cursor-pointer"
+//                             title={boxCount <= 1 ? "Clear box fields" : "Delete box"}
 //                           >
 //                             <Trash className="w-5 h-5" />
 //                           </button>
+
 //                           <OneButton
 //                             text="Package Catalog"
 //                             onClick={() =>
@@ -1215,85 +1207,6 @@
 //                           />
 //                         </div>
 //                       </div>
-
-//                       {/* Second row with remaining inputs */}
-//                       {/* <div className="grid grid-cols-12 gap-4 mb-4">
-//           <div className="col-span-2">
-//             <FloatingLabelInput
-//               placeholder="Tax"
-//               value={pkg.tax.toString()}
-//               type="number"
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "tax", value)}
-//             />
-//           </div>
-//           <div className="col-span-2">
-//             <FloatingLabelInput
-//               placeholder="Disc % (₹)"
-//               value={pkg.discount.toString()}
-//               type="number"
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "discount", value)}
-//             />
-//           </div>
-//           <div className="col-span-2">
-//             <FloatingLabelInput
-//               placeholder="HSN"
-//               value={pkg.hsn}
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "hsn", value)}
-//             />
-//           </div>
-//           <div className="col-span-2">
-//             <FloatingLabelInput
-//               placeholder="SKU"
-//               value={pkg.sku}
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "sku", value)}
-//             />
-//           </div>
-//           <div className="col-span-2">
-//             <FloatingLabelInput
-//               placeholder="Total Wt (kg)"
-//               value={pkg.totalWeight.toString()}
-//               type="number"
-//               counter="kg"
-//             />
-//           </div>
-//           <div className="col-span-2">
-//             <FloatingLabelInput
-//               placeholder="Total Price"
-//               value={pkg.totalPrice.toString()}
-//               type="number"
-//               counter="₹"
-//             />
-//           </div>
-//         </div>
-
-        
-//         <div className="grid grid-cols-12 gap-4">
-//           <div className="col-span-1">
-//             <FloatingLabelInput
-//               placeholder="L"
-//               value={pkg.length.toString()}
-//               type="number"
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "length", value)}
-//             />
-//           </div>
-//           <div className="col-span-1">
-//             <FloatingLabelInput
-//               placeholder="B"
-//               value={pkg.breadth.toString()}
-//               type="number"
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "breadth", value)}
-//             />
-//           </div>
-//           <div className="col-span-1">
-//             <FloatingLabelInput
-//               placeholder="H"
-//               value={pkg.height.toString()}
-//               type="number"
-//               onChangeCallback={(value) => updatePackageField(box.id, pkg.id, "height", value)}
-//             />
-//           </div>
-          
-//         </div> */}
 
 //                       {/* All inputs in a single flex row */}
 //                       <div className="flex flex-wrap gap-4 mb-4 pl-72">
@@ -1346,6 +1259,7 @@
 //                             value={pkg.totalWeight.toString()}
 //                             type="number"
 //                             counter="kg"
+//                             readOnly={true}
 //                           />
 //                         </div>
 //                         <div className="w-[12%]">
@@ -1354,6 +1268,8 @@
 //                             value={pkg.totalPrice.toString()}
 //                             type="number"
 //                             counter="₹"
+//                             readOnly={true}
+
 //                           />
 //                         </div>
 //                         <div className="w-[5%]">
@@ -1477,35 +1393,17 @@
 //                       </p>
 //                     </div>
 //                     <button
-//                       onClick={() => toggleProductSelection(product._id)}
-//                       className={`px-4 py-2 rounded-full ${
-//                         selectedCatalogProducts[product._id]
-//                           ? "bg-red-500 text-white"
-//                           : "bg-black text-white"
-//                       }`}
+//                       onClick={() => selectProduct(product)}
+//                       className="px-4 py-2 rounded-full bg-black text-white"
 //                     >
-//                       {selectedCatalogProducts[product._id] ? (
-//                         <span className="flex items-center">
-//                           <Trash className="w-4 h-4 mr-1" /> Delete
-//                         </span>
-//                       ) : (
-//                         <span className="flex items-center">
-//                           <span className="mr-1">+</span> Add
-//                         </span>
-//                       )}
+//                       <span className="flex items-center">
+//                         <span className="mr-1">+</span> Add
+//                       </span>
 //                     </button>
 //                   </div>
 //                 ))}
 //               </div>
 //             )}
-//           </div>
-//           <div className="p-4 border-t border-gray-200 flex justify-end">
-//             <button
-//               onClick={handleProceedClick}
-//               className="px-6 py-3 bg-black text-white rounded-full"
-//             >
-//               Proceed
-//             </button>
 //           </div>
 //         </div>
 //       </CenterModal>
@@ -1514,7 +1412,6 @@
 // };
 
 // export default OrderFormB2B;
-
 
 import { useState, useEffect, useRef } from "react";
 import FloatingLabelInput from "./FloatingLabelInput";
@@ -1527,36 +1424,51 @@ import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 import searchIcon from "../../assets/Search.svg";
 
-
 // Add these constants at the top of your OrderFormB2B file, after imports
 const STORAGE_KEYS = {
-  B2B_BOXES: 'order-form-b2b-boxes',
-  B2B_BOX_COUNT: 'order-form-b2b-box-count',
-  B2B_CATALOG_PRODUCTS: 'order-form-b2b-catalog-products',
-  B2B_PACKAGE_NAME_SEARCH: 'order-form-b2b-package-name-search',
-  B2B_PACKAGE_SEARCH_RESULTS: 'order-form-b2b-package-search-results',
-  B2B_FILTERED_PACKAGE_RESULTS: 'order-form-b2b-filtered-package-results',
-  B2B_SAVED_STATES: 'order-form-b2b-saved-states',
+  B2B_BOXES: "order-form-b2b-boxes",
+  B2B_BOX_COUNT: "order-form-b2b-box-count",
+  B2B_CATALOG_PRODUCTS: "order-form-b2b-catalog-products",
+  B2B_PACKAGE_NAME_SEARCH: "order-form-b2b-package-name-search",
+  B2B_PACKAGE_SEARCH_RESULTS: "order-form-b2b-package-search-results",
+  B2B_FILTERED_PACKAGE_RESULTS: "order-form-b2b-filtered-package-results",
+  B2B_SAVED_STATES: "order-form-b2b-saved-states",
 };
 
 // Add this function before the component definition
 const loadInitialState = () => {
   const savedBoxes = localStorage.getItem(STORAGE_KEYS.B2B_BOXES);
   const savedBoxCount = localStorage.getItem(STORAGE_KEYS.B2B_BOX_COUNT);
-  const savedCatalogProducts = localStorage.getItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS);
-  const savedPackageNameSearch = localStorage.getItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH);
-  const savedShowPackageSearchResults = localStorage.getItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS);
-  const savedFilteredPackageResults = localStorage.getItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS);
+  const savedCatalogProducts = localStorage.getItem(
+    STORAGE_KEYS.B2B_CATALOG_PRODUCTS
+  );
+  const savedPackageNameSearch = localStorage.getItem(
+    STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH
+  );
+  const savedShowPackageSearchResults = localStorage.getItem(
+    STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS
+  );
+  const savedFilteredPackageResults = localStorage.getItem(
+    STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS
+  );
   const savedStates = localStorage.getItem(STORAGE_KEYS.B2B_SAVED_STATES);
 
   return {
     boxes: savedBoxes ? JSON.parse(savedBoxes) : null,
     boxCount: savedBoxCount ? parseInt(savedBoxCount) : 1,
-    catalogProducts: savedCatalogProducts ? JSON.parse(savedCatalogProducts) : [],
-    packageNameSearch: savedPackageNameSearch ? JSON.parse(savedPackageNameSearch) : {},
-    showPackageSearchResults: savedShowPackageSearchResults ? JSON.parse(savedShowPackageSearchResults) : {},
-    filteredPackageResults: savedFilteredPackageResults ? JSON.parse(savedFilteredPackageResults) : {},
-    savedStates: savedStates ? JSON.parse(savedStates) : {}
+    catalogProducts: savedCatalogProducts
+      ? JSON.parse(savedCatalogProducts)
+      : [],
+    packageNameSearch: savedPackageNameSearch
+      ? JSON.parse(savedPackageNameSearch)
+      : {},
+    showPackageSearchResults: savedShowPackageSearchResults
+      ? JSON.parse(savedShowPackageSearchResults)
+      : {},
+    filteredPackageResults: savedFilteredPackageResults
+      ? JSON.parse(savedFilteredPackageResults)
+      : {},
+    savedStates: savedStates ? JSON.parse(savedStates) : {},
   };
 };
 
@@ -1569,6 +1481,7 @@ interface BoxPackage {
   unitWeight: string | number;
   totalWeight: string | number;
   totalPrice: string | number;
+  collectibleAmount: string | number; // Added this new field
   tax: string | number;
   discount: string | number;
   hsn: string;
@@ -1610,43 +1523,51 @@ interface OrderFormB2BProps {
     };
   };
   clearFieldError?: (boxId: number, fieldId: string) => void;
-
+  paymentMethod?: string;
 }
 
-const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validationErrors = {}, clearFieldError = () => {} }) => {
+const OrderFormB2B: React.FC<OrderFormB2BProps> = ({
+  onBoxDataUpdate,
+  validationErrors = {},
+  clearFieldError = () => {},
+  paymentMethod = "",
+}) => {
   const initialState = loadInitialState();
 
   // const [boxCount, setBoxCount] = useState<number>(1);
   const [boxCount, setBoxCount] = useState<number>(() => {
     return initialState.boxCount || 1;
   });
-  
+
   const [boxes, setBoxes] = useState<Box[]>(() => {
     if (initialState.boxes) return initialState.boxes;
-    return [{
-      id: 1,
-      packages: [
-        {
-          id: 1,
-          name: "",
-          quantity: "",
-          unitPrice: "",
-          unitWeight: "",
-          totalWeight: "",
-          totalPrice: "",
-          tax: "0",
-          discount: "0",
-          hsn: "",
-          sku: "",
-          length: "",
-          breadth: "",
-          height: "",
-          isExpanded: true,
-          isSaved: false,
-        },
-      ],
-      searchQuery: "",
-    }];
+    return [
+      {
+        id: 1,
+        packages: [
+          {
+            id: 1,
+            name: "",
+            quantity: "",
+            unitPrice: "",
+            unitWeight: "",
+            totalWeight: "",
+            totalPrice: "",
+            collectibleAmount: "",
+            tax: "0",
+            discount: "0",
+            hsn: "",
+            sku: "",
+            length: "",
+            breadth: "",
+            height: "",
+            isExpanded: true,
+            isSaved: false,
+          },
+        ],
+        searchQuery: "",
+      },
+    ];
   });
 
   // State for package catalog modal
@@ -1654,7 +1575,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
     useState<boolean>(false);
   const [currentBoxId, setCurrentBoxId] = useState<number | null>(null);
   const [currentPackageId, setCurrentPackageId] = useState<number | null>(null);
-  
+
   const [catalogProducts, setCatalogProducts] = useState<ProductCatalogItem[]>(
     initialState.catalogProducts || []
   );
@@ -1670,11 +1591,11 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   const [packageNameSearch, setPackageNameSearch] = useState<{
     [packageId: string]: string;
   }>(initialState.packageNameSearch || {});
-  
+
   const [showPackageSearchResults, setShowPackageSearchResults] = useState<{
     [packageId: string]: boolean;
   }>(initialState.showPackageSearchResults || {});
-  
+
   const [filteredPackageResults, setFilteredPackageResults] = useState<{
     [packageId: string]: ProductCatalogItem[];
   }>(initialState.filteredPackageResults || {});
@@ -1725,19 +1646,31 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   }, [boxCount]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.B2B_CATALOG_PRODUCTS, JSON.stringify(catalogProducts));
+    localStorage.setItem(
+      STORAGE_KEYS.B2B_CATALOG_PRODUCTS,
+      JSON.stringify(catalogProducts)
+    );
   }, [catalogProducts]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH, JSON.stringify(packageNameSearch));
+    localStorage.setItem(
+      STORAGE_KEYS.B2B_PACKAGE_NAME_SEARCH,
+      JSON.stringify(packageNameSearch)
+    );
   }, [packageNameSearch]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS, JSON.stringify(showPackageSearchResults));
+    localStorage.setItem(
+      STORAGE_KEYS.B2B_PACKAGE_SEARCH_RESULTS,
+      JSON.stringify(showPackageSearchResults)
+    );
   }, [showPackageSearchResults]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS, JSON.stringify(filteredPackageResults));
+    localStorage.setItem(
+      STORAGE_KEYS.B2B_FILTERED_PACKAGE_RESULTS,
+      JSON.stringify(filteredPackageResults)
+    );
   }, [filteredPackageResults]);
 
   // Save any other relevant state that needs persistence
@@ -1748,12 +1681,20 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
       currentPackageId,
       searchQuery,
       loading,
-      isPackageCatalogModalOpen
+      isPackageCatalogModalOpen,
     };
-    localStorage.setItem(STORAGE_KEYS.B2B_SAVED_STATES, JSON.stringify(savedStates));
-  }, [selectedCatalogProducts, currentBoxId, currentPackageId, searchQuery, loading, isPackageCatalogModalOpen]);
-
-
+    localStorage.setItem(
+      STORAGE_KEYS.B2B_SAVED_STATES,
+      JSON.stringify(savedStates)
+    );
+  }, [
+    selectedCatalogProducts,
+    currentBoxId,
+    currentPackageId,
+    searchQuery,
+    loading,
+    isPackageCatalogModalOpen,
+  ]);
 
   // Handle box count changes
   const decreaseBoxCount = (): void => {
@@ -1782,6 +1723,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
             unitWeight: "",
             totalWeight: "",
             totalPrice: "",
+            collectibleAmount: "",
             tax: "0",
             discount: "0",
             hsn: "",
@@ -1839,6 +1781,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
                 unitWeight: "",
                 totalWeight: "",
                 totalPrice: "",
+                collectibleAmount: "",
                 tax: "0",
                 discount: "0",
                 hsn: "",
@@ -1916,6 +1859,9 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
 
                   updatedPackage.totalPrice = qty * unitPrice;
                   updatedPackage.totalWeight = qty * unitWeight;
+
+                  // Set collectibleAmount equal to totalPrice whenever totalPrice changes
+                  updatedPackage.collectibleAmount = updatedPackage.totalPrice;
                 }
 
                 // If we're manually editing the package, remove saved status
@@ -2009,67 +1955,67 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({ onBoxDataUpdate, validation
   //   }
   // };
   // Handle package name search input
-const handlePackageNameSearch = async (
-  boxId: number,
-  packageId: number,
-  value: string
-) => {
-  // Update the package name in the state directly
-  updatePackageField(boxId, packageId, "name", value);
+  const handlePackageNameSearch = async (
+    boxId: number,
+    packageId: number,
+    value: string
+  ) => {
+    // Update the package name in the state directly
+    updatePackageField(boxId, packageId, "name", value);
 
-  // Also update our search tracking state
-  const uniqueId = `${boxId}-${packageId}`;
-  setPackageNameSearch((prev) => ({
-    ...prev,
-    [uniqueId]: value,
-  }));
-
-  // Show search results dropdown
-  setShowPackageSearchResults((prev) => ({
-    ...prev,
-    [uniqueId]: true,
-  }));
-
-  // If empty search, clear results
-  if (value.trim() === "") {
-    setFilteredPackageResults((prev) => ({
+    // Also update our search tracking state
+    const uniqueId = `${boxId}-${packageId}`;
+    setPackageNameSearch((prev) => ({
       ...prev,
-      [uniqueId]: [],
+      [uniqueId]: value,
     }));
-    return;
-  }
-  
-  // Call API directly with search query
-  try {
-    const payload = {
-      skip: 0,
-      limit: 5, // Limit to top 5 matches
-      pageNo: 1,
-      sort: { _id: -1 },
-      searchValue: value,
-    };
 
-    const response = await POST(GET_PRODUCTS, payload);
+    // Show search results dropdown
+    setShowPackageSearchResults((prev) => ({
+      ...prev,
+      [uniqueId]: true,
+    }));
 
-    if (response?.data?.success) {
+    // If empty search, clear results
+    if (value.trim() === "") {
       setFilteredPackageResults((prev) => ({
         ...prev,
-        [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
+        [uniqueId]: [],
       }));
-    } else {
+      return;
+    }
+
+    // Call API directly with search query
+    try {
+      const payload = {
+        skip: 0,
+        limit: 5, // Limit to top 5 matches
+        pageNo: 1,
+        sort: { _id: -1 },
+        searchValue: value,
+      };
+
+      const response = await POST(GET_PRODUCTS, payload);
+
+      if (response?.data?.success) {
+        setFilteredPackageResults((prev) => ({
+          ...prev,
+          [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
+        }));
+      } else {
+        setFilteredPackageResults((prev) => ({
+          ...prev,
+          [uniqueId]: [],
+        }));
+      }
+    } catch (error) {
+      console.error("Error searching products:", error);
       setFilteredPackageResults((prev) => ({
         ...prev,
         [uniqueId]: [],
       }));
     }
-  } catch (error) {
-    console.error("Error searching products:", error);
-    setFilteredPackageResults((prev) => ({
-      ...prev,
-      [uniqueId]: [],
-    }));
-  }
-};
+  };
 
   const selectPackageFromSearch = (
     boxId: number,
@@ -2091,6 +2037,8 @@ const handlePackageNameSearch = async (
                   unitPrice: product.unitPrice || 0,
                   unitWeight: product.deadWeight || 0,
                   totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+                  collectibleAmount:
+                    (product.qty || 1) * (product.unitPrice || 0),
                   totalWeight: (product.qty || 1) * (product.deadWeight || 0),
                   tax: product.unitTax?.toString() || "0",
                   hsn: product.hsnCode || "",
@@ -2108,7 +2056,7 @@ const handlePackageNameSearch = async (
         return box;
       })
     );
-  
+
     // Clear validation errors only for fields that have received values
     if (clearFieldError) {
       if (product.name || product.title) {
@@ -2141,8 +2089,6 @@ const handlePackageNameSearch = async (
       [uniqueId]: false,
     }));
   };
-
-  
 
   // Fetch catalog products if not already loaded
   const fetchCatalogProducts = async () => {
@@ -2243,6 +2189,8 @@ const handlePackageNameSearch = async (
                     unitPrice: product.unitPrice || 0,
                     unitWeight: product.deadWeight || 0,
                     totalPrice: (product.qty || 1) * (product.unitPrice || 0),
+                    collectibleAmount:
+                      (product.qty || 1) * (product.unitPrice || 0),
                     totalWeight: (product.qty || 1) * (product.deadWeight || 0),
                     tax: product.unitTax?.toString() || "0",
                     hsn: product.hsnCode || "",
@@ -2260,9 +2208,13 @@ const handlePackageNameSearch = async (
           return box;
         });
       });
-      
+
       // Clear validation errors for fields that have received values
-      if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
+      if (
+        clearFieldError &&
+        currentBoxId !== null &&
+        currentPackageId !== null
+      ) {
         if (product.name || product.title) {
           clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
         }
@@ -2270,10 +2222,16 @@ const handlePackageNameSearch = async (
           clearFieldError(currentBoxId, `package-${currentPackageId}-quantity`);
         }
         if (product.unitPrice) {
-          clearFieldError(currentBoxId, `package-${currentPackageId}-unitPrice`);
+          clearFieldError(
+            currentBoxId,
+            `package-${currentPackageId}-unitPrice`
+          );
         }
         if (product.deadWeight) {
-          clearFieldError(currentBoxId, `package-${currentPackageId}-unitWeight`);
+          clearFieldError(
+            currentBoxId,
+            `package-${currentPackageId}-unitWeight`
+          );
         }
         if (product.length) {
           clearFieldError(currentBoxId, `package-${currentPackageId}-length`);
@@ -2285,7 +2243,7 @@ const handlePackageNameSearch = async (
           clearFieldError(currentBoxId, `package-${currentPackageId}-height`);
         }
       }
-      
+
       // Close the modal
       closePackageCatalogModal();
     }
@@ -2296,14 +2254,14 @@ const handlePackageNameSearch = async (
     const selectedProducts = catalogProducts.filter(
       (product) => selectedCatalogProducts[product._id]
     );
-  
+
     if (selectedProducts.length > 0 && currentBoxId && currentPackageId) {
       setBoxes((prevBoxes) => {
         return prevBoxes.map((box) => {
           if (box.id === currentBoxId) {
             // Instead of adding multiple products, replace the current package with the first selected product
             const selectedProduct = selectedProducts[0];
-  
+
             return {
               ...box,
               packages: box.packages.map((pkg) => {
@@ -2336,11 +2294,15 @@ const handlePackageNameSearch = async (
           return box;
         });
       });
-  
+
       // Clear validation errors only for fields that have received values
-      if (clearFieldError && currentBoxId !== null && currentPackageId !== null) {
+      if (
+        clearFieldError &&
+        currentBoxId !== null &&
+        currentPackageId !== null
+      ) {
         const selectedProduct = selectedProducts[0];
-        
+
         if (selectedProduct.name || selectedProduct.title) {
           clearFieldError(currentBoxId, `package-${currentPackageId}-name`);
         }
@@ -2348,10 +2310,16 @@ const handlePackageNameSearch = async (
           clearFieldError(currentBoxId, `package-${currentPackageId}-quantity`);
         }
         if (selectedProduct.unitPrice) {
-          clearFieldError(currentBoxId, `package-${currentPackageId}-unitPrice`);
+          clearFieldError(
+            currentBoxId,
+            `package-${currentPackageId}-unitPrice`
+          );
         }
         if (selectedProduct.deadWeight) {
-          clearFieldError(currentBoxId, `package-${currentPackageId}-unitWeight`);
+          clearFieldError(
+            currentBoxId,
+            `package-${currentPackageId}-unitWeight`
+          );
         }
         if (selectedProduct.length) {
           clearFieldError(currentBoxId, `package-${currentPackageId}-length`);
@@ -2364,7 +2332,7 @@ const handlePackageNameSearch = async (
         }
       }
     }
-  
+
     // Close the modal
     closePackageCatalogModal();
   };
@@ -2457,12 +2425,12 @@ const handlePackageNameSearch = async (
   const deleteBox = (boxId: any) => {
     if (boxCount <= 1) {
       // Clear all fields in the only box instead of deleting it
-      setBoxes((prevBoxes) => 
+      setBoxes((prevBoxes) =>
         prevBoxes.map((box) => {
           if (box.id === boxId) {
             return {
               ...box,
-              packages: box.packages.map(pkg => ({
+              packages: box.packages.map((pkg) => ({
                 ...pkg,
                 name: "",
                 quantity: "",
@@ -2470,6 +2438,7 @@ const handlePackageNameSearch = async (
                 unitWeight: "",
                 totalWeight: "",
                 totalPrice: "",
+                collectibleAmount: "",
                 tax: "0",
                 discount: "0",
                 hsn: "",
@@ -2477,14 +2446,14 @@ const handlePackageNameSearch = async (
                 length: "",
                 breadth: "",
                 height: "",
-                isSaved: false
-              }))
+                isSaved: false,
+              })),
             };
           }
           return box;
         })
       );
-      
+
       // Inform the user that fields were cleared
       toast.success("Box fields have been cleared");
     } else {
@@ -2492,14 +2461,14 @@ const handlePackageNameSearch = async (
       setBoxes((prevBoxes) => {
         // First filter out the box to be deleted
         const remainingBoxes = prevBoxes.filter((box) => box.id !== boxId);
-        
+
         // Then renumber the remaining boxes sequentially (1, 2, 3, ...)
         return remainingBoxes.map((box, index) => ({
           ...box,
           id: index + 1,
         }));
       });
-      
+
       setBoxCount((prevCount) => prevCount - 1);
     }
   };
@@ -2573,14 +2542,25 @@ const handlePackageNameSearch = async (
                             <FloatingLabelInput
                               placeholder="Package Name"
                               value={pkg.name.toString()}
-                              onChangeCallback={(value) =>{
-                                if (validationErrors[box.id]?.[`package-${pkg.id}-name`]) {
-                                  clearFieldError(box.id, `package-${pkg.id}-name`);
+                              onChangeCallback={(value) => {
+                                if (
+                                  validationErrors[box.id]?.[
+                                    `package-${pkg.id}-name`
+                                  ]
+                                ) {
+                                  clearFieldError(
+                                    box.id,
+                                    `package-${pkg.id}-name`
+                                  );
                                 }
-                                handlePackageNameSearch(box.id, pkg.id, value)
+                                handlePackageNameSearch(box.id, pkg.id, value);
                               }}
                               icon={<img src={searchIcon} alt="Search" />}
-                              error={validationErrors[box.id]?.[`package-${pkg.id}-name`] || false}
+                              error={
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-name`
+                                ] || false
+                              }
                               errorMessage="Required"
                             />
 
@@ -2628,18 +2608,29 @@ const handlePackageNameSearch = async (
                               placeholder="Qty"
                               value={pkg.quantity.toString()}
                               type="number"
-                              onChangeCallback={(value) =>{
-                                if (validationErrors[box.id]?.[`package-${pkg.id}-quantity`]) {
-                                  clearFieldError(box.id, `package-${pkg.id}-quantity`);
+                              onChangeCallback={(value) => {
+                                if (
+                                  validationErrors[box.id]?.[
+                                    `package-${pkg.id}-quantity`
+                                  ]
+                                ) {
+                                  clearFieldError(
+                                    box.id,
+                                    `package-${pkg.id}-quantity`
+                                  );
                                 }
                                 updatePackageField(
                                   box.id,
                                   pkg.id,
                                   "quantity",
                                   value
-                                )
+                                );
                               }}
-                              error={validationErrors[box.id]?.[`package-${pkg.id}-quantity`] || false}
+                              error={
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-quantity`
+                                ] || false
+                              }
                               errorMessage="Required"
                             />
                           </div>
@@ -2650,18 +2641,29 @@ const handlePackageNameSearch = async (
                               placeholder="Unit Price"
                               value={pkg.unitPrice.toString()}
                               type="number"
-                              onChangeCallback={(value) =>{
-                                if (validationErrors[box.id]?.[`package-${pkg.id}-unitPrice`]) {
-                                  clearFieldError(box.id, `package-${pkg.id}-unitPrice`);
+                              onChangeCallback={(value) => {
+                                if (
+                                  validationErrors[box.id]?.[
+                                    `package-${pkg.id}-unitPrice`
+                                  ]
+                                ) {
+                                  clearFieldError(
+                                    box.id,
+                                    `package-${pkg.id}-unitPrice`
+                                  );
                                 }
                                 updatePackageField(
                                   box.id,
                                   pkg.id,
                                   "unitPrice",
                                   value
-                                )
+                                );
                               }}
-                              error={validationErrors[box.id]?.[`package-${pkg.id}-unitPrice`] || false}
+                              error={
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-unitPrice`
+                                ] || false
+                              }
                               errorMessage="Required"
                             />
                           </div>
@@ -2672,18 +2674,29 @@ const handlePackageNameSearch = async (
                               placeholder="Unit Wt (kg)"
                               value={pkg.unitWeight.toString()}
                               type="number"
-                              onChangeCallback={(value) =>{
-                                if (validationErrors[box.id]?.[`package-${pkg.id}-unitWeight`]) {
-                                  clearFieldError(box.id, `package-${pkg.id}-unitWeight`);
+                              onChangeCallback={(value) => {
+                                if (
+                                  validationErrors[box.id]?.[
+                                    `package-${pkg.id}-unitWeight`
+                                  ]
+                                ) {
+                                  clearFieldError(
+                                    box.id,
+                                    `package-${pkg.id}-unitWeight`
+                                  );
                                 }
                                 updatePackageField(
                                   box.id,
                                   pkg.id,
                                   "unitWeight",
                                   value
-                                )
+                                );
                               }}
-                              error={validationErrors[box.id]?.[`package-${pkg.id}-unitWeight`] || false}
+                              error={
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-unitWeight`
+                                ] || false
+                              }
                               errorMessage="Required"
                             />
                           </div>
@@ -2708,16 +2721,18 @@ const handlePackageNameSearch = async (
                               className="w-5 h-5"
                             />
                           </button>
-                          
+
                           {/* Updated delete button - always enabled */}
                           <button
                             onClick={() => deleteBox(box.id)}
                             className="p-2 text-gray-500 cursor-pointer"
-                            title={boxCount <= 1 ? "Clear box fields" : "Delete box"}
+                            title={
+                              boxCount <= 1 ? "Clear box fields" : "Delete box"
+                            }
                           >
                             <Trash className="w-5 h-5" />
                           </button>
-                          
+
                           <OneButton
                             text="Package Catalog"
                             onClick={() =>
@@ -2792,26 +2807,52 @@ const handlePackageNameSearch = async (
                             type="number"
                             counter="₹"
                             readOnly={true}
-
                           />
                         </div>
+                       {paymentMethod === "Cash on Delivery" &&( <div className="w-[12%]">
+                          <FloatingLabelInput
+                            placeholder="Collectible Amount"
+                            value={pkg.collectibleAmount.toString()}
+                            type="number"
+                            counter="₹"
+                            onChangeCallback={(value) =>
+                              updatePackageField(
+                                box.id,
+                                pkg.id,
+                                "collectibleAmount",
+                                value
+                              )
+                            }
+                          />
+                        </div>)}
                         <div className="w-[5%]">
                           <FloatingLabelInput
                             placeholder="L"
                             value={pkg.length.toString()}
                             type="number"
-                            onChangeCallback={(value) =>{
-                              if (validationErrors[box.id]?.[`package-${pkg.id}-length`]) {
-                                clearFieldError(box.id, `package-${pkg.id}-length`);
+                            onChangeCallback={(value) => {
+                              if (
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-length`
+                                ]
+                              ) {
+                                clearFieldError(
+                                  box.id,
+                                  `package-${pkg.id}-length`
+                                );
                               }
                               updatePackageField(
                                 box.id,
                                 pkg.id,
                                 "length",
                                 value
-                              )
+                              );
                             }}
-                            error={validationErrors[box.id]?.[`package-${pkg.id}-length`] || false}
+                            error={
+                              validationErrors[box.id]?.[
+                                `package-${pkg.id}-length`
+                              ] || false
+                            }
                             errorMessage="Required"
                           />
                         </div>
@@ -2820,18 +2861,29 @@ const handlePackageNameSearch = async (
                             placeholder="B"
                             value={pkg.breadth.toString()}
                             type="number"
-                            onChangeCallback={(value) =>{
-                              if (validationErrors[box.id]?.[`package-${pkg.id}-breadth`]) {
-                                clearFieldError(box.id, `package-${pkg.id}-breadth`);
+                            onChangeCallback={(value) => {
+                              if (
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-breadth`
+                                ]
+                              ) {
+                                clearFieldError(
+                                  box.id,
+                                  `package-${pkg.id}-breadth`
+                                );
                               }
                               updatePackageField(
                                 box.id,
                                 pkg.id,
                                 "breadth",
                                 value
-                              )
+                              );
                             }}
-                            error={validationErrors[box.id]?.[`package-${pkg.id}-breadth`] || false}
+                            error={
+                              validationErrors[box.id]?.[
+                                `package-${pkg.id}-breadth`
+                              ] || false
+                            }
                             errorMessage="Required"
                           />
                         </div>
@@ -2840,18 +2892,29 @@ const handlePackageNameSearch = async (
                             placeholder="H"
                             value={pkg.height.toString()}
                             type="number"
-                            onChangeCallback={(value) =>{
-                              if (validationErrors[box.id]?.[`package-${pkg.id}-height`]) {
-                                clearFieldError(box.id, `package-${pkg.id}-height`);
+                            onChangeCallback={(value) => {
+                              if (
+                                validationErrors[box.id]?.[
+                                  `package-${pkg.id}-height`
+                                ]
+                              ) {
+                                clearFieldError(
+                                  box.id,
+                                  `package-${pkg.id}-height`
+                                );
                               }
                               updatePackageField(
                                 box.id,
                                 pkg.id,
                                 "height",
                                 value
-                              )
+                              );
                             }}
-                            error={validationErrors[box.id]?.[`package-${pkg.id}-height`] || false}
+                            error={
+                              validationErrors[box.id]?.[
+                                `package-${pkg.id}-height`
+                              ] || false
+                            }
                             errorMessage="Required"
                           />
                         </div>
@@ -2935,4 +2998,3 @@ const handlePackageNameSearch = async (
 };
 
 export default OrderFormB2B;
-
