@@ -1027,7 +1027,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
           packageDetails: {
             boxes: fetchedOrder.boxInfo?.length || 0,
             totalWeight: totalAppliedWeight > 0 ?
-              `${totalAppliedWeight} kg` : "N/A",
+              `${Number(totalAppliedWeight.toFixed(2))} kg` : "N/A",
             invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ?
               `₹ ${fetchedOrder.codInfo.invoiceValue}` : "N/A",
             insurance: fetchedOrder.insurance?.isInsured !== undefined ?
@@ -1404,7 +1404,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
                         </svg>
                       </button>
                       <div 
-                        className="absolute left-0 top-full mt-2
+                        className="absolute left-0 bottom-full mb-2
                                    w-max max-w-[280px] 
                                    bg-slate-800/95 text-white
                                    text-sm rounded-lg shadow-xl p-3 
@@ -1416,7 +1416,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
                         <p className="whitespace-pre-line text-xs sm:text-sm leading-snug">
                           {formatVariableServices(shippingDetailsToRender.variableServices)}
                         </p>
-                        <div className="absolute bottom-full left-4
+                        <div className="absolute top-full left-4
                                         w-0 h-0
                                         border-l-4 border-l-transparent
                                         border-r-4 border-r-transparent
