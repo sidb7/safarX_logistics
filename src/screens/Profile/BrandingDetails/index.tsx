@@ -314,19 +314,19 @@ const ProfileBrandingDetails: React.FC<ProfileBrandingDetailsProps> = ({
 
           <SocialLink 
             label="Facebook URL" 
-            url={data?.facebookUrl}
+            url={data?.facebookUrl || 'N/A'}
             className="p-4 border-t md:border-t-0 md:border-l border-gray-200"
           />
 
           <SocialLink 
             label="Instagram URL" 
-            url={data?.instagramUrl}
+            url={data?.instagramUrl || 'N/A'}
             className="p-4 border-t md:border-t-0 md:border-l border-gray-200"
           />
 
           <SocialLink 
             label="WhatsApp URL" 
-            url={data?.whatsappUrl}
+            url={data?.whatsappUrl || 'N/A'}
             className="p-4 border-t md:border-t-0 md:border-l border-gray-200"
           />
         </div>
