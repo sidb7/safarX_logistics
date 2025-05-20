@@ -516,6 +516,8 @@ const POST_SSO_URL = `${SELLER_BASE_URL}/seller/sso/reirect`;
 
 // Darkstore
 const GET_DARKSTORE_DETAILS = `${SELLER_BASE_URL}/darkStore/getInventory`;
+const GET_DARKSTORE_FILTER_DETAILS = `${SELLER_BASE_URL}/darkStore/getFilterOptions`;
+const GET_DARKSTORE_PRODUCT_COUNT = `${SELLER_BASE_URL}/darkStore/getTotalProductsAndDarkStores`;
 
 export {
   ADMIN_URL,
@@ -782,4 +784,6 @@ export {
   POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
   GET_WALLET_BALANCES_DATA,
   GET_DARKSTORE_DETAILS,
+  GET_DARKSTORE_FILTER_DETAILS,
+  GET_DARKSTORE_PRODUCT_COUNT,
 };

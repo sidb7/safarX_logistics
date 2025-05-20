@@ -2331,6 +2331,7 @@ export const sideBarMenusData = [
       },
       {
         id: "efd",
+        type: "darkstore",
         name: "Darkstore Inventory",
         pages: [
           {
@@ -2349,7 +2350,8 @@ export const sideBarMenusData = [
         ],
         menu: [],
         path: "/darkstore/inventory",
-        isActive: true,
+        isActive: false,
+        isActivePath: false,
       },
       {
         id: "bcdefghijklmn",

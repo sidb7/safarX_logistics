@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../components/Table";
 import tableCheckboxFilter from "../../assets/Darkstore/tableCheckboxFilter.png";
-import { POST } from "../../utils/webService";
-import { ca } from "date-fns/locale";
+import { GET, POST } from "../../utils/webService";
 import OnePagination from "../../components/OnePagination/OnePagination";
-import { filter, set } from "lodash";
+import {
+  GET_DARKSTORE_DETAILS,
+  GET_DARKSTORE_FILTER_DETAILS,
+} from "../../utils/ApiUrls";
 
 enum TableColumnType {
   Darkstore = "dark_store",
@@ -84,6 +86,9 @@ function Dropdown({
           filterList.map((item: any) => (
             <div
               key={item}
+              onClick={() => {
+                handleCheck(item);
+              }}
               className="h-[30px] flex items-center gap-2 text-sm border-b py-[20px] p-3 hover:bg-[#F0F0F0] cursor-pointer"
             >
               <input
@@ -93,9 +98,9 @@ function Dropdown({
                   checkedFilterItems.length != 0 &&
                   checkedFilterItems.includes(item)
                 }
-                onChange={() => {
-                  handleCheck(item);
-                }}
+                // onChange={() => {
+                //   handleCheck(item);
+                // }}
               />
               {item}
             </div>
@@ -143,9 +148,27 @@ function DarkstoreTable() {
     },
   ]);
 
+  const getLengthFilterQuery = (tableType: any) => {
+    const match = filterQuery.find((item: any) => tableType in item);
+    const length = match?.[tableType]?.["$in"]?.length || 0;
+    return length;
+  };
+  const [totalPages, setTotalPages] = useState<any>({
+    currentPage: 1,
+    totalPages: 1,
+    totalInventory: 1,
+  });
   const ColumnsHelper = createColumnHelper<any>();
 
-  const fetchDarkstoreInventory = async (updatedQuery?: any) => {
+  const fetchDarkstoreInventory = async ({
+    updatedQuery,
+    newLimit,
+    newPageNo = 0,
+  }: {
+    updatedQuery?: any;
+    newLimit?: number;
+    newPageNo?: number;
+  }) => {
     try {
       let filterArr = updatedQuery;
       if (!updatedQuery) {
@@ -153,34 +176,38 @@ function DarkstoreTable() {
           return item[Object.keys(item)[0]]["$in"].length > 0;
         });
       }
-      console.log("filterArr", filterArr);
-      const GET_DARKSTORE_DETAILS =
-        "http://localhost:8010/api/v1/darkStore/getInventory";
+
       const { data: response } = await POST(GET_DARKSTORE_DETAILS, {
-        pageNo,
-        limit,
+        pageNo: newPageNo === 0 ? pageNo : newPageNo,
+        limit: !newLimit ? limit : newLimit,
         filterArr,
       });
-
+      setTotalPages({
+        currentPage: response.pageNo,
+        totalPages: response.totalPage,
+        totalInventory: response.totalInventory,
+      });
       setDarkStoreData(response.data);
     } catch (err) {
-      console.log(err);
+      console.log("Error: ", err);
     }
   };
   useEffect(() => {
-    fetchDarkstoreInventory();
+    fetchDarkstoreInventory({});
   }, [filterQuery]);
 
   useEffect(() => {
-    fetchDarkstoreInventory();
+    fetchDarkstoreInventory({});
   }, []);
 
   const onPageIndexChange = async (data: any) => {
+    fetchDarkstoreInventory({ newPageNo: data?.currentPage });
     // setSkip((data?.currentPage - 1) * data?.itemsPerPage);
   };
 
   const onPerPageItemChange = async (data: any) => {
-    // setItemsPerPage(data?.itemsPerPage);
+    fetchDarkstoreInventory({ newLimit: data?.itemsPerPage });
+    setLimit(data?.itemsPerPage);
     // setSkip(0);
   };
 
@@ -196,7 +223,7 @@ function DarkstoreTable() {
       return item;
     });
 
-    fetchDarkstoreInventory(updatedQuery);
+    fetchDarkstoreInventory({ updatedQuery });
     setFilterQuery(updatedQuery);
   };
 
@@ -253,10 +280,12 @@ function DarkstoreTable() {
   const fetchFilterList = async (type: TableColumnType) => {
     try {
       const filterArr = filterQuery.filter((item: any) => {
-        return item[Object.keys(item)[0]]["$in"].length > 0;
+        return (
+          item[Object.keys(item)[0]]["$in"].length > 0 &&
+          Object.keys(item)[0] !== type
+        );
       });
-      const GET_DARKSTORE_FILTER_DETAILS =
-        "http://localhost:8010/api/v1/darkStore/getFilterOptions";
+
       const { data: response } = await POST(GET_DARKSTORE_FILTER_DETAILS, {
         filterType: type,
         filterArr,
@@ -269,13 +298,16 @@ function DarkstoreTable() {
     }
   };
 
-  const PricingColumns = [
+  const DarkStoreColumns = [
     ColumnsHelper.accessor("darkstore", {
       header: () => {
         return (
           <div className="relative ">
             <div className="flex justify-between items-center">
-              <p className="font-Open text-sm font-semibold text-[#1C1C1C]">
+              <p
+                className="font-Open text-sm font-semibold text-[#1C1C1C]"
+                style={{ display: "flex" }}
+              >
                 Darkstore
               </p>
               <button
@@ -287,13 +319,18 @@ function DarkstoreTable() {
                       : TableColumnType.Darkstore
                   );
                 }}
-                className="p-1 hover:bg-gray-100 rounded"
+                className="p-[10px] hover:bg-[#E6E6E6] rounded bg-[#EEEEEE] rounded-full"
               >
                 <img
                   src={tableCheckboxFilter}
                   alt="filter"
                   className="h-[12px] w-[12px]"
                 />
+                {getLengthFilterQuery(TableColumnType.Darkstore) ? (
+                  <span className="text-[8px] absolute top-[-1px] right-[-4px] bg-[#3B81F6] rounded-full h-[14px] w-[14px] text-white  z-0">
+                    {getLengthFilterQuery(TableColumnType.Darkstore)}
+                  </span>
+                ) : null}
               </button>
             </div>
             <Dropdown
@@ -336,13 +373,18 @@ function DarkstoreTable() {
                       : TableColumnType.Product
                   );
                 }}
-                className="p-1 hover:bg-gray-100 rounded"
+                className="p-[10px] hover:bg-[#E6E6E6] rounded bg-[#EEEEEE] rounded-full"
               >
                 <img
                   src={tableCheckboxFilter}
                   alt="filter"
                   className="h-[12px] w-[12px]"
                 />
+                {getLengthFilterQuery(TableColumnType.Product) ? (
+                  <span className="text-[8px] absolute top-[-1px] right-[-4px] bg-[#3B81F6] rounded-full h-[14px] w-[14px] text-white  z-0">
+                    {getLengthFilterQuery(TableColumnType.Product)}
+                  </span>
+                ) : null}
               </button>
             </div>
             <Dropdown
@@ -383,13 +425,18 @@ function DarkstoreTable() {
                     open === TableColumnType.SKU ? false : TableColumnType.SKU
                   );
                 }}
-                className="p-1 hover:bg-gray-100 rounded"
+                className="p-[10px] hover:bg-[#E6E6E6] rounded bg-[#EEEEEE] rounded-full"
               >
                 <img
                   src={tableCheckboxFilter}
                   alt="filter"
                   className="h-[12px] w-[12px]"
                 />
+                {getLengthFilterQuery(TableColumnType.SKU) ? (
+                  <span className="text-[8px] absolute top-[-1px] right-[-4px] bg-[#3B81F6] rounded-full h-[14px] w-[14px] text-white  z-0">
+                    {getLengthFilterQuery(TableColumnType.SKU)}
+                  </span>
+                ) : null}
               </button>
             </div>
             <Dropdown
@@ -437,24 +484,26 @@ function DarkstoreTable() {
   return (
     <div className="mt-[15px]">
       <CustomTable
-        columnsData={PricingColumns}
+        columnsData={DarkStoreColumns}
         rowData={darkStoreData}
-        currentPage={1}
-        pageSize={10}
-        rowHeight={30}
+        currentPage={totalPages.currentPage}
+        pageSize={limit}
+        minHeight="46vh"
+        parentHeight={"46vh"}
         rowClassName={"shadow-none"}
         rowCellClassName={
-          "!border-b !border-b-lightgrey !border-solid pb-[10px]"
+          "!border-b !border-b-lightgrey !border-solid pb-[10px] border-r-0"
         }
       />
       {darkStoreData.length > 0 && (
         <OnePagination
-          totalItems={limit}
-          itemsPerPageOptions={[10, 20, 50, 100, 250]}
+          totalItems={totalPages.totalInventory}
+          itemsPerPageOptions={[20, 50, 100, 250]}
           onPageChange={onPageIndexChange}
           onItemsPerPageChange={onPerPageItemChange}
           initialItemsPerPage={limit}
           className="pb-6 !mb-0 !mt-2 !mx-0"
+          pageNo={totalPages.currentPage}
         />
       )}
     </div>

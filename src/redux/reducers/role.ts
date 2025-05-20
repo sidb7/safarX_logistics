@@ -45,6 +45,10 @@ export const getRoles: any = createAsyncThunk(
       const { data: response } = await POST(POST_FETCH_SELLER_ROLE, {});
       role = response?.data?.[0];
       sessionStorage.setItem(
+        "isDarkStoreEnable",
+        JSON.stringify(response?.data?.[0]?.isDarkStoreEnable)
+      );
+      sessionStorage.setItem(
         "paymentGateway",
         JSON.stringify(response?.data?.[0]?.payments)
       );

@@ -104,6 +104,21 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   //   setSideBarMenus([...arr]);
   // };
 
+  const filterMenuItems = (menu: any): any => {
+    const checks = [
+      {
+        key: "isDarkStoreEnable",
+        type: "darkstore",
+      },
+    ];
+
+    const matchedCheck = checks.find((check) => check.type === menu.type);
+    if (!matchedCheck) return false;
+
+    const isEnabled = sessionStorage.getItem(matchedCheck.key) === "true";
+    return isEnabled;
+  };
+
   const updateActivetab = (arr: any = []) => {
     const { pathname } = location;
     const [parent, ...childs] = pathname
@@ -141,7 +156,21 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         });
       }
     });
-    setSideBarMenus([...arr]);
+
+    const filteredMenu = arr.map((item: any) => {
+      if (!item.menu) return item;
+
+      const filteredMenu = item.menu.filter((menuItem: any) => {
+        if (!menuItem.type) return true;
+        return filterMenuItems(menuItem);
+      });
+
+      return {
+        ...item,
+        menu: filteredMenu,
+      };
+    });
+    setSideBarMenus([...filteredMenu]);
   };
 
   const setIsActivePath = (index: number, childIndex: number, path: any) => {
