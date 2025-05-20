@@ -567,6 +567,8 @@ interface EWayBillCardProps {
   tempOrderId?: string; // Added prop for tempOrderId
   source?: string; // Added prop for source
   orderId?: string; // Added prop for orderId
+  orderType?: string; // Added prop for orderType
+  onEWayBillUpdate?: (billNumber: string) => void; // New callback prop
 }
 
 interface Transporter {
@@ -588,6 +590,9 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
   tempOrderId = "",
   source = "",
   orderId = "",
+  orderType = "",
+  onEWayBillUpdate = () => {}, // Default no-op function
+
 }) => {
   // States
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -607,7 +612,7 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
 
   // Default threshold for E-Way Bill requirement in India (₹50,000)
   const EWAY_BILL_THRESHOLD = 50000;
-  const isEWayBillRequired = totalInvoiceValue > EWAY_BILL_THRESHOLD;
+  const isEWayBillRequired = totalInvoiceValue >= EWAY_BILL_THRESHOLD;
 
   // Fetch transporters when modal opens
   useEffect(() => {
@@ -624,9 +629,10 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
         limit: 1000,
         pageNo: 1,
         sort: { _id: -1 },
+        orderType: orderType, // Add orderType to the payload
       };
 
-      const response = await GET(GET_TRANSPORTER_ID, payload);
+      const response = await POST(GET_TRANSPORTER_ID, payload);
 
       if (response?.data?.success) {
         setTransporters(response.data.data || []);
@@ -713,7 +719,9 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
       } else {
         console.warn("tempOrderId or source missing, cannot update E-Way Bill number");
       }
-
+       
+      // Notify parent component about the E-Way Bill number
+      onEWayBillUpdate(eWayBillNumber.trim());
       // After successful submission, set the E-Way Bill as added
       setEWayBillAdded(true);
       setEWayBillDetails({
@@ -744,6 +752,8 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
         setSelectedTransporter(existingTransporter);
         setShowEWayForm(true);
         setEWayBillNumber(eWayBillDetails.eWayBillNumber);
+
+        onEWayBillUpdate(eWayBillDetails.eWayBillNumber);
       }
     }
   };

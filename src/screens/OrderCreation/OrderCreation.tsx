@@ -353,6 +353,14 @@ function OrderCreation() {
   const [isLoadingExistingOrder, setIsLoadingExistingOrder] = useState(false);
   const [hasLoadedExistingOrder, setHasLoadedExistingOrder] = useState(false);
 
+  // In OrderCreation component, add a new state variable for eWayBillNumber
+const [eWayBillNumber, setEWayBillNumber] = useState("");
+
+// Create a callback function to update the eWayBillNumber state
+const handleEWayBillUpdate = (billNumber: string) => {
+  setEWayBillNumber(billNumber);
+};
+
   // Save data to localStorage whenever state changes
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.ACTIVE_STEP, activeStep.toString());
@@ -1885,7 +1893,7 @@ const prepareBoxInfoPayload = () => {
         pickupDate: new Date().getTime().toString(),
         gstNumber: pickupFormValues.gstNo || "",
         orderId: order?.orderId || "",
-        eWayBillNo: "",
+        eWayBillNo: eWayBillNumber || "",
         brandName: "Your Brand",
         brandLogo: "",
         tempOrderId: tempOrderId || "",
@@ -2356,6 +2364,9 @@ const prepareBoxInfoForReverseOrder = () => {
               tempOrderId={tempOrderId}
               source={orderSource}
               orderId={order.orderId}
+              orderType={order.orderType} 
+              onEWayBillUpdate={handleEWayBillUpdate} // New callback prop
+
             />
             <ShippingServiceSelector
               tempOrderId={tempOrderId}
