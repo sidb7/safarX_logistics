@@ -2468,6 +2468,21 @@ const handleBoxNameSearch = async (value: string) => {
                   const selectedProduct = remainingSelected.shift();
 
                   if (selectedProduct) {
+
+                    if (clearFieldError && currentBox) {
+                      // Clear all relevant field errors for this product
+                      clearFieldError(box.id, `product-${product.id}-name`);
+                      clearFieldError(box.id, `product-${product.id}-quantity`);
+                      clearFieldError(box.id, `product-${product.id}-unitPrice`);
+                      clearFieldError(box.id, `product-${product.id}-unitWeight`);
+                      clearFieldError(box.id, `product-${product.id}-length`);
+                      clearFieldError(box.id, `product-${product.id}-breadth`);
+                      clearFieldError(box.id, `product-${product.id}-height`);
+                      clearFieldError(box.id, `product-${product.id}-tax`);
+                      clearFieldError(box.id, `product-${product.id}-hsn`);
+                      clearFieldError(box.id, `product-${product.id}-sku`);
+                      clearFieldError(box.id, `product-${product.id}-discount`);
+                    }
                     // Add product ID to be marked as saved
                     newSavedIds[product.id] = true;
                     // Add to list of products needing suggestions
@@ -2572,6 +2587,21 @@ const handleBoxNameSearch = async (value: string) => {
                     const selectedProduct = remainingSelected.shift();
 
                     if (selectedProduct) {
+                      
+                      if (clearFieldError && currentBox) {
+                        // Clear all relevant field errors for this product
+                        clearFieldError(box.id, `product-${product.id}-name`);
+                        clearFieldError(box.id, `product-${product.id}-quantity`);
+                        clearFieldError(box.id, `product-${product.id}-unitPrice`);
+                        clearFieldError(box.id, `product-${product.id}-unitWeight`);
+                        clearFieldError(box.id, `product-${product.id}-length`);
+                        clearFieldError(box.id, `product-${product.id}-breadth`);
+                        clearFieldError(box.id, `product-${product.id}-height`);
+                        clearFieldError(box.id, `product-${product.id}-tax`);
+                        clearFieldError(box.id, `product-${product.id}-hsn`);
+                        clearFieldError(box.id, `product-${product.id}-sku`);
+                        clearFieldError(box.id, `product-${product.id}-discount`);
+                      }
                       // Add product ID to be marked as saved
                       newSavedIds[product.id] = true;
 

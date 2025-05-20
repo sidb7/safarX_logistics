@@ -22,6 +22,7 @@ import {
   GET_LATEST_ORDER,
   POST_SET_ORDER_ID,
   GET_SERVICE_NEW,
+  GET_DELHIVERY_B2B_JOB,
 } from "../../utils/ApiUrls";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-hot-toast";
@@ -1903,6 +1904,55 @@ const prepareBoxInfoPayload = () => {
       const response = await POST(REVERSE_ORDER, orderPayload);
 
       if (response?.data?.success) {
+
+        const jobId = response.data.job_id;
+        // console.log("Job ID:", jobId);
+
+         // If job_id exists, fetch the Delhivery B2B job details
+      if (jobId) {
+        try {
+          // Define the API URL for GET_DELHIVERY_B2B_JOB
+          // const GET_DELHIVERY_B2B_JOB = `/api/v1/order/delhiveryB2B/jobId/${jobId}`;
+          
+          // Add a 5-second delay before calling the API
+          // toast.loading("Processing Delhivery B2B job, please wait...");
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          
+          // Call the GET_DELHIVERY_B2B_JOB API after the delay
+          const jobResponse = await GET(
+                              `${GET_DELHIVERY_B2B_JOB}/${jobId}`
+                            );
+          
+          // Log the Delhivery B2B job details
+          console.log("Delhivery B2B Job Details:", jobResponse.data);
+          
+          // Dismiss the loading toast
+          // toast.dismiss();
+          
+          // You can add additional logic here to handle the job details
+          // For example, you might want to display a special toast message
+          if (jobResponse.data?.success) {
+            clearSavedOrderData();
+            let awbNumbers = [];
+            awbNumbers.push(jobResponse.data.data.awb);
+            const actualOrderId = order.orderId;
+            navigate("/orders/booked", {
+              state: {
+                source: orderSource,
+                orderId: actualOrderId, // Using the actual orderId from response instead of tempOrderId
+                tempOrderId: tempOrderId,
+                awbNumbers: awbNumbers,
+              },
+            });
+
+            toast.success(jobResponse.message ||"Delhivery B2B job created successfully!");
+          }
+        } catch (jobError) {
+          console.error("Error fetching Delhivery B2B job details:", jobError);
+          // This error shouldn't prevent the order from being considered successful
+          toast.error("Order placed, but couldn't fetch Delhivery B2B details");
+        }
+      }else{
         toast.success("Order placed successfully!");
 
         // Clear all saved order data on successful order placement
@@ -1914,7 +1964,6 @@ const prepareBoxInfoPayload = () => {
             .filter(Boolean) || [];
         // Extract the actual orderId from the response
         const actualOrderId = response.data.data[0]?.orderId;
-
         navigate("/orders/booked", {
           state: {
             source: orderSource,
@@ -1923,6 +1972,31 @@ const prepareBoxInfoPayload = () => {
             awbNumbers: awbNumbers,
           },
         });
+
+      }
+      
+      
+      
+        toast.success("Order placed successfully!");
+
+        // Clear all saved order data on successful order placement
+        clearSavedOrderData();
+
+        // const awbNumbers =
+        //   response.data.data[0]?.awbs
+        //     ?.map((item: any) => item.tracking?.awb)
+        //     .filter(Boolean) || [];
+        // // Extract the actual orderId from the response
+        // const actualOrderId = response.data.data[0]?.orderId;
+
+        // navigate("/orders/booked", {
+        //   state: {
+        //     source: orderSource,
+        //     orderId: actualOrderId, // Using the actual orderId from response instead of tempOrderId
+        //     tempOrderId: tempOrderId,
+        //     awbNumbers: awbNumbers,
+        //   },
+        // });
       } else {
         setSelectedServiceDetails(null);
         localStorage.removeItem(STORAGE_KEYS.SELECTED_SERVICE);
