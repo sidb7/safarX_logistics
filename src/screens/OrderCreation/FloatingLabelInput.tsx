@@ -17,7 +17,7 @@
 //   isPhoneField?: boolean;
 //   isPincodeField?: boolean;
 //   readOnly?: boolean;
-//   maxLength?: number; // Added maxLength prop
+//   maxLength?: number;
 // }
 
 // const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
@@ -35,7 +35,7 @@
 //   isPhoneField = false,
 //   isPincodeField = false,
 //   readOnly = false,
-//   maxLength, // Added maxLength parameter
+//   maxLength,
 // }) => {
 //   const [isFocused, setIsFocused] = useState(false);
 //   const [internalValue, setInternalValue] = useState(value);
@@ -47,6 +47,27 @@
 //   useEffect(() => {
 //     setInternalValue(value);
 //   }, [value]);
+
+//   // Disable wheel scrolling on number inputs globally
+//   useEffect(() => {
+//     // Only add the event listener if this is a number input
+//     if (type === "number" && inputRef.current) {
+//       const handleWheelingGlobally = (e: WheelEvent) => {
+//         // Check if the event target is our input element
+//         if (document.activeElement === inputRef.current) {
+//           e.preventDefault();
+//         }
+//       };
+
+//       // Use passive: false to allow preventDefault()
+//       window.addEventListener("wheel", handleWheelingGlobally, { passive: false });
+      
+//       // Clean up
+//       return () => {
+//         window.removeEventListener("wheel", handleWheelingGlobally);
+//       };
+//     }
+//   }, [type]);
 
 //   const handleLabelClick = () => {
 //     if (inputRef.current) {
@@ -103,18 +124,6 @@
 //     }
 //   };
 
-//   // Prevent mouse wheel from changing number input value
-//   const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
-//     if (type === "number") {
-//       e.preventDefault();
-//       // Make sure the input doesn't lose focus
-//       if (inputRef.current) {
-//         inputRef.current.blur();
-//         inputRef.current.focus();
-//       }
-//     }
-//   };
-
 //   // Number control handlers
 //   const incrementValue = () => {
 //     if (type === "number") {
@@ -155,10 +164,9 @@
 //           onChange={handleChange}
 //           onFocus={handleFocus}
 //           onBlur={handleBlur}
-//           onWheel={handleWheel}
 //           readOnly={readOnly}
 //           min="0" // Prevent negative values
-//           maxLength={maxLength} // Apply maxLength prop
+//           maxLength={maxLength}
 //           className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
 //             counter
 //               ? "pr-10"
@@ -323,26 +331,28 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
     setInternalValue(value);
   }, [value]);
 
-  // Disable wheel scrolling on number inputs globally
-  useEffect(() => {
-    // Only add the event listener if this is a number input
-    if (type === "number" && inputRef.current) {
-      const handleWheelingGlobally = (e: WheelEvent) => {
-        // Check if the event target is our input element
-        if (document.activeElement === inputRef.current) {
-          e.preventDefault();
-        }
-      };
+  // Use a robust approach to prevent number changes while allowing scrolling
+  // This has been replaced with the text input + validation approach
 
-      // Use passive: false to allow preventDefault()
-      window.addEventListener("wheel", handleWheelingGlobally, { passive: false });
-      
-      // Clean up
-      return () => {
-        window.removeEventListener("wheel", handleWheelingGlobally);
-      };
-    }
-  }, [type]);
+  useEffect(() => {
+    // Create stylesheet to hide number input spinners
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    `;
+    document.head.appendChild(styleEl);
+    
+    return () => {
+      document.head.removeChild(styleEl);
+    };
+  }, []);
 
   const handleLabelClick = () => {
     if (inputRef.current) {
@@ -369,7 +379,16 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
         newValue = newValue.substring(1);
       }
     } else if (type === "number") {
-      // For number fields, prevent negative values
+      // For number fields, only allow digits and decimal point
+      newValue = newValue.replace(/[^\d.]/g, "");
+      
+      // Ensure only one decimal point
+      const decimalPoints = newValue.match(/\./g);
+      if (decimalPoints && decimalPoints.length > 1) {
+        newValue = newValue.replace(/\./, "x").replace(/\./g, "").replace(/x/, ".");
+      }
+      
+      // Prevent negative values
       if (newValue.startsWith("-")) {
         newValue = newValue.substring(1);
       }
@@ -434,7 +453,9 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
         )}
         <input
           ref={inputRef}
-          type={type}
+          type={type === "number" ? "text" : type}
+          pattern={type === "number" ? "[0-9]*" : undefined}
+          inputMode={type === "number" ? "numeric" : undefined}
           value={internalValue}
           onChange={handleChange}
           onFocus={handleFocus}
@@ -442,6 +463,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
           readOnly={readOnly}
           min="0" // Prevent negative values
           maxLength={maxLength}
+          step="any" // Disables mousewheel increment/decrement
           className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
             counter
               ? "pr-10"
