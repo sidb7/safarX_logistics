@@ -427,10 +427,10 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
             />
             <div className="text-sm font-Open leading-[18px] mt-5">
               <span className="font-semibold text-gray-500">
-                SPRINT (Coming Soon)
+                Sprint (Coming Soon)
               </span>
-              <div className="text-gray-500">
-                (For same day and next day delivery)
+              <div className="text-gray-500 italic">
+                (For same day and next day deliveries)
               </div>
             </div>
           </div>

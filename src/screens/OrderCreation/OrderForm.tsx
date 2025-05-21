@@ -2964,7 +2964,7 @@ const handleBoxNameSearch = async (value: string) => {
               </p>
               <button
                 onClick={addNewProduct}
-                className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-2xl text-gray-700 hover:bg-gray-50"
               >
                 <span className="mr-2">+</span>
                 <span>Add Product</span>
@@ -2972,7 +2972,7 @@ const handleBoxNameSearch = async (value: string) => {
             </div>
           ) : (
             currentBox.products.map((product) => (
-              <div key={product.id} className="bg-blue-50 rounded-md p-4">
+              <div key={product.id} className="bg-blue-50 rounded-2xl shadow-md p-4">
                 {/* Product Header */}
                 <div
                   className="flex justify-between items-center mb-4 cursor-pointer"
@@ -3043,7 +3043,7 @@ const handleBoxNameSearch = async (value: string) => {
                               return (
                                 <div
                                   key={suggestion.productId}
-                                  className={`flex items-center border rounded-md px-3 py-1 cursor-pointer ${
+                                  className={`flex items-center border rounded-2xl px-3 py-1 cursor-pointer ${
                                     isSelected
                                       ? "bg-blue-100 border-blue-400 text-blue-700"
                                       : "bg-white border-gray-300 hover:bg-gray-50 text-[#004EFF]"
@@ -3415,7 +3415,7 @@ const handleBoxNameSearch = async (value: string) => {
                         <div className="w-32">
                           <FloatingLabelInput
                             placeholder="Total Wt (kg)"
-                            value={product.totalWeight.toString()}
+                            value={Number(parseFloat(Number(product.totalWeight).toFixed(2))).toString()}
                             type="number"
                             readOnly={true}
                           />
@@ -3833,7 +3833,7 @@ const handleBoxNameSearch = async (value: string) => {
             <div className="flex justify-center">
               <button
                 onClick={addNewProduct}
-                className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-2xl text-gray-700 hover:bg-gray-50"
               >
                 <span className="mr-2">+</span>
                 <span>Product</span>
@@ -3844,7 +3844,7 @@ const handleBoxNameSearch = async (value: string) => {
 
         {/* Right column - Box Info */}
         <div className="w-full lg:w-1/3">
-          <div className="bg-white border border-gray-200 rounded-md p-4 lg:sticky lg:top-4">
+          <div className="bg-[#f5fbff] border-gray-200 rounded-2xl shadow-md p-4 lg:sticky lg:top-4 ">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
               <div className="font-medium text-gray-800 text-lg mb-2 sm:mb-0">
                 {allBoxesIdentical
@@ -3887,7 +3887,7 @@ const handleBoxNameSearch = async (value: string) => {
                   return (
                     <div
                       key={suggestion.boxId}
-                      className={`flex items-center border rounded-md px-3 py-1 cursor-pointer ${
+                      className={`flex items-center border rounded-2xl px-3 py-1 cursor-pointer ${
                         isSelected
                           ? "bg-blue-100 border-blue-400 text-[#004EFF]"
                           : "bg-white border-gray-300 hover:bg-gray-50 text-[#004EFF]"

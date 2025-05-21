@@ -3778,7 +3778,7 @@ const fetchDefaultPickupAddress = async () => {
   return (
     <div className="flex flex-row gap-6 w-full max-w-full mx-auto p-4">
       {/* Pickup Details Section */}
-      <div className="w-1/2 bg-[#F5FBFF] rounded-lg p-6">
+      <div className="w-1/2 bg-[#F5FBFF] rounded-2xl p-6 shadow-md">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
             <MapPinIcon />
@@ -4041,7 +4041,7 @@ const fetchDefaultPickupAddress = async () => {
       </div>
 
       {/* Delivery Details Section */}
-      <div className="w-1/2 bg-[#F5FBFF] rounded-lg p-6">
+      <div className="w-1/2 bg-[#f5fbff] rounded-2xl shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
             <MapPinIcon />

@@ -2501,7 +2501,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({
       <div className="space-y-6">
         {boxes.map((box) => (
           <div key={box.id}>
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="bg-[#f5fbff] border-gray-200 rounded-2xl shadow-md">
               {/* Packages - filtered by search query */}
               {getFilteredPackages(box).map((pkg) => (
                 <div
