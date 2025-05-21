@@ -312,6 +312,9 @@ function DarkstoreTable() {
               </p>
               <button
                 onClick={() => {
+                  if (darkStoreData.length == 0) {
+                    return;
+                  }
                   fetchFilterList(TableColumnType.Darkstore);
                   setOpen(
                     open === TableColumnType.Darkstore
@@ -370,6 +373,9 @@ function DarkstoreTable() {
               </p>
               <button
                 onClick={() => {
+                  if (darkStoreData.length == 0) {
+                    return;
+                  }
                   fetchFilterList(TableColumnType.Product);
                   setOpen(
                     open === TableColumnType.Product
@@ -428,6 +434,9 @@ function DarkstoreTable() {
               </p>
               <button
                 onClick={() => {
+                  if (darkStoreData.length == 0) {
+                    return;
+                  }
                   fetchFilterList(TableColumnType.SKU);
                   setOpen(
                     open === TableColumnType.SKU ? false : TableColumnType.SKU
