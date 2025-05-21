@@ -67,11 +67,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
 
   useEffect(() => {
     if (!sideBarMenus.length) return;
-    updateActivetab(sideBarMenus);
+    updateActivetab(sideBarMenusData);
   }, [location]);
 
   useEffect(() => {
-    updateActivetab(sideBarMenus);
+    updateActivetab(sideBarMenusData);
   }, [isDarkStoreEnabled]);
 
   const conditinalClass = {
