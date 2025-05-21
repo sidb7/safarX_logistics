@@ -19,7 +19,7 @@ import TrackingIcon from "../../../assets/Track.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { inputRegexFilter } from "../../../utils/Helper/Filter";
 import { PathFinder } from "../../../utils/Helper/PathFinder";
-import RefreshIcon from "../../../assets/refreshIcon.svg";
+import RefreshIcon from "../../../assets/refreshIconNew.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datePicker.css";
 import LoginModal from "./LoginModal";
@@ -173,7 +173,7 @@ const Tracking = () => {
       setLoading(true);
 
       const result = await inputRegexFilter(trackingNo, path);
-      
+
       //mapping the new data
       if (result?.success) {
         const res = result?.data?.[0]?.trackingInfo?.map(

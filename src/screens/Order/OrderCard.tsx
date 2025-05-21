@@ -44,7 +44,7 @@ import DimensionIcon from "../../assets/3d-cube-scan.svg";
 import SkuBoxIcon from "../../assets/DeliveryOder.svg";
 import BoxSearchIcon from "../../assets/box-search.svg";
 import orderBox from "../../assets/Delivery Icon.svg";
-import DelivertTruckIcon from "../../assets/group.svg";
+import DelivertTruckIcon from "../../assets/DeliveryTruckIcon.svg";
 import Location from "../../assets/Location.svg";
 import TaskSquare from "../../assets/task-square.svg";
 import profileIcon from "../../assets/Contact.svg";
