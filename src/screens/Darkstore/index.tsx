@@ -51,7 +51,7 @@ function DarkstoreInventory() {
             </div>
 
             <div className="w-full md:w-1/2 border border-gray-200 shadow-md rounded-lg px-4 py-6">
-              <h2 className="text-lg font-semibold mb-2">Dark stores</h2>
+              <h2 className="text-lg mb-2">Dark stores</h2>
               <p className="text-lg font-bold mb-1">
                 ₹ {totalProducts.dark_store}
               </p>
