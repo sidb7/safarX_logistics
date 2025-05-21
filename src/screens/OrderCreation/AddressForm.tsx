@@ -2447,6 +2447,11 @@ const handlePickupMagicFill = async () => {
         landmark: verifiedData.landmark || '',
         pincode: verifiedData.pincode || '',
       }));
+
+      // Now call fetchPincodeData to ensure consistent behavior with manual pincode entry
+      if (verifiedData.pincode && verifiedData.pincode.length === 6) {
+        fetchPincodeData(verifiedData.pincode, "pickup");
+      }
       
       // Clear any errors in the updated fields
       clearFieldError("pickup", "addressLine1");
@@ -2512,6 +2517,11 @@ const handleDeliveryMagicFill = async () => {
         landmark: verifiedData.landmark || '',
         pincode: verifiedData.pincode || '',
       }));
+
+      // Now call fetchPincodeData to ensure consistent behavior with manual pincode entry
+      if (verifiedData.pincode && verifiedData.pincode.length === 6) {
+        fetchPincodeData(verifiedData.pincode, "delivery");
+      }
       
       // Clear any errors in the updated fields
       clearFieldError("delivery", "addressLine1");
