@@ -1955,67 +1955,143 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({
   //   }
   // };
   // Handle package name search input
-  const handlePackageNameSearch = async (
-    boxId: number,
-    packageId: number,
-    value: string
-  ) => {
-    // Update the package name in the state directly
-    updatePackageField(boxId, packageId, "name", value);
+  // const handlePackageNameSearch = async (
+  //   boxId: number,
+  //   packageId: number,
+  //   value: string
+  // ) => {
+  //   // Update the package name in the state directly
+  //   updatePackageField(boxId, packageId, "name", value);
 
-    // Also update our search tracking state
-    const uniqueId = `${boxId}-${packageId}`;
-    setPackageNameSearch((prev) => ({
+  //   // Also update our search tracking state
+  //   const uniqueId = `${boxId}-${packageId}`;
+  //   setPackageNameSearch((prev) => ({
+  //     ...prev,
+  //     [uniqueId]: value,
+  //   }));
+
+  //   // Show search results dropdown
+  //   setShowPackageSearchResults((prev) => ({
+  //     ...prev,
+  //     [uniqueId]: true,
+  //   }));
+
+  //   // If empty search, clear results
+  //   if (value.trim() === "") {
+  //     setFilteredPackageResults((prev) => ({
+  //       ...prev,
+  //       [uniqueId]: [],
+  //     }));
+  //     return;
+  //   }
+
+  //   // Call API directly with search query
+  //   try {
+  //     const payload = {
+  //       skip: 0,
+  //       limit: 5, // Limit to top 5 matches
+  //       pageNo: 1,
+  //       sort: { _id: -1 },
+  //       searchValue: value,
+  //     };
+
+  //     const response = await POST(GET_PRODUCTS, payload);
+
+  //     if (response?.data?.success) {
+  //       setFilteredPackageResults((prev) => ({
+  //         ...prev,
+  //         [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
+  //       }));
+  //     } else {
+  //       setFilteredPackageResults((prev) => ({
+  //         ...prev,
+  //         [uniqueId]: [],
+  //       }));
+  //     }
+  //   } catch (error) {
+  //     console.error("Error searching products:", error);
+  //     setFilteredPackageResults((prev) => ({
+  //       ...prev,
+  //       [uniqueId]: [],
+  //     }));
+  //   }
+  // };
+  // Handle package name search input
+const handlePackageNameSearch = async (
+  boxId: number,
+  packageId: number,
+  value: string
+) => {
+  // Update the package name in the state directly
+  updatePackageField(boxId, packageId, "name", value);
+
+  // Also update our search tracking state
+  const uniqueId = `${boxId}-${packageId}`;
+  setPackageNameSearch((prev) => ({
+    ...prev,
+    [uniqueId]: value,
+  }));
+
+  // If empty search, clear results and don't show dropdown
+  if (value.trim() === "") {
+    setFilteredPackageResults((prev) => ({
       ...prev,
-      [uniqueId]: value,
+      [uniqueId]: [],
     }));
-
-    // Show search results dropdown
     setShowPackageSearchResults((prev) => ({
       ...prev,
-      [uniqueId]: true,
+      [uniqueId]: false,
     }));
+    return;
+  }
 
-    // If empty search, clear results
-    if (value.trim() === "") {
+  // Show search results dropdown
+  setShowPackageSearchResults((prev) => ({
+    ...prev,
+    [uniqueId]: true,
+  }));
+
+  // Only call API if search query has 3 or more characters
+  if (value.trim().length < 3) {
+    // Clear results when less than 3 characters
+    setFilteredPackageResults((prev) => ({
+      ...prev,
+      [uniqueId]: [],
+    }));
+    return;
+  }
+
+  // Call API directly with search query (only when 3+ characters)
+  try {
+    const payload = {
+      skip: 0,
+      limit: 5, // Limit to top 5 matches
+      pageNo: 1,
+      sort: { _id: -1 },
+      searchValue: value,
+    };
+
+    const response = await POST(GET_PRODUCTS, payload);
+
+    if (response?.data?.success) {
+      setFilteredPackageResults((prev) => ({
+        ...prev,
+        [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
+      }));
+    } else {
       setFilteredPackageResults((prev) => ({
         ...prev,
         [uniqueId]: [],
       }));
-      return;
     }
-
-    // Call API directly with search query
-    try {
-      const payload = {
-        skip: 0,
-        limit: 5, // Limit to top 5 matches
-        pageNo: 1,
-        sort: { _id: -1 },
-        searchValue: value,
-      };
-
-      const response = await POST(GET_PRODUCTS, payload);
-
-      if (response?.data?.success) {
-        setFilteredPackageResults((prev) => ({
-          ...prev,
-          [uniqueId]: response.data.data.slice(0, 5), // Ensure maximum 5 results
-        }));
-      } else {
-        setFilteredPackageResults((prev) => ({
-          ...prev,
-          [uniqueId]: [],
-        }));
-      }
-    } catch (error) {
-      console.error("Error searching products:", error);
-      setFilteredPackageResults((prev) => ({
-        ...prev,
-        [uniqueId]: [],
-      }));
-    }
-  };
+  } catch (error) {
+    console.error("Error searching products:", error);
+    setFilteredPackageResults((prev) => ({
+      ...prev,
+      [uniqueId]: [],
+    }));
+  }
+};
 
   const selectPackageFromSearch = (
     boxId: number,
@@ -2606,6 +2682,7 @@ const OrderFormB2B: React.FC<OrderFormB2BProps> = ({
                           <div className="w-[10%]">
                             <FloatingLabelInput
                               placeholder="Qty"
+                              showNumberControls={true}
                               value={pkg.quantity.toString()}
                               type="number"
                               onChangeCallback={(value) => {
