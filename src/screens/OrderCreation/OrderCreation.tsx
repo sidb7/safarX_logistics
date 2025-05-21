@@ -354,13 +354,32 @@ function OrderCreation() {
   const [isLoadingExistingOrder, setIsLoadingExistingOrder] = useState(false);
   const [hasLoadedExistingOrder, setHasLoadedExistingOrder] = useState(false);
 
+  // Added new state variables for checking waybill
+const [isEWayBillRequired, setIsEWayBillRequired] = useState(false);
+const [eWayBillUpdated, setEWayBillUpdated] = useState(false);
+
   // In OrderCreation component, add a new state variable for eWayBillNumber
 const [eWayBillNumber, setEWayBillNumber] = useState("");
 
 // Create a callback function to update the eWayBillNumber state
 const handleEWayBillUpdate = (billNumber: string) => {
   setEWayBillNumber(billNumber);
+   // If a valid bill number is provided, consider it updated
+   setEWayBillUpdated(!!billNumber.trim());
 };
+
+// Added useEffect to monitor total order value
+useEffect(() => {
+  const totalValue = calculateTotalInvoiceValue();
+  // E-Way Bill is required if total value is >= ₹50,000
+  const billRequired = totalValue >= 50000;
+  setIsEWayBillRequired(billRequired);
+  
+  // If E-Way Bill is not required, consider it as "updated" to enable the place order button
+  if (!billRequired) {
+    setEWayBillUpdated(true);
+  }
+}, [boxesData, b2bBoxesData, order.orderType]);
 
   // Save data to localStorage whenever state changes
   useEffect(() => {
@@ -2478,7 +2497,7 @@ const prepareBoxInfoForReverseOrder = () => {
                       onClick={handlePlaceOrder}
                       variant="primary"
                       className="!rounded-full"
-                      disabled={isSubmitting || !selectedServiceDetails}
+                      disabled={isSubmitting || !selectedServiceDetails || (isEWayBillRequired && !eWayBillUpdated)}
                     />
                   </div>
                 </div>

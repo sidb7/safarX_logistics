@@ -642,9 +642,13 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
   // Default threshold for E-Way Bill requirement in India (₹50,000)
   const EWAY_BILL_THRESHOLD = 50000;
   const isEWayBillRequired = totalInvoiceValue >= EWAY_BILL_THRESHOLD;
+  
 
   // Add a state to track the last partner name
   const [lastPartnerName, setLastPartnerName] = useState<string>("");
+
+  // Added new state to track API response success
+const [apiSuccess, setApiSuccess] = useState(false);
 
   // Reset E-Way Bill state when partner name changes
   useEffect(() => {
@@ -655,6 +659,7 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
       setEWayBillDetails(null);
       setEWayBillNumber("");
       setSelectedTransporter(null);
+      setApiSuccess(false); 
       // If a callback was provided to update the parent, call it with empty string
       onEWayBillUpdate("");
     }
@@ -765,12 +770,18 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
           console.log("E-Way Bill API response:", response);
           
           if (!response?.data?.success) {
-            console.error("Failed to update E-Way Bill number:", response?.data?.message);
+            setApiSuccess(true); // Added this line
+
+            // console.error("Failed to update E-Way Bill number:", response?.data?.message);
           }
         } catch (error) {
-          console.error("Error updating E-Way Bill number:", error);
+          setApiSuccess(false); // Added this line
+
+          // console.error("Error updating E-Way Bill number:", error);
         }
       } else {
+        setApiSuccess(false); // Added this line
+
         console.warn("tempOrderId or source missing, cannot update E-Way Bill number");
       }
        
@@ -806,6 +817,7 @@ const EWayBillCard: React.FC<EWayBillCardProps> = ({
         setSelectedTransporter(existingTransporter);
         setShowEWayForm(true);
         setEWayBillNumber(eWayBillDetails.eWayBillNumber);
+        setApiSuccess(false); // Added this line
 
         onEWayBillUpdate(eWayBillDetails.eWayBillNumber);
       }
