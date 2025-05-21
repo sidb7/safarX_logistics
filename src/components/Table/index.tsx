@@ -29,7 +29,7 @@ const CustomTable = (props: any) => {
     entityId,
     setRowSelectedData,
     setIsMenuOpen,
-    parentHeight,
+    parentClassName,
     minHeight,
     rowHeight,
     rowClassName,
@@ -84,9 +84,8 @@ const CustomTable = (props: any) => {
         minHeight: minHeight ? minHeight : "50vh",
         overflow: "auto",
         scrollbarWidth: "thin",
-        ...(parentHeight ? { height: parentHeight } : {}),
       }}
-      className="w-full "
+      className={"w-full " + parentClassName}
     >
       <div
         className="fixed inset-0 bg-[#333333b5] flex justify-center items-center z-50"

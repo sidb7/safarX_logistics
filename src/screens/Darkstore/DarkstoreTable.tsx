@@ -187,7 +187,7 @@ function DarkstoreTable() {
         totalPages: response.totalPage,
         totalInventory: response.totalInventory,
       });
-      setDarkStoreData(response.data);
+      setDarkStoreData(response.data || []);
     } catch (err) {
       console.log("Error: ", err);
     }
@@ -319,7 +319,11 @@ function DarkstoreTable() {
                       : TableColumnType.Darkstore
                   );
                 }}
-                className="p-[10px] hover:bg-[#E6E6E6] rounded bg-[#EEEEEE] rounded-full"
+                className={`p-[10px] rounded bg-[#EEEEEE] rounded-full ${
+                  darkStoreData.length != 0
+                    ? "hover:bg-[#E6E6E6]"
+                    : "cursor-default"
+                }`}
               >
                 <img
                   src={tableCheckboxFilter}
@@ -373,7 +377,11 @@ function DarkstoreTable() {
                       : TableColumnType.Product
                   );
                 }}
-                className="p-[10px] hover:bg-[#E6E6E6] rounded bg-[#EEEEEE] rounded-full"
+                className={`p-[10px] rounded bg-[#EEEEEE] rounded-full ${
+                  darkStoreData.length != 0
+                    ? "hover:bg-[#E6E6E6]"
+                    : "cursor-default"
+                }`}
               >
                 <img
                   src={tableCheckboxFilter}
@@ -425,7 +433,11 @@ function DarkstoreTable() {
                     open === TableColumnType.SKU ? false : TableColumnType.SKU
                   );
                 }}
-                className="p-[10px] hover:bg-[#E6E6E6] rounded bg-[#EEEEEE] rounded-full"
+                className={`p-[10px] rounded bg-[#EEEEEE] rounded-full ${
+                  darkStoreData.length != 0
+                    ? "hover:bg-[#E6E6E6]"
+                    : "cursor-default"
+                }`}
               >
                 <img
                   src={tableCheckboxFilter}
@@ -489,7 +501,7 @@ function DarkstoreTable() {
         currentPage={totalPages.currentPage}
         pageSize={limit}
         minHeight="46vh"
-        parentHeight={"46vh"}
+        parentClassName={"h-[46vh] pb-[200px]"}
         rowClassName={"shadow-none"}
         rowCellClassName={
           "!border-b !border-b-lightgrey !border-solid pb-[10px] border-r-0"

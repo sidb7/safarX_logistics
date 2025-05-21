@@ -26,6 +26,10 @@ interface INavBarProps {
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const { openMobileSideBar, setMobileSideBar } = props;
   const roles = useSelector((state: any) => state?.roles);
+  const isDarkStoreEnabled = useSelector(
+    (state: any) => state.roles.isDarkStoreEnable
+  );
+
   const navigate = useNavigate();
   const location = useLocation();
   const [sideBarMenus, setSideBarMenus]: any = useState<any>(
@@ -65,6 +69,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     if (!sideBarMenus.length) return;
     updateActivetab(sideBarMenus);
   }, [location]);
+
+  useEffect(() => {
+    updateActivetab(sideBarMenus);
+  }, [isDarkStoreEnabled]);
 
   const conditinalClass = {
     width: `${isHover ? "25rem" : "75px"}`,
@@ -109,13 +117,14 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       {
         key: "isDarkStoreEnable",
         type: "darkstore",
+        enabled: isDarkStoreEnabled,
       },
     ];
 
     const matchedCheck = checks.find((check) => check.type === menu.type);
     if (!matchedCheck) return false;
 
-    const isEnabled = sessionStorage.getItem(matchedCheck.key) === "true";
+    const isEnabled = matchedCheck.enabled == true ? true : false;
     return isEnabled;
   };
 
@@ -159,15 +168,14 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
 
     const filteredMenu = arr.map((item: any) => {
       if (!item.menu) return item;
-
-      const filteredMenu = item.menu.filter((menuItem: any) => {
+      const filteredMenuItem = item.menu.filter((menuItem: any) => {
         if (!menuItem.type) return true;
         return filterMenuItems(menuItem);
       });
 
       return {
         ...item,
-        menu: filteredMenu,
+        menu: filteredMenuItem,
       };
     });
     setSideBarMenus([...filteredMenu]);

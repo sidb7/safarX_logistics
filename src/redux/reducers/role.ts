@@ -36,6 +36,7 @@ export function checkPageAuthorized(name: any) {
 
 const initialState: any = {
   roles: [],
+  isDarkStoreEnable: false,
 };
 
 export const getRoles: any = createAsyncThunk(
@@ -75,6 +76,7 @@ export const roleSlice = createSlice({
     builder.addCase(getRoles.fulfilled, (state, action) => {
       state.loading = false;
       state.roles = [action.payload];
+      state.isDarkStoreEnable = action.payload?.isDarkStoreEnable ?? false;
     });
     builder.addCase(getRoles.rejected, (state, action) => {
       state.loading = false;
