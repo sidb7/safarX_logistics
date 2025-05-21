@@ -2112,6 +2112,21 @@ const Bookmark = ({ className = "w-5 h-5", isFilled = false }) => (
   </svg>
 );
 
+const STORAGE_KEYS = {
+  ORDER_DATA: "order-creation-data",
+  ACTIVE_STEP: "order-creation-active-step",
+  PICKUP_ADDRESS: "order-creation-pickup-address",
+  DELIVERY_ADDRESS: "order-creation-delivery-address",
+  BOX_DATA: "order-creation-box-data",
+  B2B_BOX_DATA: "order-creation-b2b-box-data",
+  PAYMENT_INFO: "order-creation-payment-info",
+  SELECTED_SERVICE: "order-creation-selected-service",
+  TEMP_ORDER_ID: "order-creation-temp-order-id",
+  ORDER_SOURCE: "order-creation-order-source",
+  ORDER_TYPE: "order-creation-order-type",
+  REVERSE_STATE: "order-creation-reverse-state",
+};
+
 
 interface VerifiedAddress {
   person_name: string;
@@ -2685,6 +2700,9 @@ const handleDeliveryMagicFill = async () => {
 const fetchDefaultPickupAddress = async () => {
   setIsLoading((prev) => ({ ...prev, pickup: true }));
   try {
+
+    // Check if there's a temporary order ID in localStorage
+    const tempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
     // Store current form values before API call
     const currentFormValues = { ...pickupFormValues };
     
@@ -2700,18 +2718,48 @@ const fetchDefaultPickupAddress = async () => {
       
       // Create a merged object that prioritizes current values
       // that have been modified by the user
-      const mergedValues = {
-        ...apiFormValues,
-        // Keep current values for fields that have been modified
-        pincode: currentFormValues.pincode || apiFormValues.pincode,
-        city: currentFormValues.city || apiFormValues.city,
-        state: currentFormValues.state || apiFormValues.state,
-        addressLine1: currentFormValues.addressLine1 || apiFormValues.addressLine1,
-        addressLine2: currentFormValues.addressLine2 || apiFormValues.addressLine2,
-        landmark: currentFormValues.landmark || apiFormValues.landmark,
-        gstNo: currentFormValues.gstNo || apiFormValues.gstNo || 
-               (sellerInfo?.kycDetails?.gstNumber || ""),
-      };
+      // const mergedValues = {
+      //   ...apiFormValues,
+      //   // Keep current values for fields that have been modified
+      //   pincode: currentFormValues.pincode || apiFormValues.pincode,
+      //   city: currentFormValues.city || apiFormValues.city,
+      //   state: currentFormValues.state || apiFormValues.state,
+      //   addressLine1: currentFormValues.addressLine1 || apiFormValues.addressLine1,
+      //   addressLine2: currentFormValues.addressLine2 || apiFormValues.addressLine2,
+      //   landmark: currentFormValues.landmark || apiFormValues.landmark,
+      //   gstNo: currentFormValues.gstNo || apiFormValues.gstNo || 
+      //          (sellerInfo?.kycDetails?.gstNumber || ""),
+      // };
+        // If tempOrderId exists, prioritize localStorage values (current form values)
+        let mergedValues;
+
+        if (tempOrderId) {
+          mergedValues = {
+            
+            ...currentFormValues,
+            // Prioritize current values for in-progress orders
+            pincode: currentFormValues.pincode || apiFormValues.pincode,
+            city: currentFormValues.city || apiFormValues.city,
+            state: currentFormValues.state || apiFormValues.state,
+            addressLine1: currentFormValues.addressLine1 || apiFormValues.addressLine1,
+            addressLine2: currentFormValues.addressLine2 || apiFormValues.addressLine2,
+            landmark: currentFormValues.landmark || apiFormValues.landmark,
+            gstNo:  (sellerInfo?.kycDetails?.gstNumber || "") || currentFormValues.gstNo || apiFormValues.gstNo   ,
+          };
+        } else {
+          // For new orders, prioritize API values for these specific fields
+          mergedValues = {
+            ...apiFormValues,
+            pincode: apiFormValues.pincode || currentFormValues.pincode,
+            addressLine1: apiFormValues.addressLine1 || currentFormValues.addressLine1,
+            addressLine2: apiFormValues.addressLine2 || currentFormValues.addressLine2,
+            landmark: apiFormValues.landmark || currentFormValues.landmark,
+            city: apiFormValues.city || currentFormValues.city,
+            state: apiFormValues.state || currentFormValues.state,
+            // Still maintain GST priority from different sources
+            gstNo: (sellerInfo?.kycDetails?.gstNumber || "") || apiFormValues.gstNo || currentFormValues.gstNo ,
+          };
+        }
       
       // Update form values with merged data
       setPickupFormValues(mergedValues);
