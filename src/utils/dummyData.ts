@@ -1790,6 +1790,30 @@ export const sideBarMenusData = [
         isChild: false,
         isActivePath: false,
       },
+      {
+        id: "bcdef1",
+        name: "Place Order(Alpha)",
+        pages: [
+          {
+            id: "bcdef1g",
+            name: "Place Order(Alpha)",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/orders/place-order",
+        isActive: true,
+        isChild: false,
+        isActivePath: false,
+      },
       // {
       //   id: "bcdefghijklmn",
       //   name: "Rule Engine",

@@ -574,7 +574,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/order-tracking/order-creation"
+            path="/orders/place-order"
             element={
               <ProtectedRoute>
                <OrderCreation/>
