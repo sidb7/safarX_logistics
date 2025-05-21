@@ -2440,11 +2440,17 @@ const prepareBoxInfoForReverseOrder = () => {
               orderId={order.orderId}
               orderType={order.orderType} 
               onEWayBillUpdate={handleEWayBillUpdate} // New callback prop
+              isServiceSelected={!!selectedServiceDetails} 
+              partnerName={selectedServiceDetails?.partnerName || ""} 
+              serviceId={selectedServiceDetails?.partnerServiceId || ""} // Pass service ID to track changes
+
+
 
             />
             <ShippingServiceSelector
               tempOrderId={tempOrderId}
               orderSource={orderSource}
+              initialSelectedServiceId={selectedServiceDetails?.partnerServiceId}
               onServiceSelect={handleServiceSelect}
             />
             {selectedServiceDetails && (

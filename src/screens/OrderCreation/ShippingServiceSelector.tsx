@@ -500,6 +500,7 @@ interface ShippingService {
 interface ShippingServiceSelectorProps {
   tempOrderId?: string;
   orderSource?: string;
+  initialSelectedServiceId?: string; // Add this new prop
   onServiceSelect?: (service: {
     partnerServiceId: string;
     partnerServiceName: string;
@@ -512,11 +513,14 @@ interface ShippingServiceSelectorProps {
 const ShippingServiceSelector: React.FC<ShippingServiceSelectorProps> = ({ 
   tempOrderId, 
   orderSource,
+  initialSelectedServiceId, 
   onServiceSelect
 }) => {
+  
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [sortType, setSortType] = useState('Fastest'); // Default to Fastest
-  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<string | null>(initialSelectedServiceId || null);
+  // const [selectedService, setSelectedService] = useState<string | null>(null);
   const [services, setServices] = useState<ShippingService[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmittingService, setIsSubmittingService] = useState(false);
