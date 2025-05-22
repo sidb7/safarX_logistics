@@ -126,7 +126,7 @@ function Dropdown({
 function DarkstoreTable() {
   const [open, setOpen] = useState<TableColumnType | false>(false);
   const [pageNo, setPageNo] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(20);
+  const [limit, setLimit] = useState<number>(50);
   const [darkStoreData, setDarkStoreData] = useState<any>([]);
   const [filterList, setFilterList] = useState<any>([]);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
@@ -357,8 +357,8 @@ function DarkstoreTable() {
 
       cell: (info: any) => {
         return (
-          <div className="flex gap-x-2" style={{}}>
-            {info.row.original.dark_store || ""}
+          <div className="flex gap-x-2">
+            {info?.row?.original?.dark_store || ""}
           </div>
         );
       },
@@ -418,8 +418,8 @@ function DarkstoreTable() {
 
       cell: (info: any) => {
         return (
-          <div className="flex gap-x-2" style={{}}>
-            {info.row.original.product_name || ""}
+          <div className="flex gap-x-2">
+            {info?.row?.original?.product_name || ""}
           </div>
         );
       },
@@ -477,9 +477,7 @@ function DarkstoreTable() {
 
       cell: (info: any) => {
         return (
-          <div className="flex gap-x-2" style={{}}>
-            {info.row.original.sku || ""}
-          </div>
+          <div className="flex gap-x-2">{info?.row?.original?.sku || ""}</div>
         );
       },
     }),
@@ -494,23 +492,20 @@ function DarkstoreTable() {
 
       cell: (info: any) => {
         return (
-          <div className="flex gap-x-2" style={{}}>
-            {info.row.original.qty || "-"}
-          </div>
+          <div className="flex gap-x-2">{info?.row?.original?.qty || "-"}</div>
         );
       },
     }),
   ];
 
   return (
-    <div className="mt-[15px]">
+    <div className="">
       <CustomTable
         columnsData={DarkStoreColumns}
         rowData={darkStoreData}
         currentPage={totalPages.currentPage}
         pageSize={limit}
-        minHeight="46vh"
-        parentClassName={"h-[46vh] pb-[200px]"}
+        parentClassName={"h-[calc(100vh-350px)] pb-[200px]"}
         rowClassName={"shadow-none"}
         rowCellClassName={
           "!border-b !border-b-lightgrey !border-solid pb-[10px] border-r-0"
@@ -519,11 +514,11 @@ function DarkstoreTable() {
       {darkStoreData.length > 0 && (
         <OnePagination
           totalItems={totalPages.totalInventory}
-          itemsPerPageOptions={[20, 50, 100, 250]}
+          itemsPerPageOptions={[50, 100, 250, 500, 1000, 5000, 10000]}
           onPageChange={onPageIndexChange}
           onItemsPerPageChange={onPerPageItemChange}
           initialItemsPerPage={limit}
-          className="pb-6 !mb-0 !mt-2 !mx-0"
+          className="!pb-0 !mb-0 !mt-2 !mx-0"
           pageNo={totalPages.currentPage}
         />
       )}
