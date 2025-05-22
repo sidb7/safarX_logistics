@@ -957,6 +957,11 @@ const prepareBoxInfoPayload = () => {
         0
       );
 
+        // Use the individual box's collectible amount, fallback to invoice value if not set
+        const boxCollectibleAmount = paymentMethod === "Cash on Delivery"
+        ? (Number(b2cBox.collectibleAmount) || invoiceValue)
+        : 0;
+
       return {
         boxId: b2cBox.selectedBoxSuggestion?.boxId || uuidv4(),
         name: b2cBox.dimensions.name || `Box ${b2cBox.id}`,
@@ -996,10 +1001,7 @@ const prepareBoxInfoPayload = () => {
         })),
         codInfo: {
           isCod: paymentMethod === "Cash on Delivery",
-          collectableAmount:
-            paymentMethod === "Cash on Delivery"
-              ? Number(collectibleAmount) || 0
-              : 0,
+          collectableAmount:boxCollectibleAmount,
           invoiceValue: invoiceValue,
         },
         insurance: {
@@ -2164,6 +2166,11 @@ const prepareBoxInfoForReverseOrder = () => {
         0
       );
 
+        // Use the individual box's collectible amount, fallback to invoice value if not set
+        const boxCollectibleAmount = paymentMethod === "Cash on Delivery"
+        ? (Number(b2cBox.collectibleAmount) || invoiceValue)
+        : 0;
+
       // Get the first product for example purposes (or combine all)
       const firstProduct = b2cBox.products[0] || {};
 
@@ -2192,10 +2199,7 @@ const prepareBoxInfoForReverseOrder = () => {
         })),
         codInfo: {
           isCod: paymentMethod === "Cash on Delivery",
-          collectableAmount:
-            paymentMethod === "Cash on Delivery"
-              ? Number(collectibleAmount) || 0
-              : 0,
+          collectableAmount:boxCollectibleAmount,
           invoiceValue: invoiceValue || 0,
         },
         podInfo: {
@@ -2482,7 +2486,7 @@ const prepareBoxInfoForReverseOrder = () => {
             )}
 
             {/* Add Place Order button at the bottom */}
-            <div className="mt-4 mb-4">
+            <div className="mt-4 mb-4  ">
               <div className="rounded-lg shadow-md bg-white p-2 border">
                 <div className="flex justify-end">
                   <div className="flex items-center gap-4">
