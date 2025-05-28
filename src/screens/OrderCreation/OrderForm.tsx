@@ -6850,7 +6850,7 @@ const handleBoxNameSearch = async (value: string) => {
       {/* Two-column layout for products and box info */}
       <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
         {/* Left column - Products List */}
-        <div className="w-full lg:w-2/3 space-y-4">
+        <div className="w-full lg:w-3/5 space-y-4">
           {currentBox.products.length === 0 ? (
             <div className="bg-blue-50 rounded-md p-8 flex flex-col items-center justify-center">
               <p className="text-gray-500 mb-4">
@@ -7021,678 +7021,461 @@ const handleBoxNameSearch = async (value: string) => {
                     </div>
 
                     {/* Product Details Form - New Layout Matching Image */}
-                    <div className="mb-4">
-                      {/* First row: Product Name, SKU, HSN, Qty, Unit Price, Unit Wt */}
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        <div
-                          className="flex-grow max-w-[262px] relative"
-                          ref={(el) =>
-                            (productSearchRefs.current[product.id] = el)
-                          }
-                        >
-                          <FloatingLabelInput
-                            placeholder="Product Name"
-                            value={product.name.toString()}
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-name`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-name`
-                                );
-                              }
-                              handleProductNameSearch(product.id, value);
-                            }}
-                            icon={<img src={searchIcon} alt="Search" />}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-name`
-                              ] || false
-                            }
-                            errorMessage="Product name is required"
-                          />
 
-                          {/* Product Search Results Dropdown */}
-                          {showProductSearchResults[product.id] &&
-                            filteredProductResults[product.id]?.length > 0 && (
-                              <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                {filteredProductResults[product.id].map(
-                                  (suggestion) => (
-                                    <div
-                                      key={suggestion.productId}
-                                      className="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 flex justify-between items-center"
-                                      onClick={() =>
-                                        selectProductFromSearch(
-                                          product.id,
-                                          suggestion
-                                        )
-                                      }
-                                    >
-                                      <div>
-                                        <div className="font-medium">
-                                          {suggestion.name}
-                                        </div>
-                                        <div className="text-sm text-gray-600">
-                                          ₹ {suggestion.unitPrice} |{" "}
-                                          {suggestion.deadWeight} kg
-                                        </div>
-                                      </div>
-                                      <div className="text-xs bg-gray-200 px-2 py-1 rounded">
-                                        {suggestion.length} x{" "}
-                                        {suggestion.breadth} x{" "}
-                                        {suggestion.height}
-                                      </div>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            )}
-                        </div>
-                        <div className="w-20">
-                          <FloatingLabelInput
-                            placeholder="SKU"
-                            value={product.boxInfo.sku}
-                            onChangeCallback={(value) => {
-                              setBoxes((prevBoxes) => {
-                                if (
-                                  validationErrors[currentBox.id]?.[
-                                    `product-${product.id}-sku`
-                                  ]
-                                ) {
-                                  clearFieldError(
-                                    currentBox.id,
-                                    `product-${product.id}-sku`
-                                  );
-                                }
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.sku = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.sku = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-sku`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-20">
-                          <FloatingLabelInput
-                            placeholder="HSN"
-                            value={product.boxInfo.hsn}
-                            onChangeCallback={(value) => {
-                              setBoxes((prevBoxes) => {
-                                if (
-                                  validationErrors[currentBox.id]?.[
-                                    `product-${product.id}-hsn`
-                                  ]
-                                ) {
-                                  clearFieldError(
-                                    currentBox.id,
-                                    `product-${product.id}-hsn`
-                                  );
-                                }
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.hsn = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.hsn = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-hsn`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-20">
-                          <FloatingLabelInput
-                            placeholder="Qty"
-                            value={product.quantity.toString()}
-                            type="number"
-                            showNumberControls={true}
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-quantity`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-quantity`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.quantity = value;
-                                      // Update total price and weight
-                                      const qty = Number(value) || 0;
-                                      const unitPrice =
-                                        Number(foundProduct.unitPrice) || 0;
-                                      const unitWeight =
-                                        Number(foundProduct.unitWeight) || 0;
-                                      foundProduct.totalPrice = qty * unitPrice;
-                                      foundProduct.totalWeight =
-                                        qty * unitWeight;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.quantity = value;
-                                      // Update total price and weight
-                                      const qty = Number(value) || 0;
-                                      const unitPrice =
-                                        Number(foundProduct.unitPrice) || 0;
-                                      const unitWeight =
-                                        Number(foundProduct.unitWeight) || 0;
-                                      foundProduct.totalPrice = qty * unitPrice;
-                                      foundProduct.totalWeight =
-                                        qty * unitWeight;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-quantity`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-32">
-                          <FloatingLabelInput
-                            placeholder="Unit Price"
-                            value={product.unitPrice.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-unitPrice`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-unitPrice`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.unitPrice = value;
-                                      // Update total price
-                                      const qty =
-                                        Number(foundProduct.quantity) || 0;
-                                      const unitPrice = Number(value) || 0;
-                                      foundProduct.totalPrice = qty * unitPrice;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.unitPrice = value;
-                                      // Update total price
-                                      const qty =
-                                        Number(foundProduct.quantity) || 0;
-                                      const unitPrice = Number(value) || 0;
-                                      foundProduct.totalPrice = qty * unitPrice;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-unitPrice`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-32">
-                          <FloatingLabelInput
-                            placeholder="Unit Wt (kg)"
-                            value={product.unitWeight.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-unitWeight`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-unitWeight`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.unitWeight = value;
-                                      // Update total weight
-                                      const qty =
-                                        Number(foundProduct.quantity) || 0;
-                                      const unitWeight = Number(value) || 0;
-                                      foundProduct.totalWeight =
-                                        qty * unitWeight;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.unitWeight = value;
-                                      // Update total weight
-                                      const qty =
-                                        Number(foundProduct.quantity) || 0;
-                                      const unitWeight = Number(value) || 0;
-                                      foundProduct.totalWeight =
-                                        qty * unitWeight;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-unitWeight`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                      </div>
+{/* Product Details Form - Responsive Grid Layout */}
+<div className="mb-4">
+  {/* Responsive grid that adapts to zoom levels and screen sizes */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2">
+    
+    {/* Product Name - spans multiple columns on larger screens */}
+    <div className="sm:col-span-2 lg:col-span-2 xl:col-span-2 relative" 
+         ref={(el) => (productSearchRefs.current[product.id] = el)}>
+      <FloatingLabelInput
+        placeholder="Product Name"
+        value={product.name.toString()}
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-name`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-name`);
+          }
+          handleProductNameSearch(product.id, value);
+        }}
+        icon={<img src={searchIcon} alt="Search" />}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-name`] || false}
+        errorMessage="Product name is required"
+      />
 
-                      {/* Second row: Disc %, Tax %, L, B, H, Total Price, Total Wt */}
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        <div className="w-32">
-                          <FloatingLabelInput
-                            placeholder="Disc %"
-                            value={product.boxInfo.discount.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-discount`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-discount`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.discount = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.discount = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-discount`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-32">
-                          <FloatingLabelInput
-                            placeholder="Tax %"
-                            value={product.boxInfo.tax.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-tax`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-tax`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.tax = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.tax = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-tax`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-20">
-                          <FloatingLabelInput
-                            placeholder="L (cm)"
-                            value={product.boxInfo.l.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-length`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-length`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.l = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.l = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-length`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-20">
-                          <FloatingLabelInput
-                            placeholder="B (cm)"
-                            value={product.boxInfo.b.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-breadth`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-breadth`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.b = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.b = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-breadth`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-20">
-                          <FloatingLabelInput
-                            placeholder="H (cm)"
-                            value={product.boxInfo.h.toString()}
-                            type="number"
-                            onChangeCallback={(value) => {
-                              if (
-                                validationErrors[currentBox.id]?.[
-                                  `product-${product.id}-height`
-                                ]
-                              ) {
-                                clearFieldError(
-                                  currentBox.id,
-                                  `product-${product.id}-height`
-                                );
-                              }
-                              setBoxes((prevBoxes) => {
-                                const updatedBoxes = [...prevBoxes];
-                                if (allBoxesIdentical) {
-                                  // Update all boxes in identical mode
-                                  updatedBoxes.forEach((box) => {
-                                    const foundProduct = box.products.find(
-                                      (p) => p.id === product.id
-                                    );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.h = value;
-                                    }
-                                  });
-                                } else {
-                                  // Update only current box
-                                  const currentBox = updatedBoxes.find(
-                                    (box) => box.id === selectedBox
-                                  );
-                                  if (currentBox) {
-                                    const foundProduct =
-                                      currentBox.products.find(
-                                        (p) => p.id === product.id
-                                      );
-                                    if (foundProduct) {
-                                      foundProduct.boxInfo.h = value;
-                                    }
-                                  }
-                                }
-                                return updatedBoxes;
-                              });
-                            }}
-                            error={
-                              validationErrors[currentBox.id]?.[
-                                `product-${product.id}-height`
-                              ] || false
-                            }
-                            errorMessage="Required"
-                          />
-                        </div>
-                        <div className="w-32 ">
-                          <FloatingLabelInput
-                            placeholder="Total Price"
-                            value={product.totalPrice.toString()}
-                            type="number"
-                            counter="₹"
-                            readOnly={true}
-                          />
-                        </div>
-                        <div className="w-32">
-                          <FloatingLabelInput
-                            placeholder="Total Wt (kg)"
-                            value={Number(parseFloat(Number(product.totalWeight).toFixed(2))).toString()}
-                            type="number"
-                            readOnly={true}
-                          />
-                        </div>
-                      </div>
-                    </div>
+      {/* Product Search Results Dropdown */}
+      {showProductSearchResults[product.id] && filteredProductResults[product.id]?.length > 0 && (
+        <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+          {filteredProductResults[product.id].map((suggestion) => (
+            <div
+              key={suggestion.productId}
+              className="p-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 flex justify-between items-center"
+              onClick={() => selectProductFromSearch(product.id, suggestion)}
+            >
+              <div>
+                <div className="font-medium">{suggestion.name}</div>
+                <div className="text-sm text-gray-600">
+                  ₹ {suggestion.unitPrice} | {suggestion.deadWeight} kg
+                </div>
+              </div>
+              <div className="text-xs bg-gray-200 px-2 py-1 rounded">
+                {suggestion.length} x {suggestion.breadth} x {suggestion.height}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {/* SKU */}
+    <div>
+      <FloatingLabelInput
+        placeholder="SKU"
+        value={product.boxInfo.sku}
+        onChangeCallback={(value) => {
+          setBoxes((prevBoxes) => {
+            if (validationErrors[currentBox.id]?.[`product-${product.id}-sku`]) {
+              clearFieldError(currentBox.id, `product-${product.id}-sku`);
+            }
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.sku = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.sku = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-sku`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* HSN */}
+    <div>
+      <FloatingLabelInput
+        placeholder="HSN"
+        value={product.boxInfo.hsn}
+        onChangeCallback={(value) => {
+          setBoxes((prevBoxes) => {
+            if (validationErrors[currentBox.id]?.[`product-${product.id}-hsn`]) {
+              clearFieldError(currentBox.id, `product-${product.id}-hsn`);
+            }
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.hsn = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.hsn = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-hsn`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Quantity */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Qty"
+        value={product.quantity.toString()}
+        type="number"
+        showNumberControls={true}
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-quantity`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-quantity`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.quantity = value;
+                  const qty = Number(value) || 0;
+                  const unitPrice = Number(foundProduct.unitPrice) || 0;
+                  const unitWeight = Number(foundProduct.unitWeight) || 0;
+                  foundProduct.totalPrice = qty * unitPrice;
+                  foundProduct.totalWeight = qty * unitWeight;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.quantity = value;
+                  const qty = Number(value) || 0;
+                  const unitPrice = Number(foundProduct.unitPrice) || 0;
+                  const unitWeight = Number(foundProduct.unitWeight) || 0;
+                  foundProduct.totalPrice = qty * unitPrice;
+                  foundProduct.totalWeight = qty * unitWeight;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-quantity`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Unit Price */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Unit Price"
+        value={product.unitPrice.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-unitPrice`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-unitPrice`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.unitPrice = value;
+                  const qty = Number(foundProduct.quantity) || 0;
+                  const unitPrice = Number(value) || 0;
+                  foundProduct.totalPrice = qty * unitPrice;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.unitPrice = value;
+                  const qty = Number(foundProduct.quantity) || 0;
+                  const unitPrice = Number(value) || 0;
+                  foundProduct.totalPrice = qty * unitPrice;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-unitPrice`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Unit Weight */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Unit Wt (kg)"
+        value={product.unitWeight.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-unitWeight`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-unitWeight`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.unitWeight = value;
+                  const qty = Number(foundProduct.quantity) || 0;
+                  const unitWeight = Number(value) || 0;
+                  foundProduct.totalWeight = qty * unitWeight;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.unitWeight = value;
+                  const qty = Number(foundProduct.quantity) || 0;
+                  const unitWeight = Number(value) || 0;
+                  foundProduct.totalWeight = qty * unitWeight;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-unitWeight`] || false}
+        errorMessage="Required"
+      />
+    </div>
+  </div>
+
+  {/* Second row - responsive layout for second set of inputs */}
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-2 mt-4">
+    
+    {/* Discount % */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Disc %"
+        value={product.boxInfo.discount.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-discount`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-discount`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.discount = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.discount = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-discount`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Tax % */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Tax %"
+        value={product.boxInfo.tax.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-tax`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-tax`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.tax = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.tax = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-tax`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Length */}
+    <div>
+      <FloatingLabelInput
+        placeholder="L (cm)"
+        value={product.boxInfo.l.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-length`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-length`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.l = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.l = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-length`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Breadth */}
+    <div>
+      <FloatingLabelInput
+        placeholder="B (cm)"
+        value={product.boxInfo.b.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-breadth`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-breadth`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.b = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.b = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-breadth`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Height */}
+    <div>
+      <FloatingLabelInput
+        placeholder="H (cm)"
+        value={product.boxInfo.h.toString()}
+        type="number"
+        onChangeCallback={(value) => {
+          if (validationErrors[currentBox.id]?.[`product-${product.id}-height`]) {
+            clearFieldError(currentBox.id, `product-${product.id}-height`);
+          }
+          setBoxes((prevBoxes) => {
+            const updatedBoxes = [...prevBoxes];
+            if (allBoxesIdentical) {
+              updatedBoxes.forEach((box) => {
+                const foundProduct = box.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.h = value;
+                }
+              });
+            } else {
+              const currentBox = updatedBoxes.find((box) => box.id === selectedBox);
+              if (currentBox) {
+                const foundProduct = currentBox.products.find((p) => p.id === product.id);
+                if (foundProduct) {
+                  foundProduct.boxInfo.h = value;
+                }
+              }
+            }
+            return updatedBoxes;
+          });
+        }}
+        error={validationErrors[currentBox.id]?.[`product-${product.id}-height`] || false}
+        errorMessage="Required"
+      />
+    </div>
+
+    {/* Total Price */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Total Price"
+        value={product.totalPrice.toString()}
+        type="number"
+        counter="₹"
+        readOnly={true}
+      />
+    </div>
+
+    {/* Total Weight */}
+    <div>
+      <FloatingLabelInput
+        placeholder="Total Wt (kg)"
+        value={Number(parseFloat(Number(product.totalWeight).toFixed(2))).toString()}
+        type="number"
+        readOnly={true}
+      />
+    </div>
+  </div>
+</div>
+
                   </>
                 )}
               </div>
@@ -7713,10 +7496,10 @@ const handleBoxNameSearch = async (value: string) => {
         </div>
 
         {/* Right column - Box Info */}
-        <div className="w-full lg:w-1/3">
-          <div className="bg-[#f5fbff] border-gray-200 rounded-2xl shadow-md p-4 lg:sticky lg:top-4 ">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-              <div className="font-medium text-gray-800 text-lg mb-2 sm:mb-0">
+        <div className="w-full lg:w-2/5">
+          <div className="bg-[#f5fbff] border-gray-200 rounded-2xl shadow-md px-4 pt-2 pb-2  lg:sticky lg:top-4 ">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center ">
+              <div className="font-medium text-gray-800 text-lg  sm:mb-0">
                 {allBoxesIdentical
                   ? "Box Info (All Identical)"
                   : `Box ${selectedBox} Info`}
@@ -7746,8 +7529,8 @@ const handleBoxNameSearch = async (value: string) => {
             </div>
 
             {/* Box Suggestions Display */}
-            <HorizontalScroller className="my-4">
-              <div className="flex gap-2 whitespace-nowrap pb-2">
+            <HorizontalScroller className="my-2">
+              <div className="flex gap-2 whitespace-nowrap ">
                 {visibleBoxSuggestions.map((suggestion) => {
                   // Check if this is the selected suggestion
                   const isSelected =
@@ -7817,7 +7600,7 @@ const handleBoxNameSearch = async (value: string) => {
               </div>
             </HorizontalScroller>
 
-            <div className="flex justify-center -mt-8">
+            <div className="flex justify-center -mt-7">
               {/* <div className="relative w-48 h-48 md:w-56 md:h-56"> */}
               <div className="relative w-34 h-34 md:w-44 md:h-44">
 
@@ -7830,7 +7613,7 @@ const handleBoxNameSearch = async (value: string) => {
             </div>
 
             {/* Box Input Fields - Single Row Layout */}
-            <div className="mb-4 relative" ref={boxSearchRef}>
+            <div className="mb-2 relative" ref={boxSearchRef}>
               <div className="flex gap-2">
                 <div className="flex-grow relative">
                   <FloatingLabelInput
