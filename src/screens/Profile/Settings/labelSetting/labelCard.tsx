@@ -46,6 +46,30 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 Data breach
               </p>
             </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
+                label="Hide Customer's GST Number"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px]"
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData?.inputs,
+                      buyerDetails: {
+                        ...labelData?.inputs?.buyerDetails,
+                        gstNumber: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={labelData?.inputs?.buyerDetails?.gstNumber || false}
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] pt-1 md:pt-2">
+                Note: Hide the Customer's GST Number from your Shipping Label.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -129,6 +153,30 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
               />
               <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777]  pt-1 md:pt-2">
                 Note: Hide the Seller's Mobile Number.
+              </p>
+            </div>
+             <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
+                label="Hide Seller's GST Number."
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData?.inputs,
+                      sellerDetails: {
+                        ...labelData?.inputs?.sellerDetails,
+                        gstNumber: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={labelData?.inputs?.sellerDetails?.gstNumber || false}
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777]  pt-1 md:pt-2">
+                Note: Hide the Seller's GST Number.
               </p>
             </div>
             {/* <div>
