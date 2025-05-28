@@ -762,7 +762,7 @@ useEffect(() => {
 
   // Function to calculate total invoice value from all boxes
   const calculateTotalInvoiceValue = () => {
-    if (order.orderType === "B2C") {
+    if (order.orderType === "B2C" || order.orderType === "B2B") {
       return boxesData.reduce((total, box) => {
         return (
           total +
@@ -944,12 +944,13 @@ useEffect(() => {
   // Updated prepareBoxInfoPayload function in OrderCreation component
   // prepareBoxInfoPayload with changes ONLY for B2B section
 const prepareBoxInfoPayload = () => {
-  const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
-  const boxesToProcess =
-    order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
+  // const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+  const boxes =  boxesData ;
+
+  const boxesToProcess = allBoxesIdentical ? [boxes[0]] : boxes;
 
   const transformedBoxes = boxesToProcess.map((box) => {
-    if (order.orderType === "B2C") {
+    if (order.orderType === "B2C" || order.orderType==="B2B") {
       // *** B2C SECTION - COMPLETELY UNCHANGED ***
       const b2cBox = box as BoxData;
       const invoiceValue = b2cBox.products.reduce(
@@ -1020,7 +1021,7 @@ const prepareBoxInfoPayload = () => {
       };
     } else {
       // *** B2B SECTION - WITH CHANGES FOR COLLECTIBLE AMOUNT ***
-      const b2bBox = box as B2BBox;
+      const b2bBox = box as unknown as B2BBox;
       const invoiceValue = b2bBox.packages.reduce(
         (total, pkg) => total + (Number(pkg.totalPrice) || 0),
         0
@@ -1585,7 +1586,7 @@ const prepareBoxInfoPayload = () => {
     const newBoxErrors: { [boxId: number]: { [fieldId: string]: boolean } } =
       {};
 
-    if (order.orderType === "B2C") {
+    if (order.orderType === "B2C" || order.orderType === "B2B") {
       // Validate B2C boxes
       boxesData.forEach((box) => {
         newBoxErrors[box.id] = {};
@@ -1669,7 +1670,8 @@ const prepareBoxInfoPayload = () => {
     // Check if box data exists for order
     if (
       (order.orderType === "B2C" && boxesData.length === 0) ||
-      (order.orderType === "B2B" && b2bBoxesData.length === 0)
+      (order.orderType === "B2B" && boxesData.length === 0)
+      // (order.orderType === "B2B" && b2bBoxesData.length === 0)
     ) {
       toast.error("Please add at least one package to your order");
       return;
@@ -1810,7 +1812,7 @@ const prepareBoxInfoPayload = () => {
           isCod: paymentMethod === "Cash on Delivery",
           collectableAmount:
             paymentMethod === "Cash on Delivery"
-              ? order.orderType === "B2C"
+              ? order.orderType === "B2C" || order.orderType === "B2B"
                 ? totalCollectibleAmount
                 : Number(collectibleAmount) || 0
               : 0,
@@ -2152,14 +2154,15 @@ const prepareBoxInfoPayload = () => {
   // prepareBoxInfoForReverseOrder with changes ONLY for B2B section
 const prepareBoxInfoForReverseOrder = () => {
   // Determine which box data to use based on order type
-  const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
-  const boxesToProcess =
-    order.orderType === "B2C" && allBoxesIdentical ? [boxes[0]] : boxes;
+  // const boxes = order.orderType === "B2C" ? boxesData : b2bBoxesData;
+  const boxes = boxesData ;
+
+  const boxesToProcess = allBoxesIdentical ? [boxes[0]] : boxes;
 
   // Transform boxes to the format expected by REVERSE_ORDER API
   return boxesToProcess.map((box, index) => {
     // For B2C boxes - COMPLETELY UNCHANGED
-    if (order.orderType === "B2C") {
+    if (order.orderType === "B2C" || order.orderType==="B2B") {
       const b2cBox = box as BoxData;
       const invoiceValue = b2cBox.products.reduce(
         (total, product) => total + (Number(product.totalPrice) || 0),
@@ -2210,7 +2213,7 @@ const prepareBoxInfoForReverseOrder = () => {
     }
     // For B2B boxes - WITH CHANGES FOR COLLECTIBLE AMOUNT
     else {
-      const b2bBox = box as B2BBox;
+      const b2bBox = box as unknown as B2BBox;
       const invoiceValue = b2bBox.packages.reduce(
         (total, pkg) => total + (Number(pkg.totalPrice) || 0),
         0
@@ -2302,7 +2305,7 @@ const prepareBoxInfoForReverseOrder = () => {
   useEffect(() => {
     // Only set the collectible amount if payment method is Cash on Delivery
     if (paymentMethod === "Cash on Delivery") {
-      if (order.orderType === "B2C") {
+      if (order.orderType === "B2C" || "B2B") {
         // For B2C orders, use the totalCollectibleAmount from OrderForm
         setCollectibleAmount(totalCollectibleAmount.toString());
       } else {
@@ -2399,7 +2402,7 @@ const prepareBoxInfoForReverseOrder = () => {
                 className="mb-10"
                 defaultOpen={true}
               >
-                {order.orderType === "B2C" ? (
+                {/* {order.orderType === "B2C" ? (
                   <OrderForm
                     key="b2c-form"
                     onBoxDataUpdate={handleBoxDataUpdate}
@@ -2415,7 +2418,14 @@ const prepareBoxInfoForReverseOrder = () => {
                     clearFieldError={clearBoxFieldError}
                     paymentMethod={paymentMethod} 
                   />
-                )}
+                )} */}
+                <OrderForm
+  key={order.orderType === "B2C" ? "b2c-form" : "b2b-form"}
+  onBoxDataUpdate={handleBoxDataUpdate}
+  validationErrors={boxValidationErrors}
+  clearFieldError={clearBoxFieldError}
+  paymentMethod={paymentMethod}
+/>
               </Collapsible>
 
               <Collapsible

@@ -3914,7 +3914,7 @@ const fetchDefaultPickupAddress = async () => {
             />
 
             {/* Magic Fill Button */}
-            <div className="flex justify-start ">
+            {/* <div className="flex justify-start ">
               <OneButton
                 text={"Magic Fill"}
                 onClick={handlePickupMagicFill}
@@ -3923,7 +3923,7 @@ const fetchDefaultPickupAddress = async () => {
                 icon={locationIcon}
                 className="!rounded-full !bg-[#004EFF] hover:!bg-blue-500"
               />
-            </div>
+            </div> */}
 
             {/* Name and Pin code */}
             <div className="grid grid-cols-2 gap-4">
@@ -3974,7 +3974,7 @@ const fetchDefaultPickupAddress = async () => {
 
             {/* Additional Address Information */}
             <div>
-              <button
+              {/* <button
                 onClick={() => setShowPickupDetails(!showPickupDetails)}
                 className="flex items-center justify-between w-full text-left"
               >
@@ -3989,7 +3989,7 @@ const fetchDefaultPickupAddress = async () => {
                 >
                   &#8963;
                 </span>
-              </button>
+              </button> */}
 
               {showPickupDetails && (
                 <div className="space-y-4 mt-4">
@@ -4176,7 +4176,7 @@ const fetchDefaultPickupAddress = async () => {
             />
 
             {/* Magic Fill Button */}
-            <div className="flex justify-start ">
+            {/* <div className="flex justify-start ">
               <OneButton
                 text={"Magic Fill"}
                 onClick={handleDeliveryMagicFill}
@@ -4185,7 +4185,7 @@ const fetchDefaultPickupAddress = async () => {
                 icon={locationIcon}
                 className="!rounded-full !bg-[#004EFF] hover:!bg-blue-500"
               />
-            </div>
+            </div> */}
 
             {/* Name and Pin code */}
             <div className="grid grid-cols-2 gap-4">
@@ -4236,7 +4236,7 @@ const fetchDefaultPickupAddress = async () => {
 
             {/* Additional Address Information */}
             <div>
-              <button
+              {/* <button
                 onClick={() => setShowDeliveryDetails(!showDeliveryDetails)}
                 className="flex items-center justify-between w-full text-left"
               >
@@ -4251,7 +4251,7 @@ const fetchDefaultPickupAddress = async () => {
                 >
                   &#8963;
                 </span>
-              </button>
+              </button> */}
 
               {showDeliveryDetails && (
                 <div className="space-y-4 mt-4">

@@ -1,5 +1,3 @@
-
-
 // import { useState, ReactNode, useRef, FC, useEffect } from "react";
 
 // interface FloatingLabelInputProps {
@@ -48,26 +46,28 @@
 //     setInternalValue(value);
 //   }, [value]);
 
-//   // Disable wheel scrolling on number inputs globally
-//   useEffect(() => {
-//     // Only add the event listener if this is a number input
-//     if (type === "number" && inputRef.current) {
-//       const handleWheelingGlobally = (e: WheelEvent) => {
-//         // Check if the event target is our input element
-//         if (document.activeElement === inputRef.current) {
-//           e.preventDefault();
-//         }
-//       };
+//   // Use a robust approach to prevent number changes while allowing scrolling
+//   // This has been replaced with the text input + validation approach
 
-//       // Use passive: false to allow preventDefault()
-//       window.addEventListener("wheel", handleWheelingGlobally, { passive: false });
-      
-//       // Clean up
-//       return () => {
-//         window.removeEventListener("wheel", handleWheelingGlobally);
-//       };
-//     }
-//   }, [type]);
+//   useEffect(() => {
+//     // Create stylesheet to hide number input spinners
+//     const styleEl = document.createElement('style');
+//     styleEl.textContent = `
+//       input[type="number"]::-webkit-inner-spin-button,
+//       input[type="number"]::-webkit-outer-spin-button {
+//         -webkit-appearance: none;
+//         margin: 0;
+//       }
+//       input[type="number"] {
+//         -moz-appearance: textfield;
+//       }
+//     `;
+//     document.head.appendChild(styleEl);
+    
+//     return () => {
+//       document.head.removeChild(styleEl);
+//     };
+//   }, []);
 
 //   const handleLabelClick = () => {
 //     if (inputRef.current) {
@@ -94,7 +94,16 @@
 //         newValue = newValue.substring(1);
 //       }
 //     } else if (type === "number") {
-//       // For number fields, prevent negative values
+//       // For number fields, only allow digits and decimal point
+//       newValue = newValue.replace(/[^\d.]/g, "");
+      
+//       // Ensure only one decimal point
+//       const decimalPoints = newValue.match(/\./g);
+//       if (decimalPoints && decimalPoints.length > 1) {
+//         newValue = newValue.replace(/\./, "x").replace(/\./g, "").replace(/x/, ".");
+//       }
+      
+//       // Prevent negative values
 //       if (newValue.startsWith("-")) {
 //         newValue = newValue.substring(1);
 //       }
@@ -159,7 +168,9 @@
 //         )}
 //         <input
 //           ref={inputRef}
-//           type={type}
+//           type={type === "number" ? "text" : type}
+//           pattern={type === "number" ? "[0-9]*" : undefined}
+//           inputMode={type === "number" ? "numeric" : undefined}
 //           value={internalValue}
 //           onChange={handleChange}
 //           onFocus={handleFocus}
@@ -167,6 +178,7 @@
 //           readOnly={readOnly}
 //           min="0" // Prevent negative values
 //           maxLength={maxLength}
+//           step="any" // Disables mousewheel increment/decrement
 //           className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
 //             counter
 //               ? "pr-10"
@@ -301,6 +313,7 @@ interface FloatingLabelInputProps {
   isPincodeField?: boolean;
   readOnly?: boolean;
   maxLength?: number;
+  size?: "small" | "medium" | "large";
 }
 
 const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
@@ -319,6 +332,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
   isPincodeField = false,
   readOnly = false,
   maxLength,
+  size = "medium",
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
@@ -326,13 +340,55 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
   const showIcon = !(isFocused || hasValue) && icon;
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Size-based styles configuration
+  const sizeStyles = {
+    small: {
+      padding: "py-2",
+      paddingLeft: showIcon ? "pl-8" : "pl-3",
+      paddingRight: counter ? "pr-8" : showNumberControls && type === "number" ? "pr-6" : "pr-3",
+      fontSize: "text-xs",
+      labelTop: "top-2",
+      labelFloatingTop: "top-0",
+      iconLeft: "left-2",
+      counterRight: "right-2",
+      numberControlsRight: "right-2",
+      errorIconSize: "h-4 w-4",
+      numberControlIconSize: "10",
+    },
+    medium: {
+      padding: "py-4",
+      paddingLeft: showIcon ? "pl-10" : "pl-4",
+      paddingRight: counter ? "pr-10" : showNumberControls && type === "number" ? "pr-8" : "pr-4",
+      fontSize: "text-sm",
+      labelTop: "top-4",
+      labelFloatingTop: "top-0",
+      iconLeft: "left-3",
+      counterRight: "right-3",
+      numberControlsRight: "right-3",
+      errorIconSize: "h-5 w-5",
+      numberControlIconSize: "14",
+    },
+    large: {
+      padding: "py-5",
+      paddingLeft: showIcon ? "pl-12" : "pl-5",
+      paddingRight: counter ? "pr-12" : showNumberControls && type === "number" ? "pr-10" : "pr-5",
+      fontSize: "text-base",
+      labelTop: "top-5",
+      labelFloatingTop: "top-0",
+      iconLeft: "left-4",
+      counterRight: "right-4",
+      numberControlsRight: "right-4",
+      errorIconSize: "h-6 w-6",
+      numberControlIconSize: "16",
+    },
+  };
+
+  const currentSize = sizeStyles[size];
+
   // Update internal state when external value changes
   useEffect(() => {
     setInternalValue(value);
   }, [value]);
-
-  // Use a robust approach to prevent number changes while allowing scrolling
-  // This has been replaced with the text input + validation approach
 
   useEffect(() => {
     // Create stylesheet to hide number input spinners
@@ -447,7 +503,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
     <div className="relative">
       <div className="relative">
         {showIcon && (
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+          <div className={`absolute inset-y-0 ${currentSize.iconLeft} flex items-center pointer-events-none`}>
             {icon}
           </div>
         )}
@@ -464,17 +520,11 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
           min="0" // Prevent negative values
           maxLength={maxLength}
           step="any" // Disables mousewheel increment/decrement
-          className={`w-full ${showIcon ? "pl-10" : "pl-4"} ${
-            counter
-              ? "pr-10"
-              : showNumberControls && type === "number"
-              ? "pr-8"
-              : "pr-4"
-          } py-4 border ${
+          className={`w-full ${currentSize.paddingLeft} ${currentSize.paddingRight} ${currentSize.padding} border ${
             error ? "border-red-500" : "border-gray-300"
           } !rounded-2xl focus:outline-none focus:ring-2 ${
             error ? "focus:ring-red-500" : "focus:ring-blue-500"
-          } font-Open text-sm ${
+          } font-Open ${currentSize.fontSize} ${
             hasValue
               ? "font-semibold text-[#1C1C1C]"
               : "font-normal text-gray-500"
@@ -483,7 +533,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
 
         {/* Integrated Number Controls - inside the input */}
         {showNumberControls && type === "number" && (
-          <div className="absolute inset-y-0 right-3 flex flex-col justify-center">
+          <div className={`absolute inset-y-0 ${currentSize.numberControlsRight} flex flex-col justify-center`}>
             <button
               type="button"
               onClick={incrementValue}
@@ -491,8 +541,8 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
+                width={currentSize.numberControlIconSize}
+                height={currentSize.numberControlIconSize}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -510,8 +560,8 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
+                width={currentSize.numberControlIconSize}
+                height={currentSize.numberControlIconSize}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -526,15 +576,15 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
         )}
 
         {counter && !error && (
-          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-400 text-sm">
+          <div className={`absolute inset-y-0 ${currentSize.counterRight} flex items-center pointer-events-none text-gray-400 ${size === "small" ? "text-xs" : size === "large" ? "text-base" : "text-sm"}`}>
             {counter}
           </div>
         )}
         {error && (
-          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-red-500">
+          <div className={`absolute inset-y-0 ${currentSize.counterRight} flex items-center pointer-events-none text-red-500`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className={currentSize.errorIconSize}
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -551,16 +601,16 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
       {/* Floating Label */}
       <div
         onClick={handleLabelClick}
-        className={`absolute transition-all duration-200 px-1 font-Open text-xs leading-4 tracking-normal cursor-pointer ${
+        className={`absolute transition-all duration-200 px-1 font-Open ${size === "small" ? "text-xs" : size === "large" ? "text-sm" : "text-xs"} leading-4 tracking-normal cursor-pointer ${
           isFocused || hasValue
-            ? `left-3 top-0 translate-y-[-50%] bg-white z-10 ${
+            ? `${size === "small" ? "left-2" : size === "large" ? "left-4" : "left-3"} ${currentSize.labelFloatingTop} translate-y-[-50%] bg-white z-10 ${
                 error
                   ? "text-red-500"
                   : isFocused
                   ? "text-blue-600"
                   : "text-gray-600"
               }`
-            : `${showIcon ? "left-10" : "left-4"} top-4 ${
+            : `${showIcon ? (size === "small" ? "left-8" : size === "large" ? "left-12" : "left-10") : (size === "small" ? "left-3" : size === "large" ? "left-5" : "left-4")} ${currentSize.labelTop} ${
                 error ? "text-red-500" : "text-gray-500"
               } bg-transparent`
         }`}
@@ -570,7 +620,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
 
       {/* Error Message */}
       {error && (
-        <div className="text-red-500 text-xs mt-1 ml-1 font-medium">
+        <div className={`text-red-500 ${size === "small" ? "text-xs" : size === "large" ? "text-sm" : "text-xs"} mt-1 ml-1 font-medium`}>
           {errorMessage}
         </div>
       )}
