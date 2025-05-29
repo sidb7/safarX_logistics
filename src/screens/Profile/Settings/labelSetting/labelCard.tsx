@@ -111,6 +111,30 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
               <Checkbox
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
+                label="Hide Seller's Name."
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData?.inputs,
+                      sellerDetails: {
+                        ...labelData?.inputs?.sellerDetails,
+                        name: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={labelData?.inputs?.sellerDetails?.name || false}
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777]  pt-1 md:pt-2">
+                Note: Hide the Seller's Name.
+              </p>
+            </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
                 label="Hide Seller's Mobile Number."
                 labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] "
                 onChange={(e: any) => {
