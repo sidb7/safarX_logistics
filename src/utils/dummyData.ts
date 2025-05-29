@@ -1792,11 +1792,11 @@ export const sideBarMenusData = [
       },
       {
         id: "bcdef1",
-        name: "Place Order(Alpha)",
+        name: "Place Order (alpha)",
         pages: [
           {
             id: "bcdef1g",
-            name: "Place Order(Alpha)",
+            name: "Place Order (alpha)",
             isActive: true,
             permissions: {
               create: true,
