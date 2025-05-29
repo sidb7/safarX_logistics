@@ -322,8 +322,8 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
   }, [order.orderType, order.reverseState, setOrder]);
 
   return (
-    <>
-      <div className="flex items-center justify-between mb-4">
+    <div>
+      <div className="flex items-center justify-between ">
         <OneButton
           text={"Parcel"}
           onClick={() => console.log("Parcel clicked")}
@@ -382,7 +382,7 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
       </div>
 
       {/* Order Type Radio Buttons */}
-      <div className="mt-4 mb-4">
+      <div className=" mb-2">
         <div className="flex gap-5">
           <div className="flex items-center">
             <input
@@ -475,7 +475,7 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

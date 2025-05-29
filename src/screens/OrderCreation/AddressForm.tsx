@@ -4132,7 +4132,7 @@ const fetchDefaultPickupAddress = async () => {
   };
 
   return (
-    <div className="flex flex-row gap-6 w-full max-w-full mx-auto p-4">
+    <div className="flex flex-row gap-6 w-full max-w-full mx-auto px-4 pt-0 pb-2">
       {/* Pickup Details Section */}
       <div className="w-1/2 bg-[#F5FBFF] rounded-2xl p-6 shadow-md">
         <div className="flex justify-between items-center mb-4">

@@ -2345,7 +2345,7 @@ const prepareBoxInfoForReverseOrder = () => {
             <>
               <Collapsible
                 title="Order Information"
-                className="mb-10"
+                className="mb-2"
                 defaultOpen={true}
               >
                 <OrderInformation
@@ -2361,7 +2361,7 @@ const prepareBoxInfoForReverseOrder = () => {
 
               <Collapsible
                 title="Where should we pick up and deliver your order?"
-                className="mb-10"
+                className="mb-2"
                 defaultOpen={true}
               >
                 <AddressForm
@@ -2399,7 +2399,7 @@ const prepareBoxInfoForReverseOrder = () => {
 
               <Collapsible
                 title="Let us know your package information"
-                className="mb-10"
+                className="mb-2"
                 defaultOpen={true}
               >
                 {/* {order.orderType === "B2C" ? (
@@ -2430,7 +2430,7 @@ const prepareBoxInfoForReverseOrder = () => {
 
               <Collapsible
                 title="Payment Information"
-                className="mb-10"
+                className="mb-2"
                 defaultOpen={true}
               >
                 <PaymentInformation
@@ -2444,8 +2444,8 @@ const prepareBoxInfoForReverseOrder = () => {
               </Collapsible>
 
               {/* Proceed Button */}
-              <div className="mt-4 mb-4">
-                <div className="rounded-lg shadow-md bg-white p-2 border">
+              <div className="mt-2 mb-2">
+                <div className="rounded-2xl shadow-md bg-white p-2 border">
                   <div className="flex justify-end">
                     <OneButton
                       text={
