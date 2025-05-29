@@ -233,7 +233,7 @@ const Collapsible = ({
         }}
         aria-hidden={!isOpen}
       >
-        <div className={`p-4 ${contentClassName}`}>
+        <div className={`px-4 pt-0 pb-2 ${contentClassName}`}>
           {children}
         </div>
       </div>

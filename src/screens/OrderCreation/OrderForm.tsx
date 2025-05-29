@@ -6779,13 +6779,13 @@ const handleBoxNameSearch = async (value: string) => {
   return (
     <div className="w-full mx-auto p-4 bg-gray-50" id="box-form-area">
       {/* Box Count Control */}
-      <div className="flex items-center mb-6">
+      <div className="flex items-center ">
         <div className="text-gray-800 font-medium mr-4">
           How many boxes are there in this order?
         </div>
         <button
           onClick={decreaseBoxCount}
-          className="px-3 py-1 border border-gray-300 rounded-l"
+          className="px-3 py-1 border border-gray-300 rounded-l-full"
         >
           −
         </button>
@@ -6794,7 +6794,7 @@ const handleBoxNameSearch = async (value: string) => {
         </div>
         <button
           onClick={increaseBoxCount}
-          className="px-3 py-1 border border-gray-300 rounded-r"
+          className="px-3 py-1 border border-gray-300 rounded-r-full"
         >
           +
         </button>
@@ -6811,14 +6811,14 @@ const handleBoxNameSearch = async (value: string) => {
       </div>
 
       {/* Box Selection - Modified to handle identical boxes */}
-      <div className="overflow-x-auto mb-8">
+      <div className="overflow-x-auto mb-2">
         {allBoxesIdentical ? (
           <div className="flex items-center">
             <button className={`px-4 py-2 border ${
           hasBoxErrors(1) 
           ? "bg-red-100 border-red-400 text-red-700" 
           : "bg-gray-200 border-gray-400"
-        } rounded`}>
+        } rounded-full`}>
               Box 1
             </button>
             <span className="ml-3 text-gray-600 flex items-center bg-blue-50 px-3 py-1 rounded-md">
@@ -6838,7 +6838,7 @@ const handleBoxNameSearch = async (value: string) => {
                   : selectedBox === boxNum
                     ? "bg-gray-200 border-gray-400"
                     : "bg-white border-gray-300"
-                } rounded-md`}
+                } rounded-full`}
               >
                 {boxNum === selectedBox ? `Box ${boxNum}` : `Box ${boxNum}`}
               </button>
@@ -6867,7 +6867,7 @@ const handleBoxNameSearch = async (value: string) => {
             </div>
           ) : (
             currentBox.products.map((product) => (
-              <div key={product.id} className="bg-blue-50 rounded-2xl shadow-md p-4">
+              <div key={product.id} className="bg-[#f5fbff] rounded-2xl shadow-md p-4">
                 {/* Product Header */}
                 <div
                   className="flex justify-between items-center mb-4 cursor-pointer"

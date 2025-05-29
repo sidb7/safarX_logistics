@@ -332,7 +332,7 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
         />
 
         {/* Reduced width input container */}
-        <div className="w-80">
+        <div className="w-80 p-3">
           <CustomInputBox
             isRightIcon={true}
             containerStyle=""
