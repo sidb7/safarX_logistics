@@ -353,13 +353,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             tempOrderIds = orders?.map(
               (data: any, index: any) => data?.tempOrderId
             );
-            orderSources = orders?.map((data: any) => data.source).filter(Boolean);
-
+            orderSources = orders
+              ?.map((data: any) => data.source)
+              .filter(Boolean);
           } else {
             tempOrderIds = selectedRowdata.map(
               (data: any, index: any) => data?.original?.tempOrderId
             );
-            orderSources = selectedRowdata.map((data: any) => data?.original?.source).filter(Boolean);
+            orderSources = selectedRowdata
+              .map((data: any) => data?.original?.source)
+              .filter(Boolean);
           }
 
           let payload = {
@@ -370,7 +373,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return;
           }
           setDeleteModalDraftOrder &&
-            setDeleteModalDraftOrder({ isOpen: true, payload,orderSources });
+            setDeleteModalDraftOrder({ isOpen: true, payload, orderSources });
         } else if (identifier === "BulkAction") {
           if (selectedRowdata.length === 0) {
             toast.error("Please Select Atleast One Order To Take Bulk Action.");
@@ -732,7 +735,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       });
 
       if (response?.success) {
-        toast.success(response?.message);
+        toast.success(
+          "Your label is being generated.You can download it from the Bulk Label page under the Settings section."
+        );
       } else {
         toast.error(response?.message);
       }
