@@ -2915,80 +2915,157 @@ const handleDeliveryMagicFill = async () => {
 };
 
   // Function to fetch pincode data from API
-  const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
-    if (!pincode || pincode.length < 6) return;
+  // const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
+  //   if (!pincode || pincode.length < 6) return;
     
-    // Set loading state for the pincode
-    if (addressType === "pickup") {
-      setIsPincodeLoading({ ...isPincodeLoading, pickup: true });
-    } else {
-      setIsPincodeLoading({ ...isPincodeLoading, delivery: true });
-    }
+  //   // Set loading state for the pincode
+  //   if (addressType === "pickup") {
+  //     setIsPincodeLoading({ ...isPincodeLoading, pickup: true });
+  //   } else {
+  //     setIsPincodeLoading({ ...isPincodeLoading, delivery: true });
+  //   }
     
-    try {
-      const payload = {
-        pincode: pincode
-      };
+  //   try {
+  //     const payload = {
+  //       pincode: pincode
+  //     };
       
-      const response = await POST(GET_PINCODE_DATA, payload);
+  //     const response = await POST(GET_PINCODE_DATA, payload);
       
-      if (response?.data?.success && response.data.data.length > 0) {
-        const pincodeData = response.data.data[0];
+  //     if (response?.data?.success && response.data.data.length > 0) {
+  //       const pincodeData = response.data.data[0];
         
-        // Update form values based on response
-        if (addressType === "pickup") {
+  //       // Update form values based on response
+  //       if (addressType === "pickup") {
+  //         const updatedFormValues = {
+  //           ...pickupFormValues,
+  //           city: pincodeData.city || pickupFormValues.city,
+  //           state: pincodeData.state || pickupFormValues.state,
+  //         };
+          
+  //         // Auto-generate address field
+  //         updatedFormValues.address = generateFullAddress(updatedFormValues);
+          
+  //         setPickupFormValues(updatedFormValues);
+          
+  //         // Clear any errors in the updated fields
+  //         clearFieldError("pickup", "city");
+  //         clearFieldError("pickup", "state");
+          
+  //         // Ensure pickup details are shown after auto-filling
+  //         if (!showPickupDetails) {
+  //           setShowPickupDetails(true);
+  //         }
+  //       } else {
+  //         const updatedFormValues = {
+  //           ...deliveryFormValues,
+  //           city: pincodeData.city || deliveryFormValues.city,
+  //           state: pincodeData.state || deliveryFormValues.state,
+  //         };
+          
+  //         // Auto-generate address field
+  //         updatedFormValues.address = generateFullAddress(updatedFormValues);
+          
+  //         setDeliveryFormValues(updatedFormValues);
+          
+  //         // Clear any errors in the updated fields
+  //         clearFieldError("delivery", "city");
+  //         clearFieldError("delivery", "state");
+          
+  //         // Ensure delivery details are shown after auto-filling
+  //         if (!showDeliveryDetails) {
+  //           setShowDeliveryDetails(true);
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(`Error fetching pincode data for ${addressType}:`, error);
+  //   } finally {
+  //     // Clear loading state
+  //     if (addressType === "pickup") {
+  //       setIsPincodeLoading({ ...isPincodeLoading, pickup: false });
+  //     } else {
+  //       setIsPincodeLoading({ ...isPincodeLoading, delivery: false });
+  //     }
+  //   }
+  // };
+  // Function to fetch pincode data from API - FIXED VERSION
+const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
+  if (!pincode || pincode.length < 6) return;
+  
+  // Set loading state for the pincode
+  setIsPincodeLoading(prev => ({
+    ...prev,
+    [addressType]: true
+  }));
+  
+  try {
+    const payload = {
+      pincode: pincode
+    };
+    
+    const response = await POST(GET_PINCODE_DATA, payload);
+    
+    if (response?.data?.success && response.data.data.length > 0) {
+      const pincodeData = response.data.data[0];
+      
+      // Update form values based on response - USING FUNCTIONAL UPDATES
+      if (addressType === "pickup") {
+        setPickupFormValues(prev => {
           const updatedFormValues = {
-            ...pickupFormValues,
-            city: pincodeData.city || pickupFormValues.city,
-            state: pincodeData.state || pickupFormValues.state,
+            ...prev,
+            city: pincodeData.city || prev.city,
+            state: pincodeData.state || prev.state,
           };
           
           // Auto-generate address field
           updatedFormValues.address = generateFullAddress(updatedFormValues);
           
-          setPickupFormValues(updatedFormValues);
-          
-          // Clear any errors in the updated fields
-          clearFieldError("pickup", "city");
-          clearFieldError("pickup", "state");
-          
-          // Ensure pickup details are shown after auto-filling
-          if (!showPickupDetails) {
-            setShowPickupDetails(true);
-          }
-        } else {
+          return updatedFormValues;
+        });
+        
+        // Clear any errors in the updated fields
+        clearFieldError("pickup", "city");
+        clearFieldError("pickup", "state");
+        
+        // Ensure pickup details are shown after auto-filling
+        if (!showPickupDetails) {
+          setShowPickupDetails(true);
+        }
+      } else {
+        setDeliveryFormValues(prev => {
           const updatedFormValues = {
-            ...deliveryFormValues,
-            city: pincodeData.city || deliveryFormValues.city,
-            state: pincodeData.state || deliveryFormValues.state,
+            ...prev,
+            city: pincodeData.city || prev.city,
+            state: pincodeData.state || prev.state,
           };
           
           // Auto-generate address field
           updatedFormValues.address = generateFullAddress(updatedFormValues);
           
-          setDeliveryFormValues(updatedFormValues);
-          
-          // Clear any errors in the updated fields
-          clearFieldError("delivery", "city");
-          clearFieldError("delivery", "state");
-          
-          // Ensure delivery details are shown after auto-filling
-          if (!showDeliveryDetails) {
-            setShowDeliveryDetails(true);
-          }
+          return updatedFormValues;
+        });
+        
+        // Clear any errors in the updated fields
+        clearFieldError("delivery", "city");
+        clearFieldError("delivery", "state");
+        
+        // Ensure delivery details are shown after auto-filling
+        if (!showDeliveryDetails) {
+          setShowDeliveryDetails(true);
         }
       }
-    } catch (error) {
-      console.error(`Error fetching pincode data for ${addressType}:`, error);
-    } finally {
-      // Clear loading state
-      if (addressType === "pickup") {
-        setIsPincodeLoading({ ...isPincodeLoading, pickup: false });
-      } else {
-        setIsPincodeLoading({ ...isPincodeLoading, delivery: false });
-      }
     }
-  };
+  } catch (error) {
+    console.error(`Error fetching pincode data for ${addressType}:`, error);
+  } finally {
+    // Clear loading state
+    setIsPincodeLoading(prev => ({
+      ...prev,
+      [addressType]: false
+    }));
+  }
+};
 
 const fetchDefaultPickupAddress = async () => {
   setIsLoading((prev) => ({ ...prev, pickup: true }));
