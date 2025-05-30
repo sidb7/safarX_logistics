@@ -6640,6 +6640,39 @@ const handleBoxNameSearch = async (value: string) => {
         return;
       }
 
+      // Validation: Check required fields
+    const validationErrors = [];
+    
+    // Check if name is empty or just whitespace
+    if (!product.name || product.name.toString().trim() === "") {
+      validationErrors.push("Product name is required");
+    }
+    
+    // Check if unit price is empty or zero
+    const unitPrice = Number(product.unitPrice);
+    if (!product.unitPrice || unitPrice <= 0) {
+      validationErrors.push("Unit price must be greater than 0");
+    }
+    
+    // Check if unit weight is empty or zero
+    const unitWeight = Number(product.unitWeight);
+    if (!product.unitWeight || unitWeight <= 0) {
+      validationErrors.push("Unit weight must be greater than 0");
+    }
+    
+    // Check if quantity is empty or zero
+    const quantity = Number(product.quantity);
+    if (!product.quantity || quantity <= 0) {
+      validationErrors.push("Quantity must be greater than 0");
+    }
+
+    // If there are validation errors, show them and return
+    if (validationErrors.length > 0) {
+      toast.error(`To Save a prodduct make sure:\n${validationErrors.join('\n')}`);
+      return;
+    }
+
+
       // Prepare the payload
       const payload = {
         products: [
@@ -7032,6 +7065,7 @@ const handleBoxNameSearch = async (value: string) => {
          ref={(el) => (productSearchRefs.current[product.id] = el)}>
       <FloatingLabelInput
         placeholder="Product Name"
+        required={true} 
         value={product.name.toString()}
         onChangeCallback={(value) => {
           if (validationErrors[currentBox.id]?.[`product-${product.id}-name`]) {
@@ -7143,6 +7177,7 @@ const handleBoxNameSearch = async (value: string) => {
       <FloatingLabelInput
         placeholder="Qty"
         value={product.quantity.toString()}
+        required={true}
         type="number"
         showNumberControls={true}
         onChangeCallback={(value) => {
@@ -7189,6 +7224,7 @@ const handleBoxNameSearch = async (value: string) => {
     <div>
       <FloatingLabelInput
         placeholder="Unit Price"
+        required={true}
         value={product.unitPrice.toString()}
         type="number"
         onChangeCallback={(value) => {
@@ -7232,6 +7268,7 @@ const handleBoxNameSearch = async (value: string) => {
       <FloatingLabelInput
         placeholder="Unit Wt (kg)"
         value={product.unitWeight.toString()}
+        required={true}
         type="number"
         onChangeCallback={(value) => {
           if (validationErrors[currentBox.id]?.[`product-${product.id}-unitWeight`]) {
@@ -7618,6 +7655,7 @@ const handleBoxNameSearch = async (value: string) => {
                 <div className="flex-grow relative">
                   <FloatingLabelInput
                     placeholder="Box Name"
+                    required={true}
                     value={currentBox.dimensions.name?.toString() || ""}
                     onChangeCallback={(value) => {
                       if (validationErrors[currentBox.id]?.[`box-name`]) {
@@ -7674,6 +7712,7 @@ const handleBoxNameSearch = async (value: string) => {
                 <div className="w-16">
                   <FloatingLabelInput
                     placeholder="L"
+                    required={true}
                     value={currentBox.dimensions.l.toString()}
                     type="number"
                     onChangeCallback={(value) => {
@@ -7691,6 +7730,7 @@ const handleBoxNameSearch = async (value: string) => {
                 <div className="w-16">
                   <FloatingLabelInput
                     placeholder="B"
+                    required={true}
                     value={currentBox.dimensions.b.toString()}
                     type="number"
                     onChangeCallback={(value) => {
@@ -7708,6 +7748,7 @@ const handleBoxNameSearch = async (value: string) => {
                 <div className="w-16">
                   <FloatingLabelInput
                     placeholder="H"
+                    required={true}
                     value={currentBox.dimensions.h.toString()}
                     type="number"
                     onChangeCallback={(value) => {

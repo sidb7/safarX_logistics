@@ -314,6 +314,8 @@ interface FloatingLabelInputProps {
   readOnly?: boolean;
   maxLength?: number;
   size?: "small" | "medium" | "large";
+  required?: boolean;
+
 }
 
 const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
@@ -333,6 +335,8 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
   readOnly = false,
   maxLength,
   size = "medium",
+  required = false,
+
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
@@ -616,12 +620,14 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
         }`}
       >
         {placeholder}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
       </div>
 
       {/* Error Message */}
       {error && (
         <div className={`text-red-500 ${size === "small" ? "text-xs" : size === "large" ? "text-sm" : "text-xs"} mt-1 ml-1 font-medium`}>
           {errorMessage}
+           {required && <span className="text-red-500 ml-0.5">*</span>}
         </div>
       )}
     </div>

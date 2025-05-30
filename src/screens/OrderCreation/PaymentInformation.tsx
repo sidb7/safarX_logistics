@@ -179,7 +179,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="Prepaid"
                 checked={paymentMethod === "Prepaid"}
                 onChange={() => setPaymentMethod("Prepaid")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
               />
             </div>
             <span className="text-sm font-medium text-gray-900">Prepaid</span>
@@ -193,7 +193,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="Cash on Delivery"
                 checked={paymentMethod === "Cash on Delivery"}
                 onChange={() => setPaymentMethod("Cash on Delivery")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
               />
             </div>
             <span className="text-sm font-medium text-gray-900">COD</span>
@@ -230,7 +230,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="withInsurance"
                 checked={insuranceOption === "withInsurance"}
                 onChange={() => setInsuranceOption("withInsurance")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
                 disabled={true} // Keep original disabled state
               />
             </div>
@@ -241,7 +241,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
           </span>
 
           {/* Option 2: No Insurance */}
-          <span className="flex items-start gap-3 cursor-pointer">
+          <span className="flex items-start gap-3 cursor-pointer pb-3">
             <div className="flex h-6 items-center">
               <input
                 type="radio"
@@ -249,7 +249,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="noInsurance"
                 checked={insuranceOption === "noInsurance"}
                 onChange={() => setInsuranceOption("noInsurance")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
               />
             </div>
             <div className="text-sm">
