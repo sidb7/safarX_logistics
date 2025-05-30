@@ -35,6 +35,7 @@ const CustomTable = (props: any) => {
     rowClassName,
     rowCellClassName,
     shimmerLoader = false,
+    theadClassName,
   } = props;
   const columns = React.useMemo<Array<ColumnDef<any>>>(
     () => columnsData,
@@ -117,10 +118,7 @@ const CustomTable = (props: any) => {
         className="w-full"
       >
         <table className="w-full bg-white tableContainerStyle ">
-          <thead
-            className="border-b border-[#E8E8E8]"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.02)", height: "50px" }}
-          >
+          <thead className={"border-b border-[#E8E8E8] " + theadClassName}>
             {table.getHeaderGroups()?.map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers?.map((header) => {

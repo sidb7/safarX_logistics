@@ -383,7 +383,7 @@ function DarkstoreTable() {
                       : TableColumnType.Product
                   );
                 }}
-                className={`p-[10px] rounded bg-[#EEEEEE] rounded-full ${
+                className={`p-[10px] bg-[#EEEEEE] rounded-full ${
                   darkStoreData.length != 0
                     ? "hover:bg-[#E6E6E6]"
                     : "cursor-default"
@@ -510,6 +510,7 @@ function DarkstoreTable() {
         rowCellClassName={
           "!border-b !border-b-lightgrey !border-solid pb-[10px] border-r-0"
         }
+        theadClassName="bg-[rgba(0,0,0,0.02)] h-[50px]"
       />
       {darkStoreData.length > 0 && (
         <OnePagination
