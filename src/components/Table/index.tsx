@@ -18,6 +18,8 @@ interface ITablePropTypes {
   currentPage: number;
   pageSize: number;
   minHeight?: string;
+  rowClassName?: string;
+  rowCellClassName?: string;
 }
 
 const CustomTable = (props: any) => {
@@ -27,8 +29,13 @@ const CustomTable = (props: any) => {
     entityId,
     setRowSelectedData,
     setIsMenuOpen,
+    parentClassName,
     minHeight,
     rowHeight,
+    rowClassName,
+    rowCellClassName,
+    shimmerLoader = false,
+    theadClassName,
   } = props;
   const columns = React.useMemo<Array<ColumnDef<any>>>(
     () => columnsData,
@@ -79,7 +86,7 @@ const CustomTable = (props: any) => {
         overflow: "auto",
         scrollbarWidth: "thin",
       }}
-      className="w-full "
+      className={"w-full " + parentClassName}
     >
       <div
         className="fixed inset-0 bg-[#333333b5] flex justify-center items-center z-50"
@@ -111,7 +118,7 @@ const CustomTable = (props: any) => {
         className="w-full"
       >
         <table className="w-full bg-white tableContainerStyle ">
-          <thead className="border-b border-[#E8E8E8]">
+          <thead className={"border-b border-[#E8E8E8] " + theadClassName}>
             {table.getHeaderGroups()?.map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers?.map((header) => {
@@ -136,43 +143,62 @@ const CustomTable = (props: any) => {
               </tr>
             ))}
           </thead>
-          <tbody className="section">
-            {virtualizer.getVirtualItems()?.map((virtualRow, index) => {
-              const row = rows[virtualRow.index];
-              return (
-                <tr
-                  className="group shadow-md rounded-lg	hover:bg-slate-200"
-                  key={row.id}
-                  id={
-                    entityId === undefined ? "" : `${entityId[index]}-${index}`
-                  }
-                  data-index={virtualRow.index}
-                  style={{
-                    height: rowHeight
-                      ? `${rowHeight}px`
-                      : `${virtualRow.size}px`,
-                    transform: `translateY(${
-                      virtualRow.start - index * virtualRow.size
-                    }px)`,
-                  }}
-                >
-                  {row.getVisibleCells()?.map((cell) => {
-                    return (
-                      <td
-                        key={cell.id}
-                        className="px-3 text-left font-normal text-[#1C1C1C] border-none "
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
+          {shimmerLoader ? (
+            <tbody className="section">
+              <tr className="">
+                <td
+                  className="animate-pulse bg-gray-200 rounded-md h-[35vh] w-full mb-4"
+                  colSpan={100}
+                />
+              </tr>
+            </tbody>
+          ) : (
+            <tbody className="section">
+              {virtualizer.getVirtualItems()?.map((virtualRow, index) => {
+                const row = rows[virtualRow.index];
+                return (
+                  <tr
+                    className={
+                      "group shadow-md rounded-lg	hover:bg-slate-200 " +
+                      rowClassName
+                    }
+                    key={row.id}
+                    id={
+                      entityId === undefined
+                        ? ""
+                        : `${entityId[index]}-${index}`
+                    }
+                    data-index={virtualRow.index}
+                    style={{
+                      height: rowHeight
+                        ? `${rowHeight}px`
+                        : `${virtualRow.size}px`,
+                      transform: `translateY(${
+                        virtualRow.start - index * virtualRow.size
+                      }px)`,
+                    }}
+                  >
+                    {row.getVisibleCells()?.map((cell) => {
+                      return (
+                        <td
+                          key={cell.id}
+                          className={
+                            "px-3 text-left font-normal text-[#1C1C1C] border-none border-r-0 " +
+                            rowCellClassName
+                          }
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          )}
         </table>
         <div>
           {table.getRowModel().rows?.length === 0 && (

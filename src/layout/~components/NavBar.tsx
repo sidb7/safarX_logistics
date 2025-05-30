@@ -26,6 +26,10 @@ interface INavBarProps {
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const { openMobileSideBar, setMobileSideBar } = props;
   const roles = useSelector((state: any) => state?.roles);
+  const isDarkStoreEnabled = useSelector(
+    (state: any) => state.roles.isDarkStoreEnable
+  );
+
   const navigate = useNavigate();
   const location = useLocation();
   const [sideBarMenus, setSideBarMenus]: any = useState<any>(
@@ -63,8 +67,12 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
 
   useEffect(() => {
     if (!sideBarMenus.length) return;
-    updateActivetab(sideBarMenus);
+    updateActivetab(sideBarMenusData);
   }, [location]);
+
+  useEffect(() => {
+    updateActivetab(sideBarMenusData);
+  }, [isDarkStoreEnabled]);
 
   const conditinalClass = {
     width: `${isHover ? "25rem" : "75px"}`,
@@ -104,6 +112,22 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   //   setSideBarMenus([...arr]);
   // };
 
+  const filterMenuItems = (menu: any): any => {
+    const checks = [
+      {
+        key: "isDarkStoreEnable",
+        type: "darkstore",
+        enabled: isDarkStoreEnabled,
+      },
+    ];
+
+    const matchedCheck = checks.find((check) => check.type === menu.type);
+    if (!matchedCheck) return false;
+
+    const isEnabled = matchedCheck.enabled == true ? true : false;
+    return isEnabled;
+  };
+
   const updateActivetab = (arr: any = []) => {
     const { pathname } = location;
     const [parent, ...childs] = pathname
@@ -141,7 +165,20 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         });
       }
     });
-    setSideBarMenus([...arr]);
+
+    const filteredMenu = arr.map((item: any) => {
+      if (!item.menu) return item;
+      const filteredMenuItem = item.menu.filter((menuItem: any) => {
+        if (!menuItem.type) return true;
+        return filterMenuItems(menuItem);
+      });
+
+      return {
+        ...item,
+        menu: filteredMenuItem,
+      };
+    });
+    setSideBarMenus([...filteredMenu]);
   };
 
   const setIsActivePath = (index: number, childIndex: number, path: any) => {

@@ -438,6 +438,12 @@ const App = () => {
             gutter={8}
             containerClassName=""
             containerStyle={{}}
+            toastOptions={{
+              style: {
+                fontFamily: "'Open Sans', sans-serif",
+                fontSize: "14px",
+              },
+            }}
           />
         </Sentry.ErrorBoundary>
       </div>
