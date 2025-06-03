@@ -14,6 +14,7 @@ import { buttonFlagSlice } from "./reducers/updateButtonReducer";
 import { dashboardOrderSlice } from "./reducers/dashboardOrderReducer";
 import { dashboardRevenueSlice } from "./reducers/dashboardRevenueReducer";
 import { dashboardExceptionSlice } from "./reducers/dashboardExceptionReducer";
+import { notificationSlice } from "./reducers/notificationReducer";
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
@@ -30,6 +31,7 @@ export const store = configureStore({
     dashboardOrder: dashboardOrderSlice.reducer,
     dashboardRevenue: dashboardRevenueSlice.reducer,
     dashboardException: dashboardExceptionSlice.reducer,
+    notifications: notificationSlice.reducer,
   },
   devTools: Environment !== "production" ? true : false,
 });

@@ -139,6 +139,7 @@ const Index = () => {
         if (token !== "") {
           console.log("socketConnectedAfterlogin");
           socketCallbacks.connectSocket(dispatch);
+          socketCallbacks.connectNotificationSocket();
         }
 
         const [
@@ -268,6 +269,7 @@ const Index = () => {
       if (token !== "") {
         console.log("socketConnectedAfterlogin");
         socketCallbacks.connectSocket(dispatch);
+        socketCallbacks.connectNotificationSocket(dispatch);
       }
 
       const [
