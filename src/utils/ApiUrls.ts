@@ -18,6 +18,8 @@ let WHITE_COMPANYFULLNAME = "";
 let WHITE_COMPANYADDRESS = "";
 let FINANCE_URL = "";
 let SUPPORT_LINK = "";
+let EMAILER_AND_NOTIFICATIONS_URL = "";
+let NOTIFICATION_SOCKET_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 // console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
@@ -47,6 +49,8 @@ switch (Environment) {
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env?.REACT_APP_FINANCE_URL}`;
+    EMAILER_AND_NOTIFICATIONS_URL = `${process.env?.REACT_APP_ALERT_EMAILER_URL}`;
+    NOTIFICATION_SOCKET_URL = `${process.env?.REACT_APP_NOTIFICATION_SOCKET_URL}`;
     break;
 
   case "test":
@@ -69,6 +73,8 @@ switch (Environment) {
     WHITE_COMPANYFULLNAME = `${process.env.REACT_APP_WHITE_COMPANYFULLNAME}`;
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
+    EMAILER_AND_NOTIFICATIONS_URL = `${process.env?.REACT_APP_ALERT_EMAILER_URL}`;
+    NOTIFICATION_SOCKET_URL = `${process.env?.REACT_APP_NOTIFICATION_SOCKET_URL}`;
 
     break;
 
@@ -95,6 +101,8 @@ switch (Environment) {
         ? "https://finance-stage.shipyaari.com"
         : process.env.REACT_APP_FINANCE_URL || "https://finance.shipyaari.com"
     }`;
+    EMAILER_AND_NOTIFICATIONS_URL = `${process.env.REACT_APP_ALERT_EMAILER_URL}`;
+    NOTIFICATION_SOCKET_URL = `${process.env?.REACT_APP_NOTIFICATION_SOCKET_URL}`;
     break;
 
   default:
@@ -116,6 +124,8 @@ switch (Environment) {
     WHITE_COMPANYADDRESS = `${process.env.REACT_APP_WHITE_COMPANYADDRESS}`;
     FINANCE_URL = `${process.env.REACT_APP_FINANCE_URL}`;
     SUPPORT_LINK = `${process.env.REACT_APP_SUPPORT_LINK_ID}`;
+    EMAILER_AND_NOTIFICATIONS_URL = `${process.env.REACT_APP_ALERT_EMAILER_URL}`;
+    NOTIFICATION_SOCKET_URL = `${process.env?.REACT_APP_NOTIFICATION_SOCKET_URL}`;
 
     break;
 }
@@ -143,6 +153,7 @@ const SELLER_BASE_URL = `${SELLER_URL}/api/v1`;
 const PARTNER_BASE_URL = `${PARTNER_URL}/api/v1`;
 const FILE_BASE_URL = `${FILE_SERVER_URL}/api/v1`;
 const BASE_FINANCE__SELLER_API = `${FINANCE_URL}/api/v1/finance/seller`;
+const BASE_EMAILER_AND_NOTIFICATION_URL = `${EMAILER_AND_NOTIFICATIONS_URL}/api/v1/seller`;
 
 // Onboarding URLs
 const POST_SIGN_IN_URL = `${SELLER_BASE_URL}/seller/signIn`;
@@ -514,6 +525,8 @@ const COD_REMITTANCE_FINANCE = `${BASE_FINANCE__SELLER_API}/cod/remitted`;
 // SSO URL
 const POST_SSO_URL = `${SELLER_BASE_URL}/seller/sso/reirect`;
 
+// Notifications and emailers
+const GET_NOTIFICATIONS = `${BASE_EMAILER_AND_NOTIFICATION_URL}/getSellerNotifications`;
 // Darkstore
 const GET_DARKSTORE_DETAILS = `${SELLER_BASE_URL}/darkStore/getInventory`;
 const GET_DARKSTORE_FILTER_DETAILS = `${SELLER_BASE_URL}/darkStore/getFilterOptions`;
@@ -783,6 +796,9 @@ export {
   POST_VERIFY_COUPON,
   POST_VERIFY_COUPON_CODE_ON_WALLET_RECHARGE,
   GET_WALLET_BALANCES_DATA,
+  GET_NOTIFICATIONS,
+  EMAILER_AND_NOTIFICATIONS_URL,
+  NOTIFICATION_SOCKET_URL,
   GET_DARKSTORE_DETAILS,
   GET_DARKSTORE_FILTER_DETAILS,
   GET_DARKSTORE_PRODUCT_COUNT,

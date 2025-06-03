@@ -165,6 +165,7 @@ const App = () => {
     const connectSocket1 = async () => {
       if (userInfo?.sellerId) {
         await socketCallbacks.connectSocket(dispatch);
+        await socketCallbacks.connectNotificationSocket(dispatch);
         setIsSocketInitialized(true);
       }
     };
@@ -409,6 +410,7 @@ const App = () => {
     if (token !== "") {
       // console.log("socketConnectedAfterlogin");
       socketCallbacks.connectSocket(dispatch);
+      socketCallbacks.connectNotificationSocket(dispatch);
     }
 
     navigate(0);
