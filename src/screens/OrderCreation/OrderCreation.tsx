@@ -1733,6 +1733,8 @@ const prepareBoxInfoPayload = () => {
         },
         transit: order.reverseState,
         orderType: order.orderType,
+        gstNumber: pickupFormValues.gstNo || "",
+
       };
 
       // Add tempOrderId and source to payload if they exist
@@ -1892,16 +1894,17 @@ const prepareBoxInfoPayload = () => {
       // Prepare the payload for REVERSE_ORDER API
       const orderPayload = {
         pickupDetails: {
-          fullAddress: `${pickupFormValues.addressLine1} ${pickupFormValues.addressLine2}, ${pickupFormValues.city}, ${pickupFormValues.state} ${pickupFormValues.pincode}`,
+          fullAddress: `${pickupFormValues.addressLine1} ${pickupFormValues.addressLine2},${pickupFormValues.landmark}, ${pickupFormValues.city}, ${pickupFormValues.state} ${pickupFormValues.pincode}`,
           pincode: parseInt(pickupFormValues.pincode),
           contact: {
             name: pickupFormValues.name,
             mobileNo: parseInt(pickupFormValues.contactNo),
             email: pickupFormValues.email || "",
           },
+           gstNumber: pickupFormValues.gstNo || "",
         },
         deliveryDetails: {
-          fullAddress: `${deliveryFormValues.addressLine1} ${deliveryFormValues.addressLine2}, ${deliveryFormValues.city}, ${deliveryFormValues.state} ${deliveryFormValues.pincode}`,
+          fullAddress: `${deliveryFormValues.addressLine1} ${deliveryFormValues.addressLine2},${deliveryFormValues.landmark}, ${deliveryFormValues.city}, ${deliveryFormValues.state} ${deliveryFormValues.pincode}`,
           pincode: parseInt(deliveryFormValues.pincode),
           contact: {
             name: deliveryFormValues.name,
