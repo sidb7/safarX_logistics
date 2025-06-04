@@ -996,6 +996,7 @@ const prepareBoxInfoPayload = () => {
           height: product.boxInfo.h || 1,
           sku: product.boxInfo.sku || "",
           hsnCode: product.boxInfo.hsn || "",
+          discount: Number(product.boxInfo.discount) || 0, // Added discount
           measureUnit: "cm",
           weightUnit: "kg",
           currency: "INR",
@@ -1075,6 +1076,7 @@ const prepareBoxInfoPayload = () => {
           height: pkg.height || 1,
           sku: pkg.sku || "",
           hsnCode: pkg.hsn || "",
+          discount: Number(pkg.discount) || 0, // Added discount
           measureUnit: "cm",
           weightUnit: "kg",
           currency: "INR",
@@ -2198,6 +2200,8 @@ const prepareBoxInfoForReverseOrder = () => {
           length: product.boxInfo.l || 1,
           breadth: product.boxInfo.b || 1,
           height: product.boxInfo.h || 1,
+          hsnCode: product.boxInfo.hsn || "", // Added hsnCode
+          discount: Number(product.boxInfo.discount) || 0, // Added discount
           measureUnit: "cm",
         })),
         codInfo: {
@@ -2252,6 +2256,8 @@ const prepareBoxInfoForReverseOrder = () => {
           length: pkg.length || 1,
           breadth: pkg.breadth || 1,
           height: pkg.height || 1,
+          hsnCode: pkg.hsn || "", // Added hsnCode
+          discount: Number(pkg.discount) || 0, // Added discount
           measureUnit: "cm",
         })),
         codInfo: {
