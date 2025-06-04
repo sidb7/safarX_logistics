@@ -21,6 +21,7 @@ import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 import OneButton from "../../../components/Button/OneButton";
 import CustomDropDown from "../../../components/DropDown";
+import sessionManager from "../../../utils/sessionManager";
 
 interface ITypeProps {
   onClick?: any;
@@ -164,6 +165,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   const renderHeaderComponent = () => {
     let baseUrl;
+    const { sellerInfo } = sessionManager({});
 
     if (Environment === "prod") {
       baseUrl = "https://sy-seller.s3.ap-south-1.amazonaws.com/files/";
@@ -172,8 +174,13 @@ const BulkUpload = (props: ITypeProps) => {
     }
 
     const downloadUrlB2B = `${baseUrl}BULK_B2B_ORDER.xlsx`;
-    const downloadUrlB2C = `${baseUrl}BULK_B2C_ORDER.xlsx`;
-
+    let downloadUrlB2C = `${baseUrl}BULK_B2C_ORDER.xlsx`;
+    if (
+      sellerInfo?.privateCompany?.companyId == 130658 ||
+      sellerInfo?.privateCompany?.companyId == 134170
+    ) {
+      downloadUrlB2C = `${baseUrl}MUTHOOD_BULK_B2C_ORDER.xlsx`;
+    }
     const downloadUrl =
       selectedOption === "B2B" ? downloadUrlB2B : downloadUrlB2C;
 
