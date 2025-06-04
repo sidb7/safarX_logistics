@@ -119,6 +119,7 @@ import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress"
 import ProtectedRoute from "../components/ProtectedRoutes";
 
 import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
+import DarkstoreInventory from "../screens/Darkstore";
 import { Transaction } from "../screens/Transaction";
 import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
@@ -1172,6 +1173,18 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <CatalogueAddProduct />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        {/* Darkstore Routes */}
+        <Route>
+          <Route
+            path="/darkstore/inventory"
+            element={
+              <ProtectedRoute>
+                <DarkstoreInventory />
               </ProtectedRoute>
             }
           />

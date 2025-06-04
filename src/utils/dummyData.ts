@@ -2354,6 +2354,30 @@ export const sideBarMenusData = [
         isActive: true,
       },
       {
+        id: "efd",
+        type: "darkstore",
+        name: "Darkstore Inventory",
+        pages: [
+          {
+            id: "efdh",
+            name: "Dark Store",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/darkstore/inventory",
+        isActive: true,
+        isActivePath: true,
+      },
+      {
         id: "bcdefghijklmn",
         name: "Rule Engine",
         pages: [

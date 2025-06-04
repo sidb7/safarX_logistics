@@ -55,6 +55,7 @@ import SentryFeedback from "./SentryFeedback";
 import ReportAbugIcon from "../../assets/ReportABug.svg";
 import sessionManager from "../../utils/sessionManager";
 import { ResponsiveState } from "../../utils/responsiveState";
+import NotificationBell from "./notificationBell";
 
 let socket: Socket | null = null;
 
@@ -461,6 +462,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 text={""}
                 onClick={() => navigate("/notifications")}
               /> */}
+                <NotificationBell />
                 <CustomButton
                   icon={ProfileLogo}
                   onClick={() => setIsOpen(!isOpen)}

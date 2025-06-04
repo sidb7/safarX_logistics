@@ -28,10 +28,6 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
     rateCardName: "",
     rateCardId: "",
   });
-  // console.log("🚀 ~ rateCardDetails:", rateCardDetails);
-
-  // console.log("🚀 ~ communicationChannels----->:", communicationChannels);
-  // console.log("🚀 ~ filteredRateCard:", filteredRateCard);
 
   const ColumnsHelper = createColumnHelper<any>();
 
@@ -50,7 +46,6 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
       cell: (info: any) => {
         const TemplateName = info?.row?.original?.templateName;
         const AllAdminCheck = info?.row?.original?.isAdminChecked;
-
         return (
           <div className="flex gap-x-2">
             <p
@@ -71,7 +66,11 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
               data-tooltip-id="my-tooltip-delivery-max"
               data-tooltip-content={`${
                 TemplateName === "Tracking Updates"
-                  ? "Applicable for Out for delivery , Reached Destination and delivered status."
+                  ? "Applicable for Picked Up, Reached Destination, Out for Delivery and Delivered status."
+                  : TemplateName === "Order Confirmation"
+                  ? " Get Order Confirmation from Buyers Before Shipping to Reduce RTO"
+                  : TemplateName === "NDR"
+                  ? "Get buyer updates on exceptions to confirm cancellations, reschedules, or updated details"
                   : ""
               }`}
             />
@@ -90,13 +89,14 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
                 fontFamily: "Open Sans",
                 fontWeight: "500",
                 letterSpacing: "1px",
-                textTransform: "capitalize",
+                // textTransform: "capitalize",
               }}
             />
           </div>
         );
       },
     }),
+
     ColumnsHelper.accessor("whatsApp", {
       header: () => {
         return (
@@ -580,7 +580,6 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
     const fetchCommunicationRateCard = async () => {
       try {
         const response = await POST(GET_COMMUNICATION_RATE_CARD, {});
-        // console.log("🚀 ~ fetchCommunicationRateCard ~ response:", response);
         if (response?.data?.success) {
           setRateCardDetails({
             rateCardId: response?.data?.data[0]?.rateCardId || "",
@@ -620,7 +619,11 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
       <div>
         <div className="flex justify-between px-5 py-4">
           <p className="font-Lato font-normal text-2xl text-[#323232] leading-8">
-            Delivery Max
+            Delivery Max{" "}
+            <span className="font-Lato font-normal text-md text-lg text-[#323232] leading-[22px]">
+              {`( Send live updates about your order straight to buyers on multiple
+              channels! )`}
+            </span>
           </p>
           <img
             src={CloseIcon}

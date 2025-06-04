@@ -36,6 +36,7 @@ export function checkPageAuthorized(name: any) {
 
 const initialState: any = {
   roles: [],
+  isDarkStoreEnable: false,
 };
 
 export const getRoles: any = createAsyncThunk(
@@ -44,6 +45,10 @@ export const getRoles: any = createAsyncThunk(
     try {
       const { data: response } = await POST(POST_FETCH_SELLER_ROLE, {});
       role = response?.data?.[0];
+      sessionStorage.setItem(
+        "isDarkStoreEnable",
+        JSON.stringify(response?.data?.[0]?.isDarkStoreEnable)
+      );
       sessionStorage.setItem(
         "paymentGateway",
         JSON.stringify(response?.data?.[0]?.payments)
@@ -71,6 +76,7 @@ export const roleSlice = createSlice({
     builder.addCase(getRoles.fulfilled, (state, action) => {
       state.loading = false;
       state.roles = [action.payload];
+      state.isDarkStoreEnable = action.payload?.isDarkStoreEnable ?? false;
     });
     builder.addCase(getRoles.rejected, (state, action) => {
       state.loading = false;

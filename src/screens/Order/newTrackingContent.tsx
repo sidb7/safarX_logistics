@@ -15,7 +15,7 @@ import NoDataFoundGif from "../../assets/NoDataFound.gif";
 import Location from "../../assets/Location.svg";
 import AccordianCloseIcon from "../../assets/AccordianCloseIcon.svg";
 import AccordianOpenIcon from "../../assets/AccordianOpen.svg";
-import RefreshIcon from "../../assets/refreshIcon.svg";
+import RefreshIcon from "../../assets/refreshIconNew.svg";
 import { isNumber } from "lodash";
 import { Spinner } from "../../components/Spinner";
 import { decryptData } from "../../utils/Helper/Filter";

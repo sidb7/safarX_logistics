@@ -1,13 +1,17 @@
 // socket.ts
 import { io, Socket } from "socket.io-client";
-import { SELLER_URL } from "../utils/ApiUrls";
+import { SELLER_URL, NOTIFICATION_SOCKET_URL } from "../utils/ApiUrls";
 import {
   GlobalToast,
   GlobalToastSuccess,
 } from "../components/GlobalToast/GlobalToast";
-import { setWalletBalance, setYaariCashBalance } from "../redux/reducers/userReducer";
+import {
+  setWalletBalance,
+  setYaariCashBalance,
+} from "../redux/reducers/userReducer";
 import { channelState } from "../redux/reducers/syncChannel";
 import sessionManager from "../utils/sessionManager";
+import { addNotification } from "../redux/reducers/notificationReducer";
 
 let socket: Socket | null = null;
 
@@ -168,7 +172,50 @@ const disconnectSocket = () => {
   }
 };
 
+let notificationSocket: Socket | null = null;
+
+export const connectNotificationSocket = (dispatch?: any) => {
+  const { sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
+  if (!sellerId) return;
+
+  notificationSocket = io(NOTIFICATION_SOCKET_URL, {
+    path: "/socket.io",
+    transports: ["websocket"],
+    auth: { token: sellerId },
+  });
+
+  notificationSocket.on("connect", () => {
+    notificationSocket?.emit("joinRoom", sellerId);
+  });
+
+  notificationSocket.on("connect_error", (err) => {
+    console.error("Connection error:", err.message);
+  });
+
+  notificationSocket.on("new_notification", (data: any) => {
+    dispatch?.(
+      addNotification({
+        title: data?.data?.message?.title,
+        message: ` ${data?.data?.message?.message}`,
+        timestamp: new Date().toISOString(),
+        read: false,
+      })
+    );
+  });
+};
+
+export const disconnectNotificationSocket = () => {
+  if (notificationSocket) {
+    console.log("Disconnecting notification socket...");
+    notificationSocket.disconnect();
+    notificationSocket = null;
+  }
+};
+
 export const socketCallbacks = {
   connectSocket,
   disconnectSocket,
+  connectNotificationSocket,
+  disconnectNotificationSocket,
 };
