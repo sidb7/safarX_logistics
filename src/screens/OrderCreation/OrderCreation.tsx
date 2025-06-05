@@ -1891,6 +1891,10 @@ const prepareBoxInfoPayload = () => {
     setIsSubmitting(true);
 
     try {
+      // Get seller session data from localStorage
+    const sellerSession = JSON.parse(localStorage.getItem('sellerSession') || '{}');
+    const brandName = sellerSession?.privateCompany?.brandName || "Your Brand";
+    const brandLogo = sellerSession?.privateCompany?.logoUrl || "";
       // Prepare the payload for REVERSE_ORDER API
       const orderPayload = {
         pickupDetails: {
@@ -1899,7 +1903,7 @@ const prepareBoxInfoPayload = () => {
           contact: {
             name: pickupFormValues.name,
             mobileNo: parseInt(pickupFormValues.contactNo),
-            email: pickupFormValues.email || "",
+            emailId: pickupFormValues.email || "",
           },
            gstNumber: pickupFormValues.gstNo || "",
         },
@@ -1909,7 +1913,7 @@ const prepareBoxInfoPayload = () => {
           contact: {
             name: deliveryFormValues.name,
             mobileNo: parseInt(deliveryFormValues.contactNo),
-            email: deliveryFormValues.email || "",
+            emailId: deliveryFormValues.email || "",
           },
           gstNumber: deliveryFormValues.gstNo || "",
         },
@@ -1923,8 +1927,8 @@ const prepareBoxInfoPayload = () => {
         gstNumber: pickupFormValues.gstNo || "",
         orderId: order?.orderId || "",
         eWayBillNo: eWayBillNumber || "",
-        brandName: "Your Brand",
-        brandLogo: "",
+        brandName: brandName,
+        brandLogo: brandLogo,
         tempOrderId: tempOrderId || "",
       };
 
@@ -2005,7 +2009,7 @@ const prepareBoxInfoPayload = () => {
       
       
       
-        toast.success("Order placed successfully!");
+        // toast.success("Order placed successfully!");
 
         // Clear all saved order data on successful order placement
         clearSavedOrderData();
@@ -2449,6 +2453,7 @@ const prepareBoxInfoForReverseOrder = () => {
                   setCollectibleAmount={setCollectibleAmount}
                   insuranceOption={insuranceOption}
                   setInsuranceOption={setInsuranceOption}
+                  reverseState={order.reverseState} // Add this line
                 />
               </Collapsible>
 

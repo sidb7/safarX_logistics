@@ -145,7 +145,7 @@
 // export default PaymentInformation;
 
 
-import React from "react";
+import React,{useEffect} from "react";
 import FloatingLabelInput from "./FloatingLabelInput";
 
 interface PaymentInformationProps {
@@ -155,6 +155,7 @@ interface PaymentInformationProps {
   setCollectibleAmount: (amount: string) => void;
   insuranceOption: string;
   setInsuranceOption: (option: string) => void;
+  reverseState: string; // Add this prop
 }
 
 const PaymentInformation: React.FC<PaymentInformationProps> = ({
@@ -164,7 +165,18 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
   setCollectibleAmount,
   insuranceOption,
   setInsuranceOption,
+  reverseState,
 }) => {
+   // Check if COD should be disabled (when reverse is true)
+  const isCODDisabled = reverseState === "REVERSE";
+
+  // Effect to automatically switch to Prepaid if COD was selected and reverse becomes true
+  useEffect(() => {
+    if (isCODDisabled && paymentMethod === "Cash on Delivery") {
+      setPaymentMethod("Prepaid");
+    }
+  }, [isCODDisabled, paymentMethod, setPaymentMethod]);
+
   return (
     <div className="flex flex-col lg:flex-row lg:items-start lg:gap-8 w-full">
       {/* Left Section - Payment Methods */}
@@ -191,12 +203,16 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 type="radio"
                 name="paymentMethod"
                 value="Cash on Delivery"
+                disabled={isCODDisabled} // Add this line
                 checked={paymentMethod === "Cash on Delivery"}
                 onChange={() => setPaymentMethod("Cash on Delivery")}
                 className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
               />
             </div>
-            <span className="text-sm font-medium text-gray-900">COD</span>
+            {/* <span className="text-sm font-medium text-gray-900">COD</span> */}
+             <span className={`text-sm font-medium ${isCODDisabled ? 'text-gray-400' : 'text-gray-900'}`}>
+    COD {isCODDisabled && '(Not available for reverse orders)'}
+  </span>
           </span>
         </div>
 
