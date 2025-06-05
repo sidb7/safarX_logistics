@@ -71,7 +71,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
     if (allAddressData?.success) {
       let tempAddress = allAddressData.data;
       tempAddress.map((item: any) => {
-        item.icon = item.isActive ? SuccessIcon : FailureIcon;
+        item.icon = item.isDefault ? SuccessIcon : FailureIcon;
       });
       setAddress(tempAddress);
       setLoading(false);
@@ -96,7 +96,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
         item.icon = FailureIcon;
       });
       tempAddress[index].icon = SuccessIcon;
-      tempAddress[index].isActive = true;
+      tempAddress[index].isDefault = true;
       setAddress(tempAddress);
     }
     setLoading(false);
