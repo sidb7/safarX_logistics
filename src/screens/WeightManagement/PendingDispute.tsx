@@ -18,6 +18,9 @@ import toast from "react-hot-toast";
 import { POST } from "../../utils/webService";
 import { Spinner } from "../../components/Spinner";
 import ActivityLogs from "./ActivityLogs";
+import { Tooltip } from "react-tooltip";
+import CopyTooltip from "../../components/CopyToClipboard";
+import NewTrackingContent from "../Order/newTrackingContent";
 
 const PendingDispute = ({
   data,
@@ -45,6 +48,12 @@ const PendingDispute = ({
       privateCompanyId: "",
     },
   });
+
+  const [openRightModalForTracking, setOpenRightModalForTracking] =
+    useState<any>({
+      isOpen: false,
+      awbNo: "",
+    });
 
   const PendingDisputeData = [
     {
@@ -221,8 +230,35 @@ const PendingDispute = ({
               <div className="font-Open font-normal leading-4 text-xs ">
                 Tracking ID
               </div>
-              <div className="font-Open font-semibold leading-5 text-sm">
+              {/* <div className="font-Open font-semibold leading-5 text-sm">
                 {rowData?.awb}
+              </div> */}
+              <div className="flex font-Open font-semibold leading-5 text-sm ">
+                <span
+                  onClick={() => {
+                    setOpenRightModalForTracking({
+                      ...openRightModalForTracking,
+                      isOpen: true,
+                      awbNo: rowData?.awb,
+                    });
+                  }}
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Track"
+                >
+                  {rowData?.awb}
+                </span>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
+                <CopyTooltip stringToBeCopied={rowData?.awb} />
               </div>
             </div>
           </div>
@@ -631,6 +667,22 @@ const PendingDispute = ({
           imagesList={imagesList}
           getWeightDispute={getWeightDispute}
           getImageLoading={getImageLoading}
+        />
+      </RightSideModal>
+      {/* new Tracking Screen with right modal  */}
+      <RightSideModal
+        isOpen={openRightModalForTracking?.isOpen}
+        onClose={() =>
+          setOpenRightModalForTracking({
+            ...openRightModalForTracking,
+            isOpen: false,
+          })
+        }
+        className=""
+      >
+        <NewTrackingContent
+          setOpenRightModalForTracking={setOpenRightModalForTracking}
+          openRightModalForTracking={openRightModalForTracking}
         />
       </RightSideModal>
     </>
