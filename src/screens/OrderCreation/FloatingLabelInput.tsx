@@ -607,7 +607,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
         onClick={handleLabelClick}
         className={`absolute transition-all duration-200 px-1 font-Open ${size === "small" ? "text-xs" : size === "large" ? "text-sm" : "text-xs"} leading-4 tracking-normal cursor-pointer ${
           isFocused || hasValue
-            ? `${size === "small" ? "left-2" : size === "large" ? "left-4" : "left-3"} ${currentSize.labelFloatingTop} translate-y-[-50%] bg-white z-10 ${
+            ? `${size === "small" ? "left-2" : size === "large" ? "left-4" : "left-3"} ${currentSize.labelFloatingTop} translate-y-[-50%] bg-white  ${
                 error
                   ? "text-red-500"
                   : isFocused
