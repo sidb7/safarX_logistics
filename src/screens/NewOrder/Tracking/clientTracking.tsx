@@ -69,6 +69,11 @@ const Tracking = () => {
 
   const awb = trackingState?.[0]?.awb;
 
+  const statusAliasMap: Record<string, string> = {
+    "REACHED DESTINATION": "IN TRANSIT",
+    // Add more if needed
+  };
+
   useEffect(() => {
     // let temp = JSON.parse(localStorage.getItem("userInfo") as any);
     const { sellerInfo } = sessionManager({});
@@ -350,11 +355,6 @@ const Tracking = () => {
                       <div className="w-full">
                         {trackingState?.map(
                           (each: any, indexTracking: number) => {
-                            console.log(
-                              "🚀 ~ Tracking ~ indexTracking:",
-                              indexTracking
-                            );
-                            console.log("indexTracking", indexTracking);
                             const edd =
                               each?.shipmentStatus?.EDD === "N/A" ||
                               each?.shipmentStatus?.EDD === "" ||
@@ -419,11 +419,22 @@ const Tracking = () => {
                               return step;
                             });
 
+                            const effectiveStatus =
+                              statusAliasMap[each?.currentStatus] ||
+                              each?.currentStatus;
+
+                            // let index = updatedSteps.findIndex((item) => {
+                            //   //normal return
+                            //   return (
+                            //     item.value === each?.currentStatus ||
+                            //     `RTO ${item.value}` === each?.currentStatus
+                            //   );
+                            // });
+
                             let index = updatedSteps.findIndex((item) => {
-                              //normal return
                               return (
-                                item.value === each?.currentStatus ||
-                                `RTO ${item.value}` === each?.currentStatus
+                                item.value === effectiveStatus ||
+                                `RTO ${item.value}` === effectiveStatus
                               );
                             });
 
