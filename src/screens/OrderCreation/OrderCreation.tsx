@@ -550,6 +550,28 @@ useEffect(() => {
     },
   ];
 
+  const [orderIdError, setOrderIdError] = useState(false);
+const handleOrderIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setOrder((prevState) => ({
+    ...prevState,
+    orderId: e.target.value,
+  }));
+  
+  // Clear the Order ID error when user starts typing
+  if (orderIdError && e.target.value.trim()) {
+    setOrderIdError(false);
+  }
+  
+  setSortServiciblity("");
+  setHighLightField({
+    addressDetails: false,
+    packageDetails: false,
+    shippingDetails: false,
+    orderDetails: true,
+    pickupTimeDetails: false,
+  });
+};
+
   // Handle box data updates from OrderForm
   const handleBoxDataUpdate = useCallback(
     (
@@ -1535,6 +1557,17 @@ const prepareBoxInfoPayload = () => {
     });
     setBoxValidationErrors({});
 
+//     // Reset previous validation errors
+// setOrderIdError(false); // Add this line
+
+// // Validate Order ID first - add this block
+// const isOrderIdEmpty = isEmptyOrZero(order.orderId);
+// if (isOrderIdEmpty) {
+//   setOrderIdError(true);
+//   // window.scrollTo({ top: 0, behavior: "smooth" });
+//   return;
+// }
+
     // Check required fields for pickup form
     const pickupErrors = {
       contactNo: isEmptyOrZero(pickupFormValues.contactNo),
@@ -1565,6 +1598,11 @@ const prepareBoxInfoPayload = () => {
         order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
       email: false,
     };
+
+    const isOrderIdEmpty = isEmptyOrZero(order.orderId);
+if (isOrderIdEmpty) {
+  setOrderIdError(true);
+}
 
     // Check if there are any validation errors in address forms
     const hasPickupErrors = Object.values(pickupErrors).some((error) => error);
@@ -1652,7 +1690,7 @@ const prepareBoxInfoPayload = () => {
     setBoxValidationErrors(newBoxErrors);
 
     // If there are validation errors, show a toast and return
-    if (hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
+    if (isOrderIdEmpty || hasPickupErrors || hasDeliveryErrors || hasBoxErrors) {
       toast.error("Please fill in all required fields");
 
       // Automatically expand details sections if they contain errors
@@ -2189,7 +2227,7 @@ const prepareBoxInfoForReverseOrder = () => {
       return {
         name: `box_${index + 1}`,
         weightUnit: "Kg",
-        deadWeight: b2cBox.dimensions.weight || 1,
+        deadWeight: b2cBox.dimensions.weight || 0.1,
         length: b2cBox.dimensions.l || 1,
         breadth: b2cBox.dimensions.b || 1,
         height: b2cBox.dimensions.h || 1,
@@ -2244,9 +2282,9 @@ const prepareBoxInfoForReverseOrder = () => {
         weightUnit: "Kg",
         deadWeight:
           b2bBox.packages.reduce(
-            (total, pkg) => total + (Number(pkg.totalWeight) || 0),
+            (total, pkg) => total + (Number(pkg.totalWeight) || 0.1),
             0
-          ) || 1,
+          ) || 0.1,
         length: firstPackage.length || 1,
         breadth: firstPackage.breadth || 1,
         height: firstPackage.height || 1,
@@ -2369,6 +2407,8 @@ const prepareBoxInfoForReverseOrder = () => {
                   setVisibility={setVisibility}
                   setSortServiciblity={setSortServiciblity}
                   setHighLightField={setHighLightField}
+                  orderIdError={orderIdError}              // Add this
+  onOrderIdChange={handleOrderIdChange}    // Add this
                 />
               </Collapsible>
 

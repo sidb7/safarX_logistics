@@ -266,7 +266,7 @@ const TotalRevenueCount: React.FunctionComponent<ITotalRevenueCountProps> = (
                   </div>
                   <div className="flex justify-between">
                     <span className=" py-3 text-base font-normal leading-[22px] font-Open text-[#1C1C1C]">
-                      highest Order Value
+                      Highest Order Value
                     </span>
                     <span className="py-3 text-sm font-normal leading-[22px] font-Open text-[#1C1C1C]">
                       {getValidNumber(

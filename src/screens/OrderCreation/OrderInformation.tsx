@@ -262,6 +262,8 @@ interface OrderInformationProps {
       pickupTimeDetails: boolean;
     }>
   >;
+   orderIdError: boolean;                                                    // Add this
+  onOrderIdChange: (e: React.ChangeEvent<HTMLInputElement>) => void;  
 }
 
 const OrderInformation: React.FC<OrderInformationProps> = ({
@@ -272,6 +274,8 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
   setVisibility,
   setSortServiciblity,
   setHighLightField,
+  orderIdError,        // Add this
+  onOrderIdChange,     // Add this
 }) => {
   // Function to generate a unique code
   const generateUniqueCode = (minLength: number, maxLength: number) => {
@@ -342,22 +346,22 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
             value={order?.orderId || ""}
             maxLength={50}
             label="Order ID"
-            onChange={(e) => {
-              setOrder((prevState) => {
-                return {
-                  ...prevState,
-                  orderId: e.target.value,
-                };
-              });
-              setSortServiciblity("");
-              setHighLightField({
-                addressDetails: false,
-                packageDetails: false,
-                shippingDetails: false,
-                orderDetails: true,
-                pickupTimeDetails: false,
-              });
-            }}
+            // onChange={(e) => {
+            //   setOrder((prevState) => {
+            //     return {
+            //       ...prevState,
+            //       orderId: e.target.value,
+            //     };
+            //   });
+            //   setSortServiciblity("");
+            //   setHighLightField({
+            //     addressDetails: false,
+            //     packageDetails: false,
+            //     shippingDetails: false,
+            //     orderDetails: true,
+            //     pickupTimeDetails: false,
+            //   });
+            // }}
             isDisabled={showDownloadLebal}
             onClick={() => {
               const orderId = generateUniqueCode(8, 12);
@@ -377,6 +381,8 @@ const OrderInformation: React.FC<OrderInformationProps> = ({
             setVisibility={setVisibility}
             name="orderId"
             data-cy="auto-generate-order-id"
+            onChange={onOrderIdChange}                                    // Change this line
+  inputError={orderIdError}                                     // Add this
           />
         </div>
       </div>

@@ -21,6 +21,9 @@ import { POST } from "../../utils/webService";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 import { Spinner } from "../../components/Spinner";
+import CopyTooltip from "../../components/CopyToClipboard";
+import { Tooltip } from "react-tooltip";
+import NewTrackingContent from "../Order/newTrackingContent";
 
 const NewDiscrepancyTable = ({
   data,
@@ -41,6 +44,11 @@ const NewDiscrepancyTable = ({
       privateCompanyId: "",
     },
   });
+  const [openRightModalForTracking, setOpenRightModalForTracking] =
+    useState<any>({
+      isOpen: false,
+      awbNo: "",
+    });
 
   const getPartnerImages = async (dataItem: any) => {
     try {
@@ -268,8 +276,35 @@ const NewDiscrepancyTable = ({
               <div className="font-Open font-normal leading-5 text-xs ">
                 Tracking ID
               </div>
-              <div className="font-Open font-semibold leading-5 text-sm ">
+              {/* <div className="font-Open font-semibold leading-5 text-sm ">
                 {rowData?.awb}
+              </div> */}
+              <div className="flex font-Open font-semibold leading-5 text-sm ">
+                <span
+                  onClick={() => {
+                    setOpenRightModalForTracking({
+                      ...openRightModalForTracking,
+                      isOpen: true,
+                      awbNo: rowData?.awb,
+                    });
+                  }}
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Track"
+                >
+                  {rowData?.awb}
+                </span>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
+                <CopyTooltip stringToBeCopied={rowData?.awb} />
               </div>
             </div>
           </div>
@@ -661,6 +696,22 @@ const NewDiscrepancyTable = ({
           setSideDrawer={setSideDrawer}
           imagesList={imagesList}
           getWeightDispute={getWeightDispute}
+        />
+      </RightSideModal>
+      {/* new Tracking Screen with right modal  */}
+      <RightSideModal
+        isOpen={openRightModalForTracking?.isOpen}
+        onClose={() =>
+          setOpenRightModalForTracking({
+            ...openRightModalForTracking,
+            isOpen: false,
+          })
+        }
+        className=""
+      >
+        <NewTrackingContent
+          setOpenRightModalForTracking={setOpenRightModalForTracking}
+          openRightModalForTracking={openRightModalForTracking}
         />
       </RightSideModal>
     </>
