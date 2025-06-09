@@ -530,6 +530,8 @@ const Index: React.FC = () => {
                     ignoreRecommended={true}
                     isMasked={isMasked}
                     data-cy="service-box"
+                    surface={surface}
+                    air={air}
                   />
                 )}
               </div>
