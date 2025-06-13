@@ -4888,14 +4888,14 @@
 //   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 //   const [serviceLoading, setServiceLoading] = useState(false);
 //   const [openPickupDatePicker, setOpenPickupDatePicker] = useState(false);
-  
+
 //   // Form Data State
 //   const [pickupAddress, setPickupAddress] = useState<any>({
 //     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
 //     flatNo: "", locality: "", landmark: "", city: "", state: "", country: "",
 //     pincode: "", addressType: "", pickupDate: "",gstNumber: "",
 //   });
-  
+
 //   const [deliveryAddress, setDeliveryAddress] = useState<any>({
 //     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
 //     flatNo: "", locality: "", landmark: "", city: "", state: "", country: "",
@@ -4947,7 +4947,7 @@
 // setIsEnabled(hasAwb);
 // console.log("🔧 AWB value:", orderInfo?.awb, "Type:", typeof orderInfo?.awb, "→ isEnabled =", isEnabled);
 // console.log("🔧 Setting isEnabled to:", hasAwb);
-        
+
 //         // Initialize form data
 //         initializeFormData(sellerData);
 //       }
@@ -4992,9 +4992,8 @@
 //   //     setServiceLoading(false);
 //   //   }
 //   // };
-  
-//   const fetchServiceList = async () => {
 
+//   const fetchServiceList = async () => {
 
 //   try {
 //     setServiceLoading(true);
@@ -5023,7 +5022,7 @@
 //       const { data } = await POST(GET_PINCODE_DATA, { pincode });
 //       if (data?.success && data.data?.[0]) {
 //         const pincodeInfo = data.data[0];
-        
+
 //         if (addressType === 'pickup') {
 //           setPickupAddress((prev:any) => ({
 //             ...prev,
@@ -5229,23 +5228,23 @@
 //   // Validation Functions
 //   const validatePickupAddress = (): boolean => {
 //     const errors: ValidationErrors = {};
-    
+
 //     if (!pickupAddress.contact.contactName.trim()) {
 //       errors.pickupContactName = "Contact name is required";
 //     }
-    
+
 //     if (!validateMobile(pickupAddress.contact.mobileNo)) {
 //       errors.pickupMobileNo = "Invalid mobile number";
 //     }
-    
+
 //     if (pickupAddress.contact.emailId && !validateEmail(pickupAddress.contact.emailId)) {
 //       errors.pickupEmailId = "Invalid email address";
 //     }
-    
+
 //     if (!pickupAddress.flatNo.trim()) {
 //       errors.pickupFlatNo = "Flat/House number is required";
 //     }
-    
+
 //     if (!validatePincode(pickupAddress.pincode)) {
 //       errors.pickupPincode = "Invalid pincode";
 //     }
@@ -5256,23 +5255,23 @@
 
 //   const validateDeliveryAddress = (): boolean => {
 //     const errors: ValidationErrors = {};
-    
+
 //     if (!deliveryAddress.contact.contactName.trim()) {
 //       errors.deliveryContactName = "Contact name is required";
 //     }
-    
+
 //     if (!validateMobile(deliveryAddress.contact.mobileNo)) {
 //       errors.deliveryMobileNo = "Invalid mobile number";
 //     }
-    
+
 //     if (deliveryAddress.contact.emailId && !validateEmail(deliveryAddress.contact.emailId)) {
 //       errors.deliveryEmailId = "Invalid email address";
 //     }
-    
+
 //     if (!deliveryAddress.flatNo.trim()) {
 //       errors.deliveryFlatNo = "Flat/House number is required";
 //     }
-    
+
 //     if (!validatePincode(deliveryAddress.pincode)) {
 //       errors.deliveryPincode = "Invalid pincode";
 //     }
@@ -5287,7 +5286,7 @@
 //       setOpenPickupDatePicker(true);
 //       return;
 //     }
-    
+
 //     setPickupAddress((prev:any) => ({
 //       ...prev,
 //       pickupDate: selectedDate.getTime(),
@@ -5297,13 +5296,13 @@
 
 //   const handlePincodeChange = (value: string, type: 'pickup' | 'delivery') => {
 //     const numericValue = value.replace(/\D/g, "");
-    
+
 //     if (type === 'pickup') {
 //       setPickupAddress((prev:any) => ({ ...prev, pincode: numericValue }));
 //     } else {
 //       setDeliveryAddress((prev:any) => ({ ...prev, pincode: numericValue }));
 //     }
-    
+
 //     if (numericValue.length === 6) {
 //       fetchPincodeData(numericValue, type);
 //     }
@@ -5318,9 +5317,9 @@
 //   }, [getAllSellerData]);
 
 //   useEffect(() => {
-   
+
 //       fetchServiceList();
-    
+
 //     isFirstRender.current = false;
 //   }, [orderData]);
 
@@ -5343,7 +5342,7 @@
 //   //         readOnly={isEnabled}
 //   //         required
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Mobile Number"
 //   //         type="tel"
@@ -5380,7 +5379,7 @@
 //   //         errorMessage={validationErrors.pickupEmailId}
 //   //         readOnly={isEnabled}
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Flat/House Number"
 //   //         value={pickupAddress.flatNo}
@@ -5404,7 +5403,7 @@
 //   //         }}
 //   //         readOnly={isEnabled}
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Landmark"
 //   //         value={pickupAddress.landmark}
@@ -5421,7 +5420,7 @@
 //   //         value={pickupAddress.city}
 //   //         readOnly
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="State"
 //   //         value={pickupAddress.state}
@@ -5435,7 +5434,7 @@
 //   //         value={pickupAddress.country}
 //   //         readOnly
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Pincode"
 //   //         value={pickupAddress.pincode}
@@ -5456,7 +5455,7 @@
 //   //         readOnly
 //   //         onFocus={() => setOpenPickupDatePicker(true)}
 //   //       />
-        
+
 //   //       {openPickupDatePicker && (
 //   //         <CustomDate
 //   //           onSelect={handlePickupDateChange}
@@ -5503,7 +5502,7 @@
 //         readOnly={isEnabled}
 //         required
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Name"
 //         value={pickupAddress.contact.contactName}
@@ -5534,7 +5533,7 @@
 //         readOnly={isEnabled}
 //         required
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Address Line 1"
 //         value={pickupAddress.flatNo}
@@ -5559,7 +5558,7 @@
 //         }}
 //         readOnly={isEnabled}
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Landmark"
 //         value={pickupAddress.landmark}
@@ -5577,7 +5576,7 @@
 //         value={pickupAddress.city}
 //         readOnly
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="State"
 //         value={pickupAddress.state}
@@ -5595,7 +5594,7 @@
 //         }}
 //         readOnly={isEnabled}
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Email ID (Optional)"
 //         type="email"
@@ -5621,7 +5620,7 @@
 //         readOnly
 //         onFocus={() => setOpenPickupDatePicker(true)}
 //       />
-      
+
 //       {openPickupDatePicker && (
 //         <CustomDate
 //           onSelect={handlePickupDateChange}
@@ -5664,7 +5663,7 @@
 //   //         readOnly={isEnabled}
 //   //         required
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Mobile Number"
 //   //         type="tel"
@@ -5701,7 +5700,7 @@
 //   //         errorMessage={validationErrors.deliveryEmailId}
 //   //         readOnly={isEnabled}
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Flat/House Number"
 //   //         value={deliveryAddress.flatNo}
@@ -5725,7 +5724,7 @@
 //   //         }}
 //   //         readOnly={isEnabled}
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Landmark"
 //   //         value={deliveryAddress.landmark}
@@ -5742,7 +5741,7 @@
 //   //         value={deliveryAddress.city}
 //   //         readOnly
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="State"
 //   //         value={deliveryAddress.state}
@@ -5756,7 +5755,7 @@
 //   //         value={deliveryAddress.country}
 //   //         readOnly
 //   //       />
-        
+
 //   //       <FloatingLabelInput
 //   //         placeholder="Pincode"
 //   //         value={deliveryAddress.pincode}
@@ -5795,8 +5794,6 @@
 //   //   </div>
 //   // );
 
-
-
 // // Updated renderDeliveryAddressForm function
 // const renderDeliveryAddressForm = () => (
 //   <div className="space-y-4 p-4">
@@ -5820,7 +5817,7 @@
 //         readOnly={isEnabled}
 //         required
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Name"
 //         value={deliveryAddress.contact.contactName}
@@ -5851,7 +5848,7 @@
 //         readOnly={isEnabled}
 //         required
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Address Line 1"
 //         value={deliveryAddress.flatNo}
@@ -5876,7 +5873,7 @@
 //         }}
 //         readOnly={isEnabled}
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Landmark"
 //         value={deliveryAddress.landmark}
@@ -5894,7 +5891,7 @@
 //         value={deliveryAddress.city}
 //         readOnly
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="State"
 //         value={deliveryAddress.state}
@@ -5912,7 +5909,7 @@
 //         }}
 //         readOnly={isEnabled}
 //       />
-      
+
 //       <FloatingLabelInput
 //         placeholder="Email ID (Optional)"
 //         type="email"
@@ -5950,7 +5947,7 @@
 //       {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
 //         <div key={boxIndex} className="border rounded-lg p-4">
 //           <h4 className="font-semibold mb-4">Box {boxIndex + 1}: {box.name}</h4>
-          
+
 //           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
 //             <FloatingLabelInput
 //               placeholder="Dead Weight (kg)"
@@ -6066,7 +6063,6 @@
 //   //     )}
 //   //   </div>
 //   // );
-  
 
 //   const renderServices = () => (
 //   <div className="space-y-4 p-4">
@@ -6166,7 +6162,7 @@
 //                     <p className="text-sm text-gray-600">Zone: {service.zoneName}</p>
 //                   </div>
 //                 </div>
-                
+
 //                 {selectedServiceIndex === index && (
 //                   <div className="mt-3 pt-3 border-t grid grid-cols-2 gap-2 text-sm">
 //                     <div>Base: ₹{service.base}</div>
@@ -6210,7 +6206,7 @@
 //           readOnly
 //         />
 //       </div>
-      
+
 //       <FloatingLabelInput
 //         placeholder="Invoice Value"
 //         type="number"
@@ -6260,7 +6256,7 @@
 //           readOnly
 //         />
 //       </div>
-      
+
 //       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 //         <FloatingLabelInput
 //           placeholder="Source"
@@ -6306,14 +6302,14 @@
 //         {renderBoxAndProducts()}
 //       </Collapsible>
 
-//       <Collapsible 
-//       title="Services" 
+//       <Collapsible
+//       title="Services"
 //   onToggle={(isOpen) => {
-    
+
 //       if (isOpen) { // ← Add this condition
 //       fetchServiceList();
-//     } 
-    
+//     }
+
 //   }}
 //       >
 //         {renderServices()}
@@ -6349,6 +6345,2179 @@
 
 // export default CustomTableAccordian;
 
+// import React, { useState, useRef, useEffect } from "react";
+// import { POST } from "../../utils/webService";
+// import {
+//   GET_SELLER_ORDER_COMPLETE_DATA,
+//   UPDATE_TEMP_ORDER_INFO,
+//   GET_SELLER_BOX,
+//   GET_COURIER_PARTNER_SERVICE,
+//   SET_SERVICE_INFO,
+//   GET_PINCODE_DATA,
+//   POST_PLACE_ALL_ORDERS,
+//   GET_PICKUP_ADDRESS_MULTIPLE_SEARCH,
+//   GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH,
+//   GET_PRODUCTS,
+// } from "../../utils/ApiUrls";
+// import { toast } from "react-hot-toast";
+// import {
+//   capitalizeFirstLetter,
+//   convertEpochToDateTime,
+//   convertEpochToDateTimeV2,
+// } from "../../utils/utility";
+// import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
+// import { Spinner } from "../../components/Spinner";
+// import Collapsible from "../OneComponents/Collapsible";
+// import FloatingLabelInput from "../../screens/OrderCreation/FloatingLabelInput";
+// import CustomDate from "./CustomDateWithTime";
+// import OneButton from "../Button/OneButton";
+
+// // Types
+// interface OrderData {
+//   orderId: string;
+//   tempOrderId: string;
+//   source: string;
+//   orderType: string;
+//   pickupAddress: any;
+//   deliveryAddress: any;
+//   boxInfo: any[];
+//   codInfo: any;
+//   service: any;
+//   status: any[];
+// }
+
+// interface ValidationErrors {
+//   [key: string]: string;
+// }
+
+// interface CustomTableAccordianProps {
+//   getAllSellerData?: any;
+//   isMasked?: boolean;
+// }
+
+// // Address interface for search results
+// interface Address {
+//   pickupAddressId?: string;
+//   deliveryAddressId?: string;
+//   contact: {
+//     name: string;
+//     mobileNo: number;
+//     mobileNoStr: string;
+//     emailId?: string;
+//     type: string;
+//   };
+//   flatNo: string;
+//   locality: string;
+//   landmark: string;
+//   city: string;
+//   state: string;
+//   country: string;
+//   pincode: number | string;
+//   pincodeStr: string;
+//   fullAddress: string;
+//   gstNumber?: string;
+//   isPin?: boolean;
+// }
+
+// const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
+//   getAllSellerData,
+//   isMasked = false,
+// }) => {
+//   // State Management
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [orderData, setOrderData] = useState<OrderData | null>(null);
+//   const [boxDetailsData, setBoxDetailsData] = useState<any[]>([]);
+//   const [serviceList, setServiceList] = useState<any[]>([]);
+//   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
+//   const [isEnabled, setIsEnabled] = useState(true);
+//   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
+//     {}
+//   );
+//   const [serviceLoading, setServiceLoading] = useState(false);
+//   const [openPickupDatePicker, setOpenPickupDatePicker] = useState(false);
+
+//   // Search functionality state
+//   const [pickupSearchQuery, setPickupSearchQuery] = useState("");
+//   const [deliverySearchQuery, setDeliverySearchQuery] = useState("");
+//   const [pickupSearchResults, setPickupSearchResults] = useState<Address[]>([]);
+//   const [deliverySearchResults, setDeliverySearchResults] = useState<Address[]>(
+//     []
+//   );
+//   const [showPickupSearchResults, setShowPickupSearchResults] = useState(false);
+//   const [showDeliverySearchResults, setShowDeliverySearchResults] =
+//     useState(false);
+//   const [searchLoading, setSearchLoading] = useState({
+//     pickup: false,
+//     delivery: false,
+//   });
+
+//   // Form Data State
+//   const [pickupAddress, setPickupAddress] = useState<any>({
+//     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
+//     flatNo: "",
+//     locality: "",
+//     landmark: "",
+//     city: "",
+//     state: "",
+//     country: "",
+//     pincode: "",
+//     addressType: "",
+//     pickupDate: "",
+//     gstNumber: "",
+//   });
+
+//   const [deliveryAddress, setDeliveryAddress] = useState<any>({
+//     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
+//     flatNo: "",
+//     locality: "",
+//     landmark: "",
+//     city: "",
+//     state: "",
+//     country: "",
+//     pincode: "",
+//     addressType: "",
+//     gstNumber: "",
+//   });
+
+//   const [selectedBoxIndex, setSelectedBoxIndex] = useState(0);
+//   const [customBox, setCustomBox] = useState({
+//     name: "",
+//     deadWeight: 0,
+//     length: 0,
+//     breadth: 0,
+//     height: 0,
+//   });
+
+//   // Refs
+//   const isFirstRender = useRef(true);
+
+//   // Search Icons
+//   const SearchIcon = (): JSX.Element => (
+//     <svg
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="18"
+//       height="18"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//       className="text-gray-500"
+//     >
+//       <circle cx="11" cy="11" r="8"></circle>
+//       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+//     </svg>
+//   );
+
+//   const LoadingIcon = (): JSX.Element => (
+//     <svg
+//       className="animate-spin h-5 w-5 text-blue-500"
+//       xmlns="http://www.w3.org/2000/svg"
+//       fill="none"
+//       viewBox="0 0 24 24"
+//     >
+//       <circle
+//         className="opacity-25"
+//         cx="12"
+//         cy="12"
+//         r="10"
+//         stroke="currentColor"
+//         strokeWidth="4"
+//       ></circle>
+//       <path
+//         className="opacity-75"
+//         fill="currentColor"
+//         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+//       ></path>
+//     </svg>
+//   );
+
+//   // Utility Functions
+//   const validateEmail = (email: string): boolean => {
+//     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+//   };
+
+//   const validateMobile = (mobile: string): boolean => {
+//     return /^[6-9]\d{9}$/.test(mobile);
+//   };
+
+//   const validatePincode = (pincode: string): boolean => {
+//     return /^\d{6}$/.test(pincode);
+//   };
+
+//   // Helper functions for address extraction
+//   const getName = (address: Address) => {
+//     return address.contact?.name || "";
+//   };
+
+//   const getContactNo = (address: Address) => {
+//     return (
+//       address.contact?.mobileNoStr ||
+//       address.contact?.mobileNo?.toString() ||
+//       ""
+//     );
+//   };
+
+//   const getEmail = (address: Address) => {
+//     return address.contact?.emailId || "";
+//   };
+
+//   const formatAddress = (address: Address) => {
+//     return address.fullAddress || "";
+//   };
+
+//   // Add these new functions to handle product operations
+
+//   const updateProduct = (
+//     boxIndex: number,
+//     productIndex: number,
+//     field: string,
+//     value: any
+//   ) => {
+//     if (isEnabled) return;
+
+//     setOrderData((prevData: any) => {
+//       if (!prevData) return prevData;
+
+//       const updatedData = { ...prevData };
+//       const updatedBoxInfo = [...updatedData.boxInfo];
+//       const updatedBox = { ...updatedBoxInfo[boxIndex] };
+//       const updatedProducts = [...updatedBox.products];
+
+//       updatedProducts[productIndex] = {
+//         ...updatedProducts[productIndex],
+//         [field]: value,
+//       };
+
+//       // Recalculate totals when qty, unitPrice, or deadWeight changes
+//       if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+//         const product = updatedProducts[productIndex];
+//         const qty = product.qty || 0;
+//         const unitPrice = product.unitPrice || 0;
+//         const deadWeight = product.deadWeight || 0;
+
+//         updatedProducts[productIndex] = {
+//           ...updatedProducts[productIndex],
+//           totalPrice: qty * unitPrice,
+//           appliedWeight: qty * deadWeight,
+//           volumetricWeight: calculateVolumetricWeight(
+//             product.length,
+//             product.breadth,
+//             product.height,
+//             qty
+//           ),
+//         };
+//       }
+
+//       updatedBox.products = updatedProducts;
+//       updatedBoxInfo[boxIndex] = updatedBox;
+//       updatedData.boxInfo = updatedBoxInfo;
+
+//       return updatedData;
+//     });
+//   };
+
+//   const addProduct = (boxIndex: number) => {
+//     if (isEnabled) return;
+
+//     const newProduct = {
+//       companyId: "",
+//       privateCompanyId: 0,
+//       sellerId: 0,
+//       productId: "",
+//       variantId: "",
+//       name: "",
+//       category: "Any",
+//       qty: 1,
+//       sku: "",
+//       hsnCode: "",
+//       currency: "INR",
+//       unitPrice: 0,
+//       unitTax: 0,
+//       measureUnit: "cm",
+//       discount: 0,
+//       sellingPrice: 0,
+//       totalDiscount: 0,
+//       totalPrice: 0,
+//       length: 0,
+//       breadth: 0,
+//       height: 0,
+//       deadWeight: 0,
+//       weightUnit: "kg",
+//       volumetricWeight: 0,
+//       appliedWeight: 0,
+//       divisor: 5000,
+//       images: [],
+//       selected: false,
+//     };
+
+//     setOrderData((prevData: any) => {
+//       if (!prevData) return prevData;
+
+//       const updatedData = { ...prevData };
+//       const updatedBoxInfo = [...updatedData.boxInfo];
+//       const updatedBox = { ...updatedBoxInfo[boxIndex] };
+
+//       updatedBox.products = [...updatedBox.products, newProduct];
+//       updatedBoxInfo[boxIndex] = updatedBox;
+//       updatedData.boxInfo = updatedBoxInfo;
+
+//       return updatedData;
+//     });
+
+//     toast.success("Product added successfully");
+//   };
+
+//   const deleteProduct = (boxIndex: number, productIndex: number) => {
+//     if (isEnabled) return;
+
+//     setOrderData((prevData: any) => {
+//       if (!prevData) return prevData;
+
+//       const updatedData = { ...prevData };
+//       const updatedBoxInfo = [...updatedData.boxInfo];
+//       const updatedBox = { ...updatedBoxInfo[boxIndex] };
+//       const updatedProducts = [...updatedBox.products];
+
+//       updatedProducts.splice(productIndex, 1);
+
+//       updatedBox.products = updatedProducts;
+//       updatedBoxInfo[boxIndex] = updatedBox;
+//       updatedData.boxInfo = updatedBoxInfo;
+
+//       return updatedData;
+//     });
+
+//     toast.success("Product deleted successfully");
+//   };
+
+//   const calculateVolumetricWeight = (
+//     length: number,
+//     breadth: number,
+//     height: number,
+//     qty: number
+//   ) => {
+//     const volume = (length || 0) * (breadth || 0) * (height || 0) * (qty || 0);
+//     return volume / 5000; // Standard divisor for volumetric weight calculation
+//   };
+
+//   // Search API Functions
+//   const searchPickupAddresses = async (query: string) => {
+//     // Always search, even with empty query to show all results
+//     setSearchLoading((prev) => ({ ...prev, pickup: true }));
+//     try {
+//       const payload = {
+//         skip: 0,
+//         limit: 50, // Increased limit to show more results
+//         pageNo: 1,
+//         sort: { _id: -1 },
+//         searchValue: query, // Can be empty to show all results
+//       };
+
+//       const response = await POST(GET_PICKUP_ADDRESS_MULTIPLE_SEARCH, payload);
+
+//       if (response?.data?.success) {
+//         const sortedAddresses = [...response.data.data].sort((a, b) => {
+//           if (a.isPin && !b.isPin) return -1;
+//           if (!a.isPin && b.isPin) return 1;
+//           return 0;
+//         });
+
+//         setPickupSearchResults(sortedAddresses);
+//         setShowPickupSearchResults(true);
+//       } else {
+//         setPickupSearchResults([]);
+//         setShowPickupSearchResults(false);
+//       }
+//     } catch (error) {
+//       console.error("Error searching pickup addresses:", error);
+//       setPickupSearchResults([]);
+//       setShowPickupSearchResults(false);
+//     } finally {
+//       setSearchLoading((prev) => ({ ...prev, pickup: false }));
+//     }
+//   };
+
+//   const searchDeliveryAddresses = async (query: string) => {
+//     // Always search, even with empty query to show all results
+//     setSearchLoading((prev) => ({ ...prev, delivery: true }));
+//     try {
+//       const payload = {
+//         skip: 0,
+//         limit: 50, // Increased limit to show more results
+//         pageNo: 1,
+//         sort: { _id: -1 },
+//         searchValue: query, // Can be empty to show all results
+//       };
+
+//       const response = await POST(
+//         GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH,
+//         payload
+//       );
+
+//       if (response?.data?.success) {
+//         const sortedAddresses = [...response.data.data].sort((a, b) => {
+//           if (a.isPin && !b.isPin) return -1;
+//           if (!a.isPin && b.isPin) return 1;
+//           return 0;
+//         });
+
+//         setDeliverySearchResults(sortedAddresses);
+//         setShowDeliverySearchResults(true);
+//       } else {
+//         setDeliverySearchResults([]);
+//         setShowDeliverySearchResults(false);
+//       }
+//     } catch (error) {
+//       console.error("Error searching delivery addresses:", error);
+//       setDeliverySearchResults([]);
+//       setShowDeliverySearchResults(false);
+//     } finally {
+//       setSearchLoading((prev) => ({ ...prev, delivery: false }));
+//     }
+//   };
+
+//   // Search handlers
+//   const handlePickupSearchChange = (value: string) => {
+//     setPickupSearchQuery(value);
+
+//     // Debounced search - search immediately if empty (to show all results)
+//     const timer = setTimeout(
+//       () => {
+//         searchPickupAddresses(value);
+//       },
+//       value === "" ? 0 : 300
+//     );
+
+//     return () => clearTimeout(timer);
+//   };
+
+//   const handleDeliverySearchChange = (value: string) => {
+//     setDeliverySearchQuery(value);
+
+//     // Debounced search - search immediately if empty (to show all results)
+//     const timer = setTimeout(
+//       () => {
+//         searchDeliveryAddresses(value);
+//       },
+//       value === "" ? 0 : 300
+//     );
+
+//     return () => clearTimeout(timer);
+//   };
+
+//   // Focus handlers to show all results when input is focused
+//   const handlePickupSearchFocus = () => {
+//     if (pickupSearchQuery === "" && pickupSearchResults.length === 0) {
+//       searchPickupAddresses("");
+//     } else if (pickupSearchResults.length > 0) {
+//       setShowPickupSearchResults(true);
+//     }
+//   };
+
+//   const handleDeliverySearchFocus = () => {
+//     if (deliverySearchQuery === "" && deliverySearchResults.length === 0) {
+//       searchDeliveryAddresses("");
+//     } else if (deliverySearchResults.length > 0) {
+//       setShowDeliverySearchResults(true);
+//     }
+//   };
+
+//   // Blur handlers to hide results after a delay
+//   const handlePickupSearchBlur = () => {
+//     setTimeout(() => {
+//       setShowPickupSearchResults(false);
+//     }, 200);
+//   };
+
+//   const handleDeliverySearchBlur = () => {
+//     setTimeout(() => {
+//       setShowDeliverySearchResults(false);
+//     }, 200);
+//   };
+
+//   // Address selection handlers
+//   const handleSelectPickupAddress = (address: Address) => {
+//     setPickupAddress({
+//       contact: {
+//         contactName: getName(address),
+//         mobileNo: getContactNo(address),
+//         emailId: getEmail(address),
+//         contactType: address.contact?.type || "",
+//       },
+//       flatNo: address.flatNo || "",
+//       locality: address.locality || "",
+//       landmark: address.landmark || "",
+//       city: address.city || "",
+//       state: address.state || "",
+//       country: address.country || "",
+//       pincode: address.pincodeStr || "",
+//       addressType: "",
+//       pickupDate: pickupAddress.pickupDate || "",
+//       gstNumber: address.gstNumber || "",
+//     });
+
+//     setPickupSearchQuery("");
+//     setShowPickupSearchResults(false);
+//     setPickupSearchResults([]);
+//   };
+
+//   const handleSelectDeliveryAddress = (address: Address) => {
+//     setDeliveryAddress({
+//       contact: {
+//         contactName: getName(address),
+//         mobileNo: getContactNo(address),
+//         emailId: getEmail(address),
+//         contactType: address.contact?.type || "",
+//       },
+//       flatNo: address.flatNo || "",
+//       locality: address.locality || "",
+//       landmark: address.landmark || "",
+//       city: address.city || "",
+//       state: address.state || "",
+//       country: address.country || "",
+//       pincode: address.pincodeStr || "",
+//       addressType: "",
+//       gstNumber: address.gstNumber || "",
+//     });
+
+//     setDeliverySearchQuery("");
+//     setShowDeliverySearchResults(false);
+//     setDeliverySearchResults([]);
+//   };
+
+//   // Search results render function
+//   const renderSearchResults = (
+//     results: Address[],
+//     type: "pickup" | "delivery",
+//     isVisible: boolean,
+//     isLoading: boolean
+//   ) => {
+//     if (!isVisible) {
+//       return null;
+//     }
+
+//     return (
+//       <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+//         {isLoading ? (
+//           <div className="p-3 flex justify-center items-center">
+//             <LoadingIcon /> <span className="ml-2">Searching...</span>
+//           </div>
+//         ) : results.length > 0 ? (
+//           <ul>
+//             {results.map((address, index) => (
+//               <li
+//                 key={`${type}-${index}`}
+//                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
+//                 onClick={() => {
+//                   if (type === "pickup") {
+//                     handleSelectPickupAddress(address);
+//                   } else {
+//                     handleSelectDeliveryAddress(address);
+//                   }
+//                 }}
+//               >
+//                 <div className="flex flex-col">
+//                   <div className="flex items-center justify-between">
+//                     <span className="font-medium">{getName(address)}</span>
+//                     {address.isPin && (
+//                       <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
+//                         Pinned
+//                       </span>
+//                     )}
+//                   </div>
+//                   <span className="text-sm text-gray-600">
+//                     {getContactNo(address)}
+//                   </span>
+//                   <span className="text-sm text-gray-600 truncate">
+//                     {address.flatNo} {address.locality} {address.landmark}
+//                   </span>
+//                   <span className="text-sm text-gray-600 truncate">
+//                     {address.city}, {address.state} {address.pincodeStr}
+//                   </span>
+//                 </div>
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           <div className="p-4 text-center text-gray-500">
+//             No addresses found
+//           </div>
+//         )}
+//       </div>
+//     );
+//   };
+
+//   // API Functions (existing functions remain the same)
+//   const fetchOrderData = async (orderInfo: any) => {
+//     try {
+//       setIsLoading(true);
+//       const { data } = await POST(GET_SELLER_ORDER_COMPLETE_DATA, {
+//         tempOrderId: orderInfo?.orderId?.split("T")[1],
+//         awb: orderInfo?.awb || "0",
+//       });
+
+//       if (data?.status) {
+//         const sellerData = data.data[0].data[0];
+//         setOrderData(sellerData);
+//         const hasAwb =
+//           orderInfo?.awb && orderInfo.awb !== "" && orderInfo.awb !== "0";
+//         setIsEnabled(hasAwb);
+
+//         initializeFormData(sellerData);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching order data:", error);
+//       toast.error("Failed to load order data");
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   const fetchBoxData = async () => {
+//     try {
+//       const { data } = await POST(GET_SELLER_BOX);
+//       if (data?.success) {
+//         setBoxDetailsData(data.data);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching box data:", error);
+//     }
+//   };
+
+//   const fetchServiceList = async () => {
+//     try {
+//       setServiceLoading(true);
+//       const payload = {
+//         tempOrderId: orderData?.tempOrderId,
+//         source: orderData?.source,
+//       };
+
+//       const { data } = await POST(GET_COURIER_PARTNER_SERVICE, payload);
+//       if (data?.success) {
+//         const services = isMasked ? data?.data?.slice(0, 2) : data?.data;
+//         setServiceList(services);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching services:", error);
+//       toast.error("Failed to load services");
+//     } finally {
+//       setServiceLoading(false);
+//     }
+//   };
+
+//   const fetchPincodeData = async (
+//     pincode: string,
+//     addressType: "pickup" | "delivery"
+//   ) => {
+//     if (pincode.length !== 6) return;
+
+//     try {
+//       const { data } = await POST(GET_PINCODE_DATA, { pincode });
+//       if (data?.success && data.data?.[0]) {
+//         const pincodeInfo = data.data[0];
+
+//         if (addressType === "pickup") {
+//           setPickupAddress((prev: any) => ({
+//             ...prev,
+//             city: pincodeInfo.city,
+//             state: pincodeInfo.state,
+//             country: pincodeInfo.country,
+//             pincode: pincodeInfo.pincode,
+//           }));
+//         } else {
+//           setDeliveryAddress((prev: any) => ({
+//             ...prev,
+//             city: pincodeInfo.city,
+//             state: pincodeInfo.state,
+//             country: pincodeInfo.country,
+//             pincode: pincodeInfo.pincode,
+//           }));
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error fetching pincode data:", error);
+//     }
+//   };
+
+//   // Form Update Functions (existing functions remain the same)
+//   const updatePickupAddress = async () => {
+//     if (isEnabled) return;
+
+//     try {
+//       const payload = {
+//         pickupAddress: {
+//           contact: {
+//             name: pickupAddress.contact.contactName,
+//             mobileNo: pickupAddress.contact.mobileNo,
+//             emailId: pickupAddress.contact.emailId,
+//             type: pickupAddress.contact.contactType,
+//           },
+//           flatNo: pickupAddress.flatNo,
+//           locality: pickupAddress.locality,
+//           landmark: pickupAddress.landmark,
+//           city: pickupAddress.city,
+//           state: pickupAddress.state,
+//           country: pickupAddress.country,
+//           pincode: pickupAddress.pincode,
+//           fullAddress: `${pickupAddress.flatNo} ${pickupAddress.locality} ${pickupAddress.landmark} ${pickupAddress.city} ${pickupAddress.state} ${pickupAddress.country} ${pickupAddress.pincode}`,
+//           addressType: pickupAddress.addressType,
+//           pickupDate: pickupAddress.pickupDate,
+//           gstNumber: pickupAddress.gstNumber,
+//         },
+//         orderId: orderData?.orderId,
+//         tempOrderId: orderData?.tempOrderId,
+//         source: orderData?.source,
+//       };
+
+//       const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+//       if (data?.status) {
+//         toast.success("Pickup address updated successfully");
+//         await fetchOrderData(getAllSellerData?.data);
+//       } else {
+//         toast.error(data?.message || "Failed to update pickup address");
+//       }
+//     } catch (error) {
+//       console.error("Error updating pickup address:", error);
+//       toast.error("Failed to update pickup address");
+//     }
+//   };
+
+//   const updateDeliveryAddress = async () => {
+//     if (isEnabled) return;
+
+//     try {
+//       const payload = {
+//         deliveryAddress: {
+//           contact: {
+//             name: deliveryAddress.contact.contactName,
+//             mobileNo: deliveryAddress.contact.mobileNo,
+//             emailId: deliveryAddress.contact.emailId,
+//             type: deliveryAddress.contact.contactType,
+//           },
+//           flatNo: deliveryAddress.flatNo,
+//           locality: deliveryAddress.locality,
+//           landmark: deliveryAddress.landmark,
+//           city: deliveryAddress.city,
+//           state: deliveryAddress.state,
+//           country: deliveryAddress.country,
+//           pincode: deliveryAddress.pincode,
+//           fullAddress: `${deliveryAddress.flatNo} ${deliveryAddress.locality} ${deliveryAddress.landmark} ${deliveryAddress.city} ${deliveryAddress.state} ${deliveryAddress.country} ${deliveryAddress.pincode}`,
+//           addressType: deliveryAddress.addressType,
+//           gstNumber: deliveryAddress.gstNumber,
+//         },
+//         orderId: orderData?.orderId,
+//         tempOrderId: orderData?.tempOrderId,
+//         source: orderData?.source,
+//       };
+
+//       const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+//       if (data?.status) {
+//         toast.success("Delivery address updated successfully");
+//         await fetchOrderData(getAllSellerData?.data);
+//       } else {
+//         toast.error(data?.message || "Failed to update delivery address");
+//       }
+//     } catch (error) {
+//       console.error("Error updating delivery address:", error);
+//       toast.error("Failed to update delivery address");
+//     }
+//   };
+
+//   const updateService = async () => {
+//     if (isEnabled || serviceList.length === 0) return;
+
+//     try {
+//       const selectedService = serviceList[selectedServiceIndex];
+//       const payload = {
+//         partnerServiceId: selectedService.partnerServiceId,
+//         partnerServiceName: selectedService.partnerServiceName,
+//         companyServiceId: selectedService.companyServiceId,
+//         companyServiceName: selectedService.companyServiceName,
+//         tempOrderId: orderData?.tempOrderId,
+//         source: orderData?.source,
+//         category: "Service",
+//       };
+
+//       const { data } = await POST(SET_SERVICE_INFO, payload);
+//       if (data?.success) {
+//         toast.success("Service updated successfully");
+//       } else {
+//         toast.error(data?.message || "Failed to update service");
+//       }
+//     } catch (error) {
+//       console.error("Error updating service:", error);
+//       toast.error("Failed to update service");
+//     }
+//   };
+
+//   const placeOrder = async () => {
+//     try {
+//       await updateService();
+
+//       const placeOrderPayload = {
+//         orders: [
+//           {
+//             orderId: orderData?.orderId,
+//             tempOrderId: orderData?.tempOrderId,
+//             source: orderData?.source,
+//           },
+//         ],
+//       };
+
+//       const { data } = await POST(POST_PLACE_ALL_ORDERS, placeOrderPayload);
+//       if (data?.success) {
+//         toast.success("Order placed successfully!");
+//       } else {
+//         toast.error(data?.message || "Failed to place order");
+//       }
+//     } catch (error) {
+//       console.error("Error placing order:", error);
+//       toast.error("Something went wrong while placing order");
+//     }
+//   };
+
+//   // Initialization Functions
+//   const initializeFormData = (data: any) => {
+//     setPickupAddress({
+//       contact: {
+//         contactName: data.pickupAddress?.contact?.name || "",
+//         mobileNo: data.pickupAddress?.contact?.mobileNo || "",
+//         emailId: data.pickupAddress?.contact?.emailId || "",
+//         contactType: data.pickupAddress?.contact?.type || "",
+//       },
+//       flatNo: data.pickupAddress?.flatNo || "",
+//       locality: data.pickupAddress?.locality || "",
+//       landmark: data.pickupAddress?.landmark || "",
+//       city: data.pickupAddress?.city || "",
+//       state: data.pickupAddress?.state || "",
+//       country: data.pickupAddress?.country || "",
+//       pincode: data.pickupAddress?.pincode || "",
+//       addressType: data.pickupAddress?.addressType || "",
+//       pickupDate: data.pickupAddress?.pickupDate || "",
+//       gstNumber: data.pickupAddress?.gstNumber || "",
+//     });
+
+//     setDeliveryAddress({
+//       contact: {
+//         contactName: data.deliveryAddress?.contact?.name || "",
+//         mobileNo: data.deliveryAddress?.contact?.mobileNo || "",
+//         emailId: data.deliveryAddress?.contact?.emailId || "",
+//         contactType: data.deliveryAddress?.contact?.type || "",
+//       },
+//       flatNo: data.deliveryAddress?.flatNo || "",
+//       locality: data.deliveryAddress?.locality || "",
+//       landmark: data.deliveryAddress?.landmark || "",
+//       city: data.deliveryAddress?.city || "",
+//       state: data.deliveryAddress?.state || "",
+//       country: data.deliveryAddress?.country || "",
+//       pincode: data.deliveryAddress?.pincode || "",
+//       addressType: data.deliveryAddress?.addressType || "",
+//       gstNumber: data.deliveryAddress?.gstNumber || "",
+//     });
+//   };
+
+//   // Validation Functions (existing functions remain the same)
+//   const validatePickupAddress = (): boolean => {
+//     const errors: ValidationErrors = {};
+
+//     if (!pickupAddress.contact.contactName.trim()) {
+//       errors.pickupContactName = "Contact name is required";
+//     }
+
+//     if (!validateMobile(pickupAddress.contact.mobileNo)) {
+//       errors.pickupMobileNo = "Invalid mobile number";
+//     }
+
+//     if (
+//       pickupAddress.contact.emailId &&
+//       !validateEmail(pickupAddress.contact.emailId)
+//     ) {
+//       errors.pickupEmailId = "Invalid email address";
+//     }
+
+//     if (!pickupAddress.flatNo.trim()) {
+//       errors.pickupFlatNo = "Flat/House number is required";
+//     }
+
+//     if (!validatePincode(pickupAddress.pincode)) {
+//       errors.pickupPincode = "Invalid pincode";
+//     }
+
+//     setValidationErrors((prev) => ({ ...prev, ...errors }));
+//     return Object.keys(errors).length === 0;
+//   };
+
+//   const validateDeliveryAddress = (): boolean => {
+//     const errors: ValidationErrors = {};
+
+//     if (!deliveryAddress.contact.contactName.trim()) {
+//       errors.deliveryContactName = "Contact name is required";
+//     }
+
+//     if (!validateMobile(deliveryAddress.contact.mobileNo)) {
+//       errors.deliveryMobileNo = "Invalid mobile number";
+//     }
+
+//     if (
+//       deliveryAddress.contact.emailId &&
+//       !validateEmail(deliveryAddress.contact.emailId)
+//     ) {
+//       errors.deliveryEmailId = "Invalid email address";
+//     }
+
+//     if (!deliveryAddress.flatNo.trim()) {
+//       errors.deliveryFlatNo = "Flat/House number is required";
+//     }
+
+//     if (!validatePincode(deliveryAddress.pincode)) {
+//       errors.deliveryPincode = "Invalid pincode";
+//     }
+
+//     setValidationErrors((prev) => ({ ...prev, ...errors }));
+//     return Object.keys(errors).length === 0;
+//   };
+
+//   // Event Handlers
+//   const handlePickupDateChange = (selectedDate: Date) => {
+//     if (selectedDate.getHours() === 0 && selectedDate.getMinutes() === 0) {
+//       setOpenPickupDatePicker(true);
+//       return;
+//     }
+
+//     setPickupAddress((prev: any) => ({
+//       ...prev,
+//       pickupDate: selectedDate.getTime(),
+//     }));
+//     setOpenPickupDatePicker(false);
+//   };
+
+//   const handlePincodeChange = (value: string, type: "pickup" | "delivery") => {
+//     const numericValue = value.replace(/\D/g, "");
+
+//     if (type === "pickup") {
+//       setPickupAddress((prev: any) => ({ ...prev, pincode: numericValue }));
+//     } else {
+//       setDeliveryAddress((prev: any) => ({ ...prev, pincode: numericValue }));
+//     }
+
+//     if (numericValue.length === 6) {
+//       fetchPincodeData(numericValue, type);
+//     }
+//   };
+
+//   // Effects
+//   useEffect(() => {
+//     if (getAllSellerData?.isOpen && getAllSellerData?.data) {
+//       fetchOrderData(getAllSellerData.data);
+//       fetchBoxData();
+//     }
+//   }, [getAllSellerData]);
+
+//   useEffect(() => {
+//     fetchServiceList();
+//     isFirstRender.current = false;
+//   }, [orderData]);
+
+//   // Updated renderPickupAddressForm function with search
+//   const renderPickupAddressForm = () => (
+//     <div className="space-y-4 p-4">
+//       {/* Search Input */}
+//       <div className="relative">
+//         <FloatingLabelInput
+//           placeholder="Search pickup addresses..."
+//           icon={searchLoading.pickup ? <LoadingIcon /> : <SearchIcon />}
+//           value={pickupSearchQuery}
+//           onChangeCallback={handlePickupSearchChange}
+//           onFocus={handlePickupSearchFocus}
+//           onBlur={handlePickupSearchBlur}
+//           readOnly={isEnabled}
+//         />
+//         {renderSearchResults(
+//           pickupSearchResults,
+//           "pickup",
+//           showPickupSearchResults,
+//           searchLoading.pickup
+//         )}
+//       </div>
+
+//       {/* Row 1: Contact (Mobile), Name */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Contact"
+//           type="tel"
+//           value={String(pickupAddress?.contact?.mobileNo || "")}
+//           onChangeCallback={(value) => {
+//             const numericValue = value.replace(/\D/g, "");
+//             setPickupAddress((prev: any) => ({
+//               ...prev,
+//               contact: { ...prev.contact, mobileNo: numericValue },
+//             }));
+//           }}
+//           maxLength={10}
+//           readOnly={isEnabled}
+//           required
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Name"
+//           value={pickupAddress.contact.contactName}
+//           onChangeCallback={(value) => {
+//             setPickupAddress((prev: any) => ({
+//               ...prev,
+//               contact: { ...prev.contact, contactName: value },
+//             }));
+//           }}
+//           readOnly={isEnabled}
+//           required
+//         />
+//       </div>
+
+//       {/* Row 2: Pin code, Address Line 1 */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Pin code"
+//           value={String(pickupAddress?.pincode || "")}
+//           onChangeCallback={(value) => handlePincodeChange(value, "pickup")}
+//           maxLength={6}
+//           isPincodeField
+//           readOnly={isEnabled}
+//           required
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Address Line 1"
+//           value={pickupAddress.flatNo}
+//           onChangeCallback={(value) => {
+//             setPickupAddress((prev: any) => ({ ...prev, flatNo: value }));
+//           }}
+//           readOnly={isEnabled}
+//           required
+//         />
+//       </div>
+
+//       {/* Row 3: Address Line 2, Landmark */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Address Line 2"
+//           value={pickupAddress.locality}
+//           onChangeCallback={(value) => {
+//             setPickupAddress((prev: any) => ({ ...prev, locality: value }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Landmark"
+//           value={pickupAddress.landmark}
+//           onChangeCallback={(value) => {
+//             setPickupAddress((prev: any) => ({ ...prev, landmark: value }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+//       </div>
+
+//       {/* Row 4: City, State */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="City"
+//           value={pickupAddress.city}
+//           readOnly
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="State"
+//           value={pickupAddress.state}
+//           readOnly
+//         />
+//       </div>
+
+//       {/* Row 5: GST No, Email ID */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="GST No (If Available)"
+//           value={pickupAddress?.gstNumber || ""}
+//           onChangeCallback={(value) => {
+//             setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Email ID (Optional)"
+//           type="email"
+//           value={pickupAddress.contact.emailId}
+//           onChangeCallback={(value) => {
+//             setPickupAddress((prev: any) => ({
+//               ...prev,
+//               contact: { ...prev.contact, emailId: value },
+//             }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+//       </div>
+
+//       {!isEnabled && (
+//         <div className="flex justify-end mt-4">
+//           <OneButton
+//             text="Update Pickup Address"
+//             onClick={() => {
+//               if (validatePickupAddress()) {
+//                 updatePickupAddress();
+//               }
+//             }}
+//             variant="primary"
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+
+//   // Updated renderDeliveryAddressForm function with search
+//   const renderDeliveryAddressForm = () => (
+//     <div className="space-y-4 p-4">
+//       {/* Search Input */}
+//       <div className="relative">
+//         <FloatingLabelInput
+//           placeholder="Search delivery addresses..."
+//           icon={searchLoading.delivery ? <LoadingIcon /> : <SearchIcon />}
+//           value={deliverySearchQuery}
+//           onChangeCallback={handleDeliverySearchChange}
+//           onFocus={handleDeliverySearchFocus}
+//           onBlur={handleDeliverySearchBlur}
+//           readOnly={isEnabled}
+//         />
+//         {renderSearchResults(
+//           deliverySearchResults,
+//           "delivery",
+//           showDeliverySearchResults,
+//           searchLoading.delivery
+//         )}
+//       </div>
+
+//       {/* Row 1: Contact (Mobile), Name */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Contact"
+//           type="tel"
+//           value={String(deliveryAddress?.contact?.mobileNo || "")}
+//           onChangeCallback={(value) => {
+//             const numericValue = value.replace(/\D/g, "");
+//             setDeliveryAddress((prev: any) => ({
+//               ...prev,
+//               contact: { ...prev.contact, mobileNo: numericValue },
+//             }));
+//           }}
+//           maxLength={10}
+//           readOnly={isEnabled}
+//           required
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Name"
+//           value={deliveryAddress.contact.contactName}
+//           onChangeCallback={(value) => {
+//             setDeliveryAddress((prev: any) => ({
+//               ...prev,
+//               contact: { ...prev.contact, contactName: value },
+//             }));
+//           }}
+//           readOnly={isEnabled}
+//           required
+//         />
+//       </div>
+
+//       {/* Row 2: Pin code, Address Line 1 */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Pin code"
+//           value={String(deliveryAddress.pincode || "")}
+//           onChangeCallback={(value) => handlePincodeChange(value, "delivery")}
+//           maxLength={6}
+//           isPincodeField
+//           readOnly={isEnabled}
+//           required
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Address Line 1"
+//           value={deliveryAddress.flatNo}
+//           onChangeCallback={(value) => {
+//             setDeliveryAddress((prev: any) => ({ ...prev, flatNo: value }));
+//           }}
+//           readOnly={isEnabled}
+//           required
+//         />
+//       </div>
+
+//       {/* Row 3: Address Line 2, Landmark */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Address Line 2"
+//           value={deliveryAddress.locality}
+//           onChangeCallback={(value) => {
+//             setDeliveryAddress((prev: any) => ({ ...prev, locality: value }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Landmark"
+//           value={deliveryAddress.landmark}
+//           onChangeCallback={(value) => {
+//             setDeliveryAddress((prev: any) => ({ ...prev, landmark: value }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+//       </div>
+
+//       {/* Row 4: City, State */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="City"
+//           value={deliveryAddress.city}
+//           readOnly
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="State"
+//           value={deliveryAddress.state}
+//           readOnly
+//         />
+//       </div>
+
+//       {/* Row 5: GST No, Email ID */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="GST No (If Available)"
+//           value={deliveryAddress.gstNumber}
+//           onChangeCallback={(value) => {
+//             setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+
+//         <FloatingLabelInput
+//           placeholder="Email ID (Optional)"
+//           type="email"
+//           value={deliveryAddress.contact.emailId}
+//           onChangeCallback={(value) => {
+//             setDeliveryAddress((prev: any) => ({
+//               ...prev,
+//               contact: { ...prev.contact, emailId: value },
+//             }));
+//           }}
+//           readOnly={isEnabled}
+//         />
+//       </div>
+
+//       {!isEnabled && (
+//         <div className="flex justify-end mt-4">
+//           <OneButton
+//             text="Update Delivery Address"
+//             onClick={() => {
+//               if (validateDeliveryAddress()) {
+//                 updateDeliveryAddress();
+//               }
+//             }}
+//             variant="primary"
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+
+//   // Other render functions remain the same...
+//   // const renderBoxAndProducts = () => (
+//   //   <div className="space-y-4 p-4">
+//   //     {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
+//   //       <div key={boxIndex} className="border rounded-lg p-4">
+//   //         <h4 className="font-semibold mb-4">Box {boxIndex + 1}: {box.name}</h4>
+
+//   //         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+//   //           <FloatingLabelInput
+//   //             placeholder="Dead Weight (kg)"
+//   //             type="number"
+//   //             value={box.deadWeight?.toString() || ""}
+//   //             readOnly
+//   //           />
+//   //           <FloatingLabelInput
+//   //             placeholder="Volumetric Weight"
+//   //             type="number"
+//   //             value={box.volumetricWeight?.toFixed(2) || ""}
+//   //             readOnly
+//   //           />
+//   //           <FloatingLabelInput
+//   //             placeholder="Length (cm)"
+//   //             type="number"
+//   //             value={box.length?.toString() || ""}
+//   //             readOnly
+//   //           />
+//   //           <FloatingLabelInput
+//   //             placeholder="Breadth (cm)"
+//   //             type="number"
+//   //             value={box.breadth?.toString() || ""}
+//   //             readOnly
+//   //           />
+//   //         </div>
+
+//   //         <h5 className="font-medium mb-2">Products:</h5>
+//   //         {box.products?.map((product: any, productIndex: number) => (
+//   //           <div key={productIndex} className="border rounded p-3 mb-2">
+//   //             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//   //               <FloatingLabelInput
+//   //                 placeholder="Product Name"
+//   //                 value={product.name || ""}
+//   //                 readOnly
+//   //               />
+//   //               <FloatingLabelInput
+//   //                 placeholder="Quantity"
+//   //                 type="number"
+//   //                 value={product.qty?.toString() || ""}
+//   //                 readOnly
+//   //               />
+//   //               <FloatingLabelInput
+//   //                 placeholder="Unit Price"
+//   //                 type="number"
+//   //                 value={product.unitPrice?.toString() || ""}
+//   //                 readOnly
+//   //               />
+//   //             </div>
+//   //           </div>
+//   //         ))}
+//   //       </div>
+//   //     ))}
+//   //   </div>
+//   // );
+
+//   // Updated renderBoxAndProducts function with Collapsible boxes and products
+//   // const renderBoxAndProducts = () => (
+//   //   <div className="space-y-4 p-4">
+//   //     {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
+//   //       <Collapsible
+//   //         key={boxIndex}
+//   //         title={`Box ${boxIndex + 1}: ${box.name}`}
+//   //         defaultOpen={boxIndex === 0} // First box open by default
+//   //         className="border-2 border-gray-200"
+//   //         titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+//   //         contentClassName="bg-white"
+//   //       >
+//   //         <div className="space-y-4 mt-4">
+//   //           {/* Box Details */}
+//   //           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+//   //             <FloatingLabelInput
+//   //               placeholder="Dead Weight (kg)"
+//   //               type="number"
+//   //               value={box.deadWeight?.toString() || ""}
+//   //               readOnly
+//   //             />
+//   //             <FloatingLabelInput
+//   //               placeholder="Volumetric Weight"
+//   //               type="number"
+//   //               value={box.volumetricWeight?.toFixed(2) || ""}
+//   //               readOnly
+//   //             />
+//   //             <FloatingLabelInput
+//   //               placeholder="Length (cm)"
+//   //               type="number"
+//   //               value={box.length?.toString() || ""}
+//   //               readOnly
+//   //             />
+//   //             <FloatingLabelInput
+//   //               placeholder="Breadth (cm)"
+//   //               type="number"
+//   //               value={box.breadth?.toString() || ""}
+//   //               readOnly
+//   //             />
+//   //           </div>
+
+//   //           {/* Products Section */}
+//   //           {box.products && box.products.length > 0 && (
+//   //             <div className="space-y-3">
+//   //               {/* <h5 className="font-medium text-gray-700 border-b pb-2">
+//   //                 Products ({box.products.length})
+//   //               </h5> */}
+
+//   //               <div className="space-y-2 mb-2 ">
+//   //                 {box.products.map((product: any, productIndex: number) => (
+//   //                   <Collapsible
+//   //                     key={`${boxIndex}-${productIndex}`}
+//   //                     title={`Product ${productIndex + 1}: ${product.name || 'Unnamed Product'}`}
+//   //                     defaultOpen={false} // Products closed by default
+//   //                     className="border border-gray-300 !shadow-none"
+//   //                     titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+//   //                     contentClassName="bg-gray-50 !shadow-none"
+//   //                   >
+//   //                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-2">
+//   //                       <FloatingLabelInput
+//   //                         placeholder="Product Name"
+//   //                         value={product.name || ""}
+//   //                         readOnly
+//   //                       />
+//   //                       <FloatingLabelInput
+//   //                         placeholder="Quantity"
+//   //                         type="number"
+//   //                         value={product.qty?.toString() || ""}
+//   //                         readOnly
+//   //                       />
+//   //                       <FloatingLabelInput
+//   //                         placeholder="Unit Price"
+//   //                         type="number"
+//   //                         value={product.unitPrice?.toString() || ""}
+//   //                         readOnly
+//   //                       />
+//   //                     </div>
+
+//   //                     {/* Additional product details if available */}
+//   //                     {(product.description || product.hsn || product.sku) && (
+//   //                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-2 pt-0">
+//   //                         {product.description && (
+//   //                           <FloatingLabelInput
+//   //                             placeholder="Description"
+//   //                             value={product.description}
+//   //                             readOnly
+//   //                           />
+//   //                         )}
+//   //                         {product.hsn && (
+//   //                           <FloatingLabelInput
+//   //                             placeholder="HSN Code"
+//   //                             value={product.hsn}
+//   //                             readOnly
+//   //                           />
+//   //                         )}
+//   //                         {product.sku && (
+//   //                           <FloatingLabelInput
+//   //                             placeholder="SKU"
+//   //                             value={product.sku}
+//   //                             readOnly
+//   //                           />
+//   //                         )}
+//   //                       </div>
+//   //                     )}
+
+//   //                     {/* Product total value */}
+//   //                     <div className="p-2 pt-0">
+//   //                       <FloatingLabelInput
+//   //                         placeholder="Total Value"
+//   //                         type="number"
+//   //                         value={((product.qty || 0) * (product.unitPrice || 0)).toString()}
+//   //                         readOnly
+//   //                       />
+//   //                     </div>
+//   //                   </Collapsible>
+//   //                 ))}
+//   //               </div>
+//   //             </div>
+//   //           )}
+
+//   //           {/* Box Summary */}
+//   //           {/* <div className="bg-gray-100 rounded-lg p-3 mt-4">
+//   //             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+//   //               <div>
+//   //                 <span className="font-medium text-gray-600">Total Products:</span>
+//   //                 <p className="font-semibold">{box.products?.length || 0}</p>
+//   //               </div>
+//   //               <div>
+//   //                 <span className="font-medium text-gray-600">Box Weight:</span>
+//   //                 <p className="font-semibold">{box.deadWeight || 0} kg</p>
+//   //               </div>
+//   //               <div>
+//   //                 <span className="font-medium text-gray-600">Dimensions:</span>
+//   //                 <p className="font-semibold">
+//   //                   {box.length || 0} × {box.breadth || 0} × {box.height || 0} cm
+//   //                 </p>
+//   //               </div>
+//   //               <div>
+//   //                 <span className="font-medium text-gray-600">Volumetric Weight:</span>
+//   //                 <p className="font-semibold">{box.volumetricWeight?.toFixed(2) || 0} kg</p>
+//   //               </div>
+//   //             </div>
+//   //           </div> */}
+//   //         </div>
+//   //       </Collapsible>
+//   //     ))}
+
+//   //     {/* Overall Summary */}
+//   //     {/* {orderData?.boxInfo && orderData.boxInfo.length > 0 && (
+//   //       <div className="bg-blue-50 rounded-lg p-4 mt-6">
+//   //         <h4 className="font-semibold text-blue-800 mb-3">Order Summary</h4>
+//   //         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+//   //           <div>
+//   //             <span className="font-medium text-blue-600">Total Boxes:</span>
+//   //             <p className="font-semibold text-blue-800">{orderData.boxInfo.length}</p>
+//   //           </div>
+//   //           <div>
+//   //             <span className="font-medium text-blue-600">Total Products:</span>
+//   //             <p className="font-semibold text-blue-800">
+//   //               {orderData.boxInfo.reduce((total: number, box: any) =>
+//   //                 total + (box.products?.length || 0), 0
+//   //               )}
+//   //             </p>
+//   //           </div>
+//   //           <div>
+//   //             <span className="font-medium text-blue-600">Total Weight:</span>
+//   //             <p className="font-semibold text-blue-800">
+//   //               {orderData.boxInfo.reduce((total: number, box: any) =>
+//   //                 total + (box.deadWeight || 0), 0
+//   //               ).toFixed(2)} kg
+//   //             </p>
+//   //           </div>
+//   //           <div>
+//   //             <span className="font-medium text-blue-600">Total Vol. Weight:</span>
+//   //             <p className="font-semibold text-blue-800">
+//   //               {orderData.boxInfo.reduce((total: number, box: any) =>
+//   //                 total + (box.volumetricWeight || 0), 0
+//   //               ).toFixed(2)} kg
+//   //             </p>
+//   //           </div>
+//   //         </div>
+//   //       </div>
+//   //     )} */}
+//   //   </div>
+//   // );
+
+//   // Updated renderBoxAndProducts function with editable product form
+//   const renderBoxAndProducts = () => (
+//     <div className="space-y-4 p-4">
+//       {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
+//         <Collapsible
+//           key={boxIndex}
+//           title={`Box ${boxIndex + 1}: ${box.name}`}
+//           defaultOpen={boxIndex === 0}
+//           className="border-2 border-gray-200"
+//           titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+//           contentClassName="bg-white"
+//         >
+//           <div className="space-y-4 mt-4">
+//             {/* Box Details */}
+//             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+//               <FloatingLabelInput
+//                 placeholder="Dead Weight (kg)"
+//                 type="number"
+//                 value={box.deadWeight?.toString() || ""}
+//                 readOnly
+//               />
+//               <FloatingLabelInput
+//                 placeholder="Volumetric Weight"
+//                 type="number"
+//                 value={box.volumetricWeight?.toFixed(2) || ""}
+//                 readOnly
+//               />
+//               <FloatingLabelInput
+//                 placeholder="Length (cm)"
+//                 type="number"
+//                 value={box.length?.toString() || ""}
+//                 readOnly
+//               />
+//               <FloatingLabelInput
+//                 placeholder="Breadth (cm)"
+//                 type="number"
+//                 value={box.breadth?.toString() || ""}
+//                 readOnly
+//               />
+//             </div>
+
+//             {/* Products Section */}
+//             {box.products && box.products.length > 0 && (
+//               <div className="space-y-3">
+//                 {/* <div className="flex justify-between items-center border-b pb-2">
+//                 <h5 className="font-medium text-gray-700">
+//                   Products ({box.products.length})
+//                 </h5>
+//                 {!isEnabled && (
+//                   <button
+//                     onClick={() => addProduct(boxIndex)}
+//                     className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm flex items-center gap-1"
+//                   >
+//                     <span>+</span> Add Product
+//                   </button>
+//                 )}
+//               </div> */}
+
+//                 <div className="space-y-2 mb-2">
+//                   {box.products.map((product: any, productIndex: number) => (
+//                     <Collapsible
+//                       key={`${boxIndex}-${productIndex}`}
+//                       title={`Product ${productIndex + 1}: ${
+//                         product.name || "Unnamed Product"
+//                       }`}
+//                       defaultOpen={false}
+//                       className="border border-gray-300 !shadow-none"
+//                       titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+//                       contentClassName="bg-gray-50 !shadow-none"
+//                     >
+//                       <div className="p-4 space-y-4">
+//                         {/* Delete Button */}
+//                         {/* {!isEnabled && box.products.length > 1 && (
+//                           <div className="flex justify-end mb-4">
+//                             <button
+//                               onClick={() =>
+//                                 deleteProduct(boxIndex, productIndex)
+//                               }
+//                               className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1"
+//                               title="Delete Product"
+//                             >
+//                               <svg
+//                                 width="16"
+//                                 height="16"
+//                                 viewBox="0 0 24 24"
+//                                 fill="none"
+//                                 stroke="currentColor"
+//                                 strokeWidth="2"
+//                               >
+//                                 <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+//                               </svg>
+//                               Delete Product
+//                             </button>
+//                           </div>
+//                         )} */}
+
+//                         {/* Row 1: Product Name */}
+//                         {/* <div className="grid grid-cols-1 gap-4">
+//                         <FloatingLabelInput
+//                           placeholder="Product Name"
+//                           value={product.name || ""}
+//                           onChangeCallback={(value) => updateProduct(boxIndex, productIndex, 'name', value)}
+//                           readOnly={isEnabled}
+//                         />
+                         
+//                       {!isEnabled && box.products.length > 1 && (
+//                         <div className="flex justify-end mb-4">
+//                           <button
+//                             onClick={() => deleteProduct(boxIndex, productIndex)}
+//                             className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1"
+//                             title="Delete Product"
+//                           >
+//                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+//                               <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2"/>
+//                             </svg>
+//                             Delete Product
+//                           </button>
+//                         </div>
+//                       )}
+//                       </div> */}
+
+//                         <div className="flex items-start gap-x-4">
+//                           <div className="flex-1">
+//                             <FloatingLabelInput
+//                               placeholder="Product Name"
+//                               value={product.name || ""}
+//                               onChangeCallback={(value) =>
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "name",
+//                                   value
+//                                 )
+//                               }
+//                               readOnly={isEnabled}
+//                             />
+//                           </div>
+
+//                           {!isEnabled && box.products.length > 1 && (
+//                             <button
+//                               onClick={() =>
+//                                 deleteProduct(boxIndex, productIndex)
+//                               }
+//                               className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+//                               title="Delete Product"
+//                             >
+//                               <svg
+//                                 width="16"
+//                                 height="16"
+//                                 viewBox="0 0 24 24"
+//                                 fill="none"
+//                                 stroke="currentColor"
+//                                 strokeWidth="2"
+//                               >
+//                                 <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+//                               </svg>
+                              
+//                             </button>
+//                           )}
+//                         </div>
+
+//                         {/* Row 2: Qty and Unit Weight */}
+//                         <div className="grid grid-cols-2 gap-4">
+//                           <FloatingLabelInput
+//                             placeholder="Qty"
+//                             type="number"
+//                             value={product.qty?.toString() || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "qty",
+//                                 parseFloat(value) || 0
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                           <FloatingLabelInput
+//                             placeholder="Unit Weight"
+//                             type="number"
+//                             value={product.deadWeight?.toString() || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "deadWeight",
+//                                 parseFloat(value) || 0
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                         </div>
+
+//                         {/* Row 3: Unit Price and Dimensions */}
+//                         <div className="grid grid-cols-4 gap-4">
+//                           <FloatingLabelInput
+//                             placeholder="Unit Price"
+//                             type="number"
+//                             value={product.unitPrice?.toString() || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "unitPrice",
+//                                 parseFloat(value) || 0
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                           <FloatingLabelInput
+//                             placeholder="L(cm)"
+//                             type="number"
+//                             value={product.length?.toString() || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "length",
+//                                 parseFloat(value) || 0
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                           <FloatingLabelInput
+//                             placeholder="B(cm)"
+//                             type="number"
+//                             value={product.breadth?.toString() || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "breadth",
+//                                 parseFloat(value) || 0
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                           <FloatingLabelInput
+//                             placeholder="H(cm)"
+//                             type="number"
+//                             value={product.height?.toString() || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "height",
+//                                 parseFloat(value) || 0
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                         </div>
+
+//                         {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
+//                         <div className="grid grid-cols-2 gap-4">
+//                           <div className="relative">
+//                             <FloatingLabelInput
+//                               placeholder="Total Weight (cm)"
+//                               type="number"
+//                               value={(
+//                                 (product.qty || 0) * (product.deadWeight || 0)
+//                               ).toFixed(2)}
+//                               readOnly
+//                             />
+//                             <div className="absolute inset-0 bg-gray-100 opacity-50 rounded-2xl pointer-events-none"></div>
+//                           </div>
+//                           <div className="relative">
+//                             <FloatingLabelInput
+//                               placeholder="Total Price"
+//                               type="number"
+//                               value={(
+//                                 (product.qty || 0) * (product.unitPrice || 0)
+//                               ).toFixed(2)}
+//                               readOnly
+//                             />
+//                             <div className="absolute inset-0 bg-gray-100 opacity-50 rounded-2xl pointer-events-none"></div>
+//                           </div>
+//                         </div>
+
+//                         {/* Row 5: SKU and HSN */}
+//                         <div className="grid grid-cols-2 gap-4">
+//                           <FloatingLabelInput
+//                             placeholder="SKU"
+//                             value={product.sku || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "sku",
+//                                 value
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                           <FloatingLabelInput
+//                             placeholder="HSN"
+//                             value={product.hsnCode || ""}
+//                             onChangeCallback={(value) =>
+//                               updateProduct(
+//                                 boxIndex,
+//                                 productIndex,
+//                                 "hsnCode",
+//                                 value
+//                               )
+//                             }
+//                             readOnly={isEnabled}
+//                           />
+//                         </div>
+//                       </div>
+//                     </Collapsible>
+//                   ))}
+//                   <div>
+//                     {!isEnabled && (
+//                       // <button
+//                       //   onClick={() => addProduct(boxIndex)}
+//                       //   className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm flex items-center gap-1"
+//                       // >
+//                       //   <span>+</span> Add Product
+//                       // </button>
+//                       <OneButton
+//                         text="Add Product"
+//                         onClick={() => addProduct(boxIndex)}
+//                         variant="secondary"
+//                         className="!rounded-full"
+//                       />
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+//         </Collapsible>
+//       ))}
+//     </div>
+//   );
+
+//   const renderServices = () => (
+//     <div className="space-y-4 p-4">
+//       {isEnabled ? (
+//         orderData?.service ? (
+//           <div className="border border-gray-400 rounded-lg p-4">
+//             <div className="space-y-3">
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Partner Name:</span>
+//                 <span>
+//                   {isMasked ? "Shipyaari" : orderData.service.partnerName}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Service Mode:</span>
+//                 <span>
+//                   {capitalizeFirstLetter(orderData.service.serviceMode)}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Applied Weight:</span>
+//                 <span>{orderData.service.appliedWeight} kg</span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Freight Charges:</span>
+//                 <span>
+//                   ₹
+//                   {Math.round(
+//                     orderData.service.base + orderData.service.add
+//                   )?.toLocaleString("en-IN")}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Other Charges:</span>
+//                 <span>
+//                   ₹
+//                   {Math.round(orderData.service.variables)?.toLocaleString(
+//                     "en-IN"
+//                   )}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">COD Charges:</span>
+//                 <span>
+//                   ₹{Math.round(orderData.service.cod)?.toLocaleString("en-IN")}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Insurance:</span>
+//                 <span>
+//                   ₹
+//                   {Math.round(orderData.service.insurance)?.toLocaleString(
+//                     "en-IN"
+//                   )}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Tax:</span>
+//                 <span>
+//                   ₹{Math.round(orderData.service.tax)?.toLocaleString("en-IN")}
+//                 </span>
+//               </div>
+//               <div className="flex justify-between">
+//                 <span className="font-medium">Total:</span>
+//                 <span>
+//                   ₹
+//                   {Math.round(orderData.service.total)?.toLocaleString("en-IN")}
+//                 </span>
+//               </div>
+//             </div>
+//           </div>
+//         ) : (
+//           <div className="text-center py-8 text-gray-500">
+//             No service information available
+//           </div>
+//         )
+//       ) : (
+//         <>
+//           {serviceLoading ? (
+//             <div className="flex justify-center py-8">
+//               <Spinner />
+//             </div>
+//           ) : serviceList.length === 0 ? (
+//             <div className="text-center py-8 text-gray-500">
+//               No services available
+//             </div>
+//           ) : (
+//             <div className="space-y-3">
+//               {serviceList.map((service: any, index: number) => (
+//                 <div
+//                   key={service.partnerServiceId}
+//                   className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+//                     selectedServiceIndex === index
+//                       ? "border-blue-500 bg-blue-50"
+//                       : "border-gray-200 hover:border-gray-300"
+//                   }`}
+//                   onClick={() => setSelectedServiceIndex(index)}
+//                 >
+//                   <div className="flex items-center justify-between">
+//                     <div className="flex items-center space-x-3">
+//                       <input
+//                         type="radio"
+//                         checked={selectedServiceIndex === index}
+//                         onChange={() => setSelectedServiceIndex(index)}
+//                         className="text-blue-600"
+//                       />
+//                       <div>
+//                         <p className="font-medium">
+//                           {capitalizeFirstLetter(service.partnerName)} -{" "}
+//                           {capitalizeFirstLetter(service.serviceMode)}
+//                         </p>
+//                         <p className="text-sm text-gray-600">
+//                           Applied Weight: {service.appliedWeight} kg
+//                         </p>
+//                         <p className="text-sm text-gray-600">
+//                           Service: {service.companyServiceName}
+//                         </p>
+//                       </div>
+//                     </div>
+//                     <div className="text-right">
+//                       <p className="font-semibold text-lg">
+//                         ₹{service.total?.toLocaleString("en-IN")}
+//                       </p>
+//                       <p className="text-sm text-gray-600">
+//                         Zone: {service.zoneName}
+//                       </p>
+//                     </div>
+//                   </div>
+
+//                   {selectedServiceIndex === index && (
+//                     <div className="mt-3 pt-3 border-t grid grid-cols-2 gap-2 text-sm">
+//                       <div>Base: ₹{service.base}</div>
+//                       <div>Additional: ₹{service.add}</div>
+//                       <div>Variables: ₹{service.variables?.toFixed(2)}</div>
+//                       <div>Tax: ₹{service.tax?.toFixed(2)}</div>
+//                       <div>COD: ₹{service.cod}</div>
+//                       <div>Insurance: ₹{service.insurance}</div>
+//                     </div>
+//                   )}
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+
+//           {serviceList.length > 0 && (
+//             <div className="flex justify-end mt-4">
+//               <OneButton
+//                 text="Update Service"
+//                 onClick={updateService}
+//                 variant="primary"
+//               />
+//             </div>
+//           )}
+//         </>
+//       )}
+//     </div>
+//   );
+
+//   const renderPaymentDetails = () => (
+//     <div className="space-y-4 p-4">
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Payment Type"
+//           value={orderData?.codInfo?.isCod ? "COD" : "Prepaid"}
+//           readOnly
+//         />
+//         <FloatingLabelInput
+//           placeholder="Collectable Amount"
+//           type="number"
+//           value={orderData?.codInfo?.collectableAmount?.toString() || "0"}
+//           readOnly
+//         />
+//       </div>
+
+//       <FloatingLabelInput
+//         placeholder="Invoice Value"
+//         type="number"
+//         value={orderData?.codInfo?.invoiceValue?.toString() || "0"}
+//         readOnly={isEnabled}
+//         onChangeCallback={(value) => {
+//           // Handle invoice value update if needed
+//         }}
+//       />
+//     </div>
+//   );
+
+//   const renderEventLogs = () => (
+//     <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
+//       {orderData?.status?.map((log: any, index: number) => (
+//         <div key={index} className="border rounded-lg p-4">
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+//             <div>
+//               <span className="font-medium">Status:</span> {log.currentStatus}
+//             </div>
+//             <div>
+//               <span className="font-medium">AWB:</span> {log.awb || "N/A"}
+//             </div>
+//             <div className="md:col-span-2">
+//               <span className="font-medium">Description:</span>{" "}
+//               {log.description}
+//             </div>
+//             <div className="md:col-span-2">
+//               <span className="font-medium">Time:</span>{" "}
+//               {convertEpochToDateTime(log.timeStamp)}
+//             </div>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+
+//   const renderOrderHistory = () => (
+//     <div className="space-y-4 p-4">
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Order ID"
+//           value={orderData?.orderId || ""}
+//           readOnly
+//         />
+//         <FloatingLabelInput
+//           placeholder="Temp Order ID"
+//           value={orderData?.tempOrderId || ""}
+//           readOnly
+//         />
+//       </div>
+
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//         <FloatingLabelInput
+//           placeholder="Source"
+//           value={capitalizeFirstLetter(orderData?.source || "")}
+//           readOnly
+//         />
+//         <FloatingLabelInput
+//           placeholder="Order Type"
+//           value={orderData?.orderType || ""}
+//           readOnly
+//         />
+//       </div>
+//     </div>
+//   );
+
+//   if (isLoading) {
+//     return (
+//       <div className="flex justify-center items-center h-96">
+//         <Spinner />
+//       </div>
+//     );
+//   }
+
+//   if (!orderData) {
+//     return (
+//       <div className="text-center py-8 text-gray-500">
+//         No order data available
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
+//       <Collapsible title="Pickup Address" defaultOpen>
+//         {renderPickupAddressForm()}
+//       </Collapsible>
+
+//       <Collapsible title="Delivery Address">
+//         {renderDeliveryAddressForm()}
+//       </Collapsible>
+
+//       <Collapsible title="Box & Products">{renderBoxAndProducts()}</Collapsible>
+
+//       <Collapsible
+//         title="Services"
+//         onToggle={(isOpen) => {
+//           if (isOpen) {
+//             fetchServiceList();
+//           }
+//         }}
+//       >
+//         {renderServices()}
+//       </Collapsible>
+
+//       <Collapsible title="Payment Details">
+//         {renderPaymentDetails()}
+//       </Collapsible>
+
+//       <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
+
+//       <Collapsible title="Order History">{renderOrderHistory()}</Collapsible>
+
+//       {!isEnabled && (
+//         <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
+//           <div className="flex justify-end max-w-screen-xl mx-auto">
+//             <OneButton
+//               text="Place Order"
+//               onClick={placeOrder}
+//               variant="primary"
+//               className="px-8"
+//             />
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default CustomTableAccordian;
+
 import React, { useState, useRef, useEffect } from "react";
 import { POST } from "../../utils/webService";
 import {
@@ -6361,6 +8530,7 @@ import {
   POST_PLACE_ALL_ORDERS,
   GET_PICKUP_ADDRESS_MULTIPLE_SEARCH,
   GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH,
+  GET_PRODUCTS, // Added for product search
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import {
@@ -6422,6 +8592,35 @@ interface Address {
   isPin?: boolean;
 }
 
+// Product search interface
+interface ProductSearchResult {
+  _id: string;
+  productId?: string;
+  name: string;
+  title?: string;
+  unitPrice: number;
+  deadWeight: number;
+  length: number;
+  breadth: number;
+  height: number;
+  unitTax: number;
+  sku: string;
+  hsnCode: string;
+  qty: number;
+  category: string;
+  companyId: string;
+  privateCompanyId: number;
+  sellerId: number;
+  appliedWeight: number;
+  volumetricWeight: number;
+  weightUnit: string;
+  measureUnit: string;
+  currency: string;
+  divisor: number;
+  variantId: string;
+  images: any[];
+}
+
 const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   getAllSellerData,
   isMasked = false,
@@ -6433,42 +8632,86 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const [serviceList, setServiceList] = useState<any[]>([]);
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [isEnabled, setIsEnabled] = useState(true);
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
+    {}
+  );
   const [serviceLoading, setServiceLoading] = useState(false);
   const [openPickupDatePicker, setOpenPickupDatePicker] = useState(false);
-  
+
   // Search functionality state
   const [pickupSearchQuery, setPickupSearchQuery] = useState("");
   const [deliverySearchQuery, setDeliverySearchQuery] = useState("");
   const [pickupSearchResults, setPickupSearchResults] = useState<Address[]>([]);
-  const [deliverySearchResults, setDeliverySearchResults] = useState<Address[]>([]);
+  const [deliverySearchResults, setDeliverySearchResults] = useState<Address[]>(
+    []
+  );
   const [showPickupSearchResults, setShowPickupSearchResults] = useState(false);
-  const [showDeliverySearchResults, setShowDeliverySearchResults] = useState(false);
+  const [showDeliverySearchResults, setShowDeliverySearchResults] =
+    useState(false);
   const [searchLoading, setSearchLoading] = useState({
     pickup: false,
-    delivery: false
+    delivery: false,
   });
-  
+
+  // Product search state
+  const [productSearchQueries, setProductSearchQueries] = useState<{
+    [key: string]: string; // key format: "boxIndex-productIndex"
+  }>({});
+
+  const [productSearchResults, setProductSearchResults] = useState<{
+    [key: string]: ProductSearchResult[];
+  }>({});
+
+  const [showProductSearchResults, setShowProductSearchResults] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const [productSearchLoading, setProductSearchLoading] = useState<{
+    [key: string]: boolean;
+  }>({});
+
   // Form Data State
   const [pickupAddress, setPickupAddress] = useState<any>({
     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
-    flatNo: "", locality: "", landmark: "", city: "", state: "", country: "",
-    pincode: "", addressType: "", pickupDate: "", gstNumber: "",
+    flatNo: "",
+    locality: "",
+    landmark: "",
+    city: "",
+    state: "",
+    country: "",
+    pincode: "",
+    addressType: "",
+    pickupDate: "",
+    gstNumber: "",
   });
-  
+
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
-    flatNo: "", locality: "", landmark: "", city: "", state: "", country: "",
-    pincode: "", addressType: "", gstNumber: "",
+    flatNo: "",
+    locality: "",
+    landmark: "",
+    city: "",
+    state: "",
+    country: "",
+    pincode: "",
+    addressType: "",
+    gstNumber: "",
   });
 
   const [selectedBoxIndex, setSelectedBoxIndex] = useState(0);
   const [customBox, setCustomBox] = useState({
-    name: "", deadWeight: 0, length: 0, breadth: 0, height: 0,
+    name: "",
+    deadWeight: 0,
+    length: 0,
+    breadth: 0,
+    height: 0,
   });
 
   // Refs
   const isFirstRender = useRef(true);
+  const productSearchRefs = useRef<{
+    [key: string]: HTMLDivElement | null;
+  }>({});
 
   // Search Icons
   const SearchIcon = (): JSX.Element => (
@@ -6531,7 +8774,11 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   };
 
   const getContactNo = (address: Address) => {
-    return address.contact?.mobileNoStr || address.contact?.mobileNo?.toString() || "";
+    return (
+      address.contact?.mobileNoStr ||
+      address.contact?.mobileNo?.toString() ||
+      ""
+    );
   };
 
   const getEmail = (address: Address) => {
@@ -6542,10 +8789,357 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     return address.fullAddress || "";
   };
 
-  // Search API Functions
+  // Product operations functions
+  const updateProduct = (
+    boxIndex: number,
+    productIndex: number,
+    field: string,
+    value: any
+  ) => {
+    if (isEnabled) return;
+
+    setOrderData((prevData: any) => {
+      if (!prevData) return prevData;
+
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+      const updatedBox = { ...updatedBoxInfo[boxIndex] };
+      const updatedProducts = [...updatedBox.products];
+
+      updatedProducts[productIndex] = {
+        ...updatedProducts[productIndex],
+        [field]: value,
+      };
+
+      // Recalculate totals when qty, unitPrice, or deadWeight changes
+      if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+        const product = updatedProducts[productIndex];
+        const qty = product.qty || 0;
+        const unitPrice = product.unitPrice || 0;
+        const deadWeight = product.deadWeight || 0;
+
+        updatedProducts[productIndex] = {
+          ...updatedProducts[productIndex],
+          totalPrice: qty * unitPrice,
+          appliedWeight: qty * deadWeight,
+          volumetricWeight: calculateVolumetricWeight(
+            product.length,
+            product.breadth,
+            product.height,
+            qty
+          ),
+        };
+      }
+
+      updatedBox.products = updatedProducts;
+      updatedBoxInfo[boxIndex] = updatedBox;
+      updatedData.boxInfo = updatedBoxInfo;
+
+      return updatedData;
+    });
+  };
+
+  const addProduct = (boxIndex: number) => {
+    if (isEnabled) return;
+
+    const newProduct = {
+      companyId: "",
+      privateCompanyId: 0,
+      sellerId: 0,
+      productId: "",
+      variantId: "",
+      name: "",
+      category: "Any",
+      qty: 1,
+      sku: "",
+      hsnCode: "",
+      currency: "INR",
+      unitPrice: 0,
+      unitTax: 0,
+      measureUnit: "cm",
+      discount: 0,
+      sellingPrice: 0,
+      totalDiscount: 0,
+      totalPrice: 0,
+      length: 0,
+      breadth: 0,
+      height: 0,
+      deadWeight: 0,
+      weightUnit: "kg",
+      volumetricWeight: 0,
+      appliedWeight: 0,
+      divisor: 5000,
+      images: [],
+      selected: false,
+    };
+
+    setOrderData((prevData: any) => {
+      if (!prevData) return prevData;
+
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+      const updatedBox = { ...updatedBoxInfo[boxIndex] };
+
+      updatedBox.products = [...updatedBox.products, newProduct];
+      updatedBoxInfo[boxIndex] = updatedBox;
+      updatedData.boxInfo = updatedBoxInfo;
+
+      return updatedData;
+    });
+
+    toast.success("Product added successfully");
+  };
+
+  const deleteProduct = (boxIndex: number, productIndex: number) => {
+    if (isEnabled) return;
+
+    setOrderData((prevData: any) => {
+      if (!prevData) return prevData;
+
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+      const updatedBox = { ...updatedBoxInfo[boxIndex] };
+      const updatedProducts = [...updatedBox.products];
+
+      updatedProducts.splice(productIndex, 1);
+
+      updatedBox.products = updatedProducts;
+      updatedBoxInfo[boxIndex] = updatedBox;
+      updatedData.boxInfo = updatedBoxInfo;
+
+      return updatedData;
+    });
+
+    toast.success("Product deleted successfully");
+  };
+
+  const calculateVolumetricWeight = (
+    length: number,
+    breadth: number,
+    height: number,
+    qty: number
+  ) => {
+    const volume = (length || 0) * (breadth || 0) * (height || 0) * (qty || 0);
+    return volume / 5000; // Standard divisor for volumetric weight calculation
+  };
+
+  // Product search functions
+  const searchProducts = async (boxIndex: number, productIndex: number, query: string) => {
+    const searchKey = `${boxIndex}-${productIndex}`;
+    
+    setProductSearchLoading((prev) => ({
+      ...prev,
+      [searchKey]: true,
+    }));
+
+    try {
+      const payload = {
+        skip: 0,
+        limit: 1000,
+        pageNo: 1,
+        sort: { _id: -1 },
+        searchValue: query, // Pass empty string if query is empty
+      };
+
+      const response = await POST(GET_PRODUCTS, payload);
+
+      if (response?.data?.success) {
+        const apiResults: ProductSearchResult[] = response.data.data.map((item: any) => ({
+          _id: item._id || item.productId || "",
+          productId: item.productId || item._id || "",
+          name: item.name || item.title || "",
+          title: item.title || item.name || "",
+          unitPrice: item.unitPrice || 0,
+          deadWeight: item.deadWeight || 0,
+          length: item.length || 0,
+          breadth: item.breadth || 0,
+          height: item.height || 0,
+          unitTax: item.unitTax || 0,
+          sku: item.sku || "",
+          hsnCode: item.hsnCode || "",
+          qty: item.qty || 1,
+          category: item.category || "",
+          companyId: item.companyId || "",
+          privateCompanyId: item.privateCompanyId || 0,
+          sellerId: item.sellerId || 0,
+          appliedWeight: item.appliedWeight || 0,
+          volumetricWeight: item.volumetricWeight || 0,
+          weightUnit: item.weightUnit || "kg",
+          measureUnit: item.measureUnit || "cm",
+          currency: item.currency || "INR",
+          divisor: item.divisor || 5000,
+          variantId: item.variantId || "",
+          images: item.images || [],
+        }));
+
+        setProductSearchResults((prev) => ({
+          ...prev,
+          [searchKey]: apiResults,
+        }));
+      } else {
+        setProductSearchResults((prev) => ({
+          ...prev,
+          [searchKey]: [],
+        }));
+      }
+    } catch (error) {
+      console.error("Error searching products:", error);
+      setProductSearchResults((prev) => ({
+        ...prev,
+        [searchKey]: [],
+      }));
+    } finally {
+      setProductSearchLoading((prev) => ({
+        ...prev,
+        [searchKey]: false,
+      }));
+    }
+  };
+
+  const handleProductNameSearch = async (boxIndex: number, productIndex: number, value: string) => {
+    const searchKey = `${boxIndex}-${productIndex}`;
+    
+    // Update the search query
+    setProductSearchQueries((prev) => ({
+      ...prev,
+      [searchKey]: value,
+    }));
+
+    // Update the product name in the main data
+    updateProduct(boxIndex, productIndex, 'name', value);
+
+    // Show search results dropdown
+    setShowProductSearchResults((prev) => ({
+      ...prev,
+      [searchKey]: true,
+    }));
+
+    // Call the search API - always call even with empty string
+    await searchProducts(boxIndex, productIndex, value);
+  };
+
+  const selectProductFromSearch = (boxIndex: number, productIndex: number, product: ProductSearchResult) => {
+    // Update all product fields with the selected product data
+    updateProduct(boxIndex, productIndex, 'name', product.name || product.title || '');
+    updateProduct(boxIndex, productIndex, 'qty', product.qty || 1);
+    updateProduct(boxIndex, productIndex, 'unitPrice', product.unitPrice || 0);
+    updateProduct(boxIndex, productIndex, 'deadWeight', product.deadWeight || 0);
+    updateProduct(boxIndex, productIndex, 'length', product.length || 0);
+    updateProduct(boxIndex, productIndex, 'breadth', product.breadth || 0);
+    updateProduct(boxIndex, productIndex, 'height', product.height || 0);
+    updateProduct(boxIndex, productIndex, 'sku', product.sku || '');
+    updateProduct(boxIndex, productIndex, 'hsnCode', product.hsnCode || '');
+    
+    // Calculate totals
+    const qty = product.qty || 1;
+    const unitPrice = product.unitPrice || 0;
+    const deadWeight = product.deadWeight || 0;
+    
+    updateProduct(boxIndex, productIndex, 'totalPrice', qty * unitPrice);
+    updateProduct(boxIndex, productIndex, 'appliedWeight', qty * deadWeight);
+    updateProduct(boxIndex, productIndex, 'volumetricWeight', calculateVolumetricWeight(
+      product.length || 0,
+      product.breadth || 0,
+      product.height || 0,
+      qty
+    ));
+
+    // Close the search results
+    const searchKey = `${boxIndex}-${productIndex}`;
+    setShowProductSearchResults((prev) => ({
+      ...prev,
+      [searchKey]: false,
+    }));
+
+    // Clear the search query
+    setProductSearchQueries((prev) => ({
+      ...prev,
+      [searchKey]: product.name || product.title || '',
+    }));
+
+    toast.success("Product details updated successfully");
+  };
+
+  const handleProductSearchFocus = async (boxIndex: number, productIndex: number) => {
+    const searchKey = `${boxIndex}-${productIndex}`;
+    const currentQuery = productSearchQueries[searchKey] || '';
+    
+    // If there are no existing results and query is empty, search with empty string
+    if (!productSearchResults[searchKey] && currentQuery === '') {
+      await searchProducts(boxIndex, productIndex, '');
+    }
+    
+    // Show existing results
+    if (productSearchResults[searchKey] && productSearchResults[searchKey].length > 0) {
+      setShowProductSearchResults((prev) => ({
+        ...prev,
+        [searchKey]: true,
+      }));
+    }
+  };
+
+  const handleProductSearchBlur = (boxIndex: number, productIndex: number) => {
+    const searchKey = `${boxIndex}-${productIndex}`;
+    setTimeout(() => {
+      setShowProductSearchResults((prev) => ({
+        ...prev,
+        [searchKey]: false,
+      }));
+    }, 200);
+  };
+
+  const renderProductSearchResults = (boxIndex: number, productIndex: number) => {
+    const searchKey = `${boxIndex}-${productIndex}`;
+    const isVisible = showProductSearchResults[searchKey];
+    const results = productSearchResults[searchKey] || [];
+    const isLoading = productSearchLoading[searchKey];
+
+    if (!isVisible) {
+      return null;
+    }
+
+    return (
+      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+        {isLoading ? (
+          <div className="p-3 flex justify-center items-center">
+            <LoadingIcon /> <span className="ml-2">Searching...</span>
+          </div>
+        ) : results.length > 0 ? (
+          <ul>
+            {results.map((product, index) => (
+              <li
+                key={product._id || index}
+                className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
+                onClick={() => selectProductFromSearch(boxIndex, productIndex, product)}
+              >
+                <div className="flex flex-col">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">{product.name || product.title}</span>
+                    <span className="text-sm text-gray-600">₹{product.unitPrice}</span>
+                  </div>
+                  <span className="text-sm text-gray-600">
+                    {product.deadWeight}kg | {product.length}×{product.breadth}×{product.height}cm
+                  </span>
+                  {product.sku && (
+                    <span className="text-xs text-gray-500">SKU: {product.sku}</span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="p-4 text-center text-gray-500">
+            No products found
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Address Search API Functions
   const searchPickupAddresses = async (query: string) => {
     // Always search, even with empty query to show all results
-    setSearchLoading(prev => ({ ...prev, pickup: true }));
+    setSearchLoading((prev) => ({ ...prev, pickup: true }));
     try {
       const payload = {
         skip: 0,
@@ -6575,13 +9169,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       setPickupSearchResults([]);
       setShowPickupSearchResults(false);
     } finally {
-      setSearchLoading(prev => ({ ...prev, pickup: false }));
+      setSearchLoading((prev) => ({ ...prev, pickup: false }));
     }
   };
 
   const searchDeliveryAddresses = async (query: string) => {
     // Always search, even with empty query to show all results
-    setSearchLoading(prev => ({ ...prev, delivery: true }));
+    setSearchLoading((prev) => ({ ...prev, delivery: true }));
     try {
       const payload = {
         skip: 0,
@@ -6591,7 +9185,10 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         searchValue: query, // Can be empty to show all results
       };
 
-      const response = await POST(GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH, payload);
+      const response = await POST(
+        GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH,
+        payload
+      );
 
       if (response?.data?.success) {
         const sortedAddresses = [...response.data.data].sort((a, b) => {
@@ -6611,29 +9208,35 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       setDeliverySearchResults([]);
       setShowDeliverySearchResults(false);
     } finally {
-      setSearchLoading(prev => ({ ...prev, delivery: false }));
+      setSearchLoading((prev) => ({ ...prev, delivery: false }));
     }
   };
 
   // Search handlers
   const handlePickupSearchChange = (value: string) => {
     setPickupSearchQuery(value);
-    
+
     // Debounced search - search immediately if empty (to show all results)
-    const timer = setTimeout(() => {
-      searchPickupAddresses(value);
-    }, value === "" ? 0 : 300);
+    const timer = setTimeout(
+      () => {
+        searchPickupAddresses(value);
+      },
+      value === "" ? 0 : 300
+    );
 
     return () => clearTimeout(timer);
   };
 
   const handleDeliverySearchChange = (value: string) => {
     setDeliverySearchQuery(value);
-    
+
     // Debounced search - search immediately if empty (to show all results)
-    const timer = setTimeout(() => {
-      searchDeliveryAddresses(value);
-    }, value === "" ? 0 : 300);
+    const timer = setTimeout(
+      () => {
+        searchDeliveryAddresses(value);
+      },
+      value === "" ? 0 : 300
+    );
 
     return () => clearTimeout(timer);
   };
@@ -6721,7 +9324,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   // Search results render function
   const renderSearchResults = (
     results: Address[],
-    type: 'pickup' | 'delivery',
+    type: "pickup" | "delivery",
     isVisible: boolean,
     isLoading: boolean
   ) => {
@@ -6742,7 +9345,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                 key={`${type}-${index}`}
                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
                 onClick={() => {
-                  if (type === 'pickup') {
+                  if (type === "pickup") {
                     handleSelectPickupAddress(address);
                   } else {
                     handleSelectDeliveryAddress(address);
@@ -6758,7 +9361,9 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                       </span>
                     )}
                   </div>
-                  <span className="text-sm text-gray-600">{getContactNo(address)}</span>
+                  <span className="text-sm text-gray-600">
+                    {getContactNo(address)}
+                  </span>
                   <span className="text-sm text-gray-600 truncate">
                     {address.flatNo} {address.locality} {address.landmark}
                   </span>
@@ -6790,9 +9395,10 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       if (data?.status) {
         const sellerData = data.data[0].data[0];
         setOrderData(sellerData);
-        const hasAwb = orderInfo?.awb && orderInfo.awb !== "" && orderInfo.awb !== "0";
+        const hasAwb =
+          orderInfo?.awb && orderInfo.awb !== "" && orderInfo.awb !== "0";
         setIsEnabled(hasAwb);
-        
+
         initializeFormData(sellerData);
       }
     } catch (error) {
@@ -6835,16 +9441,19 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     }
   };
 
-  const fetchPincodeData = async (pincode: string, addressType: 'pickup' | 'delivery') => {
+  const fetchPincodeData = async (
+    pincode: string,
+    addressType: "pickup" | "delivery"
+  ) => {
     if (pincode.length !== 6) return;
 
     try {
       const { data } = await POST(GET_PINCODE_DATA, { pincode });
       if (data?.success && data.data?.[0]) {
         const pincodeInfo = data.data[0];
-        
-        if (addressType === 'pickup') {
-          setPickupAddress((prev:any) => ({
+
+        if (addressType === "pickup") {
+          setPickupAddress((prev: any) => ({
             ...prev,
             city: pincodeInfo.city,
             state: pincodeInfo.state,
@@ -6852,7 +9461,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             pincode: pincodeInfo.pincode,
           }));
         } else {
-          setDeliveryAddress((prev:any) => ({
+          setDeliveryAddress((prev: any) => ({
             ...prev,
             city: pincodeInfo.city,
             state: pincodeInfo.state,
@@ -6982,11 +9591,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       await updateService();
 
       const placeOrderPayload = {
-        orders: [{
-          orderId: orderData?.orderId,
-          tempOrderId: orderData?.tempOrderId,
-          source: orderData?.source,
-        }],
+        orders: [
+          {
+            orderId: orderData?.orderId,
+            tempOrderId: orderData?.tempOrderId,
+            source: orderData?.source,
+          },
+        ],
       };
 
       const { data } = await POST(POST_PLACE_ALL_ORDERS, placeOrderPayload);
@@ -7044,55 +9655,61 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   // Validation Functions (existing functions remain the same)
   const validatePickupAddress = (): boolean => {
     const errors: ValidationErrors = {};
-    
+
     if (!pickupAddress.contact.contactName.trim()) {
       errors.pickupContactName = "Contact name is required";
     }
-    
+
     if (!validateMobile(pickupAddress.contact.mobileNo)) {
       errors.pickupMobileNo = "Invalid mobile number";
     }
-    
-    if (pickupAddress.contact.emailId && !validateEmail(pickupAddress.contact.emailId)) {
+
+    if (
+      pickupAddress.contact.emailId &&
+      !validateEmail(pickupAddress.contact.emailId)
+    ) {
       errors.pickupEmailId = "Invalid email address";
     }
-    
+
     if (!pickupAddress.flatNo.trim()) {
       errors.pickupFlatNo = "Flat/House number is required";
     }
-    
+
     if (!validatePincode(pickupAddress.pincode)) {
       errors.pickupPincode = "Invalid pincode";
     }
 
-    setValidationErrors(prev => ({ ...prev, ...errors }));
+    setValidationErrors((prev) => ({ ...prev, ...errors }));
     return Object.keys(errors).length === 0;
   };
 
   const validateDeliveryAddress = (): boolean => {
     const errors: ValidationErrors = {};
-    
+
     if (!deliveryAddress.contact.contactName.trim()) {
       errors.deliveryContactName = "Contact name is required";
     }
-    
+
     if (!validateMobile(deliveryAddress.contact.mobileNo)) {
       errors.deliveryMobileNo = "Invalid mobile number";
     }
-    
-    if (deliveryAddress.contact.emailId && !validateEmail(deliveryAddress.contact.emailId)) {
+
+    if (
+      deliveryAddress.contact.emailId &&
+      !validateEmail(deliveryAddress.contact.emailId)
+    ) {
       errors.deliveryEmailId = "Invalid email address";
     }
-    
+
     if (!deliveryAddress.flatNo.trim()) {
       errors.deliveryFlatNo = "Flat/House number is required";
     }
-    
+
     if (!validatePincode(deliveryAddress.pincode)) {
       errors.deliveryPincode = "Invalid pincode";
     }
 
-    setValidationErrors(prev => ({ ...prev, ...errors }));
+    setValidationErrors((prev) => ({ ...prev, ...errors }));
     return Object.keys(errors).length === 0;
   };
 
@@ -7102,23 +9719,23 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       setOpenPickupDatePicker(true);
       return;
     }
-    
-    setPickupAddress((prev:any) => ({
+
+    setPickupAddress((prev: any) => ({
       ...prev,
       pickupDate: selectedDate.getTime(),
     }));
     setOpenPickupDatePicker(false);
   };
 
-  const handlePincodeChange = (value: string, type: 'pickup' | 'delivery') => {
+  const handlePincodeChange = (value: string, type: "pickup" | "delivery") => {
     const numericValue = value.replace(/\D/g, "");
-    
-    if (type === 'pickup') {
-      setPickupAddress((prev:any) => ({ ...prev, pincode: numericValue }));
+
+    if (type === "pickup") {
+      setPickupAddress((prev: any) => ({ ...prev, pincode: numericValue }));
     } else {
-      setDeliveryAddress((prev:any) => ({ ...prev, pincode: numericValue }));
+      setDeliveryAddress((prev: any) => ({ ...prev, pincode: numericValue }));
     }
-    
+
     if (numericValue.length === 6) {
       fetchPincodeData(numericValue, type);
     }
@@ -7137,6 +9754,28 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     isFirstRender.current = false;
   }, [orderData]);
 
+  // Effect to handle click outside search results
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      Object.keys(showProductSearchResults).forEach((key) => {
+        if (
+          productSearchRefs.current[key] &&
+          !productSearchRefs.current[key]?.contains(event.target as Node)
+        ) {
+          setShowProductSearchResults((prev) => ({
+            ...prev,
+            [key]: false,
+          }));
+        }
+      });
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProductSearchResults]);
+
   // Updated renderPickupAddressForm function with search
   const renderPickupAddressForm = () => (
     <div className="space-y-4 p-4">
@@ -7153,7 +9792,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         />
         {renderSearchResults(
           pickupSearchResults,
-          'pickup',
+          "pickup",
           showPickupSearchResults,
           searchLoading.pickup
         )}
@@ -7167,23 +9806,23 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           value={String(pickupAddress?.contact?.mobileNo || "")}
           onChangeCallback={(value) => {
             const numericValue = value.replace(/\D/g, "");
-            setPickupAddress((prev:any) => ({
+            setPickupAddress((prev: any) => ({
               ...prev,
-              contact: { ...prev.contact, mobileNo: numericValue }
+              contact: { ...prev.contact, mobileNo: numericValue },
             }));
           }}
           maxLength={10}
           readOnly={isEnabled}
           required
         />
-        
+
         <FloatingLabelInput
           placeholder="Name"
           value={pickupAddress.contact.contactName}
           onChangeCallback={(value) => {
-            setPickupAddress((prev:any) => ({
+            setPickupAddress((prev: any) => ({
               ...prev,
-              contact: { ...prev.contact, contactName: value }
+              contact: { ...prev.contact, contactName: value },
             }));
           }}
           readOnly={isEnabled}
@@ -7196,18 +9835,18 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         <FloatingLabelInput
           placeholder="Pin code"
           value={String(pickupAddress?.pincode || "")}
-          onChangeCallback={(value) => handlePincodeChange(value, 'pickup')}
+          onChangeCallback={(value) => handlePincodeChange(value, "pickup")}
           maxLength={6}
           isPincodeField
           readOnly={isEnabled}
           required
         />
-        
+
         <FloatingLabelInput
           placeholder="Address Line 1"
           value={pickupAddress.flatNo}
           onChangeCallback={(value) => {
-            setPickupAddress((prev:any) => ({ ...prev, flatNo: value }));
+            setPickupAddress((prev: any) => ({ ...prev, flatNo: value }));
           }}
           readOnly={isEnabled}
           required
@@ -7220,16 +9859,16 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           placeholder="Address Line 2"
           value={pickupAddress.locality}
           onChangeCallback={(value) => {
-            setPickupAddress((prev:any) => ({ ...prev, locality: value }));
+            setPickupAddress((prev: any) => ({ ...prev, locality: value }));
           }}
           readOnly={isEnabled}
         />
-        
+
         <FloatingLabelInput
           placeholder="Landmark"
           value={pickupAddress.landmark}
           onChangeCallback={(value) => {
-            setPickupAddress((prev:any) => ({ ...prev, landmark: value }));
+            setPickupAddress((prev: any) => ({ ...prev, landmark: value }));
           }}
           readOnly={isEnabled}
         />
@@ -7242,7 +9881,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           value={pickupAddress.city}
           readOnly
         />
-        
+
         <FloatingLabelInput
           placeholder="State"
           value={pickupAddress.state}
@@ -7254,21 +9893,21 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FloatingLabelInput
           placeholder="GST No (If Available)"
-          value={(pickupAddress?.gstNumber || "")}
+          value={pickupAddress?.gstNumber || ""}
           onChangeCallback={(value) => {
-            setPickupAddress((prev:any) => ({ ...prev, gstNumber: value }));
+            setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
           }}
           readOnly={isEnabled}
         />
-        
+
         <FloatingLabelInput
           placeholder="Email ID (Optional)"
           type="email"
           value={pickupAddress.contact.emailId}
           onChangeCallback={(value) => {
-            setPickupAddress((prev:any) => ({
+            setPickupAddress((prev: any) => ({
               ...prev,
-              contact: { ...prev.contact, emailId: value }
+              contact: { ...prev.contact, emailId: value },
             }));
           }}
           readOnly={isEnabled}
@@ -7307,7 +9946,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         />
         {renderSearchResults(
           deliverySearchResults,
-          'delivery',
+          "delivery",
           showDeliverySearchResults,
           searchLoading.delivery
         )}
@@ -7321,23 +9960,23 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           value={String(deliveryAddress?.contact?.mobileNo || "")}
           onChangeCallback={(value) => {
             const numericValue = value.replace(/\D/g, "");
-            setDeliveryAddress((prev:any) => ({
+            setDeliveryAddress((prev: any) => ({
               ...prev,
-              contact: { ...prev.contact, mobileNo: numericValue }
+              contact: { ...prev.contact, mobileNo: numericValue },
             }));
           }}
           maxLength={10}
           readOnly={isEnabled}
           required
         />
-        
+
         <FloatingLabelInput
           placeholder="Name"
           value={deliveryAddress.contact.contactName}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev:any) => ({
+            setDeliveryAddress((prev: any) => ({
               ...prev,
-              contact: { ...prev.contact, contactName: value }
+              contact: { ...prev.contact, contactName: value },
             }));
           }}
           readOnly={isEnabled}
@@ -7350,18 +9989,18 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         <FloatingLabelInput
           placeholder="Pin code"
           value={String(deliveryAddress.pincode || "")}
-          onChangeCallback={(value) => handlePincodeChange(value, 'delivery')}
+          onChangeCallback={(value) => handlePincodeChange(value, "delivery")}
           maxLength={6}
           isPincodeField
           readOnly={isEnabled}
           required
         />
-        
+
         <FloatingLabelInput
           placeholder="Address Line 1"
           value={deliveryAddress.flatNo}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev:any) => ({ ...prev, flatNo: value }));
+            setDeliveryAddress((prev: any) => ({ ...prev, flatNo: value }));
           }}
           readOnly={isEnabled}
           required
@@ -7374,16 +10013,16 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           placeholder="Address Line 2"
           value={deliveryAddress.locality}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev:any) => ({ ...prev, locality: value }));
+            setDeliveryAddress((prev: any) => ({ ...prev, locality: value }));
           }}
           readOnly={isEnabled}
         />
-        
+
         <FloatingLabelInput
           placeholder="Landmark"
           value={deliveryAddress.landmark}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev:any) => ({ ...prev, landmark: value }));
+            setDeliveryAddress((prev: any) => ({ ...prev, landmark: value }));
           }}
           readOnly={isEnabled}
         />
@@ -7396,7 +10035,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           value={deliveryAddress.city}
           readOnly
         />
-        
+
         <FloatingLabelInput
           placeholder="State"
           value={deliveryAddress.state}
@@ -7410,19 +10049,19 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           placeholder="GST No (If Available)"
           value={deliveryAddress.gstNumber}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev:any) => ({ ...prev, gstNumber: value }));
+            setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
           }}
           readOnly={isEnabled}
         />
-        
+
         <FloatingLabelInput
           placeholder="Email ID (Optional)"
           type="email"
           value={deliveryAddress.contact.emailId}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev:any) => ({
+            setDeliveryAddress((prev: any) => ({
               ...prev,
-              contact: { ...prev.contact, emailId: value }
+              contact: { ...prev.contact, emailId: value },
             }));
           }}
           readOnly={isEnabled}
@@ -7445,254 +10084,277 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     </div>
   );
 
-  // Other render functions remain the same...
-  // const renderBoxAndProducts = () => (
-  //   <div className="space-y-4 p-4">
-  //     {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
-  //       <div key={boxIndex} className="border rounded-lg p-4">
-  //         <h4 className="font-semibold mb-4">Box {boxIndex + 1}: {box.name}</h4>
-          
-  //         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-  //           <FloatingLabelInput
-  //             placeholder="Dead Weight (kg)"
-  //             type="number"
-  //             value={box.deadWeight?.toString() || ""}
-  //             readOnly
-  //           />
-  //           <FloatingLabelInput
-  //             placeholder="Volumetric Weight"
-  //             type="number"
-  //             value={box.volumetricWeight?.toFixed(2) || ""}
-  //             readOnly
-  //           />
-  //           <FloatingLabelInput
-  //             placeholder="Length (cm)"
-  //             type="number"
-  //             value={box.length?.toString() || ""}
-  //             readOnly
-  //           />
-  //           <FloatingLabelInput
-  //             placeholder="Breadth (cm)"
-  //             type="number"
-  //             value={box.breadth?.toString() || ""}
-  //             readOnly
-  //           />
-  //         </div>
+  // Updated renderBoxAndProducts function with editable product form and product search
+  const renderBoxAndProducts = () => (
+    <div className="space-y-4 p-4">
+      {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
+        <Collapsible
+          key={boxIndex}
+          title={`Box ${boxIndex + 1}: ${box.name}`}
+          defaultOpen={boxIndex === 0}
+          className="border-2 border-gray-200"
+          titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+          contentClassName="bg-white"
+        >
+          <div className="space-y-4 mt-4">
+            {/* Box Details */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <FloatingLabelInput
+                placeholder="Dead Weight (kg)"
+                type="number"
+                value={box.deadWeight?.toString() || ""}
+                readOnly
+              />
+              <FloatingLabelInput
+                placeholder="Volumetric Weight"
+                type="number"
+                value={box.volumetricWeight?.toFixed(2) || ""}
+                readOnly
+              />
+              <FloatingLabelInput
+                placeholder="Length (cm)"
+                type="number"
+                value={box.length?.toString() || ""}
+                readOnly
+              />
+              <FloatingLabelInput
+                placeholder="Breadth (cm)"
+                type="number"
+                value={box.breadth?.toString() || ""}
+                readOnly
+              />
+            </div>
 
-  //         <h5 className="font-medium mb-2">Products:</h5>
-  //         {box.products?.map((product: any, productIndex: number) => (
-  //           <div key={productIndex} className="border rounded p-3 mb-2">
-  //             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-  //               <FloatingLabelInput
-  //                 placeholder="Product Name"
-  //                 value={product.name || ""}
-  //                 readOnly
-  //               />
-  //               <FloatingLabelInput
-  //                 placeholder="Quantity"
-  //                 type="number"
-  //                 value={product.qty?.toString() || ""}
-  //                 readOnly
-  //               />
-  //               <FloatingLabelInput
-  //                 placeholder="Unit Price"
-  //                 type="number"
-  //                 value={product.unitPrice?.toString() || ""}
-  //                 readOnly
-  //               />
-  //             </div>
-  //           </div>
-  //         ))}
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
+            {/* Products Section */}
+            {box.products && box.products.length > 0 && (
+              <div className="space-y-3">
+                <div className="space-y-2 mb-2">
+                  {box.products.map((product: any, productIndex: number) => (
+                    <Collapsible
+                      key={`${boxIndex}-${productIndex}`}
+                      title={`Product ${productIndex + 1}: ${
+                        product.name || "Unnamed Product"
+                      }`}
+                      defaultOpen={false}
+                      className="border border-gray-300 !shadow-none"
+                      titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+                      contentClassName="bg-gray-50 !shadow-none"
+                    >
+                      <div className="p-4 space-y-4">
+                        {/* Product Name with Search */}
+                        <div className="flex items-start gap-x-4">
+                          <div className="flex-1 relative" 
+                               ref={(el) => {
+                                 const searchKey = `${boxIndex}-${productIndex}`;
+                                 productSearchRefs.current[searchKey] = el;
+                               }}>
+                            <FloatingLabelInput
+                              placeholder="Product Name"
+                              value={(() => {
+                                const searchKey = `${boxIndex}-${productIndex}`;
+                                return productSearchQueries[searchKey] !== undefined 
+                                  ? productSearchQueries[searchKey] 
+                                  : (product.name || "");
+                              })()}
+                              onChangeCallback={(value) => handleProductNameSearch(boxIndex, productIndex, value)}
+                              onFocus={() => handleProductSearchFocus(boxIndex, productIndex)}
+                              onBlur={() => handleProductSearchBlur(boxIndex, productIndex)}
+                              readOnly={isEnabled}
+                              icon={productSearchLoading[`${boxIndex}-${productIndex}`] ? <LoadingIcon /> : <SearchIcon />}
+                            />
+                            {renderProductSearchResults(boxIndex, productIndex)}
+                          </div>
 
-  // Updated renderBoxAndProducts function with Collapsible boxes and products
-const renderBoxAndProducts = () => (
-  <div className="space-y-4 p-4">
-    {orderData?.boxInfo?.map((box: any, boxIndex: number) => (
-      <Collapsible
-        key={boxIndex}
-        title={`Box ${boxIndex + 1}: ${box.name}`}
-        defaultOpen={boxIndex === 0} // First box open by default
-        className="border-2 border-gray-200"
-        titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
-        contentClassName="bg-white"
-      >
-        <div className="space-y-4 mt-4">
-          {/* Box Details */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <FloatingLabelInput
-              placeholder="Dead Weight (kg)"
-              type="number"
-              value={box.deadWeight?.toString() || ""}
-              readOnly
-            />
-            <FloatingLabelInput
-              placeholder="Volumetric Weight"
-              type="number"
-              value={box.volumetricWeight?.toFixed(2) || ""}
-              readOnly
-            />
-            <FloatingLabelInput
-              placeholder="Length (cm)"
-              type="number"
-              value={box.length?.toString() || ""}
-              readOnly
-            />
-            <FloatingLabelInput
-              placeholder="Breadth (cm)"
-              type="number"
-              value={box.breadth?.toString() || ""}
-              readOnly
-            />
-          </div>
+                          {!isEnabled && box.products.length > 1 && (
+                            <button
+                              onClick={() =>
+                                deleteProduct(boxIndex, productIndex)
+                              }
+                              className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+                              title="Delete Product"
+                            >
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
 
-          {/* Products Section */}
-          {box.products && box.products.length > 0 && (
-            <div className="space-y-3">
-              {/* <h5 className="font-medium text-gray-700 border-b pb-2">
-                Products ({box.products.length})
-              </h5> */}
-              
-              <div className="space-y-2 mb-2 ">
-                {box.products.map((product: any, productIndex: number) => (
-                  <Collapsible
-                    key={`${boxIndex}-${productIndex}`}
-                    title={`Product ${productIndex + 1}: ${product.name || 'Unnamed Product'}`}
-                    defaultOpen={false} // Products closed by default
-                    className="border border-gray-300 !shadow-none"
-                    titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
-                    contentClassName="bg-gray-50 !shadow-none"
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-2">
-                      <FloatingLabelInput
-                        placeholder="Product Name"
-                        value={product.name || ""}
-                        readOnly
-                      />
-                      <FloatingLabelInput
-                        placeholder="Quantity"
-                        type="number"
-                        value={product.qty?.toString() || ""}
-                        readOnly
-                      />
-                      <FloatingLabelInput
-                        placeholder="Unit Price"
-                        type="number"
-                        value={product.unitPrice?.toString() || ""}
-                        readOnly
-                      />
-                    </div>
-                    
-                    {/* Additional product details if available */}
-                    {(product.description || product.hsn || product.sku) && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-2 pt-0">
-                        {product.description && (
+                        {/* Row 2: Qty and Unit Weight */}
+                        <div className="grid grid-cols-2 gap-4">
                           <FloatingLabelInput
-                            placeholder="Description"
-                            value={product.description}
-                            readOnly
+                            placeholder="Qty"
+                            type="number"
+                            value={product.qty?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "qty",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
                           />
-                        )}
-                        {product.hsn && (
                           <FloatingLabelInput
-                            placeholder="HSN Code"
-                            value={product.hsn}
-                            readOnly
+                            placeholder="Unit Weight"
+                            type="number"
+                            value={product.deadWeight?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "deadWeight",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
                           />
-                        )}
-                        {product.sku && (
+                        </div>
+
+                        {/* Row 3: Unit Price and Dimensions */}
+                        <div className="grid grid-cols-4 gap-4">
+                          <FloatingLabelInput
+                            placeholder="Unit Price"
+                            type="number"
+                            value={product.unitPrice?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "unitPrice",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                          <FloatingLabelInput
+                            placeholder="L(cm)"
+                            type="number"
+                            value={product.length?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "length",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                          <FloatingLabelInput
+                            placeholder="B(cm)"
+                            type="number"
+                            value={product.breadth?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "breadth",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                          <FloatingLabelInput
+                            placeholder="H(cm)"
+                            type="number"
+                            value={product.height?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "height",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                        </div>
+
+                        {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="relative">
+                            <FloatingLabelInput
+                              placeholder="Total Weight (kg)"
+                              type="number"
+                              value={(
+                                (product.qty || 0) * (product.deadWeight || 0)
+                              ).toFixed(2)}
+                              readOnly
+                            />
+                            <div className="absolute inset-0 bg-gray-100 opacity-50 rounded-2xl pointer-events-none"></div>
+                          </div>
+                          <div className="relative">
+                            <FloatingLabelInput
+                              placeholder="Total Price"
+                              type="number"
+                              value={(
+                                (product.qty || 0) * (product.unitPrice || 0)
+                              ).toFixed(2)}
+                              readOnly
+                            />
+                            <div className="absolute inset-0 bg-gray-100 opacity-50 rounded-2xl pointer-events-none"></div>
+                          </div>
+                        </div>
+
+                        {/* Row 5: SKU and HSN */}
+                        <div className="grid grid-cols-2 gap-4">
                           <FloatingLabelInput
                             placeholder="SKU"
-                            value={product.sku}
-                            readOnly
+                            value={product.sku || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "sku",
+                                value
+                              )
+                            }
+                            readOnly={isEnabled}
                           />
-                        )}
+                          <FloatingLabelInput
+                            placeholder="HSN"
+                            value={product.hsnCode || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "hsnCode",
+                                value
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                        </div>
                       </div>
-                    )}
-                    
-                    {/* Product total value */}
-                    <div className="p-2 pt-0">
-                      <FloatingLabelInput
-                        placeholder="Total Value"
-                        type="number"
-                        value={((product.qty || 0) * (product.unitPrice || 0)).toString()}
-                        readOnly
+                    </Collapsible>
+                  ))}
+                  <div>
+                    {!isEnabled && (
+                      <OneButton
+                        text="Add Product"
+                        onClick={() => addProduct(boxIndex)}
+                        variant="secondary"
+                        className="!rounded-full"
                       />
-                    </div>
-                  </Collapsible>
-                ))}
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-
-          {/* Box Summary */}
-          {/* <div className="bg-gray-100 rounded-lg p-3 mt-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-600">Total Products:</span>
-                <p className="font-semibold">{box.products?.length || 0}</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-600">Box Weight:</span>
-                <p className="font-semibold">{box.deadWeight || 0} kg</p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-600">Dimensions:</span>
-                <p className="font-semibold">
-                  {box.length || 0} × {box.breadth || 0} × {box.height || 0} cm
-                </p>
-              </div>
-              <div>
-                <span className="font-medium text-gray-600">Volumetric Weight:</span>
-                <p className="font-semibold">{box.volumetricWeight?.toFixed(2) || 0} kg</p>
-              </div>
-            </div>
-          </div> */}
-        </div>
-      </Collapsible>
-    ))}
-
-    {/* Overall Summary */}
-    {/* {orderData?.boxInfo && orderData.boxInfo.length > 0 && (
-      <div className="bg-blue-50 rounded-lg p-4 mt-6">
-        <h4 className="font-semibold text-blue-800 mb-3">Order Summary</h4>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <span className="font-medium text-blue-600">Total Boxes:</span>
-            <p className="font-semibold text-blue-800">{orderData.boxInfo.length}</p>
+            )}
           </div>
-          <div>
-            <span className="font-medium text-blue-600">Total Products:</span>
-            <p className="font-semibold text-blue-800">
-              {orderData.boxInfo.reduce((total: number, box: any) => 
-                total + (box.products?.length || 0), 0
-              )}
-            </p>
-          </div>
-          <div>
-            <span className="font-medium text-blue-600">Total Weight:</span>
-            <p className="font-semibold text-blue-800">
-              {orderData.boxInfo.reduce((total: number, box: any) => 
-                total + (box.deadWeight || 0), 0
-              ).toFixed(2)} kg
-            </p>
-          </div>
-          <div>
-            <span className="font-medium text-blue-600">Total Vol. Weight:</span>
-            <p className="font-semibold text-blue-800">
-              {orderData.boxInfo.reduce((total: number, box: any) => 
-                total + (box.volumetricWeight || 0), 0
-              ).toFixed(2)} kg
-            </p>
-          </div>
-        </div>
-      </div>
-    )} */}
-  </div>
-);
+        </Collapsible>
+      ))}
+    </div>
+  );
 
   const renderServices = () => (
     <div className="space-y-4 p-4">
@@ -7702,11 +10364,15 @@ const renderBoxAndProducts = () => (
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="font-medium">Partner Name:</span>
-                <span>{isMasked ? "Shipyaari" : orderData.service.partnerName}</span>
+                <span>
+                  {isMasked ? "Shipyaari" : orderData.service.partnerName}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Service Mode:</span>
-                <span>{capitalizeFirstLetter(orderData.service.serviceMode)}</span>
+                <span>
+                  {capitalizeFirstLetter(orderData.service.serviceMode)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Applied Weight:</span>
@@ -7714,27 +10380,49 @@ const renderBoxAndProducts = () => (
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Freight Charges:</span>
-                <span>₹{Math.round(orderData.service.base + orderData.service.add)?.toLocaleString('en-IN')}</span>
+                <span>
+                  ₹
+                  {Math.round(
+                    orderData.service.base + orderData.service.add
+                  )?.toLocaleString("en-IN")}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Other Charges:</span>
-                <span>₹{Math.round(orderData.service.variables)?.toLocaleString('en-IN')}</span>
+                <span>
+                  ₹
+                  {Math.round(orderData.service.variables)?.toLocaleString(
+                    "en-IN"
+                  )}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">COD Charges:</span>
-                <span>₹{Math.round(orderData.service.cod)?.toLocaleString('en-IN')}</span>
+                <span>
+                  ₹{Math.round(orderData.service.cod)?.toLocaleString("en-IN")}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Insurance:</span>
-                <span>₹{Math.round(orderData.service.insurance)?.toLocaleString('en-IN')}</span>
+                <span>
+                  ₹
+                  {Math.round(orderData.service.insurance)?.toLocaleString(
+                    "en-IN"
+                  )}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Tax:</span>
-                <span>₹{Math.round(orderData.service.tax)?.toLocaleString('en-IN')}</span>
+                <span>
+                  ₹{Math.round(orderData.service.tax)?.toLocaleString("en-IN")}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Total:</span>
-                <span>₹{Math.round(orderData.service.total)?.toLocaleString('en-IN')}</span>
+                <span>
+                  ₹
+                  {Math.round(orderData.service.total)?.toLocaleString("en-IN")}
+                </span>
               </div>
             </div>
           </div>
@@ -7760,8 +10448,8 @@ const renderBoxAndProducts = () => (
                   key={service.partnerServiceId}
                   className={`border rounded-lg p-4 cursor-pointer transition-colors ${
                     selectedServiceIndex === index
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
                   }`}
                   onClick={() => setSelectedServiceIndex(index)}
                 >
@@ -7775,7 +10463,8 @@ const renderBoxAndProducts = () => (
                       />
                       <div>
                         <p className="font-medium">
-                          {capitalizeFirstLetter(service.partnerName)} - {capitalizeFirstLetter(service.serviceMode)}
+                          {capitalizeFirstLetter(service.partnerName)} -{" "}
+                          {capitalizeFirstLetter(service.serviceMode)}
                         </p>
                         <p className="text-sm text-gray-600">
                           Applied Weight: {service.appliedWeight} kg
@@ -7786,11 +10475,15 @@ const renderBoxAndProducts = () => (
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-lg">₹{service.total?.toLocaleString('en-IN')}</p>
-                      <p className="text-sm text-gray-600">Zone: {service.zoneName}</p>
+                      <p className="font-semibold text-lg">
+                        ₹{service.total?.toLocaleString("en-IN")}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Zone: {service.zoneName}
+                      </p>
                     </div>
                   </div>
-                  
+
                   {selectedServiceIndex === index && (
                     <div className="mt-3 pt-3 border-t grid grid-cols-2 gap-2 text-sm">
                       <div>Base: ₹{service.base}</div>
@@ -7835,7 +10528,7 @@ const renderBoxAndProducts = () => (
           readOnly
         />
       </div>
-      
+
       <FloatingLabelInput
         placeholder="Invoice Value"
         type="number"
@@ -7860,10 +10553,12 @@ const renderBoxAndProducts = () => (
               <span className="font-medium">AWB:</span> {log.awb || "N/A"}
             </div>
             <div className="md:col-span-2">
-              <span className="font-medium">Description:</span> {log.description}
+              <span className="font-medium">Description:</span>{" "}
+              {log.description}
             </div>
             <div className="md:col-span-2">
-              <span className="font-medium">Time:</span> {convertEpochToDateTime(log.timeStamp)}
+              <span className="font-medium">Time:</span>{" "}
+              {convertEpochToDateTime(log.timeStamp)}
             </div>
           </div>
         </div>
@@ -7885,7 +10580,7 @@ const renderBoxAndProducts = () => (
           readOnly
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FloatingLabelInput
           placeholder="Source"
@@ -7927,16 +10622,14 @@ const renderBoxAndProducts = () => (
         {renderDeliveryAddressForm()}
       </Collapsible>
 
-      <Collapsible title="Box & Products">
-        {renderBoxAndProducts()}
-      </Collapsible>
+      <Collapsible title="Box & Products">{renderBoxAndProducts()}</Collapsible>
 
-      <Collapsible 
-        title="Services" 
+      <Collapsible
+        title="Services"
         onToggle={(isOpen) => {
           if (isOpen) {
             fetchServiceList();
-          } 
+          }
         }}
       >
         {renderServices()}
@@ -7946,13 +10639,9 @@ const renderBoxAndProducts = () => (
         {renderPaymentDetails()}
       </Collapsible>
 
-      <Collapsible title="Event Logs">
-        {renderEventLogs()}
-      </Collapsible>
+      <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
 
-      <Collapsible title="Order History">
-        {renderOrderHistory()}
-      </Collapsible>
+      <Collapsible title="Order History">{renderOrderHistory()}</Collapsible>
 
       {!isEnabled && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
