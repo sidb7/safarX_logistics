@@ -4823,6 +4823,7 @@
 // };
 
 // export default Accordion;
+
 import React, { useState, useRef, useEffect } from "react";
 import { POST } from "../../utils/webService";
 import {
@@ -4849,6 +4850,7 @@ import Collapsible from "../OneComponents/Collapsible";
 import FloatingLabelInput from "../../screens/OrderCreation/FloatingLabelInput";
 import CustomDate from "./CustomDateWithTime";
 import OneButton from "../Button/OneButton";
+import { v4 as uuidv4 } from "uuid";
 
 // Types
 interface OrderData {
@@ -4936,14 +4938,38 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
 }) => {
   // State Management
   const [isLoading, setIsLoading] = useState(false);
+  const [isServiceUpdated, setIsServiceUpdated] = useState(false);
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [boxDetailsData, setBoxDetailsData] = useState<any[]>([]);
   const [serviceList, setServiceList] = useState<any[]>([]);
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [isEnabled, setIsEnabled] = useState(true);
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
-    {}
-  );
+  // const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
+  //   {}
+  // );
+  // Add this state with other state declarations
+const [validationErrors, setValidationErrors] = useState({
+  pickup: {
+    contactName: false,
+    mobileNo: false,
+    pincode: false,
+    flatNo: false,
+    locality: false,
+    landmark: false,
+    gstNumber: false,
+  },
+  delivery: {
+    contactName: false,
+    mobileNo: false,
+    pincode: false,
+    flatNo: false,
+    locality: false,
+    landmark: false,
+    gstNumber: false,
+  },
+  boxes: {} as { [boxIndex: number]: { name: boolean; length: boolean; breadth: boolean; height: boolean } },
+  products: {} as { [key: string]: { name: boolean; qty: boolean; unitPrice: boolean; deadWeight: boolean } }, // key format: "boxIndex-productIndex"
+});
   const [serviceLoading, setServiceLoading] = useState(false);
   const [openPickupDatePicker, setOpenPickupDatePicker] = useState(false);
 
@@ -4996,6 +5022,11 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     [key: string]: boolean;
   }>({});
 
+  const [phoneValidationErrors, setPhoneValidationErrors] = useState({
+    pickup: false,
+    delivery: false,
+  });
+
   // Form Data State
   const [pickupAddress, setPickupAddress] = useState<any>({
     contact: { contactName: "", mobileNo: "", emailId: "", contactType: "" },
@@ -5032,6 +5063,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     breadth: 0,
     height: 0,
   });
+
+  
 
   // Refs
   const isFirstRender = useRef(true);
@@ -5095,6 +5128,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     return /^[6-9]\d{9}$/.test(mobile);
   };
 
+  const isValidPhoneNumber = (phone: string): boolean => {
+    // Remove any non-digit characters (like spaces, dashes, etc.)
+    const cleanPhone = phone.replace(/\D/g, "");
+    const phoneRegex = /^[6-9]\d{9}$/;
+    return phoneRegex.test(cleanPhone);
+  };
+
   const validatePincode = (pincode: string): boolean => {
     return /^\d{6}$/.test(pincode);
   };
@@ -5119,6 +5159,159 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const formatAddress = (address: Address) => {
     return address.fullAddress || "";
   };
+
+
+  // Add these validation functions
+const validateAddresses = (): boolean => {
+  let hasErrors = false;
+  const newErrors = { ...validationErrors };
+
+  // Validate pickup address
+  if (!pickupAddress.contact.contactName?.trim()) {
+    newErrors.pickup.contactName = true;
+    hasErrors = true;
+  }
+  if (!pickupAddress.contact.mobileNo || phoneValidationErrors.pickup) {
+    newErrors.pickup.mobileNo = true;
+    hasErrors = true;
+  }
+  if (!pickupAddress.pincode?.toString().trim()) {
+    newErrors.pickup.pincode = true;
+    hasErrors = true;
+  }
+  if (!pickupAddress.flatNo?.trim()) {
+    newErrors.pickup.flatNo = true;
+    hasErrors = true;
+  }
+  if (!pickupAddress.locality?.trim()) {
+    newErrors.pickup.locality = true;
+    hasErrors = true;
+  }
+  if (!pickupAddress.landmark?.trim()) {
+    newErrors.pickup.landmark = true;
+    hasErrors = true;
+  }
+  // GST validation only for B2B orders
+  if (orderData?.orderType === "B2B" && !pickupAddress.gstNumber?.trim()) {
+    newErrors.pickup.gstNumber = true;
+    hasErrors = true;
+  }
+
+  // Validate delivery address
+  if (!deliveryAddress.contact.contactName?.trim()) {
+    newErrors.delivery.contactName = true;
+    hasErrors = true;
+  }
+  if (!deliveryAddress.contact.mobileNo || phoneValidationErrors.delivery) {
+    newErrors.delivery.mobileNo = true;
+    hasErrors = true;
+  }
+  if (!deliveryAddress.pincode?.toString().trim()) {
+    newErrors.delivery.pincode = true;
+    hasErrors = true;
+  }
+  if (!deliveryAddress.flatNo?.trim()) {
+    newErrors.delivery.flatNo = true;
+    hasErrors = true;
+  }
+  if (!deliveryAddress.locality?.trim()) {
+    newErrors.delivery.locality = true;
+    hasErrors = true;
+  }
+  if (!deliveryAddress.landmark?.trim()) {
+    newErrors.delivery.landmark = true;
+    hasErrors = true;
+  }
+  // GST validation only for B2B orders
+  if (orderData?.orderType === "B2B" && !deliveryAddress.gstNumber?.trim()) {
+    newErrors.delivery.gstNumber = true;
+    hasErrors = true;
+  }
+
+  setValidationErrors(newErrors);
+  return !hasErrors;
+};
+
+const validateBoxesAndProducts = (): boolean => {
+  let hasErrors = false;
+  const newErrors = { ...validationErrors };
+
+  // Validate boxes
+  orderData?.boxInfo?.forEach((box: any, boxIndex: number) => {
+    if (!newErrors.boxes[boxIndex]) {
+      newErrors.boxes[boxIndex] = { name: false, length: false, breadth: false, height: false };
+    }
+
+    if (!box.name?.trim()) {
+      newErrors.boxes[boxIndex].name = true;
+      hasErrors = true;
+    }
+    if (!box.length || box.length <= 0) {
+      newErrors.boxes[boxIndex].length = true;
+      hasErrors = true;
+    }
+    if (!box.breadth || box.breadth <= 0) {
+      newErrors.boxes[boxIndex].breadth = true;
+      hasErrors = true;
+    }
+    if (!box.height || box.height <= 0) {
+      newErrors.boxes[boxIndex].height = true;
+      hasErrors = true;
+    }
+
+    // Validate products in this box
+    box.products?.forEach((product: any, productIndex: number) => {
+      const productKey = `${boxIndex}-${productIndex}`;
+      if (!newErrors.products[productKey]) {
+        newErrors.products[productKey] = { name: false, qty: false, unitPrice: false, deadWeight: false };
+      }
+
+      if (!product.name?.trim()) {
+        newErrors.products[productKey].name = true;
+        hasErrors = true;
+      }
+      if (!product.qty || product.qty <= 0) {
+        newErrors.products[productKey].qty = true;
+        hasErrors = true;
+      }
+      if (!product.unitPrice || product.unitPrice <= 0) {
+        newErrors.products[productKey].unitPrice = true;
+        hasErrors = true;
+      }
+      if (!product.deadWeight || product.deadWeight <= 0) {
+        newErrors.products[productKey].deadWeight = true;
+        hasErrors = true;
+      }
+    });
+  });
+
+  setValidationErrors(newErrors);
+  return !hasErrors;
+};
+
+// Helper function to clear specific validation errors
+const clearValidationError = (section: string, field: string, index?: number, subIndex?: number) => {
+  setValidationErrors(prev => {
+    const newErrors = { ...prev };
+    
+    if (section === "pickup" || section === "delivery") {
+      newErrors[section as "pickup" | "delivery"][field as keyof typeof newErrors.pickup] = false;
+    } else if (section === "boxes" && index !== undefined) {
+      if (!newErrors.boxes[index]) {
+        newErrors.boxes[index] = { name: false, length: false, breadth: false, height: false };
+      }
+      newErrors.boxes[index][field as keyof typeof newErrors.boxes[0]] = false;
+    } else if (section === "products" && index !== undefined && subIndex !== undefined) {
+      const productKey = `${index}-${subIndex}`;
+      if (!newErrors.products[productKey]) {
+        newErrors.products[productKey] = { name: false, qty: false, unitPrice: false, deadWeight: false };
+      }
+      newErrors.products[productKey][field as keyof typeof newErrors.products[string]] = false;
+    }
+    
+    return newErrors;
+  });
+};
 
   // Box operations functions
   const updateBox = (boxIndex: number, field: string, value: any) => {
@@ -5156,7 +5349,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       companyId: orderData?.companyId || "",
       sellerId: orderData?.sellerId || 0,
       privateCompanyId: orderData?.privateCompanyId || 0,
-      boxId: Math.random().toString(36).substr(2, 8),
+      // boxId: Math.random().toString(36).substr(2, 8),
+      boxId: uuidv4(), // Use uuidv4 instead of Math.random()
       type: "",
       name: `Custom Box ${(orderData?.boxInfo?.length || 0) + 1}`,
       weightUnit: "kg",
@@ -5308,10 +5502,10 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
 
     const newProduct = {
       companyId: "",
-      privateCompanyId: 0,
-      sellerId: 0,
-      productId: "",
-      variantId: "",
+      privateCompanyId: orderData?.privateCompanyId || 0,
+      sellerId: orderData?.sellerId || 0,
+      productId: uuidv4(),
+      variantId: uuidv4(),
       name: "",
       category: "Any",
       qty: 1,
@@ -5456,6 +5650,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
 
   const selectBoxFromSearch = (boxIndex: number, box: any) => {
     // Update box with all the selected box data
+    updateBox(boxIndex, "boxId", box.boxId || box._id || uuidv4());
     updateBox(boxIndex, "name", box.name || "");
     updateBox(boxIndex, "deadWeight", box.deadWeight || 0);
     updateBox(boxIndex, "length", box.length || 0);
@@ -5506,6 +5701,55 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     }, 200);
   };
 
+  const buildCompletePayload = () => {
+    return {
+      orderId: orderData?.orderId,
+      tempOrderId: orderData?.tempOrderId,
+      source: orderData?.source,
+      orderType: orderData?.orderType,
+      transit: orderData?.transit,
+      pickupAddress: {
+        contact: {
+          name: pickupAddress.contact.contactName,
+          mobileNo: pickupAddress.contact.mobileNo,
+          emailId: pickupAddress.contact.emailId,
+          type: pickupAddress.contact.contactType,
+        },
+        flatNo: pickupAddress.flatNo,
+        locality: pickupAddress.locality,
+        landmark: pickupAddress.landmark,
+        city: pickupAddress.city,
+        state: pickupAddress.state,
+        country: pickupAddress.country,
+        pincode: pickupAddress.pincode,
+        fullAddress: `${pickupAddress.flatNo} ${pickupAddress.locality} ${pickupAddress.landmark} ${pickupAddress.city} ${pickupAddress.state} ${pickupAddress.country} ${pickupAddress.pincode}`,
+        addressType: pickupAddress.addressType,
+        pickupDate: pickupAddress.pickupDate,
+        gstNumber: pickupAddress.gstNumber,
+      },
+      deliveryAddress: {
+        contact: {
+          name: deliveryAddress.contact.contactName,
+          mobileNo: deliveryAddress.contact.mobileNo,
+          emailId: deliveryAddress.contact.emailId,
+          type: deliveryAddress.contact.contactType,
+        },
+        flatNo: deliveryAddress.flatNo,
+        locality: deliveryAddress.locality,
+        landmark: deliveryAddress.landmark,
+        city: deliveryAddress.city,
+        state: deliveryAddress.state,
+        country: deliveryAddress.country,
+        pincode: deliveryAddress.pincode,
+        fullAddress: `${deliveryAddress.flatNo} ${deliveryAddress.locality} ${deliveryAddress.landmark} ${deliveryAddress.city} ${deliveryAddress.state} ${deliveryAddress.country} ${deliveryAddress.pincode}`,
+        addressType: deliveryAddress.addressType,
+        gstNumber: deliveryAddress.gstNumber,
+      },
+      boxInfo: orderData?.boxInfo,
+      codInfo: orderData?.codInfo,
+    };
+  };
+
   const renderBoxSearchResults = (boxIndex: number) => {
     const searchKey = `${boxIndex}`;
     const isVisible = showBoxSearchResults[searchKey];
@@ -5533,7 +5777,9 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                 <div className="flex flex-col">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{box.name}</span>
-                    <span className="text-sm text-gray-600">{box.deadWeight}kg</span>
+                    <span className="text-sm text-gray-600">
+                      {box.deadWeight}kg
+                    </span>
                   </div>
                   <span className="text-sm text-gray-600">
                     {box.length}×{box.breadth}×{box.height}cm
@@ -5659,11 +5905,86 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     await searchProducts(boxIndex, productIndex, value);
   };
 
+  // const selectProductFromSearch = (
+  //   boxIndex: number,
+  //   productIndex: number,
+  //   product: ProductSearchResult
+  // ) => {
+  //   // Update all product fields with the selected product data
+  //   updateProduct(
+  //     boxIndex,
+  //     productIndex,
+  //     "name",
+  //     product.name || product.title || ""
+  //   );
+  //   updateProduct(boxIndex, productIndex, "qty", product.qty || 1);
+  //   updateProduct(boxIndex, productIndex, "unitPrice", product.unitPrice || 0);
+  //   updateProduct(
+  //     boxIndex,
+  //     productIndex,
+  //     "deadWeight",
+  //     product.deadWeight || 0
+  //   );
+  //   updateProduct(boxIndex, productIndex, "length", product.length || 0);
+  //   updateProduct(boxIndex, productIndex, "breadth", product.breadth || 0);
+  //   updateProduct(boxIndex, productIndex, "height", product.height || 0);
+  //   updateProduct(boxIndex, productIndex, "sku", product.sku || "");
+  //   updateProduct(boxIndex, productIndex, "hsnCode", product.hsnCode || "");
+
+  //   // Calculate totals
+  //   const qty = product.qty || 1;
+  //   const unitPrice = product.unitPrice || 0;
+  //   const deadWeight = product.deadWeight || 0;
+
+  //   updateProduct(boxIndex, productIndex, "totalPrice", qty * unitPrice);
+  //   updateProduct(boxIndex, productIndex, "appliedWeight", qty * deadWeight);
+  //   updateProduct(
+  //     boxIndex,
+  //     productIndex,
+  //     "volumetricWeight",
+  //     calculateVolumetricWeight(
+  //       product.length || 0,
+  //       product.breadth || 0,
+  //       product.height || 0,
+  //       qty
+  //     )
+  //   );
+
+  //   // Close the search results
+  //   const searchKey = `${boxIndex}-${productIndex}`;
+  //   setShowProductSearchResults((prev) => ({
+  //     ...prev,
+  //     [searchKey]: false,
+  //   }));
+
+  //   // Clear the search query
+  //   setProductSearchQueries((prev) => ({
+  //     ...prev,
+  //     [searchKey]: product.name || product.title || "",
+  //   }));
+
+  //   toast.success("Product details updated successfully");
+  // };
+
   const selectProductFromSearch = (
     boxIndex: number,
     productIndex: number,
     product: ProductSearchResult
   ) => {
+    // Update productId and variantId first
+    updateProduct(
+      boxIndex,
+      productIndex,
+      "productId",
+      product.productId || product._id || uuidv4()
+    );
+    updateProduct(
+      boxIndex,
+      productIndex,
+      "variantId",
+      product.variantId || uuidv4()
+    );
+
     // Update all product fields with the selected product data
     updateProduct(
       boxIndex,
@@ -5967,6 +6288,15 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       pickupDate: pickupAddress.pickupDate || "",
       gstNumber: address.gstNumber || "",
     });
+    
+     const contactNo = getContactNo(address);
+  if (contactNo) {
+    setPhoneValidationErrors(prev => ({
+      ...prev,
+      pickup: !isValidPhoneNumber(contactNo)
+    }));
+  }
+    
 
     setPickupSearchQuery("");
     setShowPickupSearchResults(false);
@@ -5991,6 +6321,14 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       addressType: "",
       gstNumber: address.gstNumber || "",
     });
+
+      const contactNo = getContactNo(address);
+  if (contactNo) {
+    setPhoneValidationErrors(prev => ({
+      ...prev,
+      delivery: !isValidPhoneNumber(contactNo)
+    }));
+  }
 
     setDeliverySearchQuery("");
     setShowDeliverySearchResults(false);
@@ -6274,38 +6612,114 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       const { data } = await POST(SET_SERVICE_INFO, payload);
       if (data?.success) {
         toast.success("Service updated successfully");
+        setIsServiceUpdated(true); // Add this line
       } else {
         toast.error(data?.message || "Failed to update service");
+        setIsServiceUpdated(false); // Add this line
       }
     } catch (error) {
       console.error("Error updating service:", error);
       toast.error("Failed to update service");
+      setIsServiceUpdated(false); // Add this line
     }
   };
 
+  // const placeOrder = async () => {
+  //   try {
+  //     await updateService();
+
+  //     const placeOrderPayload = {
+  //       orders: [
+  //         {
+  //           orderId: orderData?.orderId,
+  //           tempOrderId: orderData?.tempOrderId,
+  //           source: orderData?.source,
+  //         },
+  //       ],
+  //     };
+
+  //     const { data } = await POST(POST_PLACE_ALL_ORDERS, placeOrderPayload);
+  //     if (data?.success) {
+  //       toast.success("Order placed successfully!");
+  //     } else {
+  //       toast.error(data?.message || "Failed to place order");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error placing order:", error);
+  //     toast.error("Something went wrong while placing order");
+  //   }
+  // };
+
+  //   const placeOrder = async () => {
+  //   try {
+
+   // Validate all required fields first
+    // const addressesValid = validateAddresses();
+    // const boxesProductsValid = validateBoxesAndProducts();
+    
+    // if (!addressesValid || !boxesProductsValid) {
+    //   toast.error("Please fill in all required fields");
+    //   return;
+    // }
+  //     // First update the order with all current data
+  //     const updatePayload = buildCompletePayload();
+
+  //     const { data: updateResponse } = await POST(UPDATE_TEMP_ORDER_INFO, updatePayload);
+
+  //     if (!updateResponse?.status) {
+  //       toast.error(updateResponse?.message || "Failed to update order");
+  //       return;
+  //     }
+
+  //     // Then place the order (service is already updated via updateService)
+  //     const placeOrderPayload = {
+  //       orders: [
+  //         {
+  //           orderId: orderData?.orderId,
+  //           tempOrderId: orderData?.tempOrderId,
+  //           source: orderData?.source,
+  //         },
+  //       ],
+  //     };
+
+  //     const { data } = await POST(POST_PLACE_ALL_ORDERS, placeOrderPayload);
+  //     if (data?.success) {
+  //       toast.success("Order updated and placed successfully!");
+  //     } else {
+  //       toast.error(data?.message || "Failed to place order");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating and placing order:", error);
+  //     toast.error("Something went wrong while updating and placing order");
+  //   }
+  // };
   const placeOrder = async () => {
     try {
-      await updateService();
 
-      const placeOrderPayload = {
-        orders: [
-          {
-            orderId: orderData?.orderId,
-            tempOrderId: orderData?.tempOrderId,
-            source: orderData?.source,
-          },
-        ],
-      };
+       // Validate all required fields first
+    const addressesValid = validateAddresses();
+    const boxesProductsValid = validateBoxesAndProducts();
+    
+    if (!addressesValid || !boxesProductsValid) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+      // Only update the order with all current data for testing
+      const updatePayload = buildCompletePayload();
 
-      const { data } = await POST(POST_PLACE_ALL_ORDERS, placeOrderPayload);
-      if (data?.success) {
-        toast.success("Order placed successfully!");
+      const { data: updateResponse } = await POST(
+        UPDATE_TEMP_ORDER_INFO,
+        updatePayload
+      );
+
+      if (updateResponse?.status) {
+        toast.success("Order updated successfully!");
       } else {
-        toast.error(data?.message || "Failed to place order");
+        toast.error(updateResponse?.message || "Failed to update order");
       }
     } catch (error) {
-      console.error("Error placing order:", error);
-      toast.error("Something went wrong while placing order");
+      console.error("Error updating order:", error);
+      toast.error("Something went wrong while updating order");
     }
   };
 
@@ -6347,6 +6761,25 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       addressType: data.deliveryAddress?.addressType || "",
       gstNumber: data.deliveryAddress?.gstNumber || "",
     });
+
+    // Ensure boxInfo has proper IDs
+    if (data.boxInfo) {
+      const updatedBoxInfo = data.boxInfo.map((box: any) => ({
+        ...box,
+        boxId: box.boxId || uuidv4(),
+        products:
+          box.products?.map((product: any) => ({
+            ...product,
+            productId: product.productId || uuidv4(),
+            variantId: product.variantId || uuidv4(),
+          })) || [],
+      }));
+
+      setOrderData((prev: any) => ({
+        ...prev,
+        boxInfo: updatedBoxInfo,
+      }));
+    }
   };
 
   // Validation Functions (existing functions remain the same)
@@ -6439,6 +6872,10 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   };
 
   // Effects
+
+  useEffect(() => {
+    setIsServiceUpdated(false);
+  }, [serviceList]);
   useEffect(() => {
     if (getAllSellerData?.isOpen && getAllSellerData?.data) {
       fetchOrderData(getAllSellerData.data);
@@ -6520,23 +6957,25 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const renderPickupAddressForm = () => (
     <div className="space-y-4 p-4">
       {/* Search Input */}
-      <div className="relative">
-        <FloatingLabelInput
-          placeholder="Search pickup addresses..."
-          icon={searchLoading.pickup ? <LoadingIcon /> : <SearchIcon />}
-          value={pickupSearchQuery}
-          onChangeCallback={handlePickupSearchChange}
-          onFocus={handlePickupSearchFocus}
-          onBlur={handlePickupSearchBlur}
-          readOnly={isEnabled}
-        />
-        {renderSearchResults(
-          pickupSearchResults,
-          "pickup",
-          showPickupSearchResults,
-          searchLoading.pickup
-        )}
-      </div>
+      {!isEnabled && (
+        <div className="relative">
+          <FloatingLabelInput
+            placeholder="Search pickup addresses..."
+            icon={searchLoading.pickup ? <LoadingIcon /> : <SearchIcon />}
+            value={pickupSearchQuery}
+            onChangeCallback={handlePickupSearchChange}
+            onFocus={handlePickupSearchFocus}
+            onBlur={handlePickupSearchBlur}
+            readOnly={isEnabled}
+          />
+          {renderSearchResults(
+            pickupSearchResults,
+            "pickup",
+            showPickupSearchResults,
+            searchLoading.pickup
+          )}
+        </div>
+      )}
 
       {/* Row 1: Contact (Mobile), Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -6544,16 +6983,34 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           placeholder="Contact"
           type="tel"
           value={String(pickupAddress?.contact?.mobileNo || "")}
+          // onChangeCallback={(value) => {
+          //   const numericValue = value.replace(/\D/g, "");
+          //   setPickupAddress((prev: any) => ({
+          //     ...prev,
+          //     contact: { ...prev.contact, mobileNo: numericValue },
+          //   }));
+          // }}
           onChangeCallback={(value) => {
             const numericValue = value.replace(/\D/g, "");
             setPickupAddress((prev: any) => ({
               ...prev,
               contact: { ...prev.contact, mobileNo: numericValue },
             }));
+
+            // Add phone validation
+            const isValid = value.length === 0 || isValidPhoneNumber(value);
+            setPhoneValidationErrors((prev) => ({
+              ...prev,
+              pickup: !isValid,
+            }));
+                clearValidationError("pickup", "mobileNo");
+
           }}
           maxLength={10}
           readOnly={isEnabled}
           required
+          error={phoneValidationErrors.pickup || validationErrors.pickup.mobileNo}
+  errorMessage={phoneValidationErrors.pickup ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
         />
 
         <FloatingLabelInput
@@ -6564,8 +7021,10 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
               ...prev,
               contact: { ...prev.contact, contactName: value },
             }));
+                clearValidationError("pickup", "contactName");
           }}
           readOnly={isEnabled}
+          errorMessage="Name is required"
           required
         />
       </div>
@@ -6602,6 +7061,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             setPickupAddress((prev: any) => ({ ...prev, locality: value }));
           }}
           readOnly={isEnabled}
+          required
         />
 
         <FloatingLabelInput
@@ -6611,6 +7071,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             setPickupAddress((prev: any) => ({ ...prev, landmark: value }));
           }}
           readOnly={isEnabled}
+          required
         />
       </div>
 
@@ -6674,23 +7135,25 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const renderDeliveryAddressForm = () => (
     <div className="space-y-4 p-4">
       {/* Search Input */}
-      <div className="relative">
-        <FloatingLabelInput
-          placeholder="Search delivery addresses..."
-          icon={searchLoading.delivery ? <LoadingIcon /> : <SearchIcon />}
-          value={deliverySearchQuery}
-          onChangeCallback={handleDeliverySearchChange}
-          onFocus={handleDeliverySearchFocus}
-          onBlur={handleDeliverySearchBlur}
-          readOnly={isEnabled}
-        />
-        {renderSearchResults(
-          deliverySearchResults,
-          "delivery",
-          showDeliverySearchResults,
-          searchLoading.delivery
-        )}
-      </div>
+      {!isEnabled && (
+        <div className="relative">
+          <FloatingLabelInput
+            placeholder="Search delivery addresses..."
+            icon={searchLoading.delivery ? <LoadingIcon /> : <SearchIcon />}
+            value={deliverySearchQuery}
+            onChangeCallback={handleDeliverySearchChange}
+            onFocus={handleDeliverySearchFocus}
+            onBlur={handleDeliverySearchBlur}
+            readOnly={isEnabled}
+          />
+          {renderSearchResults(
+            deliverySearchResults,
+            "delivery",
+            showDeliverySearchResults,
+            searchLoading.delivery
+          )}
+        </div>
+      )}
 
       {/* Row 1: Contact (Mobile), Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -6698,16 +7161,32 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           placeholder="Contact"
           type="tel"
           value={String(deliveryAddress?.contact?.mobileNo || "")}
+          // onChangeCallback={(value) => {
+          //   const numericValue = value.replace(/\D/g, "");
+          //   setDeliveryAddress((prev: any) => ({
+          //     ...prev,
+          //     contact: { ...prev.contact, mobileNo: numericValue },
+          //   }));
+          // }}
           onChangeCallback={(value) => {
             const numericValue = value.replace(/\D/g, "");
             setDeliveryAddress((prev: any) => ({
               ...prev,
               contact: { ...prev.contact, mobileNo: numericValue },
             }));
+
+            // Add phone validation
+            const isValid = value.length === 0 || isValidPhoneNumber(value);
+            setPhoneValidationErrors((prev) => ({
+              ...prev,
+              delivery: !isValid,
+            }));
           }}
           maxLength={10}
           readOnly={isEnabled}
           required
+          error={phoneValidationErrors.delivery}
+          errorMessage="Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9"
         />
 
         <FloatingLabelInput
@@ -6756,6 +7235,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             setDeliveryAddress((prev: any) => ({ ...prev, locality: value }));
           }}
           readOnly={isEnabled}
+          required
+
         />
 
         <FloatingLabelInput
@@ -6765,6 +7246,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             setDeliveryAddress((prev: any) => ({ ...prev, landmark: value }));
           }}
           readOnly={isEnabled}
+          required
+
         />
       </div>
 
@@ -6774,6 +7257,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           placeholder="City"
           value={deliveryAddress.city}
           readOnly
+          
         />
 
         <FloatingLabelInput
@@ -6829,7 +7313,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     <div className="space-y-4 p-4">
       {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
         const totalPrice = calculateBoxTotalPrice(box);
-        
+
         // Determine the collectible amount to display
         const getCollectibleAmount = () => {
           if (box.codInfo?.isCollectibleManuallyEdited) {
@@ -6855,8 +7339,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             <div className="space-y-4 mt-4">
               {/* Box Details */}
               <div className="flex flex-col md:flex-row items-start gap-4">
-                <div 
-                  className="!w-full relative" 
+                <div
+                  className="!w-full relative"
                   ref={(el) => {
                     const searchKey = `${boxIndex}`;
                     boxSearchRefs.current[searchKey] = el;
@@ -6873,12 +7357,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                     onChangeCallback={(value) =>
                       handleBoxNameSearch(boxIndex, value)
                     }
-                    onFocus={() =>
-                      handleBoxSearchFocus(boxIndex)
-                    }
-                    onBlur={() =>
-                      handleBoxSearchBlur(boxIndex)
-                    }
+                    onFocus={() => handleBoxSearchFocus(boxIndex)}
+                    onBlur={() => handleBoxSearchBlur(boxIndex)}
                     readOnly={isEnabled}
                     icon={
                       boxSearchLoading[`${boxIndex}`] ? (
@@ -6911,7 +7391,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                   </div>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
                 <FloatingLabelInput
                   placeholder="Weight (kg)"
@@ -7685,15 +8165,16 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
 
       {!isEnabled && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
-          <div className="flex justify-end max-w-screen-xl mx-auto">
-            <OneButton
-              text="Place Order"
-              onClick={placeOrder}
-              variant="primary"
-              className="px-8"
-            />
-          </div>
+        <div
+          className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
+          style={{ width: "-webkit-fill-available" }}
+        >
+          <OneButton
+            text="Place Order"
+            onClick={placeOrder}
+            variant="primary"
+            className="px-8"
+          />
         </div>
       )}
     </div>
