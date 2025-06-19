@@ -529,7 +529,7 @@ const Index = (props: ITypeProps) => {
                           const supportUrl =
                             COMPANY_NAME ===
                             "Shipyaari"
-                              ? "https://support.shipyaari.com/tickets"
+                              ? "https://shipyaari.freshdesk.com"
                               : SUPPORT_LINK;
                           window.open(supportUrl, "_blank");
                         }
