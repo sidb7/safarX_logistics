@@ -4837,6 +4837,7 @@ import {
   GET_PICKUP_ADDRESS_MULTIPLE_SEARCH,
   GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH,
   GET_PRODUCTS, // Added for product search
+  COMPANY_NAME,
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import {
@@ -4851,6 +4852,7 @@ import FloatingLabelInput from "../../screens/OrderCreation/FloatingLabelInput";
 import CustomDate from "./CustomDateWithTime";
 import OneButton from "../Button/OneButton";
 import { v4 as uuidv4 } from "uuid";
+import ServiceSelectionComponent from "./ServiceSelectionComponent"; // Add this import
 
 // Types
 interface OrderData {
@@ -4944,6 +4946,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const [serviceList, setServiceList] = useState<any[]>([]);
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [isEnabled, setIsEnabled] = useState(true);
+  // Step Management State - ADD THIS
+const [currentStep, setCurrentStep] = useState<'orderDetails' | 'serviceSelection'>('orderDetails');
   // const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
   //   {}
   // );
@@ -5015,6 +5019,8 @@ const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
     pickup: false,
     delivery: false,
   });
+
+  
 
   // Product search state
   const [productSearchQueries, setProductSearchQueries] = useState<{
@@ -5092,7 +5098,37 @@ const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
     height: 0,
   });
 
-  // Refs
+  // Refs// Helper function to check if pickup address has errors
+const hasPickupAddressErrors = (): boolean => {
+  return Object.values(validationErrors.pickup).some(error => error === true) || 
+         phoneValidationErrors.pickup;
+};
+
+// Helper function to check if delivery address has errors
+const hasDeliveryAddressErrors = (): boolean => {
+  return Object.values(validationErrors.delivery).some(error => error === true) || 
+         phoneValidationErrors.delivery;
+};
+
+// Helper function to check if boxes and products have errors
+const hasBoxesAndProductsErrors = (): boolean => {
+  // Check box errors
+  const boxErrors = Object.values(validationErrors.boxes).some(boxError => 
+    Object.values(boxError).some(error => error === true)
+  );
+  
+  // Check product errors
+  const productErrors = Object.values(validationErrors.products).some(productError => 
+    Object.values(productError).some(error => error === true)
+  );
+  
+  return boxErrors || productErrors;
+};
+
+// Helper function to check if order details have errors
+const hasOrderDetailsErrors = (): boolean => {
+  return Object.values(validationErrors.orderDetails).some(error => error === true);
+};
   const isFirstRender = useRef(true);
   const productSearchRefs = useRef<{
     [key: string]: HTMLDivElement | null;
@@ -5518,6 +5554,8 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
   };
 
   // Box operations functions
+
+
   const updateBox = (boxIndex: number, field: string, value: any) => {
     if (isEnabled) return;
 
@@ -5545,6 +5583,31 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
       return updatedData;
     });
   };
+
+  // Add a new function to sync collectible amount with total price when products change
+const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: number) => {
+  setOrderData((prevData: any) => {
+    if (!prevData) return prevData;
+
+    const updatedData = { ...prevData };
+    const updatedBoxInfo = [...updatedData.boxInfo];
+    const updatedBox = { ...updatedBoxInfo[boxIndex] };
+
+    // Only update if not manually edited and COD is enabled
+    if (!updatedBox.codInfo?.isCollectibleManuallyEdited && updatedData.codInfo?.isCod) {
+      updatedBox.codInfo = {
+        ...updatedBox.codInfo,
+        collectableAmount: totalPrice,
+        isCollectibleManuallyEdited: false,
+      };
+    }
+
+    updatedBoxInfo[boxIndex] = updatedBox;
+    updatedData.boxInfo = updatedBoxInfo;
+
+    return updatedData;
+  });
+};
 
   const addBox = () => {
     if (isEnabled || !isProductEditingAllowed) return;
@@ -5694,6 +5757,22 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
       }
 
       updatedBox.products = updatedProducts;
+
+       // Calculate new total price for the box
+    const newTotalPrice = updatedProducts.reduce((total: number, product: any) => {
+      const qty = product.qty || 0;
+      const unitPrice = product.unitPrice || 0;
+      return total + (qty * unitPrice);
+    }, 0);
+
+    // Sync collectible amount if not manually edited and COD is enabled
+    if (!updatedBox.codInfo?.isCollectibleManuallyEdited && updatedData.codInfo?.isCod) {
+      updatedBox.codInfo = {
+        ...updatedBox.codInfo,
+        collectableAmount: newTotalPrice,
+        isCollectibleManuallyEdited: false,
+      };
+    }
       updatedBoxInfo[boxIndex] = updatedBox;
       updatedData.boxInfo = updatedBoxInfo;
 
@@ -6983,6 +7062,49 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
     }
   };
 
+  const nextStep = async () => {
+  try {
+    // Validate all required fields first
+    const addressesValid = validateAddresses();
+    const boxesProductsValid = validateBoxesAndProducts();
+    const orderDetailsValid = validateOrderDetails();
+
+    if (!addressesValid || !boxesProductsValid || !orderDetailsValid) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Update the order with all current data
+    const updatePayload = buildCompletePayload();
+
+    const { data: updateResponse } = await POST(
+      UPDATE_TEMP_ORDER_INFO,
+      updatePayload
+    );
+
+    if (updateResponse?.status) {
+      toast.success("Order details saved successfully!");
+      setCurrentStep('serviceSelection');
+    } else {
+      toast.error(updateResponse?.message || "Failed to save order details");
+    }
+  } catch (error) {
+    console.error("Error saving order details:", error);
+    toast.error("Something went wrong while saving order details");
+  }
+};
+
+const backToOrderDetails = () => {
+  setCurrentStep('orderDetails');
+};
+
+const onOrderPlaced = () => {
+  toast.success("Order placed successfully!");
+  if (getAllSellerData?.onClose) {
+    getAllSellerData.onClose();
+  }
+};
+
   // Initialization Functions
   const initializeFormData = (data: any) => {
     clearAllValidationErrors();
@@ -7136,6 +7258,51 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
   // Effects
 
   useEffect(() => {
+  if (orderData?.codInfo?.isCod && orderData?.boxInfo) {
+    setOrderData((prevData: any) => {
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+
+      updatedBoxInfo.forEach((box: any, boxIndex: number) => {
+        // Only initialize if not manually edited
+        if (!box.codInfo?.isCollectibleManuallyEdited) {
+          const totalPrice = calculateBoxTotalPrice(box);
+          box.codInfo = {
+            ...box.codInfo,
+            collectableAmount: totalPrice,
+            isCollectibleManuallyEdited: false,
+          };
+        }
+      });
+
+      updatedData.boxInfo = updatedBoxInfo;
+      return updatedData;
+    });
+  }
+}, [orderData?.codInfo?.isCod]);
+
+// Add effect to reset collectible amounts when switching from COD to Prepaid
+useEffect(() => {
+  if (!orderData?.codInfo?.isCod && orderData?.boxInfo) {
+    setOrderData((prevData: any) => {
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+
+      updatedBoxInfo.forEach((box: any) => {
+        box.codInfo = {
+          ...box.codInfo,
+          collectableAmount: 0,
+          isCollectibleManuallyEdited: false,
+        };
+      });
+
+      updatedData.boxInfo = updatedBoxInfo;
+      return updatedData;
+    });
+  }
+}, [orderData?.codInfo?.isCod]);
+
+  useEffect(() => {
   const totalValue = calculateTotalProductValue();
   if (totalValue < 50000) {
     // Clear e-way bill validation error if total is below threshold
@@ -7162,10 +7329,10 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
     }
   }, [getAllSellerData]);
 
-  useEffect(() => {
-    fetchServiceList();
-    isFirstRender.current = false;
-  }, [orderData]);
+  // useEffect(() => {
+  //   fetchServiceList();
+  //   isFirstRender.current = false;
+  // }, [orderData]);
 
   // Effect to handle click outside search results
   useEffect(() => {
@@ -7653,17 +7820,35 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
         const totalPrice = calculateBoxTotalPrice(box);
 
         // Determine the collectible amount to display
-        const getCollectibleAmount = () => {
-          if (box.codInfo?.isCollectibleManuallyEdited) {
-            // Use the stored value (could be 0, empty string, or any other value)
-            return box.codInfo?.collectableAmount?.toString() || "";
-          } else {
-            // Use calculated total price as default
-            return totalPrice.toString();
-          }
-        };
+        // const getCollectibleAmount = () => {
+        //   if (box.codInfo?.isCollectibleManuallyEdited) {
+        //     // Use the stored value (could be 0, empty string, or any other value)
+        //     return box.codInfo?.collectableAmount?.toString() || "";
+        //   } else {
+        //     // Use calculated total price as default
+        //     return totalPrice.toString();
+        //   }
+        // };
 
-        const collectableAmount = getCollectibleAmount();
+        // Update the getCollectibleAmount function to handle initialization better
+const getCollectibleAmount = (box: any, totalPrice: number) => {
+  // If COD is not enabled, return empty string
+  if (!orderData?.codInfo?.isCod) {
+    return "";
+  }
+
+  // If manually edited, use the stored value
+  if (box.codInfo?.isCollectibleManuallyEdited) {
+    // Handle the case where collectableAmount might be 0 or empty string
+    const storedAmount = box.codInfo?.collectableAmount;
+    return storedAmount !== undefined && storedAmount !== null ? storedAmount.toString() : "";
+  } else {
+    // Use calculated total price as default
+    return totalPrice.toString();
+  }
+};
+
+        const collectableAmount = getCollectibleAmount(box, totalPrice);
 
         return (
           <Collapsible
@@ -7807,7 +7992,9 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
                   <FloatingLabelInput
                     placeholder="Collectible Amount (₹)"
                     type="number"
-                    value={collectableAmount}
+                    // value={collectableAmount}
+                        value={getCollectibleAmount(box, totalPrice)}
+
                     onChangeCallback={(value) => {
                       // Allow empty string or convert to number
                       const numericValue =
@@ -8615,6 +8802,19 @@ const renderEventLogs = () => (
     </div>
   );
 
+  if (currentStep === 'serviceSelection') {
+  return (
+    <ServiceSelectionComponent
+      orderData={orderData}
+      isMasked={isMasked}
+      onBack={backToOrderDetails}
+      onOrderPlaced={onOrderPlaced}
+    />
+  );
+}
+
+  
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-96">
@@ -8633,17 +8833,43 @@ const renderEventLogs = () => (
 
   return (
     <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
-      <Collapsible title="Order Details">{renderOrderHistory()}</Collapsible>
 
-      <Collapsible title="Pickup Address" defaultOpen>
+       {/* ADD THE STEP INDICATOR HERE */}
+    <div className="bg-blue-50 rounded-lg p-4 mb-6">
+      <div className="flex items-center justify-between">
+        
+        <div>
+          <h2 className="text-xl font-semibold text-blue-800">
+            Step 1: Order Details
+          </h2>
+          <p className="text-blue-600">
+            Fill in all order details before proceeding to service selection.
+          </p>
+        </div>
+        <div className="flex space-x-2">
+          <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+            1
+          </div>
+          <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
+            2
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+      <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>{renderOrderHistory()} </Collapsible>
+
+      <Collapsible title="Pickup Address"   hasError={hasPickupAddressErrors()}>
         {renderPickupAddressForm()}
       </Collapsible>
 
-      <Collapsible title="Delivery Address">
+      <Collapsible title="Delivery Address"          hasError={hasDeliveryAddressErrors()}>
         {renderDeliveryAddressForm()}
       </Collapsible>
 
-      <Collapsible title="Box & Products">{renderBoxAndProducts()}</Collapsible>
+      <Collapsible title="Box & Products" hasError={hasBoxesAndProductsErrors()}>{renderBoxAndProducts()}</Collapsible>
 
       <Collapsible
         title="Services"
@@ -8667,12 +8893,19 @@ const renderEventLogs = () => (
           className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
           style={{ width: "-webkit-fill-available" }}
         >
-          <OneButton
+          {/* <OneButton
             text="Place Order"
             onClick={placeOrder}
             variant="primary"
             className="px-8"
-          />
+          /> */}
+
+          <OneButton
+      text="Next"          
+      onClick={nextStep}   
+      variant="primary"
+      className="px-8"
+    />
         </div>
       )}
     </div>

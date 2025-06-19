@@ -22,6 +22,7 @@
 //   className?: string;
 //   titleClassName?: string;
 //   contentClassName?: string;
+//   onToggle?: (isOpen: boolean) => void;
 // }
 
 // const Collapsible = ({
@@ -31,6 +32,7 @@
 //   className = '',
 //   titleClassName = '',
 //   contentClassName = '',
+//   onToggle,
 // }: CollapsibleProps) => {
 //   const [isOpen, setIsOpen] = useState(defaultOpen);
 //   const contentRef = useRef<HTMLDivElement>(null);
@@ -40,6 +42,13 @@
 //   const toggleCollapsible = () => {
 //     if (contentRef.current) {
 //       setAnimating(true);
+      
+//       const newOpenState = !isOpen;
+      
+//       // Call onToggle callback if provided
+//       if (onToggle) {
+//         onToggle(newOpenState);
+//       }
       
 //       // If we're currently closed and about to open
 //       if (!isOpen) {
@@ -78,7 +87,7 @@
 //       }
       
 //       // Toggle the open state
-//       setIsOpen(!isOpen);
+//       setIsOpen(newOpenState);
 //     }
 //   };
   
@@ -147,6 +156,7 @@ interface CollapsibleProps {
   titleClassName?: string;
   contentClassName?: string;
   onToggle?: (isOpen: boolean) => void;
+  hasError?: boolean; // New prop for error state
 }
 
 const Collapsible = ({
@@ -157,6 +167,7 @@ const Collapsible = ({
   titleClassName = '',
   contentClassName = '',
   onToggle,
+  hasError = false, // Default to false
 }: CollapsibleProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -222,16 +233,37 @@ const Collapsible = ({
     }
   }, [defaultOpen]);
   
+  // Dynamic border color based on error state
+  const borderColor = hasError ? 'border-red-500' : 'border-gray-200';
+  const titleBgColor = hasError ? 'bg-red-50' : '';
+  const titleTextColor = hasError ? 'text-red-700' : '';
+  
   return (
-    <div className={`border rounded-2xl overflow-hidden shadow-md ${className}`}>
+    <div className={`border rounded-2xl overflow-hidden shadow-md ${borderColor} ${className}`}>
       <button
         type="button"
-        className={`flex justify-between items-center w-full p-4 text-left font-medium focus:outline-none ${titleClassName}`}
+        className={`flex justify-between items-center w-full p-4 text-left font-medium focus:outline-none ${titleBgColor} ${titleTextColor} ${titleClassName}`}
         onClick={toggleCollapsible}
         aria-expanded={isOpen}
         disabled={animating}
       >
-        <span>{title}</span>
+        <span className="flex items-center gap-2">
+          {hasError && (
+            <svg 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-red-500"
+            >
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+              <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" strokeWidth="2"/>
+              <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" strokeWidth="2"/>
+            </svg>
+          )}
+          {title}
+        </span>
         {isOpen ? (
           <DefaultOpenIcon />
         ) : (
