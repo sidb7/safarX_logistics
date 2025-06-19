@@ -1579,7 +1579,7 @@ const prepareBoxInfoPayload = () => {
       addressLine1: isEmptyOrZero(pickupFormValues.addressLine1),
       addressLine2: isEmptyOrZero(pickupFormValues.addressLine2),
       landmark: isEmptyOrZero(pickupFormValues.landmark),
-      gstNo: order.orderType === "B2B" && isEmptyOrZero(pickupFormValues.gstNo),
+      gstNo: false,
       email: false,
     };
 
@@ -1594,8 +1594,7 @@ const prepareBoxInfoPayload = () => {
       addressLine1: isEmptyOrZero(deliveryFormValues.addressLine1),
       addressLine2: isEmptyOrZero(deliveryFormValues.addressLine2),
       landmark: isEmptyOrZero(deliveryFormValues.landmark),
-      gstNo:
-        order.orderType === "B2B" && isEmptyOrZero(deliveryFormValues.gstNo),
+      gstNo: false,
       email: false,
     };
 

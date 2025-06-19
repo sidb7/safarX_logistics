@@ -724,18 +724,18 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       };
     });
 
-    if (payload?.orderType === "B2B") {
-      if (
-        payload?.pickupDetails?.gstNumber === undefined ||
-        payload?.pickupDetails?.gstNumber.trim() === "" ||
-        payload?.deliveryDetails?.gstNumber === undefined ||
-        payload?.deliveryDetails?.gstNumber.trim() === ""
-      ) {
-        toast.error("Please Enter GST Number");
-        return;
-      }
-      payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
-    }
+    // if (payload?.orderType === "B2B") {
+    //   if (
+    //     payload?.pickupDetails?.gstNumber === undefined ||
+    //     payload?.pickupDetails?.gstNumber.trim() === "" ||
+    //     payload?.deliveryDetails?.gstNumber === undefined ||
+    //     payload?.deliveryDetails?.gstNumber.trim() === ""
+    //   ) {
+    //     toast.error("Please Enter GST Number");
+    //     return;
+    //   }
+    //   payload.gstNumber = payload?.pickupDetails?.gstNumber.trim();
+    // }
 
     // if (
     //   order?.yaariCash !== undefined &&

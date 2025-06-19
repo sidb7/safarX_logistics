@@ -4397,10 +4397,10 @@ const fetchDefaultPickupAddress = async () => {
                 onChangeCallback={(value) =>
                   handlePickupInputChange("gstNo", value)
                 }
-                error={formErrors.pickup.gstNo || gstValidationErrors.pickup}
-                errorMessage={gstValidationErrors.pickup 
-                  ? "GST number must be exactly 15 characters" 
-                  : "GST No is required for B2B orders"}
+                // error={formErrors.pickup.gstNo || gstValidationErrors.pickup}
+                // errorMessage={gstValidationErrors.pickup 
+                //   ? "GST number must be exactly 15 characters" 
+                //   : "GST No is required for B2B orders"}
                 maxLength={15}
               />
               <FloatingLabelInput
@@ -4603,10 +4603,10 @@ const fetchDefaultPickupAddress = async () => {
                 onChangeCallback={(value) =>
                   handleDeliveryInputChange("gstNo", value)
                 }
-                error={formErrors.delivery.gstNo || gstValidationErrors.delivery}
-                errorMessage={gstValidationErrors.delivery 
-                  ? "GST number must be exactly 15 characters" 
-                  : "GST No is required for B2B orders"}
+                // error={formErrors.delivery.gstNo || gstValidationErrors.delivery}
+                // errorMessage={gstValidationErrors.delivery 
+                //   ? "GST number must be exactly 15 characters" 
+                //   : "GST No is required for B2B orders"}
                 maxLength={15}
               />
               <FloatingLabelInput
