@@ -4838,6 +4838,7 @@ import {
   GET_DELIVERY_ADDRESS_MULTIPLE_SEARCH,
   GET_PRODUCTS, // Added for product search
   COMPANY_NAME,
+  CHECK_ORDER_ID,
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import {
@@ -4946,8 +4947,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const [serviceList, setServiceList] = useState<any[]>([]);
   const [selectedServiceIndex, setSelectedServiceIndex] = useState(0);
   const [isEnabled, setIsEnabled] = useState(true);
+  // Add this state with other state declarations
+  const [originalOrderId, setOriginalOrderId] = useState<string>("");
+  const [orderIdExistsError, setOrderIdExistsError] = useState(false);
   // Step Management State - ADD THIS
-const [currentStep, setCurrentStep] = useState<'orderDetails' | 'serviceSelection'>('orderDetails');
+  const [currentStep, setCurrentStep] = useState<
+    "orderDetails" | "serviceSelection"
+  >("orderDetails");
   // const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
   //   {}
   // );
@@ -4989,19 +4995,19 @@ const [currentStep, setCurrentStep] = useState<'orderDetails' | 'serviceSelectio
     }, // key format: "boxIndex-productIndex"
 
     orderDetails: {
-    orderId: false,
-    eWayBillNo: false,
-  },
+      orderId: false,
+      eWayBillNo: false,
+    },
   });
   const EDITABLE_SOURCES = [
-  "API",
-  "WEBSITE_SINGLE_PAGE", 
-  "BULK_B2C",
-  "WEBSITE",
-  "WEBSITE_ALPHA",
-  "MANUAL_BULK_B2B"
-];
-const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
+    "API",
+    "WEBSITE_SINGLE_PAGE",
+    "BULK_B2C",
+    "WEBSITE",
+    "WEBSITE_ALPHA",
+    "MANUAL_BULK_B2B",
+  ];
+  const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
   const [serviceLoading, setServiceLoading] = useState(false);
   const [openPickupDatePicker, setOpenPickupDatePicker] = useState(false);
 
@@ -5019,8 +5025,6 @@ const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
     pickup: false,
     delivery: false,
   });
-
-  
 
   // Product search state
   const [productSearchQueries, setProductSearchQueries] = useState<{
@@ -5099,36 +5103,124 @@ const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
   });
 
   // Refs// Helper function to check if pickup address has errors
-const hasPickupAddressErrors = (): boolean => {
-  return Object.values(validationErrors.pickup).some(error => error === true) || 
-         phoneValidationErrors.pickup;
-};
+  const hasPickupAddressErrors = (): boolean => {
+    return (
+      Object.values(validationErrors.pickup).some((error) => error === true) ||
+      phoneValidationErrors.pickup
+    );
+  };
 
-// Helper function to check if delivery address has errors
-const hasDeliveryAddressErrors = (): boolean => {
-  return Object.values(validationErrors.delivery).some(error => error === true) || 
-         phoneValidationErrors.delivery;
-};
+  // Helper function to check if delivery address has errors
+  const hasDeliveryAddressErrors = (): boolean => {
+    return (
+      Object.values(validationErrors.delivery).some(
+        (error) => error === true
+      ) || phoneValidationErrors.delivery
+    );
+  };
 
-// Helper function to check if boxes and products have errors
-const hasBoxesAndProductsErrors = (): boolean => {
-  // Check box errors
-  const boxErrors = Object.values(validationErrors.boxes).some(boxError => 
-    Object.values(boxError).some(error => error === true)
-  );
+  // Helper function to check if boxes and products have errors
+  const hasBoxesAndProductsErrors = (): boolean => {
+    // Check box errors
+    const boxErrors = Object.values(validationErrors.boxes).some((boxError) =>
+      Object.values(boxError).some((error) => error === true)
+    );
+
+    // Check product errors
+    const productErrors = Object.values(validationErrors.products).some(
+      (productError) =>
+        Object.values(productError).some((error) => error === true)
+    );
+
+    return boxErrors || productErrors;
+  };
+
+  // Add this function after the existing validation functions
+  // const validateOrderId = async (orderId: string): Promise<boolean> => {
+  //   if (!orderId?.trim()) {
+  //     return false;
+  //   }
+
+  //   try {
+  //     const payload = {
+  //       orderId: orderId.trim(),
+  //     };
+
+  //     const response = await POST(CHECK_ORDER_ID, payload);
+
+  //     if (response?.data?.success === false) {
+  //       // Order ID already exists
+  //       setValidationErrors((prev) => ({
+  //         ...prev,
+  //         orderDetails: {
+  //           ...prev.orderDetails,
+  //           orderId: true,
+  //         },
+  //       }));
+
+  //       // Set custom error message for existing order ID
+  //       setOrderIdExistsError(true);
+  //       return false;
+  //     }
+
+  //     // Order ID is available
+  //     setOrderIdExistsError(false);
+  //     return true;
+  //   } catch (error) {
+  //     console.error("Error validating Order ID:", error);
+  //     toast.error("Failed to validate Order ID");
+  //     return false;
+  //   }
+  // };
+
+  // Update the validateOrderId function
+const validateOrderId = async (orderId: string): Promise<boolean> => {
+  const trimmedOrderId = orderId?.trim();
   
-  // Check product errors
-  const productErrors = Object.values(validationErrors.products).some(productError => 
-    Object.values(productError).some(error => error === true)
-  );
-  
-  return boxErrors || productErrors;
+  // Don't call API if Order ID is empty or same as original
+  if (!trimmedOrderId || trimmedOrderId === originalOrderId) {
+    setOrderIdExistsError(false);
+    return !!trimmedOrderId; // Return false for empty, true for same as original
+  }
+
+  try {
+    const payload = {
+      orderId: trimmedOrderId
+    };
+
+    const response = await POST(CHECK_ORDER_ID, payload);
+    
+    if (response?.data?.success === false) {
+      // Order ID already exists
+      setValidationErrors((prev) => ({
+        ...prev,
+        orderDetails: {
+          ...prev.orderDetails,
+          orderId: true,
+        },
+      }));
+      
+      // Set custom error message for existing order ID
+      setOrderIdExistsError(true);
+      return false;
+    }
+    
+    // Order ID is available
+    setOrderIdExistsError(false);
+    return true;
+  } catch (error) {
+    console.error("Error validating Order ID:", error);
+    toast.error("Failed to validate Order ID");
+    return false;
+  }
 };
 
-// Helper function to check if order details have errors
-const hasOrderDetailsErrors = (): boolean => {
-  return Object.values(validationErrors.orderDetails).some(error => error === true);
-};
+  // Helper function to check if order details have errors
+  const hasOrderDetailsErrors = (): boolean => {
+    return Object.values(validationErrors.orderDetails).some(
+      (error) => error === true
+    );
+  };
   const isFirstRender = useRef(true);
   const productSearchRefs = useRef<{
     [key: string]: HTMLDivElement | null;
@@ -5182,55 +5274,81 @@ const hasOrderDetailsErrors = (): boolean => {
   );
 
   // Function to calculate total value of all products across all boxes
-const calculateTotalProductValue = (): number => {
+  const calculateTotalProductValue = (): number => {
+    if (!orderData?.boxInfo) return 0;
+
+    return orderData.boxInfo.reduce((totalValue: number, box: any) => {
+      if (!box.products || box.products.length === 0) return totalValue;
+
+      const boxTotal = box.products.reduce((boxValue: number, product: any) => {
+        const qty = product.qty || 0;
+        const unitPrice = product.unitPrice || 0;
+        return boxValue + qty * unitPrice;
+      }, 0);
+
+      return totalValue + boxTotal;
+    }, 0);
+  };
+
+  // Add these helper functions after the existing helper functions
+const calculateTotalInvoiceValue = (): number => {
   if (!orderData?.boxInfo) return 0;
   
-  return orderData.boxInfo.reduce((totalValue: number, box: any) => {
-    if (!box.products || box.products.length === 0) return totalValue;
+  return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+    if (!box.products || box.products.length === 0) return totalInvoice;
     
-    const boxTotal = box.products.reduce((boxValue: number, product: any) => {
+    const boxInvoiceValue = box.products.reduce((boxTotal: number, product: any) => {
       const qty = product.qty || 0;
       const unitPrice = product.unitPrice || 0;
-      return boxValue + (qty * unitPrice);
+      return boxTotal + (qty * unitPrice);
     }, 0);
     
-    return totalValue + boxTotal;
+    return totalInvoice + boxInvoiceValue;
   }, 0);
 };
 
-// Enhanced function to validate order details
-const validateOrderDetails = (): boolean => {
-  let hasErrors = false;
-  const newErrors = { ...validationErrors };
-
-  // Validate Order ID
-  if (!orderData?.orderId?.trim()) {
-    newErrors.orderDetails.orderId = true;
-    hasErrors = true;
-  } else {
-    newErrors.orderDetails.orderId = false;
-  }
-
-  // Validate E-way Bill Number if total value >= 50,000
-  const totalValue = calculateTotalProductValue();
-  const requiresEWayBill = totalValue >= 50000;
+const calculateTotalCollectableAmount = (): number => {
+  if (!orderData?.boxInfo || !orderData?.codInfo?.isCod) return 0;
   
-  if (requiresEWayBill) {
-    const eWayBillNo = orderData?.boxInfo?.[0]?.eWayBillNo;
-    if (!eWayBillNo || eWayBillNo.trim() === "" || eWayBillNo === "0") {
-      newErrors.orderDetails.eWayBillNo = true;
+  return orderData.boxInfo.reduce((totalCollectable: number, box: any) => {
+    const collectableAmount = box.codInfo?.collectableAmount || 0;
+    return totalCollectable + collectableAmount;
+  }, 0);
+};
+
+  // Enhanced function to validate order details
+  const validateOrderDetails = (): boolean => {
+    let hasErrors = false;
+    const newErrors = { ...validationErrors };
+
+    // Validate Order ID
+    if (!orderData?.orderId?.trim()) {
+      newErrors.orderDetails.orderId = true;
       hasErrors = true;
     } else {
+      newErrors.orderDetails.orderId = false;
+    }
+
+    // Validate E-way Bill Number if total value >= 50,000
+    const totalValue = calculateTotalProductValue();
+    const requiresEWayBill = totalValue >= 50000;
+
+    if (requiresEWayBill) {
+      const eWayBillNo = orderData?.boxInfo?.[0]?.eWayBillNo;
+      if (!eWayBillNo || eWayBillNo.trim() === "" || eWayBillNo === "0") {
+        newErrors.orderDetails.eWayBillNo = true;
+        hasErrors = true;
+      } else {
+        newErrors.orderDetails.eWayBillNo = false;
+      }
+    } else {
+      // Clear e-way bill error if not required
       newErrors.orderDetails.eWayBillNo = false;
     }
-  } else {
-    // Clear e-way bill error if not required
-    newErrors.orderDetails.eWayBillNo = false;
-  }
 
-  setValidationErrors(newErrors);
-  return !hasErrors;
-};
+    setValidationErrors(newErrors);
+    return !hasErrors;
+  };
 
   // Utility Functions
   const validateEmail = (email: string): boolean => {
@@ -5274,9 +5392,9 @@ const validateOrderDetails = (): boolean => {
   };
 
   // Helper function to check if current source allows editing
-const isSourceEditable = (source: string): boolean => {
-  return EDITABLE_SOURCES.includes(source);
-};
+  const isSourceEditable = (source: string): boolean => {
+    return EDITABLE_SOURCES.includes(source);
+  };
 
   // Add these validation functions
   const validateAddresses = (): boolean => {
@@ -5415,7 +5533,6 @@ const isSourceEditable = (source: string): boolean => {
     setValidationErrors(newErrors);
     return !hasErrors;
   };
-  
 
   // Add this function to clear all validation errors
   const clearAllValidationErrors = () => {
@@ -5440,10 +5557,10 @@ const isSourceEditable = (source: string): boolean => {
       },
       boxes: {},
       products: {},
-       orderDetails: {
-      orderId: false,
-      eWayBillNo: false,
-    },
+      orderDetails: {
+        orderId: false,
+        eWayBillNo: false,
+      },
     });
 
     // Also clear phone validation errors
@@ -5454,16 +5571,15 @@ const isSourceEditable = (source: string): boolean => {
   };
 
   // Helper function to clear specific order detail validation errors
-const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
-  setValidationErrors((prev) => ({
-    ...prev,
-    orderDetails: {
-      ...prev.orderDetails,
-      [field]: false,
-    },
-  }));
-};
-
+  const clearOrderDetailValidationError = (field: "orderId" | "eWayBillNo") => {
+    setValidationErrors((prev) => ({
+      ...prev,
+      orderDetails: {
+        ...prev.orderDetails,
+        [field]: false,
+      },
+    }));
+  };
 
   // Add this function to specifically clear box and product validation errors based on current data
   const clearBoxAndProductValidationErrors = (boxInfo: any[]) => {
@@ -5555,7 +5671,6 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
 
   // Box operations functions
 
-
   const updateBox = (boxIndex: number, field: string, value: any) => {
     if (isEnabled) return;
 
@@ -5585,29 +5700,35 @@ const clearOrderDetailValidationError = (field: 'orderId' | 'eWayBillNo') => {
   };
 
   // Add a new function to sync collectible amount with total price when products change
-const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: number) => {
-  setOrderData((prevData: any) => {
-    if (!prevData) return prevData;
+  const syncCollectibleAmountWithTotalPrice = (
+    boxIndex: number,
+    totalPrice: number
+  ) => {
+    setOrderData((prevData: any) => {
+      if (!prevData) return prevData;
 
-    const updatedData = { ...prevData };
-    const updatedBoxInfo = [...updatedData.boxInfo];
-    const updatedBox = { ...updatedBoxInfo[boxIndex] };
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+      const updatedBox = { ...updatedBoxInfo[boxIndex] };
 
-    // Only update if not manually edited and COD is enabled
-    if (!updatedBox.codInfo?.isCollectibleManuallyEdited && updatedData.codInfo?.isCod) {
-      updatedBox.codInfo = {
-        ...updatedBox.codInfo,
-        collectableAmount: totalPrice,
-        isCollectibleManuallyEdited: false,
-      };
-    }
+      // Only update if not manually edited and COD is enabled
+      if (
+        !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+        updatedData.codInfo?.isCod
+      ) {
+        updatedBox.codInfo = {
+          ...updatedBox.codInfo,
+          collectableAmount: totalPrice,
+          isCollectibleManuallyEdited: false,
+        };
+      }
 
-    updatedBoxInfo[boxIndex] = updatedBox;
-    updatedData.boxInfo = updatedBoxInfo;
+      updatedBoxInfo[boxIndex] = updatedBox;
+      updatedData.boxInfo = updatedBoxInfo;
 
-    return updatedData;
-  });
-};
+      return updatedData;
+    });
+  };
 
   const addBox = () => {
     if (isEnabled || !isProductEditingAllowed) return;
@@ -5758,21 +5879,27 @@ const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: numbe
 
       updatedBox.products = updatedProducts;
 
-       // Calculate new total price for the box
-    const newTotalPrice = updatedProducts.reduce((total: number, product: any) => {
-      const qty = product.qty || 0;
-      const unitPrice = product.unitPrice || 0;
-      return total + (qty * unitPrice);
-    }, 0);
+      // Calculate new total price for the box
+      const newTotalPrice = updatedProducts.reduce(
+        (total: number, product: any) => {
+          const qty = product.qty || 0;
+          const unitPrice = product.unitPrice || 0;
+          return total + qty * unitPrice;
+        },
+        0
+      );
 
-    // Sync collectible amount if not manually edited and COD is enabled
-    if (!updatedBox.codInfo?.isCollectibleManuallyEdited && updatedData.codInfo?.isCod) {
-      updatedBox.codInfo = {
-        ...updatedBox.codInfo,
-        collectableAmount: newTotalPrice,
-        isCollectibleManuallyEdited: false,
-      };
-    }
+      // Sync collectible amount if not manually edited and COD is enabled
+      if (
+        !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+        updatedData.codInfo?.isCod
+      ) {
+        updatedBox.codInfo = {
+          ...updatedBox.codInfo,
+          collectableAmount: newTotalPrice,
+          isCollectibleManuallyEdited: false,
+        };
+      }
       updatedBoxInfo[boxIndex] = updatedBox;
       updatedData.boxInfo = updatedBoxInfo;
 
@@ -5781,7 +5908,7 @@ const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: numbe
   };
 
   const addProduct = (boxIndex: number) => {
-    if (isEnabled || !isProductEditingAllowed ) return;
+    if (isEnabled || !isProductEditingAllowed) return;
 
     const newProduct = {
       companyId: "",
@@ -5999,12 +6126,16 @@ const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: numbe
   };
 
   const buildCompletePayload = () => {
+
+    const totalInvoiceValue = calculateTotalInvoiceValue();
+  const totalCollectableAmount = calculateTotalCollectableAmount();
     return {
       orderId: orderData?.orderId,
       tempOrderId: orderData?.tempOrderId,
       source: orderData?.source,
       orderType: orderData?.orderType,
       transit: orderData?.transit,
+      eWayBillNo: orderData?.boxInfo?.[0]?.eWayBillNo || "", // Added eWayBillNo field
       pickupAddress: {
         contact: {
           name: pickupAddress.contact.contactName,
@@ -6043,7 +6174,12 @@ const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: numbe
         gstNumber: deliveryAddress.gstNumber,
       },
       boxInfo: orderData?.boxInfo,
-      codInfo: orderData?.codInfo,
+      // codInfo: orderData?.codInfo,
+      codInfo: {
+      isCod: orderData?.codInfo?.isCod || false,
+      collectableAmount: totalCollectableAmount,
+      invoiceValue: totalInvoiceValue,
+    },
     };
   };
 
@@ -7038,7 +7174,6 @@ const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: numbe
       const boxesProductsValid = validateBoxesAndProducts();
       const orderDetailsValid = validateOrderDetails();
 
-
       if (!addressesValid || !boxesProductsValid || !orderDetailsValid) {
         toast.error("Please fill in all required fields");
         return;
@@ -7063,51 +7198,67 @@ const syncCollectibleAmountWithTotalPrice = (boxIndex: number, totalPrice: numbe
   };
 
   const nextStep = async () => {
-  try {
-    // Validate all required fields first
-    const addressesValid = validateAddresses();
-    const boxesProductsValid = validateBoxesAndProducts();
-    const orderDetailsValid = validateOrderDetails();
+    try {
+      // Validate Order ID first via API
+          const currentOrderId = orderData?.orderId?.trim() || "";
+              let orderIdValid = true;
 
-    if (!addressesValid || !boxesProductsValid || !orderDetailsValid) {
-      toast.error("Please fill in all required fields");
-      return;
+       if (currentOrderId && currentOrderId !== originalOrderId) {
+      orderIdValid = await validateOrderId(currentOrderId);
+      
+      if (!orderIdValid) {
+        toast.error("Please provide a valid and unique Order ID");
+        return;
+      }
     }
+      // Validate all required fields first
+      const addressesValid = validateAddresses();
+      const boxesProductsValid = validateBoxesAndProducts();
+      const orderDetailsValid = validateOrderDetails();
 
-    // Update the order with all current data
-    const updatePayload = buildCompletePayload();
+      if (!addressesValid || !boxesProductsValid || !orderDetailsValid) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
 
-    const { data: updateResponse } = await POST(
-      UPDATE_TEMP_ORDER_INFO,
-      updatePayload
-    );
+      // Update the order with all current data
+      const updatePayload = buildCompletePayload();
 
-    if (updateResponse?.status) {
-      toast.success("Order details saved successfully!");
-      setCurrentStep('serviceSelection');
-    } else {
-      toast.error(updateResponse?.message || "Failed to save order details");
+      const { data: updateResponse } = await POST(
+        UPDATE_TEMP_ORDER_INFO,
+        updatePayload
+      );
+
+      if (updateResponse?.status) {
+        toast.success("Order details saved successfully!");
+              setOriginalOrderId(currentOrderId);
+
+        setCurrentStep("serviceSelection");
+      } else {
+        toast.error(updateResponse?.message || "Failed to save order details");
+      }
+    } catch (error) {
+      console.error("Error saving order details:", error);
+      toast.error("Something went wrong while saving order details");
     }
-  } catch (error) {
-    console.error("Error saving order details:", error);
-    toast.error("Something went wrong while saving order details");
-  }
-};
+  };
 
-const backToOrderDetails = () => {
-  setCurrentStep('orderDetails');
-};
+  const backToOrderDetails = () => {
+    setCurrentStep("orderDetails");
+  };
 
-const onOrderPlaced = () => {
-  toast.success("Order placed successfully!");
-  if (getAllSellerData?.onClose) {
-    getAllSellerData.onClose();
-  }
-};
+  const onOrderPlaced = () => {
+    toast.success("Order placed successfully!");
+    if (getAllSellerData?.onClose) {
+      getAllSellerData.onClose();
+    }
+  };
 
   // Initialization Functions
   const initializeFormData = (data: any) => {
     clearAllValidationErrors();
+    // Store the original Order ID
+  setOriginalOrderId(data.orderId || "");
 
     setPickupAddress({
       contact: {
@@ -7257,58 +7408,75 @@ const onOrderPlaced = () => {
 
   // Effects
 
-  useEffect(() => {
-  if (orderData?.codInfo?.isCod && orderData?.boxInfo) {
-    setOrderData((prevData: any) => {
-      const updatedData = { ...prevData };
-      const updatedBoxInfo = [...updatedData.boxInfo];
+  // Add this useEffect after the existing useEffects
+useEffect(() => {
+  if (orderData?.boxInfo) {
+    const totalInvoiceValue = calculateTotalInvoiceValue();
+    const totalCollectableAmount = calculateTotalCollectableAmount();
 
-      updatedBoxInfo.forEach((box: any, boxIndex: number) => {
-        // Only initialize if not manually edited
-        if (!box.codInfo?.isCollectibleManuallyEdited) {
-          const totalPrice = calculateBoxTotalPrice(box);
+    setOrderData((prevData: any) => ({
+      ...prevData,
+      codInfo: {
+        ...prevData.codInfo,
+        invoiceValue: totalInvoiceValue,
+        collectableAmount: totalCollectableAmount,
+      },
+    }));
+  }
+}, [orderData?.boxInfo, orderData?.codInfo?.isCod]);
+
+  useEffect(() => {
+    if (orderData?.codInfo?.isCod && orderData?.boxInfo) {
+      setOrderData((prevData: any) => {
+        const updatedData = { ...prevData };
+        const updatedBoxInfo = [...updatedData.boxInfo];
+
+        updatedBoxInfo.forEach((box: any, boxIndex: number) => {
+          // Only initialize if not manually edited
+          if (!box.codInfo?.isCollectibleManuallyEdited) {
+            const totalPrice = calculateBoxTotalPrice(box);
+            box.codInfo = {
+              ...box.codInfo,
+              collectableAmount: totalPrice,
+              isCollectibleManuallyEdited: false,
+            };
+          }
+        });
+
+        updatedData.boxInfo = updatedBoxInfo;
+        return updatedData;
+      });
+    }
+  }, [orderData?.codInfo?.isCod]);
+
+  // Add effect to reset collectible amounts when switching from COD to Prepaid
+  useEffect(() => {
+    if (!orderData?.codInfo?.isCod && orderData?.boxInfo) {
+      setOrderData((prevData: any) => {
+        const updatedData = { ...prevData };
+        const updatedBoxInfo = [...updatedData.boxInfo];
+
+        updatedBoxInfo.forEach((box: any) => {
           box.codInfo = {
             ...box.codInfo,
-            collectableAmount: totalPrice,
+            collectableAmount: 0,
             isCollectibleManuallyEdited: false,
           };
-        }
+        });
+
+        updatedData.boxInfo = updatedBoxInfo;
+        return updatedData;
       });
-
-      updatedData.boxInfo = updatedBoxInfo;
-      return updatedData;
-    });
-  }
-}, [orderData?.codInfo?.isCod]);
-
-// Add effect to reset collectible amounts when switching from COD to Prepaid
-useEffect(() => {
-  if (!orderData?.codInfo?.isCod && orderData?.boxInfo) {
-    setOrderData((prevData: any) => {
-      const updatedData = { ...prevData };
-      const updatedBoxInfo = [...updatedData.boxInfo];
-
-      updatedBoxInfo.forEach((box: any) => {
-        box.codInfo = {
-          ...box.codInfo,
-          collectableAmount: 0,
-          isCollectibleManuallyEdited: false,
-        };
-      });
-
-      updatedData.boxInfo = updatedBoxInfo;
-      return updatedData;
-    });
-  }
-}, [orderData?.codInfo?.isCod]);
+    }
+  }, [orderData?.codInfo?.isCod]);
 
   useEffect(() => {
-  const totalValue = calculateTotalProductValue();
-  if (totalValue < 50000) {
-    // Clear e-way bill validation error if total is below threshold
-    clearOrderDetailValidationError('eWayBillNo');
-  }
-}, [orderData?.boxInfo]);
+    const totalValue = calculateTotalProductValue();
+    if (totalValue < 50000) {
+      // Clear e-way bill validation error if total is below threshold
+      clearOrderDetailValidationError("eWayBillNo");
+    }
+  }, [orderData?.boxInfo]);
   useEffect(() => {
     if (orderData?.boxInfo) {
       clearBoxAndProductValidationErrors(orderData.boxInfo);
@@ -7831,22 +7999,24 @@ useEffect(() => {
         // };
 
         // Update the getCollectibleAmount function to handle initialization better
-const getCollectibleAmount = (box: any, totalPrice: number) => {
-  // If COD is not enabled, return empty string
-  if (!orderData?.codInfo?.isCod) {
-    return "";
-  }
+        const getCollectibleAmount = (box: any, totalPrice: number) => {
+          // If COD is not enabled, return empty string
+          if (!orderData?.codInfo?.isCod) {
+            return "";
+          }
 
-  // If manually edited, use the stored value
-  if (box.codInfo?.isCollectibleManuallyEdited) {
-    // Handle the case where collectableAmount might be 0 or empty string
-    const storedAmount = box.codInfo?.collectableAmount;
-    return storedAmount !== undefined && storedAmount !== null ? storedAmount.toString() : "";
-  } else {
-    // Use calculated total price as default
-    return totalPrice.toString();
-  }
-};
+          // If manually edited, use the stored value
+          if (box.codInfo?.isCollectibleManuallyEdited) {
+            // Handle the case where collectableAmount might be 0 or empty string
+            const storedAmount = box.codInfo?.collectableAmount;
+            return storedAmount !== undefined && storedAmount !== null
+              ? storedAmount.toString()
+              : "";
+          } else {
+            // Use calculated total price as default
+            return totalPrice.toString();
+          }
+        };
 
         const collectableAmount = getCollectibleAmount(box, totalPrice);
 
@@ -7993,8 +8163,7 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
                     placeholder="Collectible Amount (₹)"
                     type="number"
                     // value={collectableAmount}
-                        value={getCollectibleAmount(box, totalPrice)}
-
+                    value={getCollectibleAmount(box, totalPrice)}
                     onChangeCallback={(value) => {
                       // Allow empty string or convert to number
                       const numericValue =
@@ -8084,44 +8253,73 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
                                 errorMessage="Product name is required"
                               /> */}
                               <FloatingLabelInput
-  placeholder="Product Name"
-  value={(() => {
-    // For restricted sources, show only the product name without search query
-    if (!isProductEditingAllowed) {
-      return product.name || "";
-    }
-    const searchKey = `${boxIndex}-${productIndex}`;
-    return productSearchQueries[searchKey] !== undefined
-      ? productSearchQueries[searchKey]
-      : product.name || "";
-  })()}
-  onChangeCallback={(value) => {
-    if (isProductEditingAllowed) {
-      handleProductNameSearch(boxIndex, productIndex, value);
-      clearValidationError("products", "name", boxIndex, productIndex);
-    }
-  }}
-  onFocus={() => isProductEditingAllowed ? handleProductSearchFocus(boxIndex, productIndex) : null}
-  onBlur={() => isProductEditingAllowed ? handleProductSearchBlur(boxIndex, productIndex) : null}
-  readOnly={isEnabled || !isProductEditingAllowed} // Update readonly condition
-  icon={
-    // Hide search icon for restricted sources
-    !isProductEditingAllowed ? null : (
-      productSearchLoading[`${boxIndex}-${productIndex}`] ? (
-        <LoadingIcon />
-      ) : (
-        <SearchIcon />
-      )
-    )
-  }
-  required
-  error={validationErrors.products[`${boxIndex}-${productIndex}`]?.name}
-  errorMessage="Product name is required"
-/>
-                              {renderProductSearchResults && renderProductSearchResults(
-                                boxIndex,
-                                productIndex
-                              )}
+                                placeholder="Product Name"
+                                value={(() => {
+                                  // For restricted sources, show only the product name without search query
+                                  if (!isProductEditingAllowed) {
+                                    return product.name || "";
+                                  }
+                                  const searchKey = `${boxIndex}-${productIndex}`;
+                                  return productSearchQueries[searchKey] !==
+                                    undefined
+                                    ? productSearchQueries[searchKey]
+                                    : product.name || "";
+                                })()}
+                                onChangeCallback={(value) => {
+                                  if (isProductEditingAllowed) {
+                                    handleProductNameSearch(
+                                      boxIndex,
+                                      productIndex,
+                                      value
+                                    );
+                                    clearValidationError(
+                                      "products",
+                                      "name",
+                                      boxIndex,
+                                      productIndex
+                                    );
+                                  }
+                                }}
+                                onFocus={() =>
+                                  isProductEditingAllowed
+                                    ? handleProductSearchFocus(
+                                        boxIndex,
+                                        productIndex
+                                      )
+                                    : null
+                                }
+                                onBlur={() =>
+                                  isProductEditingAllowed
+                                    ? handleProductSearchBlur(
+                                        boxIndex,
+                                        productIndex
+                                      )
+                                    : null
+                                }
+                                readOnly={isEnabled || !isProductEditingAllowed} // Update readonly condition
+                                icon={
+                                  // Hide search icon for restricted sources
+                                  !isProductEditingAllowed ? null : productSearchLoading[
+                                      `${boxIndex}-${productIndex}`
+                                    ] ? (
+                                    <LoadingIcon />
+                                  ) : (
+                                    <SearchIcon />
+                                  )
+                                }
+                                required
+                                error={
+                                  validationErrors.products[
+                                    `${boxIndex}-${productIndex}`
+                                  ]?.name
+                                }
+                                errorMessage="Product name is required"
+                              />
+                              {renderProductSearchResults &&
+                                renderProductSearchResults(
+                                  boxIndex,
+                                  productIndex
+                                )}
                             </div>
 
                             {!isEnabled && box.products.length > 1 && (
@@ -8334,7 +8532,7 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
                       </Collapsible>
                     ))}
                     <div>
-                      {!isEnabled && isProductEditingAllowed &&  (
+                      {!isEnabled && isProductEditingAllowed && (
                         <OneButton
                           text="Add Product"
                           onClick={() => addProduct(boxIndex)}
@@ -8534,7 +8732,39 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
     </div>
   );
 
-  const renderPaymentDetails = () => (
+  // const renderPaymentDetails = () => (
+  //   <div className="space-y-4 p-4">
+  //     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  //       <FloatingLabelInput
+  //         placeholder="Payment Type"
+  //         value={orderData?.codInfo?.isCod ? "COD" : "Prepaid"}
+  //         readOnly
+  //       />
+  //       <FloatingLabelInput
+  //         placeholder="Collectable Amount"
+  //         type="number"
+  //         // value={orderData?.codInfo?.collectableAmount?.toString() || "0"}
+  //         readOnly
+  //       />
+  //     </div>
+
+  //     <FloatingLabelInput
+  //       placeholder="Invoice Value"
+  //       type="number"
+  //       value={orderData?.codInfo?.invoiceValue?.toString() || "0"}
+  //       readOnly
+  //       onChangeCallback={(value) => {
+  //         // Handle invoice value update if needed
+  //       }}
+  //     />
+  //   </div>
+  // );
+
+  const renderPaymentDetails = () => {
+  const totalInvoiceValue = calculateTotalInvoiceValue();
+  const totalCollectableAmount = calculateTotalCollectableAmount();
+
+  return (
     <div className="space-y-4 p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FloatingLabelInput
@@ -8543,9 +8773,9 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
           readOnly
         />
         <FloatingLabelInput
-          placeholder="Collectable Amount"
+          placeholder="Collectible Amount"
           type="number"
-          value={orderData?.codInfo?.collectableAmount?.toString() || "0"}
+          value={orderData?.codInfo?.isCod ? totalCollectableAmount.toString() : "0"}
           readOnly
         />
       </div>
@@ -8553,14 +8783,12 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
       <FloatingLabelInput
         placeholder="Invoice Value"
         type="number"
-        value={orderData?.codInfo?.invoiceValue?.toString() || "0"}
+        value={totalInvoiceValue.toString()}
         readOnly
-        onChangeCallback={(value) => {
-          // Handle invoice value update if needed
-        }}
       />
     </div>
   );
+};
 
   // const renderEventLogs = () => (
   //   <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
@@ -8586,43 +8814,45 @@ const getCollectibleAmount = (box: any, totalPrice: number) => {
   //     ))}
   //   </div>
   // );
-  
+
   // Replace the renderEventLogs function with this enhanced version:
 
-const renderEventLogs = () => (
-  <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
-    {orderData?.status?.map((log: any, index: number) => (
-      <div key={index} className="border rounded-lg p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          <div>
-            <span className="font-medium">Status:</span> {log.currentStatus}
-          </div>
-          <div>
-            <span className="font-medium">AWB:</span> {log.awb || "N/A"}
-          </div>
-          {/* Add Log ID */}
-          <div className="md:col-span-2">
-            <span className="font-medium">Log ID:</span> {log.logId || "N/A"}
-          </div>
-          {/* Add Notes */}
-          {log.notes && (
-            <div className="md:col-span-2">
-              <span className="font-medium">Notes:</span> {log.notes}
+  const renderEventLogs = () => (
+    <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
+      {orderData?.status?.map((log: any, index: number) => (
+        <div key={index} className="border rounded-lg p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <div>
+              <span className="font-medium">Status:</span> {log.currentStatus}
             </div>
-          )}
-          <div className="md:col-span-2 break-words">
-            <span className="font-medium">Description:</span>{" "}
-            <span className="break-words whitespace-pre-wrap">{log.description}</span>
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium">Time:</span>{" "}
-            {convertEpochToDateTime(log.timeStamp)}
+            <div>
+              <span className="font-medium">AWB:</span> {log.awb || "N/A"}
+            </div>
+            {/* Add Log ID */}
+            <div className="md:col-span-2">
+              <span className="font-medium">Log ID:</span> {log.logId || "N/A"}
+            </div>
+            {/* Add Notes */}
+            {log.notes && (
+              <div className="md:col-span-2">
+                <span className="font-medium">Notes:</span> {log.notes}
+              </div>
+            )}
+            <div className="md:col-span-2 break-words">
+              <span className="font-medium">Description:</span>{" "}
+              <span className="break-words whitespace-pre-wrap">
+                {log.description}
+              </span>
+            </div>
+            <div className="md:col-span-2">
+              <span className="font-medium">Time:</span>{" "}
+              {convertEpochToDateTime(log.timeStamp)}
+            </div>
           </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
 
   const renderOrderHistory = () => (
     <div className="space-y-6 pb-1">
@@ -8753,22 +8983,29 @@ const renderEventLogs = () => (
                 setOrderData((prev: any) => ({
                   ...prev,
                   orderId: value,
-                }));clearOrderDetailValidationError('orderId');
+                }));
+                clearOrderDetailValidationError("orderId");
+                setOrderIdExistsError(false); // Clear the exists error when typing
               }
-
             }}
             readOnly={isEnabled}
-             required
-            error={validationErrors.orderDetails.orderId}
-            errorMessage="Order ID is required"
+            required
+            error={validationErrors.orderDetails.orderId || orderIdExistsError}
+            // errorMessage="Order ID is required"
+            errorMessage={
+              orderIdExistsError
+                ? "Order ID already exists"
+                : "Order ID is required"
+            }
           />
 
           <FloatingLabelInput
-            
-             placeholder={(() => {
+            placeholder={(() => {
               const totalValue = calculateTotalProductValue();
               if (totalValue >= 50000) {
-                return `E-way Bill No (Required - Total: ₹${totalValue.toLocaleString('en-IN')})`;
+                return `E-way Bill No (Required - Total: ₹${totalValue.toLocaleString(
+                  "en-IN"
+                )})`;
               }
               return `E-way Bill No`;
             })()}
@@ -8789,8 +9026,7 @@ const renderEventLogs = () => (
                   return updatedData;
                 });
               }
-                              clearOrderDetailValidationError('eWayBillNo');
-
+              clearOrderDetailValidationError("eWayBillNo");
             }}
             readOnly={isEnabled}
             required={calculateTotalProductValue() >= 50000}
@@ -8802,18 +9038,16 @@ const renderEventLogs = () => (
     </div>
   );
 
-  if (currentStep === 'serviceSelection') {
-  return (
-    <ServiceSelectionComponent
-      orderData={orderData}
-      isMasked={isMasked}
-      onBack={backToOrderDetails}
-      onOrderPlaced={onOrderPlaced}
-    />
-  );
-}
-
-  
+  if (currentStep === "serviceSelection") {
+    return (
+      <ServiceSelectionComponent
+        orderData={orderData}
+        isMasked={isMasked}
+        onBack={backToOrderDetails}
+        onOrderPlaced={onOrderPlaced}
+      />
+    );
+  }
 
   if (isLoading) {
     return (
@@ -8833,45 +9067,51 @@ const renderEventLogs = () => (
 
   return (
     <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
-
-       {/* ADD THE STEP INDICATOR HERE */}
-    <div className="bg-blue-50 rounded-lg p-4 mb-6">
-      <div className="flex items-center justify-between">
-        
-        <div>
-          <h2 className="text-xl font-semibold text-blue-800">
-            Step 1: Order Details
-          </h2>
-          <p className="text-blue-600">
-            Fill in all order details before proceeding to service selection.
-          </p>
-        </div>
-        <div className="flex space-x-2">
-          <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-            1
+      {/* ADD THE STEP INDICATOR HERE */}
+      <div className="bg-blue-50 rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-blue-800">
+              Step 1: Order Details
+            </h2>
+            <p className="text-blue-600">
+              Fill in all order details before proceeding to service selection.
+            </p>
           </div>
-          <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
-            2
+          <div className="flex space-x-2">
+            <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </div>
+            <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
+      <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>
+        {renderOrderHistory()}{" "}
+      </Collapsible>
 
-
-      <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>{renderOrderHistory()} </Collapsible>
-
-      <Collapsible title="Pickup Address"   hasError={hasPickupAddressErrors()}>
+      <Collapsible title="Pickup Address" hasError={hasPickupAddressErrors()}>
         {renderPickupAddressForm()}
       </Collapsible>
 
-      <Collapsible title="Delivery Address"          hasError={hasDeliveryAddressErrors()}>
+      <Collapsible
+        title="Delivery Address"
+        hasError={hasDeliveryAddressErrors()}
+      >
         {renderDeliveryAddressForm()}
       </Collapsible>
 
-      <Collapsible title="Box & Products" hasError={hasBoxesAndProductsErrors()}>{renderBoxAndProducts()}</Collapsible>
-
       <Collapsible
+        title="Box & Products"
+        hasError={hasBoxesAndProductsErrors()}
+      >
+        {renderBoxAndProducts()}
+      </Collapsible>
+
+      {isEnabled &&(<Collapsible
         title="Services"
         onToggle={(isOpen) => {
           if (isOpen) {
@@ -8880,7 +9120,7 @@ const renderEventLogs = () => (
         }}
       >
         {renderServices()}
-      </Collapsible>
+      </Collapsible>)}
 
       <Collapsible title="Payment Details">
         {renderPaymentDetails()}
@@ -8901,11 +9141,11 @@ const renderEventLogs = () => (
           /> */}
 
           <OneButton
-      text="Next"          
-      onClick={nextStep}   
-      variant="primary"
-      className="px-8"
-    />
+            text="Next"
+            onClick={nextStep}
+            variant="primary"
+            className="px-8"
+          />
         </div>
       )}
     </div>
