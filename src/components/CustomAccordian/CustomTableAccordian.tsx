@@ -8322,7 +8322,7 @@ useEffect(() => {
                                 )}
                             </div>
 
-                            {!isEnabled && box.products.length > 1 && (
+                            {!isEnabled && box.products.length > 1 && isProductEditingAllowed &&(
                               <button
                                 onClick={() =>
                                   deleteProduct(boxIndex, productIndex)
@@ -8873,7 +8873,7 @@ useEffect(() => {
                   value="B2C"
                   checked={orderData?.orderType === "B2C"}
                   onChange={(e) => {
-                    if (!isEnabled) {
+                    if (!isEnabled || !isProductEditingAllowed) {
                       setOrderData((prev: any) => ({
                         ...prev,
                         orderType: e.target.value,
@@ -8899,7 +8899,7 @@ useEffect(() => {
                       }));
                     }
                   }}
-                  disabled={isEnabled}
+                  disabled={isEnabled || !isProductEditingAllowed}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">B2B</span>
@@ -8930,7 +8930,7 @@ useEffect(() => {
                       }));
                     }
                   }}
-                  disabled={isEnabled}
+                  disabled={isEnabled || !isProductEditingAllowed }
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">
@@ -8954,7 +8954,7 @@ useEffect(() => {
                       }));
                     }
                   }}
-                  disabled={isEnabled || orderData?.transit === "REVERSE"}
+                  disabled={isEnabled || orderData?.transit === "REVERSE" || !isProductEditingAllowed}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span
@@ -8988,7 +8988,7 @@ useEffect(() => {
                 setOrderIdExistsError(false); // Clear the exists error when typing
               }
             }}
-            readOnly={isEnabled}
+            readOnly={isEnabled || !isProductEditingAllowed}
             required
             error={validationErrors.orderDetails.orderId || orderIdExistsError}
             // errorMessage="Order ID is required"
