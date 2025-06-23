@@ -4854,6 +4854,7 @@ import CustomDate from "./CustomDateWithTime";
 import OneButton from "../Button/OneButton";
 import { v4 as uuidv4 } from "uuid";
 import ServiceSelectionComponent from "./ServiceSelectionComponent"; // Add this import
+import copyIcon from "../../assets/copy.svg";
 
 // Types
 interface OrderData {
@@ -4871,6 +4872,7 @@ interface OrderData {
   sellerId?: number;
   privateCompanyId?: number;
   transit?: any;
+  otherDetails?:any;
 }
 
 interface ValidationErrors {
@@ -8817,7 +8819,17 @@ useEffect(() => {
 
   // Replace the renderEventLogs function with this enhanced version:
 
-  const renderEventLogs = () => (
+
+ 
+
+// Replace the renderEventLogs function with this enhanced version:
+const renderEventLogs = () => {
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard!");
+  };
+
+  return (
     <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
       {orderData?.status?.map((log: any, index: number) => (
         <div key={index} className="border rounded-lg p-4">
@@ -8825,9 +8837,11 @@ useEffect(() => {
             <div>
               <span className="font-medium">Status:</span> {log.currentStatus}
             </div>
-            <div>
-              <span className="font-medium">AWB:</span> {log.awb || "N/A"}
-            </div>
+            {isEnabled && (
+              <div>
+                <span className="font-medium">AWB:</span> {log.awb || "N/A"}
+              </div>
+            )}
             {/* Add Log ID */}
             <div className="md:col-span-2">
               <span className="font-medium">Log ID:</span> {log.logId || "N/A"}
@@ -8835,15 +8849,65 @@ useEffect(() => {
             {/* Add Notes */}
             {log.notes && (
               <div className="md:col-span-2">
-                <span className="font-medium">Notes:</span> {log.notes}
+                <span className="font-medium">Notes:</span>{" "}
+                {typeof log.notes === 'object' ? JSON.stringify(log.notes) : log.notes}
               </div>
             )}
-            <div className="md:col-span-2 break-words">
-              <span className="font-medium">Description:</span>{" "}
-              <span className="break-words whitespace-pre-wrap">
-                {log.description}
-              </span>
+
+            {/* Description with scrollable single line and copy icon */}
+            <div className="md:col-span-2">
+              <span className="font-medium">Description:</span>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
+                  {typeof log.description === 'object' ? JSON.stringify(log.description) : log.description}
+                </div>
+                <img
+                  src={copyIcon}
+                  alt="Copy"
+                  className="w-4 h-4 cursor-pointer hover:opacity-70"
+                  onClick={() => copyToClipboard(typeof log.description === 'object' ? JSON.stringify(log.description) : log.description)}
+                />
+              </div>
             </div>
+            
+            {/* Shipyaari Payload */}
+            {(orderData?.otherDetails?.rawReqBody || orderData?.otherDetails?.rawResBody) && (
+              <div className="md:col-span-2">
+                <span className="font-medium">Shipyaari Payload:</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
+                    {JSON.stringify({ rawReqBody: orderData?.otherDetails?.rawReqBody, rawResBody: orderData?.otherDetails?.rawResBody })}
+                  </div>
+                  <img
+                    src={copyIcon}
+                    alt="Copy"
+                    className="w-4 h-4 cursor-pointer hover:opacity-70"
+                    onClick={() => copyToClipboard(JSON.stringify({ rawReqBody: orderData?.otherDetails?.rawReqBody, rawResBody: orderData?.otherDetails?.rawResBody }))}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Partner Payload */}
+            {orderData?.boxInfo?.some((box: any) => box.payloads && box.payloads.length > 0) && (
+              <div className="md:col-span-2">
+                <span className="font-medium">Partner Payload:</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
+                    {JSON.stringify(orderData.boxInfo.flatMap((box: any) => box.payloads || []))}
+                  </div>
+                  <img
+                    src={copyIcon}
+                    alt="Copy"
+                    className="w-4 h-4 cursor-pointer hover:opacity-70"
+                    onClick={() => copyToClipboard(JSON.stringify(orderData.boxInfo.flatMap((box: any) => box.payloads || [])))}
+                  />
+                </div>
+              </div>
+            )}
+
+            
+
             <div className="md:col-span-2">
               <span className="font-medium">Time:</span>{" "}
               {convertEpochToDateTime(log.timeStamp)}
@@ -8853,6 +8917,45 @@ useEffect(() => {
       ))}
     </div>
   );
+};
+
+  // const renderEventLogs = () => (
+  //   <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
+  //     {orderData?.status?.map((log: any, index: number) => (
+  //       <div key={index} className="border rounded-lg p-4">
+  //         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+  //           <div>
+  //             <span className="font-medium">Status:</span> {log.currentStatus}
+  //           </div>
+  //           {isEnabled && (<div>
+  //             <span className="font-medium">AWB:</span> {log.awb || "N/A"}
+  //           </div>)}
+  //           {/* Add Log ID */}
+  //           <div className="md:col-span-2">
+  //             <span className="font-medium">Log ID:</span> {log.logId || "N/A"}
+  //           </div>
+  //           {/* Add Notes */}
+  //           {log.notes && (
+  //             <div className="md:col-span-2">
+  //                   <span className="font-medium">Notes:</span>{" "}
+  //   {typeof log.notes === 'object' ? JSON.stringify(log.notes) : log.notes}
+  //             </div>
+  //           )}
+  //           <div className="md:col-span-2 break-words">
+  //             <span className="font-medium">Description:</span>{" "}
+  //             <span className="break-words whitespace-pre-wrap">
+  //               {typeof log.description === 'object' ? JSON.stringify(log.description) : log.description}
+  //             </span>
+  //           </div>
+  //           <div className="md:col-span-2">
+  //             <span className="font-medium">Time:</span>{" "}
+  //             {convertEpochToDateTime(log.timeStamp)}
+  //           </div>
+  //         </div>
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 
   const renderOrderHistory = () => (
     <div className="space-y-6 pb-1">
@@ -9068,7 +9171,7 @@ useEffect(() => {
   return (
     <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
       {/* ADD THE STEP INDICATOR HERE */}
-      <div className="bg-blue-50 rounded-lg p-4 mb-6">
+      {!isEnabled && (<div className="bg-blue-50 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold text-blue-800">
@@ -9087,7 +9190,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
 
       <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>
         {renderOrderHistory()}{" "}
