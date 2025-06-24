@@ -4960,6 +4960,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   //   {}
   // );
   // Add this state with other state declarations
+  const [isNextLoading, setIsNextLoading] = useState(false);
+
   const [validationErrors, setValidationErrors] = useState({
     pickup: {
       contactName: false,
@@ -7269,7 +7271,13 @@ const isB2BDisabled = () => {
   };
 
   const nextStep = async () => {
+     // Prevent multiple simultaneous calls
+  if (isNextLoading) {
+    return;
+  }
     try {
+          setIsNextLoading(true); // Set loading state
+
       // Validate Order ID first via API
       const currentOrderId = orderData?.orderId?.trim() || "";
       let orderIdValid = true;
@@ -7311,7 +7319,9 @@ const isB2BDisabled = () => {
     } catch (error) {
       console.error("Error saving order details:", error);
       toast.error("Something went wrong while saving order details");
-    }
+    } finally {
+    setIsNextLoading(false); // Always reset loading state
+  }
   };
 
   const backToOrderDetails = () => {
@@ -9444,6 +9454,8 @@ useEffect(() => {
             onClick={nextStep}
             variant="primary"
             className="px-8"
+            disabled={isNextLoading} // Disable button when loading
+
           />
         </div>
       )}
