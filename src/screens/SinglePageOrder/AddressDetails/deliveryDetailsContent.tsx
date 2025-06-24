@@ -262,17 +262,6 @@ const DeliveryDetailsContent: React.FunctionComponent<
       flatNo: localLandmark.flatNo ? null : "Flat No is required",
       sector: localLandmark.sector ? null : "Locality is required",
     };
-
-    if (order?.orderType === "B2B") {
-      if (
-        deliveryDetails?.gstNumber == undefined ||
-        deliveryDetails?.gstNumber.trim() === ""
-      ) {
-        errors.gstNumber = "GST Number is required";
-      } else if (!gstRegex.test(deliveryDetails?.gstNumber)) {
-        errors.gstNumber = "Enter Valid GST Number";
-      }
-    }
     console.log("errors", errors);
     setValidationErrors(errors);
     if (Object.values(errors).some((error) => error !== null)) {
