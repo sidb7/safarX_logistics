@@ -26,6 +26,8 @@ interface IRadioButtonProps {
   setSelectedOption?: any;
   ignoreRecommended?: boolean;
   isMasked?: any;
+  air?: boolean;
+  surface?: boolean;
 }
 
 const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
@@ -39,11 +41,12 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     setSelectedOption,
     ignoreRecommended,
     isMasked,
+    air = false,
+    surface = false,
   } = props;
-  console.log("options", options);
 
-  const [surface, setSurface] = useState(true);
-  const [air, setAir] = useState(true);
+  // const [surface, setSurface] = useState(true);
+  // const [air, setAir] = useState(true);
   const [sortingPrice, setSortingPrice] = useState(false);
   const [sortingFastest, setSortingFastest] = useState(false);
   const [sortedOptions, setSortedOptions] = useState<IServiceOption[]>([]);
@@ -83,40 +86,74 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     });
   };
 
-  const handleSortBy = (selectedItems: string[]) => {
-    const isSurfaceSelected = selectedItems.includes("Surface");
-    const isAirSelected = selectedItems.includes("Air");
+  // const handleSortBy = (selectedItems: string[]) => {
+  //   const isSurfaceSelected = selectedItems.includes("Surface");
+  //   const isAirSelected = selectedItems.includes("Air");
 
-    setSurface(isSurfaceSelected);
-    setAir(isAirSelected);
+  //   setSurface(isSurfaceSelected);
+  //   setAir(isAirSelected);
 
-    const sortingItems = selectedItems.filter(
-      (item) => item !== "Surface" && item !== "Air"
-    );
+  //   const sortingItems = selectedItems.filter(
+  //     (item) => item !== "Surface" && item !== "Air"
+  //   );
 
-    setSortingPrice(sortingItems.includes("Low Price"));
-    setSortingFastest(sortingItems.includes("Fastest"));
-  };
+  //   setSortingPrice(sortingItems.includes("Low Price"));
+  //   setSortingFastest(sortingItems.includes("Fastest"));
+  // };
 
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
+  // useEffect(() => {
+  //   const filters = options.filter((service) => {
+  //     const serviceMode = service.text.serviceMode.toLowerCase();
+
+  //     if (
+  //       (surface && serviceMode === "surface") ||
+  //       (air && serviceMode === "air") ||
+  //       (!surface && !air)
+  //     ) {
+  //       return service;
+  //     }
+  //     return null;
+  //   });
+
+  //   filters.sort((a, b) => {
+  //     if (
+  //       a.text.partnerName === "BLUEDART" &&
+  //       b.text.partnerName !== "BLUEDART"
+  //     ) {
+  //       return -1;
+  //     } else if (
+  //       a.text.partnerName !== "BLUEDART" &&
+  //       b.text.partnerName === "BLUEDART"
+  //     ) {
+  //       return 1;
+  //     } else {
+  //       return a.text.total - b.text.total;
+  //     }
+  //   });
+  //   // console.log("filters>>", filters);
+
+  //   setSortedOptions(filters);
+  // }, [options, surface, air, sortingPrice, sortingFastest]);
+
   useEffect(() => {
-    const filters = options.filter((service) => {
-      const serviceMode = service.text.serviceMode.toLowerCase();
+    let filtered: IServiceOption[] = [];
 
-      if (
-        (surface && serviceMode === "surface") ||
-        (air && serviceMode === "air") ||
-        (!surface && !air)
-      ) {
-        return service;
-      }
-      return null;
-    });
+    // If both are false, show all
+    if (!air && !surface) {
+      filtered = options;
+    } else {
+      filtered = options.filter((service) => {
+        const mode = service.text.serviceMode.toLowerCase();
+        return (air && mode === "air") || (surface && mode === "surface");
+      });
+    }
 
-    filters.sort((a, b) => {
+    // Optional: Sort BLUEDART first, then by price
+    filtered.sort((a, b) => {
       if (
         a.text.partnerName === "BLUEDART" &&
         b.text.partnerName !== "BLUEDART"
@@ -131,10 +168,9 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         return a.text.total - b.text.total;
       }
     });
-    // console.log("filters>>", filters);
 
-    setSortedOptions(filters);
-  }, [options, surface, air, sortingPrice, sortingFastest]);
+    setSortedOptions(filtered);
+  }, [options, air, surface, sortingPrice, sortingFastest]);
 
   return (
     <div data-cy="filter-options">
@@ -151,7 +187,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         />
       </div> */}
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {options.map((option) => {
+        {sortedOptions?.map((option) => {
           return (
             <div
               key={option?.value}
