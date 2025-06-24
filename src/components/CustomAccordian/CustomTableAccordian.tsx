@@ -5012,6 +5012,9 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     "WEBSITE",
     "WEBSITE_ALPHA",
     "MANUAL_BULK_B2B",
+    "BULK_B2B",
+        "MANUAL_BULK_B2C",
+
   ];
   const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
   const [serviceLoading, setServiceLoading] = useState(false);
@@ -5453,13 +5456,21 @@ const isB2BDisabled = () => {
       hasErrors = true;
     }
     // GST validation only for B2B orders
-    if (orderData?.orderType === "B2B" && !pickupAddress.gstNumber?.trim()) {
-      newErrors.pickup.gstNumber = true;
-      hasErrors = true;
-    }else if (pickupAddress.gstNumber.trim().length !== 15) {
+    // if (orderData?.orderType === "B2B" && !pickupAddress.gstNumber?.trim()) {
+    //   newErrors.pickup.gstNumber = true;
+    //   hasErrors = true;
+    // }else if (pickupAddress.gstNumber.trim().length !== 15) {
+    //   newErrors.pickup.gstLength = true;
+    //   hasErrors = true;
+    // }
+      if (pickupAddress.gstNumber?.trim()) {
+    const gstValue = pickupAddress.gstNumber.trim();
+    // Check if it's exactly 15 characters and contains only alphanumeric characters
+    if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
       newErrors.pickup.gstLength = true;
       hasErrors = true;
     }
+  }
 
     // Validate delivery address
     if (!deliveryAddress.contact.contactName?.trim()) {
@@ -5487,13 +5498,21 @@ const isB2BDisabled = () => {
       hasErrors = true;
     }
     // GST validation only for B2B orders
-    if (orderData?.orderType === "B2B" && !deliveryAddress.gstNumber?.trim()) {
-      newErrors.delivery.gstNumber = true;
-      hasErrors = true;
-    }else if (deliveryAddress.gstNumber.trim().length !== 15) {
+    // if (orderData?.orderType === "B2B" && !deliveryAddress.gstNumber?.trim()) {
+    //   newErrors.delivery.gstNumber = true;
+    //   hasErrors = true;
+    // }else if (deliveryAddress.gstNumber.trim().length !== 15) {
+    //   newErrors.delivery.gstLength = true;
+    //   hasErrors = true;
+    // }
+      if (deliveryAddress.gstNumber?.trim()) {
+    const gstValue = deliveryAddress.gstNumber.trim();
+    // Check if it's exactly 15 characters and contains only alphanumeric characters
+    if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
       newErrors.delivery.gstLength = true;
       hasErrors = true;
     }
+  }
 
     setValidationErrors(newErrors);
     return !hasErrors;
@@ -6232,7 +6251,11 @@ const isB2BDisabled = () => {
     }
 
     return (
-      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+            onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
+
+      >
+
         {isLoading ? (
           <div className="p-3 flex justify-center items-center">
             <LoadingIcon /> <span className="ml-2">Searching...</span>
@@ -6243,7 +6266,7 @@ const isB2BDisabled = () => {
               <li
                 key={box._id || index}
                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
-                onClick={() => selectBoxFromSearch(boxIndex, box)}
+                onMouseDown={() => selectBoxFromSearch(boxIndex, box)}
               >
                 <div className="flex flex-col">
                   <div className="flex items-center justify-between">
@@ -6575,7 +6598,10 @@ const isB2BDisabled = () => {
     }
 
     return (
-      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+            onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
+
+      >
         {isLoading ? (
           <div className="p-3 flex justify-center items-center">
             <LoadingIcon /> <span className="ml-2">Searching...</span>
@@ -6586,7 +6612,7 @@ const isB2BDisabled = () => {
               <li
                 key={product._id || index}
                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
-                onClick={() =>
+                onMouseDown={() =>
                   selectProductFromSearch(boxIndex, productIndex, product)
                 }
               >
@@ -6863,7 +6889,10 @@ const isB2BDisabled = () => {
     }
 
     return (
-      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+            onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
+
+      >
         {isLoading ? (
           <div className="p-3 flex justify-center items-center">
             <LoadingIcon /> <span className="ml-2">Searching...</span>
@@ -6874,7 +6903,7 @@ const isB2BDisabled = () => {
               <li
                 key={`${type}-${index}`}
                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
-                onClick={() => {
+                onMouseDown={() => {
                   if (type === "pickup") {
                     handleSelectPickupAddress(address);
                   } else {
@@ -7450,6 +7479,18 @@ const isB2BDisabled = () => {
 
   // Effects
 
+  // Additionally, add this useEffect to automatically set orderType to B2C if businessType is INDIVIDUAL
+useEffect(() => {
+  const sellerSession = getSellerSession();
+  if (sellerSession?.businessType === 'INDIVIDUAL' && orderData?.orderType === 'B2B') {
+    setOrderData((prev: any) => ({
+      ...prev,
+      orderType: 'B2C',
+    }));
+    toast.success('Order type changed to B2C as individual  can only create B2C orders');
+  }
+}, [orderData?.orderType]);
+
   // Add this useEffect after the existing useEffects
   useEffect(() => {
     if (orderData?.boxInfo) {
@@ -7770,25 +7811,35 @@ const isB2BDisabled = () => {
       {/* Row 5: GST No, Email ID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FloatingLabelInput
-          placeholder={
-            orderData?.orderType === "B2B"
-              ? "GST No (required)"
-              : "GST No (If Available)"
-          }
+          // placeholder={
+          //   orderData?.orderType === "B2B"
+          //     ? "GST No (required)"
+          //     : "GST No (If Available)"
+          // }
+            placeholder="GST No (Optional)"
+
           value={pickupAddress?.gstNumber || ""}
-          onChangeCallback={(value) => {
-            setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
-            clearValidationError("pickup", "gstNumber");
-          }}
+          // onChangeCallback={(value) => {
+          //   setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
+          //   clearValidationError("pickup", "gstNumber");
+          // }}
+           onChangeCallback={(value) => {
+    setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
+    // Clear GST validation errors when user starts typing
+    setValidationErrors((prev) => ({
+      ...prev,
+      pickup: {
+        ...prev.pickup,
+        gstLength: false,
+      },
+    }));
+  }}
           readOnly={isEnabled}
           required={orderData?.orderType === "B2B"}
-          error={validationErrors.pickup.gstNumber || validationErrors.pickup.gstLength}
+          error={ validationErrors.pickup.gstLength}
           // errorMessage="GST No is required for B2B orders"
-          errorMessage={
-    validationErrors.delivery.gstLength
-      ? "Please enter a valid 15-character GST number"
-      : "GST No is required for B2B orders"
-  }
+          errorMessage="Please enter a valid 15-character GST number"
+
         />
 
         <FloatingLabelInput
@@ -7982,25 +8033,35 @@ const isB2BDisabled = () => {
       {/* Row 5: GST No, Email ID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FloatingLabelInput
-          placeholder={
-            orderData?.orderType === "B2B"
-              ? "GST No (required)"
-              : "GST No (If Available)"
-          }
+          // placeholder={
+          //   orderData?.orderType === "B2B"
+          //     ? "GST No (required)"
+          //     : "GST No (If Available)"
+          // }
+            placeholder="GST No (Optional)"
+
           value={deliveryAddress.gstNumber}
+          // onChangeCallback={(value) => {
+          //   setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
+          //   clearValidationError("delivery", "gstNumber");
+          // }}
           onChangeCallback={(value) => {
-            setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
-            clearValidationError("delivery", "gstNumber");
-          }}
+    setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
+    // Clear GST validation errors when user starts typing
+    setValidationErrors((prev) => ({
+      ...prev,
+      delivery: {
+        ...prev.delivery,
+        gstLength: false,
+      },
+    }));
+  }}
           readOnly={isEnabled}
           required={orderData?.orderType === "B2B"}
-          error={validationErrors.delivery.gstNumber  || validationErrors.delivery.gstLength}
+          error={validationErrors.delivery.gstLength}
           // errorMessage="GST No is required for B2B orders"
-           errorMessage={
-    validationErrors.delivery.gstLength
-      ? "Please enter a valid 15-character GST number"
-      : "GST No is required for B2B orders"
-  }
+          errorMessage="Please enter a valid 15-character GST number"
+
         />
 
         <FloatingLabelInput
@@ -9121,7 +9182,7 @@ const isB2BDisabled = () => {
                   value="B2B"
                   checked={orderData?.orderType === "B2B"}
                   onChange={(e) => {
-                    if (!isEnabled) {
+                    if (!isEnabled && !isB2BDisabled()) {
                       setOrderData((prev: any) => ({
                         ...prev,
                         orderType: e.target.value,
