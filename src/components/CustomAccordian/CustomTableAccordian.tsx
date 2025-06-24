@@ -4872,7 +4872,7 @@ interface OrderData {
   sellerId?: number;
   privateCompanyId?: number;
   transit?: any;
-  otherDetails?:any;
+  otherDetails?: any;
 }
 
 interface ValidationErrors {
@@ -5176,46 +5176,46 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   // };
 
   // Update the validateOrderId function
-const validateOrderId = async (orderId: string): Promise<boolean> => {
-  const trimmedOrderId = orderId?.trim();
-  
-  // Don't call API if Order ID is empty or same as original
-  if (!trimmedOrderId || trimmedOrderId === originalOrderId) {
-    setOrderIdExistsError(false);
-    return !!trimmedOrderId; // Return false for empty, true for same as original
-  }
+  const validateOrderId = async (orderId: string): Promise<boolean> => {
+    const trimmedOrderId = orderId?.trim();
 
-  try {
-    const payload = {
-      orderId: trimmedOrderId
-    };
+    // Don't call API if Order ID is empty or same as original
+    if (!trimmedOrderId || trimmedOrderId === originalOrderId) {
+      setOrderIdExistsError(false);
+      return !!trimmedOrderId; // Return false for empty, true for same as original
+    }
 
-    const response = await POST(CHECK_ORDER_ID, payload);
-    
-    if (response?.data?.success === false) {
-      // Order ID already exists
-      setValidationErrors((prev) => ({
-        ...prev,
-        orderDetails: {
-          ...prev.orderDetails,
-          orderId: true,
-        },
-      }));
-      
-      // Set custom error message for existing order ID
-      setOrderIdExistsError(true);
+    try {
+      const payload = {
+        orderId: trimmedOrderId,
+      };
+
+      const response = await POST(CHECK_ORDER_ID, payload);
+
+      if (response?.data?.success === false) {
+        // Order ID already exists
+        setValidationErrors((prev) => ({
+          ...prev,
+          orderDetails: {
+            ...prev.orderDetails,
+            orderId: true,
+          },
+        }));
+
+        // Set custom error message for existing order ID
+        setOrderIdExistsError(true);
+        return false;
+      }
+
+      // Order ID is available
+      setOrderIdExistsError(false);
+      return true;
+    } catch (error) {
+      console.error("Error validating Order ID:", error);
+      toast.error("Failed to validate Order ID");
       return false;
     }
-    
-    // Order ID is available
-    setOrderIdExistsError(false);
-    return true;
-  } catch (error) {
-    console.error("Error validating Order ID:", error);
-    toast.error("Failed to validate Order ID");
-    return false;
-  }
-};
+  };
 
   // Helper function to check if order details have errors
   const hasOrderDetailsErrors = (): boolean => {
@@ -5293,30 +5293,33 @@ const validateOrderId = async (orderId: string): Promise<boolean> => {
   };
 
   // Add these helper functions after the existing helper functions
-const calculateTotalInvoiceValue = (): number => {
-  if (!orderData?.boxInfo) return 0;
-  
-  return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
-    if (!box.products || box.products.length === 0) return totalInvoice;
-    
-    const boxInvoiceValue = box.products.reduce((boxTotal: number, product: any) => {
-      const qty = product.qty || 0;
-      const unitPrice = product.unitPrice || 0;
-      return boxTotal + (qty * unitPrice);
-    }, 0);
-    
-    return totalInvoice + boxInvoiceValue;
-  }, 0);
-};
+  const calculateTotalInvoiceValue = (): number => {
+    if (!orderData?.boxInfo) return 0;
 
-const calculateTotalCollectableAmount = (): number => {
-  if (!orderData?.boxInfo || !orderData?.codInfo?.isCod) return 0;
-  
-  return orderData.boxInfo.reduce((totalCollectable: number, box: any) => {
-    const collectableAmount = box.codInfo?.collectableAmount || 0;
-    return totalCollectable + collectableAmount;
-  }, 0);
-};
+    return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+      if (!box.products || box.products.length === 0) return totalInvoice;
+
+      const boxInvoiceValue = box.products.reduce(
+        (boxTotal: number, product: any) => {
+          const qty = product.qty || 0;
+          const unitPrice = product.unitPrice || 0;
+          return boxTotal + qty * unitPrice;
+        },
+        0
+      );
+
+      return totalInvoice + boxInvoiceValue;
+    }, 0);
+  };
+
+  const calculateTotalCollectableAmount = (): number => {
+    if (!orderData?.boxInfo || !orderData?.codInfo?.isCod) return 0;
+
+    return orderData.boxInfo.reduce((totalCollectable: number, box: any) => {
+      const collectableAmount = box.codInfo?.collectableAmount || 0;
+      return totalCollectable + collectableAmount;
+    }, 0);
+  };
 
   // Enhanced function to validate order details
   const validateOrderDetails = (): boolean => {
@@ -6128,9 +6131,8 @@ const calculateTotalCollectableAmount = (): number => {
   };
 
   const buildCompletePayload = () => {
-
     const totalInvoiceValue = calculateTotalInvoiceValue();
-  const totalCollectableAmount = calculateTotalCollectableAmount();
+    const totalCollectableAmount = calculateTotalCollectableAmount();
     return {
       orderId: orderData?.orderId,
       tempOrderId: orderData?.tempOrderId,
@@ -6178,10 +6180,10 @@ const calculateTotalCollectableAmount = (): number => {
       boxInfo: orderData?.boxInfo,
       // codInfo: orderData?.codInfo,
       codInfo: {
-      isCod: orderData?.codInfo?.isCod || false,
-      collectableAmount: totalCollectableAmount,
-      invoiceValue: totalInvoiceValue,
-    },
+        isCod: orderData?.codInfo?.isCod || false,
+        collectableAmount: totalCollectableAmount,
+        invoiceValue: totalInvoiceValue,
+      },
     };
   };
 
@@ -7202,17 +7204,17 @@ const calculateTotalCollectableAmount = (): number => {
   const nextStep = async () => {
     try {
       // Validate Order ID first via API
-          const currentOrderId = orderData?.orderId?.trim() || "";
-              let orderIdValid = true;
+      const currentOrderId = orderData?.orderId?.trim() || "";
+      let orderIdValid = true;
 
-       if (currentOrderId && currentOrderId !== originalOrderId) {
-      orderIdValid = await validateOrderId(currentOrderId);
-      
-      if (!orderIdValid) {
-        toast.error("Please provide a valid and unique Order ID");
-        return;
+      if (currentOrderId && currentOrderId !== originalOrderId) {
+        orderIdValid = await validateOrderId(currentOrderId);
+
+        if (!orderIdValid) {
+          toast.error("Please provide a valid and unique Order ID");
+          return;
+        }
       }
-    }
       // Validate all required fields first
       const addressesValid = validateAddresses();
       const boxesProductsValid = validateBoxesAndProducts();
@@ -7233,7 +7235,7 @@ const calculateTotalCollectableAmount = (): number => {
 
       if (updateResponse?.status) {
         toast.success("Order details saved successfully!");
-              setOriginalOrderId(currentOrderId);
+        setOriginalOrderId(currentOrderId);
 
         setCurrentStep("serviceSelection");
       } else {
@@ -7260,7 +7262,7 @@ const calculateTotalCollectableAmount = (): number => {
   const initializeFormData = (data: any) => {
     clearAllValidationErrors();
     // Store the original Order ID
-  setOriginalOrderId(data.orderId || "");
+    setOriginalOrderId(data.orderId || "");
 
     setPickupAddress({
       contact: {
@@ -7411,21 +7413,21 @@ const calculateTotalCollectableAmount = (): number => {
   // Effects
 
   // Add this useEffect after the existing useEffects
-useEffect(() => {
-  if (orderData?.boxInfo) {
-    const totalInvoiceValue = calculateTotalInvoiceValue();
-    const totalCollectableAmount = calculateTotalCollectableAmount();
+  useEffect(() => {
+    if (orderData?.boxInfo) {
+      const totalInvoiceValue = calculateTotalInvoiceValue();
+      const totalCollectableAmount = calculateTotalCollectableAmount();
 
-    setOrderData((prevData: any) => ({
-      ...prevData,
-      codInfo: {
-        ...prevData.codInfo,
-        invoiceValue: totalInvoiceValue,
-        collectableAmount: totalCollectableAmount,
-      },
-    }));
-  }
-}, [orderData?.boxInfo, orderData?.codInfo?.isCod]);
+      setOrderData((prevData: any) => ({
+        ...prevData,
+        codInfo: {
+          ...prevData.codInfo,
+          invoiceValue: totalInvoiceValue,
+          collectableAmount: totalCollectableAmount,
+        },
+      }));
+    }
+  }, [orderData?.boxInfo, orderData?.codInfo?.isCod]);
 
   useEffect(() => {
     if (orderData?.codInfo?.isCod && orderData?.boxInfo) {
@@ -8148,23 +8150,50 @@ useEffect(() => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1  rounded-lg">
-                {/* Total Price (Non-editable, calculated) */}
-                <div className="relative">
-                  <FloatingLabelInput
-                    placeholder="Total Price (₹)"
-                    type="number"
-                    value={totalPrice.toFixed(2)}
-                    readOnly={true}
-                  />
-                </div>
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1  rounded-lg">
+  <div className="relative">
+    <FloatingLabelInput
+      placeholder="Total Price (₹)"
+      type="number"
+      value={totalPrice.toFixed(2)}
+      readOnly={true}
+    />
+  </div>
+
+  {orderData?.codInfo?.isCod && (
+    <FloatingLabelInput
+      placeholder="Collectible Amount (₹)"
+      type="number"
+      value={getCollectibleAmount(box, totalPrice)}
+      onChangeCallback={(value) => {
+        // Allow empty string or convert to number
+        const numericValue =
+          value === "" ? "" : parseFloat(value) || 0;
+        updateBox(boxIndex, "collectableAmount", numericValue);
+      }}
+      readOnly={isEnabled}
+    />
+  )}
+</div> */}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
+                {/* Quantity Input */}
+                <FloatingLabelInput
+                  placeholder="Quantity"
+                  type="number"
+                  value={box.qty?.toString() || ""}
+                  onChangeCallback={(value) => {
+                    updateBox(boxIndex, "qty", parseFloat(value) || 0);
+                  }}
+                  readOnly={isEnabled}
+                  required
+                />
 
                 {/* Collectible Amount (Editable) */}
                 {orderData?.codInfo?.isCod && (
                   <FloatingLabelInput
                     placeholder="Collectible Amount (₹)"
                     type="number"
-                    // value={collectableAmount}
                     value={getCollectibleAmount(box, totalPrice)}
                     onChangeCallback={(value) => {
                       // Allow empty string or convert to number
@@ -8175,6 +8204,18 @@ useEffect(() => {
                     readOnly={isEnabled}
                   />
                 )}
+              </div>
+
+              {/* Total Price row - moved below */}
+              <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
+                <div className="relative">
+                  <FloatingLabelInput
+                    placeholder="Total Price (₹)"
+                    type="number"
+                    value={totalPrice.toFixed(2)}
+                    readOnly={true}
+                  />
+                </div>
               </div>
 
               {/* Products Section */}
@@ -8324,26 +8365,28 @@ useEffect(() => {
                                 )}
                             </div>
 
-                            {!isEnabled && box.products.length > 1 && isProductEditingAllowed &&(
-                              <button
-                                onClick={() =>
-                                  deleteProduct(boxIndex, productIndex)
-                                }
-                                className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
-                                title="Delete Product"
-                              >
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
+                            {!isEnabled &&
+                              box.products.length > 1 &&
+                              isProductEditingAllowed && (
+                                <button
+                                  onClick={() =>
+                                    deleteProduct(boxIndex, productIndex)
+                                  }
+                                  className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+                                  title="Delete Product"
                                 >
-                                  <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-                                </svg>
-                              </button>
-                            )}
+                                  <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                  >
+                                    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                                  </svg>
+                                </button>
+                              )}
                           </div>
 
                           {/* Row 2: Qty and Unit Weight */}
@@ -8763,34 +8806,38 @@ useEffect(() => {
   // );
 
   const renderPaymentDetails = () => {
-  const totalInvoiceValue = calculateTotalInvoiceValue();
-  const totalCollectableAmount = calculateTotalCollectableAmount();
+    const totalInvoiceValue = calculateTotalInvoiceValue();
+    const totalCollectableAmount = calculateTotalCollectableAmount();
 
-  return (
-    <div className="space-y-4 p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    return (
+      <div className="space-y-4 p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FloatingLabelInput
+            placeholder="Payment Type"
+            value={orderData?.codInfo?.isCod ? "COD" : "Prepaid"}
+            readOnly
+          />
+          <FloatingLabelInput
+            placeholder="Collectible Amount"
+            type="number"
+            value={
+              orderData?.codInfo?.isCod
+                ? totalCollectableAmount.toString()
+                : "0"
+            }
+            readOnly
+          />
+        </div>
+
         <FloatingLabelInput
-          placeholder="Payment Type"
-          value={orderData?.codInfo?.isCod ? "COD" : "Prepaid"}
-          readOnly
-        />
-        <FloatingLabelInput
-          placeholder="Collectible Amount"
+          placeholder="Invoice Value"
           type="number"
-          value={orderData?.codInfo?.isCod ? totalCollectableAmount.toString() : "0"}
+          value={totalInvoiceValue.toString()}
           readOnly
         />
       </div>
-
-      <FloatingLabelInput
-        placeholder="Invoice Value"
-        type="number"
-        value={totalInvoiceValue.toString()}
-        readOnly
-      />
-    </div>
-  );
-};
+    );
+  };
 
   // const renderEventLogs = () => (
   //   <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
@@ -8819,105 +8866,136 @@ useEffect(() => {
 
   // Replace the renderEventLogs function with this enhanced version:
 
+  // Replace the renderEventLogs function with this enhanced version:
+  const renderEventLogs = () => {
+    const copyToClipboard = (text: string) => {
+      navigator.clipboard.writeText(text);
+      toast.success("Copied to clipboard!");
+    };
 
- 
-
-// Replace the renderEventLogs function with this enhanced version:
-const renderEventLogs = () => {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
-  };
-
-  return (
-    <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
-      {orderData?.status?.map((log: any, index: number) => (
-        <div key={index} className="border rounded-lg p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-            <div>
-              <span className="font-medium">Status:</span> {log.currentStatus}
-            </div>
-            {isEnabled && (
+    return (
+      <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
+        {orderData?.status?.map((log: any, index: number) => (
+          <div key={index} className="border rounded-lg p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
               <div>
-                <span className="font-medium">AWB:</span> {log.awb || "N/A"}
+                <span className="font-medium">Status:</span> {log.currentStatus}
               </div>
-            )}
-            {/* Add Log ID */}
-            <div className="md:col-span-2">
-              <span className="font-medium">Log ID:</span> {log.logId || "N/A"}
-            </div>
-            {/* Add Notes */}
-            {log.notes && (
-              <div className="md:col-span-2">
-                <span className="font-medium">Notes:</span>{" "}
-                {typeof log.notes === 'object' ? JSON.stringify(log.notes) : log.notes}
-              </div>
-            )}
-
-            {/* Description with scrollable single line and copy icon */}
-            <div className="md:col-span-2">
-              <span className="font-medium">Description:</span>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
-                  {typeof log.description === 'object' ? JSON.stringify(log.description) : log.description}
+              {isEnabled && (
+                <div>
+                  <span className="font-medium">AWB:</span> {log.awb || "N/A"}
                 </div>
-                <img
-                  src={copyIcon}
-                  alt="Copy"
-                  className="w-4 h-4 cursor-pointer hover:opacity-70"
-                  onClick={() => copyToClipboard(typeof log.description === 'object' ? JSON.stringify(log.description) : log.description)}
-                />
-              </div>
-            </div>
-            
-            {/* Shipyaari Payload */}
-            {(orderData?.otherDetails?.rawReqBody || orderData?.otherDetails?.rawResBody) && (
+              )}
+              {/* Add Log ID */}
               <div className="md:col-span-2">
-                <span className="font-medium">Shipyaari Payload:</span>
+                <span className="font-medium">Log ID:</span>{" "}
+                {log.logId || "N/A"}
+              </div>
+              {/* Add Notes */}
+              {log.notes && (
+                <div className="md:col-span-2">
+                  <span className="font-medium">Notes:</span>{" "}
+                  {typeof log.notes === "object"
+                    ? JSON.stringify(log.notes)
+                    : log.notes}
+                </div>
+              )}
+
+              {/* Description with scrollable single line and copy icon */}
+              <div className="md:col-span-2">
+                <span className="font-medium">Description:</span>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
-                    {JSON.stringify({ rawReqBody: orderData?.otherDetails?.rawReqBody, rawResBody: orderData?.otherDetails?.rawResBody })}
+                    {typeof log.description === "object"
+                      ? JSON.stringify(log.description)
+                      : log.description}
                   </div>
                   <img
                     src={copyIcon}
                     alt="Copy"
                     className="w-4 h-4 cursor-pointer hover:opacity-70"
-                    onClick={() => copyToClipboard(JSON.stringify({ rawReqBody: orderData?.otherDetails?.rawReqBody, rawResBody: orderData?.otherDetails?.rawResBody }))}
+                    onClick={() =>
+                      copyToClipboard(
+                        typeof log.description === "object"
+                          ? JSON.stringify(log.description)
+                          : log.description
+                      )
+                    }
                   />
                 </div>
               </div>
-            )}
 
-            {/* Partner Payload */}
-            {orderData?.boxInfo?.some((box: any) => box.payloads && box.payloads.length > 0) && (
-              <div className="md:col-span-2">
-                <span className="font-medium">Partner Payload:</span>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
-                    {JSON.stringify(orderData.boxInfo.flatMap((box: any) => box.payloads || []))}
+              {/* Shipyaari Payload */}
+              {(orderData?.otherDetails?.rawReqBody ||
+                orderData?.otherDetails?.rawResBody) && (
+                <div className="md:col-span-2">
+                  <span className="font-medium">Shipyaari Payload:</span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
+                      {JSON.stringify({
+                        rawReqBody: orderData?.otherDetails?.rawReqBody,
+                        rawResBody: orderData?.otherDetails?.rawResBody,
+                      })}
+                    </div>
+                    <img
+                      src={copyIcon}
+                      alt="Copy"
+                      className="w-4 h-4 cursor-pointer hover:opacity-70"
+                      onClick={() =>
+                        copyToClipboard(
+                          JSON.stringify({
+                            rawReqBody: orderData?.otherDetails?.rawReqBody,
+                            rawResBody: orderData?.otherDetails?.rawResBody,
+                          })
+                        )
+                      }
+                    />
                   </div>
-                  <img
-                    src={copyIcon}
-                    alt="Copy"
-                    className="w-4 h-4 cursor-pointer hover:opacity-70"
-                    onClick={() => copyToClipboard(JSON.stringify(orderData.boxInfo.flatMap((box: any) => box.payloads || [])))}
-                  />
                 </div>
+              )}
+
+              {/* Partner Payload */}
+              {orderData?.boxInfo?.some(
+                (box: any) => box.payloads && box.payloads.length > 0
+              ) && (
+                <div className="md:col-span-2">
+                  <span className="font-medium">Partner Payload:</span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
+                      {JSON.stringify(
+                        orderData.boxInfo.flatMap(
+                          (box: any) => box.payloads || []
+                        )
+                      )}
+                    </div>
+                    <img
+                      src={copyIcon}
+                      alt="Copy"
+                      className="w-4 h-4 cursor-pointer hover:opacity-70"
+                      onClick={() =>
+                        copyToClipboard(
+                          JSON.stringify(
+                            orderData.boxInfo.flatMap(
+                              (box: any) => box.payloads || []
+                            )
+                          )
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="md:col-span-2">
+                <span className="font-medium">Time:</span>{" "}
+                {convertEpochToDateTime(log.timeStamp)}
               </div>
-            )}
-
-            
-
-            <div className="md:col-span-2">
-              <span className="font-medium">Time:</span>{" "}
-              {convertEpochToDateTime(log.timeStamp)}
             </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+        ))}
+      </div>
+    );
+  };
 
   // const renderEventLogs = () => (
   //   <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
@@ -9033,7 +9111,7 @@ const renderEventLogs = () => {
                       }));
                     }
                   }}
-                  disabled={isEnabled || !isProductEditingAllowed }
+                  disabled={isEnabled || !isProductEditingAllowed}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">
@@ -9057,7 +9135,11 @@ const renderEventLogs = () => {
                       }));
                     }
                   }}
-                  disabled={isEnabled || orderData?.transit === "REVERSE" || !isProductEditingAllowed}
+                  disabled={
+                    isEnabled ||
+                    orderData?.transit === "REVERSE" ||
+                    !isProductEditingAllowed
+                  }
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span
@@ -9171,26 +9253,29 @@ const renderEventLogs = () => {
   return (
     <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
       {/* ADD THE STEP INDICATOR HERE */}
-      {!isEnabled && (<div className="bg-blue-50 rounded-lg p-4 mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold text-blue-800">
-              Step 1: Order Details
-            </h2>
-            <p className="text-blue-600">
-              Fill in all order details before proceeding to service selection.
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-              1
+      {!isEnabled && (
+        <div className="bg-blue-50 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-blue-800">
+                Step 1: Order Details
+              </h2>
+              <p className="text-blue-600">
+                Fill in all order details before proceeding to service
+                selection.
+              </p>
             </div>
-            <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
-              2
+            <div className="flex space-x-2">
+              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                1
+              </div>
+              <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
+                2
+              </div>
             </div>
           </div>
         </div>
-      </div>)}
+      )}
 
       <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>
         {renderOrderHistory()}{" "}
@@ -9214,16 +9299,18 @@ const renderEventLogs = () => {
         {renderBoxAndProducts()}
       </Collapsible>
 
-      {isEnabled &&(<Collapsible
-        title="Services"
-        onToggle={(isOpen) => {
-          if (isOpen) {
-            fetchServiceList();
-          }
-        }}
-      >
-        {renderServices()}
-      </Collapsible>)}
+      {isEnabled && (
+        <Collapsible
+          title="Services"
+          onToggle={(isOpen) => {
+            if (isOpen) {
+              fetchServiceList();
+            }
+          }}
+        >
+          {renderServices()}
+        </Collapsible>
+      )}
 
       <Collapsible title="Payment Details">
         {renderPaymentDetails()}

@@ -1,17 +1,19 @@
 
+
+
 // import React, { useState, useEffect } from "react";
 // import { POST } from "../../utils/webService";
 // import {
 //   GET_COURIER_PARTNER_SERVICE,
 //   SET_SERVICE_INFO,
 //   POST_PLACE_ALL_ORDERS,
+//   GET_SERVICE_NEW,
 // } from "../../utils/ApiUrls";
 // import { toast } from "react-hot-toast";
 // import { capitalizeFirstLetter } from "../../utils/utility";
 // import { Spinner } from "../../components/Spinner";
 // import OneButton from "../Button/OneButton";
 // import iIcon from "../../assets/I icon.svg";
-
 
 // interface ServiceSelectionProps {
 //   orderData: any;
@@ -33,6 +35,8 @@
 //   const [updatingServiceIndex, setUpdatingServiceIndex] = useState<number | null>(null);
 //   const [isServiceUpdated, setIsServiceUpdated] = useState(false);
 //   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+//   const [orderCooldown, setOrderCooldown] = useState(0);
+//   const [cooldownTimer, setCooldownTimer] = useState<NodeJS.Timeout | null>(null);
 
 //   // Fetch services on component mount
 //   useEffect(() => {
@@ -41,11 +45,54 @@
 //     }
 //   }, [orderData]);
 
-//   // Reset service updated state when service list changes
+//   // Auto-select cheapest service when service list changes
 //   useEffect(() => {
-//     setIsServiceUpdated(false);
-//     setSelectedServiceIndex(null);
+//     if (serviceList.length > 0) {
+//       autoSelectCheapestService();
+//     } else {
+//       setIsServiceUpdated(false);
+//       setSelectedServiceIndex(null);
+//     }
 //   }, [serviceList]);
+
+//   // Cleanup timer on unmount
+//   useEffect(() => {
+//     return () => {
+//       if (cooldownTimer) {
+//         clearTimeout(cooldownTimer);
+//       }
+//     };
+//   }, [cooldownTimer]);
+
+//   // Function to find and auto-select the cheapest service
+//   const autoSelectCheapestService = () => {
+//     if (serviceList.length === 0) return;
+
+//     // Find the minimum price
+//     const minPrice = Math.min(...serviceList.map(service => service.total));
+    
+//     // Get all services with the minimum price
+//     const cheapestServices = serviceList.filter(service => service.total === minPrice);
+    
+//     // If multiple services have the same price, select the one with lowest EDT
+//     let selectedService = cheapestServices[0];
+//     let selectedIndex = serviceList.findIndex(service => service === selectedService);
+    
+//     if (cheapestServices.length > 1) {
+//       // Sort by EDT (treat empty strings and null as high values)
+//       cheapestServices.sort((a, b) => {
+//         const edtA = a.EDT === "" || a.EDT === null ? 999 : Number(a.EDT) || 999;
+//         const edtB = b.EDT === "" || b.EDT === null ? 999 : Number(b.EDT) || 999;
+//         return edtA - edtB;
+//       });
+      
+//       selectedService = cheapestServices[0];
+//       selectedIndex = serviceList.findIndex(service => service === selectedService);
+//     }
+    
+//     // Auto-select the cheapest service (without showing toast)
+//     updateService(selectedIndex, false);
+//   };
 
 //   const fetchServiceList = async () => {
 //     try {
@@ -68,7 +115,7 @@
 //     }
 //   };
 
-//   const updateService = async (serviceIndex: number) => {
+//   const updateService = async (serviceIndex: number, showToast: boolean = true) => {
 //     if (serviceList.length === 0) return;
 
 //     try {
@@ -86,7 +133,9 @@
 
 //       const { data } = await POST(SET_SERVICE_INFO, payload);
 //       if (data?.success) {
-//         toast.success("Service selected successfully");
+//         if (showToast) {
+//           toast.success("Service selected successfully");
+//         }
 //         setSelectedServiceIndex(serviceIndex);
 //         setIsServiceUpdated(true);
 //       } else {
@@ -116,6 +165,11 @@
 //       return;
 //     }
 
+//     if (orderCooldown > 0) {
+//       toast.error(`Please wait ${orderCooldown} seconds before placing another order`);
+//       return;
+//     }
+
 //     try {
 //       setIsPlacingOrder(true);
       
@@ -131,8 +185,20 @@
 
 //       const { data } = await POST(POST_PLACE_ALL_ORDERS, placeOrderPayload);
 //       if (data?.success) {
-//         toast.success("Order placed successfully!");
-//         onOrderPlaced();
+//         // Start 5-second cooldown
+//         setOrderCooldown(5);
+//         const countdown = setInterval(() => {
+//           setOrderCooldown((prev) => {
+//             if (prev <= 1) {
+//               clearInterval(countdown);
+//               return 0;
+//             }
+//             return prev - 1;
+//           });
+//         }, 1000);
+        
+//         setCooldownTimer(countdown);
+//         onOrderPlaced(); // Parent will handle success message
 //       } else {
 //         toast.error(data?.message || "Failed to place order");
 //       }
@@ -321,7 +387,7 @@
 //           Select Delivery Service
 //         </h2>
 //         <p className="text-blue-600">
-//           Click on your preferred courier service to select it automatically.
+//           The cheapest service has been automatically selected. Click on a different service to change your selection.
 //         </p>
 //       </div>
 
@@ -347,7 +413,7 @@
 //           onClick={placeOrder}
 //           variant="primary"
 //           className="px-8"
-//           disabled={!isServiceUpdated || isPlacingOrder}
+//           disabled={!isServiceUpdated || isPlacingOrder || orderCooldown > 0}
 //         />
 //       </div>
 //     </div>
@@ -357,12 +423,15 @@
 // export default ServiceSelectionComponent;
 
 
+
+
 import React, { useState, useEffect } from "react";
 import { POST } from "../../utils/webService";
 import {
   GET_COURIER_PARTNER_SERVICE,
   SET_SERVICE_INFO,
   POST_PLACE_ALL_ORDERS,
+  GET_SERVICE_NEW,
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { capitalizeFirstLetter } from "../../utils/utility";
@@ -457,7 +526,7 @@ const ServiceSelectionComponent: React.FC<ServiceSelectionProps> = ({
         source: orderData?.source,
       };
 
-      const { data } = await POST(GET_COURIER_PARTNER_SERVICE, payload);
+      const { data } = await POST(GET_SERVICE_NEW, payload);
       if (data?.success) {
         const services = isMasked ? data?.data?.slice(0, 2) : data?.data;
         setServiceList(services);
