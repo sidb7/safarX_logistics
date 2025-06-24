@@ -4969,6 +4969,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       locality: false,
       landmark: false,
       gstNumber: false,
+          gstLength: false, // Add this
+
     },
     delivery: {
       contactName: false,
@@ -4978,6 +4980,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       locality: false,
       landmark: false,
       gstNumber: false,
+          gstLength: false, // Add this
+
     },
     boxes: {} as {
       [boxIndex: number]: {
@@ -5103,6 +5107,23 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     breadth: 0,
     height: 0,
   });
+
+
+const getSellerSession = () => {
+  try {
+    const sellerSessionData = localStorage.getItem('sellerSession');
+    return sellerSessionData ? JSON.parse(sellerSessionData) : null;
+  } catch (error) {
+    console.error('Error parsing sellerSession:', error);
+    return null;
+  }
+};
+
+const isB2BDisabled = () => {
+  const sellerSession = getSellerSession();
+  return sellerSession?.businessType === 'INDIVIDUAL';
+};
+
 
   // Refs// Helper function to check if pickup address has errors
   const hasPickupAddressErrors = (): boolean => {
@@ -5435,6 +5456,9 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     if (orderData?.orderType === "B2B" && !pickupAddress.gstNumber?.trim()) {
       newErrors.pickup.gstNumber = true;
       hasErrors = true;
+    }else if (pickupAddress.gstNumber.trim().length !== 15) {
+      newErrors.pickup.gstLength = true;
+      hasErrors = true;
     }
 
     // Validate delivery address
@@ -5465,6 +5489,9 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     // GST validation only for B2B orders
     if (orderData?.orderType === "B2B" && !deliveryAddress.gstNumber?.trim()) {
       newErrors.delivery.gstNumber = true;
+      hasErrors = true;
+    }else if (deliveryAddress.gstNumber.trim().length !== 15) {
+      newErrors.delivery.gstLength = true;
       hasErrors = true;
     }
 
@@ -5550,6 +5577,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         locality: false,
         landmark: false,
         gstNumber: false,
+              gstLength: false, // Add this
+
       },
       delivery: {
         contactName: false,
@@ -5559,6 +5588,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         locality: false,
         landmark: false,
         gstNumber: false,
+              gstLength: false, // Add this
+
       },
       boxes: {},
       products: {},
@@ -5640,6 +5671,9 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         newErrors[section as "pickup" | "delivery"][
           field as keyof typeof newErrors.pickup
         ] = false;
+          if (field === "gstNumber") {
+        newErrors[section as "pickup" | "delivery"]["gstLength"] = false;
+      }
       } else if (section === "boxes" && index !== undefined) {
         if (!newErrors.boxes[index]) {
           newErrors.boxes[index] = {
@@ -6759,6 +6793,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         locality: false,
         landmark: false,
         gstNumber: false,
+              gstLength: false,
+
       },
     }));
 
@@ -6805,6 +6841,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         locality: false,
         landmark: false,
         gstNumber: false,
+              gstLength: false,
+
       },
     }));
 
@@ -6901,7 +6939,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                   apiCollectibleAmount !== undefined &&
                   apiCollectibleAmount !== null &&
                   apiCollectibleAmount !== "",
-                collectableAmount: apiCollectibleAmount,
+                collectableAmount: apiCollectibleAmount,initializeFormData
               },
             };
           });
@@ -7744,8 +7782,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           }}
           readOnly={isEnabled}
           required={orderData?.orderType === "B2B"}
-          error={validationErrors.pickup.gstNumber}
-          errorMessage="GST No is required for B2B orders"
+          error={validationErrors.pickup.gstNumber || validationErrors.pickup.gstLength}
+          // errorMessage="GST No is required for B2B orders"
+          errorMessage={
+    validationErrors.delivery.gstLength
+      ? "Please enter a valid 15-character GST number"
+      : "GST No is required for B2B orders"
+  }
         />
 
         <FloatingLabelInput
@@ -7951,8 +7994,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
           }}
           readOnly={isEnabled}
           required={orderData?.orderType === "B2B"}
-          error={validationErrors.delivery.gstNumber}
-          errorMessage="GST No is required for B2B orders"
+          error={validationErrors.delivery.gstNumber  || validationErrors.delivery.gstLength}
+          // errorMessage="GST No is required for B2B orders"
+           errorMessage={
+    validationErrors.delivery.gstLength
+      ? "Please enter a valid 15-character GST number"
+      : "GST No is required for B2B orders"
+  }
         />
 
         <FloatingLabelInput
@@ -8185,7 +8233,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                   onChangeCallback={(value) => {
                     updateBox(boxIndex, "qty", parseFloat(value) || 0);
                   }}
-                  readOnly={isEnabled}
+                  readOnly={isEnabled || !isProductEditingAllowed}
                   required
                 />
 
@@ -9080,7 +9128,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                       }));
                     }
                   }}
-                  disabled={isEnabled || !isProductEditingAllowed}
+                  disabled={isEnabled || !isProductEditingAllowed  || isB2BDisabled()}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">B2B</span>
