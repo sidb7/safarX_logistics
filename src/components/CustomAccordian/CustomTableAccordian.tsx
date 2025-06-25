@@ -5470,12 +5470,15 @@ const isB2BDisabled = () => {
     //   newErrors.pickup.gstLength = true;
     //   hasErrors = true;
     // }
-      if (pickupAddress.gstNumber?.trim()) {
-    const gstValue = pickupAddress.gstNumber.trim();
-    // Check if it's exactly 15 characters and contains only alphanumeric characters
-    if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
-      newErrors.pickup.gstLength = true;
-      hasErrors = true;
+      if (orderData?.orderType === "B2B") {
+    // For B2B orders, GST is optional but if provided, must be valid format
+    if (pickupAddress.gstNumber?.trim()) {
+      const gstValue = pickupAddress.gstNumber.trim();
+      // Check if it's exactly 15 characters and contains only alphanumeric characters
+      if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
+        newErrors.pickup.gstLength = true;
+        hasErrors = true;
+      }
     }
   }
 
@@ -5512,12 +5515,15 @@ const isB2BDisabled = () => {
     //   newErrors.delivery.gstLength = true;
     //   hasErrors = true;
     // }
-      if (deliveryAddress.gstNumber?.trim()) {
-    const gstValue = deliveryAddress.gstNumber.trim();
-    // Check if it's exactly 15 characters and contains only alphanumeric characters
-    if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
-      newErrors.delivery.gstLength = true;
-      hasErrors = true;
+       if (orderData?.orderType === "B2B") {
+    // For B2B orders, GST is optional but if provided, must be valid format
+    if (deliveryAddress.gstNumber?.trim()) {
+      const gstValue = deliveryAddress.gstNumber.trim();
+      // Check if it's exactly 15 characters and contains only alphanumeric characters
+      if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
+        newErrors.delivery.gstLength = true;
+        hasErrors = true;
+      }
     }
   }
 
