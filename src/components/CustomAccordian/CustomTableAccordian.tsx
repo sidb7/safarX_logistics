@@ -9369,7 +9369,7 @@ useEffect(() => {
           />
         </div>
           {/* Row 3: Zone - ADD THIS NEW ROW */}
-      <div className="">
+      {isEnabled && (<div className="">
         <FloatingLabelInput
           placeholder="Zone"
           value={orderData?.zone || ""}
@@ -9377,7 +9377,7 @@ useEffect(() => {
         />
         {/* Empty div to maintain grid layout */}
         <div></div>
-      </div>
+      </div>)}
       </div>
     </div>
   );
