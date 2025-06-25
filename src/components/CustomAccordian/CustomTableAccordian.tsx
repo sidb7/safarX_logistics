@@ -4839,6 +4839,7 @@ import {
   GET_PRODUCTS, // Added for product search
   COMPANY_NAME,
   CHECK_ORDER_ID,
+  GET_ORDER_CONFIRMATION_LOG,
 } from "../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import {
@@ -4873,6 +4874,7 @@ interface OrderData {
   privateCompanyId?: number;
   transit?: any;
   otherDetails?: any;
+  zone?: any;
 }
 
 interface ValidationErrors {
@@ -4956,10 +4958,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const [currentStep, setCurrentStep] = useState<
     "orderDetails" | "serviceSelection"
   >("orderDetails");
+  
   // const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
   //   {}
   // );
   // Add this state with other state declarations
+  const [buyerConfirmationLogs, setBuyerConfirmationLogs] = useState([]);
+
   const [isNextLoading, setIsNextLoading] = useState(false);
 
   const [validationErrors, setValidationErrors] = useState({
@@ -6955,6 +6960,25 @@ const isB2BDisabled = () => {
 
       if (data?.status) {
         const sellerData = data.data[0].data[0];
+
+        // Add this section for buyer confirmation logs
+      const buyerConfirmationPayload = {
+        orderId:
+          sellerData?.status?.length == 0 ||
+          sellerData?.status[0]?.currentStatus == "DRAFT" ||
+          sellerData?.status[0]?.currentStatus == "FAILED"
+            ? sellerData?.tempOrderId
+            : sellerData?.orderId,
+      };
+      
+      const buyerConfirmationOrder = await POST(
+        GET_ORDER_CONFIRMATION_LOG,
+        buyerConfirmationPayload
+      );
+      
+      if (buyerConfirmationOrder?.data?.success) {
+        setBuyerConfirmationLogs(buyerConfirmationOrder?.data?.data[0]?.data);
+      }
 
         // Process box data to set collectible amount flags
         if (sellerData.boxInfo) {
@@ -9338,9 +9362,50 @@ useEffect(() => {
             errorMessage={`E-way Bill Number is required for orders with total value ≥ ₹50,000`}
           />
         </div>
+          {/* Row 3: Zone - ADD THIS NEW ROW */}
+      <div className="">
+        <FloatingLabelInput
+          placeholder="Zone"
+          value={orderData?.zone || ""}
+          readOnly={true}
+        />
+        {/* Empty div to maintain grid layout */}
+        <div></div>
+      </div>
       </div>
     </div>
   );
+
+  // Add this new render function
+const renderOrderConfirmationLogs = () => (
+  <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
+    {buyerConfirmationLogs?.map((item: any, index: number) => (
+      <div key={index} className="border rounded-lg p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+          <div>
+            <span className="font-medium">New Status:</span>{" "}
+            {item?.eventRecord?.newStatus || "--"}
+          </div>
+          <div>
+            <span className="font-medium">Previous Status:</span>{" "}
+            {item?.eventRecord?.previousStatus || "--"}
+          </div>
+          <div className="md:col-span-2">
+            <span className="font-medium">Time Stamp:</span>{" "}
+            {item?.createdAt
+              ? convertEpochToDateTime(item.createdAt)
+              : "--"}
+          </div>
+        </div>
+      </div>
+    ))}
+    {buyerConfirmationLogs?.length === 0 && (
+      <div className="text-center py-8 text-gray-500">
+        No confirmation logs available
+      </div>
+    )}
+  </div>
+);
 
   if (currentStep === "serviceSelection") {
     return (
@@ -9436,6 +9501,10 @@ useEffect(() => {
       </Collapsible>
 
       <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
+
+<Collapsible title="Order Confirmation Logs">
+  {renderOrderConfirmationLogs()}
+</Collapsible>
 
       {!isEnabled && (
         <div
