@@ -9069,15 +9069,15 @@ useEffect(() => {
               </div>
 
               {/* Shipyaari Payload */}
-              {(orderData?.otherDetails?.rawReqBody ||
-                orderData?.otherDetails?.rawResBody) && (
+              {(orderData?.otherDetails?.[0]?.rawReqBody ||
+                orderData?.otherDetails?.[0]?.rawResBody) && (
                 <div className="md:col-span-2">
                   <span className="font-medium">Shipyaari Payload:</span>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="flex-1 overflow-x-auto whitespace-nowrap border rounded px-2 py-1 bg-gray-50 text-xs">
                       {JSON.stringify({
-                        rawReqBody: orderData?.otherDetails?.rawReqBody,
-                        rawResBody: orderData?.otherDetails?.rawResBody,
+                        rawReqBody: orderData?.otherDetails?.[0]?.rawReqBody,
+                        rawResBody: orderData?.otherDetails?.[0]?.rawResBody,
                       })}
                     </div>
                     <img
@@ -9087,8 +9087,8 @@ useEffect(() => {
                       onClick={() =>
                         copyToClipboard(
                           JSON.stringify({
-                            rawReqBody: orderData?.otherDetails?.rawReqBody,
-                            rawResBody: orderData?.otherDetails?.rawResBody,
+                            rawReqBody: orderData?.otherDetails?.[0]?.rawReqBody,
+                            rawResBody: orderData?.otherDetails?.[0]?.rawResBody,
                           })
                         )
                       }
