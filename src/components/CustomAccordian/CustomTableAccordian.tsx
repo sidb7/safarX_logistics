@@ -4958,7 +4958,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   const [currentStep, setCurrentStep] = useState<
     "orderDetails" | "serviceSelection"
   >("orderDetails");
-  
+
   // const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
   //   {}
   // );
@@ -4976,8 +4976,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       locality: false,
       landmark: false,
       gstNumber: false,
-          gstLength: false, // Add this
-
+      gstLength: false, // Add this
     },
     delivery: {
       contactName: false,
@@ -4987,8 +4986,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       locality: false,
       landmark: false,
       gstNumber: false,
-          gstLength: false, // Add this
-
+      gstLength: false, // Add this
     },
     boxes: {} as {
       [boxIndex: number]: {
@@ -5020,8 +5018,16 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     "WEBSITE_ALPHA",
     "MANUAL_BULK_B2B",
     "BULK_B2B",
-        "MANUAL_BULK_B2C",
-
+    "MANUAL_BULK_B2C",
+  ];
+  const PANEL_SOURCES = [
+    "WEBSITE_SINGLE_PAGE",
+    "WEBSITE",
+    "WEBSITE_ALPHA",
+    "BULK_B2C",
+    "MANUAL_BULK_B2C",
+    "BULK_B2B",
+    "MANUAL_BULK_B2B",
   ];
   const [isProductEditingAllowed, setIsProductEditingAllowed] = useState(true);
   const [serviceLoading, setServiceLoading] = useState(false);
@@ -5118,22 +5124,35 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     height: 0,
   });
 
+  const getSellerSession = () => {
+    try {
+      const sellerSessionData = localStorage.getItem("sellerSession");
+      return sellerSessionData ? JSON.parse(sellerSessionData) : null;
+    } catch (error) {
+      console.error("Error parsing sellerSession:", error);
+      return null;
+    }
+  };
 
-const getSellerSession = () => {
-  try {
-    const sellerSessionData = localStorage.getItem('sellerSession');
-    return sellerSessionData ? JSON.parse(sellerSessionData) : null;
-  } catch (error) {
-    console.error('Error parsing sellerSession:', error);
-    return null;
-  }
-};
+  const isB2BDisabled = () => {
+    const sellerSession = getSellerSession();
+    return sellerSession?.businessType === "INDIVIDUAL";
+  };
 
-const isB2BDisabled = () => {
-  const sellerSession = getSellerSession();
-  return sellerSession?.businessType === 'INDIVIDUAL';
-};
+  // Helper function to check if source is from panel
+  const isPanelSource = (source: string): boolean => {
+    return PANEL_SOURCES.includes(source);
+  };
 
+  const isApiSource = (source: string): boolean => {
+    return source === "API";
+  };
+  const isNotApiSource = !isApiSource(orderData?.source || "");
+
+  // Helper function to get source type description
+  const getSourceTypeDescription = (source: string): string => {
+    return isPanelSource(source) ? "Panel Order" : "API/Channel Integration";
+  };
 
   // Refs// Helper function to check if pickup address has errors
   const hasPickupAddressErrors = (): boolean => {
@@ -5324,23 +5343,39 @@ const isB2BDisabled = () => {
   };
 
   // Add these helper functions after the existing helper functions
+  // const calculateTotalInvoiceValue = (): number => {
+  //   if (!orderData?.boxInfo) return 0;
+
+  //   return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+  //     if (!box.products || box.products.length === 0) return totalInvoice;
+
+  //     const boxInvoiceValue = box.products.reduce(
+  //       (boxTotal: number, product: any) => {
+  //         const qty = product.qty || 0;
+  //         const unitPrice = product.unitPrice || 0;
+  //         return boxTotal + qty * unitPrice;
+  //       },
+  //       0
+  //     );
+
+  //     return totalInvoice + boxInvoiceValue;
+  //   }, 0);
+  // };
+
   const calculateTotalInvoiceValue = (): number => {
     if (!orderData?.boxInfo) return 0;
 
-    return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
-      if (!box.products || box.products.length === 0) return totalInvoice;
-
-      const boxInvoiceValue = box.products.reduce(
-        (boxTotal: number, product: any) => {
-          const qty = product.qty || 0;
-          const unitPrice = product.unitPrice || 0;
-          return boxTotal + qty * unitPrice;
-        },
-        0
-      );
-
-      return totalInvoice + boxInvoiceValue;
-    }, 0);
+    if (isPanelSource(orderData?.source || "")) {
+      // For panel sources: calculate sum of (product price × quantity)
+      return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+        return totalInvoice + calculateBoxTotalPrice(box);
+      }, 0);
+    } else {
+      // For API/channel integration sources: sum invoice values from all boxes
+      return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+        return totalInvoice + (box.codInfo?.invoiceValue || 0);
+      }, 0);
+    }
   };
 
   const calculateTotalCollectableAmount = (): number => {
@@ -5470,17 +5505,17 @@ const isB2BDisabled = () => {
     //   newErrors.pickup.gstLength = true;
     //   hasErrors = true;
     // }
-      if (orderData?.orderType === "B2B") {
-    // For B2B orders, GST is optional but if provided, must be valid format
-    if (pickupAddress.gstNumber?.trim()) {
-      const gstValue = pickupAddress.gstNumber.trim();
-      // Check if it's exactly 15 characters and contains only alphanumeric characters
-      if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
-        newErrors.pickup.gstLength = true;
-        hasErrors = true;
+    if (orderData?.orderType === "B2B") {
+      // For B2B orders, GST is optional but if provided, must be valid format
+      if (pickupAddress.gstNumber?.trim()) {
+        const gstValue = pickupAddress.gstNumber.trim();
+        // Check if it's exactly 15 characters and contains only alphanumeric characters
+        if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
+          newErrors.pickup.gstLength = true;
+          hasErrors = true;
+        }
       }
     }
-  }
 
     // Validate delivery address
     if (!deliveryAddress.contact.contactName?.trim()) {
@@ -5515,17 +5550,17 @@ const isB2BDisabled = () => {
     //   newErrors.delivery.gstLength = true;
     //   hasErrors = true;
     // }
-       if (orderData?.orderType === "B2B") {
-    // For B2B orders, GST is optional but if provided, must be valid format
-    if (deliveryAddress.gstNumber?.trim()) {
-      const gstValue = deliveryAddress.gstNumber.trim();
-      // Check if it's exactly 15 characters and contains only alphanumeric characters
-      if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
-        newErrors.delivery.gstLength = true;
-        hasErrors = true;
+    if (orderData?.orderType === "B2B") {
+      // For B2B orders, GST is optional but if provided, must be valid format
+      if (deliveryAddress.gstNumber?.trim()) {
+        const gstValue = deliveryAddress.gstNumber.trim();
+        // Check if it's exactly 15 characters and contains only alphanumeric characters
+        if (gstValue.length !== 15 || !/^[0-9A-Z]{15}$/i.test(gstValue)) {
+          newErrors.delivery.gstLength = true;
+          hasErrors = true;
+        }
       }
     }
-  }
 
     setValidationErrors(newErrors);
     return !hasErrors;
@@ -5583,10 +5618,10 @@ const isB2BDisabled = () => {
           newErrors.products[productKey].qty = true;
           hasErrors = true;
         }
-        if (!product.unitPrice || product.unitPrice <= 0) {
-          newErrors.products[productKey].unitPrice = true;
-          hasErrors = true;
-        }
+        // if (!product.unitPrice || product.unitPrice <= 0) {
+        //   newErrors.products[productKey].unitPrice = true;
+        //   hasErrors = true;
+        // }
         if (!product.deadWeight || product.deadWeight <= 0) {
           newErrors.products[productKey].deadWeight = true;
           hasErrors = true;
@@ -5609,8 +5644,7 @@ const isB2BDisabled = () => {
         locality: false,
         landmark: false,
         gstNumber: false,
-              gstLength: false, // Add this
-
+        gstLength: false, // Add this
       },
       delivery: {
         contactName: false,
@@ -5620,8 +5654,7 @@ const isB2BDisabled = () => {
         locality: false,
         landmark: false,
         gstNumber: false,
-              gstLength: false, // Add this
-
+        gstLength: false, // Add this
       },
       boxes: {},
       products: {},
@@ -5703,9 +5736,9 @@ const isB2BDisabled = () => {
         newErrors[section as "pickup" | "delivery"][
           field as keyof typeof newErrors.pickup
         ] = false;
-          if (field === "gstNumber") {
-        newErrors[section as "pickup" | "delivery"]["gstLength"] = false;
-      }
+        if (field === "gstNumber") {
+          newErrors[section as "pickup" | "delivery"]["gstLength"] = false;
+        }
       } else if (section === "boxes" && index !== undefined) {
         if (!newErrors.boxes[index]) {
           newErrors.boxes[index] = {
@@ -5896,14 +5929,34 @@ const isB2BDisabled = () => {
   };
 
   // Calculate total price from products in a box
-  const calculateBoxTotalPrice = (box: any) => {
-    if (!box.products || box.products.length === 0) return 0;
+  // const calculateBoxTotalPrice = (box: any) => {
+  //   if (!box.products || box.products.length === 0) return 0;
 
-    return box.products.reduce((total: number, product: any) => {
-      const qty = product.qty || 0;
-      const unitPrice = product.unitPrice || 0;
-      return total + qty * unitPrice;
-    }, 0);
+  //   return box.products.reduce((total: number, product: any) => {
+  //     const qty = product.qty || 0;
+  //     const unitPrice = product.unitPrice || 0;
+  //     return total + qty * unitPrice;
+  //   }, 0);
+  // };
+
+  // Update the calculateBoxTotalPrice function to handle API vs Panel sources
+  const calculateBoxTotalPrice = (box: any) => {
+    if (!box) return 0;
+
+    // Check if the order source is from panel
+    if (isPanelSource(orderData?.source || "")) {
+      // For panel sources: calculate from products (sum of product price × quantity)
+      if (!box.products || box.products.length === 0) return 0;
+
+      return box.products.reduce((total: number, product: any) => {
+        const qty = product.qty || 0;
+        const unitPrice = product.unitPrice || 0;
+        return total + qty * unitPrice;
+      }, 0);
+    } else {
+      // For API/channel integration sources: use invoice value from box's codInfo
+      return box.codInfo?.invoiceValue || 0;
+    }
   };
 
   // Product operations functions
@@ -6199,6 +6252,26 @@ const isB2BDisabled = () => {
   const buildCompletePayload = () => {
     const totalInvoiceValue = calculateTotalInvoiceValue();
     const totalCollectableAmount = calculateTotalCollectableAmount();
+
+    // Update boxInfo based on source type
+    const updatedBoxInfo = orderData?.boxInfo?.map((box: any) => {
+      const updatedBox = { ...box };
+
+      if (isPanelSource(orderData?.source || "")) {
+        // For panel sources: calculate invoice value from products
+        const calculatedInvoiceValue = calculateBoxTotalPrice(box);
+        updatedBox.codInfo = {
+          ...updatedBox.codInfo,
+          invoiceValue: calculatedInvoiceValue,
+        };
+      } else {
+        // For API/channel sources: preserve existing invoice value from box's codInfo
+        // No changes needed as we're keeping the original values
+      }
+
+      return updatedBox;
+    });
+
     return {
       orderId: orderData?.orderId,
       tempOrderId: orderData?.tempOrderId,
@@ -6264,11 +6337,10 @@ const isB2BDisabled = () => {
     }
 
     return (
-      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
-            onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
-
+      <div
+        className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+        onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
       >
-
         {isLoading ? (
           <div className="p-3 flex justify-center items-center">
             <LoadingIcon /> <span className="ml-2">Searching...</span>
@@ -6611,9 +6683,9 @@ const isB2BDisabled = () => {
     }
 
     return (
-      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
-            onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
-
+      <div
+        className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+        onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
       >
         {isLoading ? (
           <div className="p-3 flex justify-center items-center">
@@ -6832,8 +6904,7 @@ const isB2BDisabled = () => {
         locality: false,
         landmark: false,
         gstNumber: false,
-              gstLength: false,
-
+        gstLength: false,
       },
     }));
 
@@ -6880,8 +6951,7 @@ const isB2BDisabled = () => {
         locality: false,
         landmark: false,
         gstNumber: false,
-              gstLength: false,
-
+        gstLength: false,
       },
     }));
 
@@ -6902,9 +6972,9 @@ const isB2BDisabled = () => {
     }
 
     return (
-      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
-            onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
-
+      <div
+        className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
+        onMouseDown={(e: React.MouseEvent) => e.preventDefault()} // Correct typing
       >
         {isLoading ? (
           <div className="p-3 flex justify-center items-center">
@@ -6968,23 +7038,23 @@ const isB2BDisabled = () => {
         const sellerData = data.data[0].data[0];
 
         // Add this section for buyer confirmation logs
-      const buyerConfirmationPayload = {
-        orderId:
-          sellerData?.status?.length == 0 ||
-          sellerData?.status[0]?.currentStatus == "DRAFT" ||
-          sellerData?.status[0]?.currentStatus == "FAILED"
-            ? sellerData?.tempOrderId
-            : sellerData?.orderId,
-      };
-      
-      const buyerConfirmationOrder = await POST(
-        GET_ORDER_CONFIRMATION_LOG,
-        buyerConfirmationPayload
-      );
-      
-      if (buyerConfirmationOrder?.data?.success) {
-        setBuyerConfirmationLogs(buyerConfirmationOrder?.data?.data[0]?.data);
-      }
+        const buyerConfirmationPayload = {
+          orderId:
+            sellerData?.status?.length == 0 ||
+            sellerData?.status[0]?.currentStatus == "DRAFT" ||
+            sellerData?.status[0]?.currentStatus == "FAILED"
+              ? sellerData?.tempOrderId
+              : sellerData?.orderId,
+        };
+
+        const buyerConfirmationOrder = await POST(
+          GET_ORDER_CONFIRMATION_LOG,
+          buyerConfirmationPayload
+        );
+
+        if (buyerConfirmationOrder?.data?.success) {
+          setBuyerConfirmationLogs(buyerConfirmationOrder?.data?.data[0]?.data);
+        }
 
         // Process box data to set collectible amount flags
         if (sellerData.boxInfo) {
@@ -7000,7 +7070,8 @@ const isB2BDisabled = () => {
                   apiCollectibleAmount !== undefined &&
                   apiCollectibleAmount !== null &&
                   apiCollectibleAmount !== "",
-                collectableAmount: apiCollectibleAmount,initializeFormData
+                collectableAmount: apiCollectibleAmount,
+                initializeFormData,
               },
             };
           });
@@ -7301,12 +7372,12 @@ const isB2BDisabled = () => {
   };
 
   const nextStep = async () => {
-     // Prevent multiple simultaneous calls
-  if (isNextLoading) {
-    return;
-  }
+    // Prevent multiple simultaneous calls
+    if (isNextLoading) {
+      return;
+    }
     try {
-          setIsNextLoading(true); // Set loading state
+      setIsNextLoading(true); // Set loading state
 
       // Validate Order ID first via API
       const currentOrderId = orderData?.orderId?.trim() || "";
@@ -7350,8 +7421,8 @@ const isB2BDisabled = () => {
       console.error("Error saving order details:", error);
       toast.error("Something went wrong while saving order details");
     } finally {
-    setIsNextLoading(false); // Always reset loading state
-  }
+      setIsNextLoading(false); // Always reset loading state
+    }
   };
 
   const backToOrderDetails = () => {
@@ -7520,16 +7591,21 @@ const isB2BDisabled = () => {
   // Effects
 
   // Additionally, add this useEffect to automatically set orderType to B2C if businessType is INDIVIDUAL
-useEffect(() => {
-  const sellerSession = getSellerSession();
-  if (sellerSession?.businessType === 'INDIVIDUAL' && orderData?.orderType === 'B2B') {
-    setOrderData((prev: any) => ({
-      ...prev,
-      orderType: 'B2C',
-    }));
-    toast.success('Order type changed to B2C as individual  can only create B2C orders');
-  }
-}, [orderData?.orderType]);
+  useEffect(() => {
+    const sellerSession = getSellerSession();
+    if (
+      sellerSession?.businessType === "INDIVIDUAL" &&
+      orderData?.orderType === "B2B"
+    ) {
+      setOrderData((prev: any) => ({
+        ...prev,
+        orderType: "B2C",
+      }));
+      toast.success(
+        "Order type changed to B2C as individual  can only create B2C orders"
+      );
+    }
+  }, [orderData?.orderType]);
 
   // Add this useEffect after the existing useEffects
   useEffect(() => {
@@ -7856,30 +7932,28 @@ useEffect(() => {
           //     ? "GST No (required)"
           //     : "GST No (If Available)"
           // }
-            placeholder="GST No (Optional)"
-
+          placeholder="GST No (Optional)"
           value={pickupAddress?.gstNumber || ""}
           // onChangeCallback={(value) => {
           //   setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
           //   clearValidationError("pickup", "gstNumber");
           // }}
-           onChangeCallback={(value) => {
-    setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
-    // Clear GST validation errors when user starts typing
-    setValidationErrors((prev) => ({
-      ...prev,
-      pickup: {
-        ...prev.pickup,
-        gstLength: false,
-      },
-    }));
-  }}
+          onChangeCallback={(value) => {
+            setPickupAddress((prev: any) => ({ ...prev, gstNumber: value }));
+            // Clear GST validation errors when user starts typing
+            setValidationErrors((prev) => ({
+              ...prev,
+              pickup: {
+                ...prev.pickup,
+                gstLength: false,
+              },
+            }));
+          }}
           readOnly={isEnabled}
           required={orderData?.orderType === "B2B"}
-          error={ validationErrors.pickup.gstLength}
+          error={validationErrors.pickup.gstLength}
           // errorMessage="GST No is required for B2B orders"
           errorMessage="Please enter a valid 15-character GST number"
-
         />
 
         <FloatingLabelInput
@@ -8078,30 +8152,28 @@ useEffect(() => {
           //     ? "GST No (required)"
           //     : "GST No (If Available)"
           // }
-            placeholder="GST No (Optional)"
-
+          placeholder="GST No (Optional)"
           value={deliveryAddress.gstNumber}
           // onChangeCallback={(value) => {
           //   setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
           //   clearValidationError("delivery", "gstNumber");
           // }}
           onChangeCallback={(value) => {
-    setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
-    // Clear GST validation errors when user starts typing
-    setValidationErrors((prev) => ({
-      ...prev,
-      delivery: {
-        ...prev.delivery,
-        gstLength: false,
-      },
-    }));
-  }}
+            setDeliveryAddress((prev: any) => ({ ...prev, gstNumber: value }));
+            // Clear GST validation errors when user starts typing
+            setValidationErrors((prev) => ({
+              ...prev,
+              delivery: {
+                ...prev.delivery,
+                gstLength: false,
+              },
+            }));
+          }}
           readOnly={isEnabled}
           required={orderData?.orderType === "B2B"}
           error={validationErrors.delivery.gstLength}
           // errorMessage="GST No is required for B2B orders"
           errorMessage="Please enter a valid 15-character GST number"
-
         />
 
         <FloatingLabelInput
@@ -8334,7 +8406,9 @@ useEffect(() => {
                   onChangeCallback={(value) => {
                     updateBox(boxIndex, "qty", parseFloat(value) || 0);
                   }}
-                  readOnly={isEnabled || !isProductEditingAllowed}
+                  readOnly={
+                    isEnabled || !isProductEditingAllowed || !isNotApiSource
+                  }
                   required
                 />
 
@@ -8558,7 +8632,11 @@ useEffect(() => {
                                   productIndex
                                 );
                               }}
-                              readOnly={isEnabled || !isProductEditingAllowed}
+                              readOnly={
+                                isEnabled ||
+                                !isProductEditingAllowed ||
+                                !isNotApiSource
+                              }
                               required
                               error={
                                 validationErrors.products[
@@ -8602,6 +8680,20 @@ useEffect(() => {
                               placeholder="Unit Price"
                               type="number"
                               value={product.unitPrice?.toString() || ""}
+                              // onChangeCallback={(value) => {
+                              //   updateProduct(
+                              //     boxIndex,
+                              //     productIndex,
+                              //     "unitPrice",
+                              //     parseFloat(value) || 0
+                              //   );
+                              //   clearValidationError(
+                              //     "products",
+                              //     "unitPrice",
+                              //     boxIndex,
+                              //     productIndex
+                              //   );
+                              // }}
                               onChangeCallback={(value) => {
                                 updateProduct(
                                   boxIndex,
@@ -8609,21 +8701,19 @@ useEffect(() => {
                                   "unitPrice",
                                   parseFloat(value) || 0
                                 );
-                                clearValidationError(
-                                  "products",
-                                  "unitPrice",
-                                  boxIndex,
-                                  productIndex
-                                );
                               }}
-                              readOnly={isEnabled || !isProductEditingAllowed}
-                              required
-                              error={
-                                validationErrors.products[
-                                  `${boxIndex}-${productIndex}`
-                                ]?.unitPrice
+                              readOnly={
+                                isEnabled ||
+                                !isProductEditingAllowed ||
+                                !isNotApiSource
                               }
-                              errorMessage="Unit price is required"
+                              // required
+                              // error={
+                              //   validationErrors.products[
+                              //     `${boxIndex}-${productIndex}`
+                              //   ]?.unitPrice
+                              // }
+                              // errorMessage="Unit price is required"
                             />
                             <FloatingLabelInput
                               placeholder="L(cm)"
@@ -8726,14 +8816,16 @@ useEffect(() => {
                       </Collapsible>
                     ))}
                     <div>
-                      {!isEnabled && isProductEditingAllowed && (
-                        <OneButton
-                          text="Add Product"
-                          onClick={() => addProduct(boxIndex)}
-                          variant="secondary"
-                          className="!rounded-full"
-                        />
-                      )}
+                      {!isEnabled &&
+                        isProductEditingAllowed &&
+                        isNotApiSource && (
+                          <OneButton
+                            text="Add Product"
+                            onClick={() => addProduct(boxIndex)}
+                            variant="secondary"
+                            className="!rounded-full"
+                          />
+                        )}
                     </div>
                   </div>
                 </div>
@@ -8756,7 +8848,7 @@ useEffect(() => {
       })}
 
       {/* Add Box Button */}
-      {!isEnabled && isProductEditingAllowed && (
+      {!isEnabled && isProductEditingAllowed && isNotApiSource && (
         <div className="flex justify-center mb-2 !w-full">
           <OneButton
             text="Add Box"
@@ -9093,8 +9185,10 @@ useEffect(() => {
                       onClick={() =>
                         copyToClipboard(
                           JSON.stringify({
-                            rawReqBody: orderData?.otherDetails?.[0]?.rawReqBody,
-                            rawResBody: orderData?.otherDetails?.[0]?.rawResBody,
+                            rawReqBody:
+                              orderData?.otherDetails?.[0]?.rawReqBody,
+                            rawResBody:
+                              orderData?.otherDetails?.[0]?.rawResBody,
                           })
                         )
                       }
@@ -9229,7 +9323,9 @@ useEffect(() => {
                       }));
                     }
                   }}
-                  disabled={isEnabled || !isProductEditingAllowed  || isB2BDisabled()}
+                  disabled={
+                    isEnabled || !isProductEditingAllowed || isB2BDisabled()
+                  }
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">B2B</span>
@@ -9368,50 +9464,50 @@ useEffect(() => {
             errorMessage={`E-way Bill Number is required for orders with total value ≥ ₹50,000`}
           />
         </div>
-          {/* Row 3: Zone - ADD THIS NEW ROW */}
-      {isEnabled && (<div className="">
-        <FloatingLabelInput
-          placeholder="Zone"
-          value={orderData?.zone || ""}
-          readOnly={true}
-        />
-        {/* Empty div to maintain grid layout */}
-        <div></div>
-      </div>)}
+        {/* Row 3: Zone - ADD THIS NEW ROW */}
+        {isEnabled && (
+          <div className="">
+            <FloatingLabelInput
+              placeholder="Zone"
+              value={orderData?.zone || ""}
+              readOnly={true}
+            />
+            {/* Empty div to maintain grid layout */}
+            <div></div>
+          </div>
+        )}
       </div>
     </div>
   );
 
   // Add this new render function
-const renderOrderConfirmationLogs = () => (
-  <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
-    {buyerConfirmationLogs?.map((item: any, index: number) => (
-      <div key={index} className="border rounded-lg p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          <div>
-            <span className="font-medium">New Status:</span>{" "}
-            {item?.eventRecord?.newStatus || "--"}
-          </div>
-          <div>
-            <span className="font-medium">Previous Status:</span>{" "}
-            {item?.eventRecord?.previousStatus || "--"}
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium">Time Stamp:</span>{" "}
-            {item?.createdAt
-              ? convertEpochToDateTime(item.createdAt)
-              : "--"}
+  const renderOrderConfirmationLogs = () => (
+    <div className="space-y-3 p-4 max-h-96 overflow-y-auto">
+      {buyerConfirmationLogs?.map((item: any, index: number) => (
+        <div key={index} className="border rounded-lg p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <div>
+              <span className="font-medium">New Status:</span>{" "}
+              {item?.eventRecord?.newStatus || "--"}
+            </div>
+            <div>
+              <span className="font-medium">Previous Status:</span>{" "}
+              {item?.eventRecord?.previousStatus || "--"}
+            </div>
+            <div className="md:col-span-2">
+              <span className="font-medium">Time Stamp:</span>{" "}
+              {item?.createdAt ? convertEpochToDateTime(item.createdAt) : "--"}
+            </div>
           </div>
         </div>
-      </div>
-    ))}
-    {buyerConfirmationLogs?.length === 0 && (
-      <div className="text-center py-8 text-gray-500">
-        No confirmation logs available
-      </div>
-    )}
-  </div>
-);
+      ))}
+      {buyerConfirmationLogs?.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No confirmation logs available
+        </div>
+      )}
+    </div>
+  );
 
   if (currentStep === "serviceSelection") {
     return (
@@ -9508,9 +9604,9 @@ const renderOrderConfirmationLogs = () => (
 
       <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
 
-<Collapsible title="Order Confirmation Logs">
-  {renderOrderConfirmationLogs()}
-</Collapsible>
+      <Collapsible title="Order Confirmation Logs">
+        {renderOrderConfirmationLogs()}
+      </Collapsible>
 
       {!isEnabled && (
         <div
@@ -9530,7 +9626,6 @@ const renderOrderConfirmationLogs = () => (
             variant="primary"
             className="px-8"
             disabled={isNextLoading} // Disable button when loading
-
           />
         </div>
       )}
