@@ -5622,6 +5622,12 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         //   newErrors.products[productKey].unitPrice = true;
         //   hasErrors = true;
         // }
+
+        // Validate unit price only for COD orders
+if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0)) {
+  newErrors.products[productKey].unitPrice = true;
+  hasErrors = true;
+}
         if (!product.deadWeight || product.deadWeight <= 0) {
           newErrors.products[productKey].deadWeight = true;
           hasErrors = true;
@@ -8694,14 +8700,20 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                               //     productIndex
                               //   );
                               // }}
-                              onChangeCallback={(value) => {
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "unitPrice",
-                                  parseFloat(value) || 0
-                                );
-                              }}
+                               onChangeCallback={(value) => {
+    updateProduct(
+      boxIndex,
+      productIndex,
+      "unitPrice",
+      parseFloat(value) || 0
+    );
+    clearValidationError(
+      "products",
+      "unitPrice",
+      boxIndex,
+      productIndex
+    );
+  }}
                               readOnly={
                                 isEnabled ||
                                 !isProductEditingAllowed ||
@@ -8714,6 +8726,14 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                               //   ]?.unitPrice
                               // }
                               // errorMessage="Unit price is required"
+
+                               required={orderData?.codInfo?.isCod}
+  error={
+    validationErrors.products[
+      `${boxIndex}-${productIndex}`
+    ]?.unitPrice
+  }
+  errorMessage="Unit price is required for COD orders"
                             />
                             <FloatingLabelInput
                               placeholder="L(cm)"
