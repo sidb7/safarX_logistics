@@ -5371,10 +5371,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         return totalInvoice + calculateBoxTotalPrice(box);
       }, 0);
     } else {
-      // For API/channel integration sources: sum invoice values from all boxes
-      return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
-        return totalInvoice + (box.codInfo?.invoiceValue || 0);
-      }, 0);
+       // For API/channel integration sources: use invoice value from main codInfo (outside boxInfo)
+    return orderData?.codInfo?.invoiceValue || 0;
     }
   };
 
