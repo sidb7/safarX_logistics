@@ -5944,96 +5944,190 @@ if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0))
   // };
 
   // Update the calculateBoxTotalPrice function to handle API vs Panel sources
-  const calculateBoxTotalPrice = (box: any) => {
-    if (!box) return 0;
+  // const calculateBoxTotalPrice = (box: any) => {
+  //   if (!box) return 0;
 
-    // Check if the order source is from panel
-    if (isPanelSource(orderData?.source || "")) {
-      // For panel sources: calculate from products (sum of product price × quantity)
-      if (!box.products || box.products.length === 0) return 0;
+  //   // Check if the order source is from panel
+  //   if (isPanelSource(orderData?.source || "")) {
+  //     // For panel sources: calculate from products (sum of product price × quantity)
+  //     if (!box.products || box.products.length === 0) return 0;
 
-      return box.products.reduce((total: number, product: any) => {
-        const qty = product.qty || 0;
-        const unitPrice = product.unitPrice || 0;
-        return total + qty * unitPrice;
-      }, 0);
-    } else {
-      // For API/channel integration sources: use invoice value from box's codInfo
-      return box.codInfo?.invoiceValue || 0;
-    }
-  };
+  //     return box.products.reduce((total: number, product: any) => {
+  //       const qty = product.qty || 0;
+  //       const unitPrice = product.unitPrice || 0;
+  //       return total + qty * unitPrice;
+  //     }, 0);
+  //   } else {
+  //     // For API/channel integration sources: use invoice value from box's codInfo
+  //     return box.codInfo?.invoiceValue || 0;
+  //   }
+  // };
+
+  // Create a centralized function to get the correct invoice value
+const getBoxInvoiceValue = (box: any, source: string) => {
+  if (isPanelSource(source)) {
+    // For panel sources: always calculate from products
+    if (!box.products || box.products.length === 0) return 0;
+    return box.products.reduce((total: number, product: any) => {
+      const qty = product.qty || 0;
+      const unitPrice = product.unitPrice || 0;
+      return total + qty * unitPrice;
+    }, 0);
+  } else {
+    // For API sources: use the existing invoice value from box's codInfo
+    return box.codInfo?.invoiceValue || 0;
+  }
+};
+
+// Update the calculateBoxTotalPrice function to use this
+const calculateBoxTotalPrice = (box: any) => {
+  return getBoxInvoiceValue(box, orderData?.source || "");
+};
 
   // Product operations functions
+  // const updateProduct = (
+  //   boxIndex: number,
+  //   productIndex: number,
+  //   field: string,
+  //   value: any
+  // ) => {
+  //   if (isEnabled) return;
+
+  //   setOrderData((prevData: any) => {
+  //     if (!prevData) return prevData;
+
+  //     const updatedData = { ...prevData };
+  //     const updatedBoxInfo = [...updatedData.boxInfo];
+  //     const updatedBox = { ...updatedBoxInfo[boxIndex] };
+  //     const updatedProducts = [...updatedBox.products];
+
+  //     updatedProducts[productIndex] = {
+  //       ...updatedProducts[productIndex],
+  //       [field]: value,
+  //     };
+
+  //     // Recalculate totals when qty, unitPrice, or deadWeight changes
+  //     if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+  //       const product = updatedProducts[productIndex];
+  //       const qty = product.qty || 0;
+  //       const unitPrice = product.unitPrice || 0;
+  //       const deadWeight = product.deadWeight || 0;
+
+  //       updatedProducts[productIndex] = {
+  //         ...updatedProducts[productIndex],
+  //         totalPrice: qty * unitPrice,
+  //         appliedWeight: qty * deadWeight,
+  //         volumetricWeight: calculateVolumetricWeight(
+  //           product.length,
+  //           product.breadth,
+  //           product.height,
+  //           qty
+  //         ),
+  //       };
+  //     }
+
+  //     updatedBox.products = updatedProducts;
+
+  //     // Calculate new total price for the box
+  //     const newTotalPrice = updatedProducts.reduce(
+  //       (total: number, product: any) => {
+  //         const qty = product.qty || 0;
+  //         const unitPrice = product.unitPrice || 0;
+  //         return total + qty * unitPrice;
+  //       },
+  //       0
+  //     );
+
+  //     // Sync collectible amount if not manually edited and COD is enabled
+  //     if (
+  //       !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+  //       updatedData.codInfo?.isCod
+  //     ) {
+  //       updatedBox.codInfo = {
+  //         ...updatedBox.codInfo,
+  //         collectableAmount: newTotalPrice,
+  //         isCollectibleManuallyEdited: false,
+  //       };
+  //     }
+  //     updatedBoxInfo[boxIndex] = updatedBox;
+  //     updatedData.boxInfo = updatedBoxInfo;
+
+  //     return updatedData;
+  //   });
+  // };
+
   const updateProduct = (
-    boxIndex: number,
-    productIndex: number,
-    field: string,
-    value: any
-  ) => {
-    if (isEnabled) return;
+  boxIndex: number,
+  productIndex: number,
+  field: string,
+  value: any
+) => {
+  if (isEnabled) return;
 
-    setOrderData((prevData: any) => {
-      if (!prevData) return prevData;
+  setOrderData((prevData: any) => {
+    if (!prevData) return prevData;
 
-      const updatedData = { ...prevData };
-      const updatedBoxInfo = [...updatedData.boxInfo];
-      const updatedBox = { ...updatedBoxInfo[boxIndex] };
-      const updatedProducts = [...updatedBox.products];
+    const updatedData = { ...prevData };
+    const updatedBoxInfo = [...updatedData.boxInfo];
+    const updatedBox = { ...updatedBoxInfo[boxIndex] };
+    const updatedProducts = [...updatedBox.products];
+
+    updatedProducts[productIndex] = {
+      ...updatedProducts[productIndex],
+      [field]: value,
+    };
+
+    // Recalculate totals when qty, unitPrice, or deadWeight changes
+    if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+      const product = updatedProducts[productIndex];
+      const qty = product.qty || 0;
+      const unitPrice = product.unitPrice || 0;
+      const deadWeight = product.deadWeight || 0;
 
       updatedProducts[productIndex] = {
         ...updatedProducts[productIndex],
-        [field]: value,
+        totalPrice: qty * unitPrice,
+        appliedWeight: qty * deadWeight,
+        volumetricWeight: calculateVolumetricWeight(
+          product.length,
+          product.breadth,
+          product.height,
+          qty
+        ),
       };
+    }
 
-      // Recalculate totals when qty, unitPrice, or deadWeight changes
-      if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
-        const product = updatedProducts[productIndex];
-        const qty = product.qty || 0;
-        const unitPrice = product.unitPrice || 0;
-        const deadWeight = product.deadWeight || 0;
+    updatedBox.products = updatedProducts;
 
-        updatedProducts[productIndex] = {
-          ...updatedProducts[productIndex],
-          totalPrice: qty * unitPrice,
-          appliedWeight: qty * deadWeight,
-          volumetricWeight: calculateVolumetricWeight(
-            product.length,
-            product.breadth,
-            product.height,
-            qty
-          ),
-        };
-      }
+    // Calculate new total price and invoice value for the box
+    const newTotalPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
+    
+    // Update box's codInfo invoice value for panel sources
+    if (isPanelSource(updatedData.source)) {
+      updatedBox.codInfo = {
+        ...updatedBox.codInfo,
+        invoiceValue: newTotalPrice,
+      };
+    }
 
-      updatedBox.products = updatedProducts;
+    // Sync collectible amount if not manually edited and COD is enabled
+    if (
+      !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+      updatedData.codInfo?.isCod
+    ) {
+      updatedBox.codInfo = {
+        ...updatedBox.codInfo,
+        collectableAmount: newTotalPrice,
+        isCollectibleManuallyEdited: false,
+      };
+    }
 
-      // Calculate new total price for the box
-      const newTotalPrice = updatedProducts.reduce(
-        (total: number, product: any) => {
-          const qty = product.qty || 0;
-          const unitPrice = product.unitPrice || 0;
-          return total + qty * unitPrice;
-        },
-        0
-      );
+    updatedBoxInfo[boxIndex] = updatedBox;
+    updatedData.boxInfo = updatedBoxInfo;
 
-      // Sync collectible amount if not manually edited and COD is enabled
-      if (
-        !updatedBox.codInfo?.isCollectibleManuallyEdited &&
-        updatedData.codInfo?.isCod
-      ) {
-        updatedBox.codInfo = {
-          ...updatedBox.codInfo,
-          collectableAmount: newTotalPrice,
-          isCollectibleManuallyEdited: false,
-        };
-      }
-      updatedBoxInfo[boxIndex] = updatedBox;
-      updatedData.boxInfo = updatedBoxInfo;
-
-      return updatedData;
-    });
-  };
+    return updatedData;
+  });
+};
 
   const addProduct = (boxIndex: number) => {
     if (isEnabled || !isProductEditingAllowed) return;
@@ -6257,24 +6351,21 @@ if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0))
     const totalInvoiceValue = calculateTotalInvoiceValue();
     const totalCollectableAmount = calculateTotalCollectableAmount();
 
-    // Update boxInfo based on source type
-    const updatedBoxInfo = orderData?.boxInfo?.map((box: any) => {
-      const updatedBox = { ...box };
+    // Update boxInfo with correct invoice values
+  const updatedBoxInfo = orderData?.boxInfo?.map((box: any) => {
+    const updatedBox = { ...box };
+    
+    // Always ensure invoice value is correct based on source
+    const correctInvoiceValue = getBoxInvoiceValue(box, orderData?.source || "");
+    updatedBox.codInfo = {
+      ...updatedBox.codInfo,
+      invoiceValue: correctInvoiceValue,
+    };
 
-      if (isPanelSource(orderData?.source || "")) {
-        // For panel sources: calculate invoice value from products
-        const calculatedInvoiceValue = calculateBoxTotalPrice(box);
-        updatedBox.codInfo = {
-          ...updatedBox.codInfo,
-          invoiceValue: calculatedInvoiceValue,
-        };
-      } else {
-        // For API/channel sources: preserve existing invoice value from box's codInfo
-        // No changes needed as we're keeping the original values
-      }
+    return updatedBox;
+  });
 
-      return updatedBox;
-    });
+
 
     return {
       orderId: orderData?.orderId,
@@ -6320,7 +6411,9 @@ if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0))
         addressType: deliveryAddress.addressType,
         gstNumber: deliveryAddress.gstNumber,
       },
-      boxInfo: orderData?.boxInfo,
+          boxInfo: updatedBoxInfo,
+
+      // boxInfo: orderData?.boxInfo,
       // codInfo: orderData?.codInfo,
       codInfo: {
         isCod: orderData?.codInfo?.isCod || false,
@@ -7612,21 +7705,63 @@ if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0))
   }, [orderData?.orderType]);
 
   // Add this useEffect after the existing useEffects
-  useEffect(() => {
-    if (orderData?.boxInfo) {
-      const totalInvoiceValue = calculateTotalInvoiceValue();
-      const totalCollectableAmount = calculateTotalCollectableAmount();
+  // useEffect(() => {
+  //   if (orderData?.boxInfo) {
+  //     const totalInvoiceValue = calculateTotalInvoiceValue();
+  //     const totalCollectableAmount = calculateTotalCollectableAmount();
 
-      setOrderData((prevData: any) => ({
-        ...prevData,
-        codInfo: {
-          ...prevData.codInfo,
-          invoiceValue: totalInvoiceValue,
-          collectableAmount: totalCollectableAmount,
-        },
-      }));
-    }
-  }, [orderData?.boxInfo, orderData?.codInfo?.isCod]);
+  //     setOrderData((prevData: any) => ({
+  //       ...prevData,
+  //       codInfo: {
+  //         ...prevData.codInfo,
+  //         invoiceValue: totalInvoiceValue,
+  //         collectableAmount: totalCollectableAmount,
+  //       },
+  //     }));
+  //   }
+  // }, [orderData?.boxInfo, orderData?.codInfo?.isCod]);
+  useEffect(() => {
+  if (orderData?.boxInfo) {
+    setOrderData((prevData: any) => {
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+      let hasChanges = false;
+
+      updatedBoxInfo.forEach((box: any, index: number) => {
+        const correctInvoiceValue = getBoxInvoiceValue(box, updatedData.source);
+        
+        // Only update if the value is different
+        if (box.codInfo?.invoiceValue !== correctInvoiceValue) {
+          updatedBoxInfo[index] = {
+            ...box,
+            codInfo: {
+              ...box.codInfo,
+              invoiceValue: correctInvoiceValue,
+            }
+          };
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) {
+        const totalInvoiceValue = calculateTotalInvoiceValue();
+        const totalCollectableAmount = calculateTotalCollectableAmount();
+
+        return {
+          ...updatedData,
+          boxInfo: updatedBoxInfo,
+          codInfo: {
+            ...updatedData.codInfo,
+            invoiceValue: totalInvoiceValue,
+            collectableAmount: totalCollectableAmount,
+          },
+        };
+      }
+
+      return prevData;
+    });
+  }
+}, [orderData?.boxInfo, orderData?.source]);
 
   useEffect(() => {
     if (orderData?.codInfo?.isCod && orderData?.boxInfo) {
