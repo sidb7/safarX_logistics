@@ -57,6 +57,16 @@ import sessionManager from "../../utils/sessionManager";
 import { ResponsiveState } from "../../utils/responsiveState";
 import NotificationBell from "./notificationBell";
 
+
+import LogOut from "../../assets/log-out-04.svg";
+import User01 from "../../assets/user-01.svg";
+import ChevronRight from "../../assets/chevron-right.svg"
+
+
+import ProfileIcon1 from "../../assets/profile.svg";
+import { profile } from "console";
+
+
 let socket: Socket | null = null;
 
 interface ITopBarProps {
@@ -91,6 +101,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   // Add new state for Sentry feedback
   const [isSentryOpen, setIsSentryOpen] = useState(false);
 
+  const [userData, setUserData ] =useState<any>(null);
+  const [profileData,setProfileData]=useState<any>(null);
+
+
+
   const [serviceabilityData, setServiceabilityData] = useState<any>({
     pickupPincode: "",
     deliveryPincode: "",
@@ -109,7 +124,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const [codPayable, setCodPayable] = useState<any>([]);
   const fetchCodPaymentDetails = async () => {
     const { data } = await POST(COD_DETAILS_FINANCE, {});
-    console.log(data.data, "COD DATA");
+    // console.log(data.data, "COD DATA");
     setCodPayable(data.data);
   };
   useEffect(() => {
@@ -141,7 +156,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   //   `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
   // );
 
+
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
+
+
+
 
   // Handler for Report A Bug click
   const handleReportBugClick = () => {
@@ -168,6 +187,29 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       setIsQuick(false);
     }
   };
+
+
+   const getProfileData = async () => {
+    const { data } = await POST(GET_PROFILE_URL, {});
+    // console.log("data from get api",data)
+    if (data?.success) {
+      setProfileData(data?.data?.[0]);
+      // console.log("i run", profileData)
+   
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
+    useEffect(() => {
+   
+      // console.log("iran");
+      getProfileData();
+      // console.log(profileData)
+            // console.log("iran1");
+
+   
+  }, [isOpen]);
 
   //Creating Dropdown data for service in serviceability
   // const setDropDownData = (data: any) => {
@@ -236,6 +278,22 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     };
   }, []);
 
+
+  
+
+
+  useEffect(() => {
+  const storedUser = localStorage.getItem("sellerSession");
+  if (storedUser) {
+    var user1 = JSON.parse(storedUser);
+    setUserData(user1);
+
+  
+  }
+  // console.log("well",userData)
+}, []);
+
+
   const onClickServiceability = async () => {
     try {
       //Get Company Services API - Serviceability
@@ -268,6 +326,12 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     //   console.error(error);
     // }
   };
+
+
+  
+
+
+  
 
   const logoutHandler = async () => {
     try {
@@ -487,13 +551,63 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 {/* <img src={ProfileLogo} alt="" /> */}
                 {isOpen && (
                   <div
-                    className="origin-top-right z-50 absolute right-0 mt-9 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                    className="origin-top-right z-50 absolute right-0 mt-9 w-[308px] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
+
+                       
+
+                      <div className="flex items-center gap-3 px-4 py-3 border-b ">
+                        {/* <img
+                          src={profileIcon} 
+                          alt="Profile"
+                          className="w-[30px] h-[30px] rounded-full object-cover"
+                        /> */}
+                        <img
+                            src={profileData?.profileImageUrl && profileData?.profileImageUrl !== "N/A" ? profileData?.profileImageUrl : profileIcon} 
+                            alt="Profile"
+                            className="w-[70px] h-[70px] rounded-full object-cover"
+                          />
+
+                        <div>
+                          <div className="font-medium text-[15px] text-gray-900">
+                            {profileData?.firstName} {profileData?.lastName}
+                          </div>
+                          <div className="text-gray-500  text-[12px]">
+                            {/* {userData?.contactNumber}<span className="px-1">|</span> */}
+                          <span
+                            className="truncate"
+                            title={userData?.email}
+                          >
+                            {userData?.email.length > 30
+                              ? `${userData?.email.slice(0, 27)}...`
+                              : userData?.email}
+                          </span>
+                          {/* <span
+                            className="truncate"
+                            title={test21}
+                          >
+                            {test21.length > 30
+                              ? `${test21.slice(0, 28)}...`
+                              : test21}
+                          </span> */}
+
+                          <div className="font-medium text-[11px] text-gray-400">
+                           +91 {userData?.contactNumber}
+                          </div>
+                         
+
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <hr/>
+                    
                     <div className="py-0.5" role="none">
-                      <button
+                      {/* <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
                         role="menuitem"
                         onClick={() => {
@@ -501,8 +615,29 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           setIsOpen(false);
                         }}
                       >
+                       
                         My Profile
-                      </button>
+                      </button> */}
+
+                       <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
+                    role="menuitem"
+                    onClick={() => {
+                      navigate("/profile");
+                      setIsOpen(false);
+                    }}
+                  >
+                  
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <img src={User01} alt="Profile Icon" className="w-4 h-4" />
+                        <span>My Profile</span>
+                      </div>
+                      {/* <img src={ChevronRight} alt="Chevron Icon" className="w-4 h-4" /> */}
+                    </div>
+
+                  </button>
+
                       {/* <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
@@ -510,12 +645,23 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       >
                         Settings
                       </button> */}
-                      <button
+                      {/* <button
                         className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
                         role="menuitem"
                         onClick={() => logoutHandler()}
                       >
                         Sign out
+                      </button> */}
+
+                      <button
+                        className="block w-full text-left px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
+                        role="menuitem"
+                        onClick={() => logoutHandler()}
+                      >
+                        <div className="flex items-center gap-2">
+                          <img src={LogOut} alt="Logout Icon" className="w-4 h-4" />
+                          <span>Sign out</span>
+                        </div>
                       </button>
                     </div>
                   </div>
