@@ -58,9 +58,9 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import NotificationBell from "./notificationBell";
 
 
-import LogOut from "../../assets/log-out-04.svg";
-import User01 from "../../assets/user-01.svg";
-import ChevronRight from "../../assets/chevron-right.svg"
+import LogOut from "../../assets/logOut.svg";
+import User01 from "../../assets/userIcon.svg";
+import ChevronRight from "../../assets/chevronRight.svg"
 
 
 import ProfileIcon1 from "../../assets/profile.svg";
@@ -279,16 +279,12 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   }, []);
 
 
-  
-
-
   useEffect(() => {
   const storedUser = localStorage.getItem("sellerSession");
   if (storedUser) {
-    var user1 = JSON.parse(storedUser);
+    const user1 = JSON.parse(storedUser);
     setUserData(user1);
 
-  
   }
   // console.log("well",userData)
 }, []);
@@ -327,11 +323,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     // }
   };
 
-
-  
-
-
-  
 
   const logoutHandler = async () => {
     try {
@@ -556,8 +547,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
-
-                       
 
                       <div className="flex items-center gap-3 px-4 py-3 border-b ">
                         {/* <img
