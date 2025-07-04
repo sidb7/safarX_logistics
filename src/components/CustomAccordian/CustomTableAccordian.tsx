@@ -5362,19 +5362,52 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   //   }, 0);
   // };
 
-  const calculateTotalInvoiceValue = (): number => {
-    if (!orderData?.boxInfo) return 0;
+  // const calculateTotalInvoiceValue = (): number => {
+  //   if (!orderData?.boxInfo) return 0;
 
-    if (isPanelSource(orderData?.source || "")) {
-      // For panel sources: calculate sum of (product price × quantity)
-      return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
-        return totalInvoice + calculateBoxTotalPrice(box);
+  //   if (isPanelSource(orderData?.source || "")) {
+  //     // For panel sources: calculate sum of (product price × quantity)
+  //     return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+  //       return totalInvoice + calculateBoxTotalPrice(box);
+  //     }, 0);
+  //   } else {
+  //      // For API/channel integration sources: use invoice value from main codInfo (outside boxInfo)
+  //   return orderData?.codInfo?.invoiceValue || 0;
+  //   }
+  // };
+
+  const calculateTotalInvoiceValue = (): number => {
+  if (!orderData?.boxInfo) return 0;
+
+  if (isPanelSource(orderData?.source || "")) {
+    // For panel sources: calculate sum of (product price × quantity)
+    return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+      const baseBoxPrice = getBoxInvoiceValue(box, orderData?.source || "");
+      
+      // For B2B orders, multiply by box quantity
+      if (orderData?.orderType === "B2B") {
+        const boxQty = box.qty || 1;
+        return totalInvoice + (baseBoxPrice * boxQty);
+      }
+      
+      // For B2C orders, just add the base price
+      return totalInvoice + baseBoxPrice;
+    }, 0);
+  } else {
+    // For API/channel integration sources: use invoice value from main codInfo
+    const baseInvoiceValue = orderData?.codInfo?.invoiceValue || 0;
+    
+    // For B2B orders with API sources, multiply by total quantity of all boxes
+    if (orderData?.orderType === "B2B") {
+      const totalBoxQty = orderData.boxInfo.reduce((total: number, box: any) => {
+        return total + (box.qty || 1);
       }, 0);
-    } else {
-       // For API/channel integration sources: use invoice value from main codInfo (outside boxInfo)
-    return orderData?.codInfo?.invoiceValue || 0;
+      return baseInvoiceValue * totalBoxQty;
     }
-  };
+    
+    return baseInvoiceValue;
+  }
+};
 
   const calculateTotalCollectableAmount = (): number => {
     if (!orderData?.boxInfo || !orderData?.codInfo?.isCod) return 0;
@@ -5980,8 +6013,19 @@ const getBoxInvoiceValue = (box: any, source: string) => {
 };
 
 // Update the calculateBoxTotalPrice function to use this
+// const calculateBoxTotalPrice = (box: any) => {
+//   return getBoxInvoiceValue(box, orderData?.source || "");
+// };
 const calculateBoxTotalPrice = (box: any) => {
-  return getBoxInvoiceValue(box, orderData?.source || "");
+  const basePrice = getBoxInvoiceValue(box, orderData?.source || "");
+  
+  // For B2B orders, multiply by box quantity
+  if (orderData?.orderType === "B2B") {
+    const boxQty = box.qty || 1;
+    return basePrice * boxQty;
+  }
+  
+  return basePrice;
 };
 
   // Product operations functions
@@ -6056,7 +6100,80 @@ const calculateBoxTotalPrice = (box: any) => {
   //   });
   // };
 
-  const updateProduct = (
+//   const updateProduct = (
+//   boxIndex: number,
+//   productIndex: number,
+//   field: string,
+//   value: any
+// ) => {
+//   if (isEnabled) return;
+
+//   setOrderData((prevData: any) => {
+//     if (!prevData) return prevData;
+
+//     const updatedData = { ...prevData };
+//     const updatedBoxInfo = [...updatedData.boxInfo];
+//     const updatedBox = { ...updatedBoxInfo[boxIndex] };
+//     const updatedProducts = [...updatedBox.products];
+
+//     updatedProducts[productIndex] = {
+//       ...updatedProducts[productIndex],
+//       [field]: value,
+//     };
+
+//     // Recalculate totals when qty, unitPrice, or deadWeight changes
+//     if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+//       const product = updatedProducts[productIndex];
+//       const qty = product.qty || 0;
+//       const unitPrice = product.unitPrice || 0;
+//       const deadWeight = product.deadWeight || 0;
+
+//       updatedProducts[productIndex] = {
+//         ...updatedProducts[productIndex],
+//         totalPrice: qty * unitPrice,
+//         appliedWeight: qty * deadWeight,
+//         volumetricWeight: calculateVolumetricWeight(
+//           product.length,
+//           product.breadth,
+//           product.height,
+//           qty
+//         ),
+//       };
+//     }
+
+//     updatedBox.products = updatedProducts;
+
+//     // Calculate new total price and invoice value for the box
+//     const newTotalPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
+    
+//     // Update box's codInfo invoice value for panel sources
+//     if (isPanelSource(updatedData.source)) {
+//       updatedBox.codInfo = {
+//         ...updatedBox.codInfo,
+//         invoiceValue: newTotalPrice,
+//       };
+//     }
+
+//     // Sync collectible amount if not manually edited and COD is enabled
+//     if (
+//       !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+//       updatedData.codInfo?.isCod
+//     ) {
+//       updatedBox.codInfo = {
+//         ...updatedBox.codInfo,
+//         collectableAmount: newTotalPrice,
+//         isCollectibleManuallyEdited: false,
+//       };
+//     }
+
+//     updatedBoxInfo[boxIndex] = updatedBox;
+//     updatedData.boxInfo = updatedBoxInfo;
+
+//     return updatedData;
+//   });
+// };
+
+const updateProduct = (
   boxIndex: number,
   productIndex: number,
   field: string,
@@ -6099,14 +6216,17 @@ const calculateBoxTotalPrice = (box: any) => {
 
     updatedBox.products = updatedProducts;
 
-    // Calculate new total price and invoice value for the box
-    const newTotalPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
+    // Calculate new box total (considering B2B quantity multiplication)
+    const baseBoxPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
+    const finalBoxPrice = updatedData.orderType === "B2B" 
+      ? baseBoxPrice * (updatedBox.qty || 1)
+      : baseBoxPrice;
     
     // Update box's codInfo invoice value for panel sources
     if (isPanelSource(updatedData.source)) {
       updatedBox.codInfo = {
         ...updatedBox.codInfo,
-        invoiceValue: newTotalPrice,
+        invoiceValue: baseBoxPrice, // Store base price, multiplication happens in total calculation
       };
     }
 
@@ -6117,7 +6237,7 @@ const calculateBoxTotalPrice = (box: any) => {
     ) {
       updatedBox.codInfo = {
         ...updatedBox.codInfo,
-        collectableAmount: newTotalPrice,
+        collectableAmount: finalBoxPrice, // Use final price including B2B multiplication
         isCollectibleManuallyEdited: false,
       };
     }
@@ -8346,275 +8466,939 @@ const calculateBoxTotalPrice = (box: any) => {
   );
 
   // Updated renderBoxAndProducts function with enhanced box management
+//   const renderBoxAndProducts = () => (
+//     <div className="space-y-4 p-4">
+//       {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
+//         const totalPrice = calculateBoxTotalPrice(box);
+
+//         // Determine the collectible amount to display
+//         // const getCollectibleAmount = () => {
+//         //   if (box.codInfo?.isCollectibleManuallyEdited) {
+//         //     // Use the stored value (could be 0, empty string, or any other value)
+//         //     return box.codInfo?.collectableAmount?.toString() || "";
+//         //   } else {
+//         //     // Use calculated total price as default
+//         //     return totalPrice.toString();
+//         //   }
+//         // };
+
+//         // Update the getCollectibleAmount function to handle initialization better
+//         const getCollectibleAmount = (box: any, totalPrice: number) => {
+//           // If COD is not enabled, return empty string
+//           if (!orderData?.codInfo?.isCod) {
+//             return "";
+//           }
+
+//           // If manually edited, use the stored value
+//           if (box.codInfo?.isCollectibleManuallyEdited) {
+//             // Handle the case where collectableAmount might be 0 or empty string
+//             const storedAmount = box.codInfo?.collectableAmount;
+//             return storedAmount !== undefined && storedAmount !== null
+//               ? storedAmount.toString()
+//               : "";
+//           } else {
+//             // Use calculated total price as default
+//             return totalPrice.toString();
+//           }
+//         };
+
+//         const collectableAmount = getCollectibleAmount(box, totalPrice);
+
+//         return (
+//           <Collapsible
+//             key={boxIndex}
+//             title={`Box ${boxIndex + 1}: ${box.name}`}
+//             defaultOpen={boxIndex === 0}
+//             className="border-2 border-gray-200"
+//             titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+//             contentClassName="bg-white"
+//           >
+//             <div className="space-y-4 mt-4">
+//               {/* Box Details */}
+//               <div className="flex flex-col md:flex-row items-start gap-4">
+//                 <div
+//                   className="!w-full relative"
+//                   ref={(el) => {
+//                     const searchKey = `${boxIndex}`;
+//                     boxSearchRefs.current[searchKey] = el;
+//                   }}
+//                 >
+//                   <FloatingLabelInput
+//                     placeholder="Box Name"
+//                     value={(() => {
+//                       const searchKey = `${boxIndex}`;
+//                       return boxSearchQueries[searchKey] !== undefined
+//                         ? boxSearchQueries[searchKey]
+//                         : box.name || "";
+//                     })()}
+//                     // onChangeCallback={(value) =>
+//                     //   handleBoxNameSearch(boxIndex, value)
+//                     // }
+//                     onChangeCallback={(value) => {
+//                       handleBoxNameSearch(boxIndex, value);
+//                       clearValidationError("boxes", "name", boxIndex);
+//                     }}
+//                     onFocus={() => handleBoxSearchFocus(boxIndex)}
+//                     onBlur={() => handleBoxSearchBlur(boxIndex)}
+//                     readOnly={isEnabled}
+//                     icon={
+//                       boxSearchLoading[`${boxIndex}`] ? (
+//                         <LoadingIcon />
+//                       ) : (
+//                         <SearchIcon />
+//                       )
+//                     }
+//                     required
+//                     error={validationErrors.boxes[boxIndex]?.name}
+//                     errorMessage="Box name is required"
+//                   />
+//                   {renderBoxSearchResults(boxIndex)}
+//                 </div>
+//                 {!isEnabled && orderData?.boxInfo?.length > 1 && (
+//                   <div className="flex justify-end mb-4">
+//                     <button
+//                       onClick={() => deleteBox(boxIndex)}
+//                       className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
+//                       title="Delete Box"
+//                     >
+//                       <svg
+//                         width="24"
+//                         height="24"
+//                         viewBox="0 0 24 24"
+//                         fill="none"
+//                         stroke="currentColor"
+//                         strokeWidth="2"
+//                       >
+//                         <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+//                       </svg>
+//                     </button>
+//                   </div>
+//                 )}
+//               </div>
+
+//               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
+//                 <FloatingLabelInput
+//                   placeholder="Weight (kg)"
+//                   type="number"
+//                   value={box.deadWeight?.toString() || ""}
+//                   onChangeCallback={(value) =>
+//                     updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
+//                   }
+//                   readOnly={isEnabled}
+//                 />
+
+//                 <FloatingLabelInput
+//                   placeholder="L (cm)"
+//                   type="number"
+//                   value={box.length?.toString() || ""}
+//                   onChangeCallback={(value) => {
+//                     updateBox(boxIndex, "length", parseFloat(value) || 0);
+//                     clearValidationError("boxes", "length", boxIndex);
+//                   }}
+//                   required
+//                   readOnly={isEnabled}
+//                   error={validationErrors.boxes[boxIndex]?.length}
+//                   errorMessage="Length is required"
+//                 />
+
+//                 <FloatingLabelInput
+//                   placeholder="B (cm)"
+//                   type="number"
+//                   value={box.breadth?.toString() || ""}
+//                   onChangeCallback={(value) => {
+//                     updateBox(boxIndex, "breadth", parseFloat(value) || 0);
+//                     clearValidationError("boxes", "breadth", boxIndex);
+//                   }}
+//                   readOnly={isEnabled}
+//                   required
+//                   error={validationErrors.boxes[boxIndex]?.breadth}
+//                   errorMessage="Breadth is required"
+//                 />
+
+//                 <FloatingLabelInput
+//                   placeholder="H (cm)"
+//                   type="number"
+//                   value={box.height?.toString() || ""}
+//                   onChangeCallback={(value) => {
+//                     updateBox(boxIndex, "height", parseFloat(value) || 0);
+//                     clearValidationError("boxes", "height", boxIndex);
+//                   }}
+//                   readOnly={isEnabled}
+//                   required
+//                   error={validationErrors.boxes[boxIndex]?.height}
+//                   errorMessage="Height is required"
+//                 />
+//               </div>
+
+//               {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1  rounded-lg">
+//   <div className="relative">
+//     <FloatingLabelInput
+//       placeholder="Total Price (₹)"
+//       type="number"
+//       value={totalPrice.toFixed(2)}
+//       readOnly={true}
+//     />
+//   </div>
+
+//   {orderData?.codInfo?.isCod && (
+//     <FloatingLabelInput
+//       placeholder="Collectible Amount (₹)"
+//       type="number"
+//       value={getCollectibleAmount(box, totalPrice)}
+//       onChangeCallback={(value) => {
+//         // Allow empty string or convert to number
+//         const numericValue =
+//           value === "" ? "" : parseFloat(value) || 0;
+//         updateBox(boxIndex, "collectableAmount", numericValue);
+//       }}
+//       readOnly={isEnabled}
+//     />
+//   )}
+// </div> */}
+
+//               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
+//                 {/* Quantity Input */}
+//                 <FloatingLabelInput
+//                   placeholder="Quantity"
+//                   type="number"
+//                   value={box.qty?.toString() || ""}
+//                   onChangeCallback={(value) => {
+//                     updateBox(boxIndex, "qty", parseFloat(value) || 0);
+//                   }}
+//                   readOnly={
+//                     isEnabled || !isProductEditingAllowed || !isNotApiSource
+//                   }
+//                   required
+//                 />
+
+//                 {/* Collectible Amount (Editable) */}
+//                 {orderData?.codInfo?.isCod && (
+//                   <FloatingLabelInput
+//                     placeholder="Collectible Amount (₹)"
+//                     type="number"
+//                     value={getCollectibleAmount(box, totalPrice)}
+//                     onChangeCallback={(value) => {
+//                       // Allow empty string or convert to number
+//                       const numericValue =
+//                         value === "" ? "" : parseFloat(value) || 0;
+//                       updateBox(boxIndex, "collectableAmount", numericValue);
+//                     }}
+//                     readOnly={isEnabled}
+//                   />
+//                 )}
+//               </div>
+
+//               {/* Total Price row - moved below */}
+//               <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
+//                 <div className="relative">
+//                   <FloatingLabelInput
+//                     placeholder="Total Price (₹)"
+//                     type="number"
+//                     value={totalPrice.toFixed(2)}
+//                     readOnly={true}
+//                   />
+//                 </div>
+//               </div>
+
+//               {/* Products Section */}
+//               {box.products && box.products.length > 0 && (
+//                 <div className="space-y-3">
+//                   <div className="space-y-2 mb-2">
+//                     {box.products.map((product: any, productIndex: number) => (
+//                       <Collapsible
+//                         key={`${boxIndex}-${productIndex}`}
+//                         title={`Product ${productIndex + 1}: ${
+//                           product.name || "Unnamed Product"
+//                         }`}
+//                         defaultOpen={false}
+//                         className="border border-gray-300 !shadow-none"
+//                         titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+//                         contentClassName="bg-gray-50 !shadow-none"
+//                       >
+//                         <div className="p-4 space-y-4">
+//                           {/* Product Name with Search */}
+//                           <div className="flex items-start gap-x-4">
+//                             <div
+//                               className="flex-1 relative"
+//                               ref={(el) => {
+//                                 const searchKey = `${boxIndex}-${productIndex}`;
+//                                 productSearchRefs.current[searchKey] = el;
+//                               }}
+//                             >
+//                               {/* <FloatingLabelInput
+//                                 placeholder="Product Name"
+//                                 value={(() => {
+//                                   const searchKey = `${boxIndex}-${productIndex}`;
+//                                   return productSearchQueries[searchKey] !==
+//                                     undefined
+//                                     ? productSearchQueries[searchKey]
+//                                     : product.name || "";
+//                                 })()}
+//                                 onChangeCallback={(value) => {
+//                                   handleProductNameSearch(
+//                                     boxIndex,
+//                                     productIndex,
+//                                     value
+//                                   );
+//                                   clearValidationError(
+//                                     "products",
+//                                     "name",
+//                                     boxIndex,
+//                                     productIndex
+//                                   );
+//                                 }}
+//                                 onFocus={() =>
+//                                   handleProductSearchFocus(
+//                                     boxIndex,
+//                                     productIndex
+//                                   )
+//                                 }
+//                                 onBlur={() =>
+//                                   handleProductSearchBlur(
+//                                     boxIndex,
+//                                     productIndex
+//                                   )
+//                                 }
+//                                 readOnly={isEnabled || !isProductEditingAllowed}
+//                                 icon={
+//                                   productSearchLoading[
+//                                     `${boxIndex}-${productIndex}`
+//                                   ] ? (
+//                                     <LoadingIcon />
+//                                   ) : (
+//                                     <SearchIcon />
+//                                   )
+//                                 }
+//                                 required
+//                                 error={
+//                                   validationErrors.products[
+//                                     `${boxIndex}-${productIndex}`
+//                                   ]?.name
+//                                 }
+//                                 errorMessage="Product name is required"
+//                               /> */}
+//                               <FloatingLabelInput
+//                                 placeholder="Product Name"
+//                                 value={(() => {
+//                                   // For restricted sources, show only the product name without search query
+//                                   if (!isProductEditingAllowed) {
+//                                     return product.name || "";
+//                                   }
+//                                   const searchKey = `${boxIndex}-${productIndex}`;
+//                                   return productSearchQueries[searchKey] !==
+//                                     undefined
+//                                     ? productSearchQueries[searchKey]
+//                                     : product.name || "";
+//                                 })()}
+//                                 onChangeCallback={(value) => {
+//                                   if (isProductEditingAllowed) {
+//                                     handleProductNameSearch(
+//                                       boxIndex,
+//                                       productIndex,
+//                                       value
+//                                     );
+//                                     clearValidationError(
+//                                       "products",
+//                                       "name",
+//                                       boxIndex,
+//                                       productIndex
+//                                     );
+//                                   }
+//                                 }}
+//                                 onFocus={() =>
+//                                   isProductEditingAllowed
+//                                     ? handleProductSearchFocus(
+//                                         boxIndex,
+//                                         productIndex
+//                                       )
+//                                     : null
+//                                 }
+//                                 onBlur={() =>
+//                                   isProductEditingAllowed
+//                                     ? handleProductSearchBlur(
+//                                         boxIndex,
+//                                         productIndex
+//                                       )
+//                                     : null
+//                                 }
+//                                 readOnly={isEnabled || !isProductEditingAllowed} // Update readonly condition
+//                                 icon={
+//                                   // Hide search icon for restricted sources
+//                                   !isProductEditingAllowed ? null : productSearchLoading[
+//                                       `${boxIndex}-${productIndex}`
+//                                     ] ? (
+//                                     <LoadingIcon />
+//                                   ) : (
+//                                     <SearchIcon />
+//                                   )
+//                                 }
+//                                 required
+//                                 error={
+//                                   validationErrors.products[
+//                                     `${boxIndex}-${productIndex}`
+//                                   ]?.name
+//                                 }
+//                                 errorMessage="Product name is required"
+//                               />
+//                               {renderProductSearchResults &&
+//                                 renderProductSearchResults(
+//                                   boxIndex,
+//                                   productIndex
+//                                 )}
+//                             </div>
+
+//                             {!isEnabled &&
+//                               box.products.length > 1 &&
+//                               isProductEditingAllowed && (
+//                                 <button
+//                                   onClick={() =>
+//                                     deleteProduct(boxIndex, productIndex)
+//                                   }
+//                                   className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+//                                   title="Delete Product"
+//                                 >
+//                                   <svg
+//                                     width="16"
+//                                     height="16"
+//                                     viewBox="0 0 24 24"
+//                                     fill="none"
+//                                     stroke="currentColor"
+//                                     strokeWidth="2"
+//                                   >
+//                                     <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+//                                   </svg>
+//                                 </button>
+//                               )}
+//                           </div>
+
+//                           {/* Row 2: Qty and Unit Weight */}
+//                           <div className="grid grid-cols-2 gap-4">
+//                             <FloatingLabelInput
+//                               placeholder="Qty"
+//                               type="number"
+//                               value={product.qty?.toString() || ""}
+//                               onChangeCallback={(value) => {
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "qty",
+//                                   parseFloat(value) || 0
+//                                 );
+//                                 clearValidationError(
+//                                   "products",
+//                                   "qty",
+//                                   boxIndex,
+//                                   productIndex
+//                                 );
+//                               }}
+//                               readOnly={
+//                                 isEnabled ||
+//                                 !isProductEditingAllowed ||
+//                                 !isNotApiSource
+//                               }
+//                               required
+//                               error={
+//                                 validationErrors.products[
+//                                   `${boxIndex}-${productIndex}`
+//                                 ]?.qty
+//                               }
+//                               errorMessage="Quantity is required"
+//                             />
+//                             <FloatingLabelInput
+//                               placeholder="Unit Weight"
+//                               type="number"
+//                               value={product.deadWeight?.toString() || ""}
+//                               onChangeCallback={(value) => {
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "deadWeight",
+//                                   parseFloat(value) || 0
+//                                 );
+//                                 clearValidationError(
+//                                   "products",
+//                                   "deadWeight",
+//                                   boxIndex,
+//                                   productIndex
+//                                 );
+//                               }}
+//                               readOnly={isEnabled}
+//                               required
+//                               error={
+//                                 validationErrors.products[
+//                                   `${boxIndex}-${productIndex}`
+//                                 ]?.deadWeight
+//                               }
+//                               errorMessage="Unit weight is required"
+//                             />
+//                           </div>
+
+//                           {/* Row 3: Unit Price and Dimensions */}
+//                           <div className="grid grid-cols-4 gap-4">
+//                             <FloatingLabelInput
+//                               placeholder="Unit Price"
+//                               type="number"
+//                               value={product.unitPrice?.toString() || ""}
+//                               // onChangeCallback={(value) => {
+//                               //   updateProduct(
+//                               //     boxIndex,
+//                               //     productIndex,
+//                               //     "unitPrice",
+//                               //     parseFloat(value) || 0
+//                               //   );
+//                               //   clearValidationError(
+//                               //     "products",
+//                               //     "unitPrice",
+//                               //     boxIndex,
+//                               //     productIndex
+//                               //   );
+//                               // }}
+//                                onChangeCallback={(value) => {
+//     updateProduct(
+//       boxIndex,
+//       productIndex,
+//       "unitPrice",
+//       parseFloat(value) || 0
+//     );
+//     clearValidationError(
+//       "products",
+//       "unitPrice",
+//       boxIndex,
+//       productIndex
+//     );
+//   }}
+//                               readOnly={
+//                                 isEnabled ||
+//                                 !isProductEditingAllowed ||
+//                                 !isNotApiSource
+//                               }
+//                               // required
+//                               // error={
+//                               //   validationErrors.products[
+//                               //     `${boxIndex}-${productIndex}`
+//                               //   ]?.unitPrice
+//                               // }
+//                               // errorMessage="Unit price is required"
+
+//                                required={orderData?.codInfo?.isCod}
+//   error={
+//     validationErrors.products[
+//       `${boxIndex}-${productIndex}`
+//     ]?.unitPrice
+//   }
+//   errorMessage="Unit price is required for COD orders"
+//                             />
+//                             <FloatingLabelInput
+//                               placeholder="L(cm)"
+//                               type="number"
+//                               value={product.length?.toString() || ""}
+//                               onChangeCallback={(value) =>
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "length",
+//                                   parseFloat(value) || 0
+//                                 )
+//                               }
+//                               readOnly={isEnabled}
+//                             />
+//                             <FloatingLabelInput
+//                               placeholder="B(cm)"
+//                               type="number"
+//                               value={product.breadth?.toString() || ""}
+//                               onChangeCallback={(value) =>
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "breadth",
+//                                   parseFloat(value) || 0
+//                                 )
+//                               }
+//                               readOnly={isEnabled}
+//                             />
+//                             <FloatingLabelInput
+//                               placeholder="H(cm)"
+//                               type="number"
+//                               value={product.height?.toString() || ""}
+//                               onChangeCallback={(value) =>
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "height",
+//                                   parseFloat(value) || 0
+//                                 )
+//                               }
+//                               readOnly={isEnabled}
+//                             />
+//                           </div>
+
+//                           {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
+//                           <div className="grid grid-cols-2 gap-4">
+//                             <div className="relative">
+//                               <FloatingLabelInput
+//                                 placeholder="Total Weight (kg)"
+//                                 type="number"
+//                                 value={(
+//                                   (product.qty || 0) * (product.deadWeight || 0)
+//                                 ).toFixed(2)}
+//                                 readOnly
+//                               />
+//                             </div>
+//                             <div className="relative">
+//                               <FloatingLabelInput
+//                                 placeholder="Total Price"
+//                                 type="number"
+//                                 value={(
+//                                   (product.qty || 0) * (product.unitPrice || 0)
+//                                 ).toFixed(2)}
+//                                 readOnly
+//                               />
+//                             </div>
+//                           </div>
+
+//                           {/* Row 5: SKU and HSN */}
+//                           <div className="grid grid-cols-2 gap-4">
+//                             <FloatingLabelInput
+//                               placeholder="SKU"
+//                               value={product.sku || ""}
+//                               onChangeCallback={(value) =>
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "sku",
+//                                   value
+//                                 )
+//                               }
+//                               readOnly={isEnabled || !isProductEditingAllowed}
+//                             />
+//                             <FloatingLabelInput
+//                               placeholder="HSN"
+//                               value={product.hsnCode || ""}
+//                               onChangeCallback={(value) =>
+//                                 updateProduct(
+//                                   boxIndex,
+//                                   productIndex,
+//                                   "hsnCode",
+//                                   value
+//                                 )
+//                               }
+//                               readOnly={isEnabled || !isProductEditingAllowed}
+//                             />
+//                           </div>
+//                         </div>
+//                       </Collapsible>
+//                     ))}
+//                     <div>
+//                       {!isEnabled &&
+//                         isProductEditingAllowed &&
+//                         isNotApiSource && (
+//                           <OneButton
+//                             text="Add Product"
+//                             onClick={() => addProduct(boxIndex)}
+//                             variant="secondary"
+//                             className="!rounded-full"
+//                           />
+//                         )}
+//                     </div>
+//                   </div>
+//                 </div>
+//               )}
+
+//               {/* If no products, show add product button */}
+//               {(!box.products || box.products.length === 0) && !isEnabled && (
+//                 <div className="flex justify-center">
+//                   <OneButton
+//                     text="Add Product"
+//                     onClick={() => addProduct(boxIndex)}
+//                     variant="secondary"
+//                     className="!rounded-full"
+//                   />
+//                 </div>
+//               )}
+//             </div>
+//           </Collapsible>
+//         );
+//       })}
+
+//       {/* Add Box Button */}
+//       {!isEnabled && isProductEditingAllowed && isNotApiSource && (
+//         <div className="flex justify-center mb-2 !w-full">
+//           <OneButton
+//             text="Add Box"
+//             onClick={addBox}
+//             variant="secondary"
+//             className="!rounded-full !w-full"
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+
   const renderBoxAndProducts = () => (
-    <div className="space-y-4 p-4">
-      {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
-        const totalPrice = calculateBoxTotalPrice(box);
+  <div className="space-y-4 p-4">
+    {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
+      const baseBoxPrice = getBoxInvoiceValue(box, orderData?.source || "");
+      const totalPrice = calculateBoxTotalPrice(box);
 
-        // Determine the collectible amount to display
-        // const getCollectibleAmount = () => {
-        //   if (box.codInfo?.isCollectibleManuallyEdited) {
-        //     // Use the stored value (could be 0, empty string, or any other value)
-        //     return box.codInfo?.collectableAmount?.toString() || "";
-        //   } else {
-        //     // Use calculated total price as default
-        //     return totalPrice.toString();
-        //   }
-        // };
+      // Update the getCollectibleAmount function to handle initialization better
+      const getCollectibleAmount = (box: any, totalPrice: number) => {
+        // If COD is not enabled, return empty string
+        if (!orderData?.codInfo?.isCod) {
+          return "";
+        }
 
-        // Update the getCollectibleAmount function to handle initialization better
-        const getCollectibleAmount = (box: any, totalPrice: number) => {
-          // If COD is not enabled, return empty string
-          if (!orderData?.codInfo?.isCod) {
-            return "";
-          }
+        // If manually edited, use the stored value
+        if (box.codInfo?.isCollectibleManuallyEdited) {
+          // Handle the case where collectableAmount might be 0 or empty string
+          const storedAmount = box.codInfo?.collectableAmount;
+          return storedAmount !== undefined && storedAmount !== null
+            ? storedAmount.toString()
+            : "";
+        } else {
+          // Use calculated total price as default
+          return totalPrice.toString();
+        }
+      };
 
-          // If manually edited, use the stored value
-          if (box.codInfo?.isCollectibleManuallyEdited) {
-            // Handle the case where collectableAmount might be 0 or empty string
-            const storedAmount = box.codInfo?.collectableAmount;
-            return storedAmount !== undefined && storedAmount !== null
-              ? storedAmount.toString()
-              : "";
-          } else {
-            // Use calculated total price as default
-            return totalPrice.toString();
-          }
-        };
+      const collectableAmount = getCollectibleAmount(box, totalPrice);
 
-        const collectableAmount = getCollectibleAmount(box, totalPrice);
-
-        return (
-          <Collapsible
-            key={boxIndex}
-            title={`Box ${boxIndex + 1}: ${box.name}`}
-            defaultOpen={boxIndex === 0}
-            className="border-2 border-gray-200"
-            titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
-            contentClassName="bg-white"
-          >
-            <div className="space-y-4 mt-4">
-              {/* Box Details */}
-              <div className="flex flex-col md:flex-row items-start gap-4">
-                <div
-                  className="!w-full relative"
-                  ref={(el) => {
+      return (
+        <Collapsible
+          key={boxIndex}
+          title={`Box ${boxIndex + 1}: ${box.name}`}
+          defaultOpen={boxIndex === 0}
+          className="border-2 border-gray-200"
+          titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+          contentClassName="bg-white"
+        >
+          <div className="space-y-4 mt-4">
+            {/* Box Details */}
+            <div className="flex flex-col md:flex-row items-start gap-4">
+              <div
+                className="!w-full relative"
+                ref={(el) => {
+                  const searchKey = `${boxIndex}`;
+                  boxSearchRefs.current[searchKey] = el;
+                }}
+              >
+                <FloatingLabelInput
+                  placeholder="Box Name"
+                  value={(() => {
                     const searchKey = `${boxIndex}`;
-                    boxSearchRefs.current[searchKey] = el;
+                    return boxSearchQueries[searchKey] !== undefined
+                      ? boxSearchQueries[searchKey]
+                      : box.name || "";
+                  })()}
+                  onChangeCallback={(value) => {
+                    handleBoxNameSearch(boxIndex, value);
+                    clearValidationError("boxes", "name", boxIndex);
                   }}
-                >
-                  <FloatingLabelInput
-                    placeholder="Box Name"
-                    value={(() => {
-                      const searchKey = `${boxIndex}`;
-                      return boxSearchQueries[searchKey] !== undefined
-                        ? boxSearchQueries[searchKey]
-                        : box.name || "";
-                    })()}
-                    // onChangeCallback={(value) =>
-                    //   handleBoxNameSearch(boxIndex, value)
-                    // }
-                    onChangeCallback={(value) => {
-                      handleBoxNameSearch(boxIndex, value);
-                      clearValidationError("boxes", "name", boxIndex);
-                    }}
-                    onFocus={() => handleBoxSearchFocus(boxIndex)}
-                    onBlur={() => handleBoxSearchBlur(boxIndex)}
-                    readOnly={isEnabled}
-                    icon={
-                      boxSearchLoading[`${boxIndex}`] ? (
-                        <LoadingIcon />
-                      ) : (
-                        <SearchIcon />
-                      )
-                    }
-                    required
-                    error={validationErrors.boxes[boxIndex]?.name}
-                    errorMessage="Box name is required"
-                  />
-                  {renderBoxSearchResults(boxIndex)}
-                </div>
-                {!isEnabled && orderData?.boxInfo?.length > 1 && (
-                  <div className="flex justify-end mb-4">
-                    <button
-                      onClick={() => deleteBox(boxIndex)}
-                      className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
-                      title="Delete Box"
+                  onFocus={() => handleBoxSearchFocus(boxIndex)}
+                  onBlur={() => handleBoxSearchBlur(boxIndex)}
+                  readOnly={isEnabled}
+                  icon={
+                    boxSearchLoading[`${boxIndex}`] ? (
+                      <LoadingIcon />
+                    ) : (
+                      <SearchIcon />
+                    )
+                  }
+                  required
+                  error={validationErrors.boxes[boxIndex]?.name}
+                  errorMessage="Box name is required"
+                />
+                {renderBoxSearchResults(boxIndex)}
+              </div>
+              {!isEnabled && orderData?.boxInfo?.length > 1 && (
+                <div className="flex justify-end mb-4">
+                  <button
+                    onClick={() => deleteBox(boxIndex)}
+                    className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
+                    title="Delete Box"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
                     >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-                      </svg>
-                    </button>
+                      <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Box Dimensions */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
+              <FloatingLabelInput
+                placeholder="Weight (kg)"
+                type="number"
+                value={box.deadWeight?.toString() || ""}
+                onChangeCallback={(value) =>
+                  updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
+                }
+                readOnly={isEnabled}
+              />
+
+              <FloatingLabelInput
+                placeholder="L (cm)"
+                type="number"
+                value={box.length?.toString() || ""}
+                onChangeCallback={(value) => {
+                  updateBox(boxIndex, "length", parseFloat(value) || 0);
+                  clearValidationError("boxes", "length", boxIndex);
+                }}
+                required
+                readOnly={isEnabled}
+                error={validationErrors.boxes[boxIndex]?.length}
+                errorMessage="Length is required"
+              />
+
+              <FloatingLabelInput
+                placeholder="B (cm)"
+                type="number"
+                value={box.breadth?.toString() || ""}
+                onChangeCallback={(value) => {
+                  updateBox(boxIndex, "breadth", parseFloat(value) || 0);
+                  clearValidationError("boxes", "breadth", boxIndex);
+                }}
+                readOnly={isEnabled}
+                required
+                error={validationErrors.boxes[boxIndex]?.breadth}
+                errorMessage="Breadth is required"
+              />
+
+              <FloatingLabelInput
+                placeholder="H (cm)"
+                type="number"
+                value={box.height?.toString() || ""}
+                onChangeCallback={(value) => {
+                  updateBox(boxIndex, "height", parseFloat(value) || 0);
+                  clearValidationError("boxes", "height", boxIndex);
+                }}
+                readOnly={isEnabled}
+                required
+                error={validationErrors.boxes[boxIndex]?.height}
+                errorMessage="Height is required"
+              />
+            </div>
+
+            {/* Box Quantity and Collectible Amount */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
+              {/* Box Quantity Input - Enhanced for B2B */}
+              <div className="relative">
+                <FloatingLabelInput
+                  placeholder={
+                    orderData?.orderType === "B2B" 
+                      ? `Box Quantity (affects invoice total)` 
+                      : "Box Quantity"
+                  }
+                  type="number"
+                  value={box.qty?.toString() || "1"}
+                  onChangeCallback={(value) => {
+                    const qty = parseFloat(value) || 1;
+                    updateBox(boxIndex, "qty", qty);
+                    
+                    // For B2B orders, recalculate collectible amount based on new quantity
+                    if (orderData?.orderType === "B2B" && !box.codInfo?.isCollectibleManuallyEdited && orderData?.codInfo?.isCod) {
+                      const newTotalPrice = baseBoxPrice * qty;
+                      updateBox(boxIndex, "collectableAmount", newTotalPrice);
+                    }
+                  }}
+                  readOnly={isEnabled || !isProductEditingAllowed || !isNotApiSource}
+                  required
+                  
+                />
+                {/* Show multiplication indicator for B2B */}
+                {/* {orderData?.orderType === "B2B" && (
+                  <div className="text-xs text-blue-600 mt-1">
+                    Base Price123: ₹{baseBoxPrice.toFixed(2)} × {box.qty || 1} = ₹{totalPrice.toFixed(2)}
+                  </div>
+                )} */}
+              </div>
+
+              {/* Collectible Amount (Editable) */}
+              {orderData?.codInfo?.isCod && (
+                <FloatingLabelInput
+                  placeholder="Collectible Amount (₹)"
+                  type="number"
+                  value={collectableAmount}
+                  onChangeCallback={(value) => {
+                    // Allow empty string or convert to number
+                    const numericValue =
+                      value === "" ? "" : parseFloat(value) || 0;
+                    updateBox(boxIndex, "collectableAmount", numericValue);
+                  }}
+                  readOnly={isEnabled}
+                />
+              )}
+            </div>
+
+            {/* Total Price row - Enhanced to show B2B calculation */}
+            <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
+              <div className="relative">
+                <FloatingLabelInput
+                  placeholder={
+                    orderData?.orderType === "B2B" 
+                      ? `Box Total (Base: ₹${baseBoxPrice.toFixed(2)} × ${box.qty || 1})`
+                      : "Box Total Price (₹)"
+                  }
+                  type="number"
+                  value={totalPrice.toFixed(2)}
+                  readOnly={true}
+                />
+                {/* Additional breakdown for B2B */}
+                {orderData?.orderType === "B2B" && baseBoxPrice !== totalPrice && (
+                  <div className="text-xs text-gray-600 mt-1">
+                    Product total: ₹{baseBoxPrice.toFixed(2)} | Box quantity: {box.qty || 1} | Final total: ₹{totalPrice.toFixed(2)}
                   </div>
                 )}
               </div>
+            </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
-                <FloatingLabelInput
-                  placeholder="Weight (kg)"
-                  type="number"
-                  value={box.deadWeight?.toString() || ""}
-                  onChangeCallback={(value) =>
-                    updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
-                  }
-                  readOnly={isEnabled}
-                />
-
-                <FloatingLabelInput
-                  placeholder="L (cm)"
-                  type="number"
-                  value={box.length?.toString() || ""}
-                  onChangeCallback={(value) => {
-                    updateBox(boxIndex, "length", parseFloat(value) || 0);
-                    clearValidationError("boxes", "length", boxIndex);
-                  }}
-                  required
-                  readOnly={isEnabled}
-                  error={validationErrors.boxes[boxIndex]?.length}
-                  errorMessage="Length is required"
-                />
-
-                <FloatingLabelInput
-                  placeholder="B (cm)"
-                  type="number"
-                  value={box.breadth?.toString() || ""}
-                  onChangeCallback={(value) => {
-                    updateBox(boxIndex, "breadth", parseFloat(value) || 0);
-                    clearValidationError("boxes", "breadth", boxIndex);
-                  }}
-                  readOnly={isEnabled}
-                  required
-                  error={validationErrors.boxes[boxIndex]?.breadth}
-                  errorMessage="Breadth is required"
-                />
-
-                <FloatingLabelInput
-                  placeholder="H (cm)"
-                  type="number"
-                  value={box.height?.toString() || ""}
-                  onChangeCallback={(value) => {
-                    updateBox(boxIndex, "height", parseFloat(value) || 0);
-                    clearValidationError("boxes", "height", boxIndex);
-                  }}
-                  readOnly={isEnabled}
-                  required
-                  error={validationErrors.boxes[boxIndex]?.height}
-                  errorMessage="Height is required"
-                />
-              </div>
-
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1  rounded-lg">
-  <div className="relative">
-    <FloatingLabelInput
-      placeholder="Total Price (₹)"
-      type="number"
-      value={totalPrice.toFixed(2)}
-      readOnly={true}
-    />
-  </div>
-
-  {orderData?.codInfo?.isCod && (
-    <FloatingLabelInput
-      placeholder="Collectible Amount (₹)"
-      type="number"
-      value={getCollectibleAmount(box, totalPrice)}
-      onChangeCallback={(value) => {
-        // Allow empty string or convert to number
-        const numericValue =
-          value === "" ? "" : parseFloat(value) || 0;
-        updateBox(boxIndex, "collectableAmount", numericValue);
-      }}
-      readOnly={isEnabled}
-    />
-  )}
-</div> */}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
-                {/* Quantity Input */}
-                <FloatingLabelInput
-                  placeholder="Quantity"
-                  type="number"
-                  value={box.qty?.toString() || ""}
-                  onChangeCallback={(value) => {
-                    updateBox(boxIndex, "qty", parseFloat(value) || 0);
-                  }}
-                  readOnly={
-                    isEnabled || !isProductEditingAllowed || !isNotApiSource
-                  }
-                  required
-                />
-
-                {/* Collectible Amount (Editable) */}
-                {orderData?.codInfo?.isCod && (
-                  <FloatingLabelInput
-                    placeholder="Collectible Amount (₹)"
-                    type="number"
-                    value={getCollectibleAmount(box, totalPrice)}
-                    onChangeCallback={(value) => {
-                      // Allow empty string or convert to number
-                      const numericValue =
-                        value === "" ? "" : parseFloat(value) || 0;
-                      updateBox(boxIndex, "collectableAmount", numericValue);
-                    }}
-                    readOnly={isEnabled}
-                  />
-                )}
-              </div>
-
-              {/* Total Price row - moved below */}
-              <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
-                <div className="relative">
-                  <FloatingLabelInput
-                    placeholder="Total Price (₹)"
-                    type="number"
-                    value={totalPrice.toFixed(2)}
-                    readOnly={true}
-                  />
-                </div>
-              </div>
-
-              {/* Products Section */}
-              {box.products && box.products.length > 0 && (
-                <div className="space-y-3">
-                  <div className="space-y-2 mb-2">
-                    {box.products.map((product: any, productIndex: number) => (
-                      <Collapsible
-                        key={`${boxIndex}-${productIndex}`}
-                        title={`Product ${productIndex + 1}: ${
-                          product.name || "Unnamed Product"
-                        }`}
-                        defaultOpen={false}
-                        className="border border-gray-300 !shadow-none"
-                        titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
-                        contentClassName="bg-gray-50 !shadow-none"
-                      >
-                        <div className="p-4 space-y-4">
-                          {/* Product Name with Search */}
-                          <div className="flex items-start gap-x-4">
-                            <div
-                              className="flex-1 relative"
-                              ref={(el) => {
+            {/* Products Section */}
+            {box.products && box.products.length > 0 && (
+              <div className="space-y-3">
+                <div className="space-y-2 mb-2">
+                  {box.products.map((product: any, productIndex: number) => (
+                    <Collapsible
+                      key={`${boxIndex}-${productIndex}`}
+                      title={`Product ${productIndex + 1}: ${
+                        product.name || "Unnamed Product"
+                      }`}
+                      defaultOpen={false}
+                      className="border border-gray-300 !shadow-none"
+                      titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+                      contentClassName="bg-gray-50 !shadow-none"
+                    >
+                      <div className="p-4 space-y-4">
+                        {/* Product Name with Search */}
+                        <div className="flex items-start gap-x-4">
+                          <div
+                            className="flex-1 relative"
+                            ref={(el) => {
+                              const searchKey = `${boxIndex}-${productIndex}`;
+                              productSearchRefs.current[searchKey] = el;
+                            }}
+                          >
+                            <FloatingLabelInput
+                              placeholder="Product Name"
+                              value={(() => {
+                                // For restricted sources, show only the product name without search query
+                                if (!isProductEditingAllowed) {
+                                  return product.name || "";
+                                }
                                 const searchKey = `${boxIndex}-${productIndex}`;
-                                productSearchRefs.current[searchKey] = el;
-                              }}
-                            >
-                              {/* <FloatingLabelInput
-                                placeholder="Product Name"
-                                value={(() => {
-                                  const searchKey = `${boxIndex}-${productIndex}`;
-                                  return productSearchQueries[searchKey] !==
-                                    undefined
-                                    ? productSearchQueries[searchKey]
-                                    : product.name || "";
-                                })()}
-                                onChangeCallback={(value) => {
+                                return productSearchQueries[searchKey] !==
+                                  undefined
+                                  ? productSearchQueries[searchKey]
+                                  : product.name || "";
+                              })()}
+                              onChangeCallback={(value) => {
+                                if (isProductEditingAllowed) {
                                   handleProductNameSearch(
                                     boxIndex,
                                     productIndex,
@@ -8626,393 +9410,314 @@ const calculateBoxTotalPrice = (box: any) => {
                                     boxIndex,
                                     productIndex
                                   );
-                                }}
-                                onFocus={() =>
-                                  handleProductSearchFocus(
-                                    boxIndex,
-                                    productIndex
-                                  )
                                 }
-                                onBlur={() =>
-                                  handleProductSearchBlur(
-                                    boxIndex,
-                                    productIndex
-                                  )
-                                }
-                                readOnly={isEnabled || !isProductEditingAllowed}
-                                icon={
-                                  productSearchLoading[
-                                    `${boxIndex}-${productIndex}`
-                                  ] ? (
-                                    <LoadingIcon />
-                                  ) : (
-                                    <SearchIcon />
-                                  )
-                                }
-                                required
-                                error={
-                                  validationErrors.products[
-                                    `${boxIndex}-${productIndex}`
-                                  ]?.name
-                                }
-                                errorMessage="Product name is required"
-                              /> */}
-                              <FloatingLabelInput
-                                placeholder="Product Name"
-                                value={(() => {
-                                  // For restricted sources, show only the product name without search query
-                                  if (!isProductEditingAllowed) {
-                                    return product.name || "";
-                                  }
-                                  const searchKey = `${boxIndex}-${productIndex}`;
-                                  return productSearchQueries[searchKey] !==
-                                    undefined
-                                    ? productSearchQueries[searchKey]
-                                    : product.name || "";
-                                })()}
-                                onChangeCallback={(value) => {
-                                  if (isProductEditingAllowed) {
-                                    handleProductNameSearch(
-                                      boxIndex,
-                                      productIndex,
-                                      value
-                                    );
-                                    clearValidationError(
-                                      "products",
-                                      "name",
+                              }}
+                              onFocus={() =>
+                                isProductEditingAllowed
+                                  ? handleProductSearchFocus(
                                       boxIndex,
                                       productIndex
-                                    );
-                                  }
-                                }}
-                                onFocus={() =>
-                                  isProductEditingAllowed
-                                    ? handleProductSearchFocus(
-                                        boxIndex,
-                                        productIndex
-                                      )
-                                    : null
-                                }
-                                onBlur={() =>
-                                  isProductEditingAllowed
-                                    ? handleProductSearchBlur(
-                                        boxIndex,
-                                        productIndex
-                                      )
-                                    : null
-                                }
-                                readOnly={isEnabled || !isProductEditingAllowed} // Update readonly condition
-                                icon={
-                                  // Hide search icon for restricted sources
-                                  !isProductEditingAllowed ? null : productSearchLoading[
-                                      `${boxIndex}-${productIndex}`
-                                    ] ? (
-                                    <LoadingIcon />
-                                  ) : (
-                                    <SearchIcon />
-                                  )
-                                }
-                                required
-                                error={
-                                  validationErrors.products[
+                                    )
+                                  : null
+                              }
+                              onBlur={() =>
+                                isProductEditingAllowed
+                                  ? handleProductSearchBlur(
+                                      boxIndex,
+                                      productIndex
+                                    )
+                                  : null
+                              }
+                              readOnly={isEnabled || !isProductEditingAllowed}
+                              icon={
+                                // Hide search icon for restricted sources
+                                !isProductEditingAllowed ? null : productSearchLoading[
                                     `${boxIndex}-${productIndex}`
-                                  ]?.name
-                                }
-                                errorMessage="Product name is required"
-                              />
-                              {renderProductSearchResults &&
-                                renderProductSearchResults(
-                                  boxIndex,
-                                  productIndex
-                                )}
-                            </div>
-
-                            {!isEnabled &&
-                              box.products.length > 1 &&
-                              isProductEditingAllowed && (
-                                <button
-                                  onClick={() =>
-                                    deleteProduct(boxIndex, productIndex)
-                                  }
-                                  className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
-                                  title="Delete Product"
-                                >
-                                  <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                  >
-                                    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-                                  </svg>
-                                </button>
+                                  ] ? (
+                                  <LoadingIcon />
+                                ) : (
+                                  <SearchIcon />
+                                )
+                              }
+                              required
+                              error={
+                                validationErrors.products[
+                                  `${boxIndex}-${productIndex}`
+                                ]?.name
+                              }
+                              errorMessage="Product name is required"
+                            />
+                            {renderProductSearchResults &&
+                              renderProductSearchResults(
+                                boxIndex,
+                                productIndex
                               )}
                           </div>
 
-                          {/* Row 2: Qty and Unit Weight */}
-                          <div className="grid grid-cols-2 gap-4">
+                          {!isEnabled &&
+                            box.products.length > 1 &&
+                            isProductEditingAllowed && (
+                              <button
+                                onClick={() =>
+                                  deleteProduct(boxIndex, productIndex)
+                                }
+                                className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+                                title="Delete Product"
+                              >
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                                </svg>
+                              </button>
+                            )}
+                        </div>
+
+                        {/* Row 2: Qty and Unit Weight */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <FloatingLabelInput
+                            placeholder="Product Qty"
+                            type="number"
+                            value={product.qty?.toString() || ""}
+                            onChangeCallback={(value) => {
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "qty",
+                                parseFloat(value) || 0
+                              );
+                              clearValidationError(
+                                "products",
+                                "qty",
+                                boxIndex,
+                                productIndex
+                              );
+                            }}
+                            readOnly={
+                              isEnabled ||
+                              !isProductEditingAllowed ||
+                              !isNotApiSource
+                            }
+                            required
+                            error={
+                              validationErrors.products[
+                                `${boxIndex}-${productIndex}`
+                              ]?.qty
+                            }
+                            errorMessage="Quantity is required"
+                          />
+                          <FloatingLabelInput
+                            placeholder="Unit Weight"
+                            type="number"
+                            value={product.deadWeight?.toString() || ""}
+                            onChangeCallback={(value) => {
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "deadWeight",
+                                parseFloat(value) || 0
+                              );
+                              clearValidationError(
+                                "products",
+                                "deadWeight",
+                                boxIndex,
+                                productIndex
+                              );
+                            }}
+                            readOnly={isEnabled}
+                            required
+                            error={
+                              validationErrors.products[
+                                `${boxIndex}-${productIndex}`
+                              ]?.deadWeight
+                            }
+                            errorMessage="Unit weight is required"
+                          />
+                        </div>
+
+                        {/* Row 3: Unit Price and Dimensions */}
+                        <div className="grid grid-cols-4 gap-4">
+                          <FloatingLabelInput
+                            placeholder="Unit Price"
+                            type="number"
+                            value={product.unitPrice?.toString() || ""}
+                            onChangeCallback={(value) => {
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "unitPrice",
+                                parseFloat(value) || 0
+                              );
+                              clearValidationError(
+                                "products",
+                                "unitPrice",
+                                boxIndex,
+                                productIndex
+                              );
+                            }}
+                            readOnly={
+                              isEnabled ||
+                              !isProductEditingAllowed ||
+                              !isNotApiSource
+                            }
+                            required={orderData?.codInfo?.isCod}
+                            error={
+                              validationErrors.products[
+                                `${boxIndex}-${productIndex}`
+                              ]?.unitPrice
+                            }
+                            errorMessage="Unit price is required for COD orders"
+                          />
+                          <FloatingLabelInput
+                            placeholder="L(cm)"
+                            type="number"
+                            value={product.length?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "length",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                          <FloatingLabelInput
+                            placeholder="B(cm)"
+                            type="number"
+                            value={product.breadth?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "breadth",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                          <FloatingLabelInput
+                            placeholder="H(cm)"
+                            type="number"
+                            value={product.height?.toString() || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "height",
+                                parseFloat(value) || 0
+                              )
+                            }
+                            readOnly={isEnabled}
+                          />
+                        </div>
+
+                        {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="relative">
                             <FloatingLabelInput
-                              placeholder="Qty"
+                              placeholder="Total Weight (kg)"
                               type="number"
-                              value={product.qty?.toString() || ""}
-                              onChangeCallback={(value) => {
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "qty",
-                                  parseFloat(value) || 0
-                                );
-                                clearValidationError(
-                                  "products",
-                                  "qty",
-                                  boxIndex,
-                                  productIndex
-                                );
-                              }}
-                              readOnly={
-                                isEnabled ||
-                                !isProductEditingAllowed ||
-                                !isNotApiSource
-                              }
-                              required
-                              error={
-                                validationErrors.products[
-                                  `${boxIndex}-${productIndex}`
-                                ]?.qty
-                              }
-                              errorMessage="Quantity is required"
-                            />
-                            <FloatingLabelInput
-                              placeholder="Unit Weight"
-                              type="number"
-                              value={product.deadWeight?.toString() || ""}
-                              onChangeCallback={(value) => {
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "deadWeight",
-                                  parseFloat(value) || 0
-                                );
-                                clearValidationError(
-                                  "products",
-                                  "deadWeight",
-                                  boxIndex,
-                                  productIndex
-                                );
-                              }}
-                              readOnly={isEnabled}
-                              required
-                              error={
-                                validationErrors.products[
-                                  `${boxIndex}-${productIndex}`
-                                ]?.deadWeight
-                              }
-                              errorMessage="Unit weight is required"
+                              value={(
+                                (product.qty || 0) * (product.deadWeight || 0)
+                              ).toFixed(2)}
+                              readOnly
                             />
                           </div>
-
-                          {/* Row 3: Unit Price and Dimensions */}
-                          <div className="grid grid-cols-4 gap-4">
+                          <div className="relative">
                             <FloatingLabelInput
-                              placeholder="Unit Price"
+                              placeholder="Product Total Price"
                               type="number"
-                              value={product.unitPrice?.toString() || ""}
-                              // onChangeCallback={(value) => {
-                              //   updateProduct(
-                              //     boxIndex,
-                              //     productIndex,
-                              //     "unitPrice",
-                              //     parseFloat(value) || 0
-                              //   );
-                              //   clearValidationError(
-                              //     "products",
-                              //     "unitPrice",
-                              //     boxIndex,
-                              //     productIndex
-                              //   );
-                              // }}
-                               onChangeCallback={(value) => {
-    updateProduct(
-      boxIndex,
-      productIndex,
-      "unitPrice",
-      parseFloat(value) || 0
-    );
-    clearValidationError(
-      "products",
-      "unitPrice",
-      boxIndex,
-      productIndex
-    );
-  }}
-                              readOnly={
-                                isEnabled ||
-                                !isProductEditingAllowed ||
-                                !isNotApiSource
-                              }
-                              // required
-                              // error={
-                              //   validationErrors.products[
-                              //     `${boxIndex}-${productIndex}`
-                              //   ]?.unitPrice
-                              // }
-                              // errorMessage="Unit price is required"
-
-                               required={orderData?.codInfo?.isCod}
-  error={
-    validationErrors.products[
-      `${boxIndex}-${productIndex}`
-    ]?.unitPrice
-  }
-  errorMessage="Unit price is required for COD orders"
-                            />
-                            <FloatingLabelInput
-                              placeholder="L(cm)"
-                              type="number"
-                              value={product.length?.toString() || ""}
-                              onChangeCallback={(value) =>
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "length",
-                                  parseFloat(value) || 0
-                                )
-                              }
-                              readOnly={isEnabled}
-                            />
-                            <FloatingLabelInput
-                              placeholder="B(cm)"
-                              type="number"
-                              value={product.breadth?.toString() || ""}
-                              onChangeCallback={(value) =>
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "breadth",
-                                  parseFloat(value) || 0
-                                )
-                              }
-                              readOnly={isEnabled}
-                            />
-                            <FloatingLabelInput
-                              placeholder="H(cm)"
-                              type="number"
-                              value={product.height?.toString() || ""}
-                              onChangeCallback={(value) =>
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "height",
-                                  parseFloat(value) || 0
-                                )
-                              }
-                              readOnly={isEnabled}
-                            />
-                          </div>
-
-                          {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="relative">
-                              <FloatingLabelInput
-                                placeholder="Total Weight (kg)"
-                                type="number"
-                                value={(
-                                  (product.qty || 0) * (product.deadWeight || 0)
-                                ).toFixed(2)}
-                                readOnly
-                              />
-                            </div>
-                            <div className="relative">
-                              <FloatingLabelInput
-                                placeholder="Total Price"
-                                type="number"
-                                value={(
-                                  (product.qty || 0) * (product.unitPrice || 0)
-                                ).toFixed(2)}
-                                readOnly
-                              />
-                            </div>
-                          </div>
-
-                          {/* Row 5: SKU and HSN */}
-                          <div className="grid grid-cols-2 gap-4">
-                            <FloatingLabelInput
-                              placeholder="SKU"
-                              value={product.sku || ""}
-                              onChangeCallback={(value) =>
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "sku",
-                                  value
-                                )
-                              }
-                              readOnly={isEnabled || !isProductEditingAllowed}
-                            />
-                            <FloatingLabelInput
-                              placeholder="HSN"
-                              value={product.hsnCode || ""}
-                              onChangeCallback={(value) =>
-                                updateProduct(
-                                  boxIndex,
-                                  productIndex,
-                                  "hsnCode",
-                                  value
-                                )
-                              }
-                              readOnly={isEnabled || !isProductEditingAllowed}
+                              value={(
+                                (product.qty || 0) * (product.unitPrice || 0)
+                              ).toFixed(2)}
+                              readOnly
                             />
                           </div>
                         </div>
-                      </Collapsible>
-                    ))}
-                    <div>
-                      {!isEnabled &&
-                        isProductEditingAllowed &&
-                        isNotApiSource && (
-                          <OneButton
-                            text="Add Product"
-                            onClick={() => addProduct(boxIndex)}
-                            variant="secondary"
-                            className="!rounded-full"
+
+                        {/* Row 5: SKU and HSN */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <FloatingLabelInput
+                            placeholder="SKU"
+                            value={product.sku || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "sku",
+                                value
+                              )
+                            }
+                            readOnly={isEnabled || !isProductEditingAllowed}
                           />
-                        )}
-                    </div>
+                          <FloatingLabelInput
+                            placeholder="HSN"
+                            value={product.hsnCode || ""}
+                            onChangeCallback={(value) =>
+                              updateProduct(
+                                boxIndex,
+                                productIndex,
+                                "hsnCode",
+                                value
+                              )
+                            }
+                            readOnly={isEnabled || !isProductEditingAllowed}
+                          />
+                        </div>
+                      </div>
+                    </Collapsible>
+                  ))}
+                  <div>
+                    {!isEnabled &&
+                      isProductEditingAllowed &&
+                      isNotApiSource && (
+                        <OneButton
+                          text="Add Product"
+                          onClick={() => addProduct(boxIndex)}
+                          variant="secondary"
+                          className="!rounded-full"
+                        />
+                      )}
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* If no products, show add product button */}
-              {(!box.products || box.products.length === 0) && !isEnabled && (
-                <div className="flex justify-center">
-                  <OneButton
-                    text="Add Product"
-                    onClick={() => addProduct(boxIndex)}
-                    variant="secondary"
-                    className="!rounded-full"
-                  />
-                </div>
-              )}
-            </div>
-          </Collapsible>
-        );
-      })}
+            {/* If no products, show add product button */}
+            {(!box.products || box.products.length === 0) && !isEnabled && (
+              <div className="flex justify-center">
+                <OneButton
+                  text="Add Product"
+                  onClick={() => addProduct(boxIndex)}
+                  variant="secondary"
+                  className="!rounded-full"
+                />
+              </div>
+            )}
+          </div>
+        </Collapsible>
+      );
+    })}
 
-      {/* Add Box Button */}
-      {!isEnabled && isProductEditingAllowed && isNotApiSource && (
-        <div className="flex justify-center mb-2 !w-full">
-          <OneButton
-            text="Add Box"
-            onClick={addBox}
-            variant="secondary"
-            className="!rounded-full !w-full"
-          />
-        </div>
-      )}
-    </div>
-  );
+    {/* Add Box Button */}
+    {!isEnabled && isProductEditingAllowed && isNotApiSource && (
+      <div className="flex justify-center mb-2 !w-full">
+        <OneButton
+          text="Add Box"
+          onClick={addBox}
+          variant="secondary"
+          className="!rounded-full !w-full"
+        />
+      </div>
+    )}
+  </div>
+);
 
   const renderServices = () => (
     <div className="space-y-4 p-4">
