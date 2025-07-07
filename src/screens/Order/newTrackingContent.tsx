@@ -229,9 +229,17 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
           currentTrackingInfo?.courierPartnerName === "DELHIVERY" &&
           currentTrackingInfo?.orderType === "B2B"
         ) {
-          setMasterAwb(
-            currentTrackingInfo?.otherDetails?.multipleAwb?.[0]?.ident || "N/A"
-          );
+          const multipleAwb = currentTrackingInfo?.otherDetails?.multipleAwb;
+          if (multipleAwb && multipleAwb.length > 0) {
+            // Check if it's an object with ident property or a direct string
+            const masterAwbValue =
+              typeof multipleAwb[0] === "object"
+                ? multipleAwb[0]?.ident
+                : multipleAwb[0];
+            setMasterAwb(masterAwbValue || "N/A");
+          } else {
+            setMasterAwb("N/A");
+          }
         } else {
           setMasterAwb("");
         }
@@ -526,7 +534,7 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
                       {currentProductName || "N/A"}
                     </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:mt-5">
                     <div>
                       <p className="font-Open text-xs font-normal leading-4 text-gray-600">
