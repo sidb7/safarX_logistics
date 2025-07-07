@@ -9308,6 +9308,7 @@ const updateProduct = (
                       updateBox(boxIndex, "collectableAmount", newTotalPrice);
                     }
                   }}
+                  integerOnly={true}
                   readOnly={isEnabled || !isProductEditingAllowed || !isNotApiSource}
                   required
                   
@@ -9498,6 +9499,7 @@ const updateProduct = (
                                 productIndex
                               );
                             }}
+                            integerOnly={true}
                             readOnly={
                               isEnabled ||
                               !isProductEditingAllowed ||
