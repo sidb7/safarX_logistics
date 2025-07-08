@@ -67,6 +67,11 @@ export const ProfileCard = (props: ProfileCardProps) => {
     props?.ProfileDetails?.privateCompany?.operationDetails?.email;
   const { getProfileData } = props;
 
+
+
+  const accountDetails = props?.ProfileDetails?.privateCompany?.accountDetails || [];
+const operationDetails = props?.ProfileDetails?.privateCompany?.operationDetails || [];
+
   const [kycValue, setKycValue] = useState();
   const [showModal, setShowModal] = useState(false);
   let currentBalance = parseFloat(walletBalance?.toFixed(2));
@@ -84,6 +89,10 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 768px)",
   });
+
+
+  const operationCount = operationDetails?.length || 0;
+  const accountCount = accountDetails?.length || 0;
 
   return (
     <>
@@ -218,20 +227,31 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                {AccDetailsEmail ? (
-                  AccDetailsEmail
-                ) : (
-                  <span className="text-gray-400  text-sm">Not Available</span>
-                )}
+                
+                {accountDetails?.[0]?.email ? (
+                      accountDetails[0].email
+                    ) : (
+                      <span className="text-gray-400 text-sm">Not Available</span>
+                    )}
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-                {AccDetailsContactNo ? (
-                  `+91 ${AccDetailsContactNo}`
-                ) : (
-                  <span className="text-gray-400  text-sm">Not Available</span>
-                )}
-              </span>
+              
+                {accountDetails?.[0]?.contactNumber ? (
+                    `+91 ${accountDetails[0].contactNumber}`
+                  ) : (
+                    <span className="text-gray-400 text-sm">Not Available</span>
+                  )}
+                    </span>
+
+                  {accountCount > 1 && (
+  <span
+    onClick={() => setShowModal(true)}
+    className="text-[14px] font-Open cursor-pointer leading-5 text-[#2563EB]"
+  >
+    + {accountCount - 1} More
+  </span>
+)}
             </div>
 
             {/* Operations Details Section */}
@@ -241,20 +261,31 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                {OpDetailsEmail ? (
-                  OpDetailsEmail
-                ) : (
-                  <span className="text-gray-400  text-sm">Not Available</span>
-                )}
+                
+                {operationDetails?.[0]?.email ? (
+                      operationDetails[0].email
+                    ) : (
+                      <span className="text-gray-400 text-sm">Not Available</span>
+                    )}
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-                {OpDetailsContactNo ? (
-                  `+91 ${OpDetailsContactNo}`
-                ) : (
-                  <span className="text-gray-400  text-sm">Not Available</span>
-                )}
+              
+                 {operationDetails?.[0]?.contactNumber ? (
+                    `+91 ${operationDetails[0].contactNumber}`
+                  ) : (
+                    <span className="text-gray-400 text-sm">Not Available</span>
+                  )}
               </span>
+
+              {operationCount > 1 && (
+                <span
+                  onClick={() => setShowModal(true)}
+                  className="text-[14px] font-Open leading-5 cursor-pointer text-[#2563EB]"
+                >
+                  + {operationCount - 1} More
+                </span>
+              )}
             </div>
 
             {/* Edit Button */}
