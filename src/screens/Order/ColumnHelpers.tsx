@@ -727,6 +727,8 @@ const idHelper = (
               : rowsData.orderId
               ? rowsData.orderId
               : `T${rowsData.tempOrderId}`,
+                  tempOrderId: rowsData?.tempOrderId,  // Add this line
+
         });
         // setInfoModalContent({
         //   isOpen: true,
@@ -1374,6 +1376,8 @@ export const columnHelperForNewOrder = (
             awb: "0",
             orderId: `T${rowsData?.tempOrderId}`,
             orderNumber: otherDetails?.orderNumber,
+           tempOrderId: rowsData?.tempOrderId,  // Add this line
+
           });
         };
         const updateBuyerConfirmation = async (
