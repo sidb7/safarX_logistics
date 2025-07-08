@@ -35,13 +35,13 @@ interface EditProfileProps {
 
 interface AccountEntry {
   email: string;
-  contactNo: string;
+  contactNumber: string;
 }
 
 
 interface OperationsEntry {
   email: string;
-  contactNo: string;
+  contactNumber: string;
 }
 
 const EditProfile: React.FC<EditProfileProps> = ({
@@ -57,11 +57,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
     verifiedEmailID: ProfileDetails?.email,
     verifiedContactNumber: ProfileDetails?.contactNumber,
     accountsMailID: ProfileDetails?.privateCompany?.accountDetails?.email || "",
-    accountsContactNo:
+    accountsContactNumber:
       ProfileDetails?.privateCompany?.accountDetails?.contactNumber || "",
     operationsMailID:
       ProfileDetails?.privateCompany?.operationDetails?.email || "",
-    operationsContactNo:
+    operationsContactNumber:
       ProfileDetails?.privateCompany?.operationDetails?.contactNumber || "",
   });
 
@@ -106,32 +106,32 @@ useEffect(() => {
     if (accountDetails && Array.isArray(accountDetails) && accountDetails.length > 0) {
       setAccounts(accountDetails.map(account => ({
         email: account.email || "",
-        contactNo: account.contactNo || "",
+        contactNumber: account.contactNumber || "",
       })));
     } else {
       // Fallback: single empty entry if no data
-      setAccounts([{ email: "", contactNo: "" }]);
+      setAccounts([{ email: "", contactNumber: "" }]);
     }
     
     // Handle operationDetails as array
     if (operationDetails && Array.isArray(operationDetails) && operationDetails.length > 0) {
       setOperations(operationDetails.map(operation => ({
         email: operation.email || "",
-        contactNo: operation.contactNo || "",
+        contactNumber: operation.contactNumber || "",
       })));
     } else {
       // Fallback: single empty entry if no data
-      setOperations([{ email: "", contactNo: "" }]);
+      setOperations([{ email: "", contactNumber: "" }]);
     }
   }
 }, [ProfileDetails]);
 
 
 
-   const handleAccountChange = (index: number, field: 'email' | 'contactNo', value: string) => {
+   const handleAccountChange = (index: number, field: 'email' | 'contactNumber', value: string) => {
     const updatedAccounts = [...accounts];
     
-    if (field === 'contactNo') {
+    if (field === 'contactNumber') {
       // For contact number, only allow numbers
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedAccounts[index][field] = numbersOnly;
@@ -142,19 +142,19 @@ useEffect(() => {
         if (!validStartDigits.test(numbersOnly)) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            [`accounts_${index}_contactNo`]: "Please enter a valid 10 digit number",
+            [`accounts_${index}_Number`]: "Please enter a valid 10 digit number",
           }));
         } else {
           setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
-            delete newErrors[`accounts_${index}_contactNo`];
+            delete newErrors[`accounts_${index}_contactNumber`];
             return newErrors;
           });
         }
       } else {
         setErrors((prevErrors) => {
           const newErrors = { ...prevErrors };
-          delete newErrors[`accounts_${index}_contactNo`];
+          delete newErrors[`accounts_${index}_contactNumber`];
           return newErrors;
         });
       }
@@ -186,7 +186,7 @@ useEffect(() => {
   };
 
     const addAccountEntry = () => {
-    setAccounts([...accounts, { email: "", contactNo: "" }]);
+    setAccounts([...accounts, { email: "", contactNumber: "" }]);
   };
 
 
@@ -200,7 +200,7 @@ useEffect(() => {
       setErrors((prevErrors) => {
         const newErrors = { ...prevErrors };
         delete newErrors[`accounts_${index}_email`];
-        delete newErrors[`accounts_${index}_contactNo`];
+        delete newErrors[`accounts_${index}_contactNumber`];
         return newErrors;
       });
     }
@@ -213,10 +213,10 @@ useEffect(() => {
 
 
 
-   const handleOperationsChange = (index: number, field: 'email' | 'contactNo', value: string) => {
+   const handleOperationsChange = (index: number, field: 'email' | 'contactNumber', value: string) => {
     const updatedOperations = [...operations];
     
-    if (field === 'contactNo') {
+    if (field === 'contactNumber') {
       // For contact number, only allow numbers
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedOperations[index][field] = numbersOnly;
@@ -227,19 +227,19 @@ useEffect(() => {
         if (!validStartDigits.test(numbersOnly)) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            [`operations_${index}_contactNo`]: "Please enter a valid 10 digit number",
+            [`operations_${index}_contactNumber`]: "Please enter a valid 10 digit number",
           }));
         } else {
           setErrors((prevErrors) => {
             const newErrors = { ...prevErrors };
-            delete newErrors[`operations_${index}_contactNo`];
+            delete newErrors[`operations_${index}_contactNumber`];
             return newErrors;
           });
         }
       } else {
         setErrors((prevErrors) => {
           const newErrors = { ...prevErrors };
-          delete newErrors[`operations_${index}_contactNo`];
+          delete newErrors[`operations_${index}_contactNumber`];
           return newErrors;
         });
       }
@@ -271,7 +271,7 @@ useEffect(() => {
   };
 
     const addOperationsEntry = () => {
-    setOperations([...operations, { email: "", contactNo: "" }]);
+    setOperations([...operations, { email: "", contactNumber: "" }]);
   };
 
 
@@ -285,7 +285,7 @@ useEffect(() => {
       setErrors((prevErrors) => {
         const newErrors = { ...prevErrors };
         delete newErrors[`operations_${index}_email`];
-        delete newErrors[`operations_${index}_contactNo`];
+        delete newErrors[`operations_${index}_contactNumber`];
         return newErrors;
       });
     }
@@ -323,7 +323,7 @@ useEffect(() => {
       }
     }
 
-    if (name.includes("ContactNo")) {
+    if (name.includes("ContactNumber")) {
       // For contact number fields, only allow numbers
       // Remove any non-digit characters and limit to 10 digits
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
@@ -394,7 +394,7 @@ useEffect(() => {
     } else if (name.includes("MailID") && !/\S+@\S+\.\S+/.test(value))
       return "Please enter a valid email address";
 
-    if (name.includes("ContactNo") && !/^[6-9]\d{9}$/.test(value))
+    if (name.includes("ContactNumber") && !/^[6-9]\d{9}$/.test(value))
       return "Please enter a valid 10 digit contact number";
     return "";
   };
@@ -532,9 +532,9 @@ useEffect(() => {
     const newErrors: { [key: string]: string } = {};
     [
       "accountsMailID",
-      "accountsContactNo",
+      "accountsContactNumber",
       "operationsMailID",
-      "operationsContactNo",
+      "operationsContactNumber",
     ].forEach((key) => {
       const error = validateField(
         key,
@@ -769,16 +769,16 @@ useEffect(() => {
 
                   <CustomInputBox
                     label={`Accounts Contact No `}
-                    name={`accounts_${index}_contactNo`}
-                    value={account.contactNo}
-                    onChange={(e) => handleAccountChange(index, 'contactNo', e.target.value)}
+                    name={`accounts_${index}_contactNumber`}
+                    value={account.contactNumber}
+                    onChange={(e) => handleAccountChange(index, 'contactNumber', e.target.value)}
                     onBlur={() => {}}
                     containerStyle="mb-4"
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
                     isRequired={true}
-                    inputError={!!errors[`accounts_${index}_contactNo`]}
-                    errorMessage={errors[`accounts_${index}_contactNo`]}
+                    inputError={!!errors[`accounts_${index}_contactNumber`]}
+                    errorMessage={errors[`accounts_${index}_contactNumber`]}
                     inputType="tel"
                   />
                 </div>
@@ -841,16 +841,16 @@ useEffect(() => {
                   
                   <CustomInputBox
                     label={`Operations Contact No`}
-                    name={`operations_${index}_contactNo`}
-                    value={operation.contactNo}
-                    onChange={(e) => handleOperationsChange(index, 'contactNo', e.target.value)}
+                    name={`operations_${index}_contactNumber`}
+                    value={operation.contactNumber}
+                    onChange={(e) => handleOperationsChange(index, 'contactNumber', e.target.value)}
                     onBlur={() => {}}
                     containerStyle="mb-4"
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
                     isRequired={true}
-                    inputError={!!errors[`operations_${index}_contactNo`]}
-                    errorMessage={errors[`operations_${index}_contactNo`]}
+                    inputError={!!errors[`operations_${index}_contactNumber`]}
+                    errorMessage={errors[`operations_${index}_contactNumber`]}
                     inputType="tel"
                   />
                 </div>

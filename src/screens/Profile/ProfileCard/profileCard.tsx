@@ -237,8 +237,8 @@ ding-6">
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
               
-                {accountDetails?.[0]?.contactNo ? (
-                    `+91 ${accountDetails[0].contactNo}`
+                {accountDetails?.[0]?.contactNumber ? (
+                    `+91 ${accountDetails[0].contactNumber}`
                   ) : (
                     <span className="text-gray-400 text-sm">Not Available</span>
                   )}
@@ -271,8 +271,8 @@ ding-6">
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
               
-                 {operationDetails?.[0]?.contactNo ? (
-                    `+91 ${operationDetails[0].contactNo}`
+                 {operationDetails?.[0]?.contactNumber ? (
+                    `+91 ${operationDetails[0].contactNumber}`
                   ) : (
                     <span className="text-gray-400 text-sm">Not Available</span>
                   )}
