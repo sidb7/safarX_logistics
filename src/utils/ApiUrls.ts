@@ -204,6 +204,8 @@ const DELIVERY_ADDRESS_SEARCHBY = `${SELLER_BASE_URL}/deliveryAddress/getSearchB
 const GET_PRODUCT_SUGGETION = `${SELLER_BASE_URL}/order/suggestionProduct`;
 const GET_BOX_SUGGETION = `${SELLER_BASE_URL}/order/suggestionBox`;
 const GET_SELLER_ORDER_SUMMARY = `${SELLER_BASE_URL}/order/getSellerOrder`;
+const CHECK_ORDER_ID = `${SELLER_BASE_URL}/order/orderIdCheck`;
+
 
 
 
@@ -837,4 +839,5 @@ export {
   GET_DARKSTORE_DETAILS,
   GET_DARKSTORE_FILTER_DETAILS,
   GET_DARKSTORE_PRODUCT_COUNT,
+  CHECK_ORDER_ID,
 };
