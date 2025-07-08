@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import CustomInputBox from "../../../components/Input";
 import cameraIcon from "../../../assets/camera.svg";
 import { POST } from "../../../utils/webService";
@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import OneButton from "../../../components/Button/OneButton";
 import { textRegex, emailRegex, mobileRegex } from "../../../utils/regexCheck";
+import DeleteIconRedColor from "../../../assets/DeleteIconRedColor.svg";
+import CloseIcon from "../../../assets/CloseIcon.svg";
 
 interface EditProfileProps {
   onClose: (value: boolean) => void;
@@ -31,6 +33,17 @@ interface EditProfileProps {
   };
 }
 
+interface AccountEntry {
+  email: string;
+  contactNo: string;
+}
+
+
+interface OperationsEntry {
+  email: string;
+  contactNo: string;
+}
+
 const EditProfile: React.FC<EditProfileProps> = ({
   onClose,
   getProfileData,
@@ -51,6 +64,12 @@ const EditProfile: React.FC<EditProfileProps> = ({
     operationsContactNo:
       ProfileDetails?.privateCompany?.operationDetails?.contactNumber || "",
   });
+
+
+ 
+const [accounts, setAccounts] = useState<AccountEntry[]>([]);
+const [operations, setOperations] = useState<OperationsEntry[]>([]);
+
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +93,205 @@ const EditProfile: React.FC<EditProfileProps> = ({
   //   }
 
   // };
+
+
+
+
+useEffect(() => {
+  if (ProfileDetails?.privateCompany) {
+    const accountDetails = ProfileDetails.privateCompany.accountDetails;
+    const operationDetails = ProfileDetails.privateCompany.operationDetails;
+    
+    // Handle accountDetails as array
+    if (accountDetails && Array.isArray(accountDetails) && accountDetails.length > 0) {
+      setAccounts(accountDetails.map(account => ({
+        email: account.email || "",
+        contactNo: account.contactNo || "",
+      })));
+    } else {
+      // Fallback: single empty entry if no data
+      setAccounts([{ email: "", contactNo: "" }]);
+    }
+    
+    // Handle operationDetails as array
+    if (operationDetails && Array.isArray(operationDetails) && operationDetails.length > 0) {
+      setOperations(operationDetails.map(operation => ({
+        email: operation.email || "",
+        contactNo: operation.contactNo || "",
+      })));
+    } else {
+      // Fallback: single empty entry if no data
+      setOperations([{ email: "", contactNo: "" }]);
+    }
+  }
+}, [ProfileDetails]);
+
+
+
+   const handleAccountChange = (index: number, field: 'email' | 'contactNo', value: string) => {
+    const updatedAccounts = [...accounts];
+    
+    if (field === 'contactNo') {
+      // For contact number, only allow numbers
+      const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
+      updatedAccounts[index][field] = numbersOnly;
+      
+      // Validate the number
+      if (numbersOnly.length > 0) {
+        const validStartDigits = /^[6-9]\d{9}$/;
+        if (!validStartDigits.test(numbersOnly)) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            [`accounts_${index}_contactNo`]: "Please enter a valid 10 digit number",
+          }));
+        } else {
+          setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[`accounts_${index}_contactNo`];
+            return newErrors;
+          });
+        }
+      } else {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[`accounts_${index}_contactNo`];
+          return newErrors;
+        });
+      }
+    } else {
+      updatedAccounts[index][field] = value;
+      
+      // Validate email
+      if (value.trim() === "") {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[`accounts_${index}_email`];
+          return newErrors;
+        });
+      } else if (!emailRegex.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [`accounts_${index}_email`]: "Please enter a valid email address",
+        }));
+      } else {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[`accounts_${index}_email`];
+          return newErrors;
+        });
+      }
+    }
+    
+    setAccounts(updatedAccounts);
+  };
+
+    const addAccountEntry = () => {
+    setAccounts([...accounts, { email: "", contactNo: "" }]);
+  };
+
+
+
+   const removeAccountEntry = (index: number) => {
+    if (accounts.length > 1) {
+      const updatedAccounts = accounts.filter((_, i) => i !== index);
+      setAccounts(updatedAccounts);
+      
+      // Clear related errors
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[`accounts_${index}_email`];
+        delete newErrors[`accounts_${index}_contactNo`];
+        return newErrors;
+      });
+    }
+  };
+
+
+
+
+  
+
+
+
+   const handleOperationsChange = (index: number, field: 'email' | 'contactNo', value: string) => {
+    const updatedOperations = [...operations];
+    
+    if (field === 'contactNo') {
+      // For contact number, only allow numbers
+      const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
+      updatedOperations[index][field] = numbersOnly;
+      
+      // Validate the number
+      if (numbersOnly.length > 0) {
+        const validStartDigits = /^[6-9]\d{9}$/;
+        if (!validStartDigits.test(numbersOnly)) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            [`operations_${index}_contactNo`]: "Please enter a valid 10 digit number",
+          }));
+        } else {
+          setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[`operations_${index}_contactNo`];
+            return newErrors;
+          });
+        }
+      } else {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[`operations_${index}_contactNo`];
+          return newErrors;
+        });
+      }
+    } else {
+      updatedOperations[index][field] = value;
+      
+      // Validate email
+      if (value.trim() === "") {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[`operations_${index}_email`];
+          return newErrors;
+        });
+      } else if (!emailRegex.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [`operations_${index}_email`]: "Please enter a valid email address",
+        }));
+      } else {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[`operations_${index}_email`];
+          return newErrors;
+        });
+      }
+    }
+    
+    setOperations(updatedOperations);
+  };
+
+    const addOperationsEntry = () => {
+    setOperations([...operations, { email: "", contactNo: "" }]);
+  };
+
+
+
+   const removeOperationsEntry = (index: number) => {
+    if (operations.length > 1) {
+      const updatedOperations = operations.filter((_, i) => i !== index);
+      setOperations(updatedOperations);
+      
+      // Clear related errors
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[`operations_${index}_email`];
+        delete newErrors[`operations_${index}_contactNo`];
+        return newErrors;
+      });
+    }
+  };
+
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -343,15 +561,23 @@ const EditProfile: React.FC<EditProfileProps> = ({
           data: {
             firstName: profileData?.firstName,
             lastName: profileData?.lastName,
-            "privateCompany.accountDetails.contactNumber":
-              profileData.accountsContactNo,
-            "privateCompany.accountDetails.email": profileData.accountsMailID,
-            "privateCompany.operationDetails.contactNumber":
-              profileData.operationsContactNo,
-            "privateCompany.operationDetails.email":
-              profileData.operationsMailID,
+            // "privateCompany.accountDetails.contactNumber":
+            //   profileData.accountsContactNo,
+            // "privateCompany.accountDetails.email": profileData.accountsMailID,
+            // "privateCompany.operationDetails.contactNumber":
+            //   profileData.operationsContactNo,
+            // "privateCompany.operationDetails.email":
+            //   profileData.operationsMailID,
             profileImageUrl: profileData.profileImageUrl,
+           
+            // accountDetails:accounts,
+            // operationDetails:operations,
+             "privateCompany.accountDetails": accounts,      
+            "privateCompany.operationDetails": operations
+    
           },
+
+
         });
         if (data?.success) {
           onClose(false);
@@ -370,13 +596,17 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
   console.log("nameErrMsgnameErrMsg", nameErrMsg?.firstName);
 
-  return (
+  return (<>
     <div className="bg-white p-4 rounded-lg shadow-lg w-full h-full flex flex-col">
-      <div className="p-4 flex-grow overflow-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">Edit Profile</h2>
-          <button onClick={() => onClose(false)}>X</button>
+
+          <div className="flex justify-between items-center mb-6 ">
+          <h2 className="text-[24px] px-4 font-Lato leading-8 font-normal">Edit Profile</h2>
+          <button    style={{ width: "24px", height: "24px" }}
+ onClick={() => onClose(false)}><img src={CloseIcon} alt="closeIcon"/></button>
         </div>
+
+        
+      <div className="p-4 flex-grow overflow-auto">
 
         {/* <div className="relative w-24 h-24 mx-auto mb-6">
           <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
@@ -393,7 +623,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
               <img
                 src={profileData.profileImageUrl}
                 alt="Profile"
-                className="absolute w-full h-full object-cover"
+                className=" w-full h-full object-cover"
                 style={{
                   objectFit: "cover",
                   objectPosition: "center",
@@ -411,7 +641,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
           </div>
         </div>
 
-        <form className="space-y-4">
+        <form className="space-y-[16px] ">
           <CustomInputBox
             label="Seller ID"
             name="sellerID"
@@ -420,6 +650,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             onBlur={handleInputBlur}
             containerStyle="mb-4"
             inputClassName="w-full"
+            className={"!rounded-[14px]"}
             isRequired={true}
             inputError={!!errors.sellerID}
             errorMessage={errors.sellerID}
@@ -437,6 +668,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             }`}
             inputClassName="w-full"
             isRequired={true}
+            className={"!rounded-[14px]"}
             // inputError={!!errors.firstName}
             // errorMessage={errors.firstName}
             // isDisabled
@@ -450,6 +682,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             value={profileData.lastName}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
+            className={"!rounded-[14px]"}
             containerStyle={`${
               nameErrMsg?.lastName?.length === 0 ? "mb-4" : "mb-0"
             }`}
@@ -471,6 +704,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             onBlur={handleInputBlur}
             containerStyle="mb-4"
             inputClassName="w-full"
+            className={"!rounded-[14px]"}
             isRequired={true}
             inputError={!!errors.verifiedEmailID}
             errorMessage={errors.verifiedEmailID}
@@ -486,6 +720,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             onBlur={handleInputBlur}
             containerStyle="mb-4"
             inputClassName="w-full"
+            className={"!rounded-[14px]"}
             isRequired={true}
             inputError={!!errors.verifiedContactNumber}
             errorMessage={errors.verifiedContactNumber}
@@ -493,84 +728,157 @@ const EditProfile: React.FC<EditProfileProps> = ({
             isDisabled
           />
 
-          <CustomInputBox
-            label="Accounts Mail ID"
-            name="accountsMailID"
-            value={profileData.accountsMailID}
-            onChange={handleInputChange}
-            onBlur={() => {}}
-            containerStyle="mb-4"
-            inputClassName="w-full"
-            isRequired={true}
-            // inputError={!!errors.accountsMailID}
-            errorMessage={errors.accountsMailID}
-            inputType="email"
-          />
+               {/* Dynamic Accounts Section */}
 
-          <CustomInputBox
-            label="Accounts Contact No"
-            name="accountsContactNo"
-            value={profileData.accountsContactNo}
-            onChange={handleInputChange}
-            onBlur={() => {}}
-            containerStyle="mb-4"
-            inputClassName="w-full"
-            isRequired={true}
-            // inputError={!!errors.accountsContactNo}
-            errorMessage={errors.accountsContactNo}
-            inputType="tel"
-          />
 
-          <CustomInputBox
-            label="Operations Mail ID"
-            name="operationsMailID"
-            value={profileData.operationsMailID}
-            onChange={handleInputChange}
-            onBlur={() => {}}
-            containerStyle="mb-4"
-            inputClassName="w-full"
-            isRequired={true}
-            // inputError={!!errors.operationsMailID}
-            errorMessage={errors.operationsMailID}
-            inputType="email"
-          />
+          <div className="mb-4">
+            <h3 className=" text-[14px] leading-4 font-Open  font-medium mb-3">Accounts</h3>
+            {accounts.map((account, index) => (
+              <div key={index} className="border p-4 mb-8 rounded-[20px] relative shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+                
+                
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs  font-Open leading-4 mb-2">  {index === 0 ? 'Primary' : `Alternate`}</span>
+                      {accounts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeAccountEntry(index)}
+                    className="absolute top-1 right-1 text-red-500 hover:text-red-700"
+                  >
+                    
+                    <img src={DeleteIconRedColor} alt="Delete" className="w-4 mx-5 my-3 h-4" />
+                  </button>
+                )}
 
-          <CustomInputBox
-            label="Operations Contact No"
-            name="operationsContactNo"
-            value={profileData.operationsContactNo}
-            onChange={handleInputChange}
-            onBlur={() => {}}
-            containerStyle="mb-4"
-            inputClassName="w-full"
-            isRequired={true}
-            // inputError={!!errors.operationsContactNo}
-            errorMessage={errors.operationsContactNo}
-            inputType="tel"
-          />
+                  </div>
+                <div className="flex flex-col gap-[4px] ">
+                  <CustomInputBox
+                    label={`Accounts Mail ID `}
+                    name={`accounts_${index}_email`}
+                    value={account.email}
+                    onChange={(e) => handleAccountChange(index, 'email', e.target.value)}
+                    onBlur={() => {}}
+                    containerStyle="mb-4"
+                    inputClassName="w-full !rounded-[14px]"
+                    className={"!rounded-[14px] "}
+                    isRequired={true}
+                    inputError={!!errors[`accounts_${index}_email`]}
+                    errorMessage={errors[`accounts_${index}_email`]}
+                    inputType="email"
+                  />
+
+                  <CustomInputBox
+                    label={`Accounts Contact No `}
+                    name={`accounts_${index}_contactNo`}
+                    value={account.contactNo}
+                    onChange={(e) => handleAccountChange(index, 'contactNo', e.target.value)}
+                    onBlur={() => {}}
+                    containerStyle="mb-4"
+                    inputClassName="w-full"
+                    className={"!rounded-[14px]"}
+                    isRequired={true}
+                    inputError={!!errors[`accounts_${index}_contactNo`]}
+                    errorMessage={errors[`accounts_${index}_contactNo`]}
+                    inputType="tel"
+                  />
+                </div>
+
+           
+
+              </div>
+            ))}
+            
+          
+              <div className="flex justify-end mt-2">
+            <button
+              type="button"
+              onClick={addAccountEntry}
+              className="py-1 px-4 text-[14px] leading-[20px] font-Open font-semibold underline border-[#004EFF]  text-[#004EFF] hover:border-blue-400 hover:text-blue-600 transition-colors"
+            >
+              Add More
+            </button>
+          </div>         
+          </div>
+
+                     {/* Dynamic Operations Section */}
+
+
+          <div className="mb-4 ">
+            <h3 className="text-[14px] leading-4 font-Open  font-medium mb-3">Operations</h3>
+            {operations.map((operation, index) => (
+              <div key={index} className="border rounded-[20px] p-4 mb-8 relative shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+               
+
+                  <div className="flex justify-between items-center mb-2 ">
+                  <span className="text-[12px]  font-Open leading-4 mb-2">{index === 0 ? 'Primary' : `Alternate`}</span>
+                      {operations.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeOperationsEntry(index)}
+                    className="absolute top-1 right-1 text-red-500 hover:text-red-700"
+                  >
+                    
+                    <img src={DeleteIconRedColor} alt="Delete" className="w-4 mx-5 my-3 h-4" />
+                  </button>
+                )}
+
+                  </div>
+                <div className="flex flex-col gap-[4px] ">
+                  <CustomInputBox
+                    label={`Operations Mail ID `}
+                    name={`operations_${index}_email`}
+                    value={operation.email}
+                    onChange={(e) => handleOperationsChange(index, 'email', e.target.value)}
+                    onBlur={() => {}}
+                    containerStyle="mb-4"
+                    inputClassName="w-full !radius-lg"
+                    className={"!rounded-[14px] "}
+                    isRequired={true}
+                    inputError={!!errors[`operations_${index}_email`]}
+                    errorMessage={errors[`operations_${index}_email`]}
+                    inputType="email"
+                  />
+                  
+                  <CustomInputBox
+                    label={`Operations Contact No`}
+                    name={`operations_${index}_contactNo`}
+                    value={operation.contactNo}
+                    onChange={(e) => handleOperationsChange(index, 'contactNo', e.target.value)}
+                    onBlur={() => {}}
+                    containerStyle="mb-4"
+                    inputClassName="w-full"
+                    className={"!rounded-[14px]"}
+                    isRequired={true}
+                    inputError={!!errors[`operations_${index}_contactNo`]}
+                    errorMessage={errors[`operations_${index}_contactNo`]}
+                    inputType="tel"
+                  />
+                </div>
+
+              </div>
+            ))}
+
+           <div className="flex justify-end mt-2">
+            <button
+              type="button"
+              onClick={addOperationsEntry}
+              className="py-1 px-4 text-[14px] leading-[20px] font-Open font-semibold underline border-[#004EFF]  text-[#004EFF] hover:border-blue-400 hover:text-blue-600 transition-colors"
+            >
+              Add More
+            </button>
+          </div>
+
+            
+          </div>
+
         </form>
       </div>
 
-      <div className="mt-auto p-4 border-t-2 border-gray-200 flex justify-end items-center w-full">
-        <OneButton
-          text="Back"
-          onClick={() => onClose(false)}
-          className="px-4 py-2 mr-4"
-          variant="secondary"
-        />
-        {isLoading ? (
-          <div className="flex justify-center items-center px-4 py-2">
-            <Spinner />
-          </div>
-        ) : (
-          <OneButton
-            text="Save"
-            onClick={handleSave}
-            className="px-4 py-2"
-            variant="primary"
-          />
-        )}
-      </div>
+          
+
+<div className="mt-8">
+<h2>Back</h2>
+</div>
 
       {showUploadModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -602,7 +910,34 @@ const EditProfile: React.FC<EditProfileProps> = ({
           </div>
         </div>
       )}
+
     </div>
+
+         
+     <div className="absolute bottom-0 mt-4 left-0 right-0 p-4 rounded-[18px] shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)] bg-white border-t border-gray-200 flex justify-end items-center">
+      {/* <div className="-mx-4 -mr-4 mt-auto p-4 rounded-[12px] shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)]    border-gray-200 flex justify-end items-center w-full"> */}
+        <OneButton
+          text="Back"
+          onClick={() => onClose(false)}
+          className="px-4 py-2 mr-4 !rounded-[18px]"
+          variant="secondary"
+        />
+        {isLoading ? (
+          <div className="flex justify-center items-center px-4 py-2">
+            <Spinner />
+          </div>
+        ) : (
+          <OneButton
+            text="Save"
+            onClick={handleSave}
+            className="px-4 py-2 !rounded-[18px] "
+            variant="primary"
+          />
+        )}
+      </div>
+        
+
+    </>
   );
 };
 

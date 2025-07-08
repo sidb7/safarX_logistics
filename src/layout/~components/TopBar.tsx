@@ -59,12 +59,11 @@ import NotificationBell from "./notificationBell";
 
 
 import LogOut from "../../assets/logOut.svg";
-import User01 from "../../assets/userIcon.svg";
+import UserIcon from "../../assets/userIcon.svg";
 import ChevronRight from "../../assets/chevronRight.svg"
 
 
-import ProfileIcon1 from "../../assets/profile.svg";
-import { profile } from "console";
+// import { profile } from "console";
 
 
 let socket: Socket | null = null;
@@ -160,8 +159,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
 
 
-
-
   // Handler for Report A Bug click
   const handleReportBugClick = () => {
     setIsSentryOpen(true);
@@ -191,10 +188,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
    const getProfileData = async () => {
     const { data } = await POST(GET_PROFILE_URL, {});
-    // console.log("data from get api",data)
     if (data?.success) {
       setProfileData(data?.data?.[0]);
-      // console.log("i run", profileData)
    
     } else {
       toast.error(data?.message);
@@ -203,11 +198,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
     useEffect(() => {
    
-      // console.log("iran");
       getProfileData();
-      // console.log(profileData)
-            // console.log("iran1");
-
    
   }, [isOpen]);
 
@@ -279,15 +270,15 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   }, []);
 
 
-  useEffect(() => {
-  const storedUser = localStorage.getItem("sellerSession");
-  if (storedUser) {
-    const user1 = JSON.parse(storedUser);
-    setUserData(user1);
+//   useEffect(() => {
+//   const storedUser = localStorage.getItem("sellerSession");
+//   if (storedUser) {
+//     const user1 = JSON.parse(storedUser);
+//     setUserData(user1);
 
-  }
-  // console.log("well",userData)
-}, []);
+//   }
+ 
+// }, []);
 
 
   const onClickServiceability = async () => {
@@ -542,13 +533,13 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 {/* <img src={ProfileLogo} alt="" /> */}
                 {isOpen && (
                   <div
-                    className="origin-top-right z-50 absolute right-0 mt-9 w-[308px] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                    className="origin-top-right z-50 absolute right-0 mt-9 w-[308px] px-[8px] py-[16px] rounded-xl shadow-lg bg-white  ring-black ring-opacity-5"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
 
-                      <div className="flex items-center gap-3 px-4 py-3 border-b ">
+                      <div className="flex items-center  gap-x-3 px-4 py-3 mb-3 border-b  border-b-[#E5E7EB]">
                         {/* <img
                           src={profileIcon} 
                           alt="Profile"
@@ -556,45 +547,48 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         /> */}
                         <img
                             src={profileData?.profileImageUrl && profileData?.profileImageUrl !== "N/A" ? profileData?.profileImageUrl : profileIcon} 
-                            alt="Profile"
-                            className="w-[70px] h-[70px] rounded-full object-cover"
+                            alt="Profile Icon"
+                            className="w-[70px] h-[70px] border border-gray-100 rounded-full object-cover"
                           />
 
                         <div>
-                          <div className="font-medium text-[15px] text-gray-900">
-                            {profileData?.firstName} {profileData?.lastName}
+                          <div className="font-semibold font-Open text-sm leading-5 text-[#1C1C1C] capitalize my-[2px]">
+                            {/* {profileData?.firstName} {profileData?.lastName} */}
+                            {profileData?.firstName && profileData?.lastName
+                              ? `${profileData.firstName} ${profileData.lastName}`
+                              : '-'}
+
                           </div>
-                          <div className="text-gray-500  text-[12px]">
+                          <div className="text-gray-500  text-[12px] leading-4 font-Open">    
                             {/* {userData?.contactNumber}<span className="px-1">|</span> */}
                           <span
-                            className="truncate"
-                            title={userData?.email}
+                            className="truncate font-medium"
+                            title={profileData?.email}
                           >
-                            {userData?.email.length > 30
-                              ? `${userData?.email.slice(0, 27)}...`
-                              : userData?.email}
-                          </span>
-                          {/* <span
-                            className="truncate"
-                            title={test21}
-                          >
-                            {test21.length > 30
-                              ? `${test21.slice(0, 28)}...`
-                              : test21}
-                          </span> */}
+                            {/* {profileData?.email.length > 30
+                              ? `${profileData?.email.slice(0, 27)}...`
+                              : profileData?.email} */}
+                              {profileData?.email
+                                ? profileData.email.length > 28
+                                  ? `${profileData.email.slice(0, 25)}...`
+                                  : profileData.email
+                                : '-'}
 
-                          <div className="font-medium text-[11px] text-gray-400">
-                           +91 {userData?.contactNumber}
+                          </span>
+
+                          <div className="font-normal font-Open text-[12px] leading-4 text-gray-400 !my-[2px]">
+                           {/* +91 {profileData?.contactNumber} */}
+                           {profileData?.contactNumber ? `+91 ${profileData.contactNumber}` : '-'}
+
                           </div>
                          
-
                           </div>
                         </div>
                       </div>
 
 
-                      <hr/>
-                    
+                    {/* <hr className="h-[1px]" /> */}
+
                     <div className="py-0.5" role="none">
                       {/* <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
@@ -609,7 +603,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       </button> */}
 
                        <button
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F9FAFB] hover:text-gray-900 font-Open"
                     role="menuitem"
                     onClick={() => {
                       navigate("/profile");
@@ -618,9 +612,9 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   >
                   
                     <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-2">
-                        <img src={User01} alt="Profile Icon" className="w-4 h-4" />
-                        <span>My Profile</span>
+                      <div className="flex items-center gap-x-2">
+                        <img src={UserIcon} alt="Profile Icon" className="w-4 h-4" />
+                        <span className="font-Open text-sm leading-5 font-normal text-[#000000]">My Profile</span>
                       </div>
                       {/* <img src={ChevronRight} alt="Chevron Icon" className="w-4 h-4" /> */}
                     </div>
@@ -634,22 +628,16 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       >
                         Settings
                       </button> */}
-                      {/* <button
-                        className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
-                        role="menuitem"
-                        onClick={() => logoutHandler()}
-                      >
-                        Sign out
-                      </button> */}
+                   
 
                       <button
-                        className="block w-full text-left px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
+                        className="block w-full text-left px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-[#F9FAFB] hover:text-gray-900 font-Open"
                         role="menuitem"
                         onClick={() => logoutHandler()}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex font-Open items-center gap-x-2">
                           <img src={LogOut} alt="Logout Icon" className="w-4 h-4" />
-                          <span>Sign out</span>
+                          <span className="font-Open text-sm leading-5 font-normal text-[#000000]">Sign out</span>
                         </div>
                       </button>
                     </div>
