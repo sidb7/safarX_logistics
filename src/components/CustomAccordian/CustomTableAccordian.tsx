@@ -1,4829 +1,3 @@
-// import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-// import {
-//   COMPANY_NAME,
-//   GET_COURIER_PARTNER_SERVICE,
-//   GET_ORDER_CONFIRMATION_LOG,
-//   GET_SELLER_ORDER_COMPLETE_DATA,
-//   GET_SYSTEM_LOG,
-// } from "../../utils/ApiUrls";
-// import { POST } from "../../utils/webService";
-// import {
-//   capitalizeFirstLetter,
-//   convertEpochToDateTime,
-// } from "../../utils/utility";
-// import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
-// import { Spinner } from "../../components/Spinner/index";
-// import CustomInputBox from "../../components/Input";
-// import {
-//   GET_PINCODE_DATA,
-//   UPDATE_TEMP_ORDER_INFO,
-//   GET_SERVICE_LIST_ORDER,
-//   SET_SERVICE_INFO,
-//   GET_SELLER_BOX,
-//   POST_PLACE_ALL_ORDERS,
-// } from "../../utils/ApiUrls";
-// import { useNavigate } from "react-router-dom";
-// import { toast } from "react-hot-toast";
-// import { convertEpochToDateTimeV2 } from "../../utils/utility";
-// import CustomDate from "./CustomDateWithTime";
-// import InputBox from "../../components/Input";
-// import CustomDropDown from "../../components/DropDown";
-// import ItemIcon from "../../assets/Product/Item.svg";
-// import BoxIcon from "../../assets/layer.svg";
-// import DownwardArrow from "../../assets/downwardArrow.svg";
-// import { gstRegex } from "../../utils/regexCheck";
-// import UpwardArrow from "../../assets/AccordionUp.svg";
-// import CustomInputWithImage from "../../components/InputWithImage/InputWithImage";
-// import CalenderIcon from "../../assets/calendar.svg";
-// import AddBoxIcon from "../../assets/add-circle.svg";
-// import { Tooltip } from "react-tooltip";
-// import AddIcon from "../../assets/add-circle.svg";
-// import OneButton from "../Button/OneButton";
-
-// interface ICustomTableAccordion {
-//   getAllSellerData?: any;
-//   isMasked?: any;
-// }
-
-// const Accordion = (props: ICustomTableAccordion) => {
-//   const isFirstRender = useRef(true);
-//   const addressOpen = useRef(false);
-//   const navigate = useNavigate();
-//   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
-//   const [errorsArray, setErrorsArray]: any = useState([]);
-//   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
-//   const [orderPayload, setOrderPayload]: any = useState({});
-//   const [customInpuBox, setCustomInputBox] = useState<any>(false);
-//   const [boxName, setBoxName] = useState(false);
-//   const [openIndex, setOpenIndex] = useState<any>(null);
-//   const [orderDetails, setOrderDetails]: any = useState([]);
-//   const [apiCall, setApiCall] = useState<any>(false);
-//   const [source, setSource]: any = useState("");
-//   const [openPickupDatePicker, setOpenPickupDatePicker] =
-//     useState<Boolean>(false);
-//   const [isLoading, setIsLoading]: any = useState(false);
-//   const [pincode, setPincode] = useState<any>();
-//   const [pincodeData, setPincodeData] = useState<any>("");
-//   const [boxProductDetails, setBoxProductDetails] = useState<any>();
-//   const [serviceLoading, setServiceLoading] = useState<any>(false);
-//   const [productAccordian, setproductAccordian] = useState<any>([]);
-//   const [otherDetailsAccordian, setOtherDetailsAccordian] = useState(false);
-//   const [validationError, setValidationError] = useState<any>({
-//     contactName: "",
-//     contactType: "",
-//     flatNo: "",
-//     locality: "",
-//     landMark: "",
-//     city: "",
-//     state: "",
-//     country: "",
-//     addressType: "",
-//     date: "",
-//     pincode: "",
-//     mobileNo: "",
-//     emailId: "",
-//     deliveryMobileNo: "",
-//     deliveryPincode: "",
-//     pickUpEmailId: "",
-//     gstValue: "",
-//     deliveryContactName: "",
-//     deliveryType: "",
-//     deliveryFlatNo: "",
-//     deliveryLocality: "",
-//     deliveryLandmark: "",
-//     deliveryCity: "",
-//     deliveryState: "",
-//     deliveryCountry: "",
-//     deliveryAddressType: "",
-//     orderId: "",
-//     deadWeight: "",
-//     volumetricWeight: "",
-//     length: "",
-//     breadth: "",
-//     height: "",
-//     boxDeadWeight: "",
-//     boxVolumtericWeight: "",
-//     boxLength: "",
-//     boxBreadth: "",
-//     boxHeight: "",
-//     boxName: "",
-//     newBoxName: "",
-//   });
-//   const [orderId, setOrderId] = useState<any>();
-//   const [inputError, setInputError] = useState(false);
-//   const [productDetails, setProductDetails] = useState<any>([
-//     {
-//       companyId: "",
-//       sellerId: 0,
-//       boxId: "",
-//       name: "",
-//       weightUnit: "",
-//       volumetricWeight: 0,
-//       deadWeight: 0,
-//       appliedWeight: 0,
-//       divisor: 0,
-//       measureUnit: "",
-//       length: 0,
-//       breadth: 0,
-//       height: 10,
-//       color: "",
-//       price: 0,
-//       currency: "",
-//       isFragile: "",
-//       eWayBillNo: 0,
-//       tracking: {
-//         awb: "",
-//         label: "",
-//         taxInvoice: "",
-//         manifest: "",
-//         status: [],
-//       },
-//       codInfo: {
-//         isCod: "",
-//         collectableAmount: 0,
-//         invoiceValue: 0,
-//       },
-//       podInfo: {
-//         isPod: "",
-//       },
-//       insurance: {
-//         isInsured: "",
-//         amount: 0,
-//       },
-//       service: {
-//         partnerServiceId: "",
-//         partnerServiceName: "",
-//         companyServiceId: "",
-//         companyServiceName: "",
-//         partnerName: "",
-//         serviceMode: "",
-//         appliedWeight: 0,
-//         invoiceValue: 0,
-//         collectableAmount: 0,
-//         insurance: 0,
-//         base: 0,
-//         add: 0,
-//         variables: 0,
-//         cod: 0,
-//         tax: 0,
-//         total: 0,
-//         yaariCash: 0,
-//       },
-//       images: [],
-//       Products: [
-//         {
-//           companyId: "",
-//           privateCompanyId: 0,
-//           sellerId: 0,
-//           productId: "",
-//           name: "",
-//           category: "",
-//           qty: 0,
-//           sku: "",
-//           hsnCode: "",
-//           currency: "",
-//           unitPrice: 0,
-//           unitTax: 0,
-//           measureUnit: "",
-//           length: 0,
-//           breadth: 0,
-//           height: 0,
-//           deadWeight: 0,
-//           weightUnit: "",
-//           volumetricWeight: 0,
-//           appliedWeight: 0,
-//           divisor: 0,
-//           images: [],
-//           selected: "",
-//         },
-//       ],
-
-//       payloads: [],
-//     },
-//   ]);
-//   const [boxDetails, setBoxDetails] = useState<any>();
-//   const [productError, setProdctError] = useState<any>([]);
-//   const [boxAccordian, setBoxAccordian] = useState<any>(false);
-//   const [pickupDate, setPickupDate] = useState("");
-//   //storing these details to call the post api for updation
-//   const [updatePayload, setUpdatePayload] = useState({
-//     orderId: "",
-//     tempOrderId: "",
-//     source: "",
-//   });
-//   const [enabled, setEnabled] = useState<boolean>(true);
-//   const [isBoxError, setIsBoxError] = useState<boolean>(false);
-//   //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
-//   const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
-//     pickUpAddress: {
-//       contact: {
-//         contactName: "",
-//         mobileNo: "",
-//         emailId: "",
-//         contactType: "",
-//       },
-
-//       flatNo: "",
-//       locality: "",
-//       landmark: "",
-//       city: "",
-//       state: "",
-//       country: "",
-//       pincode: "",
-//       addressType: "",
-//       pickupDate: "",
-//     },
-//   });
-//   const [serviceList, setServiceList] = useState<any>([]);
-//   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
-//     deliveryAddress: {
-//       contact: {
-//         contactName: "",
-//         mobileNo: "",
-//         emailId: "",
-//         contactType: "",
-//       },
-
-//       flatNo: "",
-//       locality: "",
-//       landmark: "",
-//       city: "",
-//       state: "",
-//       country: "",
-//       pincode: "",
-//       addressType: "",
-//       gstNumber: "",
-//     },
-//   });
-//   const [serviceIndex, setServiceIndex]: any = useState(0);
-//   const [addressOpenModal, setAddressOpenModal] = useState(false);
-//   const [open, setOpen] = useState<any>({});
-//   const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
-//     useState();
-//   const [partnerServiceId, setPartnerServiceId] = useState<any>();
-//   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
-//   //adding the box into boxinfo
-//   const [newBox, setNewBox] = useState<any>({
-//     deadWeight: 0,
-//     name: "",
-//     length: 0,
-//     breadth: 0,
-//     height: 0,
-//   });
-//   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
-//   //to know the box id
-//   const [selectBoxId, setSelectBoxId] = useState<any>(-1);
-//   const [dropDownContent, setDropDownContent] = useState<any>(false);
-//   const [existingBox, setExistingBox] = useState<any>(false);
-//   const [addnewBox, setAddNewBox] = useState<any>(false);
-//   const [buyerConfirmationLogs, setBuyerConfirmationLogs] = useState([]);
-//   const { getAllSellerData, isMasked } = props;
-//   let servicePartnerServiceId: any;
-//   const mainDate: any = convertEpochToDateTimeV2(
-//     getPickAddressData?.pickUpAddress?.pickupDate
-//   );
-//   const measureUnits = [
-//     {
-//       label: "Cm",
-//       value: "Cm",
-//     },
-//   ];
-//   const entries: any = document?.getElementsByClassName("entries");
-//   const handleService = (index: any) => {
-//     setServiceIndex(index);
-//   };
-//   const hanldeProducts = async (eachProduct: any, index: any) => {
-//     let temp = boxProductDetails?.boxInfo?.[0]?.products;
-//     for (let i = 0; i < temp?.length; i++) {
-//       if (index === i) {
-//       }
-//     }
-//   };
-//   //for updating product details api
-//   const handleSingleProductUpdation = async () => {
-//     try {
-//       if (!enabled) {
-//         const payload = boxProductDetails;
-
-//         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-//         console.log("11111");
-
-//         if (data?.status) {
-//           toast.success("Updated Product Successfully");
-//           //calling the getSellerCompleteData api again to get the updated details for updating the error borders
-//           getSellerOrderCompleteData(getAllSellerData?.data);
-//           // getServiceList();
-//           setServiceList([]);
-//           setServiceRefresh(true);
-//         } else {
-//           toast.error("Something went wrong");
-//         }
-//       }
-//     } catch (error: any) {
-//       console.log(error.message);
-//     }
-//   };
-
-//   //for updating payment details api
-//   const handlePaymentDetails = async () => {
-//     try {
-//       if (!enabled) {
-//         // const payload = boxProductDetails;
-//         let invoiceVal: any = document.getElementById("invoiceValue");
-//         invoiceVal = invoiceVal.value;
-//         const payload = {
-//           ...boxProductDetails,
-//           codInfo: {
-//             ...boxProductDetails.codInfo,
-//             invoiceValue: invoiceVal,
-//           },
-//         };
-
-//         console.log("🚀 ~ handlePaymentDetails ~ payload:", payload);
-
-//         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-//         console.log("5555");
-
-//         if (data?.status) {
-//           toast.success("Updated Product Successfully");
-//           //calling the getSellerCompleteData api again to get the updated details for updating the error borders
-//           getSellerOrderCompleteData(getAllSellerData?.data);
-//           // getServiceList();
-//           setServiceList([]);
-//           setServiceRefresh(true);
-//         } else {
-//           toast.error("Something went wrong");
-//         }
-//       }
-//     } catch (error: any) {
-//       console.log(error.message);
-//     }
-//   };
-
-//   const handleScheduleDateTimeChange = (selectedDate: Date) => {
-//     if (
-//       selectedDate.getHours() == 0 &&
-//       selectedDate.getMinutes() == 0 &&
-//       selectedDate.getSeconds() == 0
-//     ) {
-//       setOpenPickupDatePicker(true);
-//       return;
-//     }
-//     setGetPickUpAddressData({
-//       ...getPickAddressData,
-//       pickUpAddress: {
-//         ...getPickAddressData?.pickUpAddress,
-//         pickupDate: new Date(selectedDate).getTime(),
-//       },
-//     });
-//     setOpenPickupDatePicker(false);
-//   };
-//   //for product updation
-//   const handleInputUpdation = (
-//     product_index: any,
-//     value: any,
-//     fieldName: any
-//   ) => {
-//     let temp = boxProductDetails?.boxInfo?.[0]?.products;
-//     for (let i = 0; i < temp?.length; i++) {
-//       if (product_index === i) {
-//         temp[i][fieldName] = value == "" ? "" : Number(value);
-//         temp[i]["volumetricWeight"] =
-//           (+temp[i]["length"] * +temp[i]["breadth"] * +temp[i]["height"]) /
-//           5000;
-//       }
-//     }
-//     boxProductDetails.boxInfo[0].products = temp;
-//     // setproductAccordian(temp);
-//     setvolumetricWeighAfterEditValue(boxProductDetails?.boxInfo[0]?.products);
-//   };
-//   const placeOrder = async () => {
-//     try {
-//       // Set Services Info API call first
-//       const servicePayload = {
-//         partnerServiceId: serviceList[serviceIndex]?.partnerServiceId,
-//         partnerServiceName: serviceList[serviceIndex]?.partnerServiceName,
-//         companyServiceId: serviceList[serviceIndex]?.companyServiceId,
-//         companyServiceName: serviceList[serviceIndex]?.companyServiceName,
-//         tempOrderId: boxProductDetails?.tempOrderId,
-//         source: boxProductDetails?.source,
-//         category: "Service",
-//       };
-
-//       const { data: serviceResponse } = await POST(
-//         SET_SERVICE_INFO,
-//         servicePayload
-//       );
-
-//       // If setServicesInfo API is successful, run the placeOrder API
-//       if (serviceResponse?.success) {
-//         toast.success(
-//           serviceResponse?.message || "Updated Service Successfully"
-//         );
-
-//         // Now trigger placeOrder API
-//         const placeOrderPayload = {
-//           orders: [orderPayload],
-//         };
-//         const { data: placeOrderResponse } = await POST(
-//           POST_PLACE_ALL_ORDERS,
-//           placeOrderPayload
-//         );
-
-//         // Handle placeOrder response
-//         if (placeOrderResponse?.success) {
-//           toast.success(
-//             placeOrderResponse?.message || "Order placed successfully!"
-//           );
-//         } else {
-//           toast.error(
-//             placeOrderResponse?.message || "Failed to place the order."
-//           );
-//         }
-//       } else {
-//         toast.error(serviceResponse?.message || "Failed to update service.");
-//       }
-//     } catch (error) {
-//       console.error("Error:", error);
-//       toast.error("Something went wrong.");
-//     }
-//   };
-//   const handleBoxInputUpdation = (
-//     box_index: any,
-//     value: any,
-//     fieldName: any
-//   ) => {
-//     let boxTemp = boxProductDetails?.boxInfo;
-
-//     //while creating a box name, defining here
-//     // boxTemp[0].name = value;
-//     for (let i = 0; i < boxTemp?.length; i++) {
-//       if (box_index === i) {
-//         boxTemp[i][fieldName] = value == "" ? "" : Number(value);
-//         boxTemp[i]["volumetricWeight"] =
-//           (boxTemp[i]["length"] *
-//             boxTemp[i]["breadth"] *
-//             boxTemp[i]["height"]) /
-//           5000;
-//       }
-//       boxProductDetails.boxInfo = boxTemp;
-//     }
-//   };
-//   //checking for validations of email
-//   const validateEmailId = (emailId: string) => {
-//     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId)) {
-//       setValidationError({
-//         ...validationError,
-//         emailId: "",
-//         pickUpEmailId: "",
-//       });
-//     } else if (emailId === "") {
-//       setValidationError({
-//         ...validationError,
-//         emailId: "",
-//         pickUpEmailId: "",
-//       });
-//     } else {
-//       setValidationError({
-//         ...validationError,
-//         emailId: "Invalid Email",
-//         pickUpEmailId: "Invalid Email",
-//       });
-//     }
-//   };
-//   const entriesHeight = entries?.[0]?.offsetHeight;
-//   const getServiceList = async () => {
-//     if (
-//       boxProductDetails?.tempOrderId &&
-//       boxProductDetails?.source &&
-//       !enabled
-//     ) {
-//       try {
-//         const payload = {
-//           tempOrderId: boxProductDetails?.tempOrderId,
-//           source: boxProductDetails?.source,
-//         };
-
-//         setServiceLoading(true);
-//         const response = await POST(GET_COURIER_PARTNER_SERVICE, payload);
-//         if (response?.status) {
-//           setServiceLoading(false);
-//           if (serviceList.length === 0)
-//             response?.data?.data?.map((id: any, index: number) => {
-//               return (
-//                 id.partnerServiceId == servicePartnerServiceId &&
-//                 setServiceIndex(index)
-//               );
-//             });
-//           // setServiceList(response?.data?.data);
-//           if (isMasked) {
-//             let slice: any = response?.data?.data.slice(0, 2);
-//             slice.forEach((element: any) => {
-//               element.partnerName = COMPANY_NAME || "Shipyaari";
-//             });
-//             setServiceList(slice);
-//           } else {
-//             setServiceList(response?.data?.data);
-//           }
-//           setServiceRefresh(false);
-//           setAddressOpenModal(true);
-//         } else {
-//           //services
-
-//           setServiceLoading(false);
-//         }
-//       } catch (error: any) {
-//         console.error(error.message);
-//       }
-//     }
-//   };
-//   const handleItemClick = async (
-//     index: any,
-//     requestName?: string
-//     // title?: any
-//   ) => {
-//     if (requestName === "Box & Products") {
-//       setSelectBoxIndex(index - 2);
-//     }
-//     if (addressOpen?.current == false) {
-//       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-//       if (
-//         element4.classList.contains("!border-red-500") &&
-//         requestName === "Services"
-//       ) {
-//         return toast.error("Service is not available");
-//       } else if (requestName === "Services" && addressOpen.current === false) {
-//         await getServiceList();
-//         // setAddressOpenModal(true);
-//         addressOpen.current = true;
-//       }
-//     } else if (
-//       requestName == "Services" &&
-//       !enabled &&
-//       addressOpen.current === true
-//     ) {
-//       try {
-//         const payload: any = {
-//           partnerServiceId: serviceList[serviceIndex]?.partnerServiceId,
-//           partnerServiceName: serviceList[serviceIndex]?.partnerServiceName,
-//           companyServiceId: serviceList[serviceIndex]?.companyServiceId,
-//           companyServiceName: serviceList[serviceIndex]?.companyServiceName,
-//           tempOrderId: boxProductDetails?.tempOrderId,
-//           source: boxProductDetails?.source,
-
-//           category: "Service",
-//         };
-
-//         const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
-
-//         if (responseData?.success) {
-//           toast.success(
-//             responseData?.message || "Updated Service Successfully"
-//           );
-//           addressOpen.current = false;
-//         } else {
-//           toast.error(responseData?.message || "Something went wrong");
-//           //   toast.error("Something went wrong");
-//         }
-//       } catch (error: any) {
-//         console.log(error.message);
-//       }
-//     }
-
-//     setOpenIndex(openIndex === index ? null : index);
-//     setAddressOpenModal(false);
-//     if (!apiCall) {
-//       setApiCall(true);
-//       return;
-//     }
-//     if (requestName == "Pickup Address" && !enabled) {
-//       try {
-//         const payload = {
-//           pickupAddress: {
-//             contact: {
-//               name: getPickAddressData?.pickUpAddress?.contact?.contactName,
-//               mobileNo: getPickAddressData?.pickUpAddress?.contact?.mobileNo,
-//               emailId: getPickAddressData?.pickUpAddress?.contact?.emailId,
-//               type: getPickAddressData?.pickUpAddress?.contact?.contactType,
-//             },
-
-//             flatNo: getPickAddressData?.pickUpAddress?.flatNo,
-//             locality: getPickAddressData?.pickUpAddress?.locality,
-//             landmark: getPickAddressData?.pickUpAddress?.landmark,
-//             city: getPickAddressData?.pickUpAddress?.city,
-//             state: getPickAddressData?.pickUpAddress?.state,
-//             country: getPickAddressData?.pickUpAddress?.country,
-//             pincode: getPickAddressData?.pickUpAddress?.pincode,
-//             fullAddress:
-//               getPickAddressData?.pickUpAddress?.flatNo +
-//               " " +
-//               getPickAddressData?.pickUpAddress?.locality +
-//               " " +
-//               getPickAddressData?.pickUpAddress?.landmark +
-//               " " +
-//               getPickAddressData?.pickUpAddress?.city +
-//               " " +
-//               getPickAddressData?.pickUpAddress?.state +
-//               " " +
-//               getPickAddressData?.pickUpAddress?.country +
-//               " " +
-//               getPickAddressData?.pickUpAddress?.pincode,
-//             addressType: getPickAddressData?.pickUpAddress?.addressType,
-//             pickupDate: getPickAddressData?.pickUpAddress?.pickupDate,
-//           },
-//           orderId: updatePayload.orderId,
-//           tempOrderId: updatePayload.tempOrderId,
-//           source: updatePayload.source,
-//         };
-
-//         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-//         console.log("2222");
-
-//         if (data?.status) {
-//           toast.success("Updated Pickup Successfully");
-//           // getServiceList();
-//           setServiceList([]);
-//           setServiceRefresh(true);
-//           let temp: any;
-//           temp.pickUpAddress.pickupDate = "";
-//         } else {
-//           toast.error(data?.message || "Something went wrong");
-//         }
-//         return;
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-//     if (requestName == "Delivery Address" && !enabled) {
-//       try {
-//         const payload = {
-//           deliveryAddress: {
-//             contact: {
-//               name: getDeliveryAddressData?.deliveryAddress?.contact
-//                 ?.contactName,
-//               mobileNo:
-//                 getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo,
-//               emailId:
-//                 getDeliveryAddressData?.deliveryAddress?.contact?.emailId,
-//               type: getDeliveryAddressData?.deliveryAddress?.contact
-//                 ?.contactType,
-//             },
-
-//             flatNo: getDeliveryAddressData?.deliveryAddress?.flatNo,
-//             locality: getDeliveryAddressData?.deliveryAddress?.locality,
-//             landmark: getDeliveryAddressData?.deliveryAddress?.landmark,
-//             city: getDeliveryAddressData?.deliveryAddress?.city,
-//             state: getDeliveryAddressData?.deliveryAddress?.state,
-//             country: getDeliveryAddressData?.deliveryAddress?.country,
-//             pincode: getDeliveryAddressData?.deliveryAddress?.pincode,
-//             fullAddress:
-//               getDeliveryAddressData?.deliveryAddress?.flatNo +
-//               " " +
-//               getDeliveryAddressData?.deliveryAddress?.locality +
-//               " " +
-//               getDeliveryAddressData?.deliveryAddress?.landmark +
-//               " " +
-//               getDeliveryAddressData?.deliveryAddress?.city +
-//               " " +
-//               getDeliveryAddressData?.deliveryAddress?.state +
-//               " " +
-//               getDeliveryAddressData?.deliveryAddress?.country +
-//               " " +
-//               getDeliveryAddressData?.deliveryAddress?.pincode,
-//             addressType: getDeliveryAddressData?.deliveryAddress?.addressType,
-//             gstNumber: getDeliveryAddressData?.deliveryAddress?.gstNumber,
-//           },
-
-//           orderId: updatePayload.orderId,
-//           tempOrderId: updatePayload.tempOrderId,
-//           source: updatePayload.source,
-//         };
-
-//         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-//         console.log("3333");
-
-//         if (data?.status) {
-//           toast.success("Updated Delivery Successfully");
-//           setServiceList([]);
-//           setServiceRefresh(true);
-//           // getServiceList();
-//         } else {
-//           toast.error("Something went wrong");
-//         }
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     }
-//   };
-//   //to set particular object key you can use this
-//   const fetchPincodeData = async (e: any, title: any) => {
-//     if (!isNaN(e.target.value)) {
-//       setPincode(e.target.value);
-//     }
-//     if (e.target.value?.length === 6) {
-//       const payload = {
-//         pincode: e.target.value,
-//       };
-//       const { data: response } = await POST(GET_PINCODE_DATA, payload);
-//       setPincodeData(response?.data[0]);
-
-//       if (title === "Pickup Address") {
-//         setGetPickUpAddressData({
-//           ...getPickAddressData,
-//           pickUpAddress: {
-//             ...getPickAddressData?.pickUpAddress,
-//             pincode: response?.data[0]?.pincode,
-//             city: response?.data[0]?.city,
-//             state: response?.data[0]?.state,
-//             country: response?.data[0]?.country,
-//           },
-//         });
-//       }
-//       if (title === "Delivery Address") {
-//         setGetDeliveryAddressData({
-//           ...getDeliveryAddressData,
-//           deliveryAddress: {
-//             ...getDeliveryAddressData?.deliveryAddress,
-//             pincode: response?.data[0]?.pincode,
-//             city: response?.data[0]?.city,
-//             state: response?.data?.[0]?.state,
-//             country: response?.data?.[0]?.country,
-//           },
-//         });
-//       }
-//     }
-//   };
-//   const getSellerOrderCompleteData = async (orderData: any) => {
-//     try {
-//       setIsLoading(true);
-//       const { data } = await POST(GET_SELLER_ORDER_COMPLETE_DATA, {
-//         tempOrderId: orderData?.orderId?.split("T")[1],
-//         awb: orderData?.awb ? orderData?.awb : "0",
-//       });
-
-//       const sellerData = data?.data?.[0]?.data?.[0];
-//       const boxData = await POST(GET_SELLER_BOX);
-//       const buyerConfirmationPayload = {
-//         orderId:
-//           sellerData?.status?.length == 0 ||
-//           sellerData?.status[0]?.currentStatus == "DRAFT" ||
-//           sellerData?.status[0]?.currentStatus == "FAILED"
-//             ? sellerData?.tempOrderId
-//             : sellerData?.orderId,
-//       };
-//       const buyerConfirmationOrder = await POST(
-//         GET_ORDER_CONFIRMATION_LOG,
-//         buyerConfirmationPayload
-//       );
-//       // console.log("buyerConfirmationOrder", buyerConfirmationOrder);
-//       setOrderPayload({
-//         ...orderPayload,
-//         orderId: data?.data?.[0]?.data?.[0]?.orderId,
-//         tempOrderId: data?.data?.[0]?.data?.[0]?.tempOrderId,
-//         source: data?.data?.[0]?.data?.[0]?.source,
-//       });
-//       if (buyerConfirmationOrder?.data?.success) {
-//         setBuyerConfirmationLogs(buyerConfirmationOrder?.data?.data[0]?.data);
-//       }
-//       setBoxDetailsData(boxData?.data?.data);
-//       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
-
-//       let temp;
-//       temp = getPickAddressData;
-//       temp.pickUpAddress.contact.contactName =
-//         data?.data[0]?.data[0]?.pickupAddress.contact.name;
-//       temp.pickUpAddress.contact.mobileNo =
-//         data?.data[0]?.data[0]?.pickupAddress.contact.mobileNo;
-//       temp.pickUpAddress.contact.emailId =
-//         data?.data[0]?.data[0]?.pickupAddress.contact.emailId;
-//       temp.pickUpAddress.contact.contactType =
-//         data?.data[0]?.data[0]?.pickupAddress.contact.type;
-//       temp.pickUpAddress.flatNo = data?.data[0]?.data[0]?.pickupAddress.flatNo;
-//       temp.pickUpAddress.locality =
-//         data?.data[0]?.data[0]?.pickupAddress.locality;
-//       temp.pickUpAddress.landmark =
-//         data?.data[0]?.data[0]?.pickupAddress.landmark;
-//       temp.pickUpAddress.city = data?.data[0]?.data[0]?.pickupAddress.city;
-//       temp.pickUpAddress.state = data?.data[0]?.data[0]?.pickupAddress.state;
-//       temp.pickUpAddress.country =
-//         data?.data[0]?.data[0]?.pickupAddress.country;
-//       temp.pickUpAddress.pincode =
-//         data?.data[0]?.data[0]?.pickupAddress.pincode;
-//       temp.pickUpAddress.addressType =
-//         data?.data[0]?.data[0]?.pickupAddress.addressType;
-//       temp.pickUpAddress.pickupDate =
-//         +data?.data[0]?.data[0]?.pickupAddress.pickupDate;
-
-//       setGetPickUpAddressData({ ...temp });
-
-//       let deliveryTemp;
-//       deliveryTemp = getDeliveryAddressData;
-//       deliveryTemp.deliveryAddress.contact.contactName =
-//         data?.data[0]?.data[0]?.deliveryAddress?.contact?.name;
-//       deliveryTemp.deliveryAddress.contact.mobileNo =
-//         data?.data[0]?.data[0]?.deliveryAddress?.contact?.mobileNo;
-//       deliveryTemp.deliveryAddress.contact.emailId =
-//         data?.data[0]?.data[0]?.deliveryAddress?.contact?.emailId;
-//       deliveryTemp.deliveryAddress.contact.contactType =
-//         data?.data[0]?.data[0]?.deliveryAddress?.contact?.type;
-//       deliveryTemp.deliveryAddress.flatNo =
-//         data?.data[0]?.data[0]?.deliveryAddress?.flatNo;
-//       deliveryTemp.deliveryAddress.locality =
-//         data?.data[0]?.data[0]?.deliveryAddress?.locality;
-//       deliveryTemp.deliveryAddress.landmark =
-//         data?.data[0]?.data[0]?.deliveryAddress?.landmark;
-//       deliveryTemp.deliveryAddress.city =
-//         data?.data[0]?.data[0]?.deliveryAddress?.city;
-//       deliveryTemp.deliveryAddress.state =
-//         data?.data[0]?.data[0]?.deliveryAddress?.state;
-//       deliveryTemp.deliveryAddress.country =
-//         data?.data[0]?.data[0]?.deliveryAddress?.country;
-//       deliveryTemp.deliveryAddress.pincode =
-//         data?.data[0]?.data[0]?.deliveryAddress?.pincode;
-//       deliveryTemp.deliveryAddress.addressType =
-//         data?.data[0]?.data[0]?.deliveryAddress?.addressType;
-//       deliveryTemp.deliveryAddress.gstNumber =
-//         data?.data[0]?.data[0]?.deliveryAddress?.gstNumber;
-//       setGetDeliveryAddressData({
-//         // deliveryAddress: data?.data[0]?.data[0]?.deliveryAddress,
-//         ...deliveryTemp,
-//       });
-
-//       let productTemp;
-//       productTemp = productDetails;
-
-//       productTemp[0].companyId = data?.data[0]?.data[0]?.boxInfo[0]?.companyId;
-//       productTemp[0].sellerId = data?.data[0]?.data[0]?.boxInfo[0]?.sellerId;
-//       productTemp[0].boxId = data?.data[0]?.data[0]?.boxInfo[0]?.boxId;
-//       productTemp[0].name = data?.data[0]?.data[0]?.boxInfo[0]?.name;
-//       productTemp[0].weightUnit =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.weightUnit;
-//       productTemp[0].volumetricWeight =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.volumetricWeight;
-//       productTemp[0].deadWeight =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.deadWeight;
-//       productTemp[0].appliedWeight =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.appliedWeight;
-//       productTemp[0].divisor = data?.data[0]?.data[0]?.boxInfo[0]?.divisor;
-//       productTemp[0].measureUnit =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.measureUnit;
-//       productTemp[0].length = data?.data[0]?.data[0]?.boxInfo[0]?.length;
-//       productTemp[0].breadth = data?.data[0]?.data[0]?.boxInfo[0]?.breadth;
-//       productTemp[0].height = data?.data[0]?.data[0]?.boxInfo[0]?.height;
-//       productTemp[0].color = data?.data[0]?.data[0]?.boxInfo[0]?.color;
-//       productTemp[0].price = data?.data[0]?.data[0]?.boxInfo[0]?.price;
-//       productTemp[0].currency = data?.data[0]?.data[0]?.boxInfo[0]?.currency;
-//       productTemp[0].isFragile = data?.data[0]?.data[0]?.boxInfo[0]?.isFragile;
-//       productTemp[0].eWayBillNo =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.eWayBillNo;
-//       productTemp[0].tracking.awb =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.awb;
-//       productTemp[0].tracking.label =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.label;
-//       productTemp[0].tracking.taxInvoice =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.taxInvoice;
-//       productTemp[0].tracking.manifest =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.manifest;
-//       productTemp[0].tracking.status =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.status;
-//       productTemp[0].codInfo.isCod =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.codInfo?.isCod;
-//       productTemp[0].codInfo.collectableAmount =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.codInfo?.collectableAmount;
-//       productTemp[0].codInfo.invoiceValue =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.codInfo?.invoiceValue;
-//       productTemp[0].podInfo.isPod =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.podInfo?.isPod;
-//       productTemp[0].insurance.isInsured =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.insurance?.isInsured;
-//       productTemp[0].insurance.amount =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.insurance?.amount;
-//       productTemp[0].service.partnerServiceId =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.partnerServiceId;
-//       productTemp[0].service.partnerServiceName =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.partnerServiceName;
-//       productTemp[0].service.companyServiceId =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.companyServiceId;
-//       productTemp[0].service.companyServiceName =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.companyServiceName;
-//       productTemp[0].service.partnerName =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.partnerName;
-//       productTemp[0].service.serviceMode =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.serviceMode;
-//       productTemp[0].service.appliedWeight =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.appliedWeight;
-//       productTemp[0].service.invoiceValue =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.invoiceValue;
-//       productTemp[0].service.collectableAmount =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.collectableAmount;
-//       productTemp[0].service.insurance =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.insurance;
-//       productTemp[0].service.base =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.base;
-//       productTemp[0].service.add =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.add;
-//       productTemp[0].service.variables =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.variables;
-//       productTemp[0].service.cod =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.cod;
-//       productTemp[0].service.tax =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.tax;
-//       productTemp[0].service.total =
-//         data?.data[0]?.data[0]?.boxInfo[0]?.service?.total;
-
-//       if (data.status) {
-//         const rowsData = data?.data[0]?.data[0];
-
-//         setBoxProductDetails(rowsData);
-
-//         setBoxDetails(rowsData);
-//         setEnabled(orderData?.awb == 0 ? false : true);
-
-//         //otherdetails orderid
-//         let orderId;
-//         orderId = data?.data[0]?.data[0]?.orderId;
-//         setOrderId(data?.data[0]?.data[0]?.orderId);
-//         let updateData;
-//         updateData = updatePayload;
-//         updateData.orderId = rowsData?.orderId;
-//         updateData.tempOrderId = rowsData?.tempOrderId;
-//         updateData.source = rowsData?.source;
-//         setSource(rowsData?.source);
-//         setUpdatePayload({ ...updateData });
-
-//         let rows: any = [
-//           {
-//             "Contact Name": capitalizeFirstLetter(
-//               rowsData?.pickupAddress?.contact?.name
-//             ),
-//             "Mobile No": rowsData?.pickupAddress?.contact?.mobileNo,
-//             "Email Id": capitalizeFirstLetter(
-//               rowsData?.pickupAddress?.contact?.emailId
-//             ),
-//             "Contact Type": capitalizeFirstLetter(
-//               rowsData?.pickupAddress?.contact?.type
-//             ),
-//             FlatNo: rowsData?.pickupAddress?.flatNo,
-//             Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
-//             LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
-//             City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
-//             State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
-//             Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
-//             Pincode: rowsData?.pickupAddress?.pincode,
-//             "Address Type": capitalizeFirstLetter(
-//               rowsData?.pickupAddress?.addressType
-//             ),
-//             "Pickup Date": capitalizeFirstLetter(
-//               rowsData?.pickupAddress?.pickupDate
-//             ),
-//             title: "Pickup Address",
-//           },
-//         ];
-
-//         rows.push({
-//           "Contact Name": capitalizeFirstLetter(
-//             rowsData?.deliveryAddress?.contact?.name
-//           ),
-//           "Mobile No": rowsData?.deliveryAddress?.contact?.mobileNo,
-//           "Email Id": capitalizeFirstLetter(
-//             rowsData?.deliveryAddress?.contact?.emailId
-//           ),
-//           Type: capitalizeFirstLetter(rowsData?.deliveryAddress?.contact?.type),
-//           FlatNo: rowsData?.deliveryAddress?.flatNo,
-//           Locality: capitalizeFirstLetter(rowsData?.deliveryAddress?.locality),
-//           LandkMark: capitalizeFirstLetter(rowsData?.deliveryAddress?.landmark),
-//           City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
-//           State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
-//           Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
-//           Pincode: rowsData?.deliveryAddress?.pincode,
-//           "Address Type": capitalizeFirstLetter(
-//             rowsData?.deliveryAddress?.addressType
-//           ),
-//           title: "Delivery Address",
-//           "GST Number": rowsData?.deliveryAddress?.gstNumber,
-//         });
-
-//         let boxObj: any = { title: "Box Info" };
-//         if (rowsData?.boxInfo?.length === 0) rows.push(boxObj);
-//         rowsData?.boxInfo?.map((item: any, index: any) => {
-//           let title = `Box Info ${
-//             rowsData?.boxInfo?.length > 1 ? `${index + 1}` : ""
-//           }`;
-//           let qty = 0;
-//           item?.products?.map((elem: any, num: any) => {
-//             boxObj = {
-//               ...boxObj,
-//               [`Name ${num + 1}`]: elem?.name,
-//               [`QTY ${num + 1}`]: elem?.qty,
-//               [`Dead Weight ${num + 1}`]: `${elem?.deadWeight} Kg`,
-//               [`Applied Weight ${num + 1}`]: `${elem?.appliedWeight} Kg`,
-//               [`Dimensions ${
-//                 num + 1
-//               }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-//               [`Price ${num + 1}`]: `₹ ${Math.round(
-//                 elem?.unitPrice
-//               )?.toLocaleString("en-IN")}`,
-//               [`Tax ${num + 1}`]: `₹ ${Math.round(
-//                 elem?.unitTax
-//               )?.toLocaleString("en-IN")}`,
-
-//               [`SKU ${num + 1}`]: elem?.sku,
-//             };
-//             qty += elem?.qty;
-//           });
-//           title += ` Product(s) x ${qty}`;
-//           boxObj.title = title;
-//           rows.push(boxObj);
-//         });
-
-//         //payment details
-
-//         rows.push({
-//           title: "Payment Details",
-//           "Payment Type": rowsData?.codInfo?.isCod ? "COD" : "Prepaid",
-//           "Collectable Amount": rowsData?.codInfo?.collectableAmount,
-//           "Invoice Value": rowsData?.codInfo?.invoiceValue?.toFixed(2),
-//         });
-
-//         rows.push({
-//           title: "Services",
-//           "Partner Name": capitalizeFirstLetter(
-//             rowsData?.boxInfo?.[0]?.service?.partnerName
-//           ),
-//           "AVN Service": capitalizeFirstLetter(
-//             rowsData?.boxInfo?.[0]?.service?.companyServiceName
-//           ),
-//           "Service Mode": capitalizeFirstLetter(
-//             rowsData?.boxInfo?.[0]?.service?.serviceMode
-//           ),
-//           "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
-//           "Freight Charges": `₹ ${Math.round(
-//             rowsData?.boxInfo?.[0]?.service?.add +
-//               rowsData?.boxInfo?.[0]?.service?.base
-//           )?.toLocaleString("en-IN")}`,
-//           "COD Charges": `₹ ${Math.round(
-//             rowsData?.boxInfo?.[0]?.service?.cod
-//           )?.toLocaleString("en-IN")}`,
-//           Insurance: `₹ ${Math.round(
-//             rowsData?.boxInfo?.[0]?.service?.insurance
-//           )?.toLocaleString("en-IN")}`,
-//           "Other Charges": `₹ ${Math.round(
-//             rowsData?.boxInfo?.[0]?.service?.variables
-//           )?.toLocaleString("en-IN")}`,
-//           Tax: `₹ ${Math.round(
-//             rowsData?.boxInfo?.[0]?.service?.tax
-//           )?.toLocaleString("en-IN")}`,
-//           Total: `₹ ${Math.round(
-//             rowsData?.boxInfo?.[0]?.service?.total
-//           )?.toLocaleString("en-IN")}`,
-//           "yaari Cash": `₹ ${Math.round(
-//             rowsData?.service?.yaariCash
-//           )?.toLocaleString("en-IN")}`,
-//         });
-
-//         let statusObj: any = { title: "" };
-//         rowsData?.status?.map((elem: any, index: any) => {
-//           statusObj = {
-//             ...statusObj,
-//             [`AWB No ${index + 1}`]: orderData?.awb,
-//             [`Current Status ${index + 1}`]: capitalizeFirstLetter(
-//               elem?.currentStatus
-//             ),
-
-//             [`Description ${index + 1}`]: elem?.description,
-//             [`LogId ${index + 1}`]: elem.logId,
-//             [`Notes ${index + 1}`]: elem.notes,
-//             [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
-//           };
-//           statusObj.title = "Event Logs";
-//         });
-//         rows.push(statusObj);
-
-//         rows.push({
-//           title: "Order History",
-//           [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
-//           "Order Id": rowsData?.orderId,
-//           "Tracking Id": orderData?.awb,
-//           "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
-//           Source: capitalizeFirstLetter(rowsData?.source),
-//           "Order Type": rowsData?.orderType,
-//           Zone: capitalizeFirstLetter(rowsData?.zone),
-//         });
-
-//         if (buyerConfirmationOrder?.data?.success == true) {
-//           rows.push({
-//             title: "Order Confirmation Logs",
-//             [`${COMPANY_NAME} ID`]: rowsData?.tempOrderId,
-//             "Order Id": rowsData?.orderId,
-//             "Tracking Id": orderData?.awb,
-//             "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
-//             Source: capitalizeFirstLetter(rowsData?.source),
-//             "Order Type": rowsData?.orderType,
-//             Zone: capitalizeFirstLetter(rowsData?.zone),
-//           });
-//         }
-
-//         setOrderDetails(rows);
-//         setIsLoading(false);
-//       }
-//     } catch (error) {
-//       setIsLoading(false);
-//       return [];
-//     }
-//   };
-//   servicePartnerServiceId =
-//     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
-
-//   const handleBoxAccordian = async () => {
-//     console.log("box rendered here");
-//     if (boxAccordian === true && !enabled) {
-//       try {
-//         if (
-//           selectBoxIndex === 0 &&
-//           // commented as not implemeting add box now
-//           newBox?.name === ""
-//         ) {
-//           if (newBox?.name === "" || selectBoxIndex === 0) {
-//             // return toast.error("Filed Empty");
-//             setValidationError({
-//               ...validationError,
-//               newBoxName: "Field is required",
-//             });
-//             let element4: any = document.getElementById(
-//               `${orderDetails[2]?.title}`
-//             );
-
-//             let element5: any = document.getElementById("Box 1");
-
-//             if (element4 && !enabled) element4.style.borderColor = "red";
-
-//             if (element5 && !enabled) element5.style.borderColor = "red";
-//             // if (element5) element5.classList.add("!border-red-500");
-//           }
-//           return toast.error(
-//             "Please Select any existing box or create a new box"
-//           );
-//         }
-//         if (selectBoxIndex === 0 && newBox?.deadWeight === 0) {
-//           if (selectBoxIndex === 0 || newBox?.deadWeight === 0) {
-//             // return toast.error("Filed Empty");
-//             setValidationError({
-//               ...validationError,
-//               // boxName: "Field is required",
-//               boxDeadWeight: "Field is required",
-//             });
-//             let element4: any = document.getElementById(
-//               `${orderDetails[2]?.title}`
-//             );
-
-//             let element5: any = document.getElementById("Box 1");
-
-//             if (element4 && !enabled) element4.style.borderColor = "red";
-
-//             if (element5 && !enabled) element5.style.borderColor = "red";
-//           }
-//           return toast.error(
-//             "Please Select any existing box or create a new box"
-//           );
-//         }
-//         if (selectBoxIndex === 0 && newBox?.length === 0) {
-//           if (newBox?.length === 0 || selectBoxIndex === 0) {
-//             // return toast.error("Filed Empty");
-//             setValidationError({
-//               ...validationError,
-
-//               boxLength: "Field is required",
-//             });
-//             let element4: any = document.getElementById(
-//               `${orderDetails[2]?.title}`
-//             );
-
-//             let element5: any = document.getElementById("Box 1");
-
-//             if (element4 && !enabled) element4.style.borderColor = "red";
-
-//             if (element5 && !enabled) element5.style.borderColor = "red";
-//           }
-//           return toast.error(
-//             "Please Select any existing box or create a new box"
-//           );
-//         }
-//         if (selectBoxIndex === 0 && newBox?.breadth === 0) {
-//           if (selectBoxIndex === 0 || newBox?.breadth === 0) {
-//             // return toast.error("Filed Empty");
-//             setValidationError({
-//               ...validationError,
-
-//               boxBreadth: "Field is required",
-//             });
-//             let element4: any = document.getElementById(
-//               `${orderDetails[2]?.title}`
-//             );
-
-//             let element5: any = document.getElementById("Box 1");
-
-//             if (element4 && !enabled) element4.classList.add("!border-red-500");
-//             // if (element4) element4.style.borderColor = "red";
-
-//             if (element5 && !enabled) element5.style.borderColor = "red";
-//           }
-//           return toast.error(
-//             "Please Select any existing box or create a new box"
-//           );
-//         }
-//         if (selectBoxIndex === 0 && newBox?.height === 0) {
-//           if (newBox?.height === 0 || selectBoxIndex === 0) {
-//             // return toast.error("Filed Empty");
-//             setValidationError({
-//               ...validationError,
-
-//               boxHeight: "Field is required",
-//             });
-//             let element4: any = document.getElementById(
-//               `${orderDetails[2]?.title}`
-//             );
-
-//             let element5: any = document.getElementById("Box 1");
-
-//             if (element4 && !enabled) element4.classList.add("!border-red-500");
-//             // if (element4) element4.style.borderColor = "red";
-
-//             if (element5 && !enabled) element5.style.borderColor = "red";
-//           }
-//           return toast.error(
-//             "Please Select any existing box or create a new box"
-//           );
-//         }
-
-//         if (customInpuBox) {
-//           boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
-//           boxProductDetails.boxInfo[0].appliedWeight =
-//             boxProductDetails.boxInfo[0]?.appliedWeight;
-//           boxProductDetails.boxInfo[0].name = newBox?.name;
-//           boxProductDetails.boxInfo[0].boxId =
-//             boxProductDetails.boxInfo[0]?.boxId;
-//           boxProductDetails.boxInfo[0].length = newBox?.length;
-//           boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
-//           boxProductDetails.boxInfo[0].height = newBox?.height;
-//         } else {
-//           boxProductDetails.boxInfo[0].deadWeight =
-//             boxDetailsData[selectBoxId]?.deadWeight;
-//           boxProductDetails.boxInfo[0].appliedWeight =
-//             boxDetailsData[selectBoxId]?.appliedWeight;
-//           boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
-//           boxProductDetails.boxInfo[0].boxId =
-//             boxDetailsData[selectBoxId]?.boxId;
-//           boxProductDetails.boxInfo[0].length =
-//             boxDetailsData[selectBoxId]?.length;
-//           boxProductDetails.boxInfo[0].breadth =
-//             boxDetailsData[selectBoxId]?.breadth;
-//           boxProductDetails.boxInfo[0].height =
-//             boxDetailsData[selectBoxId]?.height;
-//         }
-
-//         let payload = boxProductDetails;
-
-//         if (
-//           payload?.boxInfo?.[0]?.name?.length !== 0 &&
-//           payload?.boxInfo?.[0]?.deadWeight !== 0 &&
-//           payload?.boxInfo?.[0]?.length !== 0 &&
-//           payload?.boxInfo?.[0]?.breadth !== 0 &&
-//           payload?.boxInfo?.[0]?.height !== 0
-//         ) {
-//           console.log("hiii");
-//           const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-//           if (data?.status) {
-//             toast.success("Updated Box Successfully");
-//             setServiceList([]);
-//             setServiceRefresh(true);
-//             setBoxAccordian(false);
-//             setCustomInputBox(false);
-//             setSelectBoxIndex(0);
-//             setNewBox({
-//               ...newBox,
-//               deadWeight: 0,
-//               name: "",
-//               length: 0,
-//               breadth: 0,
-//               height: 0,
-//             });
-
-//             //calling the getSellerCompleteData api again to get the updated details for updating the error borders
-
-//             getSellerOrderCompleteData(getAllSellerData?.data);
-//             let element4: any = document.getElementById(
-//               `${orderDetails[2]?.title}`
-//             );
-
-//             let element5: any = document.getElementById("Box 1");
-//             if (element5) element5.style.borderColor = "#E8E8E8";
-
-//             if (element4 && !enabled) element4.classList.add("!#E8E8E8");
-
-//             // getServiceList();
-//           } else {
-//             toast.error("Something went wrong");
-//             setBoxAccordian(true);
-//             setCustomInputBox(true);
-//           }
-//         } else {
-//           setBoxAccordian(true);
-//           setCustomInputBox(true);
-//         }
-//       } catch (error: any) {
-//         console.log(error.message);
-//       }
-//     }
-//   };
-
-//   const productLoops = (
-//     deadWeight: any,
-//     dataIndex: any,
-//     accordionTrigger?: boolean
-//   ) => {
-//     console.log("selectBoxIndexproductLoops", selectBoxIndex);
-
-//     if (accordionTrigger) {
-//       if (deadWeight[dataIndex].deadWeight > 0) return false;
-//       else return true;
-//     }
-
-//     if (enabled) {
-//       return false;
-//     }
-
-//     // for (let i = 0; i < productAccordian.length; i++) {
-//     // const product = productAccordian[dataIndex];
-//     const product =
-//       boxProductDetails?.boxInfo?.[selectBoxIndex]?.products?.[dataIndex];
-
-//     // if (deadWeight > 0) {
-//     //     let productBorderError = document.getElementById(product.productId);
-//     //     if (productBorderError && !enabled)
-//     //         productBorderError.style.borderColor = "#E8E8E8";
-//     //     let element4: any = document.getElementById(
-//     //         `${orderDetails[2]?.title}`
-//     //     );
-//     //     if (element4 && !enabled) element4.style.borderColor = "#E8E8E8";
-//     //     return false;
-//     // } else {
-//     //     let productBorderError = document.getElementById(product.productId);
-//     //     if (productBorderError && !enabled)
-//     //         productBorderError.style.borderColor = "red";
-//     //     let element4: any = document.getElementById(
-//     //         `${orderDetails[2]?.title}`
-//     //     );
-//     //     if (element4 && !enabled) element4.style.borderColor = "red";
-//     //     return true;
-//     // }
-
-//     if (
-//       deadWeight > 0
-//       // product?.deadWeight > 0 &&
-//       // product.deadWeight.length !== 0
-//       // &&
-//       // product?.volumetricWeight > 0 &&
-//       //commented as not mandatory
-//       // product?.length > 0 &&
-//       // product?.breadth > 0 &&
-//       // product?.height > 0
-//     ) {
-//       // for (let index = 0; index < productAccordian.length; index++) {
-//       //     const product = productAccordian[index];
-//       //     console.log("product", product);
-//       //     let productBorderError: any = document.getElementById(
-//       //         product.productId
-//       //     );
-//       //     console.log("productproductBorderErrorif", productBorderError);
-//       //     if (productBorderError && !enabled)
-//       //         productBorderError.style.borderColor = "#E8E8E8";
-//       //     let element4: any = document.getElementById(
-//       //         `${orderDetails[2]?.title}`
-//       //     );
-//       //     if (element4 && !enabled)
-//       //         element4.style.borderColor = "#E8E8E8";
-//       // }
-//       let productBorderError: any = document.getElementById(product.productId);
-//       if (productBorderError && !enabled)
-//         productBorderError.style.borderColor = "#E8E8E8";
-//       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-//       if (element4 && !enabled) element4.style.borderColor = "#E8E8E8";
-//       return false;
-//     } else {
-//       // for (let index = 0; index < productAccordian.length; index++) {
-//       //     const product = productAccordian[index];
-//       //     let productBorderError: any = document.getElementById(
-//       //         product.productId
-//       //     );
-//       //     console.log("productBorderErrorelse", productBorderError);
-//       //     if (productBorderError && !enabled)
-//       //         productBorderError.style.borderColor = "red";
-//       //     let element4: any = document.getElementById(
-//       //         `${orderDetails[2]?.title}`
-//       //     );
-//       //     if (element4 && !enabled) element4.style.borderColor = "red";
-//       // }
-//       let productBorderError: any = document.getElementById(product.productId);
-//       if (productBorderError && !enabled)
-//         productBorderError.style.borderColor = "red";
-//       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-//       if (element4 && !enabled) element4.style.borderColor = "red";
-
-//       setInputError(true);
-//       setProdctError(
-//         productError?.map((item: any, index: any) => {
-//           if (dataIndex === index) {
-//             return {
-//               ...item,
-//               deadWeight:
-//                 product?.deadWeight <= 0
-//                   ? "Should be greater than 0"
-//                   : product?.deadWeight === ""
-//                   ? "Field is Required"
-//                   : "",
-//               // volumetricWeight:
-//               //   product?.volumetricWeight <= 0
-//               //     ? "Should be greater than 0"
-//               //     : product?.volumetricWeight === ""
-//               //     ? "Field is Required"
-//               //     : "",
-//               // length:
-//               //     product?.length <= 0
-//               //         ? "Should be greater than 0"
-//               //         : product?.length === ""
-//               //         ? "Field is Required"
-//               //         : "",
-//               // breadth:
-//               //     product?.breadth <= 0
-//               //         ? "Should be greater than 0"
-//               //         : product?.breadth === ""
-//               //         ? "Field is Required"
-//               //         : "",
-//               // height:
-//               //     product?.height <= 0
-//               //         ? "Should be greater than 0"
-//               //         : product?.height === ""
-//               //         ? "Field is Required"
-//               //         : "",
-//               // let productBorderError:any = document.getElementById("Delivery Address")
-//             };
-//           } else {
-//             return item;
-//           }
-//         })
-//       );
-//       return true;
-//     }
-
-//     // }
-//   };
-
-//   const boxloops: any = (boxProductDetails: any, index: any) => {
-//     if (enabled) {
-//       return false;
-//     }
-
-//     const boxDetails = boxProductDetails?.boxInfo[index];
-
-//     if (
-//       boxDetails?.deadWeight > 0 &&
-//       // boxDetails?.volumetricWeight > 0 &&
-//       boxDetails?.length > 0 &&
-//       boxDetails?.breadth > 0 &&
-//       boxDetails?.height > 0 &&
-//       boxDetails?.name?.length > 0 &&
-//       !enabled
-//     ) {
-//       return false;
-//     } else {
-//       // setValidationError({
-//       //   ...validationError,
-//       //   boxDeadWeight:
-//       //     boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
-//       //   // boxVolumtericWeight:
-//       //   //   boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
-//       //   boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
-//       //   boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
-//       //   boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
-//       //   boxName: boxDetails?.name?.length == 0 ? "Field is required" : "",
-//       // });
-//       setInputError(true);
-//       return true;
-//     }
-//   };
-
-//   const handlePriorValidation = () => {
-//     // Delivery Checks
-//     if (
-//       getDeliveryAddressData?.deliveryAddress?.contact?.contactName?.trim()
-//         ?.length === 0 ||
-//       getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length <= 9 ||
-//       // getDeliveryAddressData?.deliveryAddress?.contact?.emailId?.length === 0 ||
-//       // getDeliveryAddressData?.deliveryAddress?.contact?.contactType?.length ===
-//       //   0 ||
-//       getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
-//       !getDeliveryAddressData?.deliveryAddress?.city ||
-//       !getDeliveryAddressData?.deliveryAddress?.contact?.contactName ||
-//       // getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
-//       //     ?.length === 0 ||
-//       // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
-//       //     ?.length === 0 ||
-//       getDeliveryAddressData?.deliveryAddress?.getDeliveryAddressData
-//         ?.deliveryAddress?.city?.length === 0 ||
-//       getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
-//       getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
-//       getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
-//       getDeliveryAddressData?.deliveryAddress?.pincode === 0 ||
-//       // getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
-//       getDeliveryAddressData?.deliveryAddress?.pickupDate?.length === 0
-//     ) {
-//       let element1: any = document.getElementById("Delivery Address");
-
-//       if (element1 && !enabled) element1.style.borderColor = "red";
-//     } else {
-//       let element1: any = document.getElementById("Delivery Address");
-
-//       if (element1) element1.style.borderColor = "#E8E8E8";
-//     }
-//     //Pickup Checks
-
-//     if (
-//       getPickAddressData?.pickUpAddress?.contact?.contactName?.trim()
-//         ?.length === 0 ||
-//       !getPickAddressData?.pickUpAddress?.city ||
-//       !getPickAddressData?.pickUpAddress?.contact?.contactName ||
-//       getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length <= 9 ||
-//       // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
-//       // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
-//       getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-//       // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
-//       // getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
-//       getPickAddressData?.pickUpAddress?.city?.length === 0 ||
-//       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
-//       getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-//       getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
-//       getPickAddressData?.pickUpAddress?.pincode === 0 ||
-//       // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
-//       getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
-//     ) {
-//       let element2: any = document.getElementById("Pickup Address");
-
-//       if (element2 && !enabled) element2.style.borderColor = "red";
-//     } else {
-//       let element2: any = document.getElementById("Pickup Address");
-//       if (element2) element2.style.borderColor = "#E8E8E8";
-//     }
-
-//     //services
-
-//     if ((serviceList?.length === 0 && !partnerServiceId) || serviceRefresh) {
-//       let elemente3: any = document.getElementById("Services");
-//       setErrorsArray([...errorsArray, "service"]);
-//       // if (elemente3) elemente3.style.backgroundColor = "yellow";
-//       // if (elemente3) elemente3.style.borderColor = "rgb(255,0,0) ";
-//       if (elemente3) elemente3.classList.add("!border-red-500");
-
-//       // if (elemente3) elemente3.style.backgroundColor = "green";
-//     } else {
-//       setErrorsArray(errorsArray.filter((item: any) => item !== "service"));
-//       let element3: any = document.getElementById("Services");
-//       if (element3) element3.style.borderColor = "#E8E8E8";
-//     }
-
-//     //box and product
-
-//     if (boxProductDetails?.boxInfo?.length === 0) {
-//       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
-
-//       // let element5: any = document.getElementById("Box 1");
-//       let element5: any = document.getElementById(
-//         // `${boxProductDetails?.boxInfo?.[0]?.name}`
-//         "Box 1"
-//       );
-
-//       if (element4 && !enabled) element4.classList.add("!border-red-500");
-//       if (element5 && !enabled) element5.style.borderColor = "red";
-//     }
-
-//     if (source !== "UNICOMMERCE") {
-//       if (
-//         boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
-//         // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
-//         boxProductDetails?.boxInfo?.[0]?.name === 0 ||
-//         boxProductDetails?.boxInfo?.[0]?.length === 0 ||
-//         boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
-//         boxProductDetails?.boxInfo?.[0]?.height === 0 ||
-//         isBoxError
-//       ) {
-//         // let element4: any = document.getElementById("Box Info  Product(s) x 5");
-//         let element4: any = document.getElementById(
-//           `${orderDetails[2]?.title}`
-//         );
-
-//         // let element5: any = document.getElementById("Box 1");
-//         let element5: any = document.getElementById(
-//           // `${boxProductDetails?.boxInfo?.[0]?.name}`
-//           "Box 1"
-//         );
-
-//         if (element4 && !enabled) element4.classList.add("!border-red-500");
-//         if (element5 && !enabled) element5.style.borderColor = "red";
-//         // if (element5) element5.classList.add("!border-red-500");
-//       } else {
-//         // let element4: any = document.getElementById("Box Info  Product(s) x 5");
-//         let element4: any = document.getElementById(
-//           `${orderDetails[2]?.title}`
-//         );
-//         // let element5: any = document.getElementById("Box 1");
-//         // let element5: any = document.getElementById(
-//         //     `${boxProductDetails?.boxInfo?.[0]?.name}`
-//         // );
-//         let element5: any = document.getElementById(
-//           // `${boxProductDetails?.boxInfo?.[0]?.name}`
-//           "Box 1"
-//         );
-
-//         if (element4) element4.style.borderColor = "#E8E8E8";
-//         if (element5 && !enabled) element5.style.borderColor = "#E8E8E8";
-//       }
-
-//       for (
-//         let i = 0;
-//         i < boxProductDetails?.boxInfo?.[0]?.products?.length;
-//         i++
-//       ) {
-//         if (
-//           boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0
-//           //commenting as not mandatory
-//           // ||
-//           // boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
-//           // boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
-//           // boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
-//         ) {
-//           let element6 = document.getElementById(
-//             `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
-//           );
-
-//           let element4: any = document.getElementById(
-//             `${orderDetails[2]?.title}`
-//           );
-//           if (element6) element6.style.borderColor = "red";
-//           if (element4 && !enabled) element4.style.borderColor = "red";
-//           // break;
-//         } else {
-//           let element4: any = document.getElementById(
-//             `${orderDetails[2]?.title}`
-//           );
-//           let element6 = document.getElementById(
-//             `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
-//           );
-//           if (element6) element6.style.borderColor = "#E8E8E8";
-//           if (element4) element4.style.borderColor = "#E8E8E8";
-//         }
-//       }
-//     }
-//   };
-
-//   const validationFunction = (e: any, key: any, index: any) => {
-//     if (key == "Pickup Address") {
-//       if (
-//         getPickAddressData?.pickUpAddress?.contact?.contactName?.trim()
-//           ?.length === 0 ||
-//         getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length <= 9 ||
-//         !getPickAddressData?.pickUpAddress?.city ||
-//         !getPickAddressData?.pickUpAddress?.contact?.contactName ||
-//         // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
-//         // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
-//         getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
-//         // getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
-//         // getPickAddressData?.pickUpAddress?.landmark?.trim().length ===
-//         //     0 ||
-//         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
-//         getPickAddressData?.pickUpAddress?.state?.length === 0 ||
-//         getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-//         getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
-//         getPickAddressData?.pickUpAddress?.pincode === 0 ||
-//         // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
-//         getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
-//       ) {
-//         setErrorsArray([...errorsArray, "pickupAddress"]);
-//         // setOpenIndex(0);
-
-//         setOpen({
-//           [`item${index}`]: true,
-//         });
-//         setInputError(true);
-//         // setErrorStatusAccordian(true);
-//       } else {
-//         setErrorsArray(
-//           errorsArray.filter((item: any) => item !== "pickupAddress")
-//         );
-//         // setOpenIndex(0);
-//         handleItemClick(index, e.target.textContent);
-//         setOpen({
-//           [`item${index}`]: false,
-//         });
-//         setApiCall(false);
-//         // setErrorStatusAccordian(false);
-//       }
-//     }
-
-//     if (key == "Delivery Address") {
-//       if (
-//         getDeliveryAddressData?.deliveryAddress?.contact?.contactName?.trim()
-//           ?.length === 0 ||
-//         getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length <=
-//           9 ||
-//         !getDeliveryAddressData?.deliveryAddress?.city ||
-//         !getDeliveryAddressData?.deliveryAddress?.contact?.contactName ||
-//         // getDeliveryAddressData?.deliveryAddress?.contact?.emailId?.length ===
-//         //   0 ||
-//         // getDeliveryAddressData?.deliveryAddress?.contact?.contactType
-//         //   ?.length === 0 ||
-//         getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
-//         // getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
-//         //   0 ||
-//         // getDeliveryAddressData?.deliveryAddress?.landmark?.trim()
-//         //     ?.length === 0 ||
-//         getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
-//         getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
-//         getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
-//         getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
-//         getDeliveryAddressData?.deliveryAddress?.pincode === 0
-//         // ||
-//         // getDeliveryAddressData?.deliveryAddress?.addressType?.length ===
-//         //     0 ||
-//         // (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
-//         //   getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
-//       ) {
-//         setErrorsArray([...errorsArray, "deliveryAddress"]);
-//         setOpen({
-//           [`item${index}`]: true,
-//         });
-//         setInputError(true);
-//       } else {
-//         setErrorsArray(
-//           errorsArray.filter((item: any) => item !== "deliveryAddress")
-//         );
-//         // setOpenIndex(0);
-//         handleItemClick(index, e.target.textContent);
-//         setOpen({
-//           [`item${index}`]: false,
-//         });
-//         setApiCall(false);
-//       }
-//     }
-
-//     if (key == "Services") {
-//       handleItemClick(index, e.target.textContent);
-//       setOpen({
-//         [`item${index}`]: false,
-//       });
-
-//       setOpenIndex(null);
-
-//       setOtherDetailsAccordian(false);
-//       //setAddressOpenModal(true);
-//       setApiCall(false);
-//     }
-//   };
-
-//   const clickedOption = (e: any) => {
-//     for (let i = 0; i < boxDetailsData?.length; i++) {
-//       if (e === boxDetailsData[i]?.boxId) {
-//         setSelectBoxId(i);
-//       }
-//     }
-//   };
-
-//   useEffect(() => {
-//     const { data: dataFromState, isOpen } = getAllSellerData;
-
-//     if (getAllSellerData !== undefined && isOpen === true) {
-//       setOrderDetails([]);
-//       getSellerOrderCompleteData(dataFromState);
-//     }
-//   }, [getAllSellerData]);
-
-//   useEffect(() => {
-//     if (orderDetails?.length > 0) {
-//       const deliveryAddress = orderDetails[1];
-
-//       delete deliveryAddress.title;
-
-//       const pickAddress = orderDetails[0];
-
-//       delete pickAddress.title;
-//       setOrderDetails({ ...orderDetails, deliveryAddress });
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     setGetPickUpAddressData(getPickAddressData);
-//   }, [getPickAddressData]);
-
-//   useEffect(() => {
-//     // if()
-
-//     if (isFirstRender.current) {
-//       isFirstRender.current = false;
-//       return;
-//     }
-//     // postOtherDetails();
-//   }, [addressOpenModal]);
-
-//   useEffect(() => {
-//     setproductAccordian(boxProductDetails?.boxInfo?.[selectBoxIndex]?.products);
-
-//     if (!enabled) {
-//       setProdctError(
-//         boxProductDetails?.boxInfo?.[0]?.products?.map(
-//           (product: any, index: any) => {
-//             return {
-//               deadWeight:
-//                 product?.deadWeight <= 0
-//                   ? "Should be greater than 0"
-//                   : product?.deadWeight === ""
-//                   ? "Field is Required"
-//                   : "",
-//               volumetricWeight:
-//                 product?.volumetricWeight <= 0
-//                   ? "Should be greater than 0"
-//                   : product?.volumetricWeight === ""
-//                   ? "Field is Required"
-//                   : "",
-//               //commented as not mandatory
-//               // length:
-//               //     product?.length <= 0
-//               //         ? "Should be greater than 0"
-//               //         : product?.length === ""
-//               //         ? "Field is Required"
-//               //         : "",
-//               // breadth:
-//               //     product?.breadth <= 0
-//               //         ? "Should be greater than 0"
-//               //         : product?.breadth === ""
-//               //         ? "Field is Required"
-//               //         : "",
-//               // height:
-//               //     product?.height <= 0
-//               //         ? "Should be greater than 0"
-//               //         : product?.height === ""
-//               //         ? "Field is Required"
-//               //         : "",
-//             };
-//           }
-//         )
-//       );
-//     }
-
-//     // setProdctError(
-//     //   boxProductDetails?.boxInfo?.[0]?.products?.map(
-//     //     (item: any, index: number) => {
-//     //       return {
-//     //         deadWeight: "",
-//     //         volumetricWeight: "",
-//     //         length: "",
-//     //         breadth: "",
-//     //         height: "",
-//     //       };
-//     //     }
-//     //   )
-//     // );
-//   }, [boxProductDetails, selectBoxIndex]);
-
-//   useEffect(() => {
-//     handlePriorValidation();
-//     // This Function is added here to trigger this function each time a user
-//   }, [
-//     getDeliveryAddressData,
-//     getPickAddressData,
-//     serviceList,
-//     boxProductDetails,
-//     openIndex,
-//   ]);
-
-//   return (
-//     <div className="overflow-auto h-[100%] pb-[2rem]">
-//       {isLoading ? (
-//         <div className="flex w-full justify-center items-center h-[80%]">
-//           <Spinner />
-//         </div>
-//       ) : (
-//         <>
-//           <div className="w-[100%] p-[1rem] items-start overflow-auto">
-//             {orderDetails?.length > 0 &&
-//               orderDetails?.map((item: any, index: any) => {
-//                 return (
-//                   item?.title && (
-//                     <div
-//                       className="flex flex-col mb-3 cursor-pointer"
-//                       key={index}
-//                     >
-//                       <div
-//                         className={`flex flex-col select-none gap-y-[1rem] justify-between p-3 h-[52px] border-[1px] border-[#E8E8E8] ${
-//                           openIndex === index
-//                             ? "rounded-tr-lg rounded-tl-lg rounded-b-none "
-//                             : " text-[black] rounded-lg "
-//                         }`}
-//                         id={`${item?.title}`}
-//                         onClick={(e: any) => {
-//                           validationFunction(e, item.title, index);
-
-//                           if (!open[`item${index}`]) {
-//                             setOpen({
-//                               [`item${index}`]: true,
-//                             });
-
-//                             handleItemClick(index, e.target.textContent);
-//                           } else if (e.target.textContent === "Status") {
-//                             setOpen({
-//                               [`item${index}`]: false,
-//                             });
-//                             setOpenIndex(null);
-//                           } else if (e.target.textContent === "Order History") {
-//                             setOpen({
-//                               [`item${index}`]: false,
-//                             });
-//                             setOpenIndex(null);
-//                           } else if (
-//                             e.target.textContent === "Payment Details"
-//                           ) {
-//                             setOpen({
-//                               [`item${index}`]: false,
-//                             });
-//                             setOpenIndex(null);
-//                             handlePaymentDetails();
-//                           } else if (e.target.textContent == "Event Logs") {
-//                             handleItemClick(index, e.target.textContent);
-
-//                             setOpen({
-//                               [`item${index}`]: false,
-//                             });
-//                             setOpenIndex(null);
-
-//                             setApiCall(false);
-//                           } else if (
-//                             e.target.textContent == "Order Confirmation Logs"
-//                           ) {
-//                             handleItemClick(index, e.target.textContent);
-
-//                             setOpen({
-//                               [`item${index}`]: false,
-//                             });
-//                             setOpenIndex(null);
-
-//                             setApiCall(false);
-//                           } else if (e.target.textContent.includes("Box")) {
-//                             setOpen({
-//                               [`item${index}`]: false,
-//                             });
-//                             setOpenIndex(null);
-//                             setExistingBox(false);
-//                             setCustomInputBox(false);
-//                             setApiCall(false);
-//                           }
-//                         }}
-//                         key={index}
-//                       >
-//                         <div className="flex justify-between">
-//                           {item?.title.includes("Box")
-//                             ? "Box & Products"
-//                             : item.title}
-
-//                           {open?.[`item${index}`] ? (
-//                             <img src={UpwardArrow} alt="" />
-//                           ) : (
-//                             <img src={DownwardArrow} alt="" />
-//                           )}
-//                         </div>
-//                       </div>
-//                       {openIndex === index && (
-//                         <div>
-//                           <div>
-//                             <div
-//                               className={`entries ${
-//                                 entriesHeight && entriesHeight < 500
-//                                   ? `px-5 h-[${entriesHeight}]px`
-//                                   : `px-5 h-[${500}]px`
-//                               } flex flex-col overflow-auto border p-[0.5rem]`}
-//                             >
-//                               {Object.entries(item)?.map(
-//                                 ([key, value]: any, index: any) => {
-//                                   // Need To Implement this dynamically, It is applied for time being
-
-//                                   return index === 0 ? (
-//                                     ""
-//                                   ) : item?.title?.includes("Box") &&
-//                                     index === 4 &&
-//                                     boxProductDetails?.boxInfo?.length > 0 ? (
-//                                     <div
-//                                       className="items-center flex flex-col gap-y-[1rem] justify-between my-5 w-[100%]"
-//                                       style={{
-//                                         boxShadow:
-//                                           "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-//                                       }}
-//                                     >
-//                                       {productAccordian !== "" &&
-//                                         productAccordian !== undefined &&
-//                                         productAccordian?.map(
-//                                           (eachProduct: any, index: number) => {
-//                                             return (
-//                                               <div className="w-full">
-//                                                 <div className="w-full">
-//                                                   <div
-//                                                     className="border  border-black-600 p-2 rounded-md w-full"
-//                                                     // id={"productname"}
-//                                                     id={`${eachProduct.productId}`}
-//                                                     onClick={(e: any) => {
-//                                                       let temp = [
-//                                                         ...productAccordian,
-//                                                       ];
-
-//                                                       if (
-//                                                         eachProduct?.isCollapse ===
-//                                                           true &&
-//                                                         !productLoops(
-//                                                           productAccordian,
-//                                                           index,
-//                                                           true
-//                                                         )
-//                                                       ) {
-//                                                         eachProduct.isCollapse =
-//                                                           false;
-//                                                         setproductAccordian(
-//                                                           temp
-//                                                         );
-//                                                         setOpen({
-//                                                           [`itemproductAccordian${index}`]:
-//                                                             false,
-//                                                         });
-//                                                         handleSingleProductUpdation();
-//                                                       } else {
-//                                                         eachProduct.isCollapse =
-//                                                           true;
-//                                                         setproductAccordian(
-//                                                           temp
-//                                                         );
-//                                                         setOpen({
-//                                                           [`itemproductAccordian${index}`]:
-//                                                             true,
-//                                                         });
-//                                                         // setInputError(true);
-//                                                       }
-//                                                       hanldeProducts(
-//                                                         index,
-//                                                         eachProduct
-//                                                       );
-//                                                       if (
-//                                                         !open[
-//                                                           `itemproductAccordian${index}`
-//                                                         ]
-//                                                       ) {
-//                                                         setOpen({
-//                                                           [`itemproductAccordian${index}`]:
-//                                                             true,
-//                                                         });
-//                                                       }
-//                                                       setAddressOpenModal(
-//                                                         false
-//                                                       );
-//                                                     }}
-//                                                   >
-//                                                     <div className="flex justify-between">
-//                                                       <div className="flex gap-x-3">
-//                                                         <img
-//                                                           src={ItemIcon}
-//                                                           className=""
-//                                                           alt=""
-//                                                         />
-//                                                         <div className="flex  items-center align-middle h-full  ">
-//                                                           <div
-//                                                             className=" whitespace-nowrap max-w-[360px] overflow-hidden overflow-ellipsis"
-//                                                             data-tooltip-id="name-id"
-//                                                             data-tooltip-content={
-//                                                               eachProduct?.name
-//                                                             }
-//                                                           >
-//                                                             <div className="text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
-//                                                               <div className="flex gap-x-3">
-//                                                                 <p className="font-bold min-w-[65px]">
-//                                                                   Product
-//                                                                 </p>
-//                                                                 {eachProduct
-//                                                                   ?.name
-//                                                                   ?.length <=
-//                                                                 10 ? (
-//                                                                   <>
-//                                                                     {
-//                                                                       eachProduct?.name
-//                                                                     }
-//                                                                     {"  x  " +
-//                                                                       eachProduct?.qty +
-//                                                                       " (Qty) "}
-//                                                                   </>
-//                                                                 ) : (
-//                                                                   <>
-//                                                                     {eachProduct?.name.slice(
-//                                                                       0,
-//                                                                       10
-//                                                                     ) + " ..."}
-//                                                                     {" x " +
-//                                                                       eachProduct?.qty +
-//                                                                       " (Qty) "}
-//                                                                   </>
-//                                                                 )}
-//                                                               </div>
-//                                                             </div>
-//                                                           </div>
-//                                                           <Tooltip
-//                                                             id="name-id"
-//                                                             style={{
-//                                                               color: "#FFFFFF",
-//                                                               fontSize: "14px",
-//                                                               lineHeight:
-//                                                                 "14px",
-//                                                               maxWidth: "430px",
-//                                                               textTransform:
-//                                                                 "capitalize",
-//                                                               zIndex: "50",
-//                                                             }}
-//                                                           />
-//                                                         </div>
-//                                                       </div>
-//                                                       <div className="flex items-center">
-//                                                         {/* <img
-//                                                           src={DownwardArrow}
-//                                                         /> */}
-//                                                         {open?.[
-//                                                           `itemproductAccordian${index}`
-//                                                         ] ? (
-//                                                           <img
-//                                                             src={UpwardArrow}
-//                                                             alt=""
-//                                                           />
-//                                                         ) : (
-//                                                           <img
-//                                                             src={DownwardArrow}
-//                                                             alt=""
-//                                                           />
-//                                                         )}
-//                                                       </div>
-//                                                     </div>
-//                                                   </div>
-//                                                   {eachProduct?.isCollapse && (
-//                                                     <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-6 rounded-md">
-//                                                       <div className="grid grid-cols-2  px-[1rem] gap-x-4">
-//                                                         <div className="col-span-1">
-//                                                           <InputBox
-//                                                             label="Dead Weight (Kg)"
-//                                                             defaultValue={
-//                                                               eachProduct?.deadWeight
-//                                                             }
-//                                                             isDisabled={enabled}
-//                                                             name={`deadWeight${index}`}
-//                                                             inputType="number"
-//                                                             inputMode="numeric"
-//                                                             className="!w-[100%]"
-//                                                             onChange={(
-//                                                               e: any
-//                                                             ) => {
-//                                                               productLoops(
-//                                                                 e.target.value,
-//                                                                 index
-//                                                               );
-//                                                               handleInputUpdation(
-//                                                                 index,
-//                                                                 e.target.value,
-//                                                                 "deadWeight"
-//                                                               );
-
-//                                                               setProdctError(
-//                                                                 productError.map(
-//                                                                   (
-//                                                                     itemData: any,
-//                                                                     errIndex: number
-//                                                                   ) => {
-//                                                                     if (
-//                                                                       errIndex ==
-//                                                                       e.target
-//                                                                         .name[
-//                                                                         e.target
-//                                                                           .name
-//                                                                           ?.length -
-//                                                                           1
-//                                                                       ]
-//                                                                     ) {
-//                                                                       return {
-//                                                                         ...itemData,
-//                                                                         deadWeight:
-//                                                                           e
-//                                                                             .target
-//                                                                             .value <=
-//                                                                             0 &&
-//                                                                           eachProduct
-//                                                                             .deadWeight
-//                                                                             ?.length !=
-//                                                                             0
-//                                                                             ? "Should be greater than 0"
-//                                                                             : e
-//                                                                                 .target
-//                                                                                 .value ===
-//                                                                               ""
-//                                                                             ? "Field is Required"
-//                                                                             : "",
-//                                                                       };
-//                                                                     } else {
-//                                                                       return itemData;
-//                                                                     }
-//                                                                   }
-//                                                                 )
-//                                                               );
-//                                                             }}
-//                                                           />
-//                                                           <p className="open-sans text-[12px] text-red-600">
-//                                                             {
-//                                                               productError?.[
-//                                                                 index
-//                                                               ]?.deadWeight
-//                                                             }
-//                                                           </p>
-//                                                         </div>
-
-//                                                         <div className="col-span-1">
-//                                                           <InputBox
-//                                                             label="Volumetric Weight"
-//                                                             value={eachProduct?.volumetricWeight?.toFixed(
-//                                                               2
-//                                                             )}
-//                                                             name={`volumetricWeight${index}`}
-//                                                             className="!w-[100%]"
-//                                                             inputType="number"
-//                                                             isDisabled={true}
-//                                                           />
-//                                                         </div>
-//                                                       </div>
-//                                                       <div className="flex justify-between  w-[100%] gap-x-[1rem] px-[1rem]  mt-2">
-//                                                         <div className="w-[50%]">
-//                                                           <CustomDropDown
-//                                                             onChange={() => {}}
-//                                                             options={
-//                                                               measureUnits
-//                                                             }
-//                                                           />
-//                                                         </div>
-//                                                         <div className="flex w-[50%] gap-x-4">
-//                                                           <div>
-//                                                             <InputBox
-//                                                               label="L"
-//                                                               inputType="number"
-//                                                               inputMode="numeric"
-//                                                               name={`length${index}`}
-//                                                               defaultValue={
-//                                                                 eachProduct?.length
-//                                                               }
-//                                                               isDisabled={
-//                                                                 enabled
-//                                                               }
-//                                                               onChange={(
-//                                                                 e: any
-//                                                               ) => {
-//                                                                 handleInputUpdation(
-//                                                                   index,
-//                                                                   e.target
-//                                                                     .value,
-//                                                                   "length"
-//                                                                 );
-//                                                                 setProdctError(
-//                                                                   productError.map(
-//                                                                     (
-//                                                                       itemData: any,
-//                                                                       errIndex: number
-//                                                                     ) => {
-//                                                                       if (
-//                                                                         errIndex ==
-//                                                                         e.target
-//                                                                           .name[
-//                                                                           e
-//                                                                             .target
-//                                                                             .name
-//                                                                             ?.length -
-//                                                                             1
-//                                                                         ]
-//                                                                       ) {
-//                                                                         return {
-//                                                                           ...itemData,
-//                                                                           length:
-//                                                                             e
-//                                                                               .target
-//                                                                               .value <=
-//                                                                               0 &&
-//                                                                             eachProduct
-//                                                                               ?.length
-//                                                                               ?.length !=
-//                                                                               0
-//                                                                               ? "Should be greater than 0"
-//                                                                               : e
-//                                                                                   .target
-//                                                                                   .value ===
-//                                                                                 ""
-//                                                                               ? "Field is Required"
-//                                                                               : "",
-//                                                                         };
-//                                                                       } else {
-//                                                                         return itemData;
-//                                                                       }
-//                                                                     }
-//                                                                   )
-//                                                                 );
-//                                                               }}
-//                                                             />
-//                                                             {/* <p className="open-sans text-[12px] text-red-600">
-//                                                                                                                             {
-//                                                                                                                                 productError?.[
-//                                                                                                                                     index
-//                                                                                                                                 ]
-//                                                                                                                                     ?.length
-//                                                                                                                             }
-//                                                                                                                         </p> */}
-//                                                           </div>
-//                                                           <div>
-//                                                             <InputBox
-//                                                               label="B"
-//                                                               defaultValue={
-//                                                                 eachProduct?.breadth
-//                                                               }
-//                                                               name={`breadth${index}`}
-//                                                               isDisabled={
-//                                                                 enabled
-//                                                               }
-//                                                               inputType="number"
-//                                                               inputMode="numeric"
-//                                                               onChange={(
-//                                                                 e: any
-//                                                               ) => {
-//                                                                 handleInputUpdation(
-//                                                                   index,
-//                                                                   e.target
-//                                                                     .value,
-//                                                                   "breadth"
-//                                                                 );
-//                                                                 setProdctError(
-//                                                                   productError.map(
-//                                                                     (
-//                                                                       itemData: any,
-//                                                                       errIndex: number
-//                                                                     ) => {
-//                                                                       if (
-//                                                                         errIndex ==
-//                                                                         e.target
-//                                                                           .name[
-//                                                                           e
-//                                                                             .target
-//                                                                             .name
-//                                                                             ?.length -
-//                                                                             1
-//                                                                         ]
-//                                                                       ) {
-//                                                                         return {
-//                                                                           ...itemData,
-//                                                                           breadth:
-//                                                                             e
-//                                                                               .target
-//                                                                               .value <=
-//                                                                               0 &&
-//                                                                             eachProduct
-//                                                                               .breadth
-//                                                                               ?.length !=
-//                                                                               0
-//                                                                               ? "Should be greater than 0"
-//                                                                               : e
-//                                                                                   .target
-//                                                                                   .value ===
-//                                                                                 ""
-//                                                                               ? "Field is Required"
-//                                                                               : "",
-//                                                                         };
-//                                                                       } else {
-//                                                                         return itemData;
-//                                                                       }
-//                                                                     }
-//                                                                   )
-//                                                                 );
-//                                                               }}
-//                                                             />
-//                                                             {/* <p className="open-sans text-[12px] text-red-600">
-//                                                                                                                             {
-//                                                                                                                                 productError?.[
-//                                                                                                                                     index
-//                                                                                                                                 ]
-//                                                                                                                                     ?.breadth
-//                                                                                                                             }
-//                                                                                                                         </p> */}
-//                                                           </div>
-//                                                           <div>
-//                                                             <InputBox
-//                                                               label="H"
-//                                                               defaultValue={
-//                                                                 eachProduct?.height
-//                                                               }
-//                                                               name={`height${index}`}
-//                                                               isDisabled={
-//                                                                 enabled
-//                                                               }
-//                                                               inputType="number"
-//                                                               inputMode="numeric"
-//                                                               onChange={(
-//                                                                 e: any
-//                                                               ) => {
-//                                                                 handleInputUpdation(
-//                                                                   index,
-//                                                                   e.target
-//                                                                     .value,
-//                                                                   "height"
-//                                                                 );
-//                                                                 setProdctError(
-//                                                                   productError.map(
-//                                                                     (
-//                                                                       itemData: any,
-//                                                                       errIndex: number
-//                                                                     ) => {
-//                                                                       if (
-//                                                                         errIndex ==
-//                                                                         e.target
-//                                                                           .name[
-//                                                                           e
-//                                                                             .target
-//                                                                             .name
-//                                                                             ?.length -
-//                                                                             1
-//                                                                         ]
-//                                                                       ) {
-//                                                                         return {
-//                                                                           ...itemData,
-//                                                                           height:
-//                                                                             e
-//                                                                               .target
-//                                                                               .value <=
-//                                                                               0 &&
-//                                                                             eachProduct
-//                                                                               .height
-//                                                                               ?.length !=
-//                                                                               0
-//                                                                               ? "Should be greater than 0"
-//                                                                               : e
-//                                                                                   .target
-//                                                                                   .value ===
-//                                                                                 ""
-//                                                                               ? "Field is Required"
-//                                                                               : "",
-//                                                                         };
-//                                                                       } else {
-//                                                                         return itemData;
-//                                                                       }
-//                                                                     }
-//                                                                   )
-//                                                                 );
-//                                                               }}
-//                                                             />
-//                                                             {/* <p className="open-sans text-[12px] text-red-600">
-//                                                                                                                             {
-//                                                                                                                                 productError?.[
-//                                                                                                                                     index
-//                                                                                                                                 ]
-//                                                                                                                                     ?.height
-//                                                                                                                             }
-//                                                                                                                         </p> */}
-//                                                           </div>
-//                                                         </div>
-//                                                       </div>
-//                                                     </div>
-//                                                   )}
-//                                                 </div>
-//                                               </div>
-//                                             );
-//                                           }
-//                                         )}
-//                                       {boxProductDetails?.boxInfo.map(
-//                                         (eachBox: any, index: number) => {
-//                                           return (
-//                                             <div className="w-full ">
-//                                               <div className="w-full">
-//                                                 <div
-//                                                   // id={`${item?.title}`}
-
-//                                                   className="border  border-black-600 p-2 flex justify-between w-full rounded-md"
-//                                                   // id={`${eachBox.name}`}
-//                                                   id={"Box 1"}
-//                                                   onClick={(e: any) => {
-//                                                     if (boxAccordian === true) {
-//                                                       handleBoxAccordian();
-
-//                                                       setBoxName(false);
-//                                                       setExistingBox(false);
-
-//                                                       setOpen({
-//                                                         [`itemboxProductDetails${index}`]:
-//                                                           false,
-//                                                       });
-//                                                     } else {
-//                                                       setBoxAccordian(true);
-
-//                                                       setOpen({
-//                                                         [`itemboxProductDetails${index}`]:
-//                                                           true,
-//                                                       });
-//                                                     }
-
-//                                                     if (
-//                                                       !open[
-//                                                         `itemboxProductDetails${index}`
-//                                                       ]
-//                                                     ) {
-//                                                       setOpen({
-//                                                         [`itemboxProductDetails${index}`]:
-//                                                           true,
-//                                                       });
-//                                                     }
-//                                                     setAddressOpenModal(false);
-//                                                   }}
-//                                                 >
-//                                                   <div className="flex items-center gap-x-3">
-//                                                     <img
-//                                                       src={BoxIcon}
-//                                                       className="w-10 h-10"
-//                                                       alt=""
-//                                                     />
-//                                                     <p className="font-bold text-[14px] min-w-[65px]">
-//                                                       Box
-//                                                     </p>
-//                                                     <p className="text-[14px] font-Open">
-//                                                       {eachBox?.name === "Box 1"
-//                                                         ? ""
-//                                                         : eachBox?.name}
-//                                                     </p>
-//                                                   </div>
-
-//                                                   <div className="flex items-center">
-//                                                     {open?.[
-//                                                       `itemboxProductDetails${index}`
-//                                                     ] ? (
-//                                                       <img
-//                                                         src={UpwardArrow}
-//                                                         alt=""
-//                                                       />
-//                                                     ) : (
-//                                                       <img
-//                                                         src={DownwardArrow}
-//                                                         alt=""
-//                                                       />
-//                                                     )}
-//                                                   </div>
-//                                                 </div>
-
-//                                                 <div className="border border-black-600 px-5 rounded-md">
-//                                                   {boxAccordian && (
-//                                                     <>
-//                                                       {boxProductDetails
-//                                                         ?.boxInfo?.length ===
-//                                                       0 ? (
-//                                                         <>
-//                                                           <p className="font-open text-[14px] font-medium mt-6">
-//                                                             Existing box not
-//                                                             found, Please create
-//                                                             a box
-//                                                           </p>
-//                                                         </>
-//                                                       ) : (
-//                                                         <>
-//                                                           {!enabled && (
-//                                                             <div className="mt-4">
-//                                                               <CustomDropDown
-//                                                                 heading="Select A Box"
-//                                                                 options={boxDetailsData?.map(
-//                                                                   (
-//                                                                     option: any,
-//                                                                     index: any
-//                                                                   ) => {
-//                                                                     return {
-//                                                                       label:
-//                                                                         option?.name,
-//                                                                       value:
-//                                                                         option?.boxId,
-//                                                                     };
-//                                                                   }
-//                                                                 )}
-//                                                                 onChange={(
-//                                                                   e: any
-//                                                                 ) => {
-//                                                                   clickedOption(
-//                                                                     e.target
-//                                                                       .value
-//                                                                   );
-//                                                                   setSelectBoxIndex(
-//                                                                     e.target
-//                                                                       .value
-//                                                                   );
-//                                                                   setDropDownContent(
-//                                                                     true
-//                                                                   );
-//                                                                   setExistingBox(
-//                                                                     true
-//                                                                   );
-//                                                                   setCustomInputBox(
-//                                                                     false
-//                                                                   );
-//                                                                 }}
-//                                                               />
-//                                                               <></>
-//                                                             </div>
-//                                                           )}
-//                                                         </>
-//                                                       )}
-//                                                       <div className="mt-4">
-//                                                         <div className="my-3 rounded-md">
-//                                                           {!enabled && (
-//                                                             <p
-//                                                               onClick={() => {
-//                                                                 setCustomInputBox(
-//                                                                   true
-//                                                                 );
-//                                                                 setExistingBox(
-//                                                                   false
-//                                                                 );
-
-//                                                                 setBoxName(
-//                                                                   false
-//                                                                 );
-//                                                                 // handleBoxAccordian();
-//                                                               }}
-//                                                               className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center  py-2 px-2 rounded-md border-[1.90px] border-black-600"
-//                                                             >
-//                                                               <span>
-//                                                                 <img
-//                                                                   src={
-//                                                                     AddBoxIcon
-//                                                                   }
-//                                                                   alt="boxImage"
-//                                                                   className="w-4 h-4"
-//                                                                 />
-//                                                               </span>
-//                                                               <span className="font-open mt-1 ">
-//                                                                 Customize Your
-//                                                                 Box
-//                                                               </span>
-//                                                             </p>
-//                                                           )}
-
-//                                                           {
-//                                                             !boxName &&
-//                                                               !customInpuBox &&
-//                                                               !existingBox && (
-//                                                                 <div>
-//                                                                   <div className="my-4">
-//                                                                     <CustomInputBox
-//                                                                       label="Box Name"
-//                                                                       onChange={(
-//                                                                         e
-//                                                                       ) => {}}
-//                                                                       value={
-//                                                                         eachBox?.name
-//                                                                       }
-//                                                                       isDisabled={
-//                                                                         true
-//                                                                       }
-//                                                                     />
-//                                                                   </div>
-
-//                                                                   <div className="grid grid-cols-2 gap-x-2">
-//                                                                     <div>
-//                                                                       <CustomInputBox
-//                                                                         label="Dead Weight"
-//                                                                         onChange={(
-//                                                                           e
-//                                                                         ) => {}}
-//                                                                         value={
-//                                                                           eachBox?.deadWeight
-//                                                                         }
-//                                                                         isDisabled={
-//                                                                           true
-//                                                                         }
-//                                                                       />
-//                                                                     </div>
-//                                                                     <div>
-//                                                                       <CustomInputBox
-//                                                                         label="Volumetric Weight"
-//                                                                         onChange={(
-//                                                                           e
-//                                                                         ) => {}}
-//                                                                         value={
-//                                                                           eachBox?.volumetricWeight
-//                                                                         }
-//                                                                         isDisabled={
-//                                                                           true
-//                                                                         }
-//                                                                       />
-//                                                                     </div>
-//                                                                   </div>
-//                                                                   <div className="grid grid-cols-2 gap-x-2 mt-3">
-//                                                                     <div>
-//                                                                       <CustomDropDown
-//                                                                         onChange={() => {}}
-//                                                                         options={
-//                                                                           measureUnits
-//                                                                         }
-//                                                                       />
-//                                                                     </div>
-//                                                                     <div className="grid  grid-cols-3 gap-x-2">
-//                                                                       <div>
-//                                                                         <CustomInputBox
-//                                                                           label="Length"
-//                                                                           onChange={(
-//                                                                             e
-//                                                                           ) => {}}
-//                                                                           value={
-//                                                                             eachBox?.length
-//                                                                           }
-//                                                                           isDisabled={
-//                                                                             true
-//                                                                           }
-//                                                                         />
-//                                                                       </div>
-//                                                                       <div>
-//                                                                         <CustomInputBox
-//                                                                           label="Breadth"
-//                                                                           onChange={(
-//                                                                             e
-//                                                                           ) => {}}
-//                                                                           value={
-//                                                                             eachBox?.breadth
-//                                                                           }
-//                                                                           isDisabled={
-//                                                                             true
-//                                                                           }
-//                                                                         />
-//                                                                       </div>
-//                                                                       <div>
-//                                                                         <CustomInputBox
-//                                                                           label="Height"
-//                                                                           onChange={(
-//                                                                             e
-//                                                                           ) => {}}
-//                                                                           value={
-//                                                                             eachBox?.height
-//                                                                           }
-//                                                                           isDisabled={
-//                                                                             true
-//                                                                           }
-//                                                                         />
-//                                                                       </div>
-//                                                                     </div>
-//                                                                   </div>
-//                                                                 </div>
-//                                                               )
-//                                                             //   : (
-//                                                             //     <div>hello</div>
-//                                                             //   )
-//                                                           }
-//                                                           <div className=" my-2">
-//                                                             {customInpuBox && (
-//                                                               <div className="">
-//                                                                 <div className=" mt-4 ">
-//                                                                   <CustomInputBox
-//                                                                     label="Box Name"
-//                                                                     onChange={(
-//                                                                       e
-//                                                                     ) => {
-//                                                                       setNewBox(
-//                                                                         {
-//                                                                           ...newBox,
-//                                                                           name: e
-//                                                                             .target
-//                                                                             .value,
-//                                                                         }
-//                                                                       );
-
-//                                                                       if (
-//                                                                         e.target
-//                                                                           .value ===
-//                                                                         ""
-//                                                                       ) {
-//                                                                         setValidationError(
-//                                                                           {
-//                                                                             ...validationError,
-//                                                                             newBoxName:
-//                                                                               "Field is required",
-//                                                                           }
-//                                                                         );
-//                                                                       } else {
-//                                                                         setValidationError(
-//                                                                           {
-//                                                                             ...validationError,
-//                                                                             newBoxName:
-//                                                                               "",
-//                                                                           }
-//                                                                         );
-//                                                                       }
-//                                                                     }}
-//                                                                   />
-//                                                                   <p className="open-sans text-[12px] text-red-600">
-//                                                                     {
-//                                                                       validationError.newBoxName
-//                                                                     }
-//                                                                   </p>
-//                                                                 </div>
-//                                                                 <div className="grid grid-cols-2 gap-x-[1rem]  mt-5">
-//                                                                   <div className="col-span-1">
-//                                                                     <InputBox
-//                                                                       label="Dead Weight (Kg)"
-//                                                                       isDisabled={
-//                                                                         enabled
-//                                                                       }
-//                                                                       inputType="number"
-//                                                                       name="deadWeight"
-//                                                                       inputMode="numeric"
-//                                                                       onChange={(
-//                                                                         e: any
-//                                                                       ) => {
-//                                                                         setNewBox(
-//                                                                           {
-//                                                                             ...newBox,
-//                                                                             deadWeight:
-//                                                                               +e
-//                                                                                 .target
-//                                                                                 .value,
-//                                                                           }
-//                                                                         );
-//                                                                         if (
-//                                                                           e
-//                                                                             .target
-//                                                                             .value ===
-//                                                                           0
-//                                                                         ) {
-//                                                                           setValidationError(
-//                                                                             {
-//                                                                               ...validationError,
-//                                                                               boxDeadWeight:
-//                                                                                 "Should be greater than 0",
-//                                                                             }
-//                                                                           );
-//                                                                         }
-
-//                                                                         // }
-//                                                                         else {
-//                                                                           setValidationError(
-//                                                                             {
-//                                                                               ...validationError,
-//                                                                               boxDeadWeight:
-//                                                                                 "",
-//                                                                             }
-//                                                                           );
-//                                                                         }
-//                                                                       }}
-//                                                                     />
-//                                                                     <p className="open-sans text-[12px] text-red-600">
-//                                                                       {
-//                                                                         validationError.boxDeadWeight
-//                                                                       }
-//                                                                     </p>
-//                                                                   </div>
-//                                                                   <div className="col-span-1">
-//                                                                     <InputBox
-//                                                                       label="Volumetric Weight"
-//                                                                       value={
-//                                                                         (newBox?.length *
-//                                                                           newBox?.breadth *
-//                                                                           newBox?.height) /
-//                                                                         5000
-//                                                                       }
-//                                                                       isDisabled={
-//                                                                         true
-//                                                                       }
-//                                                                       name="volumetricWeight"
-//                                                                       inputType="number"
-//                                                                     />
-//                                                                   </div>
-//                                                                 </div>
-//                                                                 <div className="flex justify-between w-[100%] gap-x-[1rem]  mt-2">
-//                                                                   <div className="w-[50%]">
-//                                                                     <CustomDropDown
-//                                                                       onChange={() => {}}
-//                                                                       options={
-//                                                                         measureUnits
-//                                                                       }
-//                                                                     />
-//                                                                   </div>
-//                                                                   <div className="flex w-[50%] gap-x-4">
-//                                                                     <div>
-//                                                                       <InputBox
-//                                                                         label="L"
-//                                                                         inputType="number"
-//                                                                         inputMode="numeric"
-//                                                                         name="length"
-//                                                                         isDisabled={
-//                                                                           enabled
-//                                                                         }
-//                                                                         onChange={(
-//                                                                           e: any
-//                                                                         ) => {
-//                                                                           setNewBox(
-//                                                                             {
-//                                                                               ...newBox,
-//                                                                               length:
-//                                                                                 +e
-//                                                                                   .target
-//                                                                                   .value,
-//                                                                             }
-//                                                                           );
-//                                                                           if (
-//                                                                             e
-//                                                                               .target
-//                                                                               .value <=
-//                                                                               0 &&
-//                                                                             eachBox
-//                                                                               ?.length
-//                                                                               ?.length !=
-//                                                                               0
-//                                                                           ) {
-//                                                                             setValidationError(
-//                                                                               {
-//                                                                                 ...validationError,
-//                                                                                 boxLength:
-//                                                                                   "Should be greater than 0",
-//                                                                               }
-//                                                                             );
-//                                                                           } else {
-//                                                                             setValidationError(
-//                                                                               {
-//                                                                                 ...validationError,
-//                                                                                 boxLength:
-//                                                                                   "",
-//                                                                               }
-//                                                                             );
-//                                                                           }
-//                                                                         }}
-//                                                                         inputError={
-//                                                                           eachBox
-//                                                                             ?.length
-//                                                                             ?.length ===
-//                                                                           0
-//                                                                         }
-//                                                                       />
-//                                                                       <p className="open-sans text-[12px] text-red-600">
-//                                                                         {
-//                                                                           validationError.boxLength
-//                                                                         }
-//                                                                       </p>
-//                                                                     </div>
-//                                                                     <div>
-//                                                                       <InputBox
-//                                                                         label="B"
-//                                                                         isDisabled={
-//                                                                           enabled
-//                                                                         }
-//                                                                         name="breadth"
-//                                                                         inputType="number"
-//                                                                         inputMode="numeric"
-//                                                                         onChange={(
-//                                                                           e: any
-//                                                                         ) => {
-//                                                                           setNewBox(
-//                                                                             {
-//                                                                               ...newBox,
-//                                                                               breadth:
-//                                                                                 +e
-//                                                                                   .target
-//                                                                                   .value,
-//                                                                             }
-//                                                                           );
-//                                                                           if (
-//                                                                             e
-//                                                                               .target
-//                                                                               .value <=
-//                                                                               0 &&
-//                                                                             eachBox
-//                                                                               .breadth
-//                                                                               ?.length !=
-//                                                                               0
-//                                                                           ) {
-//                                                                             setValidationError(
-//                                                                               {
-//                                                                                 ...validationError,
-//                                                                                 boxBreadth:
-//                                                                                   "Should be greater than 0",
-//                                                                               }
-//                                                                             );
-//                                                                           } else {
-//                                                                             setValidationError(
-//                                                                               {
-//                                                                                 ...validationError,
-//                                                                                 boxBreadth:
-//                                                                                   "",
-//                                                                               }
-//                                                                             );
-//                                                                           }
-//                                                                         }}
-//                                                                         inputError={
-//                                                                           eachBox
-//                                                                             ?.breadth
-//                                                                             ?.length ===
-//                                                                           0
-//                                                                         }
-//                                                                       />
-//                                                                       <p className="open-sans text-[12px] text-red-600">
-//                                                                         {
-//                                                                           validationError.boxBreadth
-//                                                                         }
-//                                                                       </p>
-//                                                                     </div>
-//                                                                     <div>
-//                                                                       <InputBox
-//                                                                         label="H"
-//                                                                         isDisabled={
-//                                                                           enabled
-//                                                                         }
-//                                                                         name="height"
-//                                                                         inputType="number"
-//                                                                         inputMode="numeric"
-//                                                                         onChange={(
-//                                                                           e: any
-//                                                                         ) => {
-//                                                                           setNewBox(
-//                                                                             {
-//                                                                               ...newBox,
-//                                                                               height:
-//                                                                                 +e
-//                                                                                   .target
-//                                                                                   .value,
-//                                                                             }
-//                                                                           );
-//                                                                           if (
-//                                                                             e
-//                                                                               .target
-//                                                                               .value <=
-//                                                                               0 &&
-//                                                                             eachBox
-//                                                                               .height
-//                                                                               ?.length !=
-//                                                                               0
-//                                                                           ) {
-//                                                                             setValidationError(
-//                                                                               {
-//                                                                                 ...validationError,
-//                                                                                 boxHeight:
-//                                                                                   "Should be greater than 0",
-//                                                                               }
-//                                                                             );
-//                                                                           } else {
-//                                                                             setValidationError(
-//                                                                               {
-//                                                                                 ...validationError,
-//                                                                                 boxHeight:
-//                                                                                   "",
-//                                                                               }
-//                                                                             );
-//                                                                           }
-//                                                                         }}
-//                                                                         inputError={
-//                                                                           eachBox
-//                                                                             ?.height
-//                                                                             ?.length ===
-//                                                                           0
-//                                                                         }
-//                                                                       />
-//                                                                       <p className="open-sans text-[12px] text-red-600">
-//                                                                         {
-//                                                                           validationError.boxHeight
-//                                                                         }
-//                                                                       </p>
-//                                                                     </div>
-//                                                                   </div>
-//                                                                 </div>
-//                                                               </div>
-//                                                             )}
-//                                                             {/* existing box */}
-//                                                             {existingBox && (
-//                                                               //   !customInpuBox &&
-//                                                               //   !boxName &&
-//                                                               <div className=" my-1 pb-1">
-//                                                                 <div className="mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
-//                                                                   <p className="text-[16px] font-open ">
-//                                                                     {
-//                                                                       boxDetailsData[
-//                                                                         selectBoxId
-//                                                                       ]?.name
-//                                                                     }
-//                                                                   </p>
-//                                                                 </div>
-//                                                                 <div className="grid grid-cols-2 gap-x-[1rem]  mt-5">
-//                                                                   <div className="col-span-1">
-//                                                                     <InputBox
-//                                                                       label="Dead Weight (Kg)"
-//                                                                       value={
-//                                                                         boxDetailsData?.[
-//                                                                           selectBoxId
-//                                                                         ]
-//                                                                           ?.deadWeight
-//                                                                       }
-//                                                                       isDisabled={
-//                                                                         true
-//                                                                       }
-//                                                                       inputType="number"
-//                                                                       name="deadWeight"
-//                                                                       inputMode="numeric"
-//                                                                     />
-//                                                                   </div>
-//                                                                   <div className="col-span-1">
-//                                                                     <InputBox
-//                                                                       label="Volumetric Weight"
-//                                                                       value={boxDetailsData?.[
-//                                                                         selectBoxId
-//                                                                       ]?.volumetricWeight?.toFixed(
-//                                                                         2
-//                                                                       )}
-//                                                                       isDisabled={
-//                                                                         true
-//                                                                       }
-//                                                                       name="volumetricWeight"
-//                                                                       inputType="number"
-//                                                                     />
-//                                                                   </div>
-//                                                                 </div>
-//                                                                 <div className="flex justify-between w-[100%] gap-x-[1rem]  mt-2">
-//                                                                   <div className="w-[50%]">
-//                                                                     <CustomDropDown
-//                                                                       onChange={() => {}}
-//                                                                       options={
-//                                                                         measureUnits
-//                                                                       }
-//                                                                     />
-//                                                                   </div>
-//                                                                   <div className="flex w-[50%] gap-x-4">
-//                                                                     <div>
-//                                                                       <InputBox
-//                                                                         label="L"
-//                                                                         inputType="number"
-//                                                                         inputMode="numeric"
-//                                                                         name="length"
-//                                                                         isDisabled={
-//                                                                           true
-//                                                                         }
-//                                                                         value={
-//                                                                           boxDetailsData?.[
-//                                                                             selectBoxId
-//                                                                           ]
-//                                                                             ?.length
-//                                                                         }
-//                                                                       />
-//                                                                     </div>
-//                                                                     <div>
-//                                                                       <InputBox
-//                                                                         label="B"
-//                                                                         value={
-//                                                                           boxDetailsData?.[
-//                                                                             selectBoxId
-//                                                                           ]
-//                                                                             ?.breadth
-//                                                                         }
-//                                                                         isDisabled={
-//                                                                           true
-//                                                                         }
-//                                                                         name="breadth"
-//                                                                         inputType="number"
-//                                                                         inputMode="numeric"
-//                                                                       />{" "}
-//                                                                     </div>
-//                                                                     <div>
-//                                                                       <InputBox
-//                                                                         label="H"
-//                                                                         value={
-//                                                                           boxDetailsData?.[
-//                                                                             selectBoxId
-//                                                                           ]
-//                                                                             ?.height
-//                                                                         }
-//                                                                         isDisabled={
-//                                                                           true
-//                                                                         }
-//                                                                         name="height"
-//                                                                       />
-//                                                                     </div>
-//                                                                   </div>
-//                                                                 </div>
-//                                                               </div>
-//                                                             )}
-//                                                           </div>
-//                                                         </div>
-//                                                       </div>
-//                                                     </>
-//                                                   )}
-//                                                 </div>
-//                                               </div>
-//                                             </div>
-//                                           );
-//                                         }
-//                                       )}
-//                                     </div>
-//                                   ) : (
-//                                     <>
-//                                       <div>
-//                                         {item.title === "Event Logs" &&
-//                                           index === 4 && (
-//                                             <div>
-//                                               {boxProductDetails?.status.map(
-//                                                 (
-//                                                   eachStatus: any,
-//                                                   index: any
-//                                                 ) => {
-//                                                   return (
-//                                                     <div className="border border-[#A4A4A4]  p-4 mt-2 rounded-md">
-//                                                       <div className="flex justify-between">
-//                                                         <p>AWB:</p>
-//                                                         <p>{eachStatus?.awb}</p>
-//                                                       </div>
-//                                                       <div className="flex justify-between mt-4">
-//                                                         <p>Current Status:</p>
-//                                                         <p>
-//                                                           {
-//                                                             eachStatus?.currentStatus
-//                                                           }
-//                                                         </p>
-//                                                       </div>
-//                                                       <div className="flex justify-between mt-4">
-//                                                         <p>Description:</p>
-//                                                         <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
-//                                                           {
-//                                                             eachStatus?.description
-//                                                           }
-//                                                         </p>
-//                                                       </div>
-//                                                       <div className="flex justify-between mt-4">
-//                                                         <p>Login:</p>
-//                                                         <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
-//                                                           {eachStatus?.logId}
-//                                                         </p>
-//                                                       </div>
-//                                                       <div className="flex justify-between mt-4">
-//                                                         <p>Notes:</p>
-//                                                         <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
-//                                                           {eachStatus?.notes}
-//                                                         </p>
-//                                                       </div>
-//                                                       <div className="flex justify-between mt-4">
-//                                                         <p>Time Stamp:</p>
-//                                                         <p>
-//                                                           {convertEpochToDateTime(
-//                                                             eachStatus?.timeStamp
-//                                                           )}
-//                                                         </p>
-//                                                       </div>
-//                                                     </div>
-//                                                   );
-//                                                 }
-//                                               )}
-//                                             </div>
-//                                           )}
-//                                       </div>
-
-//                                       <div>
-//                                         {item.title === "Order History" &&
-//                                           index === 5 && (
-//                                             <>
-//                                               {
-//                                                 <>
-//                                                   <div className="p-4">
-//                                                     <div>
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 1 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[0]
-//                                                                   }
-//                                                                 </p>
-//                                                                 <p>
-//                                                                   {
-//                                                                     eachService[1]
-//                                                                   }
-//                                                                 </p>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                     {/* this is for order id */}
-//                                                     <div className="mt-2">
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 2 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <div>
-//                                                                   <p className="open-sans">
-//                                                                     {
-//                                                                       eachService[0]
-//                                                                     }
-//                                                                   </p>
-//                                                                 </div>
-
-//                                                                 <div>
-//                                                                   <CustomInputBox
-//                                                                     defaultValue={
-//                                                                       // eachService[1]
-//                                                                       orderId
-//                                                                     }
-//                                                                     isDisabled={
-//                                                                       true
-//                                                                     }
-//                                                                     className="!max-w-[120px] !h-[30px] !rounded-sm"
-//                                                                   />
-//                                                                 </div>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                     <div className="mt-2">
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 3 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[0]
-//                                                                   }
-//                                                                 </p>
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[1]
-//                                                                   }
-//                                                                 </p>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                     <div className="mt-2">
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 4 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[0]
-//                                                                   }
-//                                                                 </p>
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[1]
-//                                                                   }
-//                                                                 </p>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                     <div className="mt-2">
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 5 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[0]
-//                                                                   }
-//                                                                 </p>
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[1]
-//                                                                   }
-//                                                                 </p>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                     <div className="mt-2">
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 6 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[0]
-//                                                                   }
-//                                                                 </p>
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[1]
-//                                                                   }
-//                                                                 </p>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                     <div className="mt-2">
-//                                                       {Object?.entries(
-//                                                         orderDetails?.[
-//                                                           orderDetails?.length -
-//                                                             1
-//                                                         ]
-//                                                       )?.map(
-//                                                         (
-//                                                           eachService: any,
-//                                                           index: any
-//                                                         ) => {
-//                                                           return (
-//                                                             index === 7 && (
-//                                                               <div className="flex justify-between">
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[0]
-//                                                                   }
-//                                                                 </p>
-//                                                                 <p className="open-sans">
-//                                                                   {
-//                                                                     eachService[1]
-//                                                                   }
-//                                                                 </p>
-//                                                               </div>
-//                                                             )
-//                                                           );
-//                                                         }
-//                                                       )}
-//                                                     </div>
-//                                                   </div>
-//                                                 </>
-//                                               }
-//                                             </>
-//                                           )}
-//                                       </div>
-//                                       <div>
-//                                         {item.title ===
-//                                           "Order Confirmation Logs" &&
-//                                           index === 5 && (
-//                                             <div className="mb-40">
-//                                               {buyerConfirmationLogs?.map(
-//                                                 (item: any) => {
-//                                                   return (
-//                                                     <div className="">
-//                                                       <div className="border border-[#A4A4A4]  p-4 mt-2 rounded-md">
-//                                                         {/* <div className="flex justify-between mt-4">
-//                                                           <p>Order ID:</p>
-//                                                           <p>
-//                                                             {item?.orderId ||
-//                                                               "--"}
-//                                                           </p>
-//                                                         </div> */}
-//                                                         <div className="flex justify-between mt-4">
-//                                                           <p>New Status:</p>
-//                                                           <p>
-//                                                             {item?.eventRecord
-//                                                               ?.newStatus ||
-//                                                               "--"}
-//                                                           </p>
-//                                                         </div>
-//                                                         <div className="flex justify-between mt-4">
-//                                                           <p>
-//                                                             Previous Status:
-//                                                           </p>
-//                                                           <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
-//                                                             {item?.eventRecord
-//                                                               ?.previousStatus ||
-//                                                               "--"}
-//                                                           </p>
-//                                                         </div>
-//                                                         <div className="flex justify-between mt-4">
-//                                                           <p>Time Stamp:</p>
-//                                                           <p className="whitespace-nowrap overflow-x-scroll w-100% ml-16 customScroll">
-//                                                             {item?.createdAt
-//                                                               ? convertEpochToDateTime(
-//                                                                   item.createdAt
-//                                                                 )
-//                                                               : "--"}
-//                                                           </p>
-//                                                         </div>
-//                                                       </div>
-//                                                     </div>
-//                                                   );
-//                                                 }
-//                                               )}
-//                                             </div>
-//                                           )}
-//                                       </div>
-//                                       <div>
-//                                         {item.title === "Services" && (
-//                                           <div>
-//                                             {index === 3 && (
-//                                               <>
-//                                                 {serviceLoading ? (
-//                                                   <div className="flex w-full justify-center items-center h-[80%]">
-//                                                     <Spinner />
-//                                                   </div>
-//                                                 ) : (
-//                                                   <div>
-//                                                     <div>
-//                                                       {!enabled ? (
-//                                                         serviceList.length ===
-//                                                         0 ? (
-//                                                           <div className="flex justify-center py-4">
-//                                                             <p className="open-sans text-[14px]">
-//                                                               No Data Found
-//                                                             </p>
-//                                                           </div>
-//                                                         ) : (
-//                                                           <div>
-//                                                             {serviceList?.map(
-//                                                               (
-//                                                                 service: any,
-//                                                                 index: any
-//                                                               ) => {
-//                                                                 return (
-//                                                                   <div
-//                                                                     className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0  ${
-//                                                                       index ===
-//                                                                         serviceIndex &&
-//                                                                       "shadow-inner bg-[#F7F7F7]"
-//                                                                     }hover:shadow-inner hover:bg-[#F7F7F7]`}
-//                                                                     onClick={() =>
-//                                                                       handleService(
-//                                                                         index
-//                                                                       )
-//                                                                     }
-//                                                                   >
-//                                                                     <div
-//                                                                       className="flex flex-col items-center gap-y-[1rem] my-2 w-[100%] "
-//                                                                       style={{
-//                                                                         boxShadow:
-//                                                                           "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-//                                                                       }}
-//                                                                       // onClick={() => handleProductsDetails(index)}
-//                                                                     >
-//                                                                       <div
-//                                                                         className={`flex items-center  max-w-[90%] min-w-[90%]`}
-//                                                                         style={{
-//                                                                           justifyContent:
-//                                                                             "space-between",
-//                                                                           marginRight:
-//                                                                             "1rem",
-//                                                                         }}
-//                                                                       >
-//                                                                         <div
-//                                                                           className={`flex gap-x-3 items-center  ${
-//                                                                             index ===
-//                                                                               serviceIndex &&
-//                                                                             " font-Lato font-semibold text-[16px] leading-5"
-//                                                                           }`}
-//                                                                         >
-//                                                                           <input
-//                                                                             type="radio"
-//                                                                             value={
-//                                                                               service.partnerName
-//                                                                             }
-//                                                                             className="!w-4"
-//                                                                             style={{
-//                                                                               accentColor:
-//                                                                                 "black",
-//                                                                             }}
-//                                                                             readOnly={
-//                                                                               true
-//                                                                             }
-//                                                                             checked={
-//                                                                               index ===
-//                                                                               serviceIndex
-//                                                                             }
-//                                                                             onChange={(
-//                                                                               e: any
-//                                                                             ) =>
-//                                                                               handleService(
-//                                                                                 index
-//                                                                               )
-//                                                                             }
-//                                                                           />
-//                                                                           {capitalizeFirstLetter(
-//                                                                             service.partnerName
-//                                                                           ) +
-//                                                                             " " +
-//                                                                             capitalizeFirstLetter(
-//                                                                               service.serviceMode
-//                                                                             )}
-//                                                                         </div>
-//                                                                         <div
-//                                                                           className={` ${
-//                                                                             index ===
-//                                                                               serviceIndex &&
-//                                                                             "font-semibold"
-//                                                                           }`}
-//                                                                         >
-//                                                                           {
-//                                                                             service.total
-//                                                                           }
-//                                                                         </div>
-//                                                                       </div>
-//                                                                     </div>
-//                                                                   </div>
-//                                                                 );
-//                                                               }
-//                                                             )}
-//                                                           </div>
-//                                                         )
-//                                                       ) : (
-//                                                         <div>
-//                                                           <div className="flex flex-col gap-y-2 border border-[#A4A4A4]  p-4 mt-2 rounded-md">
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Partner Name
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {isMasked
-//                                                                   ? COMPANY_NAME ||
-//                                                                     "Shipyaari"
-//                                                                   : item[
-//                                                                       "Partner Name"
-//                                                                     ]}
-//                                                               </p>
-//                                                             </div>
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Service Mode
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {
-//                                                                   item[
-//                                                                     "Service Mode"
-//                                                                   ]
-//                                                                 }
-//                                                               </p>
-//                                                             </div>
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Applied Weight
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {
-//                                                                   item[
-//                                                                     "Applied Weight"
-//                                                                   ]
-//                                                                 }
-//                                                               </p>
-//                                                             </div>
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Freight Charges
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {
-//                                                                   item[
-//                                                                     "Freight Charges"
-//                                                                   ]
-//                                                                 }
-//                                                               </p>
-//                                                             </div>
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Other Charges
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {
-//                                                                   item[
-//                                                                     "Other Charges"
-//                                                                   ]
-//                                                                 }
-//                                                               </p>
-//                                                             </div>
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 COD Charges
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {
-//                                                                   item[
-//                                                                     "COD Charges"
-//                                                                   ]
-//                                                                 }
-//                                                               </p>
-//                                                             </div>
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Insurance
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {
-//                                                                   item[
-//                                                                     "Insurance"
-//                                                                   ]
-//                                                                 }
-//                                                               </p>
-//                                                             </div>
-
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Tax
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {item["Tax"]}
-//                                                               </p>
-//                                                             </div>
-//                                                             {/* {item?.[
-//                                                               "yaari Cash"
-//                                                             ] !== undefined &&
-//                                                               item?.[
-//                                                                 "yaari Cash"
-//                                                               ] !== 0 &&
-//                                                               item?.[
-//                                                                 "yaari Cash"
-//                                                               ]
-//                                                                 .toString()
-//                                                                 .trim() !==
-//                                                                 "" &&
-//                                                               !item?.[
-//                                                                 "yaari Cash"
-//                                                               ].includes(
-//                                                                 "undefined"
-//                                                               ) &&
-//                                                               !item?.[
-//                                                                 "yaari Cash"
-//                                                               ].includes(
-//                                                                 "NaN"
-//                                                               ) && ( // Check for "NaN"
-//                                                                 <div className="flex justify-between mx-2">
-//                                                                   <p className="font-open">
-//                                                                     Yaari Cash
-//                                                                   </p>
-//                                                                   <p className="font-open text-[#7CCA62]">
-//                                                                     {console.log(
-//                                                                       "Yaari Cash:",
-//                                                                       item[
-//                                                                         "yaari Cash"
-//                                                                       ]
-//                                                                     )}
-//                                                                     - &nbsp;{" "}
-//                                                                     {
-//                                                                       item[
-//                                                                         "yaari Cash"
-//                                                                       ]
-//                                                                     }
-//                                                                   </p>
-//                                                                 </div>
-//                                                               )} */}
-
-//                                                             <div className="flex justify-between mx-2">
-//                                                               <p className="font-open">
-//                                                                 Total
-//                                                               </p>
-//                                                               <p className="font-open">
-//                                                                 {item["Total"]}
-//                                                               </p>
-//                                                             </div>
-//                                                           </div>
-//                                                         </div>
-//                                                       )}
-//                                                     </div>
-//                                                   </div>
-//                                                 )}
-//                                               </>
-//                                             )}
-//                                           </div>
-//                                         )}
-//                                       </div>
-
-//                                       <div>
-//                                         {item.title === "Payment Details" &&
-//                                           index === 1 && (
-//                                             <div className="flex flex-col gap-y-2 border border-black-600 p-4 rounded-md">
-//                                               {Object.entries(item).map(
-//                                                 ([key, value]: any) => {
-//                                                   return (
-//                                                     <div className="flex justify-between">
-//                                                       {key != "title" && (
-//                                                         <>
-//                                                           <div>{key}:</div>
-//                                                           <div>{value}</div>
-//                                                         </>
-//                                                       )}
-//                                                     </div>
-//                                                   );
-//                                                 }
-//                                               )}
-//                                             </div>
-//                                           )}
-//                                       </div>
-
-//                                       <div className="flex justify-center">
-//                                         {item.title === "Pickup Address" &&
-//                                           // <p>{key + "-- " + value}</p>
-//                                           index === 1 && (
-//                                             <div className="flex gap-x-5 mt-4 mb-2">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index - 1]
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.contact
-//                                                       ?.contactName
-//                                                   }
-//                                                   onChange={(e: any) => {
-//                                                     const nameValue =
-//                                                       e.target.value;
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.contact.contactName =
-//                                                       nameValue;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {validationError.contactName}
-//                                                 </p>
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.contact
-//                                                       ?.mobileNo
-//                                                   }
-//                                                   maxLength={10}
-//                                                   inputMode="numeric"
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     const numericValue =
-//                                                       e.target.value.replace(
-//                                                         /[^0-9]/g,
-//                                                         ""
-//                                                       );
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.contact.mobileNo =
-//                                                       numericValue;
-//                                                     if (
-//                                                       numericValue?.length ===
-//                                                       10
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         mobileNo: "",
-//                                                       });
-//                                                     } else if (
-//                                                       numericValue?.length === 0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         mobileNo: "",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         mobileNo:
-//                                                           "Invalid Number",
-//                                                       });
-//                                                     }
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {validationError.mobileNo}
-//                                                 </p>
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Pickup Address" &&
-//                                           // <p>{key + "-- " + value}</p>
-//                                           index === 3 && (
-//                                             <div className="flex gap-x-5 mt-2">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index - 1]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.contact
-//                                                       ?.emailId
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     const emailValue =
-//                                                       e.target.value;
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.contact.emailId =
-//                                                       emailValue;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     validateEmailId(emailValue);
-//                                                   }}
-//                                                   // inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {
-//                                                     validationError.pickUpEmailId
-//                                                   }
-//                                                 </p>
-//                                               </div>
-//                                               {/* changed the flatno */}
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.flatNo
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.flatNo =
-//                                                       e.target.value;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Pickup Address" &&
-//                                           index === 5 && (
-//                                             <div className="flex gap-x-5 mt-4">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.locality
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.locality =
-//                                                       e.target.value;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         locality:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         locality: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.landmark
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.landmark =
-//                                                       e.target.value;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         landmark:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         landmark: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   // inputError={
-//                                                   //     inputError
-//                                                   // }
-//                                                 />
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Pickup Address" &&
-//                                           index === 7 && (
-//                                             <div className="flex gap-x-5 mt-4">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.city
-//                                                   }
-//                                                   isDisabled={true}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.city =
-//                                                       e.target.value;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         city: "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         city: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.state
-//                                                   }
-//                                                   isDisabled={true}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.state =
-//                                                       e.target.value;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         state:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         state: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Pickup Address" &&
-//                                           index === 9 && (
-//                                             <div className="flex gap-x-5 mt-4">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.country
-//                                                   }
-//                                                   isDisabled={true}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getPickAddressData;
-//                                                     temp.pickUpAddress.country =
-//                                                       e.target.value;
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         country:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         country: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getPickAddressData
-//                                                       ?.pickUpAddress?.pincode
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   maxLength={6}
-//                                                   inputMode="numeric"
-//                                                   isRequired={true}
-//                                                   onChange={(e: any) => {
-//                                                     fetchPincodeData(
-//                                                       e,
-//                                                       item.title
-//                                                     );
-//                                                     const numericValue =
-//                                                       e.target?.value?.replace(
-//                                                         /[^0-9]/g,
-//                                                         ""
-//                                                       );
-//                                                     let temp =
-//                                                       getPickAddressData;
-
-//                                                     temp.pickUpAddress.pincode =
-//                                                       numericValue;
-//                                                     if (
-//                                                       numericValue?.length === 6
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         pincode: "",
-//                                                       });
-//                                                     } else if (
-//                                                       numericValue?.length === 0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         pincode: "",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         pincode:
-//                                                           "Pincode must be 6 digits",
-//                                                       });
-//                                                     }
-
-//                                                     setGetPickUpAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {validationError.pincode}
-//                                                 </p>
-//                                               </div>
-//                                             </div>
-//                                           )}
-
-//                                         {item.title === "Pickup Address" &&
-//                                           // <p>{key + "-- " + value}</p>
-//                                           index === 11 && (
-//                                             <div className="flex gap-x-5 mt-4 mb-2"></div>
-//                                           )}
-
-//                                         {item.title === "Pickup Address" &&
-//                                           index === 13 && (
-//                                             <div className="">
-//                                               <div className="  ">
-//                                                 <div className="">
-//                                                   <div className="flex mt-0">
-//                                                     <CustomInputWithImage
-//                                                       placeholder="Pickup Date"
-//                                                       imgSrc={CalenderIcon}
-//                                                       value={date_DD_MMM_YYYY_HH_MM_SS(
-//                                                         getPickAddressData
-//                                                           ?.pickUpAddress
-//                                                           ?.pickupDate
-//                                                       )}
-//                                                       isDisabled={enabled}
-//                                                       onClick={() => {
-//                                                         setOpenPickupDatePicker(
-//                                                           true
-//                                                         );
-//                                                       }}
-//                                                       inputError={inputError}
-//                                                       inputClassName="w-[330px] xl:!w-[570px]"
-//                                                     />
-//                                                   </div>
-
-//                                                   {openPickupDatePicker && (
-//                                                     <CustomDate
-//                                                       onSelect={
-//                                                         handleScheduleDateTimeChange
-//                                                       }
-//                                                       disabled={enabled}
-//                                                     />
-//                                                   )}
-//                                                 </div>
-//                                               </div>
-//                                             </div>
-//                                           )}
-
-//                                         {item?.title === "Status" &&
-//                                           (index === 7 ||
-//                                             index === 13 ||
-//                                             index === 19)}
-//                                       </div>
-
-//                                       <div className="flex justify-center">
-//                                         {item.title === "Delivery Address" &&
-//                                           index === 1 && (
-//                                             <div className="flex gap-x-5 mt-4 mb-2">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index - 1]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress?.contact
-//                                                       ?.contactName
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.contact.contactName =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryContactName: "",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryContactName: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {
-//                                                     validationError.deliveryContactName
-//                                                   }
-//                                                 </p>
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   maxLength={10}
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress?.contact
-//                                                       ?.mobileNo
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     const numbericValue =
-//                                                       e.target.value.replace(
-//                                                         /[^0-9]/g,
-//                                                         ""
-//                                                       );
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.contact.mobileNo =
-//                                                       numbericValue;
-//                                                     if (
-//                                                       numbericValue?.length ===
-//                                                       10
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryMobileNo: "",
-//                                                       });
-//                                                     } else if (
-//                                                       numbericValue?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryMobileNo: "",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryMobileNo:
-//                                                           "Invalid Number",
-//                                                       });
-//                                                     }
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {
-//                                                     validationError.deliveryMobileNo
-//                                                   }
-//                                                 </p>
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Delivery Address" &&
-//                                           index === 3 && (
-//                                             <div className="flex gap-x-5 mt-2">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index - 1]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress?.contact
-//                                                       ?.emailId
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     const emailValue =
-//                                                       e.target.value;
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.contact.emailId =
-//                                                       emailValue;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     validateEmailId(emailValue);
-//                                                   }}
-//                                                   // inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {validationError.emailId}
-//                                                 </p>
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress.flatNo
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.flatNo =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryFlatNo:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryFlatNo: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Delivery Address" &&
-//                                           index === 5 && (
-//                                             <div className="flex gap-x-5 mt-4">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress.locality
-//                                                   }
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.locality =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryLocality:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryLocality: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress.landmark
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.landmark =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryLandmark:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryLandmark: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   // inputError={
-//                                                   //     inputError
-//                                                   // }
-//                                                 />
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Delivery Address" &&
-//                                           index === 7 && (
-//                                             <div className="flex gap-x-5 mt-4">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress?.city
-//                                                   }
-//                                                   isDisabled={true}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.city =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryCity:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryCity: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress.state
-//                                                   }
-//                                                   isDisabled={true}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.state =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryState:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryState: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                             </div>
-//                                           )}
-//                                         {item.title === "Delivery Address" &&
-//                                           // <p>{key + "-- " + value}</p>
-//                                           index === 9 && (
-//                                             <div className="flex gap-x-5 mt-4">
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index]
-//                                                   }
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress.country
-//                                                   }
-//                                                   isDisabled={true}
-//                                                   onChange={(e: any) => {
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.country =
-//                                                       e.target.value;
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                     if (
-//                                                       e.target.value?.length ===
-//                                                       0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryCountry:
-//                                                           "Field is required",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryCountry: "",
-//                                                       });
-//                                                     }
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                               </div>
-//                                               <div className="xl:w-[274px]">
-//                                                 <CustomInputBox
-//                                                   label={
-//                                                     Object.keys(item)[index + 1]
-//                                                   }
-//                                                   inputMode="numeric"
-//                                                   maxLength={6}
-//                                                   value={
-//                                                     getDeliveryAddressData
-//                                                       ?.deliveryAddress.pincode
-//                                                   }
-//                                                   isDisabled={enabled}
-//                                                   onChange={(e: any) => {
-//                                                     fetchPincodeData(
-//                                                       e,
-//                                                       item.title
-//                                                     );
-//                                                     const numericValue =
-//                                                       e.target.value.replace(
-//                                                         /[^0-9]/g,
-//                                                         ""
-//                                                       );
-//                                                     let temp =
-//                                                       getDeliveryAddressData;
-//                                                     temp.deliveryAddress.pincode =
-//                                                       numericValue;
-//                                                     if (
-//                                                       numericValue?.length === 6
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryPincode: "",
-//                                                       });
-//                                                     } else if (
-//                                                       numericValue?.length === 0
-//                                                     ) {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryPincode: "",
-//                                                       });
-//                                                     } else {
-//                                                       setValidationError({
-//                                                         ...validationError,
-//                                                         deliveryPincode:
-//                                                           "Pincode must be 6 digits",
-//                                                       });
-//                                                     }
-//                                                     setGetDeliveryAddressData({
-//                                                       ...temp,
-//                                                     });
-//                                                   }}
-//                                                   inputError={inputError}
-//                                                 />
-//                                                 <p className="open-sans text-[12px] text-red-600">
-//                                                   {
-//                                                     validationError.deliveryPincode
-//                                                   }
-//                                                 </p>
-//                                               </div>
-//                                             </div>
-//                                           )}
-
-//                                         {item.title === "Delivery Address" &&
-//                                           index === 11 && (
-//                                             <div className="flex gap-x-5 mt-4 mb-2"></div>
-//                                           )}
-
-//                                         {item?.title === "Status" &&
-//                                           (index === 7 ||
-//                                             index === 13 ||
-//                                             index === 19)}
-//                                       </div>
-//                                     </>
-//                                   );
-//                                 }
-//                               )}
-//                             </div>
-//                           </div>
-//                         </div>
-//                       )}
-//                     </div>
-//                   )
-//                 );
-//               })}
-//           </div>
-
-//           {!enabled && (
-//             <div
-//               className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
-//               style={{ width: "-webkit-fill-available" }}
-//             >
-//               <OneButton
-//                 text={"Place Order"}
-//                 disabled={errorsArray.length > 0 ? true : false}
-//                 variant="primary"
-//                 onClick={placeOrder}
-//                 className="!w-[160px]"
-//               />
-//             </div>
-//           )}
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Accordion;
-
 import React, { useState, useRef, useEffect } from "react";
 import { POST } from "../../utils/webService";
 import {
@@ -5377,37 +551,40 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   // };
 
   const calculateTotalInvoiceValue = (): number => {
-  if (!orderData?.boxInfo) return 0;
+    if (!orderData?.boxInfo) return 0;
 
-  if (isPanelSource(orderData?.source || "")) {
-    // For panel sources: calculate sum of (product price × quantity)
-    return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
-      const baseBoxPrice = getBoxInvoiceValue(box, orderData?.source || "");
-      
-      // For B2B orders, multiply by box quantity
-      if (orderData?.orderType === "B2B") {
-        const boxQty = box.qty || 1;
-        return totalInvoice + (baseBoxPrice * boxQty);
-      }
-      
-      // For B2C orders, just add the base price
-      return totalInvoice + baseBoxPrice;
-    }, 0);
-  } else {
-    // For API/channel integration sources: use invoice value from main codInfo
-    const baseInvoiceValue = orderData?.codInfo?.invoiceValue || 0;
-    
-    // For B2B orders with API sources, multiply by total quantity of all boxes
-    if (orderData?.orderType === "B2B") {
-      const totalBoxQty = orderData.boxInfo.reduce((total: number, box: any) => {
-        return total + (box.qty || 1);
+    if (isPanelSource(orderData?.source || "")) {
+      // For panel sources: calculate sum of (product price × quantity)
+      return orderData.boxInfo.reduce((totalInvoice: number, box: any) => {
+        const baseBoxPrice = getBoxInvoiceValue(box, orderData?.source || "");
+
+        // For B2B orders, multiply by box quantity
+        if (orderData?.orderType === "B2B") {
+          const boxQty = box.qty || 1;
+          return totalInvoice + baseBoxPrice * boxQty;
+        }
+
+        // For B2C orders, just add the base price
+        return totalInvoice + baseBoxPrice;
       }, 0);
-      return baseInvoiceValue * totalBoxQty;
+    } else {
+      // For API/channel integration sources: use invoice value from main codInfo
+      const baseInvoiceValue = orderData?.codInfo?.invoiceValue || 0;
+
+      // For B2B orders with API sources, multiply by total quantity of all boxes
+      if (orderData?.orderType === "B2B") {
+        const totalBoxQty = orderData.boxInfo.reduce(
+          (total: number, box: any) => {
+            return total + (box.qty || 1);
+          },
+          0
+        );
+        return baseInvoiceValue * totalBoxQty;
+      }
+
+      return baseInvoiceValue;
     }
-    
-    return baseInvoiceValue;
-  }
-};
+  };
 
   const calculateTotalCollectableAmount = (): number => {
     if (!orderData?.boxInfo || !orderData?.codInfo?.isCod) return 0;
@@ -5655,10 +832,13 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         // }
 
         // Validate unit price only for COD orders
-if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0)) {
-  newErrors.products[productKey].unitPrice = true;
-  hasErrors = true;
-}
+        if (
+          orderData?.codInfo?.isCod &&
+          (!product.unitPrice || product.unitPrice <= 0)
+        ) {
+          newErrors.products[productKey].unitPrice = true;
+          hasErrors = true;
+        }
         if (!product.deadWeight || product.deadWeight <= 0) {
           newErrors.products[productKey].deadWeight = true;
           hasErrors = true;
@@ -5997,36 +1177,36 @@ if (orderData?.codInfo?.isCod && (!product.unitPrice || product.unitPrice <= 0))
   // };
 
   // Create a centralized function to get the correct invoice value
-const getBoxInvoiceValue = (box: any, source: string) => {
-  if (isPanelSource(source)) {
-    // For panel sources: always calculate from products
-    if (!box.products || box.products.length === 0) return 0;
-    return box.products.reduce((total: number, product: any) => {
-      const qty = product.qty || 0;
-      const unitPrice = product.unitPrice || 0;
-      return total + qty * unitPrice;
-    }, 0);
-  } else {
-    // For API sources: use the existing invoice value from box's codInfo
-    return box.codInfo?.invoiceValue || 0;
-  }
-};
+  const getBoxInvoiceValue = (box: any, source: string) => {
+    if (isPanelSource(source)) {
+      // For panel sources: always calculate from products
+      if (!box.products || box.products.length === 0) return 0;
+      return box.products.reduce((total: number, product: any) => {
+        const qty = product.qty || 0;
+        const unitPrice = product.unitPrice || 0;
+        return total + qty * unitPrice;
+      }, 0);
+    } else {
+      // For API sources: use the existing invoice value from box's codInfo
+      return box.codInfo?.invoiceValue || 0;
+    }
+  };
 
-// Update the calculateBoxTotalPrice function to use this
-// const calculateBoxTotalPrice = (box: any) => {
-//   return getBoxInvoiceValue(box, orderData?.source || "");
-// };
-const calculateBoxTotalPrice = (box: any) => {
-  const basePrice = getBoxInvoiceValue(box, orderData?.source || "");
-  
-  // For B2B orders, multiply by box quantity
-  if (orderData?.orderType === "B2B") {
-    const boxQty = box.qty || 1;
-    return basePrice * boxQty;
-  }
-  
-  return basePrice;
-};
+  // Update the calculateBoxTotalPrice function to use this
+  // const calculateBoxTotalPrice = (box: any) => {
+  //   return getBoxInvoiceValue(box, orderData?.source || "");
+  // };
+  const calculateBoxTotalPrice = (box: any) => {
+    const basePrice = getBoxInvoiceValue(box, orderData?.source || "");
+
+    // For B2B orders, multiply by box quantity
+    if (orderData?.orderType === "B2B") {
+      const boxQty = box.qty || 1;
+      return basePrice * boxQty;
+    }
+
+    return basePrice;
+  };
 
   // Product operations functions
   // const updateProduct = (
@@ -6100,154 +1280,155 @@ const calculateBoxTotalPrice = (box: any) => {
   //   });
   // };
 
-//   const updateProduct = (
-//   boxIndex: number,
-//   productIndex: number,
-//   field: string,
-//   value: any
-// ) => {
-//   if (isEnabled) return;
+  //   const updateProduct = (
+  //   boxIndex: number,
+  //   productIndex: number,
+  //   field: string,
+  //   value: any
+  // ) => {
+  //   if (isEnabled) return;
 
-//   setOrderData((prevData: any) => {
-//     if (!prevData) return prevData;
+  //   setOrderData((prevData: any) => {
+  //     if (!prevData) return prevData;
 
-//     const updatedData = { ...prevData };
-//     const updatedBoxInfo = [...updatedData.boxInfo];
-//     const updatedBox = { ...updatedBoxInfo[boxIndex] };
-//     const updatedProducts = [...updatedBox.products];
+  //     const updatedData = { ...prevData };
+  //     const updatedBoxInfo = [...updatedData.boxInfo];
+  //     const updatedBox = { ...updatedBoxInfo[boxIndex] };
+  //     const updatedProducts = [...updatedBox.products];
 
-//     updatedProducts[productIndex] = {
-//       ...updatedProducts[productIndex],
-//       [field]: value,
-//     };
+  //     updatedProducts[productIndex] = {
+  //       ...updatedProducts[productIndex],
+  //       [field]: value,
+  //     };
 
-//     // Recalculate totals when qty, unitPrice, or deadWeight changes
-//     if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
-//       const product = updatedProducts[productIndex];
-//       const qty = product.qty || 0;
-//       const unitPrice = product.unitPrice || 0;
-//       const deadWeight = product.deadWeight || 0;
+  //     // Recalculate totals when qty, unitPrice, or deadWeight changes
+  //     if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+  //       const product = updatedProducts[productIndex];
+  //       const qty = product.qty || 0;
+  //       const unitPrice = product.unitPrice || 0;
+  //       const deadWeight = product.deadWeight || 0;
 
-//       updatedProducts[productIndex] = {
-//         ...updatedProducts[productIndex],
-//         totalPrice: qty * unitPrice,
-//         appliedWeight: qty * deadWeight,
-//         volumetricWeight: calculateVolumetricWeight(
-//           product.length,
-//           product.breadth,
-//           product.height,
-//           qty
-//         ),
-//       };
-//     }
+  //       updatedProducts[productIndex] = {
+  //         ...updatedProducts[productIndex],
+  //         totalPrice: qty * unitPrice,
+  //         appliedWeight: qty * deadWeight,
+  //         volumetricWeight: calculateVolumetricWeight(
+  //           product.length,
+  //           product.breadth,
+  //           product.height,
+  //           qty
+  //         ),
+  //       };
+  //     }
 
-//     updatedBox.products = updatedProducts;
+  //     updatedBox.products = updatedProducts;
 
-//     // Calculate new total price and invoice value for the box
-//     const newTotalPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
-    
-//     // Update box's codInfo invoice value for panel sources
-//     if (isPanelSource(updatedData.source)) {
-//       updatedBox.codInfo = {
-//         ...updatedBox.codInfo,
-//         invoiceValue: newTotalPrice,
-//       };
-//     }
+  //     // Calculate new total price and invoice value for the box
+  //     const newTotalPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
 
-//     // Sync collectible amount if not manually edited and COD is enabled
-//     if (
-//       !updatedBox.codInfo?.isCollectibleManuallyEdited &&
-//       updatedData.codInfo?.isCod
-//     ) {
-//       updatedBox.codInfo = {
-//         ...updatedBox.codInfo,
-//         collectableAmount: newTotalPrice,
-//         isCollectibleManuallyEdited: false,
-//       };
-//     }
+  //     // Update box's codInfo invoice value for panel sources
+  //     if (isPanelSource(updatedData.source)) {
+  //       updatedBox.codInfo = {
+  //         ...updatedBox.codInfo,
+  //         invoiceValue: newTotalPrice,
+  //       };
+  //     }
 
-//     updatedBoxInfo[boxIndex] = updatedBox;
-//     updatedData.boxInfo = updatedBoxInfo;
+  //     // Sync collectible amount if not manually edited and COD is enabled
+  //     if (
+  //       !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+  //       updatedData.codInfo?.isCod
+  //     ) {
+  //       updatedBox.codInfo = {
+  //         ...updatedBox.codInfo,
+  //         collectableAmount: newTotalPrice,
+  //         isCollectibleManuallyEdited: false,
+  //       };
+  //     }
 
-//     return updatedData;
-//   });
-// };
+  //     updatedBoxInfo[boxIndex] = updatedBox;
+  //     updatedData.boxInfo = updatedBoxInfo;
 
-const updateProduct = (
-  boxIndex: number,
-  productIndex: number,
-  field: string,
-  value: any
-) => {
-  if (isEnabled) return;
+  //     return updatedData;
+  //   });
+  // };
 
-  setOrderData((prevData: any) => {
-    if (!prevData) return prevData;
+  const updateProduct = (
+    boxIndex: number,
+    productIndex: number,
+    field: string,
+    value: any
+  ) => {
+    if (isEnabled) return;
 
-    const updatedData = { ...prevData };
-    const updatedBoxInfo = [...updatedData.boxInfo];
-    const updatedBox = { ...updatedBoxInfo[boxIndex] };
-    const updatedProducts = [...updatedBox.products];
+    setOrderData((prevData: any) => {
+      if (!prevData) return prevData;
 
-    updatedProducts[productIndex] = {
-      ...updatedProducts[productIndex],
-      [field]: value,
-    };
-
-    // Recalculate totals when qty, unitPrice, or deadWeight changes
-    if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
-      const product = updatedProducts[productIndex];
-      const qty = product.qty || 0;
-      const unitPrice = product.unitPrice || 0;
-      const deadWeight = product.deadWeight || 0;
+      const updatedData = { ...prevData };
+      const updatedBoxInfo = [...updatedData.boxInfo];
+      const updatedBox = { ...updatedBoxInfo[boxIndex] };
+      const updatedProducts = [...updatedBox.products];
 
       updatedProducts[productIndex] = {
         ...updatedProducts[productIndex],
-        totalPrice: qty * unitPrice,
-        appliedWeight: qty * deadWeight,
-        volumetricWeight: calculateVolumetricWeight(
-          product.length,
-          product.breadth,
-          product.height,
-          qty
-        ),
+        [field]: value,
       };
-    }
 
-    updatedBox.products = updatedProducts;
+      // Recalculate totals when qty, unitPrice, or deadWeight changes
+      if (field === "qty" || field === "unitPrice" || field === "deadWeight") {
+        const product = updatedProducts[productIndex];
+        const qty = product.qty || 0;
+        const unitPrice = product.unitPrice || 0;
+        const deadWeight = product.deadWeight || 0;
 
-    // Calculate new box total (considering B2B quantity multiplication)
-    const baseBoxPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
-    const finalBoxPrice = updatedData.orderType === "B2B" 
-      ? baseBoxPrice * (updatedBox.qty || 1)
-      : baseBoxPrice;
-    
-    // Update box's codInfo invoice value for panel sources
-    if (isPanelSource(updatedData.source)) {
-      updatedBox.codInfo = {
-        ...updatedBox.codInfo,
-        invoiceValue: baseBoxPrice, // Store base price, multiplication happens in total calculation
-      };
-    }
+        updatedProducts[productIndex] = {
+          ...updatedProducts[productIndex],
+          totalPrice: qty * unitPrice,
+          appliedWeight: qty * deadWeight,
+          volumetricWeight: calculateVolumetricWeight(
+            product.length,
+            product.breadth,
+            product.height,
+            qty
+          ),
+        };
+      }
 
-    // Sync collectible amount if not manually edited and COD is enabled
-    if (
-      !updatedBox.codInfo?.isCollectibleManuallyEdited &&
-      updatedData.codInfo?.isCod
-    ) {
-      updatedBox.codInfo = {
-        ...updatedBox.codInfo,
-        collectableAmount: finalBoxPrice, // Use final price including B2B multiplication
-        isCollectibleManuallyEdited: false,
-      };
-    }
+      updatedBox.products = updatedProducts;
 
-    updatedBoxInfo[boxIndex] = updatedBox;
-    updatedData.boxInfo = updatedBoxInfo;
+      // Calculate new box total (considering B2B quantity multiplication)
+      const baseBoxPrice = getBoxInvoiceValue(updatedBox, updatedData.source);
+      const finalBoxPrice =
+        updatedData.orderType === "B2B"
+          ? baseBoxPrice * (updatedBox.qty || 1)
+          : baseBoxPrice;
 
-    return updatedData;
-  });
-};
+      // Update box's codInfo invoice value for panel sources
+      if (isPanelSource(updatedData.source)) {
+        updatedBox.codInfo = {
+          ...updatedBox.codInfo,
+          invoiceValue: baseBoxPrice, // Store base price, multiplication happens in total calculation
+        };
+      }
+
+      // Sync collectible amount if not manually edited and COD is enabled
+      if (
+        !updatedBox.codInfo?.isCollectibleManuallyEdited &&
+        updatedData.codInfo?.isCod
+      ) {
+        updatedBox.codInfo = {
+          ...updatedBox.codInfo,
+          collectableAmount: finalBoxPrice, // Use final price including B2B multiplication
+          isCollectibleManuallyEdited: false,
+        };
+      }
+
+      updatedBoxInfo[boxIndex] = updatedBox;
+      updatedData.boxInfo = updatedBoxInfo;
+
+      return updatedData;
+    });
+  };
 
   const addProduct = (boxIndex: number) => {
     if (isEnabled || !isProductEditingAllowed) return;
@@ -6472,20 +1653,21 @@ const updateProduct = (
     const totalCollectableAmount = calculateTotalCollectableAmount();
 
     // Update boxInfo with correct invoice values
-  const updatedBoxInfo = orderData?.boxInfo?.map((box: any) => {
-    const updatedBox = { ...box };
-    
-    // Always ensure invoice value is correct based on source
-    const correctInvoiceValue = getBoxInvoiceValue(box, orderData?.source || "");
-    updatedBox.codInfo = {
-      ...updatedBox.codInfo,
-      invoiceValue: correctInvoiceValue,
-    };
+    const updatedBoxInfo = orderData?.boxInfo?.map((box: any) => {
+      const updatedBox = { ...box };
 
-    return updatedBox;
-  });
+      // Always ensure invoice value is correct based on source
+      const correctInvoiceValue = getBoxInvoiceValue(
+        box,
+        orderData?.source || ""
+      );
+      updatedBox.codInfo = {
+        ...updatedBox.codInfo,
+        invoiceValue: correctInvoiceValue,
+      };
 
-
+      return updatedBox;
+    });
 
     return {
       orderId: orderData?.orderId,
@@ -6531,7 +1713,7 @@ const updateProduct = (
         addressType: deliveryAddress.addressType,
         gstNumber: deliveryAddress.gstNumber,
       },
-          boxInfo: updatedBoxInfo,
+      boxInfo: updatedBoxInfo,
 
       // boxInfo: orderData?.boxInfo,
       // codInfo: orderData?.codInfo,
@@ -7841,47 +3023,50 @@ const updateProduct = (
   //   }
   // }, [orderData?.boxInfo, orderData?.codInfo?.isCod]);
   useEffect(() => {
-  if (orderData?.boxInfo) {
-    setOrderData((prevData: any) => {
-      const updatedData = { ...prevData };
-      const updatedBoxInfo = [...updatedData.boxInfo];
-      let hasChanges = false;
+    if (orderData?.boxInfo) {
+      setOrderData((prevData: any) => {
+        const updatedData = { ...prevData };
+        const updatedBoxInfo = [...updatedData.boxInfo];
+        let hasChanges = false;
 
-      updatedBoxInfo.forEach((box: any, index: number) => {
-        const correctInvoiceValue = getBoxInvoiceValue(box, updatedData.source);
-        
-        // Only update if the value is different
-        if (box.codInfo?.invoiceValue !== correctInvoiceValue) {
-          updatedBoxInfo[index] = {
-            ...box,
+        updatedBoxInfo.forEach((box: any, index: number) => {
+          const correctInvoiceValue = getBoxInvoiceValue(
+            box,
+            updatedData.source
+          );
+
+          // Only update if the value is different
+          if (box.codInfo?.invoiceValue !== correctInvoiceValue) {
+            updatedBoxInfo[index] = {
+              ...box,
+              codInfo: {
+                ...box.codInfo,
+                invoiceValue: correctInvoiceValue,
+              },
+            };
+            hasChanges = true;
+          }
+        });
+
+        if (hasChanges) {
+          const totalInvoiceValue = calculateTotalInvoiceValue();
+          const totalCollectableAmount = calculateTotalCollectableAmount();
+
+          return {
+            ...updatedData,
+            boxInfo: updatedBoxInfo,
             codInfo: {
-              ...box.codInfo,
-              invoiceValue: correctInvoiceValue,
-            }
+              ...updatedData.codInfo,
+              invoiceValue: totalInvoiceValue,
+              collectableAmount: totalCollectableAmount,
+            },
           };
-          hasChanges = true;
         }
+
+        return prevData;
       });
-
-      if (hasChanges) {
-        const totalInvoiceValue = calculateTotalInvoiceValue();
-        const totalCollectableAmount = calculateTotalCollectableAmount();
-
-        return {
-          ...updatedData,
-          boxInfo: updatedBoxInfo,
-          codInfo: {
-            ...updatedData.codInfo,
-            invoiceValue: totalInvoiceValue,
-            collectableAmount: totalCollectableAmount,
-          },
-        };
-      }
-
-      return prevData;
-    });
-  }
-}, [orderData?.boxInfo, orderData?.source]);
+    }
+  }, [orderData?.boxInfo, orderData?.source]);
 
   useEffect(() => {
     if (orderData?.codInfo?.isCod && orderData?.boxInfo) {
@@ -8466,1260 +3651,1270 @@ const updateProduct = (
   );
 
   // Updated renderBoxAndProducts function with enhanced box management
-//   const renderBoxAndProducts = () => (
-//     <div className="space-y-4 p-4">
-//       {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
-//         const totalPrice = calculateBoxTotalPrice(box);
+  //   const renderBoxAndProducts = () => (
+  //     <div className="space-y-4 p-4">
+  //       {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
+  //         const totalPrice = calculateBoxTotalPrice(box);
 
-//         // Determine the collectible amount to display
-//         // const getCollectibleAmount = () => {
-//         //   if (box.codInfo?.isCollectibleManuallyEdited) {
-//         //     // Use the stored value (could be 0, empty string, or any other value)
-//         //     return box.codInfo?.collectableAmount?.toString() || "";
-//         //   } else {
-//         //     // Use calculated total price as default
-//         //     return totalPrice.toString();
-//         //   }
-//         // };
+  //         // Determine the collectible amount to display
+  //         // const getCollectibleAmount = () => {
+  //         //   if (box.codInfo?.isCollectibleManuallyEdited) {
+  //         //     // Use the stored value (could be 0, empty string, or any other value)
+  //         //     return box.codInfo?.collectableAmount?.toString() || "";
+  //         //   } else {
+  //         //     // Use calculated total price as default
+  //         //     return totalPrice.toString();
+  //         //   }
+  //         // };
 
-//         // Update the getCollectibleAmount function to handle initialization better
-//         const getCollectibleAmount = (box: any, totalPrice: number) => {
-//           // If COD is not enabled, return empty string
-//           if (!orderData?.codInfo?.isCod) {
-//             return "";
-//           }
+  //         // Update the getCollectibleAmount function to handle initialization better
+  //         const getCollectibleAmount = (box: any, totalPrice: number) => {
+  //           // If COD is not enabled, return empty string
+  //           if (!orderData?.codInfo?.isCod) {
+  //             return "";
+  //           }
 
-//           // If manually edited, use the stored value
-//           if (box.codInfo?.isCollectibleManuallyEdited) {
-//             // Handle the case where collectableAmount might be 0 or empty string
-//             const storedAmount = box.codInfo?.collectableAmount;
-//             return storedAmount !== undefined && storedAmount !== null
-//               ? storedAmount.toString()
-//               : "";
-//           } else {
-//             // Use calculated total price as default
-//             return totalPrice.toString();
-//           }
-//         };
+  //           // If manually edited, use the stored value
+  //           if (box.codInfo?.isCollectibleManuallyEdited) {
+  //             // Handle the case where collectableAmount might be 0 or empty string
+  //             const storedAmount = box.codInfo?.collectableAmount;
+  //             return storedAmount !== undefined && storedAmount !== null
+  //               ? storedAmount.toString()
+  //               : "";
+  //           } else {
+  //             // Use calculated total price as default
+  //             return totalPrice.toString();
+  //           }
+  //         };
 
-//         const collectableAmount = getCollectibleAmount(box, totalPrice);
+  //         const collectableAmount = getCollectibleAmount(box, totalPrice);
 
-//         return (
-//           <Collapsible
-//             key={boxIndex}
-//             title={`Box ${boxIndex + 1}: ${box.name}`}
-//             defaultOpen={boxIndex === 0}
-//             className="border-2 border-gray-200"
-//             titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
-//             contentClassName="bg-white"
-//           >
-//             <div className="space-y-4 mt-4">
-//               {/* Box Details */}
-//               <div className="flex flex-col md:flex-row items-start gap-4">
-//                 <div
-//                   className="!w-full relative"
-//                   ref={(el) => {
-//                     const searchKey = `${boxIndex}`;
-//                     boxSearchRefs.current[searchKey] = el;
-//                   }}
-//                 >
-//                   <FloatingLabelInput
-//                     placeholder="Box Name"
-//                     value={(() => {
-//                       const searchKey = `${boxIndex}`;
-//                       return boxSearchQueries[searchKey] !== undefined
-//                         ? boxSearchQueries[searchKey]
-//                         : box.name || "";
-//                     })()}
-//                     // onChangeCallback={(value) =>
-//                     //   handleBoxNameSearch(boxIndex, value)
-//                     // }
-//                     onChangeCallback={(value) => {
-//                       handleBoxNameSearch(boxIndex, value);
-//                       clearValidationError("boxes", "name", boxIndex);
-//                     }}
-//                     onFocus={() => handleBoxSearchFocus(boxIndex)}
-//                     onBlur={() => handleBoxSearchBlur(boxIndex)}
-//                     readOnly={isEnabled}
-//                     icon={
-//                       boxSearchLoading[`${boxIndex}`] ? (
-//                         <LoadingIcon />
-//                       ) : (
-//                         <SearchIcon />
-//                       )
-//                     }
-//                     required
-//                     error={validationErrors.boxes[boxIndex]?.name}
-//                     errorMessage="Box name is required"
-//                   />
-//                   {renderBoxSearchResults(boxIndex)}
-//                 </div>
-//                 {!isEnabled && orderData?.boxInfo?.length > 1 && (
-//                   <div className="flex justify-end mb-4">
-//                     <button
-//                       onClick={() => deleteBox(boxIndex)}
-//                       className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
-//                       title="Delete Box"
-//                     >
-//                       <svg
-//                         width="24"
-//                         height="24"
-//                         viewBox="0 0 24 24"
-//                         fill="none"
-//                         stroke="currentColor"
-//                         strokeWidth="2"
-//                       >
-//                         <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-//                       </svg>
-//                     </button>
-//                   </div>
-//                 )}
-//               </div>
+  //         return (
+  //           <Collapsible
+  //             key={boxIndex}
+  //             title={`Box ${boxIndex + 1}: ${box.name}`}
+  //             defaultOpen={boxIndex === 0}
+  //             className="border-2 border-gray-200"
+  //             titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+  //             contentClassName="bg-white"
+  //           >
+  //             <div className="space-y-4 mt-4">
+  //               {/* Box Details */}
+  //               <div className="flex flex-col md:flex-row items-start gap-4">
+  //                 <div
+  //                   className="!w-full relative"
+  //                   ref={(el) => {
+  //                     const searchKey = `${boxIndex}`;
+  //                     boxSearchRefs.current[searchKey] = el;
+  //                   }}
+  //                 >
+  //                   <FloatingLabelInput
+  //                     placeholder="Box Name"
+  //                     value={(() => {
+  //                       const searchKey = `${boxIndex}`;
+  //                       return boxSearchQueries[searchKey] !== undefined
+  //                         ? boxSearchQueries[searchKey]
+  //                         : box.name || "";
+  //                     })()}
+  //                     // onChangeCallback={(value) =>
+  //                     //   handleBoxNameSearch(boxIndex, value)
+  //                     // }
+  //                     onChangeCallback={(value) => {
+  //                       handleBoxNameSearch(boxIndex, value);
+  //                       clearValidationError("boxes", "name", boxIndex);
+  //                     }}
+  //                     onFocus={() => handleBoxSearchFocus(boxIndex)}
+  //                     onBlur={() => handleBoxSearchBlur(boxIndex)}
+  //                     readOnly={isEnabled}
+  //                     icon={
+  //                       boxSearchLoading[`${boxIndex}`] ? (
+  //                         <LoadingIcon />
+  //                       ) : (
+  //                         <SearchIcon />
+  //                       )
+  //                     }
+  //                     required
+  //                     error={validationErrors.boxes[boxIndex]?.name}
+  //                     errorMessage="Box name is required"
+  //                   />
+  //                   {renderBoxSearchResults(boxIndex)}
+  //                 </div>
+  //                 {!isEnabled && orderData?.boxInfo?.length > 1 && (
+  //                   <div className="flex justify-end mb-4">
+  //                     <button
+  //                       onClick={() => deleteBox(boxIndex)}
+  //                       className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
+  //                       title="Delete Box"
+  //                     >
+  //                       <svg
+  //                         width="24"
+  //                         height="24"
+  //                         viewBox="0 0 24 24"
+  //                         fill="none"
+  //                         stroke="currentColor"
+  //                         strokeWidth="2"
+  //                       >
+  //                         <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+  //                       </svg>
+  //                     </button>
+  //                   </div>
+  //                 )}
+  //               </div>
 
-//               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
-//                 <FloatingLabelInput
-//                   placeholder="Weight (kg)"
-//                   type="number"
-//                   value={box.deadWeight?.toString() || ""}
-//                   onChangeCallback={(value) =>
-//                     updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
-//                   }
-//                   readOnly={isEnabled}
-//                 />
+  //               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
+  //                 <FloatingLabelInput
+  //                   placeholder="Weight (kg)"
+  //                   type="number"
+  //                   value={box.deadWeight?.toString() || ""}
+  //                   onChangeCallback={(value) =>
+  //                     updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
+  //                   }
+  //                   readOnly={isEnabled}
+  //                 />
 
-//                 <FloatingLabelInput
-//                   placeholder="L (cm)"
-//                   type="number"
-//                   value={box.length?.toString() || ""}
-//                   onChangeCallback={(value) => {
-//                     updateBox(boxIndex, "length", parseFloat(value) || 0);
-//                     clearValidationError("boxes", "length", boxIndex);
-//                   }}
-//                   required
-//                   readOnly={isEnabled}
-//                   error={validationErrors.boxes[boxIndex]?.length}
-//                   errorMessage="Length is required"
-//                 />
+  //                 <FloatingLabelInput
+  //                   placeholder="L (cm)"
+  //                   type="number"
+  //                   value={box.length?.toString() || ""}
+  //                   onChangeCallback={(value) => {
+  //                     updateBox(boxIndex, "length", parseFloat(value) || 0);
+  //                     clearValidationError("boxes", "length", boxIndex);
+  //                   }}
+  //                   required
+  //                   readOnly={isEnabled}
+  //                   error={validationErrors.boxes[boxIndex]?.length}
+  //                   errorMessage="Length is required"
+  //                 />
 
-//                 <FloatingLabelInput
-//                   placeholder="B (cm)"
-//                   type="number"
-//                   value={box.breadth?.toString() || ""}
-//                   onChangeCallback={(value) => {
-//                     updateBox(boxIndex, "breadth", parseFloat(value) || 0);
-//                     clearValidationError("boxes", "breadth", boxIndex);
-//                   }}
-//                   readOnly={isEnabled}
-//                   required
-//                   error={validationErrors.boxes[boxIndex]?.breadth}
-//                   errorMessage="Breadth is required"
-//                 />
+  //                 <FloatingLabelInput
+  //                   placeholder="B (cm)"
+  //                   type="number"
+  //                   value={box.breadth?.toString() || ""}
+  //                   onChangeCallback={(value) => {
+  //                     updateBox(boxIndex, "breadth", parseFloat(value) || 0);
+  //                     clearValidationError("boxes", "breadth", boxIndex);
+  //                   }}
+  //                   readOnly={isEnabled}
+  //                   required
+  //                   error={validationErrors.boxes[boxIndex]?.breadth}
+  //                   errorMessage="Breadth is required"
+  //                 />
 
-//                 <FloatingLabelInput
-//                   placeholder="H (cm)"
-//                   type="number"
-//                   value={box.height?.toString() || ""}
-//                   onChangeCallback={(value) => {
-//                     updateBox(boxIndex, "height", parseFloat(value) || 0);
-//                     clearValidationError("boxes", "height", boxIndex);
-//                   }}
-//                   readOnly={isEnabled}
-//                   required
-//                   error={validationErrors.boxes[boxIndex]?.height}
-//                   errorMessage="Height is required"
-//                 />
-//               </div>
+  //                 <FloatingLabelInput
+  //                   placeholder="H (cm)"
+  //                   type="number"
+  //                   value={box.height?.toString() || ""}
+  //                   onChangeCallback={(value) => {
+  //                     updateBox(boxIndex, "height", parseFloat(value) || 0);
+  //                     clearValidationError("boxes", "height", boxIndex);
+  //                   }}
+  //                   readOnly={isEnabled}
+  //                   required
+  //                   error={validationErrors.boxes[boxIndex]?.height}
+  //                   errorMessage="Height is required"
+  //                 />
+  //               </div>
 
-//               {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1  rounded-lg">
-//   <div className="relative">
-//     <FloatingLabelInput
-//       placeholder="Total Price (₹)"
-//       type="number"
-//       value={totalPrice.toFixed(2)}
-//       readOnly={true}
-//     />
-//   </div>
+  //               {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1  rounded-lg">
+  //   <div className="relative">
+  //     <FloatingLabelInput
+  //       placeholder="Total Price (₹)"
+  //       type="number"
+  //       value={totalPrice.toFixed(2)}
+  //       readOnly={true}
+  //     />
+  //   </div>
 
-//   {orderData?.codInfo?.isCod && (
-//     <FloatingLabelInput
-//       placeholder="Collectible Amount (₹)"
-//       type="number"
-//       value={getCollectibleAmount(box, totalPrice)}
-//       onChangeCallback={(value) => {
-//         // Allow empty string or convert to number
-//         const numericValue =
-//           value === "" ? "" : parseFloat(value) || 0;
-//         updateBox(boxIndex, "collectableAmount", numericValue);
-//       }}
-//       readOnly={isEnabled}
-//     />
-//   )}
-// </div> */}
+  //   {orderData?.codInfo?.isCod && (
+  //     <FloatingLabelInput
+  //       placeholder="Collectible Amount (₹)"
+  //       type="number"
+  //       value={getCollectibleAmount(box, totalPrice)}
+  //       onChangeCallback={(value) => {
+  //         // Allow empty string or convert to number
+  //         const numericValue =
+  //           value === "" ? "" : parseFloat(value) || 0;
+  //         updateBox(boxIndex, "collectableAmount", numericValue);
+  //       }}
+  //       readOnly={isEnabled}
+  //     />
+  //   )}
+  // </div> */}
 
-//               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
-//                 {/* Quantity Input */}
-//                 <FloatingLabelInput
-//                   placeholder="Quantity"
-//                   type="number"
-//                   value={box.qty?.toString() || ""}
-//                   onChangeCallback={(value) => {
-//                     updateBox(boxIndex, "qty", parseFloat(value) || 0);
-//                   }}
-//                   readOnly={
-//                     isEnabled || !isProductEditingAllowed || !isNotApiSource
-//                   }
-//                   required
-//                 />
+  //               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
+  //                 {/* Quantity Input */}
+  //                 <FloatingLabelInput
+  //                   placeholder="Quantity"
+  //                   type="number"
+  //                   value={box.qty?.toString() || ""}
+  //                   onChangeCallback={(value) => {
+  //                     updateBox(boxIndex, "qty", parseFloat(value) || 0);
+  //                   }}
+  //                   readOnly={
+  //                     isEnabled || !isProductEditingAllowed || !isNotApiSource
+  //                   }
+  //                   required
+  //                 />
 
-//                 {/* Collectible Amount (Editable) */}
-//                 {orderData?.codInfo?.isCod && (
-//                   <FloatingLabelInput
-//                     placeholder="Collectible Amount (₹)"
-//                     type="number"
-//                     value={getCollectibleAmount(box, totalPrice)}
-//                     onChangeCallback={(value) => {
-//                       // Allow empty string or convert to number
-//                       const numericValue =
-//                         value === "" ? "" : parseFloat(value) || 0;
-//                       updateBox(boxIndex, "collectableAmount", numericValue);
-//                     }}
-//                     readOnly={isEnabled}
-//                   />
-//                 )}
-//               </div>
+  //                 {/* Collectible Amount (Editable) */}
+  //                 {orderData?.codInfo?.isCod && (
+  //                   <FloatingLabelInput
+  //                     placeholder="Collectible Amount (₹)"
+  //                     type="number"
+  //                     value={getCollectibleAmount(box, totalPrice)}
+  //                     onChangeCallback={(value) => {
+  //                       // Allow empty string or convert to number
+  //                       const numericValue =
+  //                         value === "" ? "" : parseFloat(value) || 0;
+  //                       updateBox(boxIndex, "collectableAmount", numericValue);
+  //                     }}
+  //                     readOnly={isEnabled}
+  //                   />
+  //                 )}
+  //               </div>
 
-//               {/* Total Price row - moved below */}
-//               <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
-//                 <div className="relative">
-//                   <FloatingLabelInput
-//                     placeholder="Total Price (₹)"
-//                     type="number"
-//                     value={totalPrice.toFixed(2)}
-//                     readOnly={true}
-//                   />
-//                 </div>
-//               </div>
+  //               {/* Total Price row - moved below */}
+  //               <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
+  //                 <div className="relative">
+  //                   <FloatingLabelInput
+  //                     placeholder="Total Price (₹)"
+  //                     type="number"
+  //                     value={totalPrice.toFixed(2)}
+  //                     readOnly={true}
+  //                   />
+  //                 </div>
+  //               </div>
 
-//               {/* Products Section */}
-//               {box.products && box.products.length > 0 && (
-//                 <div className="space-y-3">
-//                   <div className="space-y-2 mb-2">
-//                     {box.products.map((product: any, productIndex: number) => (
-//                       <Collapsible
-//                         key={`${boxIndex}-${productIndex}`}
-//                         title={`Product ${productIndex + 1}: ${
-//                           product.name || "Unnamed Product"
-//                         }`}
-//                         defaultOpen={false}
-//                         className="border border-gray-300 !shadow-none"
-//                         titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
-//                         contentClassName="bg-gray-50 !shadow-none"
-//                       >
-//                         <div className="p-4 space-y-4">
-//                           {/* Product Name with Search */}
-//                           <div className="flex items-start gap-x-4">
-//                             <div
-//                               className="flex-1 relative"
-//                               ref={(el) => {
-//                                 const searchKey = `${boxIndex}-${productIndex}`;
-//                                 productSearchRefs.current[searchKey] = el;
-//                               }}
-//                             >
-//                               {/* <FloatingLabelInput
-//                                 placeholder="Product Name"
-//                                 value={(() => {
-//                                   const searchKey = `${boxIndex}-${productIndex}`;
-//                                   return productSearchQueries[searchKey] !==
-//                                     undefined
-//                                     ? productSearchQueries[searchKey]
-//                                     : product.name || "";
-//                                 })()}
-//                                 onChangeCallback={(value) => {
-//                                   handleProductNameSearch(
-//                                     boxIndex,
-//                                     productIndex,
-//                                     value
-//                                   );
-//                                   clearValidationError(
-//                                     "products",
-//                                     "name",
-//                                     boxIndex,
-//                                     productIndex
-//                                   );
-//                                 }}
-//                                 onFocus={() =>
-//                                   handleProductSearchFocus(
-//                                     boxIndex,
-//                                     productIndex
-//                                   )
-//                                 }
-//                                 onBlur={() =>
-//                                   handleProductSearchBlur(
-//                                     boxIndex,
-//                                     productIndex
-//                                   )
-//                                 }
-//                                 readOnly={isEnabled || !isProductEditingAllowed}
-//                                 icon={
-//                                   productSearchLoading[
-//                                     `${boxIndex}-${productIndex}`
-//                                   ] ? (
-//                                     <LoadingIcon />
-//                                   ) : (
-//                                     <SearchIcon />
-//                                   )
-//                                 }
-//                                 required
-//                                 error={
-//                                   validationErrors.products[
-//                                     `${boxIndex}-${productIndex}`
-//                                   ]?.name
-//                                 }
-//                                 errorMessage="Product name is required"
-//                               /> */}
-//                               <FloatingLabelInput
-//                                 placeholder="Product Name"
-//                                 value={(() => {
-//                                   // For restricted sources, show only the product name without search query
-//                                   if (!isProductEditingAllowed) {
-//                                     return product.name || "";
-//                                   }
-//                                   const searchKey = `${boxIndex}-${productIndex}`;
-//                                   return productSearchQueries[searchKey] !==
-//                                     undefined
-//                                     ? productSearchQueries[searchKey]
-//                                     : product.name || "";
-//                                 })()}
-//                                 onChangeCallback={(value) => {
-//                                   if (isProductEditingAllowed) {
-//                                     handleProductNameSearch(
-//                                       boxIndex,
-//                                       productIndex,
-//                                       value
-//                                     );
-//                                     clearValidationError(
-//                                       "products",
-//                                       "name",
-//                                       boxIndex,
-//                                       productIndex
-//                                     );
-//                                   }
-//                                 }}
-//                                 onFocus={() =>
-//                                   isProductEditingAllowed
-//                                     ? handleProductSearchFocus(
-//                                         boxIndex,
-//                                         productIndex
-//                                       )
-//                                     : null
-//                                 }
-//                                 onBlur={() =>
-//                                   isProductEditingAllowed
-//                                     ? handleProductSearchBlur(
-//                                         boxIndex,
-//                                         productIndex
-//                                       )
-//                                     : null
-//                                 }
-//                                 readOnly={isEnabled || !isProductEditingAllowed} // Update readonly condition
-//                                 icon={
-//                                   // Hide search icon for restricted sources
-//                                   !isProductEditingAllowed ? null : productSearchLoading[
-//                                       `${boxIndex}-${productIndex}`
-//                                     ] ? (
-//                                     <LoadingIcon />
-//                                   ) : (
-//                                     <SearchIcon />
-//                                   )
-//                                 }
-//                                 required
-//                                 error={
-//                                   validationErrors.products[
-//                                     `${boxIndex}-${productIndex}`
-//                                   ]?.name
-//                                 }
-//                                 errorMessage="Product name is required"
-//                               />
-//                               {renderProductSearchResults &&
-//                                 renderProductSearchResults(
-//                                   boxIndex,
-//                                   productIndex
-//                                 )}
-//                             </div>
+  //               {/* Products Section */}
+  //               {box.products && box.products.length > 0 && (
+  //                 <div className="space-y-3">
+  //                   <div className="space-y-2 mb-2">
+  //                     {box.products.map((product: any, productIndex: number) => (
+  //                       <Collapsible
+  //                         key={`${boxIndex}-${productIndex}`}
+  //                         title={`Product ${productIndex + 1}: ${
+  //                           product.name || "Unnamed Product"
+  //                         }`}
+  //                         defaultOpen={false}
+  //                         className="border border-gray-300 !shadow-none"
+  //                         titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+  //                         contentClassName="bg-gray-50 !shadow-none"
+  //                       >
+  //                         <div className="p-4 space-y-4">
+  //                           {/* Product Name with Search */}
+  //                           <div className="flex items-start gap-x-4">
+  //                             <div
+  //                               className="flex-1 relative"
+  //                               ref={(el) => {
+  //                                 const searchKey = `${boxIndex}-${productIndex}`;
+  //                                 productSearchRefs.current[searchKey] = el;
+  //                               }}
+  //                             >
+  //                               {/* <FloatingLabelInput
+  //                                 placeholder="Product Name"
+  //                                 value={(() => {
+  //                                   const searchKey = `${boxIndex}-${productIndex}`;
+  //                                   return productSearchQueries[searchKey] !==
+  //                                     undefined
+  //                                     ? productSearchQueries[searchKey]
+  //                                     : product.name || "";
+  //                                 })()}
+  //                                 onChangeCallback={(value) => {
+  //                                   handleProductNameSearch(
+  //                                     boxIndex,
+  //                                     productIndex,
+  //                                     value
+  //                                   );
+  //                                   clearValidationError(
+  //                                     "products",
+  //                                     "name",
+  //                                     boxIndex,
+  //                                     productIndex
+  //                                   );
+  //                                 }}
+  //                                 onFocus={() =>
+  //                                   handleProductSearchFocus(
+  //                                     boxIndex,
+  //                                     productIndex
+  //                                   )
+  //                                 }
+  //                                 onBlur={() =>
+  //                                   handleProductSearchBlur(
+  //                                     boxIndex,
+  //                                     productIndex
+  //                                   )
+  //                                 }
+  //                                 readOnly={isEnabled || !isProductEditingAllowed}
+  //                                 icon={
+  //                                   productSearchLoading[
+  //                                     `${boxIndex}-${productIndex}`
+  //                                   ] ? (
+  //                                     <LoadingIcon />
+  //                                   ) : (
+  //                                     <SearchIcon />
+  //                                   )
+  //                                 }
+  //                                 required
+  //                                 error={
+  //                                   validationErrors.products[
+  //                                     `${boxIndex}-${productIndex}`
+  //                                   ]?.name
+  //                                 }
+  //                                 errorMessage="Product name is required"
+  //                               /> */}
+  //                               <FloatingLabelInput
+  //                                 placeholder="Product Name"
+  //                                 value={(() => {
+  //                                   // For restricted sources, show only the product name without search query
+  //                                   if (!isProductEditingAllowed) {
+  //                                     return product.name || "";
+  //                                   }
+  //                                   const searchKey = `${boxIndex}-${productIndex}`;
+  //                                   return productSearchQueries[searchKey] !==
+  //                                     undefined
+  //                                     ? productSearchQueries[searchKey]
+  //                                     : product.name || "";
+  //                                 })()}
+  //                                 onChangeCallback={(value) => {
+  //                                   if (isProductEditingAllowed) {
+  //                                     handleProductNameSearch(
+  //                                       boxIndex,
+  //                                       productIndex,
+  //                                       value
+  //                                     );
+  //                                     clearValidationError(
+  //                                       "products",
+  //                                       "name",
+  //                                       boxIndex,
+  //                                       productIndex
+  //                                     );
+  //                                   }
+  //                                 }}
+  //                                 onFocus={() =>
+  //                                   isProductEditingAllowed
+  //                                     ? handleProductSearchFocus(
+  //                                         boxIndex,
+  //                                         productIndex
+  //                                       )
+  //                                     : null
+  //                                 }
+  //                                 onBlur={() =>
+  //                                   isProductEditingAllowed
+  //                                     ? handleProductSearchBlur(
+  //                                         boxIndex,
+  //                                         productIndex
+  //                                       )
+  //                                     : null
+  //                                 }
+  //                                 readOnly={isEnabled || !isProductEditingAllowed} // Update readonly condition
+  //                                 icon={
+  //                                   // Hide search icon for restricted sources
+  //                                   !isProductEditingAllowed ? null : productSearchLoading[
+  //                                       `${boxIndex}-${productIndex}`
+  //                                     ] ? (
+  //                                     <LoadingIcon />
+  //                                   ) : (
+  //                                     <SearchIcon />
+  //                                   )
+  //                                 }
+  //                                 required
+  //                                 error={
+  //                                   validationErrors.products[
+  //                                     `${boxIndex}-${productIndex}`
+  //                                   ]?.name
+  //                                 }
+  //                                 errorMessage="Product name is required"
+  //                               />
+  //                               {renderProductSearchResults &&
+  //                                 renderProductSearchResults(
+  //                                   boxIndex,
+  //                                   productIndex
+  //                                 )}
+  //                             </div>
 
-//                             {!isEnabled &&
-//                               box.products.length > 1 &&
-//                               isProductEditingAllowed && (
-//                                 <button
-//                                   onClick={() =>
-//                                     deleteProduct(boxIndex, productIndex)
-//                                   }
-//                                   className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
-//                                   title="Delete Product"
-//                                 >
-//                                   <svg
-//                                     width="16"
-//                                     height="16"
-//                                     viewBox="0 0 24 24"
-//                                     fill="none"
-//                                     stroke="currentColor"
-//                                     strokeWidth="2"
-//                                   >
-//                                     <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-//                                   </svg>
-//                                 </button>
-//                               )}
-//                           </div>
+  //                             {!isEnabled &&
+  //                               box.products.length > 1 &&
+  //                               isProductEditingAllowed && (
+  //                                 <button
+  //                                   onClick={() =>
+  //                                     deleteProduct(boxIndex, productIndex)
+  //                                   }
+  //                                   className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+  //                                   title="Delete Product"
+  //                                 >
+  //                                   <svg
+  //                                     width="16"
+  //                                     height="16"
+  //                                     viewBox="0 0 24 24"
+  //                                     fill="none"
+  //                                     stroke="currentColor"
+  //                                     strokeWidth="2"
+  //                                   >
+  //                                     <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+  //                                   </svg>
+  //                                 </button>
+  //                               )}
+  //                           </div>
 
-//                           {/* Row 2: Qty and Unit Weight */}
-//                           <div className="grid grid-cols-2 gap-4">
-//                             <FloatingLabelInput
-//                               placeholder="Qty"
-//                               type="number"
-//                               value={product.qty?.toString() || ""}
-//                               onChangeCallback={(value) => {
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "qty",
-//                                   parseFloat(value) || 0
-//                                 );
-//                                 clearValidationError(
-//                                   "products",
-//                                   "qty",
-//                                   boxIndex,
-//                                   productIndex
-//                                 );
-//                               }}
-//                               readOnly={
-//                                 isEnabled ||
-//                                 !isProductEditingAllowed ||
-//                                 !isNotApiSource
-//                               }
-//                               required
-//                               error={
-//                                 validationErrors.products[
-//                                   `${boxIndex}-${productIndex}`
-//                                 ]?.qty
-//                               }
-//                               errorMessage="Quantity is required"
-//                             />
-//                             <FloatingLabelInput
-//                               placeholder="Unit Weight"
-//                               type="number"
-//                               value={product.deadWeight?.toString() || ""}
-//                               onChangeCallback={(value) => {
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "deadWeight",
-//                                   parseFloat(value) || 0
-//                                 );
-//                                 clearValidationError(
-//                                   "products",
-//                                   "deadWeight",
-//                                   boxIndex,
-//                                   productIndex
-//                                 );
-//                               }}
-//                               readOnly={isEnabled}
-//                               required
-//                               error={
-//                                 validationErrors.products[
-//                                   `${boxIndex}-${productIndex}`
-//                                 ]?.deadWeight
-//                               }
-//                               errorMessage="Unit weight is required"
-//                             />
-//                           </div>
+  //                           {/* Row 2: Qty and Unit Weight */}
+  //                           <div className="grid grid-cols-2 gap-4">
+  //                             <FloatingLabelInput
+  //                               placeholder="Qty"
+  //                               type="number"
+  //                               value={product.qty?.toString() || ""}
+  //                               onChangeCallback={(value) => {
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "qty",
+  //                                   parseFloat(value) || 0
+  //                                 );
+  //                                 clearValidationError(
+  //                                   "products",
+  //                                   "qty",
+  //                                   boxIndex,
+  //                                   productIndex
+  //                                 );
+  //                               }}
+  //                               readOnly={
+  //                                 isEnabled ||
+  //                                 !isProductEditingAllowed ||
+  //                                 !isNotApiSource
+  //                               }
+  //                               required
+  //                               error={
+  //                                 validationErrors.products[
+  //                                   `${boxIndex}-${productIndex}`
+  //                                 ]?.qty
+  //                               }
+  //                               errorMessage="Quantity is required"
+  //                             />
+  //                             <FloatingLabelInput
+  //                               placeholder="Unit Weight"
+  //                               type="number"
+  //                               value={product.deadWeight?.toString() || ""}
+  //                               onChangeCallback={(value) => {
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "deadWeight",
+  //                                   parseFloat(value) || 0
+  //                                 );
+  //                                 clearValidationError(
+  //                                   "products",
+  //                                   "deadWeight",
+  //                                   boxIndex,
+  //                                   productIndex
+  //                                 );
+  //                               }}
+  //                               readOnly={isEnabled}
+  //                               required
+  //                               error={
+  //                                 validationErrors.products[
+  //                                   `${boxIndex}-${productIndex}`
+  //                                 ]?.deadWeight
+  //                               }
+  //                               errorMessage="Unit weight is required"
+  //                             />
+  //                           </div>
 
-//                           {/* Row 3: Unit Price and Dimensions */}
-//                           <div className="grid grid-cols-4 gap-4">
-//                             <FloatingLabelInput
-//                               placeholder="Unit Price"
-//                               type="number"
-//                               value={product.unitPrice?.toString() || ""}
-//                               // onChangeCallback={(value) => {
-//                               //   updateProduct(
-//                               //     boxIndex,
-//                               //     productIndex,
-//                               //     "unitPrice",
-//                               //     parseFloat(value) || 0
-//                               //   );
-//                               //   clearValidationError(
-//                               //     "products",
-//                               //     "unitPrice",
-//                               //     boxIndex,
-//                               //     productIndex
-//                               //   );
-//                               // }}
-//                                onChangeCallback={(value) => {
-//     updateProduct(
-//       boxIndex,
-//       productIndex,
-//       "unitPrice",
-//       parseFloat(value) || 0
-//     );
-//     clearValidationError(
-//       "products",
-//       "unitPrice",
-//       boxIndex,
-//       productIndex
-//     );
-//   }}
-//                               readOnly={
-//                                 isEnabled ||
-//                                 !isProductEditingAllowed ||
-//                                 !isNotApiSource
-//                               }
-//                               // required
-//                               // error={
-//                               //   validationErrors.products[
-//                               //     `${boxIndex}-${productIndex}`
-//                               //   ]?.unitPrice
-//                               // }
-//                               // errorMessage="Unit price is required"
+  //                           {/* Row 3: Unit Price and Dimensions */}
+  //                           <div className="grid grid-cols-4 gap-4">
+  //                             <FloatingLabelInput
+  //                               placeholder="Unit Price"
+  //                               type="number"
+  //                               value={product.unitPrice?.toString() || ""}
+  //                               // onChangeCallback={(value) => {
+  //                               //   updateProduct(
+  //                               //     boxIndex,
+  //                               //     productIndex,
+  //                               //     "unitPrice",
+  //                               //     parseFloat(value) || 0
+  //                               //   );
+  //                               //   clearValidationError(
+  //                               //     "products",
+  //                               //     "unitPrice",
+  //                               //     boxIndex,
+  //                               //     productIndex
+  //                               //   );
+  //                               // }}
+  //                                onChangeCallback={(value) => {
+  //     updateProduct(
+  //       boxIndex,
+  //       productIndex,
+  //       "unitPrice",
+  //       parseFloat(value) || 0
+  //     );
+  //     clearValidationError(
+  //       "products",
+  //       "unitPrice",
+  //       boxIndex,
+  //       productIndex
+  //     );
+  //   }}
+  //                               readOnly={
+  //                                 isEnabled ||
+  //                                 !isProductEditingAllowed ||
+  //                                 !isNotApiSource
+  //                               }
+  //                               // required
+  //                               // error={
+  //                               //   validationErrors.products[
+  //                               //     `${boxIndex}-${productIndex}`
+  //                               //   ]?.unitPrice
+  //                               // }
+  //                               // errorMessage="Unit price is required"
 
-//                                required={orderData?.codInfo?.isCod}
-//   error={
-//     validationErrors.products[
-//       `${boxIndex}-${productIndex}`
-//     ]?.unitPrice
-//   }
-//   errorMessage="Unit price is required for COD orders"
-//                             />
-//                             <FloatingLabelInput
-//                               placeholder="L(cm)"
-//                               type="number"
-//                               value={product.length?.toString() || ""}
-//                               onChangeCallback={(value) =>
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "length",
-//                                   parseFloat(value) || 0
-//                                 )
-//                               }
-//                               readOnly={isEnabled}
-//                             />
-//                             <FloatingLabelInput
-//                               placeholder="B(cm)"
-//                               type="number"
-//                               value={product.breadth?.toString() || ""}
-//                               onChangeCallback={(value) =>
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "breadth",
-//                                   parseFloat(value) || 0
-//                                 )
-//                               }
-//                               readOnly={isEnabled}
-//                             />
-//                             <FloatingLabelInput
-//                               placeholder="H(cm)"
-//                               type="number"
-//                               value={product.height?.toString() || ""}
-//                               onChangeCallback={(value) =>
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "height",
-//                                   parseFloat(value) || 0
-//                                 )
-//                               }
-//                               readOnly={isEnabled}
-//                             />
-//                           </div>
+  //                                required={orderData?.codInfo?.isCod}
+  //   error={
+  //     validationErrors.products[
+  //       `${boxIndex}-${productIndex}`
+  //     ]?.unitPrice
+  //   }
+  //   errorMessage="Unit price is required for COD orders"
+  //                             />
+  //                             <FloatingLabelInput
+  //                               placeholder="L(cm)"
+  //                               type="number"
+  //                               value={product.length?.toString() || ""}
+  //                               onChangeCallback={(value) =>
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "length",
+  //                                   parseFloat(value) || 0
+  //                                 )
+  //                               }
+  //                               readOnly={isEnabled}
+  //                             />
+  //                             <FloatingLabelInput
+  //                               placeholder="B(cm)"
+  //                               type="number"
+  //                               value={product.breadth?.toString() || ""}
+  //                               onChangeCallback={(value) =>
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "breadth",
+  //                                   parseFloat(value) || 0
+  //                                 )
+  //                               }
+  //                               readOnly={isEnabled}
+  //                             />
+  //                             <FloatingLabelInput
+  //                               placeholder="H(cm)"
+  //                               type="number"
+  //                               value={product.height?.toString() || ""}
+  //                               onChangeCallback={(value) =>
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "height",
+  //                                   parseFloat(value) || 0
+  //                                 )
+  //                               }
+  //                               readOnly={isEnabled}
+  //                             />
+  //                           </div>
 
-//                           {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
-//                           <div className="grid grid-cols-2 gap-4">
-//                             <div className="relative">
-//                               <FloatingLabelInput
-//                                 placeholder="Total Weight (kg)"
-//                                 type="number"
-//                                 value={(
-//                                   (product.qty || 0) * (product.deadWeight || 0)
-//                                 ).toFixed(2)}
-//                                 readOnly
-//                               />
-//                             </div>
-//                             <div className="relative">
-//                               <FloatingLabelInput
-//                                 placeholder="Total Price"
-//                                 type="number"
-//                                 value={(
-//                                   (product.qty || 0) * (product.unitPrice || 0)
-//                                 ).toFixed(2)}
-//                                 readOnly
-//                               />
-//                             </div>
-//                           </div>
+  //                           {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
+  //                           <div className="grid grid-cols-2 gap-4">
+  //                             <div className="relative">
+  //                               <FloatingLabelInput
+  //                                 placeholder="Total Weight (kg)"
+  //                                 type="number"
+  //                                 value={(
+  //                                   (product.qty || 0) * (product.deadWeight || 0)
+  //                                 ).toFixed(2)}
+  //                                 readOnly
+  //                               />
+  //                             </div>
+  //                             <div className="relative">
+  //                               <FloatingLabelInput
+  //                                 placeholder="Total Price"
+  //                                 type="number"
+  //                                 value={(
+  //                                   (product.qty || 0) * (product.unitPrice || 0)
+  //                                 ).toFixed(2)}
+  //                                 readOnly
+  //                               />
+  //                             </div>
+  //                           </div>
 
-//                           {/* Row 5: SKU and HSN */}
-//                           <div className="grid grid-cols-2 gap-4">
-//                             <FloatingLabelInput
-//                               placeholder="SKU"
-//                               value={product.sku || ""}
-//                               onChangeCallback={(value) =>
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "sku",
-//                                   value
-//                                 )
-//                               }
-//                               readOnly={isEnabled || !isProductEditingAllowed}
-//                             />
-//                             <FloatingLabelInput
-//                               placeholder="HSN"
-//                               value={product.hsnCode || ""}
-//                               onChangeCallback={(value) =>
-//                                 updateProduct(
-//                                   boxIndex,
-//                                   productIndex,
-//                                   "hsnCode",
-//                                   value
-//                                 )
-//                               }
-//                               readOnly={isEnabled || !isProductEditingAllowed}
-//                             />
-//                           </div>
-//                         </div>
-//                       </Collapsible>
-//                     ))}
-//                     <div>
-//                       {!isEnabled &&
-//                         isProductEditingAllowed &&
-//                         isNotApiSource && (
-//                           <OneButton
-//                             text="Add Product"
-//                             onClick={() => addProduct(boxIndex)}
-//                             variant="secondary"
-//                             className="!rounded-full"
-//                           />
-//                         )}
-//                     </div>
-//                   </div>
-//                 </div>
-//               )}
+  //                           {/* Row 5: SKU and HSN */}
+  //                           <div className="grid grid-cols-2 gap-4">
+  //                             <FloatingLabelInput
+  //                               placeholder="SKU"
+  //                               value={product.sku || ""}
+  //                               onChangeCallback={(value) =>
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "sku",
+  //                                   value
+  //                                 )
+  //                               }
+  //                               readOnly={isEnabled || !isProductEditingAllowed}
+  //                             />
+  //                             <FloatingLabelInput
+  //                               placeholder="HSN"
+  //                               value={product.hsnCode || ""}
+  //                               onChangeCallback={(value) =>
+  //                                 updateProduct(
+  //                                   boxIndex,
+  //                                   productIndex,
+  //                                   "hsnCode",
+  //                                   value
+  //                                 )
+  //                               }
+  //                               readOnly={isEnabled || !isProductEditingAllowed}
+  //                             />
+  //                           </div>
+  //                         </div>
+  //                       </Collapsible>
+  //                     ))}
+  //                     <div>
+  //                       {!isEnabled &&
+  //                         isProductEditingAllowed &&
+  //                         isNotApiSource && (
+  //                           <OneButton
+  //                             text="Add Product"
+  //                             onClick={() => addProduct(boxIndex)}
+  //                             variant="secondary"
+  //                             className="!rounded-full"
+  //                           />
+  //                         )}
+  //                     </div>
+  //                   </div>
+  //                 </div>
+  //               )}
 
-//               {/* If no products, show add product button */}
-//               {(!box.products || box.products.length === 0) && !isEnabled && (
-//                 <div className="flex justify-center">
-//                   <OneButton
-//                     text="Add Product"
-//                     onClick={() => addProduct(boxIndex)}
-//                     variant="secondary"
-//                     className="!rounded-full"
-//                   />
-//                 </div>
-//               )}
-//             </div>
-//           </Collapsible>
-//         );
-//       })}
+  //               {/* If no products, show add product button */}
+  //               {(!box.products || box.products.length === 0) && !isEnabled && (
+  //                 <div className="flex justify-center">
+  //                   <OneButton
+  //                     text="Add Product"
+  //                     onClick={() => addProduct(boxIndex)}
+  //                     variant="secondary"
+  //                     className="!rounded-full"
+  //                   />
+  //                 </div>
+  //               )}
+  //             </div>
+  //           </Collapsible>
+  //         );
+  //       })}
 
-//       {/* Add Box Button */}
-//       {!isEnabled && isProductEditingAllowed && isNotApiSource && (
-//         <div className="flex justify-center mb-2 !w-full">
-//           <OneButton
-//             text="Add Box"
-//             onClick={addBox}
-//             variant="secondary"
-//             className="!rounded-full !w-full"
-//           />
-//         </div>
-//       )}
-//     </div>
-//   );
+  //       {/* Add Box Button */}
+  //       {!isEnabled && isProductEditingAllowed && isNotApiSource && (
+  //         <div className="flex justify-center mb-2 !w-full">
+  //           <OneButton
+  //             text="Add Box"
+  //             onClick={addBox}
+  //             variant="secondary"
+  //             className="!rounded-full !w-full"
+  //           />
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
 
   const renderBoxAndProducts = () => (
-  <div className="space-y-4 p-4">
-    {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
-      const baseBoxPrice = getBoxInvoiceValue(box, orderData?.source || "");
-      const totalPrice = calculateBoxTotalPrice(box);
+    <div className="space-y-4 p-4">
+      {orderData?.boxInfo?.map((box: any, boxIndex: number) => {
+        const baseBoxPrice = getBoxInvoiceValue(box, orderData?.source || "");
+        const totalPrice = calculateBoxTotalPrice(box);
 
-      // Update the getCollectibleAmount function to handle initialization better
-      const getCollectibleAmount = (box: any, totalPrice: number) => {
-        // If COD is not enabled, return empty string
-        if (!orderData?.codInfo?.isCod) {
-          return "";
-        }
+        // Update the getCollectibleAmount function to handle initialization better
+        const getCollectibleAmount = (box: any, totalPrice: number) => {
+          // If COD is not enabled, return empty string
+          if (!orderData?.codInfo?.isCod) {
+            return "";
+          }
 
-        // If manually edited, use the stored value
-        if (box.codInfo?.isCollectibleManuallyEdited) {
-          // Handle the case where collectableAmount might be 0 or empty string
-          const storedAmount = box.codInfo?.collectableAmount;
-          return storedAmount !== undefined && storedAmount !== null
-            ? storedAmount.toString()
-            : "";
-        } else {
-          // Use calculated total price as default
-          return totalPrice.toString();
-        }
-      };
+          // If manually edited, use the stored value
+          if (box.codInfo?.isCollectibleManuallyEdited) {
+            // Handle the case where collectableAmount might be 0 or empty string
+            const storedAmount = box.codInfo?.collectableAmount;
+            return storedAmount !== undefined && storedAmount !== null
+              ? storedAmount.toString()
+              : "";
+          } else {
+            // Use calculated total price as default
+            return totalPrice.toString();
+          }
+        };
 
-      const collectableAmount = getCollectibleAmount(box, totalPrice);
+        const collectableAmount = getCollectibleAmount(box, totalPrice);
 
-      return (
-        <Collapsible
-          key={boxIndex}
-          title={`Box ${boxIndex + 1}: ${box.name}`}
-          defaultOpen={boxIndex === 0}
-          className="border-2 border-gray-200"
-          titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
-          contentClassName="bg-white"
-        >
-          <div className="space-y-4 mt-4">
-            {/* Box Details */}
-            <div className="flex flex-col md:flex-row items-start gap-4">
-              <div
-                className="!w-full relative"
-                ref={(el) => {
-                  const searchKey = `${boxIndex}`;
-                  boxSearchRefs.current[searchKey] = el;
-                }}
-              >
-                <FloatingLabelInput
-                  placeholder="Box Name"
-                  value={(() => {
+        return (
+          <Collapsible
+            key={boxIndex}
+            title={`Box ${boxIndex + 1}: ${box.name}`}
+            defaultOpen={boxIndex === 0}
+            className="border-2 border-gray-200"
+            titleClassName="bg-gray-50 hover:bg-gray-100 transition-colors"
+            contentClassName="bg-white"
+          >
+            <div className="space-y-4 mt-4">
+              {/* Box Details */}
+              <div className="flex flex-col md:flex-row items-start gap-4">
+                <div
+                  className="!w-full relative"
+                  ref={(el) => {
                     const searchKey = `${boxIndex}`;
-                    return boxSearchQueries[searchKey] !== undefined
-                      ? boxSearchQueries[searchKey]
-                      : box.name || "";
-                  })()}
-                  onChangeCallback={(value) => {
-                    handleBoxNameSearch(boxIndex, value);
-                    clearValidationError("boxes", "name", boxIndex);
+                    boxSearchRefs.current[searchKey] = el;
                   }}
-                  onFocus={() => handleBoxSearchFocus(boxIndex)}
-                  onBlur={() => handleBoxSearchBlur(boxIndex)}
-                  readOnly={isEnabled}
-                  icon={
-                    boxSearchLoading[`${boxIndex}`] ? (
-                      <LoadingIcon />
-                    ) : (
-                      <SearchIcon />
-                    )
-                  }
-                  required
-                  error={validationErrors.boxes[boxIndex]?.name}
-                  errorMessage="Box name is required"
-                />
-                {renderBoxSearchResults(boxIndex)}
-              </div>
-              {!isEnabled && orderData?.boxInfo?.length > 1 && (
-                <div className="flex justify-end mb-4">
-                  <button
-                    onClick={() => deleteBox(boxIndex)}
-                    className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
-                    title="Delete Box"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-                    </svg>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Box Dimensions */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
-              <FloatingLabelInput
-                placeholder="Weight (kg)"
-                type="number"
-                value={box.deadWeight?.toString() || ""}
-                onChangeCallback={(value) =>
-                  updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
-                }
-                readOnly={isEnabled}
-              />
-
-              <FloatingLabelInput
-                placeholder="L (cm)"
-                type="number"
-                value={box.length?.toString() || ""}
-                onChangeCallback={(value) => {
-                  updateBox(boxIndex, "length", parseFloat(value) || 0);
-                  clearValidationError("boxes", "length", boxIndex);
-                }}
-                required
-                readOnly={isEnabled}
-                error={validationErrors.boxes[boxIndex]?.length}
-                errorMessage="Length is required"
-              />
-
-              <FloatingLabelInput
-                placeholder="B (cm)"
-                type="number"
-                value={box.breadth?.toString() || ""}
-                onChangeCallback={(value) => {
-                  updateBox(boxIndex, "breadth", parseFloat(value) || 0);
-                  clearValidationError("boxes", "breadth", boxIndex);
-                }}
-                readOnly={isEnabled}
-                required
-                error={validationErrors.boxes[boxIndex]?.breadth}
-                errorMessage="Breadth is required"
-              />
-
-              <FloatingLabelInput
-                placeholder="H (cm)"
-                type="number"
-                value={box.height?.toString() || ""}
-                onChangeCallback={(value) => {
-                  updateBox(boxIndex, "height", parseFloat(value) || 0);
-                  clearValidationError("boxes", "height", boxIndex);
-                }}
-                readOnly={isEnabled}
-                required
-                error={validationErrors.boxes[boxIndex]?.height}
-                errorMessage="Height is required"
-              />
-            </div>
-
-            {/* Box Quantity and Collectible Amount */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
-              {/* Box Quantity Input - Enhanced for B2B */}
-              <div className="relative">
-                <FloatingLabelInput
-                  placeholder={
-                    orderData?.orderType === "B2B" 
-                      ? `Box Quantity (affects invoice total)` 
-                      : "Box Quantity"
-                  }
-                  type="number"
-                  value={box.qty?.toString() || "1"}
-                  onChangeCallback={(value) => {
-                    const qty = parseFloat(value) || 1;
-                    updateBox(boxIndex, "qty", qty);
-                    
-                    // For B2B orders, recalculate collectible amount based on new quantity
-                    if (orderData?.orderType === "B2B" && !box.codInfo?.isCollectibleManuallyEdited && orderData?.codInfo?.isCod) {
-                      const newTotalPrice = baseBoxPrice * qty;
-                      updateBox(boxIndex, "collectableAmount", newTotalPrice);
+                >
+                  <FloatingLabelInput
+                    placeholder="Box Name"
+                    value={(() => {
+                      const searchKey = `${boxIndex}`;
+                      return boxSearchQueries[searchKey] !== undefined
+                        ? boxSearchQueries[searchKey]
+                        : box.name || "";
+                    })()}
+                    onChangeCallback={(value) => {
+                      handleBoxNameSearch(boxIndex, value);
+                      clearValidationError("boxes", "name", boxIndex);
+                    }}
+                    onFocus={() => handleBoxSearchFocus(boxIndex)}
+                    onBlur={() => handleBoxSearchBlur(boxIndex)}
+                    readOnly={isEnabled}
+                    icon={
+                      boxSearchLoading[`${boxIndex}`] ? (
+                        <LoadingIcon />
+                      ) : (
+                        <SearchIcon />
+                      )
                     }
-                  }}
-                  integerOnly={true}
-                  readOnly={isEnabled || !isProductEditingAllowed || !isNotApiSource}
-                  required
-                  
+                    required
+                    error={validationErrors.boxes[boxIndex]?.name}
+                    errorMessage="Box name is required"
+                  />
+                  {renderBoxSearchResults(boxIndex)}
+                </div>
+                {!isEnabled && orderData?.boxInfo?.length > 1 && (
+                  <div className="flex justify-end mb-4">
+                    <button
+                      onClick={() => deleteBox(boxIndex)}
+                      className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-2 border border-red-200 mt-1"
+                      title="Delete Box"
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Box Dimensions */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 rounded-lg">
+                <FloatingLabelInput
+                  placeholder="Weight (kg)"
+                  type="number"
+                  value={box.deadWeight?.toString() || ""}
+                  onChangeCallback={(value) =>
+                    updateBox(boxIndex, "deadWeight", parseFloat(value) || 0)
+                  }
+                  readOnly={isEnabled}
                 />
-                {/* Show multiplication indicator for B2B */}
-                {/* {orderData?.orderType === "B2B" && (
+
+                <FloatingLabelInput
+                  placeholder="L (cm)"
+                  type="number"
+                  value={box.length?.toString() || ""}
+                  onChangeCallback={(value) => {
+                    updateBox(boxIndex, "length", parseFloat(value) || 0);
+                    clearValidationError("boxes", "length", boxIndex);
+                  }}
+                  required
+                  readOnly={isEnabled}
+                  error={validationErrors.boxes[boxIndex]?.length}
+                  errorMessage="Length is required"
+                />
+
+                <FloatingLabelInput
+                  placeholder="B (cm)"
+                  type="number"
+                  value={box.breadth?.toString() || ""}
+                  onChangeCallback={(value) => {
+                    updateBox(boxIndex, "breadth", parseFloat(value) || 0);
+                    clearValidationError("boxes", "breadth", boxIndex);
+                  }}
+                  readOnly={isEnabled}
+                  required
+                  error={validationErrors.boxes[boxIndex]?.breadth}
+                  errorMessage="Breadth is required"
+                />
+
+                <FloatingLabelInput
+                  placeholder="H (cm)"
+                  type="number"
+                  value={box.height?.toString() || ""}
+                  onChangeCallback={(value) => {
+                    updateBox(boxIndex, "height", parseFloat(value) || 0);
+                    clearValidationError("boxes", "height", boxIndex);
+                  }}
+                  readOnly={isEnabled}
+                  required
+                  error={validationErrors.boxes[boxIndex]?.height}
+                  errorMessage="Height is required"
+                />
+              </div>
+
+              {/* Box Quantity and Collectible Amount */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-1 rounded-lg">
+                {/* Box Quantity Input - Enhanced for B2B */}
+                <div className="relative">
+                  <FloatingLabelInput
+                    placeholder={
+                      orderData?.orderType === "B2B"
+                        ? `Box Quantity (affects invoice total)`
+                        : "Box Quantity"
+                    }
+                    type="number"
+                    value={box.qty?.toString() || "1"}
+                    onChangeCallback={(value) => {
+                      const qty = parseFloat(value) || 1;
+                      updateBox(boxIndex, "qty", qty);
+
+                      // For B2B orders, recalculate collectible amount based on new quantity
+                      if (
+                        orderData?.orderType === "B2B" &&
+                        !box.codInfo?.isCollectibleManuallyEdited &&
+                        orderData?.codInfo?.isCod
+                      ) {
+                        const newTotalPrice = baseBoxPrice * qty;
+                        updateBox(boxIndex, "collectableAmount", newTotalPrice);
+                      }
+                    }}
+                    integerOnly={true}
+                    readOnly={
+                      isEnabled || !isProductEditingAllowed || !isNotApiSource
+                    }
+                    required
+                  />
+                  {/* Show multiplication indicator for B2B */}
+                  {/* {orderData?.orderType === "B2B" && (
                   <div className="text-xs text-blue-600 mt-1">
                     Base Price123: ₹{baseBoxPrice.toFixed(2)} × {box.qty || 1} = ₹{totalPrice.toFixed(2)}
                   </div>
                 )} */}
-              </div>
+                </div>
 
-              {/* Collectible Amount (Editable) */}
-              {orderData?.codInfo?.isCod && (
-                <FloatingLabelInput
-                  placeholder="Collectible Amount (₹)"
-                  type="number"
-                  value={collectableAmount}
-                  onChangeCallback={(value) => {
-                    // Allow empty string or convert to number
-                    const numericValue =
-                      value === "" ? "" : parseFloat(value) || 0;
-                    updateBox(boxIndex, "collectableAmount", numericValue);
-                  }}
-                  readOnly={isEnabled}
-                />
-              )}
-            </div>
-
-            {/* Total Price row - Enhanced to show B2B calculation */}
-            <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
-              <div className="relative">
-                <FloatingLabelInput
-                  placeholder={
-                    orderData?.orderType === "B2B" 
-                      ? `Box Total (Base: ₹${baseBoxPrice.toFixed(2)} × ${box.qty || 1})`
-                      : "Box Total Price (₹)"
-                  }
-                  type="number"
-                  value={totalPrice.toFixed(2)}
-                  readOnly={true}
-                />
-                {/* Additional breakdown for B2B */}
-                {orderData?.orderType === "B2B" && baseBoxPrice !== totalPrice && (
-                  <div className="text-xs text-gray-600 mt-1">
-                    Product total: ₹{baseBoxPrice.toFixed(2)} | Box quantity: {box.qty || 1} | Final total: ₹{totalPrice.toFixed(2)}
-                  </div>
+                {/* Collectible Amount (Editable) */}
+                {orderData?.codInfo?.isCod && (
+                  <FloatingLabelInput
+                    placeholder="Collectible Amount (₹)"
+                    type="number"
+                    value={collectableAmount}
+                    onChangeCallback={(value) => {
+                      // Allow empty string or convert to number
+                      const numericValue =
+                        value === "" ? "" : parseFloat(value) || 0;
+                      updateBox(boxIndex, "collectableAmount", numericValue);
+                    }}
+                    readOnly={isEnabled}
+                  />
                 )}
               </div>
-            </div>
 
-            {/* Products Section */}
-            {box.products && box.products.length > 0 && (
-              <div className="space-y-3">
-                <div className="space-y-2 mb-2">
-                  {box.products.map((product: any, productIndex: number) => (
-                    <Collapsible
-                      key={`${boxIndex}-${productIndex}`}
-                      title={`Product ${productIndex + 1}: ${
-                        product.name || "Unnamed Product"
-                      }`}
-                      defaultOpen={false}
-                      className="border border-gray-300 !shadow-none"
-                      titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
-                      contentClassName="bg-gray-50 !shadow-none"
-                    >
-                      <div className="p-4 space-y-4">
-                        {/* Product Name with Search */}
-                        <div className="flex items-start gap-x-4">
-                          <div
-                            className="flex-1 relative"
-                            ref={(el) => {
-                              const searchKey = `${boxIndex}-${productIndex}`;
-                              productSearchRefs.current[searchKey] = el;
-                            }}
-                          >
-                            <FloatingLabelInput
-                              placeholder="Product Name"
-                              value={(() => {
-                                // For restricted sources, show only the product name without search query
-                                if (!isProductEditingAllowed) {
-                                  return product.name || "";
-                                }
+              {/* Total Price row - Enhanced to show B2B calculation */}
+              <div className="grid grid-cols-1 gap-4 p-1 rounded-lg">
+                <div className="relative">
+                  <FloatingLabelInput
+                    placeholder={
+                      orderData?.orderType === "B2B"
+                        ? `Box Total (Base: ₹${baseBoxPrice.toFixed(2)} × ${
+                            box.qty || 1
+                          })`
+                        : "Box Total Price (₹)"
+                    }
+                    type="number"
+                    value={totalPrice.toFixed(2)}
+                    readOnly={true}
+                  />
+                  {/* Additional breakdown for B2B */}
+                  {orderData?.orderType === "B2B" &&
+                    baseBoxPrice !== totalPrice && (
+                      <div className="text-xs text-gray-600 mt-1">
+                        Product total: ₹{baseBoxPrice.toFixed(2)} | Box
+                        quantity: {box.qty || 1} | Final total: ₹
+                        {totalPrice.toFixed(2)}
+                      </div>
+                    )}
+                </div>
+              </div>
+
+              {/* Products Section */}
+              {box.products && box.products.length > 0 && (
+                <div className="space-y-3">
+                  <div className="space-y-2 mb-2">
+                    {box.products.map((product: any, productIndex: number) => (
+                      <Collapsible
+                        key={`${boxIndex}-${productIndex}`}
+                        title={`Product ${productIndex + 1}: ${
+                          product.name || "Unnamed Product"
+                        }`}
+                        defaultOpen={false}
+                        className="border border-gray-300 !shadow-none"
+                        titleClassName="bg-blue-50 hover:bg-blue-100 transition-colors text-sm !shadow-none"
+                        contentClassName="bg-gray-50 !shadow-none"
+                      >
+                        <div className="p-4 space-y-4">
+                          {/* Product Name with Search */}
+                          <div className="flex items-start gap-x-4">
+                            <div
+                              className="flex-1 relative"
+                              ref={(el) => {
                                 const searchKey = `${boxIndex}-${productIndex}`;
-                                return productSearchQueries[searchKey] !==
-                                  undefined
-                                  ? productSearchQueries[searchKey]
-                                  : product.name || "";
-                              })()}
-                              onChangeCallback={(value) => {
-                                if (isProductEditingAllowed) {
-                                  handleProductNameSearch(
-                                    boxIndex,
-                                    productIndex,
-                                    value
-                                  );
-                                  clearValidationError(
-                                    "products",
-                                    "name",
-                                    boxIndex,
-                                    productIndex
-                                  );
-                                }
+                                productSearchRefs.current[searchKey] = el;
                               }}
-                              onFocus={() =>
-                                isProductEditingAllowed
-                                  ? handleProductSearchFocus(
+                            >
+                              <FloatingLabelInput
+                                placeholder="Product Name"
+                                value={(() => {
+                                  // For restricted sources, show only the product name without search query
+                                  if (!isProductEditingAllowed) {
+                                    return product.name || "";
+                                  }
+                                  const searchKey = `${boxIndex}-${productIndex}`;
+                                  return productSearchQueries[searchKey] !==
+                                    undefined
+                                    ? productSearchQueries[searchKey]
+                                    : product.name || "";
+                                })()}
+                                onChangeCallback={(value) => {
+                                  if (isProductEditingAllowed) {
+                                    handleProductNameSearch(
+                                      boxIndex,
+                                      productIndex,
+                                      value
+                                    );
+                                    clearValidationError(
+                                      "products",
+                                      "name",
                                       boxIndex,
                                       productIndex
-                                    )
-                                  : null
-                              }
-                              onBlur={() =>
-                                isProductEditingAllowed
-                                  ? handleProductSearchBlur(
-                                      boxIndex,
-                                      productIndex
-                                    )
-                                  : null
-                              }
-                              readOnly={isEnabled || !isProductEditingAllowed}
-                              icon={
-                                // Hide search icon for restricted sources
-                                !isProductEditingAllowed ? null : productSearchLoading[
+                                    );
+                                  }
+                                }}
+                                onFocus={() =>
+                                  isProductEditingAllowed
+                                    ? handleProductSearchFocus(
+                                        boxIndex,
+                                        productIndex
+                                      )
+                                    : null
+                                }
+                                onBlur={() =>
+                                  isProductEditingAllowed
+                                    ? handleProductSearchBlur(
+                                        boxIndex,
+                                        productIndex
+                                      )
+                                    : null
+                                }
+                                readOnly={isEnabled || !isProductEditingAllowed}
+                                icon={
+                                  // Hide search icon for restricted sources
+                                  !isProductEditingAllowed ? null : productSearchLoading[
+                                      `${boxIndex}-${productIndex}`
+                                    ] ? (
+                                    <LoadingIcon />
+                                  ) : (
+                                    <SearchIcon />
+                                  )
+                                }
+                                required
+                                error={
+                                  validationErrors.products[
                                     `${boxIndex}-${productIndex}`
-                                  ] ? (
-                                  <LoadingIcon />
-                                ) : (
-                                  <SearchIcon />
-                                )
+                                  ]?.name
+                                }
+                                errorMessage="Product name is required"
+                              />
+                              {renderProductSearchResults &&
+                                renderProductSearchResults(
+                                  boxIndex,
+                                  productIndex
+                                )}
+                            </div>
+
+                            {!isEnabled &&
+                              box.products.length > 1 &&
+                              isProductEditingAllowed && (
+                                <button
+                                  onClick={() =>
+                                    deleteProduct(boxIndex, productIndex)
+                                  }
+                                  className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
+                                  title="Delete Product"
+                                >
+                                  <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                  >
+                                    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
+                                  </svg>
+                                </button>
+                              )}
+                          </div>
+
+                          {/* Row 2: Qty and Unit Weight */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <FloatingLabelInput
+                              placeholder="Product Qty"
+                              type="number"
+                              value={product.qty?.toString() || ""}
+                              onChangeCallback={(value) => {
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "qty",
+                                  parseFloat(value) || 0
+                                );
+                                clearValidationError(
+                                  "products",
+                                  "qty",
+                                  boxIndex,
+                                  productIndex
+                                );
+                              }}
+                              integerOnly={true}
+                              readOnly={
+                                isEnabled ||
+                                !isProductEditingAllowed ||
+                                !isNotApiSource
                               }
                               required
                               error={
                                 validationErrors.products[
                                   `${boxIndex}-${productIndex}`
-                                ]?.name
+                                ]?.qty
                               }
-                              errorMessage="Product name is required"
+                              errorMessage="Quantity is required"
                             />
-                            {renderProductSearchResults &&
-                              renderProductSearchResults(
-                                boxIndex,
-                                productIndex
-                              )}
-                          </div>
-
-                          {!isEnabled &&
-                            box.products.length > 1 &&
-                            isProductEditingAllowed && (
-                              <button
-                                onClick={() =>
-                                  deleteProduct(boxIndex, productIndex)
-                                }
-                                className="text-red-500 hover:text-red-700 p-2 rounded-md hover:bg-red-50 flex items-center gap-1 mt-1"
-                                title="Delete Product"
-                              >
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
-                                  <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c0 1 1 2 2 2v2" />
-                                </svg>
-                              </button>
-                            )}
-                        </div>
-
-                        {/* Row 2: Qty and Unit Weight */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <FloatingLabelInput
-                            placeholder="Product Qty"
-                            type="number"
-                            value={product.qty?.toString() || ""}
-                            onChangeCallback={(value) => {
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "qty",
-                                parseFloat(value) || 0
-                              );
-                              clearValidationError(
-                                "products",
-                                "qty",
-                                boxIndex,
-                                productIndex
-                              );
-                            }}
-                            integerOnly={true}
-                            readOnly={
-                              isEnabled ||
-                              !isProductEditingAllowed ||
-                              !isNotApiSource
-                            }
-                            required
-                            error={
-                              validationErrors.products[
-                                `${boxIndex}-${productIndex}`
-                              ]?.qty
-                            }
-                            errorMessage="Quantity is required"
-                          />
-                          <FloatingLabelInput
-                            placeholder="Unit Weight"
-                            type="number"
-                            value={product.deadWeight?.toString() || ""}
-                            onChangeCallback={(value) => {
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "deadWeight",
-                                parseFloat(value) || 0
-                              );
-                              clearValidationError(
-                                "products",
-                                "deadWeight",
-                                boxIndex,
-                                productIndex
-                              );
-                            }}
-                            readOnly={isEnabled}
-                            required
-                            error={
-                              validationErrors.products[
-                                `${boxIndex}-${productIndex}`
-                              ]?.deadWeight
-                            }
-                            errorMessage="Unit weight is required"
-                          />
-                        </div>
-
-                        {/* Row 3: Unit Price and Dimensions */}
-                        <div className="grid grid-cols-4 gap-4">
-                          <FloatingLabelInput
-                            placeholder="Unit Price"
-                            type="number"
-                            value={product.unitPrice?.toString() || ""}
-                            onChangeCallback={(value) => {
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "unitPrice",
-                                parseFloat(value) || 0
-                              );
-                              clearValidationError(
-                                "products",
-                                "unitPrice",
-                                boxIndex,
-                                productIndex
-                              );
-                            }}
-                            readOnly={
-                              isEnabled ||
-                              !isProductEditingAllowed ||
-                              !isNotApiSource
-                            }
-                            required={orderData?.codInfo?.isCod}
-                            error={
-                              validationErrors.products[
-                                `${boxIndex}-${productIndex}`
-                              ]?.unitPrice
-                            }
-                            errorMessage="Unit price is required for COD orders"
-                          />
-                          <FloatingLabelInput
-                            placeholder="L(cm)"
-                            type="number"
-                            value={product.length?.toString() || ""}
-                            onChangeCallback={(value) =>
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "length",
-                                parseFloat(value) || 0
-                              )
-                            }
-                            readOnly={isEnabled}
-                          />
-                          <FloatingLabelInput
-                            placeholder="B(cm)"
-                            type="number"
-                            value={product.breadth?.toString() || ""}
-                            onChangeCallback={(value) =>
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "breadth",
-                                parseFloat(value) || 0
-                              )
-                            }
-                            readOnly={isEnabled}
-                          />
-                          <FloatingLabelInput
-                            placeholder="H(cm)"
-                            type="number"
-                            value={product.height?.toString() || ""}
-                            onChangeCallback={(value) =>
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "height",
-                                parseFloat(value) || 0
-                              )
-                            }
-                            readOnly={isEnabled}
-                          />
-                        </div>
-
-                        {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="relative">
                             <FloatingLabelInput
-                              placeholder="Total Weight (kg)"
+                              placeholder="Unit Weight"
                               type="number"
-                              value={(
-                                (product.qty || 0) * (product.deadWeight || 0)
-                              ).toFixed(2)}
-                              readOnly
+                              value={product.deadWeight?.toString() || ""}
+                              onChangeCallback={(value) => {
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "deadWeight",
+                                  parseFloat(value) || 0
+                                );
+                                clearValidationError(
+                                  "products",
+                                  "deadWeight",
+                                  boxIndex,
+                                  productIndex
+                                );
+                              }}
+                              readOnly={isEnabled}
+                              required
+                              error={
+                                validationErrors.products[
+                                  `${boxIndex}-${productIndex}`
+                                ]?.deadWeight
+                              }
+                              errorMessage="Unit weight is required"
                             />
                           </div>
-                          <div className="relative">
-                            <FloatingLabelInput
-                              placeholder="Product Total Price"
-                              type="number"
-                              value={(
-                                (product.qty || 0) * (product.unitPrice || 0)
-                              ).toFixed(2)}
-                              readOnly
-                            />
-                          </div>
-                        </div>
 
-                        {/* Row 5: SKU and HSN */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <FloatingLabelInput
-                            placeholder="SKU"
-                            value={product.sku || ""}
-                            onChangeCallback={(value) =>
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "sku",
-                                value
-                              )
-                            }
-                            readOnly={isEnabled || !isProductEditingAllowed}
-                          />
-                          <FloatingLabelInput
-                            placeholder="HSN"
-                            value={product.hsnCode || ""}
-                            onChangeCallback={(value) =>
-                              updateProduct(
-                                boxIndex,
-                                productIndex,
-                                "hsnCode",
-                                value
-                              )
-                            }
-                            readOnly={isEnabled || !isProductEditingAllowed}
-                          />
+                          {/* Row 3: Unit Price and Dimensions */}
+                          <div className="grid grid-cols-4 gap-4">
+                            <FloatingLabelInput
+                              placeholder="Unit Price"
+                              type="number"
+                              value={product.unitPrice?.toString() || ""}
+                              onChangeCallback={(value) => {
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "unitPrice",
+                                  parseFloat(value) || 0
+                                );
+                                clearValidationError(
+                                  "products",
+                                  "unitPrice",
+                                  boxIndex,
+                                  productIndex
+                                );
+                              }}
+                              readOnly={
+                                isEnabled ||
+                                !isProductEditingAllowed ||
+                                !isNotApiSource
+                              }
+                              required={orderData?.codInfo?.isCod}
+                              error={
+                                validationErrors.products[
+                                  `${boxIndex}-${productIndex}`
+                                ]?.unitPrice
+                              }
+                              errorMessage="Unit price is required for COD orders"
+                            />
+                            <FloatingLabelInput
+                              placeholder="L(cm)"
+                              type="number"
+                              value={product.length?.toString() || ""}
+                              onChangeCallback={(value) =>
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "length",
+                                  parseFloat(value) || 0
+                                )
+                              }
+                              readOnly={isEnabled}
+                            />
+                            <FloatingLabelInput
+                              placeholder="B(cm)"
+                              type="number"
+                              value={product.breadth?.toString() || ""}
+                              onChangeCallback={(value) =>
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "breadth",
+                                  parseFloat(value) || 0
+                                )
+                              }
+                              readOnly={isEnabled}
+                            />
+                            <FloatingLabelInput
+                              placeholder="H(cm)"
+                              type="number"
+                              value={product.height?.toString() || ""}
+                              onChangeCallback={(value) =>
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "height",
+                                  parseFloat(value) || 0
+                                )
+                              }
+                              readOnly={isEnabled}
+                            />
+                          </div>
+
+                          {/* Row 4: Total Weight and Total Price (Calculated, Non-editable) */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="relative">
+                              <FloatingLabelInput
+                                placeholder="Total Weight (kg)"
+                                type="number"
+                                value={(
+                                  (product.qty || 0) * (product.deadWeight || 0)
+                                ).toFixed(2)}
+                                readOnly
+                              />
+                            </div>
+                            <div className="relative">
+                              <FloatingLabelInput
+                                placeholder="Product Total Price"
+                                type="number"
+                                value={(
+                                  (product.qty || 0) * (product.unitPrice || 0)
+                                ).toFixed(2)}
+                                readOnly
+                              />
+                            </div>
+                          </div>
+
+                          {/* Row 5: SKU and HSN */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <FloatingLabelInput
+                              placeholder="SKU"
+                              value={product.sku || ""}
+                              onChangeCallback={(value) =>
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "sku",
+                                  value
+                                )
+                              }
+                              readOnly={isEnabled || !isProductEditingAllowed}
+                            />
+                            <FloatingLabelInput
+                              placeholder="HSN"
+                              value={product.hsnCode || ""}
+                              onChangeCallback={(value) =>
+                                updateProduct(
+                                  boxIndex,
+                                  productIndex,
+                                  "hsnCode",
+                                  value
+                                )
+                              }
+                              readOnly={isEnabled || !isProductEditingAllowed}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </Collapsible>
-                  ))}
-                  <div>
-                    {!isEnabled &&
-                      isProductEditingAllowed &&
-                      isNotApiSource && (
-                        <OneButton
-                          text="Add Product"
-                          onClick={() => addProduct(boxIndex)}
-                          variant="secondary"
-                          className="!rounded-full"
-                        />
-                      )}
+                      </Collapsible>
+                    ))}
+                    <div>
+                      {!isEnabled &&
+                        isProductEditingAllowed &&
+                        isNotApiSource && (
+                          <OneButton
+                            text="Add Product"
+                            onClick={() => addProduct(boxIndex)}
+                            variant="secondary"
+                            className="!rounded-full"
+                          />
+                        )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* If no products, show add product button */}
-            {(!box.products || box.products.length === 0) && !isEnabled && (
-              <div className="flex justify-center">
-                <OneButton
-                  text="Add Product"
-                  onClick={() => addProduct(boxIndex)}
-                  variant="secondary"
-                  className="!rounded-full"
-                />
-              </div>
-            )}
-          </div>
-        </Collapsible>
-      );
-    })}
+              {/* If no products, show add product button */}
+              {(!box.products || box.products.length === 0) && !isEnabled && (
+                <div className="flex justify-center">
+                  <OneButton
+                    text="Add Product"
+                    onClick={() => addProduct(boxIndex)}
+                    variant="secondary"
+                    className="!rounded-full"
+                  />
+                </div>
+              )}
+            </div>
+          </Collapsible>
+        );
+      })}
 
-    {/* Add Box Button */}
-    {!isEnabled && isProductEditingAllowed && isNotApiSource && (
-      <div className="flex justify-center mb-2 !w-full">
-        <OneButton
-          text="Add Box"
-          onClick={addBox}
-          variant="secondary"
-          className="!rounded-full !w-full"
-        />
-      </div>
-    )}
-  </div>
-);
+      {/* Add Box Button */}
+      {!isEnabled && isProductEditingAllowed && isNotApiSource && (
+        <div className="flex justify-center mb-2 !w-full">
+          <OneButton
+            text="Add Box"
+            onClick={addBox}
+            variant="secondary"
+            className="!rounded-full !w-full"
+          />
+        </div>
+      )}
+    </div>
+  );
 
   const renderServices = () => (
     <div className="space-y-4 p-4">
