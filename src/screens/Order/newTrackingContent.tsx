@@ -81,6 +81,7 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
   const [edd, setEdd] = useState<any>();
 
   const [accordionOpen, setAccordionOpen] = useState<boolean[]>([]);
+  const [masterAwb, setMasterAwb] = useState<any>("");
 
   // Function to toggle accordion state for a specific index
   const toggleAccordion = (index: number) => {
@@ -221,6 +222,27 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
 
       if (response?.success && response?.data[0]?.trackingInfo?.length > 0) {
         setTrackingData(response?.data?.[0]?.trackingInfo?.[0]);
+
+        // Add this after setting trackingData
+        const currentTrackingInfo = response?.data[0]?.trackingInfo[0];
+        if (
+          currentTrackingInfo?.courierPartnerName === "DELHIVERY" &&
+          currentTrackingInfo?.orderType === "B2B"
+        ) {
+          const multipleAwb = currentTrackingInfo?.otherDetails?.multipleAwb;
+          if (multipleAwb && multipleAwb.length > 0) {
+            // Check if it's an object with ident property or a direct string
+            const masterAwbValue =
+              typeof multipleAwb[0] === "object"
+                ? multipleAwb[0]?.ident
+                : multipleAwb[0];
+            setMasterAwb(masterAwbValue || "N/A");
+          } else {
+            setMasterAwb("N/A");
+          }
+        } else {
+          setMasterAwb("");
+        }
         //edd datatypes are different so based on data type of it
         if (isNumber(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD)) {
           const EDDtime = convertEpochToDateTime(
@@ -512,21 +534,37 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
                       {currentProductName || "N/A"}
                     </p>
                   </div>
-                  <div className="flex lg:gap-12 xl:justify-between xl:mt-5">
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:mt-5">
                     <div>
-                      <p className="font-Open text-xs font-normal leading-4">
-                        Order ID:
+                      <p className="font-Open text-xs font-normal leading-4 text-gray-600">
+                        Order ID
                       </p>
-                      <p className="font-Open text-sm font-semibold leading-5">
+                      <p className="font-Open text-sm font-semibold leading-5 mt-1">
                         {trackingData?.orderId || "N/A"}
                       </p>
                     </div>
+
                     <div>
-                      <p className="font-Open text-xs font-normal leading-4">
-                        Order Placed:
+                      <p className="font-Open text-xs font-normal leading-4 text-gray-600">
+                        {trackingData?.courierPartnerName === "DELHIVERY" &&
+                        trackingData?.orderType === "B2B"
+                          ? "Master AWB"
+                          : "AWB"}
                       </p>
-                      <p className="font-Open text-sm font-semibold leading-5">
-                        {/* {lastUpdate.date || "N/A"} */}
+                      <p className="font-Open text-sm font-semibold leading-5 mt-1 font-mono">
+                        {trackingData?.courierPartnerName === "DELHIVERY" &&
+                        trackingData?.orderType === "B2B"
+                          ? masterAwb
+                          : trackingData?.awb || "N/A"}
+                      </p>
+                    </div>
+
+                    <div className="md:col-span-2 xl:col-span-1">
+                      <p className="font-Open text-xs font-normal leading-4 text-gray-600">
+                        Order Placed
+                      </p>
+                      <p className="font-Open text-sm font-semibold leading-5 mt-1">
                         {formatDate(
                           convertEpochToDateTime(trackingData?.createdAt)
                         ) || "N/A"}

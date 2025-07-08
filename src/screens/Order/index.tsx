@@ -2146,9 +2146,11 @@ const Index = () => {
             <hr />
             <p className="mt-1">
               <span>{capitalizeFirstLetter(companyName)} ID:</span>
-              {infoModalContent?.data?.orderId?.split("T")?.[1] ||
+              {/* {infoModalContent?.data?.orderId?.split("T")?.[1] ||
                 infoModalContent?.data?.orderId ||
-                ""}
+                ""} */}
+                 {infoModalContent?.data?.tempOrderId || ""}
+ 
             </p>
           </div>
         </div>
