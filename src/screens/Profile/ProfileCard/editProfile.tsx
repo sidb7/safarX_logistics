@@ -135,14 +135,14 @@ useEffect(() => {
       // For contact number, only allow numbers
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedAccounts[index][field] = numbersOnly;
-      
+
       // Validate the number
       if (numbersOnly.length > 0) {
         const validStartDigits = /^[6-9]\d{9}$/;
         if (!validStartDigits.test(numbersOnly)) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            [`accounts_${index}_Number`]: "Please enter a valid 10 digit number",
+            [`accounts_${index}_contactNumber`]: "Please enter a valid 10 digit number",
           }));
         } else {
           setErrors((prevErrors) => {
@@ -385,19 +385,27 @@ useEffect(() => {
     }
   };
 
-  const validateField = (name: string, value: string) => {
-    // if (!value) return `Please enter your ${name.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
-    if (value.trim() === "") return ""; // Don't show error for empty fields
-
-    if (name === "accountsMailID" && value === "") {
-      return "";
-    } else if (name.includes("MailID") && !/\S+@\S+\.\S+/.test(value))
+const validateField = (name: string, value: string) => {
+  
+  if (name.includes("MailID") || name.includes("_email")) {
+    if (value.trim() === "") {
+      return "Email is required";
+    }
+    if (!/\S+@\S+\.\S+/.test(value)) {
       return "Please enter a valid email address";
-
-    if (name.includes("ContactNumber") && !/^[6-9]\d{9}$/.test(value))
-      return "Please enter a valid 10 digit contact number";
-    return "";
-  };
+    }
+  }
+  
+  if (name.includes("ContactNumber") || name.includes("_contactNumber")) {
+    if (value.trim() === "") {
+      return "Contact number is required";
+    }
+    if (!/^[6-9]\d{9}$/.test(value)) {
+      return "Please enter a valid 10 digit number";
+    }
+  }
+  return "";
+};
 
   const handleInputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -529,70 +537,78 @@ useEffect(() => {
   // };
 
   const handleSave = async () => {
-    const newErrors: { [key: string]: string } = {};
-    [
-      "accountsMailID",
-      "accountsContactNumber",
-      "operationsMailID",
-      "operationsContactNumber",
-    ].forEach((key) => {
-      const error = validateField(
-        key,
-        profileData[key as keyof typeof profileData]
-      );
-      if (error) newErrors[key] = error;
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      toast.error("Please fix the validation errors before saving");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      if (
-        profileData?.firstName?.length === 0 ||
-        profileData?.lastName?.length === 0
-      ) {
-        toast.error("Please Enter First Name & Last Name");
-      } else {
-        const { data } = await POST(UPDATE_SINGLE_SELLER, {
-          data: {
-            firstName: profileData?.firstName,
-            lastName: profileData?.lastName,
-            // "privateCompany.accountDetails.contactNumber":
-            //   profileData.accountsContactNo,
-            // "privateCompany.accountDetails.email": profileData.accountsMailID,
-            // "privateCompany.operationDetails.contactNumber":
-            //   profileData.operationsContactNo,
-            // "privateCompany.operationDetails.email":
-            //   profileData.operationsMailID,
-            profileImageUrl: profileData.profileImageUrl,
-           
-            // accountDetails:accounts,
-            // operationDetails:operations,
-             "privateCompany.accountDetails": accounts,      
-            "privateCompany.operationDetails": operations
+  const newErrors: { [key: string]: string } = {};
+  
+  // Validate firstName and lastName
+  if (!profileData?.firstName || profileData.firstName.length === 0) {
+    newErrors['firstName'] = 'First Name is required';
+  }
+  if (!profileData?.lastName || profileData.lastName.length === 0) {
+    newErrors['lastName'] = 'Last Name is required';
+  }
+  
+  // Validate all accounts
+  accounts.forEach((account, index) => {
+    const emailError = validateField(
+      `accounts_${index}_email`,
+      account.email
+    );
+    if (emailError) newErrors[`accounts_${index}_email`] = emailError;
     
-          },
+    const contactError = validateField(
+      `accounts_${index}_contactNumber`,
+      account.contactNumber
+    );
+    if (contactError) newErrors[`accounts_${index}_contactNumber`] = contactError;
+  });
 
+  // Validate all operations
+  operations.forEach((operation, index) => {
+    const emailError = validateField(
+      `operations_${index}_email`,
+      operation.email
+    );
+    if (emailError) newErrors[`operations_${index}_email`] = emailError;
+    
+    const contactError = validateField(
+      `operations_${index}_contactNumber`,
+      operation.contactNumber
+    );
+    if (contactError) newErrors[`operations_${index}_contactNumber`] = contactError;
+  });
 
-        });
-        if (data?.success) {
-          onClose(false);
-          getProfileData();
-          toast.success("Profile updated successfully");
-        } else {
-          toast.error(data?.message || "Failed to update profile");
-        }
-      }
-    } catch (err) {
-      toast.error("An error occurred while updating the profile");
-    } finally {
-      setIsLoading(false);
+  // If there are ANY validation errors, stop the save process
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    toast.error("Please fix the validation errors before saving");
+    return;
+  }
+
+  // Only proceed with save if ALL validations pass
+  setIsLoading(true);
+  try {
+    const { data } = await POST(UPDATE_SINGLE_SELLER, {
+      data: {
+        firstName: profileData?.firstName,
+        lastName: profileData?.lastName,
+        profileImageUrl: profileData.profileImageUrl,
+        "privateCompany.accountDetails": accounts,
+        "privateCompany.operationDetails": operations
+      },
+    });
+    if (data?.success) {
+      onClose(false);
+      getProfileData();
+      toast.success("Profile updated successfully");
+    } else {
+      toast.error(data?.message || "Failed to update profile");
     }
-  };
+  } catch (err) {
+    toast.error("An error occurred while updating the profile");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   console.log("nameErrMsgnameErrMsg", nameErrMsg?.firstName);
 
@@ -758,7 +774,7 @@ useEffect(() => {
                     value={account.email}
                     onChange={(e) => handleAccountChange(index, 'email', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`accounts_${index}_email`] ? "mb-2" : "mb-4"}
                     inputClassName="w-full !rounded-[14px]"
                     className={"!rounded-[14px] "}
                     isRequired={true}
@@ -773,7 +789,8 @@ useEffect(() => {
                     value={account.contactNumber}
                     onChange={(e) => handleAccountChange(index, 'contactNumber', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`accounts_${index}_contactNumber`] ? "mb-1 mt-2" : "mb-4 mt-2"}
+
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
                     isRequired={true}
@@ -830,7 +847,7 @@ useEffect(() => {
                     value={operation.email}
                     onChange={(e) => handleOperationsChange(index, 'email', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`operations_${index}_email`] ? "mb-1" : "mb-4"}
                     inputClassName="w-full !radius-lg"
                     className={"!rounded-[14px] "}
                     isRequired={true}
@@ -845,7 +862,7 @@ useEffect(() => {
                     value={operation.contactNumber}
                     onChange={(e) => handleOperationsChange(index, 'contactNumber', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`operations_${index}_contactNumber`] ? "mb-1 mt-2" : "mb-4 mt-2"}
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
                     isRequired={true}
