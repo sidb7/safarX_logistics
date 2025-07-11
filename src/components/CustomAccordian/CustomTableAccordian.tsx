@@ -5592,7 +5592,10 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   }
 
   return (
-    <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
+    // <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
+    <div className="flex flex-col min-h-[calc(100vh-100px)] px-3 pt-3">
+         <div className="flex-1 space-y-4">
+
       {/* ADD THE STEP INDICATOR HERE */}
       {!isEnabled && (
         <div className="bg-blue-50 rounded-lg p-4 mb-6">
@@ -5663,10 +5666,11 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
         {renderOrderConfirmationLogs()}
       </Collapsible>
 
+      </div>
+
       {!isEnabled && (
         <div
-          className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[88px] bg-[#FFFFFF] px-6 py-7 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
-          style={{ width: "-webkit-fill-available" }}
+className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[60px] bg-[#FFFFFF] px-6 py-3 rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0 "          style={{ width: "-webkit-fill-available" }}
         >
           {/* <OneButton
             text="Place Order"
@@ -5679,7 +5683,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             text="Next"
             onClick={nextStep}
             variant="primary"
-            className="px-8"
+            className="px-8 mb-2"
             disabled={isNextLoading} // Disable button when loading
           />
         </div>
