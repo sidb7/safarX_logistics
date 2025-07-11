@@ -1,5 +1,4 @@
 
-
 import React, { useEffect,useState, useRef } from "react";
 import CustomInputBox from "../../../components/Input";
 import cameraIcon from "../../../assets/camera.svg";
@@ -135,11 +134,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedAccounts[index][field] = numbersOnly;
 
-      // Get sibling value (email) for validation
-      const siblingValue = updatedAccounts[index]['email'];
-      
-      // Validate the number with index and sibling value
-      const error = validateField(`accounts_${index}_contactNumber`, numbersOnly, index, siblingValue, 'accounts');
+      // Validate only the current field
+      const error = validateField(`accounts_${index}_contactNumber`, numbersOnly, index, updatedAccounts[index]['email'], 'accounts');
       if (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -152,29 +148,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
           return newErrors;
         });
       }
-      
-      // Also revalidate the email field to check if it needs to be required now
-      const emailError = validateField(`accounts_${index}_email`, siblingValue, index, numbersOnly, 'accounts');
-      if (emailError) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`accounts_${index}_email`]: emailError,
-        }));
-      } else {
-        setErrors((prevErrors) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[`accounts_${index}_email`];
-          return newErrors;
-        });
-      }
     } else {
       updatedAccounts[index][field] = value;
       
-      // Get sibling value (contactNumber) for validation
-      const siblingValue = updatedAccounts[index]['contactNumber'];
-      
-      // Validate email with index and sibling value
-      const error = validateField(`accounts_${index}_email`, value, index, siblingValue, 'accounts');
+      // Validate only the current field
+      const error = validateField(`accounts_${index}_email`, value, index, updatedAccounts[index]['contactNumber'], 'accounts');
       if (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -184,21 +162,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
         setErrors((prevErrors) => {
           const newErrors = { ...prevErrors };
           delete newErrors[`accounts_${index}_email`];
-          return newErrors;
-        });
-      }
-      
-      // Also revalidate the contact number field to check if it needs to be required now
-      const contactError = validateField(`accounts_${index}_contactNumber`, siblingValue, index, value, 'accounts');
-      if (contactError) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`accounts_${index}_contactNumber`]: contactError,
-        }));
-      } else {
-        setErrors((prevErrors) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[`accounts_${index}_contactNumber`];
           return newErrors;
         });
       }
@@ -234,11 +197,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedOperations[index][field] = numbersOnly;
       
-      // Get sibling value (email) for validation
-      const siblingValue = updatedOperations[index]['email'];
-      
-      // Validate the number with index and sibling value
-      const error = validateField(`operations_${index}_contactNumber`, numbersOnly, index, siblingValue, 'operations');
+      // Validate only the current field
+      const error = validateField(`operations_${index}_contactNumber`, numbersOnly, index, updatedOperations[index]['email'], 'operations');
       if (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -251,29 +211,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
           return newErrors;
         });
       }
-      
-      // Also revalidate the email field to check if it needs to be required now
-      const emailError = validateField(`operations_${index}_email`, siblingValue, index, numbersOnly, 'operations');
-      if (emailError) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`operations_${index}_email`]: emailError,
-        }));
-      } else {
-        setErrors((prevErrors) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[`operations_${index}_email`];
-          return newErrors;
-        });
-      }
     } else {
       updatedOperations[index][field] = value;
       
-      // Get sibling value (contactNumber) for validation
-      const siblingValue = updatedOperations[index]['contactNumber'];
-      
-      // Validate email with index and sibling value
-      const error = validateField(`operations_${index}_email`, value, index, siblingValue, 'operations');
+      // Validate only the current field
+      const error = validateField(`operations_${index}_email`, value, index, updatedOperations[index]['contactNumber'], 'operations');
       if (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -283,21 +225,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
         setErrors((prevErrors) => {
           const newErrors = { ...prevErrors };
           delete newErrors[`operations_${index}_email`];
-          return newErrors;
-        });
-      }
-      
-      // Also revalidate the contact number field to check if it needs to be required now
-      const contactError = validateField(`operations_${index}_contactNumber`, siblingValue, index, value, 'operations');
-      if (contactError) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`operations_${index}_contactNumber`]: contactError,
-        }));
-      } else {
-        setErrors((prevErrors) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[`operations_${index}_contactNumber`];
           return newErrors;
         });
       }
@@ -418,7 +345,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   };
 
   const validateField = (name: string, value: string, index?: number, siblingValue?: string, section?: 'accounts' | 'operations') => {
-    // For alternative entries (index > 0), fields are required
+    // For alternative entries (index > 0), at least one field must have data
     const isAlternateEntry = index !== undefined && index > 0;
     const isPrimaryEntry = index !== undefined && index === 0;
     
@@ -426,23 +353,13 @@ const EditProfile: React.FC<EditProfileProps> = ({
     const originalHadData = section === 'accounts' ? originalAccountsHadData : originalOperationsHadData;
     
     if (value.trim() === "") {
-      // If it's an alternate entry, require the field to be filled
-      if (isAlternateEntry) {
+      // For alternative entries, if both fields are empty, show error
+      if (isAlternateEntry && (!siblingValue || siblingValue.trim() === "")) {
         if (name.includes("email") || name.includes("MailID")) {
-          return "Email is required for alternative entries";
+          return "At least one field (email or contact number) is required for alternative entries";
         }
         if (name.includes("contactNumber") || name.includes("ContactNumber")) {
-          return "Contact number is required for alternative entries";
-        }
-      }
-      
-      // For primary entry, if sibling field has data, this field is also required
-      if (isPrimaryEntry && siblingValue && siblingValue.trim() !== "") {
-        if (name.includes("email") || name.includes("MailID")) {
-          return "Email is required when contact number is provided";
-        }
-        if (name.includes("contactNumber") || name.includes("ContactNumber")) {
-          return "Contact number is required when email is provided";
+          return "At least one field (email or contact number) is required for alternative entries";
         }
       }
       
@@ -459,6 +376,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       return ""; // Primary entries can be empty if both are empty and no original data
     }
     
+    // Validate format only when value is provided
     if (name.includes("MailID") || name.includes("_email")) {
       if (!/\S+@\S+\.\S+/.test(value)) {
         return "Please enter a valid email address";
@@ -836,8 +754,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
                     containerStyle={errors[`accounts_${index}_email`] ? "mb-2" : "mb-4"}
                     inputClassName="w-full !rounded-[14px]"
                     className={"!rounded-[14px] "}
-                    isRequired={true}
-                    inputError={!!errors[`accounts_${index}_email`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`accounts_${index}_email`]}
                     errorMessage={errors[`accounts_${index}_email`]}
                     inputType="email"
                   />
@@ -852,8 +770,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
-                    isRequired={true}
-                    inputError={!!errors[`accounts_${index}_contactNumber`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`accounts_${index}_contactNumber`]}
                     errorMessage={errors[`accounts_${index}_contactNumber`]}
                     inputType="tel"
                   />
@@ -909,8 +827,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
                     containerStyle={errors[`operations_${index}_email`] ? "mb-1" : "mb-4"}
                     inputClassName="w-full !radius-lg"
                     className={"!rounded-[14px] "}
-                    isRequired={true}
-                    inputError={!!errors[`operations_${index}_email`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`operations_${index}_email`]}
                     errorMessage={errors[`operations_${index}_email`]}
                     inputType="email"
                   />
@@ -924,8 +842,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
                     containerStyle={errors[`operations_${index}_contactNumber`] ? "mb-1 mt-2" : "mb-4 mt-2"}
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
-                    isRequired={true}
-                    inputError={!!errors[`operations_${index}_contactNumber`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`operations_${index}_contactNumber`]}
                     errorMessage={errors[`operations_${index}_contactNumber`]}
                     inputType="tel"
                   />
