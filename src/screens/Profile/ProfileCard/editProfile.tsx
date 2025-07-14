@@ -1,3 +1,4 @@
+
 import React, { useEffect,useState, useRef } from "react";
 import CustomInputBox from "../../../components/Input";
 import cameraIcon from "../../../assets/camera.svg";
@@ -38,7 +39,6 @@ interface AccountEntry {
   contactNumber: string;
 }
 
-
 interface OperationsEntry {
   email: string;
   contactNumber: string;
@@ -65,11 +65,12 @@ const EditProfile: React.FC<EditProfileProps> = ({
       ProfileDetails?.privateCompany?.operationDetails?.contactNumber || "",
   });
 
-
- 
-const [accounts, setAccounts] = useState<AccountEntry[]>([]);
-const [operations, setOperations] = useState<OperationsEntry[]>([]);
-
+  const [accounts, setAccounts] = useState<AccountEntry[]>([]);
+  const [operations, setOperations] = useState<OperationsEntry[]>([]);
+  
+  // Track if original data had non-empty entries
+  const [originalAccountsHadData, setOriginalAccountsHadData] = useState(false);
+  const [originalOperationsHadData, setOriginalOperationsHadData] = useState(false);
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -80,77 +81,66 @@ const [operations, setOperations] = useState<OperationsEntry[]>([]);
     lastName: "",
   });
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   console.log('namesdsd',name, value);
-
-  //   setProfileData(prevData => ({ ...prevData, [name]: value }));
-  //   if (name.includes('MailID') && !/\S+@\S+\.\S+/.test(value)) {
-  //     setErrors(prevErrors => ({ ...prevErrors, [name]: 'Please enter a valid email address 1' }));
-  //   }
-  //   if (name.includes('ContactNo') && !/\S+@\S+\.\S+/.test(value)) {
-  //     setErrors(prevErrors => ({ ...prevErrors, [name]: 'Please enter a valid 10 digit contact number' }));
-  //   }
-
-  // };
-
-
-
-
-useEffect(() => {
-  if (ProfileDetails?.privateCompany) {
-    const accountDetails = ProfileDetails.privateCompany.accountDetails;
-    const operationDetails = ProfileDetails.privateCompany.operationDetails;
-    
-    // Handle accountDetails as array
-    if (accountDetails && Array.isArray(accountDetails) && accountDetails.length > 0) {
-      setAccounts(accountDetails.map(account => ({
-        email: account.email || "",
-        contactNumber: account.contactNumber || "",
-      })));
-    } else {
-      // Fallback: single empty entry if no data
-      setAccounts([{ email: "", contactNumber: "" }]);
+  useEffect(() => {
+    if (ProfileDetails?.privateCompany) {
+      const accountDetails = ProfileDetails.privateCompany.accountDetails;
+      const operationDetails = ProfileDetails.privateCompany.operationDetails;
+      
+      // Handle accountDetails as array
+      if (accountDetails && Array.isArray(accountDetails) && accountDetails.length > 0) {
+        const accountsData = accountDetails.map(account => ({
+          email: account.email || "",
+          contactNumber: account.contactNumber || "",
+        }));
+        setAccounts(accountsData);
+        
+        // Check if original data had non-empty entries
+        const hadData = accountsData.some(account => 
+          account.email.trim() !== "" || account.contactNumber.trim() !== ""
+        );
+        setOriginalAccountsHadData(hadData);
+      } else {
+        // Fallback: single empty entry if no data
+        setAccounts([{ email: "", contactNumber: "" }]);
+        setOriginalAccountsHadData(false);
+      }
+      
+      // Handle operationDetails as array
+      if (operationDetails && Array.isArray(operationDetails) && operationDetails.length > 0) {
+        const operationsData = operationDetails.map(operation => ({
+          email: operation.email || "",
+          contactNumber: operation.contactNumber || "",
+        }));
+        setOperations(operationsData);
+        
+        // Check if original data had non-empty entries
+        const hadData = operationsData.some(operation => 
+          operation.email.trim() !== "" || operation.contactNumber.trim() !== ""
+        );
+        setOriginalOperationsHadData(hadData);
+      } else {
+        // Fallback: single empty entry if no data
+        setOperations([{ email: "", contactNumber: "" }]);
+        setOriginalOperationsHadData(false);
+      }
     }
-    
-    // Handle operationDetails as array
-    if (operationDetails && Array.isArray(operationDetails) && operationDetails.length > 0) {
-      setOperations(operationDetails.map(operation => ({
-        email: operation.email || "",
-        contactNumber: operation.contactNumber || "",
-      })));
-    } else {
-      // Fallback: single empty entry if no data
-      setOperations([{ email: "", contactNumber: "" }]);
-    }
-  }
-}, [ProfileDetails]);
+  }, [ProfileDetails]);
 
-
-
-   const handleAccountChange = (index: number, field: 'email' | 'contactNumber', value: string) => {
+  const handleAccountChange = (index: number, field: 'email' | 'contactNumber', value: string) => {
     const updatedAccounts = [...accounts];
     
     if (field === 'contactNumber') {
       // For contact number, only allow numbers
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedAccounts[index][field] = numbersOnly;
-      
-      // Validate the number
-      if (numbersOnly.length > 0) {
-        const validStartDigits = /^[6-9]\d{9}$/;
-        if (!validStartDigits.test(numbersOnly)) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            [`accounts_${index}_Number`]: "Please enter a valid 10 digit number",
-          }));
-        } else {
-          setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            delete newErrors[`accounts_${index}_contactNumber`];
-            return newErrors;
-          });
-        }
+
+      // Validate only the current field
+      const error = validateField(`accounts_${index}_contactNumber`, numbersOnly, index, updatedAccounts[index]['email'], 'accounts');
+      if (error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [`accounts_${index}_contactNumber`]: error,
+        }));
       } else {
         setErrors((prevErrors) => {
           const newErrors = { ...prevErrors };
@@ -161,17 +151,12 @@ useEffect(() => {
     } else {
       updatedAccounts[index][field] = value;
       
-      // Validate email
-      if (value.trim() === "") {
-        setErrors((prevErrors) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[`accounts_${index}_email`];
-          return newErrors;
-        });
-      } else if (!emailRegex.test(value)) {
+      // Validate only the current field
+      const error = validateField(`accounts_${index}_email`, value, index, updatedAccounts[index]['contactNumber'], 'accounts');
+      if (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [`accounts_${index}_email`]: "Please enter a valid email address",
+          [`accounts_${index}_email`]: error,
         }));
       } else {
         setErrors((prevErrors) => {
@@ -185,13 +170,11 @@ useEffect(() => {
     setAccounts(updatedAccounts);
   };
 
-    const addAccountEntry = () => {
+  const addAccountEntry = () => {
     setAccounts([...accounts, { email: "", contactNumber: "" }]);
   };
 
-
-
-   const removeAccountEntry = (index: number) => {
+  const removeAccountEntry = (index: number) => {
     if (accounts.length > 1) {
       const updatedAccounts = accounts.filter((_, i) => i !== index);
       setAccounts(updatedAccounts);
@@ -206,14 +189,7 @@ useEffect(() => {
     }
   };
 
-
-
-
-  
-
-
-
-   const handleOperationsChange = (index: number, field: 'email' | 'contactNumber', value: string) => {
+  const handleOperationsChange = (index: number, field: 'email' | 'contactNumber', value: string) => {
     const updatedOperations = [...operations];
     
     if (field === 'contactNumber') {
@@ -221,21 +197,13 @@ useEffect(() => {
       const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
       updatedOperations[index][field] = numbersOnly;
       
-      // Validate the number
-      if (numbersOnly.length > 0) {
-        const validStartDigits = /^[6-9]\d{9}$/;
-        if (!validStartDigits.test(numbersOnly)) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            [`operations_${index}_contactNumber`]: "Please enter a valid 10 digit number",
-          }));
-        } else {
-          setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            delete newErrors[`operations_${index}_contactNumber`];
-            return newErrors;
-          });
-        }
+      // Validate only the current field
+      const error = validateField(`operations_${index}_contactNumber`, numbersOnly, index, updatedOperations[index]['email'], 'operations');
+      if (error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [`operations_${index}_contactNumber`]: error,
+        }));
       } else {
         setErrors((prevErrors) => {
           const newErrors = { ...prevErrors };
@@ -246,17 +214,12 @@ useEffect(() => {
     } else {
       updatedOperations[index][field] = value;
       
-      // Validate email
-      if (value.trim() === "") {
-        setErrors((prevErrors) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[`operations_${index}_email`];
-          return newErrors;
-        });
-      } else if (!emailRegex.test(value)) {
+      // Validate only the current field
+      const error = validateField(`operations_${index}_email`, value, index, updatedOperations[index]['contactNumber'], 'operations');
+      if (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          [`operations_${index}_email`]: "Please enter a valid email address",
+          [`operations_${index}_email`]: error,
         }));
       } else {
         setErrors((prevErrors) => {
@@ -270,13 +233,11 @@ useEffect(() => {
     setOperations(updatedOperations);
   };
 
-    const addOperationsEntry = () => {
+  const addOperationsEntry = () => {
     setOperations([...operations, { email: "", contactNumber: "" }]);
   };
 
-
-
-   const removeOperationsEntry = (index: number) => {
+  const removeOperationsEntry = (index: number) => {
     if (operations.length > 1) {
       const updatedOperations = operations.filter((_, i) => i !== index);
       setOperations(updatedOperations);
@@ -290,8 +251,6 @@ useEffect(() => {
       });
     }
   };
-
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -313,7 +272,7 @@ useEffect(() => {
       if (value.trim()?.length === 0) {
         setNameErrMsg({
           ...nameErrMsg,
-          lastName: "Please Enter First Name",
+          lastName: "Please Enter Last Name",
         });
       } else {
         setNameErrMsg({
@@ -385,38 +344,58 @@ useEffect(() => {
     }
   };
 
-  const validateField = (name: string, value: string) => {
-    // if (!value) return `Please enter your ${name.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
-    if (value.trim() === "") return ""; // Don't show error for empty fields
-
-    if (name === "accountsMailID" && value === "") {
-      return "";
-    } else if (name.includes("MailID") && !/\S+@\S+\.\S+/.test(value))
-      return "Please enter a valid email address";
-
-    if (name.includes("ContactNumber") && !/^[6-9]\d{9}$/.test(value))
-      return "Please enter a valid 10 digit contact number";
+  const validateField = (name: string, value: string, index?: number, siblingValue?: string, section?: 'accounts' | 'operations') => {
+    // For alternative entries (index > 0), at least one field must have data
+    const isAlternateEntry = index !== undefined && index > 0;
+    const isPrimaryEntry = index !== undefined && index === 0;
+    
+    // Check if original data had entries for this section
+    const originalHadData = section === 'accounts' ? originalAccountsHadData : originalOperationsHadData;
+    
+    if (value.trim() === "") {
+      // For alternative entries, if both fields are empty, show error
+      if (isAlternateEntry && (!siblingValue || siblingValue.trim() === "")) {
+        if (name.includes("email") || name.includes("MailID")) {
+          return "At least one field (email or contact number) is required for alternative entries";
+        }
+        if (name.includes("contactNumber") || name.includes("ContactNumber")) {
+          return "At least one field (email or contact number) is required for alternative entries";
+        }
+      }
+      
+      // If original data had entries, don't allow completely empty primary entry
+      if (isPrimaryEntry && originalHadData && (!siblingValue || siblingValue.trim() === "")) {
+        if (name.includes("email") || name.includes("MailID")) {
+          return "Email is required as original data contained account information";
+        }
+        if (name.includes("contactNumber") || name.includes("ContactNumber")) {
+          return "Contact number is required as original data contained account information";
+        }
+      }
+      
+      return ""; // Primary entries can be empty if both are empty and no original data
+    }
+    
+    // Validate format only when value is provided
+    if (name.includes("MailID") || name.includes("_email")) {
+      if (!/\S+@\S+\.\S+/.test(value)) {
+        return "Please enter a valid email address";
+      }
+    }
+    
+    if (name.includes("ContactNumber") || name.includes("_contactNumber")) {
+      if (!/^[6-9]\d{9}$/.test(value)) {
+        return "Please enter a valid 10 digit number";
+      }
+    }
     return "";
   };
 
   const handleInputBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // console.log('name',name, value)
     const error = validateField(name, value);
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
-
-  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setProfileData(prevData => ({ ...prevData, profileImageUrl: reader.result as string }));
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  //   setShowUploadModal(false);
-  // };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -504,88 +483,115 @@ useEffect(() => {
     reader.readAsDataURL(file);
   };
 
-  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     const img = new Image();
-  //     img.onload = () => {
-  //       if (img.height > 200 || img.width > 700) {
-  //         toast.error(
-  //           "Image size must be no larger than 200 pixels in height and 700 pixels in width. Please resize your image and try again."
-  //         );
-  //         setShowUploadModal(false);
-  //         return;
-  //       }
-
-  //       const reader = new FileReader();
-  //       reader.onloadend = () => {
-  //         setProfileData(prevData => ({ ...prevData, profileImageUrl: reader.result as string }));
-  //       };
-  //       reader.readAsDataURL(file);
-  //       setShowUploadModal(false);
-  //     };
-  //     img.src = URL.createObjectURL(file);
-  //   }
-  // };
-
   const handleSave = async () => {
     const newErrors: { [key: string]: string } = {};
-    [
-      "accountsMailID",
-      "accountsContactNumber",
-      "operationsMailID",
-      "operationsContactNumber",
-    ].forEach((key) => {
-      const error = validateField(
-        key,
-        profileData[key as keyof typeof profileData]
+    
+    // Validate firstName and lastName
+    if (!profileData?.firstName || profileData.firstName.length === 0) {
+      newErrors['firstName'] = 'First Name is required';
+    }
+    if (!profileData?.lastName || profileData.lastName.length === 0) {
+      newErrors['lastName'] = 'Last Name is required';
+    }
+    
+    // Check if accounts section should have data (either originally had data or currently has some data)
+    const currentAccountsHaveData = accounts.some(account => 
+      account.email.trim() !== "" || account.contactNumber.trim() !== ""
+    );
+    
+    // Check if operations section should have data (either originally had data or currently has some data)
+    const currentOperationsHaveData = operations.some(operation => 
+      operation.email.trim() !== "" || operation.contactNumber.trim() !== ""
+    );
+    
+    // If original accounts had data but now all are empty, show error
+    if (originalAccountsHadData && !currentAccountsHaveData) {
+      newErrors['accounts_general'] = 'Account details cannot be empty as original data contained account information';
+    }
+    
+    // If original operations had data but now all are empty, show error
+    if (originalOperationsHadData && !currentOperationsHaveData) {
+      newErrors['operations_general'] = 'Operations details cannot be empty as original data contained operations information';
+    }
+    
+    // Validate all accounts
+    accounts.forEach((account, index) => {
+      const emailError = validateField(
+        `accounts_${index}_email`,
+        account.email,
+        index,
+        account.contactNumber,
+        'accounts'
       );
-      if (error) newErrors[key] = error;
+      if (emailError) newErrors[`accounts_${index}_email`] = emailError;
+      
+      const contactError = validateField(
+        `accounts_${index}_contactNumber`,
+        account.contactNumber,
+        index,
+        account.email,
+        'accounts'
+      );
+      if (contactError) newErrors[`accounts_${index}_contactNumber`] = contactError;
     });
 
+    // Validate all operations
+    operations.forEach((operation, index) => {
+      const emailError = validateField(
+        `operations_${index}_email`,
+        operation.email,
+        index,
+        operation.contactNumber,
+        'operations'
+      );
+      if (emailError) newErrors[`operations_${index}_email`] = emailError;
+      
+      const contactError = validateField(
+        `operations_${index}_contactNumber`,
+        operation.contactNumber,
+        index,
+        operation.email,
+        'operations'
+      );
+      if (contactError) newErrors[`operations_${index}_contactNumber`] = contactError;
+    });
+
+    // If there are ANY validation errors, stop the save process
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error("Please fix the validation errors before saving");
+      
+      // Show specific error messages for general validation
+      if (newErrors['accounts_general']) {
+        toast.error(newErrors['accounts_general']);
+      }
+      if (newErrors['operations_general']) {
+        toast.error(newErrors['operations_general']);
+      }
+      
+      if (!newErrors['accounts_general'] && !newErrors['operations_general']) {
+        toast.error("Please fix the validation errors before saving");
+      }
       return;
     }
 
+    // Only proceed with save if ALL validations pass
     setIsLoading(true);
     try {
-      if (
-        profileData?.firstName?.length === 0 ||
-        profileData?.lastName?.length === 0
-      ) {
-        toast.error("Please Enter First Name & Last Name");
+      const { data } = await POST(UPDATE_SINGLE_SELLER, {
+        data: {
+          firstName: profileData?.firstName,
+          lastName: profileData?.lastName,
+          profileImageUrl: profileData.profileImageUrl,
+          "privateCompany.accountDetails": accounts,
+          "privateCompany.operationDetails": operations
+        },
+      });
+      if (data?.success) {
+        onClose(false);
+        getProfileData();
+        toast.success("Profile updated successfully");
       } else {
-        const { data } = await POST(UPDATE_SINGLE_SELLER, {
-          data: {
-            firstName: profileData?.firstName,
-            lastName: profileData?.lastName,
-            // "privateCompany.accountDetails.contactNumber":
-            //   profileData.accountsContactNo,
-            // "privateCompany.accountDetails.email": profileData.accountsMailID,
-            // "privateCompany.operationDetails.contactNumber":
-            //   profileData.operationsContactNo,
-            // "privateCompany.operationDetails.email":
-            //   profileData.operationsMailID,
-            profileImageUrl: profileData.profileImageUrl,
-           
-            // accountDetails:accounts,
-            // operationDetails:operations,
-             "privateCompany.accountDetails": accounts,      
-            "privateCompany.operationDetails": operations
-    
-          },
-
-
-        });
-        if (data?.success) {
-          onClose(false);
-          getProfileData();
-          toast.success("Profile updated successfully");
-        } else {
-          toast.error(data?.message || "Failed to update profile");
-        }
+        toast.error(data?.message || "Failed to update profile");
       }
     } catch (err) {
       toast.error("An error occurred while updating the profile");
@@ -608,18 +614,9 @@ useEffect(() => {
         
       <div className="p-4 flex-grow overflow-auto">
 
-        {/* <div className="relative w-24 h-24 mx-auto mb-6">
-          <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
-            <img src={cameraIcon} alt="Profile" />
-          </div>
-          <div className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer">
-            <img src={cameraIcon} alt="Change" />
-          </div>
-        </div> */}
         <div className="relative w-24 h-24 mx-auto mb-6">
           <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
             {profileData.profileImageUrl ? (
-              // <img src={profileData.profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
               <img
                 src={profileData.profileImageUrl}
                 alt="Profile"
@@ -669,9 +666,6 @@ useEffect(() => {
             inputClassName="w-full"
             isRequired={true}
             className={"!rounded-[14px]"}
-            // inputError={!!errors.firstName}
-            // errorMessage={errors.firstName}
-            // isDisabled
           />
           <p className="text-red-600 font-Open text-[10px]">
             {nameErrMsg?.firstName}
@@ -688,9 +682,6 @@ useEffect(() => {
             }`}
             inputClassName="w-full"
             isRequired={true}
-            // inputError={!!errors.lastName}
-            // errorMessage={errors.lastName}
-            // isDisabled
           />
           <p className="text-red-600 font-Open text-[10px]">
             {nameErrMsg?.lastName}
@@ -728,14 +719,16 @@ useEffect(() => {
             isDisabled
           />
 
-               {/* Dynamic Accounts Section */}
-
-
+          {/* Dynamic Accounts Section */}
           <div className="mb-4">
             <h3 className=" text-[14px] leading-4 font-Open  font-medium mb-3">Accounts</h3>
+            {errors['accounts_general'] && (
+              <div className="text-red-600 font-Open text-[10px] mb-2 bg-red-50 p-2 rounded">
+                {errors['accounts_general']}
+              </div>
+            )}
             {accounts.map((account, index) => (
               <div key={index} className="border p-4 mb-8 rounded-[20px] relative shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
-                
                 
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs  font-Open leading-4 mb-2">  {index === 0 ? 'Primary' : `Alternate`}</span>
@@ -758,11 +751,11 @@ useEffect(() => {
                     value={account.email}
                     onChange={(e) => handleAccountChange(index, 'email', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`accounts_${index}_email`] ? "mb-2" : "mb-4"}
                     inputClassName="w-full !rounded-[14px]"
                     className={"!rounded-[14px] "}
-                    isRequired={true}
-                    inputError={!!errors[`accounts_${index}_email`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`accounts_${index}_email`]}
                     errorMessage={errors[`accounts_${index}_email`]}
                     inputType="email"
                   />
@@ -773,22 +766,20 @@ useEffect(() => {
                     value={account.contactNumber}
                     onChange={(e) => handleAccountChange(index, 'contactNumber', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`accounts_${index}_contactNumber`] ? "mb-1 mt-2" : "mb-4 mt-2"}
+
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
-                    isRequired={true}
-                    inputError={!!errors[`accounts_${index}_contactNumber`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`accounts_${index}_contactNumber`]}
                     errorMessage={errors[`accounts_${index}_contactNumber`]}
                     inputType="tel"
                   />
                 </div>
 
-           
-
               </div>
             ))}
             
-          
               <div className="flex justify-end mt-2">
             <button
               type="button"
@@ -800,11 +791,14 @@ useEffect(() => {
           </div>         
           </div>
 
-                     {/* Dynamic Operations Section */}
-
-
+          {/* Dynamic Operations Section */}
           <div className="mb-4 ">
             <h3 className="text-[14px] leading-4 font-Open  font-medium mb-3">Operations</h3>
+            {errors['operations_general'] && (
+              <div className="text-red-600 font-Open text-[10px] mb-2 bg-red-50 p-2 rounded">
+                {errors['operations_general']}
+              </div>
+            )}
             {operations.map((operation, index) => (
               <div key={index} className="border rounded-[20px] p-4 mb-8 relative shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
                
@@ -830,11 +824,11 @@ useEffect(() => {
                     value={operation.email}
                     onChange={(e) => handleOperationsChange(index, 'email', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`operations_${index}_email`] ? "mb-1" : "mb-4"}
                     inputClassName="w-full !radius-lg"
                     className={"!rounded-[14px] "}
-                    isRequired={true}
-                    inputError={!!errors[`operations_${index}_email`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`operations_${index}_email`]}
                     errorMessage={errors[`operations_${index}_email`]}
                     inputType="email"
                   />
@@ -845,11 +839,11 @@ useEffect(() => {
                     value={operation.contactNumber}
                     onChange={(e) => handleOperationsChange(index, 'contactNumber', e.target.value)}
                     onBlur={() => {}}
-                    containerStyle="mb-4"
+                    containerStyle={errors[`operations_${index}_contactNumber`] ? "mb-1 mt-2" : "mb-4 mt-2"}
                     inputClassName="w-full"
                     className={"!rounded-[14px]"}
-                    isRequired={true}
-                    inputError={!!errors[`operations_${index}_contactNumber`]}
+                    // isRequired={true}
+                    // inputError={!!errors[`operations_${index}_contactNumber`]}
                     errorMessage={errors[`operations_${index}_contactNumber`]}
                     inputType="tel"
                   />
@@ -867,14 +861,11 @@ useEffect(() => {
               Add More
             </button>
           </div>
-
             
           </div>
 
         </form>
       </div>
-
-          
 
 <div className="mt-8">
 <h2>Back</h2>
@@ -913,9 +904,7 @@ useEffect(() => {
 
     </div>
 
-         
      <div className="absolute bottom-0 mt-4 left-0 right-0 p-4 rounded-[18px] shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)] bg-white border-t border-gray-200 flex justify-end items-center">
-      {/* <div className="-mx-4 -mr-4 mt-auto p-4 rounded-[12px] shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)]    border-gray-200 flex justify-end items-center w-full"> */}
         <OneButton
           text="Back"
           onClick={() => onClose(false)}
@@ -935,7 +924,6 @@ useEffect(() => {
           />
         )}
       </div>
-        
 
     </>
   );
