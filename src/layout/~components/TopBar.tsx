@@ -192,7 +192,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       setProfileData(data?.data?.[0]);
    
     } else {
-      toast.error(data?.message);
+      //toast.error(data?.message);
     }
   };
 
