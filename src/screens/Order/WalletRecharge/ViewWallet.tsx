@@ -187,9 +187,15 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
     setAmount(value);
   };
 
-  // payment method change functionality
   const handlePaymentMethodChange = (method: string) => {
     setPaymentMethod(method);
+
+    
+  if (method === "online") {
+    setPaymentGateway("RAZORPE");
+  } else {
+    setPaymentGateway(""); 
+  }
   };
 
   // toggle functionality
@@ -553,6 +559,16 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
       }
     }
   }, [amount, couponDetails, selectedCoupon, verifiedCouponData]);
+
+  
+useEffect(() => {
+  if (paymentMethod === "online" && paymentGatewayArr.length > 0) {
+    const hasRazorpay = paymentGatewayArr.some((gateway: any) => gateway.paymentId === "RAZORPE");
+    if (hasRazorpay) {
+      setPaymentGateway("RAZORPE");
+    }
+  }
+}, [paymentGatewayArr, paymentMethod]);
 
   return (
     <>
