@@ -85,6 +85,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
   const [isCouponVerified, setIsCouponVerified] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isActives, setIsActives] = useState(false);
+  const [userSelectedGateway, setUserSelectedGateway] = useState(false);
   const rechargeAmountFromRedux = useSelector(
     (state: any) => state?.payment?.amount
   );
@@ -190,12 +191,22 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
   const handlePaymentMethodChange = (method: string) => {
     setPaymentMethod(method);
 
-    
-  if (method === "online") {
-    setPaymentGateway("RAZORPE");
-  } else {
-    setPaymentGateway(""); 
-  }
+    if (method === "online") {
+      
+      if (!userSelectedGateway && paymentGatewayArr.length > 0) {
+        const hasRazorpay = paymentGatewayArr.some(
+          (gateway: any) => gateway.paymentId === "RAZORPE"
+        );
+        if (hasRazorpay) {
+          setPaymentGateway("RAZORPE");
+        } else {
+          setPaymentGateway(paymentGatewayArr[0]?.paymentId);
+        }
+      }
+    } else {
+      setPaymentGateway("");
+      setUserSelectedGateway(false); 
+    }
   };
 
   // toggle functionality
@@ -560,15 +571,23 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
     }
   }, [amount, couponDetails, selectedCoupon, verifiedCouponData]);
 
-  
-useEffect(() => {
-  if (paymentMethod === "online" && paymentGatewayArr.length > 0) {
-    const hasRazorpay = paymentGatewayArr.some((gateway: any) => gateway.paymentId === "RAZORPE");
-    if (hasRazorpay) {
-      setPaymentGateway("RAZORPE");
+  useEffect(() => {
+    if (
+      paymentMethod === "online" &&
+      paymentGatewayArr.length > 0 &&
+      !paymentGateway &&
+      !userSelectedGateway
+    ) {
+      const hasRazorpay = paymentGatewayArr.some(
+        (gateway: any) => gateway.paymentId === "RAZORPE"
+      );
+      if (hasRazorpay) {
+        setPaymentGateway("RAZORPE");
+      } else {
+        setPaymentGateway(paymentGatewayArr[0]?.paymentId);
+      }
     }
-  }
-}, [paymentGatewayArr, paymentMethod]);
+  }, [paymentGatewayArr, paymentMethod]);
 
   return (
     <>
@@ -847,7 +866,10 @@ useEffect(() => {
                             {paymentGatewayArr?.map((el: any, i: number) => (
                               <div
                                 key={i}
-                                onClick={() => setPaymentGateway(el?.paymentId)}
+                                onClick={() => {
+                                  setPaymentGateway(el?.paymentId);
+                                  setUserSelectedGateway(true);
+                                }}
                                 className={`border cursor-pointer text-sm min-w-[6rem] py-[10px] text-center flex justify-center items-center  px-[10px] rounded-[9px] transition-transform ${
                                   el?.paymentId === paymentGateway
                                     ? "border-[#004EFF] border-[0.5px] text-white scale-105"
