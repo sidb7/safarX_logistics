@@ -10,6 +10,8 @@ interface UserState {
   walletBalance: number;
   yaariCash?: number;
   isMasked: boolean;
+  fullName?: string;
+  profileImageurl?: string;
 }
 
 // Define the initial state using that type
@@ -22,6 +24,8 @@ const initialState: UserState = {
   walletBalance: 0,
   yaariCash: 0,
   isMasked: true,
+  fullName: "",
+  profileImageurl: "",
 };
 
 export const userSlice = createSlice({
@@ -52,9 +56,16 @@ export const userSlice = createSlice({
     isMasked: (state, action) => {
       state.isMasked = action.payload.isMasked;
     },
+    setProfileInfo: (
+      state,
+      action: PayloadAction<{ fullName: string; profileImageurl: string }>
+    ) => {
+      state.fullName = action.payload.fullName;
+      state.profileImageurl = action.payload.profileImageurl;
+    },
     // other reducers...
   },
 });
 
-export const { login, logout, setWalletBalance, setYaariCashBalance, isMasked } = userSlice.actions;
+export const { login, logout, setWalletBalance, setYaariCashBalance, isMasked, setProfileInfo } = userSlice.actions;
 export default userSlice.reducer;

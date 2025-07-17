@@ -10,6 +10,8 @@ import OneButton from "../../../components/Button/OneButton";
 import { textRegex, emailRegex, mobileRegex } from "../../../utils/regexCheck";
 import DeleteIconRedColor from "../../../assets/DeleteIconRedColor.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
+import { useDispatch } from "react-redux";
+import { setProfileInfo } from "../../../redux/reducers/userReducer"; 
 
 interface EditProfileProps {
   onClose: (value: boolean) => void;
@@ -81,10 +83,12 @@ const EditProfile: React.FC<EditProfileProps> = ({
     lastName: "",
   });
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (ProfileDetails?.privateCompany) {
-      const accountDetails = ProfileDetails.privateCompany.accountDetails;
-      const operationDetails = ProfileDetails.privateCompany.operationDetails;
+      const accountDetails = ProfileDetails?.privateCompany?.accountDetails;
+      const operationDetails = ProfileDetails?.privateCompany?.operationDetails;
       
       // Handle accountDetails as array
       if (accountDetails && Array.isArray(accountDetails) && accountDetails.length > 0) {
@@ -587,6 +591,14 @@ const EditProfile: React.FC<EditProfileProps> = ({
         },
       });
       if (data?.success) {
+
+        const profdata = {
+        fullName: profileData?.firstName + " " + profileData?.lastName,
+        profileImageurl: profileData?.profileImageUrl, 
+        }
+
+        dispatch(setProfileInfo(profdata));
+
         onClose(false);
         getProfileData();
         toast.success("Profile updated successfully");
@@ -600,7 +612,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
     }
   };
 
-  console.log("nameErrMsgnameErrMsg", nameErrMsg?.firstName);
 
   return (<>
     <div className="bg-white p-4 rounded-lg shadow-lg w-full h-full flex flex-col">

@@ -13,6 +13,8 @@ import {
   POST_UPDATE_USER_DATA,
 } from "../../../../utils/ApiUrls";
 import OneButton from "../../../../components/Button/OneButton";
+import { useDispatch } from "react-redux";
+import { setProfileInfo } from "../../../../redux/reducers/userReducer"; 
 
 const Buttons = (
   className?: string,
@@ -96,8 +98,14 @@ function UpdateUser() {
         addUserData
       );
       if (response?.success) {
-        navigate("/settings/user-management");
-        toast.success(response?.message || "N/A");
+        const profdata = {
+                fullName: addUserData?.firstName + " " + addUserData?.lastName,
+                profileImageurl: addUserData?.profileImageUrl, 
+                }
+         dispatch(setProfileInfo(profdata));
+
+         toast.success(response?.message || "N/A");
+         navigate("/settings/user-management");
       } else {
         toast.error(response?.message || "N/A");
       }
@@ -109,6 +117,7 @@ function UpdateUser() {
   useEffect(() => {
     getRolesData();
   }, []);
+  const dispatch = useDispatch();
 
   return (
     <div>

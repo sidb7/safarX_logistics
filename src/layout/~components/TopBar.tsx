@@ -57,14 +57,12 @@ import sessionManager from "../../utils/sessionManager";
 import { ResponsiveState } from "../../utils/responsiveState";
 import NotificationBell from "./notificationBell";
 
-
 import LogOut from "../../assets/logOut.svg";
 import UserIcon from "../../assets/userIcon.svg";
-import ChevronRight from "../../assets/chevronRight.svg"
-
+import ChevronRight from "../../assets/chevronRight.svg";
+import { RootState } from "../../redux/store";
 
 // import { profile } from "console";
-
 
 let socket: Socket | null = null;
 
@@ -100,10 +98,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   // Add new state for Sentry feedback
   const [isSentryOpen, setIsSentryOpen] = useState(false);
 
-  const [userData, setUserData ] =useState<any>(null);
-  const [profileData,setProfileData]=useState<any>(null);
+  const [userData, setUserData] = useState<any>({});
 
-
+  const { fullName, profileImageurl } = useSelector(
+    (state: RootState) => state.user
+  );
 
   const [serviceabilityData, setServiceabilityData] = useState<any>({
     pickupPincode: "",
@@ -155,9 +154,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   //   `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
   // );
 
-
   const companyName = process.env.REACT_APP_WHITE_COMPANYNAME;
-
 
   // Handler for Report A Bug click
   const handleReportBugClick = () => {
@@ -184,23 +181,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       setIsQuick(false);
     }
   };
-
-
-   const getProfileData = async () => {
-    const { data } = await POST(GET_PROFILE_URL, {});
-    if (data?.success) {
-      setProfileData(data?.data?.[0]);
-   
-    } else {
-      //toast.error(data?.message);
-    }
-  };
-
-    useEffect(() => {
-   
-      getProfileData();
-   
-  }, [isOpen]);
 
   //Creating Dropdown data for service in serviceability
   // const setDropDownData = (data: any) => {
@@ -269,17 +249,12 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     };
   }, []);
 
-
-//   useEffect(() => {
-//   const storedUser = localStorage.getItem("sellerSession");
-//   if (storedUser) {
-//     const user1 = JSON.parse(storedUser);
-//     setUserData(user1);
-
-//   }
- 
-// }, []);
-
+  useEffect(() => {
+    const { sellerInfo } = sessionManager({});
+    if (sellerInfo) {
+      setUserData(sellerInfo);
+    }
+  }, [isOpen]);
 
   const onClickServiceability = async () => {
     try {
@@ -313,7 +288,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     //   console.error(error);
     // }
   };
-
 
   const logoutHandler = async () => {
     try {
@@ -359,6 +333,21 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   //     };
   //   }
   // }, []);
+
+  const finalImageUrl =
+    profileImageurl &&
+    profileImageurl !== "N/A" &&
+    profileImageurl !== "" &&
+    profileImageurl !== undefined
+      ? profileImageurl
+      : userData.profileImageUrl &&
+        userData.profileImageUrl !== "N/A" &&
+        userData.profileImageUrl !== "" &&
+        userData.profileImageUrl !== undefined
+      ? userData.profileImageUrl
+      : profileIcon;
+
+  const isDefaultIcon = finalImageUrl === profileIcon;
 
   return (
     <>
@@ -538,54 +527,52 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     aria-orientation="vertical"
                     aria-labelledby="options-menu"
                   >
-
-                      <div className="flex items-center  gap-x-3 px-4 py-3 mb-3 border-b  border-b-[#E5E7EB]">
-                        {/* <img
+                    <div className="flex items-center  gap-x-3 px-4 py-3 mb-3 border-b  border-b-[#E5E7EB]">
+                      {/* <img
                           src={profileIcon} 
                           alt="Profile"
                           className="w-[30px] h-[30px] rounded-full object-cover"
                         /> */}
-                        <img
-                            src={profileData?.profileImageUrl && profileData?.profileImageUrl !== "N/A" ? profileData?.profileImageUrl : profileIcon} 
-                            alt="Profile Icon"
-                            className="w-[70px] h-[70px] border border-gray-100 rounded-full object-cover"
-                          />
+                      <img
+                        src={finalImageUrl}
+                        alt="Profile Icon"
+                        className={`border border-gray-100 rounded-full object-cover ${
+                          isDefaultIcon
+                            ? "w-[50px] h-[50px]"
+                            : "w-[70px] h-[70px]"
+                        }`}
+                      />
 
-                        <div>
-                          <div className="font-semibold font-Open text-sm leading-5 text-[#1C1C1C] capitalize my-[2px]">
-                            {/* {profileData?.firstName} {profileData?.lastName} */}
-                            {profileData?.firstName && profileData?.lastName
-                              ? `${profileData.firstName} ${profileData.lastName}`
-                              : '-'}
-
-                          </div>
-                          <div className="text-gray-500  text-[12px] leading-4 font-Open">    
-                            {/* {userData?.contactNumber}<span className="px-1">|</span> */}
+                      <div>
+                        <div className="font-semibold font-Open text-sm leading-5 text-[#1C1C1C] capitalize my-[2px]">
+                          {fullName && fullName !== undefined && fullName !== ""
+                            ? fullName
+                            : userData.fullName && userData.fullName !== ""
+                            ? userData.fullName
+                            : "-"}
+                        </div>
+                        <div className="text-gray-500  text-[12px] leading-4 font-Open">
                           <span
                             className="truncate font-medium"
-                            title={profileData?.email}
+                            // title={profileData?.email}
+                            title={userData?.email}
                           >
-                            {/* {profileData?.email.length > 30
-                              ? `${profileData?.email.slice(0, 27)}...`
-                              : profileData?.email} */}
-                              {profileData?.email
-                                ? profileData.email.length > 28
-                                  ? `${profileData.email.slice(0, 25)}...`
-                                  : profileData.email
-                                : '-'}
-
+                            {userData?.email
+                              ? userData?.email.length > 28
+                                ? `${userData?.email.slice(0, 25)}...`
+                                : userData?.email
+                              : "-"}
                           </span>
 
                           <div className="font-normal font-Open text-[12px] leading-4 text-gray-400 !my-[2px]">
-                           {/* +91 {profileData?.contactNumber} */}
-                           {profileData?.contactNumber ? `+91 ${profileData.contactNumber}` : '-'}
-
-                          </div>
-                         
+                            {/* +91 {profileData?.contactNumber} */}
+                            {userData?.contactNumber
+                              ? `+91 ${userData?.contactNumber}`
+                              : "-"}
                           </div>
                         </div>
                       </div>
-
+                    </div>
 
                     {/* <hr className="h-[1px]" /> */}
 
@@ -602,24 +589,28 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         My Profile
                       </button> */}
 
-                       <button
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F9FAFB] hover:text-gray-900 font-Open"
-                    role="menuitem"
-                    onClick={() => {
-                      navigate("/profile");
-                      setIsOpen(false);
-                    }}
-                  >
-                  
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-x-2">
-                        <img src={UserIcon} alt="Profile Icon" className="w-4 h-4" />
-                        <span className="font-Open text-sm leading-5 font-normal text-[#000000]">My Profile</span>
-                      </div>
-                      {/* <img src={ChevronRight} alt="Chevron Icon" className="w-4 h-4" /> */}
-                    </div>
-
-                  </button>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F9FAFB] hover:text-gray-900 font-Open"
+                        role="menuitem"
+                        onClick={() => {
+                          navigate("/profile");
+                          setIsOpen(false);
+                        }}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center gap-x-2">
+                            <img
+                              src={UserIcon}
+                              alt="Profile Icon"
+                              className="w-4 h-4"
+                            />
+                            <span className="font-Open text-sm leading-5 font-normal text-[#000000]">
+                              My Profile
+                            </span>
+                          </div>
+                          {/* <img src={ChevronRight} alt="Chevron Icon" className="w-4 h-4" /> */}
+                        </div>
+                      </button>
 
                       {/* <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -628,7 +619,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       >
                         Settings
                       </button> */}
-                   
 
                       <button
                         className="block w-full text-left px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-[#F9FAFB] hover:text-gray-900 font-Open"
@@ -636,8 +626,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         onClick={() => logoutHandler()}
                       >
                         <div className="flex font-Open items-center gap-x-2">
-                          <img src={LogOut} alt="Logout Icon" className="w-4 h-4" />
-                          <span className="font-Open text-sm leading-5 font-normal text-[#000000]">Sign out</span>
+                          <img
+                            src={LogOut}
+                            alt="Logout Icon"
+                            className="w-4 h-4"
+                          />
+                          <span className="font-Open text-sm leading-5 font-normal text-[#000000]">
+                            Sign out
+                          </span>
                         </div>
                       </button>
                     </div>
