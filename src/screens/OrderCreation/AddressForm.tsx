@@ -4002,7 +4002,11 @@ const fetchDefaultPickupAddress = async () => {
               <li
                 key={index}
                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
-                onClick={() => handleSelectSearchResult(type, address)}
+                // onClick={() => handleSelectSearchResult(type, address)}
+                onMouseDown={(e) => {
+                e.preventDefault();
+                handleSelectSearchResult(type, address);
+              }}
               >
                 {/* Show different content based on which field is being searched */}
                 {field === "contactNo" && (
