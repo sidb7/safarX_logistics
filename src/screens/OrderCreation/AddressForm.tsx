@@ -2440,7 +2440,7 @@ import {
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast"; // Assuming this is available since it's used in OrderForm
 import sessionManager from "../../utils/sessionManager";
-
+import { Trash } from './Icons';
 
 // Import the Save and Bookmark icons like in OrderForm
 const Save = ({ className = "w-5 h-5" }) => (
@@ -4126,6 +4126,27 @@ const fetchDefaultPickupAddress = async () => {
     }
   };
 
+  // 1. Add Clear icon component after the Bookmark icon
+const ClearIcon = ({ className = "w-5 h-5" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <polyline points="3,6 5,6 21,6"></polyline>
+    <path d="m19,6v14c0,1-1,2-2,2H7c-1,0-2-1-2-2V6m3,0V4c0-1,1-2,2-2h4c0-1,1-2,2-2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
+
   // New function to save delivery address
   const saveDeliveryAddress = async () => {
     // If address is already saved, don't allow saving again
@@ -4212,6 +4233,64 @@ const fetchDefaultPickupAddress = async () => {
     }
   };
 
+  // Function to clear pickup address data
+const clearPickupAddress = () => {
+  const emptyFormValues = {
+    contactNo: "",
+    address: "",
+    name: "",
+    pincode: "",
+    city: "",
+    state: "",
+    addressLine1: "",
+    addressLine2: "",
+    landmark: "",
+    gstNo: "",
+    email: "",
+  };
+  
+  setPickupFormValues(emptyFormValues);
+  setPickupAddress(null);
+  setSavedAddresses(prev => ({ ...prev, pickup: false }));
+  setPhoneValidationErrors(prev => ({ ...prev, pickup: false }));
+  setGstValidationErrors(prev => ({ ...prev, pickup: false }));
+  
+  // Clear search results
+  setPickupSearchResults([]);
+  setShowPickupSearchResults(false);
+  
+  toast.success("Pickup address cleared successfully!");
+};
+
+// Function to clear delivery address data
+const clearDeliveryAddress = () => {
+  const emptyFormValues = {
+    contactNo: "",
+    address: "",
+    name: "",
+    pincode: "",
+    city: "",
+    state: "",
+    addressLine1: "",
+    addressLine2: "",
+    landmark: "",
+    gstNo: "",
+    email: "",
+  };
+  
+  setDeliveryFormValues(emptyFormValues);
+  setDeliveryAddress(null);
+  setSavedAddresses(prev => ({ ...prev, delivery: false }));
+  setPhoneValidationErrors(prev => ({ ...prev, delivery: false }));
+  setGstValidationErrors(prev => ({ ...prev, delivery: false }));
+  
+  // Clear search results
+  setDeliverySearchResults([]);
+  setShowDeliverySearchResults(false);
+  
+  toast.success("Delivery address cleared successfully!");
+};
+
   return (
     <div className="flex flex-row gap-6 w-full max-w-full mx-auto px-4 pt-0 pb-2">
       {/* Pickup Details Section */}
@@ -4225,6 +4304,13 @@ const fetchDefaultPickupAddress = async () => {
           </div>
           <div className="flex items-center gap-2">
             {/* Save Button - Modified from OrderForm pattern */}
+             <button
+    className=" text-gray-500 cursor-pointer hover:text-red-700"
+    onClick={clearPickupAddress}
+    title="Clear pickup address"
+  >
+    <Trash className="w-5 h-5" />
+  </button>
             <button
               className={`p-2 ${
                 savedAddresses.pickup
@@ -4427,6 +4513,13 @@ const fetchDefaultPickupAddress = async () => {
           </div>
           <div className="flex items-center gap-2">
             {/* Save Button - Modified from OrderForm pattern */}
+            <button
+    className=" text-gray-500 cursor-pointer hover:text-red-700"
+    onClick={clearDeliveryAddress}
+    title="Clear delivery address"
+  >
+    <Trash className="w-5 h-5" />
+  </button>
             <button
               className={`p-2 ${
                 savedAddresses.delivery
