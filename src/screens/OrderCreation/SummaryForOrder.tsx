@@ -757,6 +757,7 @@ interface ShippingDetailsProps {
   variableServices: any; // Added for tooltip
   orderType?: string; // Add orderType field
   revisedShippingCost?: string; // Add field for the revised shipping cost
+  taxAmount?: number;
 }
 
 interface SummaryForOrderProps {
@@ -1025,7 +1026,8 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             address: deliveryAddressForTooltip
           },
           packageDetails: {
-            boxes: fetchedOrder.boxInfo?.length || 0,
+            // boxes: fetchedOrder.boxInfo?.length || 0,
+              boxes: fetchedOrder.boxInfo?.reduce((total, box) => total + (box.qty || 1), 0) || 0,
             totalWeight: totalAppliedWeight > 0 ?
               `${Number(totalAppliedWeight.toFixed(2))} kg` : "N/A",
             invoice: fetchedOrder.codInfo?.invoiceValue !== undefined ?
@@ -1051,6 +1053,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             shippingCost: `₹ ${totalShippingCostValue}`,
             revisedShippingCost: revisedShippingCostValue !== null ?
               `₹ ${revisedShippingCostValue}` : undefined,
+            taxAmount: totalTaxValue,
             gstPercentage: (totalTaxValue > 0 && totalShippingCostValue > 0 && (totalShippingCostValue - totalTaxValue !== 0)) ?
               Number(((totalTaxValue / (totalShippingCostValue - totalTaxValue)) * 100).toFixed(0)) : 0,
             variableServices: allVariableServices,
@@ -1131,7 +1134,8 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
     collectibleAmount: "N/A", orderPrice: "N/A", variableCharges: "N/A", // Changed property names
     codHandlingFees: "N/A", yaariCash: "N/A", shippingCost: "N/A", gstPercentage: 0,
     variableServices: {}, // Added for tooltip
-    orderType: "N/A"
+    orderType: "N/A",
+    taxAmount: 0 
   };
 
   if (isLoading && !orderData) { 
@@ -1448,7 +1452,7 @@ const SummaryForOrder: React.FC<SummaryForOrderProps> = (props) => {
             : `₹ ${Number(parseFloat(shippingDetailsToRender.shippingCost.replace('₹ ', '')).toFixed(2))}`}
                   </p>
                   {shippingDetailsToRender.gstPercentage > 0 && (
-                    <p className="text-xs text-gray-500">(inc {shippingDetailsToRender.gstPercentage}% GST)</p>
+                    <p className="text-xs text-gray-500">(inc ₹{shippingDetailsToRender.taxAmount} as 18% GST)</p>
                   )}
                 </div>
               </div>
