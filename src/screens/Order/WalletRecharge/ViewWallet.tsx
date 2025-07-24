@@ -192,7 +192,6 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
     setPaymentMethod(method);
 
     if (method === "online") {
-      
       if (!userSelectedGateway && paymentGatewayArr.length > 0) {
         const hasRazorpay = paymentGatewayArr.some(
           (gateway: any) => gateway.paymentId === "RAZORPE"
@@ -205,7 +204,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
       }
     } else {
       setPaymentGateway("");
-      setUserSelectedGateway(false); 
+      setUserSelectedGateway(false);
     }
   };
 
@@ -432,15 +431,14 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
     }
 
     if (paymentMethod === "cod") {
-      console.log("COD payment method selected");
+      // console.log("COD payment method selected");
+      toast.error("COD payment method is currently disabled");
       // TODO: Add COD payment logic here
-      handleUpdateWallet();
+      // handleUpdateWallet();
       return;
     }
 
     if (paymentMethod === "neft") {
-      // console.log("NEFT payment method selected");
-
       if (!utrNo) {
         return toast.error("Please enter UTR No");
       }
@@ -778,7 +776,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
 
               {/* Payment Method Options */}
               <div className="space-y-4 my-2">
-                <div
+                {/*  <div
                   className="flex flex-col"
                   // onClick={() => handlePaymentMethodChange("cod")}
                 >
@@ -828,7 +826,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div
                   className="flex flex-col"
                   onClick={() => handlePaymentMethodChange("online")}
