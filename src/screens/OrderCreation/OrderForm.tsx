@@ -4751,6 +4751,46 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
   const [isEditingCollectible, setIsEditingCollectible] = useState(false);
 
+  // Function to clear box inputs
+const clearBoxInfo = () => {
+  setBoxes((prevBoxes) => {
+    if (allBoxesIdentical) {
+      // Clear all boxes in identical mode
+      return prevBoxes.map((box) => ({
+        ...box,
+        dimensions: {
+          l: "",
+          b: "",
+          h: "",
+          weight: "",
+          name: "",
+          isManuallyEdited: false,
+        },
+      }));
+    } else {
+      // Clear only the selected box
+      return prevBoxes.map((box) => {
+        if (box.id === selectedBox) {
+          return {
+            ...box,
+            dimensions: {
+              l: "",
+              b: "",
+              h: "",
+              weight: "",
+              name: "",
+              isManuallyEdited: false,
+            },
+          };
+        }
+        return box;
+      });
+    }
+  });
+  
+  toast.success("Box information cleared!");
+};
+
   // Store boxes and their products in a single state
   const [boxes, setBoxes] = useState<BoxData[]>(
     initialState.boxData || [
@@ -7777,6 +7817,13 @@ const OrderForm: React.FC<OrderFormProps> = ({
                   : `Box ${selectedBox} Info`}
               </div>
               <div className="flex space-x-2 w-full sm:w-auto justify-end">
+                 <button
+    className=" text-gray-500 cursor-pointer hover:text-red-700"
+    onClick={clearBoxInfo}
+    title="Clear box information"
+  >
+    <Trash className="w-5 h-5" />
+  </button>
                 <button
                   className={`p-2 ${
                     savedBox
