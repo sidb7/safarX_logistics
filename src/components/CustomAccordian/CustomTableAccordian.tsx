@@ -361,6 +361,22 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
     return boxErrors || productErrors;
   };
 
+  const generateUniqueCode = (minLength: number, maxLength: number) => {
+    const charset =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const length =
+      Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+    let code = "";
+
+    while (code.length < length) {
+      const randomIndex = Math.random() * charset.length;
+      const randomIndexOnFloor = Math.floor(randomIndex);
+      code += charset.charAt(randomIndexOnFloor);
+    }
+
+    return code;
+  };
+
   // Add this function after the existing validation functions
   // const validateOrderId = async (orderId: string): Promise<boolean> => {
   //   if (!orderId?.trim()) {
@@ -5460,30 +5476,57 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
       <div className="space-y-4">
         {/* Row 2: Order ID and Eway Bill No */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FloatingLabelInput
-            placeholder="Order ID"
-            value={orderData?.orderId || ""}
-            onChangeCallback={(value) => {
-              if (!isEnabled) {
-                setOrderData((prev: any) => ({
-                  ...prev,
-                  orderId: value,
-                }));
-                clearOrderDetailValidationError("orderId");
-                setOrderIdExistsError(false); // Clear the exists error when typing
+          {/* Order ID with Auto-Generate functionality */}
+          <div className="relative">
+            <FloatingLabelInput
+              placeholder="Order ID"
+              value={orderData?.orderId || ""}
+              onChangeCallback={(value) => {
+                if (!isEnabled) {
+                  setOrderData((prev: any) => ({
+                    ...prev,
+                    orderId: value,
+                  }));
+                  clearOrderDetailValidationError("orderId");
+                  setOrderIdExistsError(false);
+                }
+              }}
+              readOnly={isEnabled || !isProductEditingAllowed}
+              required
+              error={
+                validationErrors.orderDetails.orderId || orderIdExistsError
               }
-            }}
-            readOnly={isEnabled || !isProductEditingAllowed}
-            required
-            error={validationErrors.orderDetails.orderId || orderIdExistsError}
-            // errorMessage="Order ID is required"
-            errorMessage={
-              orderIdExistsError
-                ? "Order ID already exists"
-                : "Order ID is required"
-            }
-          />
+              errorMessage={
+                orderIdExistsError
+                  ? "Order ID already exists"
+                  : "Order ID is required"
+              }
+            />
 
+            {/* Auto-Generate Button - Only show when Order ID is empty */}
+            {(!orderData?.orderId || orderData?.orderId.trim() === "") &&
+              !isEnabled &&
+              isProductEditingAllowed && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newOrderId = generateUniqueCode(8, 12);
+                    setOrderData((prev: any) => ({
+                      ...prev,
+                      orderId: newOrderId,
+                    }));
+                    clearOrderDetailValidationError("orderId");
+                    setOrderIdExistsError(false);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-100 hover:bg-blue-200 text-blue-600 text-xs px-2 py-1 rounded transition-colors duration-200 font-medium"
+                  title="Auto Generate Order ID"
+                >
+                  AUTO GENERATE
+                </button>
+              )}
+          </div>
+
+          {/* E-way Bill Input */}
           <FloatingLabelInput
             placeholder={(() => {
               const totalValue = calculateTotalProductValue();
@@ -5494,7 +5537,6 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
               }
               return `E-way Bill No`;
             })()}
-            // placeholder="Eway Bill No"
             value={orderData?.boxInfo?.[0]?.eWayBillNo || ""}
             onChangeCallback={(value) => {
               if (!isEnabled) {
@@ -5519,7 +5561,8 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
             errorMessage={`E-way Bill Number is required for orders with total value ≥ ₹50,000`}
           />
         </div>
-        {/* Row 3: Zone - ADD THIS NEW ROW */}
+
+        {/* Row 3: Zone - Only show if enabled */}
         {isEnabled && (
           <div className="">
             <FloatingLabelInput
@@ -5527,8 +5570,6 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
               value={orderData?.zone || ""}
               readOnly={true}
             />
-            {/* Empty div to maintain grid layout */}
-            <div></div>
           </div>
         )}
       </div>
@@ -5594,83 +5635,82 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
   return (
     // <div className="space-y-4 max-h-[calc(100vh-100px)] pb-20 px-3 pt-3">
     <div className="flex flex-col min-h-[calc(100vh-100px)] px-3 pt-3">
-         <div className="flex-1 space-y-4">
-
-      {/* ADD THE STEP INDICATOR HERE */}
-      {!isEnabled && (
-        <div className="bg-blue-50 rounded-lg p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-blue-800">
-                Step 1: Order Details
-              </h2>
-              <p className="text-blue-600">
-                Fill in all order details before proceeding to service
-                selection.
-              </p>
-            </div>
-            <div className="flex space-x-2">
-              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                1
+      <div className="flex-1 space-y-4">
+        {/* ADD THE STEP INDICATOR HERE */}
+        {!isEnabled && (
+          <div className="bg-blue-50 rounded-lg p-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-blue-800">
+                  Step 1: Order Details
+                </h2>
+                <p className="text-blue-600">
+                  Fill in all order details before proceeding to service
+                  selection.
+                </p>
               </div>
-              <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
-                2
+              <div className="flex space-x-2">
+                <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                  1
+                </div>
+                <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">
+                  2
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>
-        {renderOrderHistory()}{" "}
-      </Collapsible>
-
-      <Collapsible title="Pickup Address" hasError={hasPickupAddressErrors()}>
-        {renderPickupAddressForm()}
-      </Collapsible>
-
-      <Collapsible
-        title="Delivery Address"
-        hasError={hasDeliveryAddressErrors()}
-      >
-        {renderDeliveryAddressForm()}
-      </Collapsible>
-
-      <Collapsible
-        title="Box & Products"
-        hasError={hasBoxesAndProductsErrors()}
-      >
-        {renderBoxAndProducts()}
-      </Collapsible>
-
-      {isEnabled && (
-        <Collapsible
-          title="Services"
-          onToggle={(isOpen) => {
-            if (isOpen) {
-              fetchServiceList();
-            }
-          }}
-        >
-          {renderServices()}
+        <Collapsible title="Order Details" hasError={hasOrderDetailsErrors()}>
+          {renderOrderHistory()}{" "}
         </Collapsible>
-      )}
 
-      <Collapsible title="Payment Details">
-        {renderPaymentDetails()}
-      </Collapsible>
+        <Collapsible title="Pickup Address" hasError={hasPickupAddressErrors()}>
+          {renderPickupAddressForm()}
+        </Collapsible>
 
-      <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
+        <Collapsible
+          title="Delivery Address"
+          hasError={hasDeliveryAddressErrors()}
+        >
+          {renderDeliveryAddressForm()}
+        </Collapsible>
 
-      <Collapsible title="Order Confirmation Logs">
-        {renderOrderConfirmationLogs()}
-      </Collapsible>
+        <Collapsible
+          title="Box & Products"
+          hasError={hasBoxesAndProductsErrors()}
+        >
+          {renderBoxAndProducts()}
+        </Collapsible>
 
+        {isEnabled && (
+          <Collapsible
+            title="Services"
+            onToggle={(isOpen) => {
+              if (isOpen) {
+                fetchServiceList();
+              }
+            }}
+          >
+            {renderServices()}
+          </Collapsible>
+        )}
+
+        <Collapsible title="Payment Details">
+          {renderPaymentDetails()}
+        </Collapsible>
+
+        <Collapsible title="Event Logs">{renderEventLogs()}</Collapsible>
+
+        <Collapsible title="Order Confirmation Logs">
+          {renderOrderConfirmationLogs()}
+        </Collapsible>
       </div>
 
       {!isEnabled && (
         <div
-className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[60px] bg-[#FFFFFF] px-6 py-3 rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0 "          style={{ width: "-webkit-fill-available" }}
+          className="flex justify-end gap-x-10 shadow-lg border-[1px] h-[60px] bg-[#FFFFFF] px-6 py-3 rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0 "
+          style={{ width: "-webkit-fill-available" }}
         >
           {/* <OneButton
             text="Place Order"
