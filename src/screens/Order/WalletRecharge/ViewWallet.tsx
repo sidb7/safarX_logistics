@@ -58,6 +58,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
   const [showCoupons, setShowCoupons] = useState(false);
   const [paymentGatewayArr, setPaymentGatewayArr] = useState<any>([]);
   const [paymentGateway, setPaymentGateway] = useState<any>("");
+  const [isRetrying, setIsRetrying] = useState(false);
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
   const [dataFromSession, setDataFromSession] = useState<any>();
   const [companydetails, setcompanydetails] = useState<any>(
@@ -86,6 +87,9 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isActives, setIsActives] = useState(false);
   const [userSelectedGateway, setUserSelectedGateway] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 1000;
   const rechargeAmountFromRedux = useSelector(
     (state: any) => state?.payment?.amount
   );
@@ -570,22 +574,55 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
   }, [amount, couponDetails, selectedCoupon, verifiedCouponData]);
 
   useEffect(() => {
-    if (
-      paymentMethod === "online" &&
-      paymentGatewayArr.length > 0 &&
-      !paymentGateway &&
-      !userSelectedGateway
-    ) {
-      const hasRazorpay = paymentGatewayArr.some(
-        (gateway: any) => gateway.paymentId === "RAZORPE"
-      );
-      if (hasRazorpay) {
-        setPaymentGateway("RAZORPE");
-      } else {
-        setPaymentGateway(paymentGatewayArr[0]?.paymentId);
+    let timeoutId: NodeJS.Timeout;
+
+    if (paymentMethod === "online" && !paymentGateway && !userSelectedGateway) {
+      if (paymentGatewayArr && paymentGatewayArr?.length > 0) {
+        // Success case - we have data
+        const hasRazorpay = paymentGatewayArr.some(
+          (gateway: any) => gateway.paymentId === "RAZORPE"
+        );
+        if (hasRazorpay) {
+          setPaymentGateway("RAZORPE");
+        } else {
+          setPaymentGateway(paymentGatewayArr[0]?.paymentId);
+        }
+        setRetryCount(0);
+      } else if (retryCount < MAX_RETRIES) {
+        setIsRetrying(true);
+
+        // Retry case
+        timeoutId = setTimeout(() => {
+          let tempPaymentArr: any = sessionStorage.getItem("paymentGateway");
+          if (tempPaymentArr) {
+            try {
+              tempPaymentArr = JSON.parse(tempPaymentArr);
+              if (Array.isArray(tempPaymentArr)) {
+                setPaymentGatewayArr(tempPaymentArr);
+              }
+            } catch (e) {
+              console.error("Error parsing payment gateway data:", e);
+            }
+          }
+          setRetryCount((prev) => prev + 1);
+          setIsRetrying(false);
+        }, RETRY_DELAY);
       }
     }
-  }, [paymentGatewayArr, paymentMethod]);
+
+    // Cleanup function to clear timeout
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [
+    paymentGatewayArr,
+    paymentMethod,
+    retryCount,
+    paymentGateway,
+    userSelectedGateway,
+  ]);
 
   return (
     <>
@@ -860,6 +897,11 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
 
                       {paymentMethod === "online" && (
                         <>
+                          {isRetrying && !paymentGatewayArr?.length && (
+                            <p className="text-sm text-gray-500">
+                              Loading payment options...
+                            </p>
+                          )}
                           <div className="flex flex-wrap gap-x-3 gap-y-3 sm:grid sm:grid-cols-2 md:flex">
                             {paymentGatewayArr?.map((el: any, i: number) => (
                               <div
