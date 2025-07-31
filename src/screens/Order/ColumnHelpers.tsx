@@ -26,6 +26,7 @@ import {
   COMPANY_NAME,
   SELLER_WEB_URL,
   UPDATE_ORDER_CONFIRMATION_STATUS,
+  FETCH_LABELS_REPORT_DOWNLOAD,
 } from "../../utils/ApiUrls";
 import { Key, useEffect, useRef, useState } from "react";
 import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
@@ -181,7 +182,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
     ],
   };
 
-  const actionClickHandler = (
+  const actionClickHandler = async (
     payLoad?: any,
     actionType?: any,
     currentStatus?: any,
@@ -192,26 +193,107 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
         `${SELLER_WEB_URL}/tracking?trackingNo=${data?.awb}`,
         "_blank"
       );
-    } else {
-      orderActions(payLoad, actionType, currentStatus, data);
+      return;
+    }
+
+    if (actionType === "download_label") {
+      const loadingToast = toast.loading("Preparing label(s) for download...");
+      const payload = { awbs: [data?.awb] };
+
+      try {
+        const response: any = await POST(FETCH_LABELS_REPORT_DOWNLOAD, payload);
+        const partnerFromBackend = response?.data?.partnerName?.toUpperCase();
+        const pngLinks: string[] = response?.data?.imageUrls || [];
+
+        const isImageBasedPartner = [
+          "MUTHOOT",
+          "DELHIVERY",
+          "BLUEDART",
+          "XPRESSBEES",
+          "GATI",
+          "EKART",
+        ].includes(partnerFromBackend);
+
+        if (isImageBasedPartner && pngLinks.length > 0) {
+          await downloadAllPngs(pngLinks, data?.awb);
+          toast.success("PNG labels downloaded successfully!", {
+            id: loadingToast,
+          });
+        } else {
+          toast.dismiss(loadingToast);
+          orderActions(payLoad, actionType, currentStatus, data);
+        }
+      } catch (err) {
+        console.error("Label download error:", err);
+        toast.error("Failed to download labels");
+      }
+
+      return;
+    }
+
+    orderActions(payLoad, actionType, currentStatus, data);
+  };
+
+  const downloadAllPngs = async (pngLinks: string[], awb?: string) => {
+    try {
+      for (let i = 0; i < pngLinks.length; i++) {
+        const url = pngLinks[i];
+
+        try {
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch image: ${response.statusText}`);
+          }
+
+          const blob = await response.blob();
+
+          const blobUrl = URL.createObjectURL(blob);
+
+          // Create download link
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = `${awb || "label"}_${i + 1}.png`;
+          a.style.display = "none";
+
+          // Trigger download
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+          }, 1000);
+
+          if (i < pngLinks.length - 1) {
+            await new Promise((resolve) => setTimeout(resolve, 200));
+          }
+        } catch (imageError) {
+          console.error(`Failed to download image ${i + 1}:`, imageError);
+
+          window.open(url, "_blank");
+        }
+      }
+    } catch (error) {
+      console.error("Error in downloadAllPngs:", error);
     }
   };
 
   return (
-    <div className=" min-w-[150px] rounded-md border">
+    <div className=" min-w-[150px]  rounded-md border">
       {actionsObject[currentStatus]?.map((action: any, index: any) => (
         <>
           {action?.actionType === "download_label" ? (
             <div
               className="hover:bg-[#E5E7EB] flex justify-start items-center px-3 py-2"
-              onClick={() =>
+              onClick={() => {
                 actionClickHandler(
                   payLoad,
                   action.actionType,
                   currentStatus,
                   data
-                )
-              }
+                );
+              }}
             >
               <div className="w-[20px]">
                 <img src={action.icon} alt="" />
@@ -224,14 +306,14 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
           ) : (
             <div
               className="flex hover:bg-[#E5E7EB] justify-start items-center py-2 px-3"
-              onClick={() =>
+              onClick={() => {
                 actionClickHandler(
                   payLoad,
                   action.actionType,
                   currentStatus,
                   data
-                )
-              }
+                );
+              }}
             >
               <div className=" w-[20px]">
                 <img src={action.icon} alt="" />
@@ -727,8 +809,7 @@ const idHelper = (
               : rowsData.orderId
               ? rowsData.orderId
               : `T${rowsData.tempOrderId}`,
-                  tempOrderId: rowsData?.tempOrderId,  // Add this line
-
+          tempOrderId: rowsData?.tempOrderId, // Add this line
         });
         // setInfoModalContent({
         //   isOpen: true,
@@ -1376,8 +1457,7 @@ export const columnHelperForNewOrder = (
             awb: "0",
             orderId: `T${rowsData?.tempOrderId}`,
             orderNumber: otherDetails?.orderNumber,
-           tempOrderId: rowsData?.tempOrderId,  // Add this line
-
+            tempOrderId: rowsData?.tempOrderId, // Add this line
           });
         };
         const updateBuyerConfirmation = async (

@@ -1530,48 +1530,47 @@ const Index = () => {
   };
 
   const fetchLabels = async (
-    arrLebels: string[],
-    setIsLoadingManifest: any
-  ) => {
-    if (!arrLebels?.length) {
-      toast.error("Please Select One Orders For label");
-      return;
-    }
+  arrLebels: string[],
+  setIsLoadingManifest: any
+) => {
+  if (!arrLebels?.length) {
+    toast.error("Please Select One Orders For label");
+    return;
+  }
 
-    const selectAllContainer: any = document.getElementById("selectAll");
-    const checkbox = selectAllContainer.querySelector('input[type="checkbox"]');
+  const selectAllContainer: any = document.getElementById("selectAll");
+  const checkbox = selectAllContainer?.querySelector('input[type="checkbox"]');
+  const isChecked = checkbox?.checked;
 
-    // Function to check if the checkbox is checked
-    const isChecked = checkbox.checked;
-    let awbs: any = [];
-    if (isChecked) {
-      orders?.map((el: any, i: number) => {
-        awbs.push(el?.awb);
-      });
-    } else {
-      awbs.push(...arrLebels.filter((item: any) => item !== ""));
-    }
-    setIsLoadingManifest({
-      isLoading: true,
-      identifier: "Download_Labels",
+  let awbs: any = [];
+  if (isChecked) {
+    orders?.forEach((el: any) => {
+      awbs.push(el?.awb);
     });
+  } else {
+    awbs.push(...arrLebels.filter((item: any) => item !== ""));
+  }
 
-    const payload: any = {
-      awbs,
-      source: "WEBSITE",
-    };
-    const { sellerInfo } = sessionManager({});
-    const sellerId = sellerInfo?.sellerId;
-    let header = {
-      Accept: "/",
-      // Authorization: `Bearer ${localStorage.getItem(
-      //   `${sellerId}_${tokenKey}`
-      // )}`,
-      Authorization: `Bearer ${sellerInfo?.token}`,
-      "Content-Type": "application/json",
-    };
+  setIsLoadingManifest({
+    isLoading: true,
+    identifier: "Download_Labels",
+  });
 
-    const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+  const payload: any = {
+    awbs,
+    source: "WEBSITE",
+  };
+
+  const { sellerInfo } = sessionManager({});
+  const sellerId = sellerInfo?.sellerId;
+  const header = {
+    Accept: "/",
+    Authorization: `Bearer ${sellerInfo?.token}`,
+    "Content-Type": "application/json",
+  };
+
+  try {
+    const response = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
       method: "POST",
       headers: header,
       body: JSON.stringify(payload),
@@ -1582,47 +1581,96 @@ const Index = () => {
       identifier: "",
     });
 
-    if (!data.ok) {
-      const contentType = data.headers.get("Content-Type");
+    const contentType = response.headers.get("Content-Type");
 
-      // Check if the Content-Type indicates JSON
-      if (contentType && contentType.includes("application/json")) {
-        const jsonData = await data.json();
-        console.log("JSON Data:", jsonData);
+    // 📦 Check if JSON response (image-based partners)
+    if (contentType?.includes("application/json")) {
+      const resJson = await response.json();
 
-        if (!jsonData?.success) {
-          toast.error(jsonData?.message);
-        }
+      const partnerName = resJson?.partnerName?.toUpperCase();
+      const pngLinks: string[] = resJson?.imageUrls || [];
+      console.log("png links",pngLinks)
+      const isImageBasedPartner = [
+        "MUTHOOT",
+        "DELHIVERY",
+        "BLUEDART",
+        "XPRESSBEES",
+        "GATI",
+        "EKART"
+      ].includes(partnerName);
+
+      if (isImageBasedPartner && pngLinks.length > 0) {
+        await downloadAllPngs(pngLinks); 
+        toast.success("PNG labels downloaded successfully!");
+        return;
       } else {
-        // Handle other types of responses or errors
-        toast.error("An unexpected error occurred.");
+        toast.error("No image labels found. 11");
+        return;
       }
-
-      return; // Exit the function to avoid further processing
     }
 
-    const resdata: any = await data.blob();
+    // 🧾 If it's not JSON, fallback to PDF blob
+    const resBlob = await response.blob();
+    const blob = new Blob([resBlob], { type: resBlob?.type });
 
-    const blob = new Blob([resdata], { type: resdata?.type });
-    let filename: any;
-    if (resdata?.type === "image/png") {
-      filename = "Label_Report.png";
-    } else {
-      filename = "Label_Report.pdf";
-    }
+    const filename =
+      resBlob?.type === "image/png" ? "Label_Report.png" : "Label_Report.pdf";
 
-    var url = URL.createObjectURL(blob);
-    setIsLoadingManifest({
-      isLoading: false,
-      identifier: "",
-    });
-
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = filename;
     a.click();
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+
     return true;
-  };
+  } catch (error) {
+    console.error("fetchLabels error:", error);
+    toast.error("Something went wrong while fetching labels.");
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+  }
+};
+
+
+  const downloadAllPngs = async (pngLinks: string[], awb?: string) => {
+  for (let i = 0; i < pngLinks.length; i++) {
+    const url = pngLinks[i];
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Image fetch failed");
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `${awb || "label"}_${i + 1}.png`;
+      a.style.display = "none";
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+      if (i < pngLinks.length - 1) {
+        await new Promise((r) => setTimeout(r, 200));
+      }
+    } catch (err) {
+      console.error(`Error downloading image ${i + 1}:`, err);
+      window.open(url, "_blank");
+    }
+  }
+};
+
+
 
   const fetchMultiTax = async (
     arrLebels: string[],

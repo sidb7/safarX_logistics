@@ -5,6 +5,7 @@ import multiplePageLabel from "../../../../assets/multiplePageLabel.svg";
 import A4PageLabel from "../../../../assets/A4.png";
 import A5PageLabel from "../../../../assets/A5.png";
 import A6PageLabel from "../../../../assets/A6.png";
+import FourPageLabel from "../../../../assets/4X4.png";
 import CustomRadioButton from "../../../../components/RadioButton/Index";
 import CustomDropDown from "../../../../components/DropDown";
 
@@ -22,6 +23,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
   const [checked, setChecked] = useState();
   const [labelPerPage, setLabelPerPage] = useState();
   const [a4LabelOption, setA4LabelOption] = useState(false);
+  const [fourLabelOption, setFourLabelOption] = useState(false);
+
   const [a4LabelOptionValue, setA4LabelOptionValue] = useState("1");
 
   useEffect(() => {
@@ -41,6 +44,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
   const handleOptionChange = (e: any) => {
     if (e === "A4") {
       setA4LabelOption(true);
+    } else if (e == "4X4") {
+      setFourLabelOption(true);
     } else {
       setA4LabelOption(false);
     }
@@ -193,6 +198,26 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                     name="singlePage"
                     value="A6"
                     checked={checked === "A6"}
+                    onChange={() => {}}
+                    // defaultChecked=""
+                    inputClassName="h-full m-2"
+                    style={{ accentColor: "black" }}
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-end items-center cursor-pointer"
+                onClick={() => handleOptionChange("4X4")}
+              >
+                <img src={FourPageLabel} alt="A6PageLabel" />
+                <div className="md:w-[40%] text-center flex-col flex justify-center items-center">
+                  <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
+                    4X4 Size 4 x 4 inches
+                  </p>
+                  <CustomRadioButton
+                    name="singlePage"
+                    value="4X4"
+                    checked={checked === "4X4"}
                     onChange={() => {}}
                     // defaultChecked=""
                     inputClassName="h-full m-2"

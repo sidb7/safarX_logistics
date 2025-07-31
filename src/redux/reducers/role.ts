@@ -57,6 +57,10 @@ export const getRoles: any = createAsyncThunk(
         "companydetails",
         JSON.stringify(response?.data?.[0]?.companydetails?.[0])
       );
+      sessionStorage.setItem(
+        "muthootUser",
+        JSON.stringify(response?.data?.[0]?.muthootUser)
+      );
       return role;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
