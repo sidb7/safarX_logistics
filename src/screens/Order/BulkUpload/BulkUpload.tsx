@@ -177,7 +177,7 @@ const BulkUpload = (props: ITypeProps) => {
 
     const downloadUrlB2B = `${baseUrl}BULK_B2B_ORDER.xlsx`;
     let downloadUrlB2C = `${baseUrl}BULK_B2C_ORDER.xlsx`;
-    if (isMuthootUser) {
+    if (isMuthootUser == "true") {
       downloadUrlB2C = `${baseUrl}MUTHOOD_BULK_B2C_ORDER.xlsx`;
     }
     const downloadUrl =
