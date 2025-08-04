@@ -1283,6 +1283,8 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/tracking/:trackingNumber" element={<ClientTracking />} />
         </Route>
 
         <Route

@@ -361,6 +361,133 @@ const [eWayBillUpdated, setEWayBillUpdated] = useState(false);
   // In OrderCreation component, add a new state variable for eWayBillNumber
 const [eWayBillNumber, setEWayBillNumber] = useState("");
 
+const [formKey, setFormKey] = useState(Date.now());
+const handleClearForm = () => {
+  // Show confirmation dialog
+  if (window.confirm("Are you sure you want to clear all form data? This action cannot be undone.")) {
+    // Clear all localStorage data
+    clearSavedOrderData();
+    
+    // Clear OrderForm specific localStorage keys
+    const ORDERFORM_STORAGE_KEYS = {
+      BOX_DATA: "order-form-box-data",
+      BOX_COUNT: "order-form-box-count",
+      SELECTED_BOX: "order-form-selected-box",
+      ALL_BOXES_IDENTICAL: "order-form-all-boxes-identical",
+      PRODUCT_SUGGESTIONS: "order-form-product-suggestions",
+      BOX_SUGGESTIONS: "order-form-box-suggestions",
+      SAVED_PRODUCTS: "order-form-saved-products",
+      SAVED_BOX: "order-form-saved-box",
+      TOTAL_COLLECTIBLE_AMOUNT: "order-form-total-collectible-amount",
+    };
+
+    // Clear OrderForm localStorage
+    Object.values(ORDERFORM_STORAGE_KEYS).forEach((key) => {
+      localStorage.removeItem(key);
+    });
+
+    // Clear OrderFormB2B specific localStorage keys
+    const B2B_STORAGE_KEYS = {
+      B2B_BOXES: "order-form-b2b-boxes",
+      B2B_BOX_COUNT: "order-form-b2b-box-count",
+      B2B_CATALOG_PRODUCTS: "order-form-b2b-catalog-products",
+      B2B_PACKAGE_NAME_SEARCH: "order-form-b2b-package-name-search",
+      B2B_PACKAGE_SEARCH_RESULTS: "order-form-b2b-package-search-results",
+      B2B_FILTERED_PACKAGE_RESULTS: "order-form-b2b-filtered-package-results",
+      B2B_SAVED_STATES: "order-form-b2b-saved-states",
+    };
+
+    Object.values(B2B_STORAGE_KEYS).forEach((key) => {
+      localStorage.removeItem(key);
+    });
+    
+    // Reset all states to initial values
+    setActiveStep(1);
+    setOrder({
+      orderId: generateUniqueCode(8, 12),
+      orderType: "B2C",
+      reverseState: "FORWARD",
+    });
+    setPickupFormValues({
+      contactNo: "",
+      address: "",
+      name: "",
+      pincode: "",
+      city: "",
+      state: "",
+      addressLine1: "",
+      addressLine2: "",
+      landmark: "",
+      gstNo: "",
+      email: "",
+    });
+    setDeliveryFormValues({
+      contactNo: "",
+      address: "",
+      name: "",
+      pincode: "",
+      city: "",
+      state: "",
+      addressLine1: "",
+      addressLine2: "",
+      landmark: "",
+      gstNo: "",
+      email: "",
+    });
+    setBoxesData([]);
+    setB2BBoxesData([]);
+    setPaymentMethod("Prepaid");
+    setCollectibleAmount("");
+    setInsuranceOption("noInsurance");
+    setSelectedServiceDetails(null);
+    setTempOrderId("");
+    setOrderSource("");
+    setTotalCollectibleAmount(0);
+    setEWayBillNumber("");
+    setEWayBillUpdated(false);
+    setBoxCount(1);
+    setAllBoxesIdentical(false);
+    
+    // Clear any validation errors
+    setFormErrors({
+      pickup: {
+        contactNo: false,
+        address: false,
+        name: false,
+        pincode: false,
+        city: false,
+        state: false,
+        addressLine1: false,
+        addressLine2: false,
+        landmark: false,
+        gstNo: false,
+        email: false,
+      },
+      delivery: {
+        contactNo: false,
+        address: false,
+        name: false,
+        pincode: false,
+        city: false,
+        state: false,
+        addressLine1: false,
+        addressLine2: false,
+        landmark: false,
+        gstNo: false,
+        email: false,
+      },
+    });
+    setBoxValidationErrors({});
+    setOrderIdError(false);
+    
+    // Change the form key to force remount of OrderForm component
+    setFormKey(Date.now());
+    
+    // Show success message
+    toast.success("Form cleared successfully!");
+  }
+};
+
 // Create a callback function to update the eWayBillNumber state
 const handleEWayBillUpdate = (billNumber: string) => {
   setEWayBillNumber(billNumber);
@@ -2409,6 +2536,8 @@ const prepareBoxInfoForReverseOrder = () => {
                   setHighLightField={setHighLightField}
                   orderIdError={orderIdError}              // Add this
   onOrderIdChange={handleOrderIdChange}    // Add this
+    onClearForm={handleClearForm}  // Add this new prop
+
                 />
               </Collapsible>
 
@@ -2473,7 +2602,8 @@ const prepareBoxInfoForReverseOrder = () => {
                   />
                 )} */}
                 <OrderForm
-  key={order.orderType === "B2C" ? "b2c-form" : "b2b-form"}
+  // key={order.orderType === "B2C" ? "b2c-form" : "b2b-form"}
+    key={`${order.orderType === "B2C" ? "b2c-form" : "b2b-form"}-${formKey}`}
   onBoxDataUpdate={handleBoxDataUpdate}
   validationErrors={boxValidationErrors}
   clearFieldError={clearBoxFieldError}

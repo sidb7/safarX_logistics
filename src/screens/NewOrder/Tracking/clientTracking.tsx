@@ -30,6 +30,7 @@ import { UPDATETRACKINGBYBUYER } from "../../../utils/ApiUrls";
 // import { POST } from "../../../utils/webService";
 import { POSTHEADER } from "../../../utils/webService";
 import sessionManager from "../../../utils/sessionManager";
+import { useParams } from "react-router-dom";
 
 const Tracking = () => {
   const isMobileResponsive = ResponsiveState();
@@ -42,8 +43,12 @@ const Tracking = () => {
   const path = PathFinder(currenturl);
   const [trackingState, setTrackingState] = useState<any[]>([]);
   const [openOrderDetails, setOpenOrderDetails] = useState<string | null>(null);
-  const { trackingNo: trackingNoParams = "" } = getQueryJson();
-  const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
+  const { trackingNumber } = useParams(); 
+  const { trackingNo: trackingNoParams = "" } = getQueryJson(); 
+  const actualPath = trackingNumber ? "tracking" : path;
+  const [trackingNo, setTrackingNo] = useState<any>(
+    trackingNumber || trackingNoParams 
+  );
   const [loading, setLoading] = useState(false);
   const [sellerId, setSellerId] = useState<any>();
   const [loggedIn, setLoggedIn] = useState<any>(false);
@@ -176,8 +181,8 @@ const Tracking = () => {
     getJwtTokenForUser(sellerId);
     try {
       setLoading(true);
-
-      const result = await inputRegexFilter(trackingNo, path);
+      
+      const result = await inputRegexFilter(trackingNo, actualPath); // Use actualPath instead of path
 
       //mapping the new data
       if (result?.success) {
