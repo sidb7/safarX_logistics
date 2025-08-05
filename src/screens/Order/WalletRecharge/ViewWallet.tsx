@@ -647,7 +647,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
 
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-5 overflow-hidden mt-5 lg:mt-0">
           {/* Balance Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[30px] mb-6 lg:mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-[30px] mb-2 lg:mb-4">
             <div
               className="bg-white rounded-[20px] shadow-md p-4 block md:hidden"
               onClick={() => navigate("/wallet/transaction-history")}
@@ -721,6 +721,16 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg px-3 py-1 mb-4">
+            <p className="text-xs text-yellow-700 font-Lato leading-5">
+              Disclaimer: Only recharges made via the Shipyaari panel will
+              reflect in your wallet. Payments made directly via UPI or any
+              external payment gateway will not be visible in the panel and your
+              wallet balance will not be updated. For any queries, contact
+              support@shipyaari.com.{" "}
+            </p>
           </div>
 
           {/* Main Content */}
