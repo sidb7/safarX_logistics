@@ -5,7 +5,7 @@ import { CustomTable } from "../../../components/Table";
 import { SearchBox } from "../../../components/SearchBox";
 import CopyTooltip from "../../../components/CopyToClipboard";
 
-function CodRemittedAwbModal({ onClick, awbs, isRecovery }: any) {
+function CodRemittedAwbModal({ onClick, awbs, isRecovery ,isAWB,isOrderId,isOrderNum}: any) {
   const columnsHelper = createColumnHelper();
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,7 +48,15 @@ function CodRemittedAwbModal({ onClick, awbs, isRecovery }: any) {
     <div>
       <div className="flex items-center justify-between p-5">
         <p className="font-semibold text-2xl">
-          {isRecovery ? "Cod Recovery AWBs" : "Cod Remitted AWBs"}
+          {isRecovery
+            ? "Cod Recovery"
+            : isAWB
+            ? "Cod Remitted AWBS"
+            : isOrderId
+            ? "Order IDs"
+            : isOrderNum
+            ? "Order Numbers"
+            : ""}
         </p>
         <img
           src={crossIcon}
@@ -58,9 +66,21 @@ function CodRemittedAwbModal({ onClick, awbs, isRecovery }: any) {
         />
       </div>
       <div className="px-6 flex justify-between">
-        <div className="font-semibold text-lg">Tracking IDs</div>
+        <div className="font-semibold text-lg">
+          {isOrderId
+            ? "Order IDs"
+            : isOrderNum
+            ? "Order Numbers"
+            : "Tracking IDs"}
+        </div>
         <SearchBox
-          customPlaceholder="Search tracking ID"
+          customPlaceholder={
+            isOrderId
+            ? "Search Order ID"
+            : isOrderNum
+            ? "Search Order Number"
+            : "Search Tracking ID"
+          }
           label="Search"
           value={searchTerm}
           onChange={(e: any) => setSearchTerm(e.target.value)}

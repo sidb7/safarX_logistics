@@ -37,6 +37,9 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     isOpen: false,
     data: [],
     recovery: false,
+    isAWB:false,
+    isOrderId:false,
+    isOrderNum:false,
   });
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -265,6 +268,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
         const formattedData = response?.data?.orders?.map((order: any) => {
           return {
             OrderId: order.orderId,
+            OrderNumber: order?.orderNumber || "NA",
             AWB: order.awb,
             InvoiceValue: order?.invoiceValue,
             SellerId: order.sellerId,
@@ -504,16 +508,19 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           <RightSideModal
             isOpen={awbModal?.isOpen}
             onClose={() => {
-              setAwbModal({ isOpen: false, data: [], recovery: false });
+              setAwbModal({ isOpen: false, data: [], recovery: false, isAWB: false, isOrderId: false, isOrderNum: false });
             }}
             className="md:!w-[40%]"
           >
             <CodRemittedAwbModal
               onClick={() =>
-                setAwbModal({ isOpen: false, data: [], recovery: false })
+                setAwbModal({ isOpen: false, data: [], recovery: false, isAWB: false, isOrderId: false, isOrderNum: false })
               }
               awbs={awbModal?.data}
               isRecovery={awbModal?.recovery}
+              isAWB={awbModal?.isAWB}
+              isOrderId={awbModal?.isOrderId}
+              isOrderNum={awbModal?.isOrderNum}
             />
           </RightSideModal>
         </div>

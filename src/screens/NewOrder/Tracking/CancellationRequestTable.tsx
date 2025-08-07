@@ -211,6 +211,18 @@ const CancellationRequestTable = (props: Props) => {
         );
       },
     }),
+    columnsHelper.accessor("courierPartner", {
+  header: () => <div className="text-left">Courier Partner</div>,
+  cell: (info) => {
+    const courierPartnerName = info?.row?.original?.courierPartnerName;
+
+    return (
+      <div className="font-sans text-sm leading-5 text-black w-[120px]">
+        <span>{courierPartnerName || "NA"}</span>
+      </div>
+    );
+  },
+}),
     columnsHelper.accessor("custContactDetail", {
       header: () => <div className="text-left">Cust Contact Details</div>,
       cell: (info) => {
