@@ -213,84 +213,84 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         );
       },
     }),
-    // columnsHelper.accessor("orderId", {
-    //   header: () => {
-    //     return (
-    //       <div className="flex justify-between ">
-    //         <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-    //           OrderId
-    //         </p>
-    //         <img className="cursor-pointer" src={sortIcon} alt="" />
-    //       </div>
-    //     );
-    //   },
+    columnsHelper.accessor("orderId", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
+              OrderId
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
 
-    //   cell: (info: any) => {
-    //     const orderId = info?.row?.original?.details?.orderIds;
-    //     // Calculate the count of AWBs
-    //     const orderIdCount = Array.isArray(orderId) ? orderId?.length : 0;
+      cell: (info: any) => {
+        const orderId = info?.row?.original?.details?.orderIds;
+        // Calculate the count of AWBs
+        const orderIdCount = Array.isArray(orderId) ? orderId?.length : 0;
 
-    //     return (
-    //       <div
-    //         className=""
-    //         onClick={() =>
-    //           setAwbModal({
-    //             isOpen: true,
-    //             data: info?.row?.original?.details?.orderIds,
-    //             recovery: false,
-    //             isAWB:false,
-    //             isOrderId: true,
-    //             isOrderNum: false,
-    //           })
-    //         }
-    //       >
-    //         {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
-    //        <p className="text-[#5958FF] text-xs cursor-pointer">
-    //           {orderIdCount === 0 ? 'NA' : `${orderIdCount} Order Id`}
-    //         </p>
-    //       </div>
-    //     );
-    //   },
-    // }),
-    // columnsHelper.accessor("orderNumber", {
-    //   header: () => {
-    //     return (
-    //       <div className="flex justify-between ">
-    //         <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-    //            Order Number
-    //         </p>
-    //         <img className="cursor-pointer" src={sortIcon} alt="" />
-    //       </div>
-    //     );
-    //   },
+        return (
+          <div
+            className=""
+            onClick={() =>
+              setAwbModal({
+                isOpen: true,
+                data: info?.row?.original?.details?.orderIds,
+                recovery: false,
+                isAWB:false,
+                isOrderId: true,
+                isOrderNum: false,
+              })
+            }
+          >
+            {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
+           <p className="text-[#5958FF] text-xs cursor-pointer">
+              {orderIdCount === 0 ? 'NA' : `${orderIdCount} Order Id`}
+            </p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("orderNumber", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
+               Order Number
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
 
-    //   cell: (info: any) => {
-    //     const orderNumbers = info?.row?.original?.details?.channelNumbers;
-    //     // Calculate the count of AWBs
-    //     const orderNumberCount = Array.isArray(orderNumbers) ? orderNumbers?.length : 0;
+      cell: (info: any) => {
+        const orderNumbers = info?.row?.original?.details?.channelNumbers;
+        // Calculate the count of AWBs
+        const orderNumberCount = Array.isArray(orderNumbers) ? orderNumbers?.length : 0;
 
-    //     return (
-    //       <div
-    //         className=""
-    //         onClick={() =>
-    //           setAwbModal({
-    //             isOpen: true,
-    //             data: info?.row?.original?.details?.channelNumbers,
-    //             recovery: false,
-    //             isAWB:false,
-    //             isOrderId: false,
-    //             isOrderNum: true,
-    //           })
-    //         }
-    //       >
-    //         {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
-    //         <p className="text-[#5958FF] text-xs cursor-pointer">
-    //           {orderNumberCount === 0 ? 'NA' : `${orderNumberCount} Order Number`}
-    //         </p>
-    //       </div>
-    //     );
-    //   },
-    // }),
+        return (
+          <div
+            className=""
+            onClick={() =>
+              setAwbModal({
+                isOpen: true,
+                data: info?.row?.original?.details?.channelNumbers,
+                recovery: false,
+                isAWB:false,
+                isOrderId: false,
+                isOrderNum: true,
+              })
+            }
+          >
+            {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
+            <p className="text-[#5958FF] text-xs cursor-pointer">
+              {orderNumberCount === 0 ? 'NA' : `${orderNumberCount} Order Number`}
+            </p>
+          </div>
+        );
+      },
+    }),
     columnsHelper.accessor("awb", {
       header: () => {
         return (
