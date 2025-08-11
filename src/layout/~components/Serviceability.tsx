@@ -306,12 +306,13 @@ const Serviceability = (props: ITypeProps) => {
 
   const tableComponent = () => {
     return (
-      <div className=" h-full m-5">
+      <div className=" h-full m-4 ">
         <CustomTable
           rowData={serviceabilityTableData}
           columnsData={columns}
           thclassName={"bg-white"}
           tdclassName={"bg-white"}
+          parentClassName="!max-h-none !h-full"
         />
       </div>
     );
@@ -324,7 +325,7 @@ const Serviceability = (props: ITypeProps) => {
           <Spinner />
         </div>
       ) : (
-        <div className="flex flex-col h-full w-full relative ">
+        <div className="flex flex-col h-full w-full">
           <div className="flex justify-between p-5">
             <p className="font-Open text-base text-[#004eff] font-semibold">
               {`${showTable ? "Availability & Pricing" : "Check Availability"}`}
@@ -344,10 +345,12 @@ const Serviceability = (props: ITypeProps) => {
           <hr />
 
           {showTable ? (
-            tableComponent()
+            <div className="flex-1 overflow-hidden pb-12">
+              {tableComponent()}
+            </div>
           ) : (
-            <div className="h-full">
-              <div className="flex items-center justify-start  p-5">
+            <div className="flex-1 overflow-y-auto pb-12">
+              <div className="flex items-center justify-start  p-5 pb-12">
                 <GroupRadioButtons
                   options={[
                     { text: "B2C", value: "B2C" },
@@ -514,9 +517,9 @@ const Serviceability = (props: ITypeProps) => {
               </div>
             </div>
           )}
-          <div>
-            <hr />
-            <div className="flex items-center justify-end p-5">
+
+          <div className="border-t border-gray-200">
+            <div className=" p-5 flex justify-end">
               {showTable ? (
                 <div className="flex items-center space-x-2">
                   <ServiceButton
@@ -538,23 +541,25 @@ const Serviceability = (props: ITypeProps) => {
                   />
                 </div>
               ) : (
-                <ServiceButton
-                  text={"Submit"}
-                  onClick={() => {
-                    if (validateData(serviceabilityData)) {
-                      onSubmitServiceability({
-                        ...serviceabilityData,
-                        orderType: serviceValue,
-                      });
-                      clearServiceabilityState();
-                    }
-                  }}
-                  className={`!p-2 !w-[120px] !text-[#ffffff] ${
-                    validateData(serviceabilityData)
-                      ? "!bg-[#1c1c1c]"
-                      : "!bg-[#D2D2D2] border-none cursor-not-allowed"
-                  }`}
-                />
+                <div className="flex items-center space-x-2">
+                  <ServiceButton
+                    text={"Submit"}
+                    onClick={() => {
+                      if (validateData(serviceabilityData)) {
+                        onSubmitServiceability({
+                          ...serviceabilityData,
+                          orderType: serviceValue,
+                        });
+                        clearServiceabilityState();
+                      }
+                    }}
+                    className={`!p-2 !w-[120px] !text-[#ffffff] ${
+                      validateData(serviceabilityData)
+                        ? "!bg-[#1c1c1c]"
+                        : "!bg-[#D2D2D2] border-none cursor-not-allowed"
+                    }`}
+                  />
+                </div>
               )}
             </div>
           </div>
