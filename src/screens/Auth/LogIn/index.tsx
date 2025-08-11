@@ -650,6 +650,7 @@ const Index = () => {
                       //commented as by default placeholder text is getting top of the input box
                       // tempLabel={true}
                       inputType="email"
+                      fixedLabel={true}
                       value={loginCredentials.email}
                       onChange={(e) => {
                         //
@@ -744,6 +745,7 @@ const Index = () => {
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       minLength={8}
                       maxLength={16}
+                      fixedLabel={true}
                       //commented as by default placeholder text is getting top of the input box
                       // tempLabel={true}
                       isRightIcon={true}

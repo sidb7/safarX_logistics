@@ -48,6 +48,7 @@ interface propTypes {
   startDateValue?: string; // Add this line
   endDateValue?: string; // Add this line
   isIndNumber?: boolean;
+  fixedLabel?: boolean;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -95,6 +96,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     startDateValue = "",
     endDateValue = "",
     isIndNumber = false,
+    fixedLabel = false,
   } = props;
 
   // Function to check if the error condition is met
@@ -177,7 +179,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 
             <label
               className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
-                (value || tempLabel || isFocused) && "filled"
+                fixedLabel || (value || tempLabel || isFocused) ? "filled" : ""
               } ${
                 errorMessage !== true &&
                 errorMessage !== false &&

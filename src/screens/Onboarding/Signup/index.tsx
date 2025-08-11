@@ -439,6 +439,7 @@ const Index = () => {
                       label="Email"
                       // placeholder=""
                       id="email"
+                      fixedLabel={true}
                       inputClassName={` ${
                         signUpError.email !== "" && "!border-[#F35838]"
                       } `}
@@ -490,6 +491,7 @@ const Index = () => {
                       // tempLabel={true}
                       minLength={8}
                       maxLength={16}
+                      fixedLabel={true}
                       label="Password"
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       isRightIcon={true}
