@@ -106,18 +106,8 @@ const WeightDiscrepancy: React.FunctionComponent<IWeightDiscrepancyProps> = (
   return (
     <>
       {revenueLoading ? (
-        <div className=" h-[410px]">
-          <div className="flex items-stretch h-16 rounded-xl">
-            {/* <div className="flex-3 my-2 animated rounded-xl"></div>
-            <div className="flex-1 my-2 animated rounded-xl"></div> */}
-            <div className="flex-1 m-2 animated rounded-xl"></div>
-          </div>
-          <div className="flex items-stretch h-[350px] rounded-xl">
-            {/* <div className="flex-3 my-2 animated rounded-xl"></div>
-            <div className="flex-2 my-2 animated rounded-xl"></div> */}
-            <div className="flex-1 my-2 animated rounded-xl"></div>
-          </div>
-        </div>
+        <>
+        </>
       ) : (
         <>
           <div className="flex flex-col mb-5">

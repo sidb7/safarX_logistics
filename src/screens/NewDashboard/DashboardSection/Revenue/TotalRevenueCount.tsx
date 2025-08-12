@@ -12,6 +12,7 @@ import RedEllipse from "../../../../assets/redEllipse.svg";
 import GreenEllipse from "../../../../assets/greenEllipse.svg";
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
+import CargoLaneBlue from "../.././../../assets/CargoLaneBlue.gif";
 
 interface ITotalRevenueCountProps {}
 
@@ -91,17 +92,13 @@ const TotalRevenueCount: React.FunctionComponent<ITotalRevenueCountProps> = (
   return (
     <>
       {revenueLoading ? (
-        <div className="mt-6 h-[410px]">
-          <div className="flex items-stretch h-16 rounded-xl">
-            <div className="flex-3 my-2 animated rounded-xl"></div>
-            <div className="flex-1 my-2 animated rounded-xl"></div>
-            <div className="flex-1 m-2 animated rounded-xl"></div>
-          </div>
-          <div className="flex items-stretch h-[350px] rounded-xl">
-            <div className="flex-3 my-2 animated rounded-xl"></div>
-            <div className="flex-2 my-2 animated rounded-xl"></div>
-            <div className="flex-1 my-2 animated rounded-xl"></div>
-          </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={CargoLaneBlue}
+            loading="lazy"
+            alt="home-screen"
+            width={450}
+          />
         </div>
       ) : dataForRevenueAndCount?.length === 0 &&
         dataForRevenueTotals?.length === 0 ? (

@@ -182,23 +182,6 @@ const CategoriesAndChannels: React.FunctionComponent<
     <>
       {loading ? (
         <>
-          <div className="mb-3">
-            {/* Top row with consistent flex and spacing */}
-            <div className="flex h-16 rounded-xl space-x-4">
-              <div className="flex-1 my-2 animated rounded-xl"></div>
-              <div className="flex-1 my-2 animated rounded-xl"></div>
-            </div>
-
-            {/* Bottom row split into two halves */}
-            <div className="flex h-[350px] rounded-xl space-x-4">
-              <div className="w-1/2 flex space-x-4">
-                <div className="flex-1 my-2 animated rounded-xl"></div>
-              </div>
-              <div className="w-1/2 flex space-x-4">
-                <div className="flex-1 my-2 animated rounded-xl"></div>
-              </div>
-            </div>
-          </div>
         </>
       ) : (
         <>

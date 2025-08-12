@@ -121,20 +121,6 @@ const LocationWise: React.FunctionComponent<ILocationWiseProps> = ({
     <>
       {loading ? (
         <>
-          <div className="">
-            <div className="flex h-16 rounded-xl space-x-4">
-              <div className="flex-1 my-2 animated rounded-xl"></div>
-              <div className="flex-1 my-2 animated rounded-xl"></div>
-            </div>
-            <div className="flex h-[350px] rounded-xl space-x-4">
-              <div className="w-1/2 flex space-x-4">
-                <div className="flex-1 my-2 animated rounded-xl"></div>
-              </div>
-              <div className="w-1/2 flex space-x-4">
-                <div className="flex-1 my-2 animated rounded-xl"></div>
-              </div>
-            </div>
-          </div>
         </>
       ) : (
         <>

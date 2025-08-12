@@ -26,6 +26,7 @@ import ServiceButton from "../../components/Button/ServiceButton";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import sessionManager from "../../utils/sessionManager";
 import { Spinner } from "flowbite-react";
+import OneButton from "../../components/Button/OneButton";
 
 interface IInvoiceProps {}
 
@@ -365,11 +366,23 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
                   />
                 </div>
                 <div>
-                  <ServiceButton
-                    text="Download"
-                    className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
-                    onClick={() => downloadReport()}
-                  />
+                  
+                  <div className="relative">
+  <OneButton
+    text={isDownloading ? "Downloading..." : "Download"}
+    variant="primary"
+    disabled={isDownloading}
+    onClick={() => downloadReport()}
+    className={`lg:w-[120px] min-w-[120px] ${
+      isDownloading ? 'opacity-75' : ''
+    }`}
+  />
+  {isDownloading && (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <Spinner size="sm" color="gray" />
+    </div>
+  )}
+</div>
                 </div>
               </div>
             </div>
