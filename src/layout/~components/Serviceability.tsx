@@ -5,6 +5,9 @@ import CustomInputBox from "../../components/Input";
 import CustomDropDown from "../../components/DropDown";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { DropDownWeightData } from "../../utils/dummyData";
+import { toast } from "react-hot-toast";
+import { POST } from "../../utils/webService";
+import { FETCH_ALL_PARTNER_WITH_SERVICE } from "../../utils/ApiUrls";
 
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../components/Table";
@@ -53,6 +56,9 @@ const Serviceability = (props: ITypeProps) => {
   const [serviceValue, setServiceValue] = useState("B2C");
   const [serviceMode, setServiceMode] = useState<any>([]);
   const [servicesDataArray, setServicesDataArray] = useState<any>();
+  const [courierPartner, setCourierPartner] = useState("");
+  const [partnerList, setPartnerList] = useState<any>();
+  const [allPartner, setAllPartner] = useState<string[]>([]);
 
   const weightData: any = [];
   let temp: any = [];
@@ -105,6 +111,25 @@ const Serviceability = (props: ITypeProps) => {
     }
   };
 
+  const fetchAllPartner = async () => {
+    try {
+      const { data: response } = await POST(FETCH_ALL_PARTNER_WITH_SERVICE, {});
+      if (response?.success) {
+        setPartnerList(response?.data);
+
+        const partnerNames = response?.data.map((partner: any) => ({
+          label: partner.partnerName,
+          value: partner.partnerName,
+        }));
+        setAllPartner(partnerNames);
+      } else {
+        toast.error("Something went wrong...");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   function validateData(data: any) {
     // Check if any of the required fields are empty
     if (
@@ -117,7 +142,7 @@ const Serviceability = (props: ITypeProps) => {
       !data?.dimension.width ||
       !data?.dimension.height ||
       !data?.dimension.length ||
-      !data?.invoiceValue ||
+      // !data?.invoiceValue ||
       !data?.serviceId ||
       !data?.serviceMode
     ) {
@@ -304,6 +329,7 @@ const Serviceability = (props: ITypeProps) => {
 
   setWeightData();
 
+
   const tableComponent = () => {
     return (
       <div className=" h-full m-4 ">
@@ -317,6 +343,10 @@ const Serviceability = (props: ITypeProps) => {
       </div>
     );
   };
+
+    useEffect(() => {
+    fetchAllPartner();
+  }, []);
 
   return (
     <>
@@ -411,20 +441,17 @@ const Serviceability = (props: ITypeProps) => {
                   ]}
                   heading="Payment Mode"
                 />
-                <CustomInputBox
-                  label="Invoice Value"
-                  value={serviceabilityData?.invoiceValue}
+
+                <CustomDropDown
                   onChange={(e: any) => {
-                    if (isNaN(e.target.value)) {
-                    } else {
-                      setServiceabilityData({
-                        ...serviceabilityData,
-                        invoiceValue: +e.target.value
-                          ? Number(e.target.value)
-                          : "",
-                      });
-                    }
+                    setServiceabilityData({
+                      ...serviceabilityData,
+                      weight: e.target.value ? Number(e.target.value) : "",
+                    });
                   }}
+                  value={serviceabilityData?.weight}
+                  options={weightData}
+                  heading="Select Weight(KG)"
                 />
 
                 <div className="grid grid-cols-3 gap-5">
@@ -484,16 +511,13 @@ const Serviceability = (props: ITypeProps) => {
                     }}
                   />
                 </div>
+             
+
                 <CustomDropDown
-                  onChange={(e: any) => {
-                    setServiceabilityData({
-                      ...serviceabilityData,
-                      weight: e.target.value ? Number(e.target.value) : "",
-                    });
-                  }}
-                  value={serviceabilityData?.weight}
-                  options={weightData}
-                  heading="Select Weight(KG)"
+                  onChange={(e: any) => setCourierPartner(e.target.value)}
+                  options={allPartner}
+                  value={courierPartner ?? ""}
+                  heading="Select Courier Partner (Optional)"
                 />
 
                 <CustomDropDown
@@ -529,6 +553,7 @@ const Serviceability = (props: ITypeProps) => {
                       setShowTable(false);
                       clearServiceabilityState();
                       setServiceabilityTableData([]);
+                      setCourierPartner("");
                     }}
                   />
                   <ServiceButton
@@ -549,6 +574,7 @@ const Serviceability = (props: ITypeProps) => {
                         onSubmitServiceability({
                           ...serviceabilityData,
                           orderType: serviceValue,
+                          partnerName: courierPartner,
                         });
                         clearServiceabilityState();
                       }
