@@ -53,7 +53,7 @@ const BulkUpload = (props: ITypeProps) => {
       if (response?.success) {
         toast.success(response?.message);
       } else {
-        toast.error("Failed To Upload!");
+        toast.error(response?.message || "Failed To Upload!");
       }
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -97,14 +97,14 @@ const BulkUpload = (props: ITypeProps) => {
       "Source",
       "Product Id",
       "Variant Id",
-      "Name",
+      "Name (Mandatory)",
       "Category",
       "SKU",
-      "Length (cm)",
-      "Breadth (cm)",
-      "Height (cm)",
-      "Dead Weight (Kg)",
-      "Unit Price (Rs)",
+      "Length (cm) (Mandatory)",
+      "Breadth (cm) (Mandatory)",
+      "Height (cm) (Mandatory)",
+      "Dead Weight (Kg) (Mandatory)",
+      "Unit Price (Rs) (Mandatory)",
       "Unit Tax (Rs)",
     ];
     const ws = XLSX.utils.json_to_sheet(data, { header: headers });
@@ -211,14 +211,14 @@ const BulkUpload = (props: ITypeProps) => {
         Source: item?.source || "SHIPYAARI",
         "Product Id": item?.productId,
         "Variant Id": item?.variantId,
-        Name: item?.name,
+        "Name (Mandatory)": item?.name,
         Category: item?.category,
         SKU: item?.sku,
-        "Length (cm)": item?.length,
-        "Breadth (cm)": item?.breadth,
-        "Height (cm)": item?.height,
-        "Dead Weight (Kg)": item?.deadWeight,
-        "Unit Price (Rs)": item?.unitPrice,
+        "Length (cm) (Mandatory)": item?.length,
+        "Breadth (cm) (Mandatory)": item?.breadth,
+        "Height (cm) (Mandatory)": item?.height,
+        "Dead Weight (Kg) (Mandatory)": item?.deadWeight,
+        "Unit Price (Rs) (Mandatory)": item?.unitPrice,
         "Unit Tax (Rs)": item?.unitTax,
         // "Box Length (cm)": "",
         // "Box Breadth (cm)": "",
