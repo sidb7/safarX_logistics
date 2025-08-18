@@ -37,3 +37,18 @@ export const downloadCSVFromString = (
     return false;
   }
 };
+export function formatCurrency(remitableAmount: any) {
+  const amount = Number(remitableAmount);
+  if (isNaN(amount)) {
+  return "--";
+  }
+  return amount.toLocaleString("en-IN", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  });
+}
+export function formatCount(value: any) {
+  const count = Number(value);
+  if (isNaN(count)) return "--";
+  return count.toLocaleString("en-IN"); // adds commas but no decimals
+}

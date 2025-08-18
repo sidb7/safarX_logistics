@@ -9,6 +9,7 @@ import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
 import CustomTableWithScroll from "../../../components/CustomTableWithScroll";
 import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
+import { formatCurrency } from "../../../utils/helper";
 
 interface IInvoiceDataProps {
   setCodModal?: any;
@@ -95,7 +96,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="font-Open text-xs font-normal leading-4">
-              ₹ {info?.row?.original?.details?.codAmountRemittable.toFixed(2)}
+            ₹ {formatCurrency(info?.row?.original?.details?.codAmountRemittable || 0)}
             </p>
           </div>
         );
@@ -116,7 +117,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="font-Open font-normal leading-4 text-xs">
-            <p>₹{info.row?.original?.addonCharges || 0}</p>
+            <p>₹{formatCurrency(info.row?.original?.addonCharges || 0)}</p>
           </div>
         );
       },
@@ -142,7 +143,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
               setCodModal({ isOpen: true, data: info?.row?.original })
             }
           >
-            <p>₹{info.row.original?.details?.totalRecoveredAmount || 0}</p>
+            <p>₹{formatCurrency(info.row.original?.details?.totalRecoveredAmount || 0)}</p>
           </div>
         );
       },
@@ -162,7 +163,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="font-Open font-normal leading-4 text-xs ">
-            <p>₹{info.row.original?.details?.codRecharge || 0}</p>
+            <p>₹{formatCurrency(info.row.original?.details?.codRecharge || 0)}</p>
           </div>
         );
       },
@@ -185,7 +186,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="font-Open font-normal leading-4 text-xs ">
             <p className="text-[#5958FF] cursor-pointer">
-              ₹ {info?.row?.original?.details?.codAmountRemitted.toFixed(2)}
+              ₹ {formatCurrency(info?.row?.original?.details?.codAmountRemitted)}
             </p>
           </div>
         );

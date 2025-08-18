@@ -10,15 +10,17 @@ import CodData from "./BillingData/codData";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import ShipmentDetailModal from "./Modal/shipmentDetailModal";
 import { POST } from "../../utils/webService";
+import downloadIcon from "../../assets/download.svg";
 import {
   COD_DETAILS_FINANCE,
+  COD_PAYABLE_FINANCE,
   COD_REMITTANCE_FINANCE,
   DOWNLOAD_COD_REMITTED,
   GET_COD_REMITTED,
 } from "../../utils/ApiUrls";
 import CodRemittedAwbModal from "./Modal/codRemittedAwbsModal";
 import ReactDatePicker from "react-datepicker";
-import { convertXMLToXLSX } from "../../utils/helper";
+import { convertXMLToXLSX, formatCount, formatCurrency } from "../../utils/helper";
 import { toast } from "react-hot-toast";
 import DatePicker from "react-datepicker";
 import DateButton from "../../components/Button/DateButton";
@@ -86,6 +88,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           pickupCod = {},
           intransitCod = {},
           paidCod = {},
+          lostOrDamagedCod={},
           payableAmount = [],
           recovery = {},
           codRechargeAmount = 0,
@@ -106,11 +109,12 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
             )
           : 0;
 
+
         const codDashboardData = [
           {
             title: "Picked Up",
-            amount: pickupCod.amount || 0,
-            count: pickupCod.count || 0,
+            amount: pickupCod.amount,
+            count: pickupCod.count,
           },
           {
             title: "In Transit",
@@ -149,6 +153,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           {
             title: "Wallet Recharge",
             amount: codRechargeAmount,
+          },
+          {
+            title: "Lost/damage",
+            amount: lostOrDamagedCod.amount || 0,
+            count: lostOrDamagedCod.count || 0,
           },
         ];
 
@@ -252,6 +261,26 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     setDateRange([null, null]);
     setStartDate(null);
     setEndDate(null);
+  };
+  
+
+  const handleDownloadCodPayable = async (date: number) => {
+    try {
+      const { data } = await POST(
+        COD_PAYABLE_FINANCE,
+        { date },
+        { Accept:"application/json", responseType: 'blob' }
+      );
+  
+      const blob = new Blob([data], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `payable_awbs_${date}.csv`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } catch {
+      toast.error("Error downloading COD Payable");
+    }
   };
 
   const downloadReport = async (reportNumber?: any) => {
@@ -387,98 +416,99 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
               </div>
             </div>
             <div className="mx-4  justify-start">
-              <div className="flex mb-2 justify-start flex-wrap gap-3 w-full  item rounded-md">
-                {codReportData?.map((ele: any) => {
-                  return (
-                    <div className="border min-w-[160px] min-h-[75px] shadow-md  flex rounded-md px-3 py-1 ">
-                      {ele?.payableAmountWithDate !== undefined ? (
-                        ele?.payableAmountWithDate.length > 0 ? (
-                          <div>
-                            <div className="text-sm text-[#878787]">
-                              {ele?.title ?? "--"}
-                            </div>
-                            <div>
-                              {ele?.payableAmountWithDate.map(
-                                (item: any, idx: number) => (
-                                  <div
-                                    key={idx}
-                                    className="flex text-xs min-w-[140px] font-semibold mt-0.5 justify-between"
-                                  >
-                                    <div>
-                                      {item?.date
-                                        ? new Date(
-                                            item.date
-                                          ).toLocaleDateString("en-GB", {
-                                            day: "2-digit",
-                                            month: "short",
-                                            year: "2-digit",
-                                          })
-                                        : "--"}
-                                    </div>
-                                    <div>
-                                      ₹{" "}
-                                      {item?.remitableAmount != null
-                                        ? Number(item.remitableAmount)
-                                            .toFixed(2)
-                                            .toLocaleString()
-                                        : "--"}
-                                    </div>
-                                  </div>
-                                )
-                              )}
-                            </div>
+            
+<div className="flex mb-2 justify-start flex-wrap gap-3 w-full item rounded-md">
+  {codReportData?.map((ele: any) => {
+    const isCodPayable = ele?.payableAmountWithDate !== undefined;
 
-                            {/* Footer */}
-                            <div className="border-t border-gray-300 mt-2 pt-1 flex text-xs font-semibold justify-between">
-                              <div>Total :</div>
-                              <div>
-                                ₹{" "}
-                                {ele?.totalPayableAmount != null
-                                  ? Number(ele.totalPayableAmount)
-                                      .toFixed(2)
-                                      .toLocaleString()
-                                  : "--"}
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="text-sm text-[#878787]">
-                            {ele?.title ?? "--"}
-                            <div className="text-red-500 text-xs mt-1">
-                              No upcoming payables
-                            </div>
-                          </div>
-                        )
-                      ) : (
-                        <div className="relative">
-                          <div className="text-sm text-[#878787]">
-                            {ele?.title ?? "--"}
-                          </div>
-
-                          <div className="flex items-center min-h-[60px]">
-                            <div>
-                              <div className="font-bold">
-                                ₹{" "}
-                                {ele?.amount != null
-                                  ? Number(ele.amount)
-                                      .toFixed(2)
-                                      .toLocaleString()
-                                  : "--"}
-                              </div>
-                              {(ele?.count != undefined ||
-                                ele?.count != null) && (
-                                <div className="text-sm text-[#878787]">
-                                  No. of Awbs: <b>{ele?.count ?? "--"}</b>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+    return (
+      <div className="border min-w-[160px] min-h-[75px] shadow-md flex rounded-md px-3 py-1 relative">
+        {isCodPayable ? (
+          ele?.payableAmountWithDate.length > 0 ? (
+            <div className="w-full">
+              <div className="flex justify-between items-center text-sm text-[#878787]">
+                <span>{ele?.title ?? "--"}</span>
+                {/* Download Icon */}
+                <img
+                  src={downloadIcon}
+                  alt="Download"
+                  className="cursor-pointer w-[16px] h-[16px]"
+                  onClick={() => {
+                    const date = ele?.payableAmountWithDate.at(-1)?.date; 
+                    handleDownloadCodPayable(date);
+                  }}
+                />
               </div>
+
+              <div>
+                {ele?.payableAmountWithDate.map((item: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className="flex text-xs min-w-[140px] font-semibold mt-0.5 justify-between"
+                  >
+                    <div>
+                      {item?.date
+                        ? new Date(item.date).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "2-digit",
+                          })
+                        : "--"}
+                    </div>
+                    <div>
+                      ₹{" "}
+                      {item?.remitableAmount != null
+                        ? formatCurrency(item.remitableAmount)
+                        : "--"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <div className="border-t border-gray-300 mt-2 pt-1 flex text-xs font-semibold justify-between">
+                <div>Total :</div>
+                <div>
+                  ₹{" "}
+                  {ele?.totalPayableAmount != null
+                    ? formatCurrency(ele.totalPayableAmount)
+                    : "--"}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-sm text-[#878787]">
+              {ele?.title ?? "--"}
+              <div className="text-red-500 text-xs mt-1">
+                No upcoming payables
+              </div>
+            </div>
+          )
+        ) : (
+          <div className="relative">
+            <div className="text-sm text-[#878787]">{ele?.title ?? "--"}</div>
+            <div className="flex items-center min-h-[60px]">
+              <div>
+                <div className="font-bold">
+                  ₹{" "}
+                  {ele?.amount != null
+                    ? formatCurrency(ele.amount)
+                    : "--"}
+                </div>
+                {(ele?.count != undefined || ele?.count != null) && (
+                  <div className="text-sm text-[#878787]">
+                     No. of Awbs: <b>{formatCount(ele?.count)}</b>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  })}
+</div>
+
               {loading ? (
                 <div className="w-full h-96 flex items-center justify-center">
                   <Spinner />{" "}
