@@ -414,7 +414,7 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                   <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
                     <OneButton
                       text={"CREATE ORDER"}
-                      onClick={() => navigate("/orders/quick-order-place")}
+                      onClick={() => navigate("/orders/place-order")}
                       variant="tertiary"
                       className=" !bg-transparent !text-sm"
                     />
@@ -424,7 +424,7 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                     <div className="">
                       <OneButton
                         text={"Single"}
-                        onClick={() => navigate("/orders/quick-order-place")}
+                        onClick={() => navigate("/orders/place-order")}
                         className=" !bg-[#3371FF] !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
                       />
                     </div>

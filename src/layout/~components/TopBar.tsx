@@ -718,7 +718,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       </div> */}
                         <div
                           className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                          onClick={() => navigate("/orders/add-order/pickup")}
+                          onClick={() => navigate("/orders/place-order")}
                         >
                           <img
                             src={CreateOrderIcon}
