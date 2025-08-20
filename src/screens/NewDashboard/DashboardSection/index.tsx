@@ -376,7 +376,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleAddOrder = () => {
-    navigate("/orders/quick-order-place");
+    navigate("/orders/place-order");
   };
 
   // URL change function

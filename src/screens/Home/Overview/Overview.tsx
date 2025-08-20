@@ -257,7 +257,7 @@ export const Overview = (props: IOverview) => {
                 <OneButton
                   text={"ADD ORDER"}
                   className="!w-[120px]"
-                  onClick={() => navigate("/orders/add-order/pickup")}
+                  onClick={() => navigate("/orders/place-order")}
                   variant="quad"
                   showIcon={true}
                   icon={PlusIcon}

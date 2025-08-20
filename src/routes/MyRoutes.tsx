@@ -578,28 +578,28 @@ const MyRoutes: React.FC = () => {
             path="/orders/place-order"
             element={
               <ProtectedRoute>
-               <OrderCreation/>
+                <OrderCreation />
               </ProtectedRoute>
             }
           />
-            <Route
+          <Route
             path="/orders/booked"
             element={
               <ProtectedRoute>
-               <OrderBooked/>
+                <OrderBooked />
               </ProtectedRoute>
             }
           />
 
-          <Route
+          {/* <Route
             path="/orders/add-order/pickup"
             element={
               <ProtectedRoute>
                 <PickupLocationNew />
                 {/* <PickupLocationUpdatedUI /> */}
-              </ProtectedRoute>
-            }
-          />
+          {/* </ProtectedRoute> */}
+          {/* } */}
+          {/* />  */}
           <Route
             path="/orders/add-order/delivery"
             element={
@@ -1284,7 +1284,10 @@ const MyRoutes: React.FC = () => {
             }
           />
 
-          <Route path="/tracking/:trackingNumber" element={<ClientTracking />} />
+          <Route
+            path="/tracking/:trackingNumber"
+            element={<ClientTracking />}
+          />
         </Route>
 
         <Route

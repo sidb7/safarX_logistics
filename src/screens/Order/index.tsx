@@ -178,7 +178,6 @@ const Index = () => {
     awbNo: "",
     orderId: "",
     orderSources: [], // Add this line
-
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
@@ -588,7 +587,7 @@ const Index = () => {
           <div className="grid col-span-2">
             <OneButton
               text=" ADD ORDER"
-              onClick={() => navigate("/orders/add-order/pickup")}
+              onClick={() => navigate("/orders/place-order")}
               variant="primary"
               showIcon={true}
               icon={AddOrderIcon}
@@ -1530,147 +1529,146 @@ const Index = () => {
   };
 
   const fetchLabels = async (
-  arrLebels: string[],
-  setIsLoadingManifest: any
-) => {
-  if (!arrLebels?.length) {
-    toast.error("Please Select One Orders For label");
-    return;
-  }
-
-  const selectAllContainer: any = document.getElementById("selectAll");
-  const checkbox = selectAllContainer?.querySelector('input[type="checkbox"]');
-  const isChecked = checkbox?.checked;
-
-  let awbs: any = [];
-  if (isChecked) {
-    orders?.forEach((el: any) => {
-      awbs.push(el?.awb);
-    });
-  } else {
-    awbs.push(...arrLebels.filter((item: any) => item !== ""));
-  }
-
-  setIsLoadingManifest({
-    isLoading: true,
-    identifier: "Download_Labels",
-  });
-
-  const payload: any = {
-    awbs,
-    source: "WEBSITE",
-  };
-
-  const { sellerInfo } = sessionManager({});
-  const sellerId = sellerInfo?.sellerId;
-  const header = {
-    Accept: "/",
-    Authorization: `Bearer ${sellerInfo?.token}`,
-    "Content-Type": "application/json",
-  };
-
-  try {
-    const response = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
-      method: "POST",
-      headers: header,
-      body: JSON.stringify(payload),
-    });
-
-    setIsLoadingManifest({
-      isLoading: false,
-      identifier: "",
-    });
-
-    const contentType = response.headers.get("Content-Type");
-
-    // 📦 Check if JSON response (image-based partners)
-    if (contentType?.includes("application/json")) {
-      const resJson = await response.json();
-
-      const partnerName = resJson?.partnerName?.toUpperCase();
-      const pngLinks: string[] = resJson?.imageUrls || [];
-      console.log("png links",pngLinks)
-      const isImageBasedPartner = [
-        "MUTHOOT",
-        "DELHIVERY",
-        "BLUEDART",
-        "XPRESSBEES",
-        "GATI",
-        "EKART"
-      ].includes(partnerName);
-
-      if (isImageBasedPartner && pngLinks.length > 0) {
-        await downloadAllPngs(pngLinks); 
-        toast.success("PNG labels downloaded successfully!");
-        return;
-      } else {
-        toast.error("No image labels found. 11");
-        return;
-      }
+    arrLebels: string[],
+    setIsLoadingManifest: any
+  ) => {
+    if (!arrLebels?.length) {
+      toast.error("Please Select One Orders For label");
+      return;
     }
 
-    // 🧾 If it's not JSON, fallback to PDF blob
-    const resBlob = await response.blob();
-    const blob = new Blob([resBlob], { type: resBlob?.type });
+    const selectAllContainer: any = document.getElementById("selectAll");
+    const checkbox = selectAllContainer?.querySelector(
+      'input[type="checkbox"]'
+    );
+    const isChecked = checkbox?.checked;
 
-    const filename =
-      resBlob?.type === "image/png" ? "Label_Report.png" : "Label_Report.pdf";
+    let awbs: any = [];
+    if (isChecked) {
+      orders?.forEach((el: any) => {
+        awbs.push(el?.awb);
+      });
+    } else {
+      awbs.push(...arrLebels.filter((item: any) => item !== ""));
+    }
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
-
-    return true;
-  } catch (error) {
-    console.error("fetchLabels error:", error);
-    toast.error("Something went wrong while fetching labels.");
     setIsLoadingManifest({
-      isLoading: false,
-      identifier: "",
+      isLoading: true,
+      identifier: "Download_Labels",
     });
-  }
-};
 
+    const payload: any = {
+      awbs,
+      source: "WEBSITE",
+    };
 
-  const downloadAllPngs = async (pngLinks: string[], awb?: string) => {
-  for (let i = 0; i < pngLinks.length; i++) {
-    const url = pngLinks[i];
+    const { sellerInfo } = sessionManager({});
+    const sellerId = sellerInfo?.sellerId;
+    const header = {
+      Accept: "/",
+      Authorization: `Bearer ${sellerInfo?.token}`,
+      "Content-Type": "application/json",
+    };
 
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Image fetch failed");
+      const response = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(payload),
+      });
 
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
 
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = `${awb || "label"}_${i + 1}.png`;
-      a.style.display = "none";
+      const contentType = response.headers.get("Content-Type");
 
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      // 📦 Check if JSON response (image-based partners)
+      if (contentType?.includes("application/json")) {
+        const resJson = await response.json();
 
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+        const partnerName = resJson?.partnerName?.toUpperCase();
+        const pngLinks: string[] = resJson?.imageUrls || [];
+        console.log("png links", pngLinks);
+        const isImageBasedPartner = [
+          "MUTHOOT",
+          "DELHIVERY",
+          "BLUEDART",
+          "XPRESSBEES",
+          "GATI",
+          "EKART",
+        ].includes(partnerName);
 
-      if (i < pngLinks.length - 1) {
-        await new Promise((r) => setTimeout(r, 200));
+        if (isImageBasedPartner && pngLinks.length > 0) {
+          await downloadAllPngs(pngLinks);
+          toast.success("PNG labels downloaded successfully!");
+          return;
+        } else {
+          toast.error("No image labels found. 11");
+          return;
+        }
       }
-    } catch (err) {
-      console.error(`Error downloading image ${i + 1}:`, err);
-      window.open(url, "_blank");
+
+      // 🧾 If it's not JSON, fallback to PDF blob
+      const resBlob = await response.blob();
+      const blob = new Blob([resBlob], { type: resBlob?.type });
+
+      const filename =
+        resBlob?.type === "image/png" ? "Label_Report.png" : "Label_Report.pdf";
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
+      return true;
+    } catch (error) {
+      console.error("fetchLabels error:", error);
+      toast.error("Something went wrong while fetching labels.");
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
     }
-  }
-};
+  };
 
+  const downloadAllPngs = async (pngLinks: string[], awb?: string) => {
+    for (let i = 0; i < pngLinks.length; i++) {
+      const url = pngLinks[i];
 
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Image fetch failed");
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = `${awb || "label"}_${i + 1}.png`;
+        a.style.display = "none";
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+        if (i < pngLinks.length - 1) {
+          await new Promise((r) => setTimeout(r, 200));
+        }
+      } catch (err) {
+        console.error(`Error downloading image ${i + 1}:`, err);
+        window.open(url, "_blank");
+      }
+    }
+  };
 
   const fetchMultiTax = async (
     arrLebels: string[],
@@ -2197,16 +2195,15 @@ const Index = () => {
               {/* {infoModalContent?.data?.orderId?.split("T")?.[1] ||
                 infoModalContent?.data?.orderId ||
                 ""} */}
-                 {infoModalContent?.data?.tempOrderId || ""}
- 
+              {infoModalContent?.data?.tempOrderId || ""}
             </p>
           </div>
         </div>
         <div className="overflow-y-auto max-h-[80vh]">
-        <CustomTableAccordian
-          getAllSellerData={infoModalContent}
-          isMasked={isMasked}
-        />
+          <CustomTableAccordian
+            getAllSellerData={infoModalContent}
+            isMasked={isMasked}
+          />
         </div>
       </CustomRightModal>
 
