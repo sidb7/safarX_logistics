@@ -11,12 +11,18 @@ import { DELETE_SELLER } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import DeltaOnBlaze from "../../Order/deltaOnBlaze";
+import CustomRightModal from "../../../components/CustomModal/customRightModal";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import sessionManager from "../../../utils/sessionManager";
 
 export const SettingTab = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const roles = useSelector((state: any) => state?.roles);
-
+  const { isLgScreen, isXlScreen } = ResponsiveState();
+  const { sellerInfo } = sessionManager({});
+  let kycValue = sellerInfo;
   // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("Settings");
 
@@ -27,6 +33,8 @@ export const SettingTab = () => {
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [openRightModalForDelta, setOpenRightModalForDelta] =
+    useState<any>(false);
   // const navigateTo = (text?: string) => {
   //   if (!isItLgScreen) {
   //     if (text === "settings")
@@ -246,7 +254,40 @@ export const SettingTab = () => {
                 </div>
               </div>
             </div>
+            {kycValue?.communicationRateCardExists && (
+              <div
+                className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+                onClick={() => setOpenRightModalForDelta(true)}
+                style={{
+                  boxShadow:
+                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                }}
+              >
+                <div className={`flex justify-between items-center h-[44px]`}>
+                  <div className="flex">
+                    <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
+                      Delivery Max
+                    </span>
+                  </div>
+                  <div className="mr-4">
+                    <img src={RightArrowIcon} alt="" className="ml-4" />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+
+          <CustomRightModal
+            isOpen={openRightModalForDelta}
+            onClose={() => setOpenRightModalForDelta(false)}
+            className={`${isXlScreen ? "!w-1/2" : isLgScreen ? "!w-2/3" : ""}`}
+          >
+            <>
+              <DeltaOnBlaze
+                setOpenRightModalForDelta={setOpenRightModalForDelta}
+              />
+            </>
+          </CustomRightModal>
 
           <PassModal
             isPassModalOpen={isPassModalOpen}

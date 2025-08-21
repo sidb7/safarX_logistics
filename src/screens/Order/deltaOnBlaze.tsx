@@ -649,7 +649,7 @@ const DeltaOnBlaze: React.FunctionComponent<IDeltaOnBlazeProps> = ({
             </div>
           </div>
           <div>
-            <div className="px-5 py-2 text-xs flex  bg-[#F2F4F5] mx-2 gap-1 rounded-md">
+            <div className="px-5 py-2 text-xs flex font-Open leading-5 bg-[#F2F4F5] mx-2 gap-1 rounded-md">
               <b>Note:</b>&nbsp;
               <div className="items-center text-justify">
                 For API or channel orders, the <b>&nbsp;Brand Name&nbsp;</b>{" "}

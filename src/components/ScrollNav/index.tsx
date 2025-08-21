@@ -95,11 +95,11 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
             </span>
             {showNumber && (
               <span
-                className={`flex justify-center items-center ml-2 text-[12px] text-white bg-[#777777] h-[20px] w-[20px] ${
+                className={`flex justify-center items-center ml-2 px-2 text-[12px] text-white bg-[#777777] h-[20px] min-w-[20px] ${
                   selectedId === index ? "!bg-[#004EFF]" : ""
                 }`}
               >
-                {singleData?.number !== undefined  ? singleData.number : "0"}
+                {singleData?.number !== undefined ? singleData.number : "0"}
               </span>
             )}
           </div>
