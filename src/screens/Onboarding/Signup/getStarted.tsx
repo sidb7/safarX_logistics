@@ -30,7 +30,7 @@ const Index = () => {
       );
 
       if (response?.success) {
-        navigate("/onboarding/kyc-welcome");
+        navigate("/dashboard/overview");
       } else {
         toast.error(response?.message);
       }

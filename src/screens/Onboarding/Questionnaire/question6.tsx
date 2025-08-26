@@ -94,7 +94,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
         });
         // toast.success(response?.message);
         const navigationObject = constructNavigationObject(
-          "/onboarding/kyc-welcome",
+          "/dashboard/overview",
           window.location.search
         );
         navigate(navigationObject, {

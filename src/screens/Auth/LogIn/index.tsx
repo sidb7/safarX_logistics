@@ -185,7 +185,7 @@ const Index = () => {
           navigate(navigationObject);
         } else if (response?.data?.[0]?.nextStep?.kyc === false) {
           const navigationObject = constructNavigationObject(
-            "/onboarding/kyc-welcome",
+            "/dashboard/overview",
             window.location.search
           );
           navigate(navigationObject);
