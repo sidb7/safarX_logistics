@@ -22,12 +22,14 @@ interface IProductFilledProps {
   editAddressModal: any;
   setEditAddressModal: any;
   editProductData: any;
+  onUpdate?: () => void; 
 }
 
 const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
   editAddressModal,
   setEditAddressModal,
   editProductData,
+  onUpdate,
 }) => {
   const tempProductData = editProductData;
   const isMobileView = useMediaQuery({ maxWidth: 768 });
@@ -103,6 +105,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
     if (updateProduct.success) {
       toast.success(updateProduct.message);
       setEditAddressModal(false);
+       onUpdate?.(); 
     } else {
       toast.error(updateProduct.message);
     }

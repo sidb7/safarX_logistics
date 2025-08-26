@@ -69,8 +69,15 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     { label: "Combo Product", isActive: false },
   ]);
 
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   //on page change index
   const onPageIndexChange = async (pageIndex: any) => {
+    setCurrentPage(pageIndex.currentPage);
+    setItemsPerPage(pageIndex.itemsPerPage);
+
     const { data } = await POST(
       filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
       {
@@ -90,12 +97,15 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
 
   // on per page item change
   const onPerPageItemChange = async (pageperItem: any) => {
+    setCurrentPage(pageperItem.currentPage);
+    setItemsPerPage(pageperItem.itemsPerPage);
+
     const { data } = await POST(
       filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
       {
-        skip: (pageperItem?.currentPage - 1) * pageperItem?.itemsPerPage,
+        skip: 0,
         limit: pageperItem?.itemsPerPage,
-        pageNo: pageperItem?.currentPage,
+        pageNo: 1,
       }
     );
     if (data?.success) {
@@ -112,9 +122,9 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     const { data } = await POST(
       filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
       {
-        skip: 0,
-        limit: 10,
-        pageNo: 1,
+        skip: (currentPage - 1) * itemsPerPage,
+        limit: itemsPerPage,
+        pageNo: currentPage,
       }
     );
 
@@ -169,7 +179,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     (async () => {
       await getProducts();
     })();
-  }, [filterId, editAddressModal, isModalOpen]);
+  }, [filterId, refreshKey, isModalOpen]);
 
   const filterComponent = (className?: string) => {
     return (
@@ -190,6 +200,9 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                   : ""
               }`}
               onClick={() => {
+                setCurrentPage(1);
+                setItemsPerPage(10);
+
                 setFilterId(index);
                 if (index === 0) {
                   setProductCatalogueTab("singleProduct");
@@ -451,6 +464,8 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     ]}
                     onPageChange={onPageIndexChange}
                     onItemsPerPageChange={onPerPageItemChange}
+                    pageNo={currentPage}
+                    initialItemsPerPage={itemsPerPage}
                   />
                 )}
               </div>
@@ -534,6 +549,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           editAddressModal={editAddressModal}
           setEditAddressModal={setEditAddressModal}
           editProductData={editProductData}
+          onUpdate={() => setRefreshKey((prev) => prev + 1)}
         />
       )}
 

@@ -573,43 +573,13 @@ const Index = () => {
                       id="referalCode"
                       value={sellerData.referalCode}
                       onChange={(e) => {
-                        setSignUpError({
-                          ...signUpError,
-                          referalCode: "",
-                        });
                         setsellerData({
                           ...sellerData,
                           referalCode: e.target.value,
                         });
                       }}
-                      onBlur={(e) => {
-                        if (!sellerData?.referalCode) {
-                          setSignUpError({
-                            ...signUpError,
-                            referalCode: "Please Enter Your Referal Code",
-                          });
-                        } else if (!referalRegex.test(e.target.value)) {
-                          setSignUpError({
-                            ...signUpError,
-                            referalCode: "Enter Valid Code",
-                          });
-                        } else {
-                          setSignUpError({
-                            ...signUpError,
-                            referalCode: "",
-                          });
-                        }
-                      }}
                       isDisabled={false}
                     />
-                    {signUpError.referalCode !== "" && (
-                      <div className="flex items-center gap-x-1 mt-1">
-                        <img src={InfoCircle} alt="" width={10} height={10} />
-                        <span className="font-normal text-[#F35838] text-xs leading-3">
-                          {signUpError.referalCode}
-                        </span>
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex items-center gap-x-2">
