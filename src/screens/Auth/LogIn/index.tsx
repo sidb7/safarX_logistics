@@ -45,6 +45,7 @@ import OneButton from "../../../components/Button/OneButton";
 import { isMasked, login } from "../../../redux/reducers/userReducer";
 import axios from "axios";
 import sessionManager from "../../../utils/sessionManager";
+import BootScreen from "../../BootScreen";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -421,12 +422,7 @@ const Index = () => {
               };
             }
             const { sessionId, sellerInfo } = sessionManager(sellerData);
-            // localStorage.setItem(
-            //   "userInfo",
-            //   JSON.stringify(response?.data?.data[0])
-            // );
-
-            // Navigate to the dashboard directly if the token is valid
+          
             navigate("/dashboard/overview");
             return; // Skip the rest of the logic
           } else {
@@ -478,38 +474,6 @@ const Index = () => {
       }
     })();
 
-    // token &&
-    //   (async () => {
-    //     const response = await POST(VALIDATE_USER_TOKEN);
-    //     const amazonsellerId: any = localStorage.getItem("sellerId");
-    //     const state = amazonsellerId;
-    //     // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
-    //     const redirectUrl = AMAZON_REDIRECT_URL;
-    //     if (response?.data?.success) {
-    //       if (
-    //         selling_partner_id &&
-    //         amazon_callback_uri &&
-    //         amazon_state &&
-    //         state
-    //       ) {
-    //         [
-    //           "selling_partner_id",
-    //           "amazon_callback_uri",
-    //           "amazon_state",
-    //         ].forEach((key) => localStorage.removeItem(key));
-    //         window.location.href =
-    //           amazon_callback_uri +
-    //           "?redirect_uri=" +
-    //           redirectUrl +
-    //           "&amazon_state=" +
-    //           amazon_state +
-    //           "&state=" +
-    //           state;
-    //       } else {
-    //         navigate("/dashboard/overview");
-    //       }
-    //     }
-    //   })();
   }, []);
 
   useEffect(() => {
@@ -603,16 +567,7 @@ const Index = () => {
                       className=" ml-auto !p-4 "
                     />
                   </div>
-                  {/* <a
-                    href="https://app.shipyaari.com/shipyaari-tracking"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`ml-auto text-[#004EFF] underline p-4 font-Lato font-bold ${
-                      isMobileScreen ? "text-xs" : "text-sm"
-                    } leading-4 tracking-wide`}
-                  >
-                    TRACK ORDER
-                  </a> */}
+                 
                 </div>
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
@@ -688,53 +643,10 @@ const Index = () => {
                       }}
                       // inputError={loginError.email !== ""}
                     />
-                    {/* {loginError.email !== "" && (
-                      <div className="flex items-center gap-x-1 mt-1">
-                        <img src={InfoCircle} alt="" width={10} height={10} />
-                        <span className="font-normal text-[#F35838] text-xs leading-3">
-                          {loginError.email}
-                        </span>
-                      </div>
-                    )} */}
+                
                   </div>
 
-                  {/* <div>
-                    <CustomInputBox
-                      containerStyle={`mt-[17px] ${
-                        loginError.email ? "border-red-500" : ""
-                      }`}
-                      label="Email"
-                      id="email"
-                      inputType="email"
-                      value={loginCredentials.email}
-                      onChange={(e) => {
-                        setLoginCredentials({
-                          ...loginCredentials,
-                          email: e.target.value,
-                        });
-                      }}
-                      onBlur={(e) => {
-                        if (!loginCredentials?.email) {
-                          setLoginError({
-                            ...loginError,
-                            email: "Please Enter Your Email ID",
-                          });
-                        } else if (!emailRegex.test(e.target.value)) {
-                          setLoginError({
-                            ...loginError,
-                            email: "Incorrect Email ID",
-                          });
-                        } else {
-                          setLoginError({ ...loginError, email: "" });
-                        }
-                      }}
-                      errorCondition={{
-                        // regex: "email",
-                        message: loginError.email,
-                        // onBlur: true, // Trigger error condition check on blur
-                      }}
-                    />
-                  </div> */}
+              
 
                   <div>
                     <CustomInputBox
@@ -746,8 +658,7 @@ const Index = () => {
                       minLength={8}
                       maxLength={16}
                       fixedLabel={true}
-                      //commented as by default placeholder text is getting top of the input box
-                      // tempLabel={true}
+                  
                       isRightIcon={true}
                       isInfoIcon={true}
                       informativeIcon={InformativeIcon}
@@ -793,14 +704,7 @@ const Index = () => {
                         // onBlur: true, // Trigger error condition check on blur
                       }}
                     />
-                    {/* {loginError.password !== "" && (
-                      <div className="flex items-center gap-x-1 mt-1">
-                        <img src={InfoCircle} alt="" width={10} height={10} />
-                        <span className="font-normal text-[#F35838] text-xs leading-3">
-                          {loginError.password}
-                        </span>
-                      </div>
-                    )} */}
+            
                   </div>
                   <div className="mt-[-15px]">
                     {" "}
@@ -847,24 +751,11 @@ const Index = () => {
     <>
       {showBootScreen ? (
         <div className="flex items-center justify-center h-screen">
-          <img
-            className="animate-bounce object-contain w-48 h-48"
-            src={LARGE_LOGO}
-            alt=""
-          />
+         <BootScreen/>
         </div>
       ) : (
         <>
-          {/* {isLgScreen && isModalOpen && (
-            <CenterModal
-              isOpen={isModalOpen}
-              onRequestClose={() => setIsModalOpen(false)}
-            >
-              {loginComponent()}
-            </CenterModal>
-          )} */}
-
-          {/* /////////////////////// */}
+         
 
           {isMdScreen && (
             <div className="flex justify-center items-center h-screen">

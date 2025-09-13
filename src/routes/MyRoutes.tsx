@@ -46,8 +46,7 @@ import BulkBoxes from "../screens/NewOrder/NewCatalogue/BoxCatalogue/BulkBoxes";
 import BulkCombos from "../screens/NewOrder/NewCatalogue/ProductCatalogue/BulkCombos";
 
 import TransactionLayout from "../layout/TransactionLayout";
-// import WalletRecharge from "../screens/NewOrder/WalletRecharge";
-// import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
+
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
 import ReturningUserPickup from "../screens/NewOrder/ReturningUser/PickUp";
@@ -188,6 +187,7 @@ import BulkLabelList from "../screens/bulkLabelList/bulkLabelList";
 import YaariCashDashboard from "../screens/YaariCash/Index";
 import OrderCreation from "../screens/OrderCreation/OrderCreation";
 import OrderBooked from "../screens/OrderCreation/OrderBooked";
+import AuthContainer from "../screens/AuthFramerMotion/AuthContainer";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -206,7 +206,17 @@ const MyRoutes: React.FC = () => {
           </ErrorBoundary>
         }
       />
-
+<Route
+        path="/auth/framer-motion/login"
+        element={
+          <ErrorBoundary
+            FallbackComponent={ErrorHandle}
+            onError={() => console.log("Error Occured")}
+          >
+            <AuthContainer />
+          </ErrorBoundary>
+        }
+      />
       {/* <Route
         path="/change-password"
         element={
@@ -472,14 +482,7 @@ const MyRoutes: React.FC = () => {
           element={<CashOnDelivery />}
         />
 
-        {/* <Route
-              path="/onboarding/wallet-recharge"
-              element={
-                <BankProtected>
-                  <OnBoundingWalletRecharge />
-                </BankProtected>
-              }
-            /> */}
+  
 
         <Route
           path="/onboarding/recharge-payment"

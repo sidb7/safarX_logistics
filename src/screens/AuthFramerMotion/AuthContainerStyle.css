@@ -1,0 +1,35 @@
+.tealBack {
+  position: absolute;
+  inset: 0;
+  background: #d8ecf8 url("/home/siddhant/Downloads/steptodown.com559947.jpg")
+    no-repeat center center;
+  background-size: cover;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* floating squares */
+.tealBack span {
+  position: absolute;
+  display: block;
+  width: 120px;
+  height: 120px;
+  background: #c2bedd;
+  border-radius: 20%;
+  animation: floatUp 15s linear infinite; /* slowed for smoothness */
+}
+
+/* floating + rotating */
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) scale(0.5) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1.2) rotate(360deg);
+    opacity: 0;
+  }
+}
