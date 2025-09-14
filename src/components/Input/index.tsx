@@ -1,18 +1,23 @@
 import { Tooltip } from "react-tooltip";
 import "../../styles/inputBox.css";
 import InfoCircle from "../../assets/info-circle.svg";
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import Flag from "../../assets/Flag.svg";
 
-interface propTypes {
+interface ErrorCondition {
+  message?: string;
+}
+
+interface CustomInputProps {
   label?: string;
   value?: string | number;
   defaultValue?: string | number;
-  inputMode?: any;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: () => void;
   placeholder?: string;
-  className?: any;
+  className?: string;
   containerStyle?: string;
   inputClassName?: string;
   labelClassName?: string;
@@ -26,144 +31,121 @@ interface propTypes {
   rightIcon?: string;
   informativeIcon?: string;
   isInfoIcon?: boolean;
-  setVisibility?: any;
-  visibility?: any;
-  onClick?: any;
+  setVisibility?: (v: boolean) => void;
+  visibility?: boolean;
   imageClassName?: string;
   tempLabel?: any;
-  onKeyDown?: any;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   tooltipContent?: string;
   inputError?: boolean;
-  errorMessage?: any;
-  autoComplete?: any;
-  ref?: any;
-  title?: any;
-  id?: any;
-  errorCondition?: {
-    // regex?: RegExp | string; // Accept either a RegExp object or a string representing the regex pattern
-    message?: string;
-    // onBlur?: boolean; // Add this line
-  };
-  range?: boolean; // Add this line
-  startDateValue?: string; // Add this line
-  endDateValue?: string; // Add this line
+  errorMessage?: string | boolean;
+  autoComplete?: string;
+  title?: string;
+  id?: string;
+  errorCondition?: ErrorCondition;
+  range?: boolean;
+  startDateValue?: string;
+  endDateValue?: string;
   isIndNumber?: boolean;
   fixedLabel?: boolean;
 }
 
-const CustomInputBox: React.FunctionComponent<propTypes> = (
-  props: propTypes
-) => {
-  const {
-    label,
-    value = undefined,
-    defaultValue = undefined,
-    inputMode = "",
-    onChange = () => {},
-    onBlur = () => {},
-    onClick,
-    placeholder = "",
-    className,
-    containerStyle,
-    tempLabel,
-    inputClassName,
-    labelClassName,
-    name,
-    visibility,
-    isDisabled,
-    rightIcon,
-    informativeIcon,
-    isInfoIcon = false,
-    inputType = "text",
-    isRequired = false,
-    isRightIcon = false,
-    setVisibility,
-    minLength,
-    maxLength,
-    imageClassName,
-    onKeyDown,
-    tooltipContent,
-    inputError,
-    errorMessage = false,
-    autoComplete = "",
-    title = "",
-    ref = {},
-    id,
-    errorCondition, // Added errorCondition prop
+const ErrorMessage: React.FC<{ message: string }> = ({ message }) => (
+  <div className="flex items-center gap-x-1 mt-1">
+    <img src={InfoCircle} alt="" width={16} height={16} />
+    <span className="font-normal text-[#F35838] text-xs leading-3">
+      {message}
+    </span>
+  </div>
+);
 
-    // Add the following props
-    range = false,
-    startDateValue = "",
-    endDateValue = "",
-    isIndNumber = false,
-    fixedLabel = false,
-  } = props;
+const CustomInputBox = forwardRef<HTMLInputElement, CustomInputProps>(
+  (
+    {
+      label,
+      value,
+      defaultValue,
+      inputMode,
+      onChange,
+      onBlur,
+      onClick,
+      placeholder = "",
+      className = "",
+      containerStyle = "",
+      tempLabel,
+      labelClassName = "",
+      name,
+      visibility,
+      isDisabled,
+      rightIcon,
+      informativeIcon,
+      isInfoIcon = false,
+      inputType = "text",
+      isRequired = false,
+      isRightIcon = false,
+      setVisibility,
+      minLength,
+      maxLength,
+      imageClassName = "",
+      onKeyDown,
+      tooltipContent,
+      inputError,
+      errorMessage = false,
+      autoComplete,
+      title,
+      id,
+      errorCondition,
+      isIndNumber = false,
+      fixedLabel = false,
+    },
+    ref
+  ) => {
+    const [isFocused, setIsFocused] = useState(false);
 
-  // Function to check if the error condition is met
-  // const isErrorConditionMet = (value: string, onBlur: boolean = false) => {
-  //   if (
-  //     errorCondition &&
-  //     (errorCondition.regex instanceof RegExp ||
-  //       typeof errorCondition.regex === "string")
-  //   ) {
-  //     const regex =
-  //       typeof errorCondition.regex === "string"
-  //         ? new RegExp(errorCondition.regex)
-  //         : errorCondition.regex;
-  //     if (onBlur) {
-  //       return !regex.test(value);
-  //     } else {
-  //       return false; // Return false if not on blur
-  //     }
-  //   }
-  //   return false;
-  // };
+    // --- Input Border Class ---
+    const borderClass =
+      (!isFocused && errorCondition?.message) || (inputError && !value)
+        ? "border-[#F35838]"
+        : "border-[#A4A4A4]";
 
-  // NEW: Add state variable to track focus state
-  const [isFocused, setIsFocused] = useState(false);
+    const errorText =
+      typeof errorMessage === "string"
+        ? errorMessage
+        : inputError && !value
+        ? "Field is required"
+        : !isFocused && errorCondition?.message
+        ? errorCondition.message
+        : null;
 
-  return (
-    <>
+    return (
       <div className={`${isIndNumber ? "flex" : ""}`}>
-        {isIndNumber ? (
+        {isIndNumber && (
           <div className="rounded-s border-[1px] border-[#A4A4A4] bg-[#E8E8E8] border-r-white pt-[15px] px-1">
-            <img
-              src={Flag}
-              alt=""
-              // className="absolute z-2 left-[18px] top-[1px]"
-              width={"59px"}
-              height={"55px"}
-            />
+            <img src={Flag} alt="flag" width={59} height={55} />
           </div>
-        ) : (
-          <></>
         )}
 
-        <div className="flex  flex-col text-start  w-full">
-          <div className={`relative w-[100%]  ${containerStyle}`}>
+        <div className="flex flex-col text-start w-full">
+          <div className={`relative w-full ${containerStyle}`}>
             <input
               ref={ref}
               name={name}
               type={inputType}
               placeholder={placeholder}
-              className={`${className} ${
-                errorMessage !== true &&
-                errorMessage !== false &&
-                "!border-[#F35838]"
-              }  ${
-                (!isFocused && errorCondition?.message) ||
-                (inputError && !value)
-                  ? "border-[#F35838]"
-                  : "border-[#A4A4A4]"
-              }
-           rounded border-[1px] w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask `}
+              className={`
+                ${className} 
+                ${borderClass}
+                rounded border-[1px] w-full p-[10px] 
+                focus:border-[#004eff] h-[48px]  focus:shadow-blue-50 focus:shadow-lg
+                font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask
+              `}
               required={isRequired}
-              onChange={(e: any) => onChange(e)}
+              onChange={onChange}
               onBlur={(e) => {
-                onBlur(e);
-                setIsFocused(false); // Set isFocused to false on blur
+                onBlur?.(e);
+                setIsFocused(false);
               }}
-              onFocus={() => setIsFocused(true)} // Set isFocused to true on focus
+              onFocus={() => setIsFocused(true)}
               autoComplete={autoComplete}
               value={value}
               defaultValue={defaultValue}
@@ -175,17 +157,18 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
               title={title}
               id={id}
             />
-            {/* absolute -bottom-4 px-2 left-0 */}
 
             <label
-              className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
-                fixedLabel || value || tempLabel || isFocused ? "filled" : ""
-              } ${
-                errorMessage !== true &&
-                errorMessage !== false &&
-                "!text-[#F35838] "
-              } ${labelClassName}`}
               htmlFor={id}
+              className={`
+                text-[12px] text-[#777777] absolute leading-4 font-Open 
+                transition-all ease-out bg-transparent
+                ${
+                  fixedLabel || value || tempLabel || isFocused ? "filled" : ""
+                } 
+                ${typeof errorMessage === "string" ? "!text-[#F35838]" : ""} 
+                ${labelClassName}
+              `}
             >
               {label}
             </label>
@@ -193,87 +176,44 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
             {isRightIcon && (
               <img
                 src={rightIcon}
-                alt=""
-                className={`${imageClassName} absolute z-15  right-6  top-[30%] cursor-pointer w-[16px] h-[20px]`}
+                alt="right-icon"
+                className={`${imageClassName} absolute right-6 top-[30%] cursor-pointer w-[16px] h-[20px]`}
                 onClick={() => {
-                  setVisibility(!visibility);
-                  onClick();
+                  setVisibility?.(!visibility);
+                  onClick?.();
                 }}
               />
             )}
-            <div>
-              {isInfoIcon && (
+
+            {isInfoIcon && (
+              <>
                 <img
                   src={informativeIcon}
-                  alt=""
-                  className={`${imageClassName} absolute z-20  right-1  top-[34%] cursor-pointer`}
+                  alt="info-icon"
+                  className={`${imageClassName} absolute right-1 top-[34%] cursor-pointer`}
                   data-tooltip-id="my-tooltip-landing"
                   data-tooltip-content={tooltipContent}
                 />
-              )}
-              <Tooltip
-                id="my-tooltip-landing"
-                style={{
-                  backgroundColor: "#4D83FF",
-                  color: "#FFFFFF",
-                  width: "270px",
-                  fontSize: "12px",
-                  lineHeight: "14px",
-                  textTransform: "capitalize",
-                }}
-              />
-            </div>
+                <Tooltip
+                  id="my-tooltip-landing"
+                  style={{
+                    backgroundColor: "#4D83FF",
+                    color: "#FFFFFF",
+                    width: "270px",
+                    fontSize: "12px",
+                    lineHeight: "14px",
+                    textTransform: "capitalize",
+                  }}
+                />
+              </>
+            )}
           </div>
-          {/* <span
-        className={`text-[red] transition-all ease-out h-0 ${
-          errorMessage !== false &&
-          errorMessage !== true &&
-          "opacity-100 h-[18px]"
-        } opacity-0 delay-100 font-Open text-[11px] mt-1 px-2 `}
-      >
-        {errorMessage && errorMessage}
-      </span> */}
 
-          {errorMessage !== false && errorMessage !== true && (
-            <div className="flex items-center gap-x-1 mt-1">
-              <img src={InfoCircle} alt="" width={16} height={16} />
-              <span className="font-normal text-[#F35838] text-xs leading-3">
-                {errorMessage && errorMessage}
-              </span>
-            </div>
-          )}
-
-          {/* {inputError && !value && (
-        <span
-          className={`text-[red] transition-all ease-out h-[18px] delay-100 font-Open font-normal text-[12px] mt-1 px-2 leading-4`}
-        >
-          Field is required
-        </span>
-      )} */}
-
-          {inputError && !value && (
-            <div className="flex items-center gap-x-1 mt-1">
-              <img src={InfoCircle} alt="" width={16} height={16} />
-              <span className="font-normal text-[#F35838] text-xs leading-3 transition-all ease-out delay-100">
-                Field is required
-              </span>
-            </div>
-          )}
-
-          {/* Render dynamic error message based on errorCondition */}
-          {/* Render dynamic error message based on errorCondition */}
-          {!isFocused && errorCondition?.message && (
-            <div className="flex items-center gap-x-1 mt-1">
-              <img src={InfoCircle} alt="" width={16} height={16} />
-              <span className="font-normal text-[#F35838] text-xs leading-3">
-                {errorCondition.message}
-              </span>
-            </div>
-          )}
+          {errorText && <ErrorMessage message={errorText} />}
         </div>
       </div>
-    </>
-  );
-};
+    );
+  }
+);
 
 export default CustomInputBox;

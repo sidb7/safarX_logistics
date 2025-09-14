@@ -5,27 +5,54 @@ import Signup from "./SignUpComponent";
 import { LARGE_LOGO } from "../../utils/ApiUrls";
 import "./AuthContainerStyle.css";
 export default function AuthContainer() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
-  const spring = { type: "spring", stiffness: 90, damping: 14 };
+  const spring = { type: "spring", stiffness: 50, damping: 14 };
 
   // form animation variants
   const formVariants = {
-    hiddenLeft: { x: 100, opacity: 1 },
-    hiddenRight: { x: -100, opacity: 1 },
-    visible: { x: 0, opacity: 1 },
-    exitLeft: { x: 100, opacity: 1 },
-    exitRight: { x: -100, opacity: 1 },
+    hiddenLeft: {
+      x: 100,
+      opacity: 0,
+    },
+    hiddenRight: {
+      x: -100,
+      opacity: 0,
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { duration: 1, ease: "easeOut" }, // 👈 slide duration
+        opacity: { duration: 0.3, ease: "linear" }, // 👈 fade duration
+      },
+    },
+    exitLeft: {
+      x: 800,
+      opacity: 0,
+      transition: {
+        x: { duration: 0.9, ease: "easeIn" },
+        opacity: { duration: 0.6 },
+      },
+    },
+    exitRight: {
+      x: -800,
+      opacity: 0,
+      transition: {
+        x: { duration: 0.9, ease: "easeIn" },
+        opacity: { duration: 0.6 },
+      },
+    },
   };
 
   return (
     <div className="min-h-screen grid place-items-center bg-gray-50">
-      <div className="relative w-full h-[100vh] rounded-2xl overflow-hidden shadow-2xl bg-white">
+      <div className="login-backdrop relative w-full h-[100vh] rounded-2xl overflow-hidden shadow-2x">
         {/* FORMS (with midway slide + fade) */}
         <div className="absolute inset-0 flex">
           {/* Left Slot → Signup */}
           <div className="w-1/2 grid place-items-center p-10 relative">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {isLogin && (
                 <motion.div
                   key="signup"
@@ -33,7 +60,6 @@ export default function AuthContainer() {
                   initial="hiddenLeft"
                   animate="visible"
                   exit="exitLeft"
-                  transition={{ duration: 0.2, ease: "easeOut" }}
                   className="absolute w-full max-w-sm"
                 >
                   <Signup />
@@ -43,8 +69,8 @@ export default function AuthContainer() {
           </div>
 
           {/* Right Slot → Login */}
-          <div className="w-1/2 grid place-items-center p-10 relative">
-            <AnimatePresence mode="wait">
+          <div className="w-1/2 grid place-items-center p-5 relative">
+            <AnimatePresence>
               {!isLogin && (
                 <motion.div
                   key="login"
@@ -52,7 +78,6 @@ export default function AuthContainer() {
                   initial="hiddenRight"
                   animate="visible"
                   exit="exitRight"
-                  transition={{ duration: 0.2, ease: "easeOut" }}
                   className="absolute w-full max-w-sm"
                 >
                   <Login />

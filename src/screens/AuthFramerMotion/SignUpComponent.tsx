@@ -10,7 +10,7 @@ export default function Signup() {
         type="password"
         placeholder="Password"
       />
-      <button className="w-full bg-[#160783 ] text-white py-2 rounded">
+      <button className="w-full bg-[#160783] text-white py-2 rounded">
         Register
       </button>
     </div>

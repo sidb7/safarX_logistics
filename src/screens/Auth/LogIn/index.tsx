@@ -422,7 +422,7 @@ const Index = () => {
               };
             }
             const { sessionId, sellerInfo } = sessionManager(sellerData);
-          
+
             navigate("/dashboard/overview");
             return; // Skip the rest of the logic
           } else {
@@ -473,7 +473,6 @@ const Index = () => {
         }
       }
     })();
-
   }, []);
 
   useEffect(() => {
@@ -567,7 +566,6 @@ const Index = () => {
                       className=" ml-auto !p-4 "
                     />
                   </div>
-                 
                 </div>
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
@@ -643,10 +641,7 @@ const Index = () => {
                       }}
                       // inputError={loginError.email !== ""}
                     />
-                
                   </div>
-
-              
 
                   <div>
                     <CustomInputBox
@@ -658,7 +653,6 @@ const Index = () => {
                       minLength={8}
                       maxLength={16}
                       fixedLabel={true}
-                  
                       isRightIcon={true}
                       isInfoIcon={true}
                       informativeIcon={InformativeIcon}
@@ -704,7 +698,6 @@ const Index = () => {
                         // onBlur: true, // Trigger error condition check on blur
                       }}
                     />
-            
                   </div>
                   <div className="mt-[-15px]">
                     {" "}
@@ -751,12 +744,10 @@ const Index = () => {
     <>
       {showBootScreen ? (
         <div className="flex items-center justify-center h-screen">
-         <BootScreen/>
+          <BootScreen />
         </div>
       ) : (
         <>
-         
-
           {isMdScreen && (
             <div className="flex justify-center items-center h-screen">
               {loginComponent()}

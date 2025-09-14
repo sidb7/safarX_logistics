@@ -7,7 +7,12 @@
   overflow: hidden;
   z-index: 1;
 }
-
+/* .login-backdrop {
+  background: #d8ecf8 url("/home/siddhant/Downloads/steptodown.com559947.jpg")
+    no-repeat center center fixed;
+  background-size: cover;
+  z-index: 100;
+} */
 /* floating squares */
 .tealBack span {
   position: absolute;
