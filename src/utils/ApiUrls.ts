@@ -206,14 +206,11 @@ const GET_BOX_SUGGETION = `${SELLER_BASE_URL}/order/suggestionBox`;
 const GET_SELLER_ORDER_SUMMARY = `${SELLER_BASE_URL}/order/getSellerOrder`;
 const CHECK_ORDER_ID = `${SELLER_BASE_URL}/order/orderIdCheck`;
 
+//Tracking Orders Page
 
-
-
-
-
-
-
-
+const SEND_GEN_OTP = `${SELLER_BASE_URL}/seller/sendGenOtp`;
+const GET_TRACKING_FOR_SYSTEM = `${SELLER_BASE_URL}/tracking/getTrackingforSystem`;
+const VERIFY_GEN_OTP = `${SELLER_BASE_URL}/seller/verifyGenOtp`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -226,7 +223,6 @@ const GET_SERVICE_NEW = `${SELLER_BASE_URL}/order/getService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 const SET_WEIGHT_INFO_ORDER = `${SELLER_BASE_URL}/order/setWeightInfoForOrder`;
 const GET_TRANSPORTER_ID = `${SELLER_BASE_URL}/partners/transporterId`;
-
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
 // const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
@@ -843,4 +839,7 @@ export {
   GET_DARKSTORE_FILTER_DETAILS,
   GET_DARKSTORE_PRODUCT_COUNT,
   CHECK_ORDER_ID,
+  GET_TRACKING_FOR_SYSTEM,
+  SEND_GEN_OTP,
+  VERIFY_GEN_OTP,
 };

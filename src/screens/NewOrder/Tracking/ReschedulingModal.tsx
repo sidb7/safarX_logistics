@@ -19,12 +19,16 @@ type Props = {
   reschedulingModal?: any;
   setReschedulingModal?: (value: boolean) => void; // Allow a boolean argument
   awb?: any;
+  buyerToken?: any;
+  buyerMobileNo?: any;
 };
 
 const ReschedulingModal = ({
   reschedulingModal,
   setReschedulingModal,
   awb,
+  buyerToken,
+  buyerMobileNo,
 }: Props) => {
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState<any>(null);
@@ -36,7 +40,8 @@ const ReschedulingModal = ({
   };
 
   const handleNavigationandModal = async () => {
-    const token = sessionStorage.getItem(`${awb}`);
+    const token1 = sessionStorage.getItem(`${awb}`);
+    const token = token1 || buyerToken;
     console.log("beforethefunctiuon", startDate);
     try {
       if (!startDate || startDate === null) {
@@ -51,6 +56,7 @@ const ReschedulingModal = ({
         buyerRemark: "Want to reschedule the order",
         requestType: "RESCHEDULE",
         awb,
+        mobileNo: buyerMobileNo || "",
       };
 
       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, { token });

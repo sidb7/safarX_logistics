@@ -179,7 +179,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 
             <label
               className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
-                fixedLabel || (value || tempLabel || isFocused) ? "filled" : ""
+                fixedLabel || value || tempLabel || isFocused ? "filled" : ""
               } ${
                 errorMessage !== true &&
                 errorMessage !== false &&

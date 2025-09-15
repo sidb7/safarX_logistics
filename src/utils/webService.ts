@@ -5,18 +5,21 @@ import sessionManager from "./sessionManager";
 
 axios.defaults.baseURL = SELLER_URL;
 
-const createHeader = (_URL: string, options = {}) => {
-  // let sellerId = localStorage.getItem("sellerId");
+const createHeader = (_URL: string, options: any = {}) => {
   const { sellerInfo } = sessionManager({});
-  let header = {
-    Accept: "/",
-    // Authorization: `Bearer ${localStorage.getItem(
-    //   `${sellerId}_${tokenKey}`
-    // )}`,
+
+  const defaultHeaders = {
+    Accept: "*/*",
     Authorization: `Bearer ${sellerInfo?.token || null}`,
   };
-  options = { ...options, headers: header };
-  return { URL: _URL, options: options };
+
+  // merge headers → custom headers take priority
+  const mergedHeaders = {
+    ...defaultHeaders,
+    ...(options.headers || {}),
+  };
+
+  return { URL: _URL, options: { ...options, headers: mergedHeaders } };
 };
 
 const CreateHeaderToken = (_URL: string, _options?: any) => {
@@ -56,13 +59,13 @@ const POST = async (_URL: string, data = {}, _options?: any) => {
   }
 };
 
-const GET = async (_URL: string, _options?: any) => {
-  let { URL, options } = createHeader(_URL, _options);
+const GET = async (_URL: string, _options: any = {}) => {
+  const { URL, options } = createHeader(_URL, _options);
   try {
     const response = await axios.get(URL, options);
     return response;
   } catch (error: any) {
-    return error.response;
+    return error?.response;
   }
 };
 

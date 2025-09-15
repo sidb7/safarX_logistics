@@ -17,8 +17,8 @@ const LoginModal = ({
   mobileNo,
   logginModal,
   setLogginModal,
-  loggedIn,
-  setLoggedIn,
+  viewProductAwbs,
+  setViewProductAwbs,
   setLoginSuccess,
 }: any) => {
   const navigate = useNavigate();
@@ -89,9 +89,12 @@ const LoginModal = ({
         if (data?.data?.success) {
           toast.success(data?.data?.message);
           setLogginModal(false);
+
+          setViewProductAwbs((prev: any) =>
+            prev.includes(awb) ? prev : [...prev, awb]
+          );
           setOtp("");
           setSendOtp(false);
-          setLoggedIn(true);
           setLoginSuccess(true);
         } else {
           toast.error(data?.data?.message);

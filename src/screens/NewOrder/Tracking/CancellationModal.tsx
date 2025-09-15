@@ -16,12 +16,16 @@ type Props = {
   cancellationModalOpen?: any;
   setCancellationModalOpen?: () => void;
   awb?: any;
+  buyerToken?: any;
+  buyerMobileNo?: any;
 };
 
 const CancellationModal = ({
   cancellationModalOpen,
   setCancellationModalOpen,
   awb,
+  buyerToken,
+  buyerMobileNo,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -76,7 +80,8 @@ const CancellationModal = ({
   };
 
   const handleCancelApi = async () => {
-    const token = sessionStorage.getItem(`${awb}`);
+    const token1 = sessionStorage.getItem(`${awb}`);
+    const token = token1 || buyerToken;
     try {
       const payload = {
         altno: "",
@@ -85,6 +90,7 @@ const CancellationModal = ({
           cancelSelectedOption === "Other" ? otherReason : cancelSelectedOption,
         requestType: "CANCEL",
         awb,
+        mobileNo: buyerMobileNo || "",
       };
       const data = await POSTHEADER(UPDATETRACKINGBYBUYER, payload, {
         token,
