@@ -32,7 +32,7 @@ export default function AuthContainer() {
       opacity: 0,
       transition: {
         x: { duration: 0.9, ease: "easeIn" },
-        opacity: { duration: 0.6 },
+        opacity: { duration: 0.5 },
       },
     },
     exitRight: {
@@ -40,7 +40,7 @@ export default function AuthContainer() {
       opacity: 0,
       transition: {
         x: { duration: 0.9, ease: "easeIn" },
-        opacity: { duration: 0.6 },
+        opacity: { duration: 0.5 },
       },
     },
   };
@@ -51,7 +51,7 @@ export default function AuthContainer() {
         {/* FORMS (with midway slide + fade) */}
         <div className="absolute inset-0 flex">
           {/* Left Slot → Signup */}
-          <div className="w-1/2 grid place-items-center p-10 relative">
+          <div className="w-1/2 grid place-items-center p-5 relative">
             <AnimatePresence>
               {isLogin && (
                 <motion.div
@@ -60,7 +60,7 @@ export default function AuthContainer() {
                   initial="hiddenLeft"
                   animate="visible"
                   exit="exitLeft"
-                  className="absolute w-full max-w-sm"
+                  className="absolute w-full max-w-md"
                 >
                   <Signup />
                 </motion.div>
@@ -78,7 +78,7 @@ export default function AuthContainer() {
                   initial="hiddenRight"
                   animate="visible"
                   exit="exitRight"
-                  className="absolute w-full max-w-sm"
+                  className="absolute w-full  max-w-md"
                 >
                   <Login />
                 </motion.div>
@@ -102,10 +102,15 @@ export default function AuthContainer() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.35 }}
-                className="text-3xl font-bold text-[#160783]"
+                className="text-3xl mt-10 font-bold font-Open text-[#160783]"
               >
                 {isLogin ? (
-                  "Welcome Back!"
+                  <div className="text-lg sm:text-xl md:text-3xl lg:text-6xl flex flex-wrap justify-center">
+                    <span className="text-[#a99bfd]">
+                      Beyond deliveries.&nbsp;
+                    </span>
+                    Building connections.
+                  </div>
                 ) : (
                   <div className="text-4xl">
                     Logistics.{" "}
@@ -117,7 +122,7 @@ export default function AuthContainer() {
 
               <p className="mt-3  text-[#160783]/90">
                 {isLogin ? (
-                  "To keep connected with us please login with your personal info"
+                  ""
                 ) : (
                   <div className="text-start">
                     From first mile to last mile — one seamless journey.
@@ -125,11 +130,29 @@ export default function AuthContainer() {
                 )}
               </p>
 
+              {!isLogin ? (
+                <div className="z-50 w-[70%] ">
+                  <img
+                    src="https://i.postimg.cc/4dG3LwY8/login-graphic.png"
+                    alt=""
+                  />
+                </div>
+              ) : (
+                <div></div>
+              )}
+              {!isLogin ? (
+                <p className="text-[#a99bfd] flex">
+                  Begin your journey. Build connections
+                </p>
+              ) : (
+                ""
+              )}
+
               <button
                 onClick={() => setIsLogin((v) => !v)}
-                className="mt-8 px-7 z-10 py-2.5 rounded-full  text-white border bg-[#160783] border-[#160783]  hover:border-[#160783] hover:bg-transparent hover:text-[#160783] duration-200 transition"
+                className="mt-1 px-7 z-10 py-2.5 rounded-full  text-white border bg-[#160783] border-[#160783]  hover:border-[#160783] hover:bg-transparent hover:text-[#160783] duration-200 transition"
               >
-                {isLogin ? "SIGN UP" : "SIGN IN"}
+                {!isLogin ? "SIGN UP" : "SIGN IN"}
               </button>
             </div>
           </div>

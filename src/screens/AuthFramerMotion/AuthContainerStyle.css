@@ -1,7 +1,8 @@
 .tealBack {
   position: absolute;
   inset: 0;
-  background: #d8ecf8 url("/home/siddhant/Downloads/steptodown.com559947.jpg")
+  background: #d8ecf8
+    url("/home/siddhant/Pictures/safarX_assets/steptodown.com559947.jpg")
     no-repeat center center;
   background-size: cover;
   overflow: hidden;
@@ -23,7 +24,9 @@
   border-radius: 20%;
   animation: floatUp 15s linear infinite; /* slowed for smoothness */
 }
-
+html {
+  font-size: 95%; /* everything using rem/em shrinks */
+}
 /* floating + rotating */
 @keyframes floatUp {
   0% {

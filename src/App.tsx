@@ -16,6 +16,7 @@ import {
   ADMIN_URL,
   COMPANY_NAME,
   Environment,
+  LARGE_LOGO,
   REACT_APP_GA4_ID,
   REACT_APP_GTM_ID,
   SMALL_LOGO,
@@ -422,8 +423,11 @@ const App = () => {
   return (
     <>
       <div className="relative  min-h-screen">
+        <div className="py-2 z-20 absolute flex w-40">
+          <img src={LARGE_LOGO} alt="" />
+        </div>
         <Helmet>
-          <title>{COMPANY_NAME || "Shipaari"}</title>
+          <title>{COMPANY_NAME || "Drivaa.Run"}</title>
           <link rel="icon" href={SMALL_LOGO} type="image/png" />
         </Helmet>
         <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>

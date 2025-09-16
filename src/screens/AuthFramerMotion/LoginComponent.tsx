@@ -43,7 +43,8 @@ export default function Login() {
 
       {/* Email Field */}
       <CustomInputBox
-        containerStyle="mt-4"
+        containerStyle="mt-5"
+        className="!h-[40px]"
         label="Email"
         id="email"
         name="email"
@@ -62,7 +63,8 @@ export default function Login() {
 
       {/* Password Field */}
       <CustomInputBox
-        containerStyle="mt-4"
+        containerStyle="mt-5"
+        className="!h-[40px]"
         label="Password"
         id="password"
         name="password"
@@ -84,8 +86,13 @@ export default function Login() {
       </button>
       <p className="text-[9px] my-2 text-gray-500">
         By clicking on Login, I accept the{" "}
-        <span className="text-[#160783]">Terms & Conditions</span> and{" "}
-        <span className="text-[#160783]">Privacy Policy.</span>
+        <span className="text-[#160783] hover:underline cursor-pointer">
+          Terms & Conditions
+        </span>{" "}
+        and{" "}
+        <span className="text-[#160783] hover:underline cursor-pointer">
+          Privacy Policy.
+        </span>
       </p>
       <div className="flex items-center my-3">
         <hr className="flex-grow border-gray-300" />
