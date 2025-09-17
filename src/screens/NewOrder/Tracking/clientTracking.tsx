@@ -115,7 +115,8 @@ const Tracking = () => {
     let sellerIdVar = sellerInfo?.sellerId;
     let temp = sellerInfo;
     // let privateCompanyId = JSON.parse(localStorage.getItem("userInfo") as any);
-    const jwtToken = sellerInfo?.jwt || buyerJwt?.token || null;
+    const jwtToken =
+      sellerInfo?.jwt || sellerInfo?.token || buyerJwt?.token || null;
     setToken(jwtToken);
     setBuyerMobileNo(buyerJwt?.mobileNo);
 
@@ -258,7 +259,8 @@ const Tracking = () => {
       const buyerObj: any = sessionStorage.getItem("buyerJwt");
       const buyerJwt: any = JSON.parse(buyerObj);
 
-      const jwtToken = sellerInfo?.jwt || buyerJwt?.token || null;
+      const jwtToken =
+        sellerInfo?.jwt || sellerInfo?.token || buyerJwt?.token || null;
       setBuyerMobileNo(buyerJwt?.mobileNo);
       const buyerJwtMobileNo = buyerMobileNo || buyerJwt?.mobileNo || "";
       const buyerToken = token || jwtToken || "";
