@@ -90,32 +90,34 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
 
   return (
     <div
-      className={`border-b  rounded-[3.475px]  my-5 p-6 ${
-        completed ? "border-[#7CCA62]" : "border-[#A9D4FF]"
-      }`}
+      className={`rounded-2xl my-6 p-6 transition-all duration-300 shadow-md border border-[#CFDFFF] bg-white/90 ${
+        isOpen && !completed ? "bg-[#F8F8FF] shadow-xl border-[#9082FF]" : ""
+      } animate-fadein`}
       style={{
-        boxShadow: boxShadowStyle,
+        boxShadow: completed
+          ? "0px 0px 0px 0px #7CCA62, 2.83px 0px 0px 0px #acf295 inset"
+          : "0px 0px 0px 0px #A9D4FF, 2.83px 0px 0px 0px #A9D4FF inset",
       }}
     >
       <div
-        className="flex justify-between items-center cursor-pointer"
+        className="flex justify-between items-center cursor-pointer select-none"
         onClick={!completed ? onClick : undefined}
       >
-        <h2 className="font-Open text-[14px] lg:text-[18px] font-semibold leading-4 lg:!leading-8 tracking-wider xl:tracking-widest">
+        <h2 className="font-Open text-[16px] lg:text-[20px] font-bold leading-5 lg:!leading-8 tracking-wide text-[#160783]">
           {title}
         </h2>
         {completed ? (
           <div className="flex gap-x-2 items-center text-center">
             <img src={successStatus} alt="successStatus" />
-            <span className="text-[14px] font-normal font-Open leading-5 text-[#7CCA62]">
-              COMPLETED
+            <span className="text-[14px] font-semibold font-Open leading-5 text-[#7CCA62] uppercase tracking-wider">
+              Completed
             </span>
           </div>
         ) : (
           <div className="cursor-pointer">
             <svg
-              className={`w-5 h-5 transform transition-transform ${
-                isOpen ? "rotate-180" : ""
+              className={`w-6 h-6 transform transition-transform duration-300 ${
+                isOpen ? "rotate-180 text-[#9082FF]" : "text-[#B8B5FF]"
               }`}
               fill="none"
               viewBox="0 0 24 24"
@@ -133,7 +135,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
       </div>
       {!completed && isOpen && shouldRenderSectionContent(selectedSection) && (
         <div
-          className={`pt-3  ${
+          className={`pt-4 transition-all duration-300 animate-fadein ${
             selectedSection === "kyc" ||
             selectedSection === "bankDetails" ||
             selectedSection === "brandDetails"
@@ -142,7 +144,7 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
           }`}
         >
           <div>
-            <p className="font-Open text-[13px] lg:text-[15px] font-normal leading-8 lg:!leading-[26px] tracking-wide">
+            <p className="font-Open text-[15px] lg:text-[16px] font-normal leading-7 lg:!leading-[26px] tracking-wide text-[#494949]">
               {content}
             </p>
           </div>
@@ -162,12 +164,12 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
             ) : selectedSection === "brandDetails" ? (
               <BrandSection setBrandLoadingState={setBrandLoadingState} />
             ) : (
-              <div className=" items-end text-end">
+              <div className="">
                 <OneButton
-                  text={"CLICK HERE"}
+                  text={"Know more"}
                   onClick={handleClick}
                   variant="tertiary"
-                  className="!bg-transparent"
+                  className="!rounded-full w-full bg-[#9082FF] flex text-white px-6 py-2 font-Open font-bold text-xs uppercase border-2 border-[#9082FF] hover:bg-[#160783] hover:text-white transition-all duration-200"
                 />
               </div>
             )}
@@ -179,3 +181,13 @@ const AccordionItem: React.FC<IAccordionItemProps> = ({
 };
 
 export default AccordionItem;
+
+/* Add this to your global CSS or Tailwind config:
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadein {
+  animation: fadein 0.7s cubic-bezier(0.4,0,0.2,1) both;
+}
+*/

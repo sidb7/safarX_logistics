@@ -566,7 +566,7 @@ const ExceptionNdr: React.FunctionComponent<IOrdersProps> = () => {
                 onChange={handleSearchChange}
                 getFullContent={handleGetFullContent}
                 customPlaceholder={`Order, Tracking or ${
-                  COMPANY_NAME || "Shipyaari"
+                  COMPANY_NAME || "Drivaa.Run"
                 } ID`}
               />
             </div>

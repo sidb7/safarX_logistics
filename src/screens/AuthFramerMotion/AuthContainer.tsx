@@ -48,6 +48,9 @@ export default function AuthContainer() {
 
   return (
     <div className="min-h-screen grid place-items-center bg-gray-50">
+      <div className="py-2 z-20 absolute flex w-40 top-0 start-0">
+        <img src={LARGE_LOGO} alt="" />
+      </div>
       <div className="login-backdrop relative w-full h-[100vh] rounded-2xl overflow-hidden shadow-2x">
         {/* FORMS (with midway slide + fade) */}
         <div className="absolute inset-0 flex">

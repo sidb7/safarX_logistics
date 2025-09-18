@@ -191,7 +191,7 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
         if (isMasked) {
           let slice = filterData?.slice(0, 2);
           slice.forEach((element: any, i: number) => {
-            element.partnerName = COMPANY_NAME || "Shipyaari";
+            element.partnerName = COMPANY_NAME || "Drivaa.Run";
 
             if (i === 0) {
               element.companyServiceName = "Air";
@@ -242,258 +242,262 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
 
   return (
     <>
-      <div className="flex flex-col sm:flex-col-reverse xl:flex-row xl:mt-[50px] mb-[25px] gap-x-8">
-        <div className="flex-1">
-          <div className=" grid grid-cols-1 sm:grid-cols-2  gap-6 lg:gap-8 ">
-            {/* first card  */}
-            <div
-              className="rounded-xl border-[1px] border-[#E8E8E8] shadow-md relative h-[161px]"
-              style={{
-                background:
-                  "radial-gradient(147.39% 166.25% at 106.91% -8.82%, #FD88B3 0%, #FFF 50.67%)",
-              }}
-            >
-              <div className="flex flex-col gap-y-5 pt-5">
-                <div className="  pl-[15px] pr-[21px]">
-                  <p className="font-Open text-base xl:text-[18px] leading-6 font-semibold xl:leading-8 text-[#1C1C1C]">
-                    {completedStatus?.qna && completedStatus?.returningUser
-                      ? "Track your Order"
-                      : completedStatus?.qna && !completedStatus?.returningUser
-                      ? "You're all set!"
-                      : "Let's get you started!"}
-                  </p>
+      <div className="px-4 md:px-8">
+        <div className="flex flex-col sm:flex-col-reverse xl:flex-row xl:mt-[50px] mb-[25px] gap-x-8">
+          <div className="flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+              {/* first card  */}
+              <div
+                className="rounded-2xl border border-[#CFDFFF] shadow-lg relative h-[161px] bg-[#E7E4FF] transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl animate-fadein"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E7E4FF 0%, #CFDFFF 60%, #fff 100%)",
+                }}
+              >
+                <div className="flex flex-col gap-y-5 pt-5">
+                  <div className="  pl-[15px] pr-[21px]">
+                    <p className="font-Open text-base xl:text-[18px] leading-6 font-semibold xl:leading-8 text-[#1C1C1C]">
+                      {completedStatus?.qna && completedStatus?.returningUser
+                        ? "Track your Order"
+                        : completedStatus?.qna &&
+                          !completedStatus?.returningUser
+                        ? "You're all set!"
+                        : "Let's get you started!"}
+                    </p>
 
-                  <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                    {completedStatus?.qna && completedStatus?.returningUser
-                      ? "Stay updated on your order's progress and estimated delivery time with real-time tracking."
-                      : completedStatus?.qna && !completedStatus?.returningUser
-                      ? `Your setup is complete. You can now enjoy a personalized ${COMPANY_NAME} experience.`
-                      : `Set up your account for a personalized ${COMPANY_NAME} experience and seamless logistics.`}
-                  </p>
-                </div>
-                {!completedStatus?.qna ? (
-                  // Condition 1: If qna is not true, show "CLICK HERE" button for onboarding
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
-                    <OneButton
-                      text={"CLICK HERE"}
-                      onClick={() => navigate("/onboarding/get-started")}
-                      variant="tertiary"
-                      className="!bg-transparent !text-sm "
-                    />
+                    <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
+                      {completedStatus?.qna && completedStatus?.returningUser
+                        ? "Stay updated on your order's progress and estimated delivery time with real-time tracking."
+                        : completedStatus?.qna &&
+                          !completedStatus?.returningUser
+                        ? `Your setup is complete. You can now enjoy a personalized ${COMPANY_NAME} experience.`
+                        : `Set up your account for a personalized ${COMPANY_NAME} experience and seamless logistics.`}
+                    </p>
                   </div>
-                ) : completedStatus?.returningUser ? (
-                  // Condition 2: If qna is true and returning user is true, show "CLICK HERE" button for tracking
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
-                    <OneButton
-                      text={"CLICK HERE"}
-                      onClick={() => navigate("/tracking")}
-                      className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
-                    />
-                  </div>
-                ) : (
-                  // If qna is true but returningUser is false, show "Completed" text without a button
-                  <div className="flex gap-x-1 items-center text-center  justify-end pr-[10px] pb-[20px] absolute bottom-0 right-0 ">
-                    {/* <img src={successStatus} alt="successStatus" /> */}
-                    <span className="text-[15px] font-bold font-Open leading-5 text-[#43be43] underline underline-offset-4">
-                      Your setup is complete!
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* second card  */}
-            <div
-              className="rounded-xl border-[1px] border-[#E8E8E8] shadow-md relative h-[161px]"
-              style={{
-                background:
-                  "radial-gradient(147.39% 166.25% at 106.91% -8.82%, #88E7FD 0%, #FFF 50.67%)",
-              }}
-            >
-              <div className="flex flex-col gap-y-5 pt-5">
-                <div className="  pl-[15px] pr-[21px]">
-                  <p className="font-Open text-base xl:text-[18px] font-semibold leading-6  xl:leading-8 text-[#1C1C1C]">
-                    {completedStatus?.returningUser
-                      ? "Upgrade your Plan"
-                      : "Sync your Channel"}
-                  </p>
-                  <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                    {completedStatus?.returningUser
-                      ? "Enhance your experience by upgrading your plan. Click here to learn more."
-                      : "Integrate your channel for a seamless Shipping Experience."}
-                  </p>
-                </div>
-                {!completedStatus?.returningUser ? (
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
-                    <OneButton
-                      text={"SYNC MY STORE"}
-                      onClick={() => {
-                        navigate("/catalogues/channel-integration");
-                      }}
-                      variant="tertiary"
-                      className="!bg-transparent !text-sm"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
-                    <OneButton
-                      text={"CLICK HERE"}
-                      onClick={() => navigate("/subscription/plans")}
-                      className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* third card  */}
-            <div
-              className="rounded-xl border-[1px] border-[#E8E8E8] shadow-md relative h-[161px]"
-              style={{
-                background:
-                  "radial-gradient(147.39% 166.25% at 106.91% -8.82%, #88FDDA 0%, #FFF 50.67%)",
-              }}
-            >
-              <div className="flex flex-col gap-y-5 pt-5">
-                <div className="  pl-[15px] pr-[21px]">
-                  <p className="font-Open text-base xl:text-[18px] font-semibold leading-6 xl:leading-8 text-[#1C1C1C]">
-                    {completedStatus?.returningUser
-                      ? "Check Service Coverage"
-                      : "Time to Fill the Wallet Tank"}
-                  </p>
-                  <p className="font-Open text-[13px] 2xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                    {completedStatus?.returningUser
-                      ? "Instantly check if we can deliver to your location for a hassle-free shipping experience!"
-                      : "Fill up your wallet and speed up your business. Quick top-ups for smooth, unstoppable growth."}
-                  </p>
-                </div>
-                {!completedStatus?.returningUser ? (
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
-                    <OneButton
-                      text={"WALLET RECHARGE"}
-                      onClick={() => navigate("/wallet/view-wallet")}
-                      variant="tertiary"
-                      className=" !bg-transparent !text-sm"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
-                    <OneButton
-                      text={"Serviceability"}
-                      onClick={() => {
-                        setShowTable(false);
-                        setShowServiceability(true);
-                        onClickServiceability();
-                      }}
-                      className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* fourth card  */}
-            <div
-              className="rounded-xl border-[1px] border-[#E8E8E8] shadow-md relative h-[161px]"
-              style={{
-                background:
-                  "radial-gradient(147.39% 166.25% at 106.91% -8.82%, #88A9FD 0%, #FFF 50.67%)",
-              }}
-            >
-              <div className="flex flex-col gap-y-5 pt-5">
-                <div className="pl-[15px] pr-[21px]">
-                  <p className="font-Open text-base xl:text-[18px] font-semibold leading-6 xl:leading-8 text-[#1C1C1C]">
-                    {completedStatus?.returningUser
-                      ? "Place order!"
-                      : "Add Your First Order Manually"}
-                  </p>
-                  <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
-                    {completedStatus?.returningUser
-                      ? "Create orders quickly. Select 'Single' for one shipment or 'Bulk' for multiple."
-                      : "Lets take a plunge and start our yaari. Add your first order Manually."}
-                  </p>
-                </div>
-                {!completedStatus?.returningUser ? (
-                  <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
-                    <OneButton
-                      text={"CREATE ORDER"}
-                      onClick={() => navigate("/orders/place-order")}
-                      variant="tertiary"
-                      className=" !bg-transparent !text-sm"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex gap-x-[10px] justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
-                    <div className="">
+                  {!completedStatus?.qna ? (
+                    // Condition 1: If qna is not true, show "CLICK HERE" button for onboarding
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
                       <OneButton
-                        text={"Single"}
+                        text={"CLICK HERE"}
+                        onClick={() => navigate("/onboarding/get-started")}
+                        variant="tertiary"
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                      />
+                    </div>
+                  ) : completedStatus?.returningUser ? (
+                    // Condition 2: If qna is true and returning user is true, show "CLICK HERE" button for tracking
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
+                      <OneButton
+                        text={"CLICK HERE"}
+                        onClick={() => navigate("/tracking")}
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                      />
+                    </div>
+                  ) : (
+                    // If qna is true but returningUser is false, show "Completed" text without a button
+                    <div className="flex gap-x-1 items-center text-center  justify-end pr-[10px] pb-[20px] absolute bottom-0 right-0 ">
+                      {/* <img src={successStatus} alt="successStatus" /> */}
+                      <span className="text-[15px] font-bold font-Open leading-5 text-[#43be43] underline underline-offset-4">
+                        Your setup is complete!
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* second card  */}
+              <div
+                className="rounded-2xl border border-[#CFDFFF] shadow-lg relative h-[161px] bg-[#E7E4FF] transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl animate-fadein"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E7E4FF 0%, #CFDFFF 60%, #fff 100%)",
+                }}
+              >
+                <div className="flex flex-col gap-y-5 pt-5">
+                  <div className="  pl-[15px] pr-[21px]">
+                    <p className="font-Open text-base xl:text-[18px] font-semibold leading-6  xl:leading-8 text-[#1C1C1C]">
+                      {completedStatus?.returningUser
+                        ? "Upgrade your Plan"
+                        : "Sync your Channel"}
+                    </p>
+                    <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
+                      {completedStatus?.returningUser
+                        ? "Enhance your experience by upgrading your plan. Click here to learn more."
+                        : "Integrate your channel for a seamless Shipping Experience."}
+                    </p>
+                  </div>
+                  {!completedStatus?.returningUser ? (
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
+                      <OneButton
+                        text={"SYNC MY STORE"}
+                        onClick={() => {
+                          navigate("/catalogues/channel-integration");
+                        }}
+                        variant="tertiary"
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
+                      <OneButton
+                        text={"CLICK HERE"}
+                        onClick={() => navigate("/subscription/plans")}
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* third card  */}
+              <div
+                className="rounded-2xl border border-[#CFDFFF] shadow-lg relative h-[161px] bg-[#E7E4FF] transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl animate-fadein"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E7E4FF 0%, #CFDFFF 60%, #fff 100%)",
+                }}
+              >
+                <div className="flex flex-col gap-y-5 pt-5">
+                  <div className="  pl-[15px] pr-[21px]">
+                    <p className="font-Open text-base xl:text-[18px] font-semibold leading-6 xl:leading-8 text-[#1C1C1C]">
+                      {completedStatus?.returningUser
+                        ? "Check Service Coverage"
+                        : "Time to Fill the Wallet Tank"}
+                    </p>
+                    <p className="font-Open text-[13px] 2xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
+                      {completedStatus?.returningUser
+                        ? "Instantly check if we can deliver to your location for a hassle-free shipping experience!"
+                        : "Fill up your wallet and speed up your business. Quick top-ups for smooth, unstoppable growth."}
+                    </p>
+                  </div>
+                  {!completedStatus?.returningUser ? (
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
+                      <OneButton
+                        text={"WALLET RECHARGE"}
+                        onClick={() => navigate("/wallet/view-wallet")}
+                        variant="tertiary"
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0 ">
+                      <OneButton
+                        text={"Serviceability"}
+                        onClick={() => {
+                          setShowTable(false);
+                          setShowServiceability(true);
+                          onClickServiceability();
+                        }}
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* fourth card  */}
+              <div
+                className="rounded-2xl border border-[#CFDFFF] shadow-lg relative h-[161px] bg-[#E7E4FF] transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl animate-fadein"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #E7E4FF 0%, #CFDFFF 60%, #fff 100%)",
+                }}
+              >
+                <div className="flex flex-col gap-y-5 pt-5">
+                  <div className="pl-[15px] pr-[21px]">
+                    <p className="font-Open text-base xl:text-[18px] font-semibold leading-6 xl:leading-8 text-[#1C1C1C]">
+                      {completedStatus?.returningUser
+                        ? "Place order!"
+                        : "Add Your First Order Manually"}
+                    </p>
+                    <p className="font-Open text-[13px] xl:text-[15px] font-normal leading-[18px] xl:leading-5 text-[#494949] tracking-wide xl:tracking-normal">
+                      {completedStatus?.returningUser
+                        ? "Create orders quickly. Select 'Single' for one shipment or 'Bulk' for multiple."
+                        : "Lets take a plunge and start our yaari. Add your first order Manually."}
+                    </p>
+                  </div>
+                  {!completedStatus?.returningUser ? (
+                    <div className="flex justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
+                      <OneButton
+                        text={"CREATE ORDER"}
                         onClick={() => navigate("/orders/place-order")}
-                        className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
+                        variant="tertiary"
+                        className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
                       />
                     </div>
-                    <div className="">
-                      <OneButton
-                        text={"Bulk"}
-                        onClick={() => navigate("/orders/add-bulk")}
-                        className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
-                      />
+                  ) : (
+                    <div className="flex gap-x-[10px] justify-end pr-[10px] pb-[10px] absolute bottom-0 right-0">
+                      <div>
+                        <OneButton
+                          text={"Single"}
+                          onClick={() => navigate("/orders/place-order")}
+                          className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                        />
+                      </div>
+                      <div>
+                        <OneButton
+                          text={"Bulk"}
+                          onClick={() => navigate("/orders/add-bulk")}
+                          className="!rounded-full bg-[#9082FF] !text-white px-6 py-2 font-Open font-bold text-sm uppercase border-2 border-[#9082FF]  transition-all duration-200"
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-                {/* Open Modal on Clicking Serviceability */}
+                  )}
+                  {/* Open Modal on Clicking Serviceability */}
 
-                <CenterModal
-                  isOpen={showServiceability}
-                  className=" !flex !justify-center !items-center !w-[60%] !h-3/4"
-                  onRequestClose={() => {
-                    setShowServiceability(false);
-                    clearServiceabilityState();
-                    setServiceabilityTableData([]);
-                  }}
-                >
-                  <Serviceability
-                    onClick={() => {
+                  <CenterModal
+                    isOpen={showServiceability}
+                    className=" !flex !justify-center !items-center !w-[60%] !h-3/4"
+                    onRequestClose={() => {
                       setShowServiceability(false);
                       clearServiceabilityState();
                       setServiceabilityTableData([]);
                     }}
-                    servicesData={servicesData}
-                    serviceabilityData={serviceabilityData}
-                    setServiceabilityData={setServiceabilityData}
-                    onSubmitServiceability={onSubmitServiceability}
-                    clearServiceabilityState={clearServiceabilityState}
-                    showTable={showTable}
-                    setShowTable={setShowTable}
-                    serviceabilityTableData={serviceabilityTableData}
-                    setServiceabilityTableData={setServiceabilityTableData}
-                    loader={serviceabilityTableLoader}
-                  />
-                </CenterModal>
+                  >
+                    <Serviceability
+                      onClick={() => {
+                        setShowServiceability(false);
+                        clearServiceabilityState();
+                        setServiceabilityTableData([]);
+                      }}
+                      servicesData={servicesData}
+                      serviceabilityData={serviceabilityData}
+                      setServiceabilityData={setServiceabilityData}
+                      onSubmitServiceability={onSubmitServiceability}
+                      clearServiceabilityState={clearServiceabilityState}
+                      showTable={showTable}
+                      setShowTable={setShowTable}
+                      serviceabilityTableData={serviceabilityTableData}
+                      setServiceabilityTableData={setServiceabilityTableData}
+                      loader={serviceabilityTableLoader}
+                    />
+                  </CenterModal>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col mb-[25px] xl:mb-[0px]">
-          <div className="flex-2 rounded-2xl border border-[#E8E8E8] bg-white shadow-md px-5 py-[26px] xl:min-w-[394px] mt-[50px]  xl:mt-[0px]">
-            {carouselIndex === 0 && (
-              <>
-                <p className="flex justify-start font-Open text-base xl:text-[18px] leading-6 font-bold xl:leading-8 text-[#1C1C1C]">
-                  Your Profile
-                </p>
-              </>
-            )}
+          <div className="flex flex-col mb-[25px] xl:mb-[0px]">
+            <div className="flex-2 rounded-2xl border border-[#CFDFFF] bg-[#ffffff] shadow-lg px-5 py-[26px] xl:min-w-[394px] mt-[50px]  xl:mt-[0px] transition-all duration-300 hover:shadow-2xl animate-fadein">
+              {carouselIndex === 0 && (
+                <>
+                  <p className="flex justify-start font-Open text-base xl:text-[18px] leading-6 font-bold xl:leading-8 text-[#160783]">
+                    Your Profile
+                  </p>
+                </>
+              )}
 
-            {/* Display carousel item based on carouselIndex */}
-            {carouselItems[carouselIndex]}
-          </div>
-          <div className="flex justify-center space-x-2 mt-4">
-            {carouselItems.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`w-4 h-2 rounded-full ${
-                  carouselIndex === index ? "bg-blue-500" : "bg-gray-300"
-                }`}
-              />
-            ))}
+              {/* Display carousel item based on carouselIndex */}
+              {carouselItems[carouselIndex]}
+            </div>
+            <div className="flex justify-center space-x-2 mt-4">
+              {carouselItems.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDotClick(index)}
+                  className={`w-4 h-2 rounded-full transition-all duration-300 border border-[#9082FF] scale-100 hover:scale-125 ${
+                    carouselIndex === index ? "bg-[#9082FF]" : "bg-[#CFDFFF]"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -502,3 +506,13 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
 };
 
 export default TopCardSection;
+
+/* Add this to your global CSS or Tailwind config:
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadein {
+  animation: fadein 0.7s cubic-bezier(0.4,0,0.2,1) both;
+}
+*/

@@ -1,5 +1,3 @@
-
-
 // import React, { useState, useRef, useEffect } from "react";
 // import FloatingLabelInput from "./FloatingLabelInput"; // Updated path
 
@@ -42,7 +40,7 @@
 //         {/* Custom Dropdown */}
 //         <div ref={dropdownRef} className="relative">
 //           {/* Selected Value Display */}
-//           <div 
+//           <div
 //             className="w-full pl-4 pr-10 py-4 border border-gray-300 rounded-2xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-Open text-sm cursor-pointer flex justify-between"
 //             onClick={() => setIsOpen(!isOpen)}
 //           >
@@ -53,12 +51,12 @@
 //               </svg>
 //             </div>
 //           </div>
-          
+
 //           {/* Dropdown Options */}
 //           {isOpen && (
 //             <div className="absolute z-20 mt-1 w-full bg-white shadow-lg border border-gray-200  overflow-hidden rounded-2xl">
 //               <div className="bg-white">
-//                 <div 
+//                 <div
 //                   className="px-4 py-2 cursor-pointer hover:bg-gray-100 rounded-2xl  bg-white font-Open text-sm"
 //                   onClick={() => {
 //                     setPaymentMethod("Prepaid");
@@ -67,7 +65,7 @@
 //                 >
 //                   Prepaid
 //                 </div>
-//                 <div 
+//                 <div
 //                   className="px-4 py-2 cursor-pointer hover:bg-gray-100 rounded-2xl  bg-white font-Open text-sm"
 //                   onClick={() => {
 //                     setPaymentMethod("Cash on Delivery");
@@ -98,7 +96,7 @@
 //       {/* Right Column - Insurance Options */}
 //       <div className="md:w-2/3">
 //         <h3 className="text-lg font-medium mb-4">Insure your Shipment?</h3>
-        
+
 //         <div className="space-y-3">
 //           {/* Option 1: With Insurance */}
 //           <span className="flex items-start gap-3 cursor-pointer">
@@ -109,7 +107,7 @@
 //                 value="withInsurance"
 //                 checked={insuranceOption === "withInsurance"}
 //                 onChange={() => setInsuranceOption("withInsurance")}
-//                 className="h-5 w-5 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
+//                 className="h-5 w-5 rounded-full border-gray-300 text-[#160783] focus:ring-blue-500"
 //                 disabled={true} // Disable this option for now
 //               />
 //             </div>
@@ -128,7 +126,7 @@
 //                 value="noInsurance"
 //                 checked={insuranceOption === "noInsurance"}
 //                 onChange={() => setInsuranceOption("noInsurance")}
-//                 className="h-5 w-5 rounded-full border-gray-300 text-blue-600 focus:ring-blue-500"
+//                 className="h-5 w-5 rounded-full border-gray-300 text-[#160783] focus:ring-blue-500"
 //               />
 //             </div>
 //             <div className="text-sm">
@@ -144,8 +142,7 @@
 
 // export default PaymentInformation;
 
-
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import FloatingLabelInput from "./FloatingLabelInput";
 
 interface PaymentInformationProps {
@@ -167,7 +164,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
   setInsuranceOption,
   reverseState,
 }) => {
-   // Check if COD should be disabled (when reverse is true)
+  // Check if COD should be disabled (when reverse is true)
   const isCODDisabled = reverseState === "REVERSE";
 
   // Effect to automatically switch to Prepaid if COD was selected and reverse becomes true
@@ -191,7 +188,7 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="Prepaid"
                 checked={paymentMethod === "Prepaid"}
                 onChange={() => setPaymentMethod("Prepaid")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-[#160783] focus:ring-blue-500 "
               />
             </div>
             <span className="text-sm font-medium text-gray-900">Prepaid</span>
@@ -206,13 +203,17 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 disabled={isCODDisabled} // Add this line
                 checked={paymentMethod === "Cash on Delivery"}
                 onChange={() => setPaymentMethod("Cash on Delivery")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-[#160783] focus:ring-blue-500 "
               />
             </div>
             {/* <span className="text-sm font-medium text-gray-900">COD</span> */}
-             <span className={`text-sm font-medium ${isCODDisabled ? 'text-gray-400' : 'text-gray-900'}`}>
-    COD {isCODDisabled && '(Not available for reverse orders)'}
-  </span>
+            <span
+              className={`text-sm font-medium ${
+                isCODDisabled ? "text-gray-400" : "text-gray-900"
+              }`}
+            >
+              COD {isCODDisabled && "(Not available for reverse orders)"}
+            </span>
           </span>
         </div>
 
@@ -234,8 +235,10 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
 
       {/* Right Section - Insurance Options */}
       <div className="flex-1 lg:ml-8">
-        <h3 className="text-lg font-medium mb-4 text-gray-900">Insure your Shipment?</h3>
-        
+        <h3 className="text-lg font-medium mb-4 text-gray-900">
+          Insure your Shipment?
+        </h3>
+
         <div className="flex flex-col lg:flex-row lg:gap-8 gap-4">
           {/* Option 1: With Insurance - Disabled as in original */}
           <span className="flex items-start gap-3 cursor-pointer">
@@ -246,13 +249,18 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="withInsurance"
                 checked={insuranceOption === "withInsurance"}
                 onChange={() => setInsuranceOption("withInsurance")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-[#160783] focus:ring-blue-500 "
                 disabled={true} // Keep original disabled state
               />
             </div>
             <div className="text-sm">
-              <p className="font-medium text-gray-400">Protect with Insurance (Coming Soon)</p>
-              <p className="text-gray-400 mt-1">Covers loss, theft, and damage during transit. Charges are subject to applicable terms.</p>
+              <p className="font-medium text-gray-400">
+                Protect with Insurance (Coming Soon)
+              </p>
+              <p className="text-gray-400 mt-1">
+                Covers loss, theft, and damage during transit. Charges are
+                subject to applicable terms.
+              </p>
             </div>
           </span>
 
@@ -265,12 +273,16 @@ const PaymentInformation: React.FC<PaymentInformationProps> = ({
                 value="noInsurance"
                 checked={insuranceOption === "noInsurance"}
                 onChange={() => setInsuranceOption("noInsurance")}
-                className="h-5 w-5 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500 "
+                className="h-5 w-5 rounded-full border-2 border-gray-300 text-[#160783] focus:ring-blue-500 "
               />
             </div>
             <div className="text-sm">
-              <p className="font-medium text-gray-900">I'll take the risk (No extra cost)</p>
-              <p className="text-gray-500 mt-1">You'll bear full liability for any loss or damage.</p>
+              <p className="font-medium text-gray-900">
+                I'll take the risk (No extra cost)
+              </p>
+              <p className="text-gray-500 mt-1">
+                You'll bear full liability for any loss or damage.
+              </p>
             </div>
           </span>
         </div>

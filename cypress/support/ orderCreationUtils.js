@@ -207,7 +207,7 @@ export function Login() {
   cy.visit("https://sysellerdev.yaarilabs.com/auth/login");
 
   // Verify the title of the page
-  cy.title().should("include", "Shipyaari");
+  cy.title().should("include", "Drivaa.Run");
 
   // Enter login credentials
   cy.get("#email").should("be.visible").type("tech@shipyaari.com");

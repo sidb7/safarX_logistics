@@ -558,7 +558,7 @@ const Index = () => {
 
             <div
               onClick={() => setFilterModal(true)}
-              className="text-center gap-1 items-center flex p-2 rounded-md md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap text-blue-600 hover:bg-blue-50 cursor-pointer"
+              className="text-center gap-1 items-center flex p-2 rounded-md md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap text-[#160783] hover:bg-blue-50 cursor-pointer"
             >
               <img src={FilterIcon} alt="" />
               FILTER{" "}
@@ -1914,35 +1914,41 @@ const Index = () => {
   return (
     <>
       {isActive ? (
-        <div>
+        <div className="bg-gradient-to-br  min-h-screen pb-10">
           <Breadcrum label="Orders" component={Buttons()} />
-          <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5 ">
+          {/* Modern order summary cards */}
+          <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5">
             {ordersArr?.map((order: any, i: number) => (
               <div
-                className="shadow-md w-[30rem] lg:w-[24rem] h-[6.2rem] lg:h-[6.6rem] relative rounded-lg border"
+                className="shadow-lg w-[18rem] h-[6.2rem] relative rounded-2xl border bg-white flex flex-col justify-between p-4 transition-all duration-300 hover:shadow-2xl animate-fadein"
                 key={i}
               >
-                <div className="flex items-center justify-between min-w-[310px] p-3   lg:px-6 lg:py-4  ">
+                <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[22px] lg:text-[2rem]">
+                    <div className="font-bold font-Lato mb-2 text-[#160783] text-[22px] lg:text-[2rem]">
                       {order?.count}
                     </div>
                     <p className="text-[#494949] font-normal lg:text-base font-Open text-sm">
                       {order?.text}
                     </p>
                   </div>
-                  <div className="self-center  absolute top-[-35px] right-[10px] w-[120px] h-[120px]">
-                    <img src={orderCardImg} alt="Box" />
+                  <div className="self-center absolute top-[-35px] right-[10px] w-[90px] h-[90px]">
+                    <img
+                      src={orderCardImg}
+                      alt="Box"
+                      className="rounded-xl shadow-md"
+                    />
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
+          {/* Responsive action/filter bar */}
           {!isLgScreen && MobileButtons()}
 
           <div className="px-4 md:pl-5 md:pr-6">
-            <div className="bg-white">
+            <div className="bg-white rounded-3xl shadow-xl p-4 md:p-8 mt-4 animate-fadein">
               <OrderStatus
                 filterId={filterId}
                 itemPerPage={itemsPerPage}
@@ -1987,91 +1993,34 @@ const Index = () => {
             </div>
             <div ref={scrollRef} className="my-0 h-[calc(100%-180px)]">
               {isLoading ? (
-                <>
-                  {isLgScreen ? (
-                    <div>
-                      <div className="flex items-stretch h-16 rounded-xl">
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                      </div>
-                      <div className="flex items-stretch h-44 rounded-xl">
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                      </div>
-                      <div className="flex items-stretch h-44 rounded-xl">
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                        <div className="flex-1 m-2 animated rounded-xl"></div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-4">
-                      <div className="flex items-stretch h-44 rounded-xl">
-                        <div className="flex-1 my-2 animated rounded-xl"></div>
-                      </div>
-                      <div className="flex items-stretch h-44 rounded-xl">
-                        <div className="flex-1 my-2 animated rounded-xl"></div>
-                      </div>
-                      <div className="flex items-stretch h-44 rounded-xl">
-                        <div className="flex-1 my-2 animated rounded-xl"></div>
-                      </div>
-                    </div>
-                  )}
-                </>
+                <div className="flex flex-col gap-4 mt-8 animate-fadein">
+                  {[1, 2, 3].map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-24 bg-[#E7E4FF] rounded-2xl animate-pulse"
+                    />
+                  ))}
+                </div>
               ) : (
                 <div>
-                  {
-                    isErrorPage ? (
-                      <div className="mt-5">
-                        <Errors
-                          errorData={errorData}
-                          setIsErrorModalOpen={setIsErrorModalOpen}
-                          isErrorModalOpen={isErrorModalOpen}
-                          setErrorModalData={setErrorModalData}
-                          isLoading={isErrorListLoading}
-                          getErrors={getErrors}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        <CustomTable
-                          rowData={orders || []}
-                          columnsData={columnHelper || []}
-                          setRowSelectedData={setSelectedRowData}
-                        />
-                      </>
-                    )
-                    // : (
-                    //   <div className="border border-white my-5">
-                    //     {/* {orders?.length > 0 ? (
-                    //       <>
-                    //         {orders?.map((data: any, i: any) => (
-                    //           <OrderCard
-                    //             data={data}
-                    //             currentStatus={tabs[tabStatusId].value}
-                    //             orderActions={orderActions}
-                    //           />
-                    //         ))}
-                    //       </>
-                    //     ) : (
-                    //       <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
-                    //         No Data Found
-                    //       </div>
-                    //     )} */}
-                    //   </div>
-                    // )
-                  }
+                  {isErrorPage ? (
+                    <div className="mt-5">
+                      <Errors
+                        errorData={errorData}
+                        setIsErrorModalOpen={setIsErrorModalOpen}
+                        isErrorModalOpen={isErrorModalOpen}
+                        setErrorModalData={setErrorModalData}
+                        isLoading={isErrorListLoading}
+                        getErrors={getErrors}
+                      />
+                    </div>
+                  ) : (
+                    <CustomTable
+                      rowData={orders || []}
+                      columnsData={columnHelper || []}
+                      setRowSelectedData={setSelectedRowData}
+                    />
+                  )}
                 </div>
               )}
             </div>

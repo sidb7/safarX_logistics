@@ -68,7 +68,7 @@ const Index = (props: ITypeProps) => {
         </div>
         <WelcomeHeader
           className="!mt-[44px]"
-          title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
+          title={`Welcome to ${COMPANY_NAME || "Drivaa.Run"}`}
           content="Kindly complete your KYC"
         />
 

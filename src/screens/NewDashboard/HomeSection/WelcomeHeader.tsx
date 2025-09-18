@@ -6,14 +6,10 @@ import { POST } from "../../../utils/webService";
 import { GET_TODAY_DATA_FOR_DASHBOARD } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
 // Improved Type Definitions
-interface IWelcomeHeaderProps {
-  userName?: string;
-  completedStatus?: {
-    returningUser?: boolean;
-  };
-}
-const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
+
+const WelcomeHeader: React.FC<any> = ({
   userName = "",
+  profilePicture = "",
   completedStatus,
 }) => {
   const { isLgScreen } = ResponsiveState();
@@ -101,110 +97,107 @@ const WelcomeHeader: React.FC<IWelcomeHeaderProps> = ({
   const cancelRequested = getCount("CANCEL REQUESTED") || 0;
 
   return (
-    <>
-      <div className="px-4 py-[10px] border-1 border-[#E8E8E8] rounded-2xl shadow-md bg-[#EBFCFF] mt-[35px] mb-6 md:mb-0">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col p-3 lg:p-2 gap-y-3 lg:gap-y-[14px]">
-            <p className="font-Lato text-lg lg:text-[22px] xl:text-[26px] text-[#1C1C1C] font-semibold lg:leading-6 xl:leading-9 tracking-wider capitalize">
-              {completedStatus?.returningUser ? "Welcome Back, " : "Hi, "}
-              <span>{capitalizeFirstLetter(userName)}</span>!
-            </p>
-            <p className="font-Open text-[13px] lg:text-base xl:text-lg text-[#606060] font-normal lg:font-semibold  leading-5 xl:leading-6 tracking-wide">
-              {completedStatus?.returningUser
-                ? "Important Today!"
-                : " We are excited to have you aboard and look forward to supporting your Success!"}
-            </p>
-          </div>
-          {!completedStatus?.returningUser && isLgScreen && (
-            <div>
-              <img
-                src={WelcomeGif}
-                loading="lazy"
-                alt="welcome-gif"
-                height={134}
-                width={134}
-              />
+    <div className="w-full max-w-[98vw] mx-auto mt-10 mb-6 px-2 md:px-8">
+      <div className="rounded-3xl shadow-2xl bg-gradient-to-br from-[#F8F8FF] via-[#E7E4FF] to-[#CFDFFF] p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-10 min-h-[260px]">
+        <div className="flex flex-col md:flex-row items-center gap-10 w-full">
+          {/* User Card */}
+          <div className="relative flex flex-col justify-end items-start bg-white/80 rounded-3xl shadow-xl min-w-[240px] max-w-[280px] h-[240px] overflow-hidden p-0">
+            <img
+              src={profilePicture || WelcomeGif}
+              alt="profile-avatar"
+              className="absolute top-0 left-0 w-full h-full object-fill rounded-3xl"
+            />
+            {/* Gradient overlay */}
+            <div className="absolute bottom-0 left-0 w-full h-2/5 bg-gradient-to-t from-[#E7E4FF]/90 via-[#CFDFFF]/70 to-transparent flex flex-col justify-end px-6 pb-2">
+              <div className="font-Open text-lg md:text-xl font-bold text-[#160783]  drop-shadow-sm">
+                {capitalizeFirstLetter(userName)}
+              </div>
+              <div className="font-Open text-sm text-[#160783] opacity-90 ">
+                Good to see you again
+              </div>
             </div>
-          )}
-        </div>
-        {completedStatus?.returningUser && (
-          <>
-            <div className="flex flex-wrap gap-x-6 mb-1">
-              <>
-                {isLoading ? (
-                  <>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
-                    <div className="flex-1 m-2 animated rounded-xl w-[273px] h-40 p-4"></div>
-                  </>
-                ) : (
-                  <>
-                    <div className="border-[1px] bg-[#F2FAEF] rounded-2xl shadow-md mt-4 flex-1 w-[273px] px-[18px] py-[17px]">
-                      <div className=" flex flex-col justify-center items-center text-center gap-y-[11px]">
-                        <p className="font-Lato font-semibold text-xl leading-[26px] text-[#1C1C1C]">
-                          {" "}
+          </div>
+          {/* Welcome and Stats */}
+          <div className="flex-1 flex flex-col gap-6 w-full">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2 w-full">
+              <div>
+                <h2 className="font-Lato text-3xl md:text-4xl font-bold text-[#160783] tracking-wide">
+                  {completedStatus?.returningUser ? "Welcome Back, " : "Hi, "}
+                  <span className="text-[#9082FF]">
+                    {capitalizeFirstLetter(userName)}
+                  </span>
+                  !
+                </h2>
+                <p className="font-Open text-lg md:text-xl text-[#494949] font-normal md:font-semibold tracking-wide mt-1">
+                  {completedStatus?.returningUser
+                    ? "Here's a quick look at your shipping activity today."
+                    : "We are excited to have you aboard and look forward to supporting your success!"}
+                </p>
+              </div>
+            </div>
+            {completedStatus?.returningUser && (
+              <div className="w-full flex flex-col items-center mt-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 w-full">
+                  {isLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-32 bg-[#CFDFFF] rounded-2xl animate-pulse"
+                      />
+                    ))
+                  ) : (
+                    <>
+                      <div className="bg-white/90 border-t-4 border-[#9082FF] rounded-2xl shadow p-6 flex flex-col items-center min-w-[140px]">
+                        <span className="text-sm font-semibold text-[#9082FF] tracking-wider uppercase mb-1">
                           Orders Placed
-                        </p>
-                        <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
+                        </span>
+                        <span className="text-4xl font-bold text-[#160783]">
                           {bookedCount + notPickedCount || "0"}
-                        </p>
+                        </span>
                       </div>
-                    </div>
-                    <div className="border-[1px] bg-[#D8EFD0] rounded-2xl shadow-md mt-4 flex-1 w-[273px] px-[18px] py-[17px]">
-                      <div className=" flex flex-col justify-center items-center text-center gap-y-[11px]">
-                        <p className="font-Lato font-semibold text-xl leading-[26px] text-[#1C1C1C]">
-                          {" "}
-                          Orders In Transit
-                        </p>
-                        <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
+                      <div className="bg-white/90 border-t-4 border-[#160783] rounded-2xl shadow p-6 flex flex-col items-center min-w-[140px]">
+                        <span className="text-sm font-semibold text-[#9082FF] tracking-wider uppercase mb-1">
+                          In Transit
+                        </span>
+                        <span className="text-4xl font-bold text-[#160783]">
                           {inTransitCount + pickedUp || "0"}
-                        </p>
+                        </span>
                       </div>
-                    </div>
-                    <div className="border-[1px] bg-[#B0DFA1] rounded-2xl shadow-md mt-4 flex-1 w-[273px] px-[18px] py-[17px]">
-                      <div className=" flex flex-col justify-center items-center text-center gap-y-[11px]">
-                        <p className="font-Lato font-semibold text-xl leading-[26px] text-[#1C1C1C]">
-                          {" "}
+                      <div className="bg-white/90 border-t-4 border-[#CFDFFF] rounded-2xl shadow p-6 flex flex-col items-center min-w-[140px]">
+                        <span className="text-sm font-semibold text-[#9082FF] tracking-wider uppercase mb-1">
                           Out for Delivery
-                        </p>
-                        <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
+                        </span>
+                        <span className="text-4xl font-bold text-[#160783]">
                           {outForDeliveryCount || "0"}
-                        </p>
+                        </span>
                       </div>
-                    </div>
-                    <div className="border-[1px] bg-[#FEEEEB] rounded-2xl shadow-md mt-4 flex-1 w-[273px] px-[18px] py-[17px]">
-                      <div className=" flex flex-col justify-center items-center text-center gap-y-[11px]">
-                        <p className="font-Lato font-semibold text-xl leading-[26px] text-[#1C1C1C]">
-                          {" "}
-                          Exception Orders
-                        </p>
-                        <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
+                      <div className="bg-white/90 border-t-4 border-[#E7E4FF] rounded-2xl shadow p-6 flex flex-col items-center min-w-[140px]">
+                        <span className="text-sm font-semibold text-[#9082FF] tracking-wider uppercase mb-1">
+                          Exception
+                        </span>
+                        <span className="text-4xl font-bold text-[#160783]">
                           {exceptionCount || "0"}
-                        </p>
+                        </span>
                       </div>
-                    </div>
-                    <div className="border-[1px] bg-[#FBCDC3] rounded-2xl shadow-md mt-4 flex-1 w-[273px] px-[18px] py-[17px]">
-                      <div className=" flex flex-col justify-center items-center text-center gap-y-[11px]">
-                        <p className="font-Lato font-semibold text-xl leading-[26px] text-[#1C1C1C]">
-                          {" "}
-                          Orders Cancelled
-                        </p>
-                        <p className="font-Lato font-bold text-[22px] leading-[28px] text-[#1C1C1C]">
+                      <div className="bg-white/90 border-t-4 border-[#9082FF] rounded-2xl shadow p-6 flex flex-col items-center min-w-[140px]">
+                        <span className="text-sm font-semibold text-[#9082FF] tracking-wider uppercase mb-1">
+                          Cancelled
+                        </span>
+                        <span className="text-4xl font-bold text-[#160783]">
                           {cancelledCount +
                             cancelRequested +
                             cancelledRequested || "0"}
-                        </p>
+                        </span>
                       </div>
-                    </div>
-                  </>
-                )}
-              </>
-            </div>
-          </>
-        )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 export default WelcomeHeader;

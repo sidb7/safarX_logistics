@@ -384,7 +384,7 @@ const Tracking = () => {
           <img
             className="w-40 mt-10"
             src={LARGE_LOGO}
-            alt={COMPANY_NAME || "Shipyaari"}
+            alt={COMPANY_NAME || "Drivaa.Run"}
           />
         </div>
         <div className="flex justify-center items-center py-4">
@@ -441,13 +441,19 @@ const Tracking = () => {
                         <div className="w-full md:w-auto z-10">
                           <OneButton
                             text={"Track Order"}
-                            className="w-full !rounded-full py-4.5 px-5 md:w-auto"
+                            className={`w-full !rounded-xl border-2 py-2 px-2 md:w-auto
+    ${
+      trackingNo.length === 0
+        ? "border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+        : "border-[#160783] text-[#160783] bg-transparent hover:bg-[#160783] hover:text-white"
+    }`}
                             onClick={() => handleTrackOrderClick()}
                             variant="primary"
                             showIcon={!!isMobileResponsive?.isMobileScreen}
                             icon={TrackingIcon}
                             disabled={trackingNo.length == 0}
                             iconClass="!w-5 !h-5 ml-2 mr-0"
+                            backgroundColour="bg-transparent"
                           />
                         </div>
                       )}

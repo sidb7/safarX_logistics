@@ -34,7 +34,8 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   const [selectedAWB, setSelectedAWB] = useState<string | null>(null);
   const [exceptionCount, setExceptionCount] = useState<any>([]);
   const [rtoCount, setRtoCount] = useState<any>(0);
-  const [isLoadingSellerAction, setIsLoadingSellerAction] = useState<boolean>(false);
+  const [isLoadingSellerAction, setIsLoadingSellerAction] =
+    useState<boolean>(false);
   const [cancelRequestData, setCancelRequestData] = useState<any>([]);
   const [openRightSideModal, setOpenRightSideModal] = useState<any>(false);
   const [searchText, setSearchText] = useState<any>("");
@@ -48,15 +49,15 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
     courierPartner: string[];
   }>({
     requestType: [],
-    courierPartner: []
+    courierPartner: [],
   });
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({
     requestType: [],
-    courierPartner: []
+    courierPartner: [],
   });
   const [tempFilters, setTempFilters] = useState<FilterState>({
     requestType: [],
-    courierPartner: []
+    courierPartner: [],
   });
 
   const data = [{}];
@@ -112,11 +113,11 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
     value: string,
     isChecked: boolean
   ) => {
-    setTempFilters(prev => ({
+    setTempFilters((prev) => ({
       ...prev,
-      [filterType]: isChecked 
+      [filterType]: isChecked
         ? [...prev[filterType], value]
-        : prev[filterType].filter(item => item !== value)
+        : prev[filterType].filter((item) => item !== value),
     }));
   };
 
@@ -142,16 +143,18 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
   const getAllTracingBuyerRequest = async () => {
     try {
       setIsLoading(true);
-      
+
       // Create filterArr from selected filters in the required format
       const filterArr = [];
-      
+
       if (selectedFilters.requestType.length > 0) {
-        filterArr.push({ "requestType": { "$in": selectedFilters.requestType } });
+        filterArr.push({ requestType: { $in: selectedFilters.requestType } });
       }
-      
+
       if (selectedFilters.courierPartner.length > 0) {
-        filterArr.push({ "courierPartnerName": { "$in": selectedFilters.courierPartner } });
+        filterArr.push({
+          courierPartnerName: { $in: selectedFilters.courierPartner },
+        });
       }
 
       const payload = {
@@ -160,27 +163,27 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
         sort: { _id: -1 },
         pageNo: currentPage,
         searchText: searchText,
-        filterArr: filterArr // Add filter array to payload
+        filterArr: filterArr, // Add filter array to payload
       };
-      
+
       const data = await POST(GETALLTRACKINGBUYERREQUEST, payload);
 
       if (data?.data?.success) {
         setIsLoading(false);
         setCancelRequestData(data?.data?.data);
         setTotalItemsCount(data?.data?.totalCount);
-        
+
         // Updated: Extract filter options from uniqueRequestTypes and uniqueCourierPartners
         if (data?.data?.uniqueRequestTypes) {
-          setFilterOptions(prev => ({
+          setFilterOptions((prev) => ({
             ...prev,
-            requestType: data.data.uniqueRequestTypes
+            requestType: data.data.uniqueRequestTypes,
           }));
         }
         if (data?.data?.uniqueCourierPartners) {
-          setFilterOptions(prev => ({
+          setFilterOptions((prev) => ({
             ...prev,
-            courierPartner: data.data.uniqueCourierPartners
+            courierPartner: data.data.uniqueCourierPartners,
           }));
         }
       } else {
@@ -231,12 +234,21 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
           >
             <div className="space-y-2 p-2">
               {filterOptions.requestType.map((type) => (
-                <div key={type} className="flex items-center space-x-2 cursor-pointer">
+                <div
+                  key={type}
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     checked={tempFilters.requestType.includes(type)}
-                    onChange={(e) => handleFilterCheckboxChange('requestType', type, e.target.checked)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    onChange={(e) =>
+                      handleFilterCheckboxChange(
+                        "requestType",
+                        type,
+                        e.target.checked
+                      )
+                    }
+                    className="rounded border-gray-300 text-[#160783] focus:ring-blue-500"
                   />
                   <span className="text-sm">{type}</span>
                 </div>
@@ -252,12 +264,21 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
           >
             <div className="space-y-2 p-2">
               {filterOptions.courierPartner.map((partner) => (
-                <div key={partner} className="flex items-center space-x-2 cursor-pointer">
+                <div
+                  key={partner}
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     checked={tempFilters.courierPartner.includes(partner)}
-                    onChange={(e) => handleFilterCheckboxChange('courierPartner', partner, e.target.checked)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    onChange={(e) =>
+                      handleFilterCheckboxChange(
+                        "courierPartner",
+                        partner,
+                        e.target.checked
+                      )
+                    }
+                    className="rounded border-gray-300 text-[#160783] focus:ring-blue-500"
                   />
                   <span className="text-sm">{partner}</span>
                 </div>
@@ -315,7 +336,7 @@ const NdrCancellationRequest: React.FunctionComponent<IOrdersProps> = () => {
               customPlaceholder="Search"
             />
           </div>
-          <OneButton  
+          <OneButton
             text="Filter"
             onClick={handleOpenFilterModal}
             variant="secondary"

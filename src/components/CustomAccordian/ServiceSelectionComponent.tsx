@@ -418,7 +418,7 @@ const ServiceSelectionComponent: React.FC<ServiceSelectionProps> = ({
         <h2 className="text-xl font-semibold text-blue-800 mb-2">
           Select Delivery Service
         </h2>
-        <p className="text-blue-600">
+        <p className="text-[#160783]">
           The cheapest service has been automatically selected. Click on a
           different service to change your selection.
         </p>

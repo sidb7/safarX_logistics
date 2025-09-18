@@ -206,7 +206,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   let roundedPrice = Math.round(+price);
 
   if (roundedYaariCash > 0) {
-    // Adjust roundedPrice after Yaari Cash deduction
+    // Adjust roundedPrice after Drivaa miles deduction
     roundedPrice = roundedPrice - roundedYaariCash;
   }
 
@@ -403,7 +403,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
           </div>
           <div className="flex justify-between">
             <p className="text-[12px] font-normal font-Open lg:text-[16px]">
-              Yaari Cash:
+              Drivaa miles:
             </p>
             <p>
               {`\u20B9`} -{roundedYaariCash?.toLocaleString("en-IN")}

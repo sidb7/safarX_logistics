@@ -76,14 +76,6 @@ const Sidebar = (props: IpropTypes) => {
         className=" bg-white text-gray shadow-xl  max-w-[16rem]  w-[16rem] 
             overflow-hidden md:relative fixed  
        h-full "
-        // onMouseEnter={() => {
-        //   setSidebarWidth(sidebarRef.current?.clientWidth);
-        //   setOpen(true);
-        // }}
-        // onMouseLeave={() => {
-        //   setSidebarWidth(0);
-        //   setOpen(false);
-        // }}
       >
         <div className="flex justify-center items-center gap-2.5 font-medium border-b py-3 border-slate-300  mx-3 cursor-pointer">
           {open ? (

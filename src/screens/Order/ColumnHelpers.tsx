@@ -569,7 +569,7 @@ const idHelper = (
           {tempOrderId && (
             <div className="">
               <span className="font-Open font-normal leading-4 text-xs">
-                {COMPANY_NAME || "Shipyaari"} ID :
+                {COMPANY_NAME || "Drivaa.Run"} ID :
               </span>
               <div className="flex  items-center font-Open font-semibold leading-5 text-sm">
                 <span
@@ -2141,58 +2141,6 @@ export const ColumnHelperForBookedAndReadyToPicked = (
           <>
             <div className="flex items-center gap-x-1 ">
               <CopyTooltip stringToBeCopied={copyString} />
-              {/* {fileUrl !== "" ? (
-                <ShowLabel fileUrl={fileUrl} />
-              ) : (
-                <div className="text-[grey]">No Label Found</div>
-              )} */}
-              {/* {setCancellationModal && (
-                <div>
-                  <img
-                    src={CrossIcon}
-                    width={"35px"}
-                    // alt="Cancel Order"
-                    className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                    onClick={() => handleCancellationModal(awb, data?.orderId)}
-                    data-tooltip-id="my-tooltip-inline"
-                    data-tooltip-content="Cancel Order"
-                  />
-                  <Tooltip
-                    id="my-tooltip-inline"
-                    style={{
-                      backgroundColor: "bg-neutral-900",
-                      color: "#FFFFFF",
-                      width: "fit-content",
-                      fontSize: "14px",
-                      lineHeight: "16px",
-                    }}
-                  />
-                </div>
-              )}
-              <div className="w-[35px]">
-                <img
-                  src={ShreIcon}
-                  className="w-[20px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                  data-tooltip-id="tracking"
-                  data-tooltip-content="Open Tracking URL"
-                  onClick={() =>
-                    window.open(
-                      `/shipyaari-tracking?trackingNo=${awb}`,
-                      "_blank"
-                    )
-                  }
-                />
-                <Tooltip
-                  id="tracking"
-                  style={{
-                    backgroundColor: "bg-neutral-900",
-                    color: "#FFFFFF",
-                    width: "fit-content",
-                    fontSize: "14px",
-                    lineHeight: "16px",
-                  }}
-                />
-              </div> */}
 
               <CustomToolTip
                 position="bottom"

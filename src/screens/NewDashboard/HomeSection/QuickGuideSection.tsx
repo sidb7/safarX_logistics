@@ -157,38 +157,34 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
 
   return (
     <>
-      <div className="bg-[#F0F4FE] py-7 px-6 lg:py-[50px] lg:px-12">
-        <div className="flex flex-col items-start gap-y-4">
-          <h1 className="text-lg lg:text-2xl text-[#1C1C1C] font-Open font-semibold leading-5 lg:leading-8">
-            Your Quick Start Guide to {COMPANY_NAME}
+      <div className="bg-gradient-to-br from-[#F0F4FE] via-[#E7E4FF] to-[#CFDFFF] py-10 px-4 md:px-10 lg:py-[50px] lg:px-20 transition-all duration-500 animate-fadein">
+        <div className="flex flex-col items-start gap-y-4 mb-2">
+          <h1 className="text-2xl lg:text-3xl text-[#160783] font-Open font-extrabold leading-7 lg:leading-10 tracking-tight">
+            Your Quick Start Guide to{" "}
+            <span className="text-[#9082FF]">{COMPANY_NAME}</span>
           </h1>
-          <p className="font-Open text-sm lg:text-base font-normal leading-6 text-[#697586]">
+          <p className="font-Open text-base lg:text-lg font-normal leading-6 text-[#697586] max-w-2xl">
             Quickly learn how to set up and use {COMPANY_NAME} with this
             easy-to-follow guide. It covers everything you need to start
             managing your shipments efficiently and effectively.
           </p>
         </div>
-        <div className="py-5 lg:py-10 px-4 lg:px-6 flex bg-white rounded-[20px] shadow-[4px_4px_15px_0px_rgba(0, 0, 0, 0.10)] my-4 lg:my-[28px]">
-          {isXlScreen ? (
-            <div className="flex justify-center items-center">
+        <div className="py-6 lg:py-10 px-2 lg:px-8 flex flex-col lg:flex-row bg-white rounded-[28px] shadow-2xl my-6 lg:my-[32px] gap-8 items-center transition-all duration-500 animate-fadein">
+          {isXlScreen && (
+            <div className="flex justify-center items-center flex-shrink-0">
               <img
-                src={HomeGif}
+                src={"https://i.postimg.cc/MKfttmyY/20945996.jpg"}
                 loading="lazy"
                 alt="home-screen"
-                width={isXlScreen ? 450 : 300}
+                width={isXlScreen ? 340 : 220}
+                className="rounded-2xl animate-fadein"
               />
             </div>
-          ) : (
-            <></>
           )}
-
-          <div className="flex-1" ref={kycRef}>
-            <div className=" ">
+          <div className="flex-1 w-full" ref={kycRef}>
+            <div className="space-y-4">
               {accordianItems?.map((item: any, index: number) => (
-                <div
-                  key={index}
-                  // ref={item.section === "brandDetails" ? brandDetailsRef : null}
-                >
+                <div key={index} className="animate-fadein">
                   <AccordionItem
                     key={index}
                     title={item?.title}
@@ -196,11 +192,11 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
                     isOpen={openIndex === index}
                     onClick={() => {
                       if (!loadingState) {
-                        handleClick(index, item?.section); // Use handleClick to toggle the item with the KYC check
+                        handleClick(index, item?.section);
                       }
                     }}
                     completed={completedStatus[item.section]}
-                    section={item.section} // Pass the section key here
+                    section={item.section}
                     selectedSection={selectedSection}
                     mandatoryCheck={mandatoryCheck}
                     sectionRoutes={sectionRoutes}
@@ -222,3 +218,13 @@ const QuickGuideSection: React.FunctionComponent<IQuickGuideSectionProps> = ({
 };
 
 export default QuickGuideSection;
+
+/* Add this to your global CSS or Tailwind config:
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadein {
+  animation: fadein 0.7s cubic-bezier(0.4,0,0.2,1) both;
+}
+*/

@@ -29,7 +29,7 @@ const Checkbox: React.FC<IProps> = ({
         checked={checked}
         onChange={onChange}
         title="Checkbox"
-        className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out`}
+        className={`${checkboxClassName} form-checkbox h-5 w-5 text-[#160783] transition duration-150 ease-in-out`}
       />
       <span className={`ml-2 ${labelClassName} text-sm`}>{label}</span>
     </div>

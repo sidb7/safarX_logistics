@@ -206,7 +206,7 @@ const MyRoutes: React.FC = () => {
           </ErrorBoundary>
         }
       />
-<Route
+      <Route
         path="/auth/framer-motion/login"
         element={
           <ErrorBoundary
@@ -482,8 +482,6 @@ const MyRoutes: React.FC = () => {
           element={<CashOnDelivery />}
         />
 
-  
-
         <Route
           path="/onboarding/recharge-payment"
           element={
@@ -678,37 +676,6 @@ const MyRoutes: React.FC = () => {
             }
           />
         </Route>
-
-        {/* dashboard routes  */}
-
-        {/* <Route>
-          <Route
-            path="home"
-            element={
-              <ProtectedRoute>
-                <NewDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="overview"
-            element={
-              <ProtectedRoute>
-                <NewDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="dashboard"
-            element={
-              <ProtectedRoute>
-                <NewDashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Route> */}
 
         {/* billing details Routes */}
         <Route>
@@ -1247,7 +1214,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path={`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}
+            path={`/${COMPANY_NAME?.toLowerCase() || "Drivaa.Run"}-tracking`}
             element={<ClientTracking />}
           />
           <Route

@@ -316,7 +316,7 @@ ding-6">
                   classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
                 />
               </div> */}
-              {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+              {COMPANY_NAME?.toLowerCase() === "Drivaa.Run" ? (
                 <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
                   <LabelComponent
                     label="Drivaa Miles"
@@ -335,19 +335,13 @@ ding-6">
                 <span className="text-[16px] font-[#1C1C1C]">
                   {activePlan || "Not Assigned Yet"}
                 </span>
-                {/* <span
-                                className="text-[14px] text-[#160783] underline underline-offset-4 decoration-[#160783]"
-                                onClick={() => {
-                                    navigate("/subscription/plans");
-                                }}
-                            >
-                                UPGRADE
-                            </span> */}
+
                 <OneButton
                   text={"UPGRADE"}
-                  className="text-[14px] text-[#160783] underline underline-offset-4 decoration-[#160783]"
+                  className="text-[14px] text-[#160783] underline underline-offset-4 "
                   onClick={() => navigate("/subscription/plans")}
                   variant="primary"
+                  backgroundColour="bg-transparent"
                 />
               </div>
               <div className="flex mt-2">
@@ -363,7 +357,7 @@ ding-6">
         ) : (
           <div
             className={`grid mt-4 gap-4 ${
-              COMPANY_NAME?.toLowerCase() === "shipyaari"
+              COMPANY_NAME?.toLowerCase() === "Drivaa.Run"
                 ? "grid-cols-3"
                 : "grid-cols-2"
             }`}
@@ -376,7 +370,7 @@ ding-6">
                 classNameInfo="pl-3"
               />
             </div>
-            {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
+            {COMPANY_NAME?.toLowerCase() === "Drivaa.Run" ? (
               <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
                 <LabelComponent
                   label="Drivaa Miles"
@@ -403,12 +397,10 @@ ding-6">
               </span> */}
                 <OneButton
                   text={"UPGRADE"}
-                  className=" "
-                  onClick={() => {
-                    navigate("/subscription/plans");
-                  }}
+                  className="text-[14px] text-[#160783] underline underline-offset-4 "
+                  onClick={() => navigate("/subscription/plans")}
                   variant="primary"
-                  textTransform="uppercase"
+                  backgroundColour="bg-transparent"
                 />
               </div>
               <div className="flex mt-2">

@@ -173,7 +173,7 @@ const DeliveryMap: React.FunctionComponent<IPropsTypes> = (
                 <span className="text-base font-light lg:font-Open lg:text-[16px]	">
                   Select delivery location
                 </span>
-                <button className="text-blue-600 underline underline-offset-4 lg:font-Open lg:text-[16px]">
+                <button className="text-[#160783] underline underline-offset-4 lg:font-Open lg:text-[16px]">
                   CHANGE
                 </button>
               </div>

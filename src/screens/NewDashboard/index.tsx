@@ -18,11 +18,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
       active: true,
       //   icon: TaskSquareIcon,
     },
-    // {
-    //   statusName: "Overview",
-    //   active: false,
-    //   //   icon: LocationIcon,
-    // },
+
     {
       statusName: "Dashboard",
       active: false,

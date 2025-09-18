@@ -880,7 +880,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                 <button
                   type="button"
                   onClick={addAccountEntry}
-                  className="py-1 px-4 text-[14px] leading-[20px] font-Open font-semibold underline border-[#160783]  text-[#160783] hover:border-blue-400 hover:text-blue-600 transition-colors"
+                  className="py-1 px-4 text-[14px] leading-[20px] font-Open font-semibold underline border-[#160783]  text-[#160783] hover:border-blue-400 hover:text-[#160783] transition-colors"
                 >
                   Add More
                 </button>
@@ -972,7 +972,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                 <button
                   type="button"
                   onClick={addOperationsEntry}
-                  className="py-1 px-4 text-[14px] leading-[20px] font-Open font-semibold underline border-[#160783]  text-[#160783] hover:border-blue-400 hover:text-blue-600 transition-colors"
+                  className="py-1 px-4 text-[14px] leading-[20px] font-Open font-semibold underline border-[#160783]  text-[#160783] hover:border-blue-400 hover:text-[#160783] transition-colors"
                 >
                   Add More
                 </button>

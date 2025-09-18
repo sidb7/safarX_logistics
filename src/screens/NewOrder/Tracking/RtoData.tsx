@@ -135,7 +135,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
             )}
             <div className="flex items-center">
               <span className="font-sans  text-sm leading-5 text-black font-normal mr-1">
-                {COMPANY_NAME || "Shipyaari"}:
+                {COMPANY_NAME || "Drivaa.Run"}:
               </span>
               <span className="font-sans  text-sm leading-5 text-black  font-semibold">
                 {info?.row?.original?.tempOrderId}

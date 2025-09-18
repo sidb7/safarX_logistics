@@ -14,7 +14,7 @@ describe("Login and Order Pickup Tests", () => {
 
     cy.visit("https://sysellerdev.yaarilabs.com/auth/login");
 
-    cy.title().should("include", "Shipyaari");
+    cy.title().should("include", "Drivaa.Run");
 
     // Enter login credentials
     cy.get("#email").should("be.visible").type("rachanam559@gmail.com");

@@ -47,7 +47,7 @@ const WalletRecharge = () => {
           <div className="lg:grid">
             <div className="mx-5  mt-[148px] lg:mt-[110px]">
               <h1 className="text-[22px] font-semibold leading-7 text-center">
-                Welcome to {COMPANY_NAME || "Shipyaari"}
+                Welcome to {COMPANY_NAME || "Drivaa.Run"}
               </h1>
               <p className="mt-3 text-[#494949] font-light text-center">
                 Recharge your wallet with minimum of
@@ -63,7 +63,7 @@ const WalletRecharge = () => {
             <div className="mx-5 mt-24 rounded-lg border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
               <div className="lg:space-y-4">
                 <h1 className="ml-2 text-[20px] font-medium">
-                  Benefits of {COMPANY_NAME || "Shipyaari"} wallet
+                  Benefits of {COMPANY_NAME || "Drivaa.Run"} wallet
                 </h1>
                 <div className="flex mt-[26px]">
                   <Checkbox checked={true} checkboxClassName="text-black" />

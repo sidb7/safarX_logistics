@@ -559,10 +559,11 @@ const PlanDetails = (props: ITypeProps) => {
           <div className="flex justify-center">
             {planData[0]?.planName.toUpperCase() !== "PLATINUM" && (
               <div className="flex items-center justify-center">
-                <ServiceButton
+                <OneButton
                   onClick={() => {}}
                   text="UPGRADE"
-                  className="!h-[34px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4  "
+                  className="!h-[34px] !text-[#FFFFFF] !py-2 !px-4  "
+                  backgroundColour="bg-transparent"
                 />
               </div>
             )}
@@ -836,40 +837,7 @@ const PlanDetails = (props: ITypeProps) => {
           <div className="lg:mb-5">
             <Breadcrum label="Plans" />
           </div>
-          {/* Plan Upgradation */}
-          {/* <div className="flex  items-center h-[124px]  rounded-lg border-[1px] p-1 md:p-4 border-[#E8E8E8] bg-[#F2F6FF] justify-between    mb-7  mx-5 lg:ml-[30px]">
-            <div className="flex    items-center justify-between ">
-              <img
-                src={PlanDetailsGif}
-                alt=""
-                height={isLgScreen ? 124 : 90}
-                width={isLgScreen ? 124 : 90}
-                className="lg:mr-8"
-              />
-              <div className="flex flex-col   justify-center gap-y-1 lg:gap-y-2  lg:h-[120px]  lg:mr-5">
-                <p className="font-Open lg:font-Lato text-[#160783] font-semibold text-sm lg:text-[22px] leading-5 lg:leading-7  ">
-                  PLATINUM PLAN
-                </p>
-                <p className="font-Open lg:font-Lato font-semibold text-sm lg:text-lg leading-4 lg:leading-6 text-[#323232]">
-                  Built exclusively for your needs
-                </p>
-                <p className="font-Open  lg:font-Lato font-normal text-sm lg:text-lg leading-4 lg:leading-6 text-[#777777]">
-                  Get extra 8% off on all your orders
-                  {isLgScreen &&
-                    "International shipping,label customization and more."}
-                </p>
-              </div>
-            </div>
-            <div className="flex   items-center justify-end ">
-              <ServiceButton
-                onClick={() => {
-                  navigate("/plans");
-                }}
-                text="UPGRADE"
-                className="lg:!w-full !w-[80px]  !h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4  !font-Open"
-              />
-            </div>
-          </div> */}
+
           {/* Plan Details */}
           <div className=" mb-9 mx-5 lg:ml-[20px]">
             <PlanDetailsCard planDetails={planData} />

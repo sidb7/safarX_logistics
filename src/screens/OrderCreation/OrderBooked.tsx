@@ -1,14 +1,12 @@
-
-
 // import React, { useState, useEffect } from "react";
 // import { useNavigate, useLocation } from "react-router-dom";
 // import OneButton from "../../components/Button/OneButton";
 // import { POST } from "../../utils/webService";
-// import { 
-//   GET_SELLER_ORDER_SUMMARY, 
-//   FETCH_LABELS_REPORT_DOWNLOAD, 
-//   FETCH_MANIFEST_DATA, 
-//   FETCH_MULTI_TAX_REPORT_DOWNLOAD 
+// import {
+//   GET_SELLER_ORDER_SUMMARY,
+//   FETCH_LABELS_REPORT_DOWNLOAD,
+//   FETCH_MANIFEST_DATA,
+//   FETCH_MULTI_TAX_REPORT_DOWNLOAD
 // } from "../../utils/ApiUrls";
 // import sessionManager from "../../utils/sessionManager";
 
@@ -157,9 +155,9 @@
 //     shipping: false,
 //     manifest: false
 //   });
-//   const [downloadLoading, setDownloadLoading] = useState<{ 
+//   const [downloadLoading, setDownloadLoading] = useState<{
 //     isLoading: boolean;
-//     identifier?: string; 
+//     identifier?: string;
 //   }>({ isLoading: false });
 //   const [showEmailModal, setShowEmailModal] = useState<boolean>(false);
 //   const [emailInput, setEmailInput] = useState<string>('');
@@ -201,14 +199,14 @@
 
 //   const fetchPdfData = async (type: 'invoice' | 'shipping' | 'manifest') => {
 //     const awbNumbers = getAllAwbNumbers();
-    
+
 //     if (awbNumbers.length === 0) {
 //       console.error(`No AWB numbers available to fetch ${type}`);
 //       return;
 //     }
 
 //     setLoadingPdf(prev => ({ ...prev, [type]: true }));
-    
+
 //     try {
 //       let endpoint;
 //       switch (type) {
@@ -225,32 +223,32 @@
 
 //       const { sellerInfo } = sessionManager({});
 //       const payload = { awbs: awbNumbers };
-      
+
 //       let headers = {
 //         Accept: "/",
 //         Authorization: `Bearer ${sellerInfo?.token}`,
 //         "Content-Type": "application/json",
 //       };
-      
+
 //       const response = await fetch(endpoint, {
 //         method: "POST",
 //         headers: headers,
 //         body: JSON.stringify(payload),
 //       });
-      
+
 //       if (!response.ok) {
 //         console.error(`Error fetching ${type} PDF:`, response);
 //         return;
 //       }
-      
+
 //       const data = await response.blob();
 //       const reader = new FileReader();
-      
+
 //       reader.onloadend = function() {
 //         const base64data = reader.result?.toString().split(',')[1] || '';
 //         setPdfData(prev => ({ ...prev, [type]: base64data }));
 //       };
-      
+
 //       reader.readAsDataURL(data);
 //     } catch (error) {
 //       console.error(`Error fetching ${type} PDF:`, error);
@@ -265,7 +263,7 @@
 //       fetchPdfData(activeTab);
 //     }
 //   }, [activeTab]);
-  
+
 //   // Initialize by loading the first tab's data once order details are loaded
 //   useEffect(() => {
 //     if (orderDetails && getAllAwbNumbers().length > 0 && !pdfData[activeTab]) {
@@ -301,10 +299,10 @@
 //     if (passedData?.awbNumbers && passedData.awbNumbers.length > 0) {
 //       return passedData.awbNumbers;
 //     }
-    
+
 //     // Otherwise, try to extract them from the orderDetails
 //     const awbs: string[] = [];
-    
+
 //     // Check if AWBs exist in orderDetails
 //     if (orderDetails?.awbs && orderDetails.awbs.length > 0) {
 //       orderDetails.awbs.forEach(awbItem => {
@@ -313,7 +311,7 @@
 //         }
 //       });
 //     }
-    
+
 //     // Fallback: check status or boxInfo for AWBs
 //     if (awbs.length === 0) {
 //       orderDetails?.status?.forEach(status => {
@@ -321,21 +319,21 @@
 //           awbs.push(status.awb);
 //         }
 //       });
-      
+
 //       orderDetails?.boxInfo?.forEach(box => {
 //         if (box.tracking?.awb && !awbs.includes(box.tracking.awb)) {
 //           awbs.push(box.tracking.awb);
 //         }
 //       });
 //     }
-    
+
 //     return awbs;
 //   };
 
 //   // Calculate total value
 //   const calculateTotal = (): number => {
 //     if (!orderDetails?.boxInfo) return 0;
-    
+
 //     let total = 0;
 //     orderDetails.boxInfo.forEach(box => {
 //       box.products?.forEach(product => {
@@ -369,10 +367,10 @@
 //   const getCustomerContact = (): string => {
 //     const contact = orderDetails?.deliveryAddress?.contact;
 //     if (!contact) return "N/A";
-    
+
 //     const phone = contact.mobileNo ? contact.mobileNo.toString() : "N/A";
 //     const email = contact.emailId || "N/A";
-    
+
 //     return `${phone} | ${email}`;
 //   };
 
@@ -380,8 +378,8 @@
 //   const getCustomerAddress = (): string => {
 //     const address = orderDetails?.deliveryAddress;
 //     if (!address) return "N/A";
-    
-//     return `${address.flatNo || ""} ${address.locality || ""}, ${address.landmark || ""}, 
+
+//     return `${address.flatNo || ""} ${address.locality || ""}, ${address.landmark || ""},
 //     ${address.city}, ${address.state} ${address.pincode}`;
 //   };
 
@@ -454,7 +452,7 @@
 //           <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden">
 //             <div className="p-6 border-b">
 //               <h1 className="text-2xl font-bold mb-2">Order Summary</h1>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Order Details</h2>
 //                 <p><span className="font-medium">Order ID:</span> {orderDetails?.orderId || "N/A"}</p>
@@ -462,14 +460,14 @@
 //                 <p><span className="font-medium">Status:</span> <span className="text-green-500">{getLatestStatus()}</span></p>
 //                 <p><span className="font-medium">Order Type:</span> {orderDetails?.orderType || "N/A"}</p>
 //               </div>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Customer Details</h2>
 //                 <p className="font-medium">{getCustomerName()}</p>
 //                 <p>{getCustomerContact()}</p>
 //                 <p className="text-sm text-gray-600">{getCustomerAddress()}</p>
 //               </div>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Shipping Details</h2>
 //                 <p>{getCourierName()}</p>
@@ -486,18 +484,18 @@
 //                   )}
 //                 </div>
 //               </div>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Order Items</h2>
 //                 {orderDetails?.boxInfo && orderDetails.boxInfo.map((box, boxIndex) => {
 //                   // Count total products across all boxes
 //                   const totalProducts = box.products?.length || 0;
-                  
+
 //                   // Determine which products to show based on showAllProducts state
-//                   const productsToShow = showAllProducts 
-//                     ? box.products 
+//                   const productsToShow = showAllProducts
+//                     ? box.products
 //                     : (box.products || []).slice(0, 2);
-                  
+
 //                   return (
 //                     <div key={boxIndex}>
 //                       {productsToShow.map((product, productIndex) => (
@@ -510,12 +508,12 @@
 //                           </div>
 //                         </div>
 //                       ))}
-                      
+
 //                       {/* Only show View More button if there are more than 2 products */}
 //                       {totalProducts > 2 && (
 //                         <div className="mt-2 text-right">
-//                           <button 
-//                             className="text-blue-500 text-sm" 
+//                           <button
+//                             className="text-blue-500 text-sm"
 //                             onClick={() => setShowAllProducts(!showAllProducts)}
 //                           >
 //                             {showAllProducts ? "View Less" : "View More"}
@@ -526,7 +524,7 @@
 //                   );
 //                 })}
 //               </div>
-              
+
 //               <div className="bg-gray-50 p-4 rounded-md">
 //                 <div className="flex justify-between py-2">
 //                   <p className="font-medium">Total Invoice Value</p>
@@ -538,9 +536,9 @@
 //                 </div>
 //               </div>
 //             </div>
-            
+
 //             <div className="p-4 bg-gray-50">
-//               <button 
+//               <button
 //                 onClick={handleBackClick}
 //                 className="w-full flex items-center justify-center py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
 //               >
@@ -551,31 +549,31 @@
 //               </button>
 //             </div>
 //           </div>
-          
+
 //           {/* Document Tabs - Right Side */}
 //           <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
 //             {/* Tab Navigation */}
 //             <div className="flex border-b">
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'shipping' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 className={`flex-1 py-3 text-center ${activeTab === 'shipping' ? 'text-[#160783] border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('shipping')}
 //               >
 //                 Shipping Label
 //               </button>
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'manifest' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 className={`flex-1 py-3 text-center ${activeTab === 'manifest' ? 'text-[#160783] border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('manifest')}
 //               >
 //                 Manifest
 //               </button>
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-[#160783] border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('invoice')}
 //               >
 //                 Invoice
 //               </button>
 //             </div>
-            
+
 //             {/* PDF Viewer */}
 //             <div className="flex-grow p-4 flex flex-col">
 //               {loadingPdf[activeTab] ? (
@@ -586,7 +584,7 @@
 //               ) : !pdfData[activeTab] ? (
 //                 <div className="flex justify-center items-center h-full flex-col">
 //                   <p className="mb-4">No {activeTab} data available</p>
-//                   <button 
+//                   <button
 //                     onClick={() => fetchPdfData(activeTab)}
 //                     className="px-4 py-2 bg-blue-500 text-white rounded-md"
 //                   >
@@ -603,7 +601,7 @@
 //                     />
 //                   </div>
 //                   <div className="mt-auto flex gap-4">
-//                     <button 
+//                     <button
 //                       onClick={handleEmail}
 //                       className="flex-1 px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
 //                     >
@@ -612,7 +610,7 @@
 //                       </svg>
 //                       Email
 //                     </button>
-//                     <button 
+//                     <button
 //                       onClick={handlePrint}
 //                       className="flex-1 px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
 //                     >
@@ -670,20 +668,17 @@
 
 // export default OrderBooked;
 
-
-
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import OneButton from "../../components/Button/OneButton";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
-import { 
-  GET_SELLER_ORDER_SUMMARY, 
-  FETCH_LABELS_REPORT_DOWNLOAD, 
-  FETCH_MANIFEST_DATA, 
+import {
+  GET_SELLER_ORDER_SUMMARY,
+  FETCH_LABELS_REPORT_DOWNLOAD,
+  FETCH_MANIFEST_DATA,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
-  FETCH_BULK_LABELS_REPORT_DOWNLOAD 
+  FETCH_BULK_LABELS_REPORT_DOWNLOAD,
 } from "../../utils/ApiUrls";
 import sessionManager from "../../utils/sessionManager";
 
@@ -810,7 +805,7 @@ interface LocationState {
   tempOrderId?: string; // Add this for backward compatibility
 }
 
-type TabType = 'invoice' | 'shipping' | 'manifest';
+type TabType = "invoice" | "shipping" | "manifest";
 
 function OrderBooked() {
   const navigate = useNavigate();
@@ -820,20 +815,24 @@ function OrderBooked() {
   const [orderDetails, setOrderDetails] = useState<OrderData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showAllProducts, setShowAllProducts] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<TabType>('shipping');
-  const [pdfData, setPdfData] = useState<{ [key in 'invoice' | 'shipping' | 'manifest']: string }>({
-    invoice: '',
-    shipping: '',
-    manifest: ''
+  const [activeTab, setActiveTab] = useState<TabType>("shipping");
+  const [pdfData, setPdfData] = useState<{
+    [key in "invoice" | "shipping" | "manifest"]: string;
+  }>({
+    invoice: "",
+    shipping: "",
+    manifest: "",
   });
-  const [loadingPdf, setLoadingPdf] = useState<{ [key in 'invoice' | 'shipping' | 'manifest']: boolean }>({
+  const [loadingPdf, setLoadingPdf] = useState<{
+    [key in "invoice" | "shipping" | "manifest"]: boolean;
+  }>({
     invoice: false,
     shipping: false,
-    manifest: false
+    manifest: false,
   });
-  const [downloadLoading, setDownloadLoading] = useState<{ 
+  const [downloadLoading, setDownloadLoading] = useState<{
     isLoading: boolean;
-    identifier?: string; 
+    identifier?: string;
   }>({ isLoading: false });
   const [emailLoading, setEmailLoading] = useState<boolean>(false);
 
@@ -873,63 +872,63 @@ function OrderBooked() {
     }
   }, [orderId]);
 
-  const fetchPdfData = async (type: 'invoice' | 'shipping' | 'manifest') => {
+  const fetchPdfData = async (type: "invoice" | "shipping" | "manifest") => {
     const awbNumbers = getAllAwbNumbers();
-    
+
     if (awbNumbers.length === 0) {
       console.error(`No AWB numbers available to fetch ${type}`);
       return;
     }
 
-    setLoadingPdf(prev => ({ ...prev, [type]: true }));
-    
+    setLoadingPdf((prev) => ({ ...prev, [type]: true }));
+
     try {
       let endpoint;
       switch (type) {
-        case 'invoice':
+        case "invoice":
           endpoint = FETCH_MULTI_TAX_REPORT_DOWNLOAD;
           break;
-        case 'shipping':
+        case "shipping":
           endpoint = FETCH_LABELS_REPORT_DOWNLOAD;
           break;
-        case 'manifest':
+        case "manifest":
           endpoint = FETCH_MANIFEST_DATA;
           break;
       }
 
       const { sellerInfo } = sessionManager({});
       const payload = { awbs: awbNumbers };
-      
+
       let headers = {
         Accept: "/",
         Authorization: `Bearer ${sellerInfo?.token}`,
         "Content-Type": "application/json",
       };
-      
+
       const response = await fetch(endpoint, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(payload),
       });
-      
+
       if (!response.ok) {
         console.error(`Error fetching ${type} PDF:`, response);
         return;
       }
-      
+
       const data = await response.blob();
       const reader = new FileReader();
-      
-      reader.onloadend = function() {
-        const base64data = reader.result?.toString().split(',')[1] || '';
-        setPdfData(prev => ({ ...prev, [type]: base64data }));
+
+      reader.onloadend = function () {
+        const base64data = reader.result?.toString().split(",")[1] || "";
+        setPdfData((prev) => ({ ...prev, [type]: base64data }));
       };
-      
+
       reader.readAsDataURL(data);
     } catch (error) {
       console.error(`Error fetching ${type} PDF:`, error);
     } finally {
-      setLoadingPdf(prev => ({ ...prev, [type]: false }));
+      setLoadingPdf((prev) => ({ ...prev, [type]: false }));
     }
   };
 
@@ -939,10 +938,14 @@ function OrderBooked() {
       fetchPdfData(activeTab);
     }
   }, [activeTab]);
-  
+
   // Initialize by loading the first tab's data once order details are loaded
   useEffect(() => {
-    if (orderDetails.length > 0 && getAllAwbNumbers().length > 0 && !pdfData[activeTab]) {
+    if (
+      orderDetails.length > 0 &&
+      getAllAwbNumbers().length > 0 &&
+      !pdfData[activeTab]
+    ) {
       fetchPdfData(activeTab);
     }
   }, [orderDetails]);
@@ -967,12 +970,12 @@ function OrderBooked() {
   // Get latest status from all orders
   const getLatestStatus = (): string => {
     if (orderDetails.length === 0) return "Pending";
-    
+
     // Look for the most recent status across all orders
     let latestTimestamp = 0;
     let latestStatus = "Pending";
-    
-    orderDetails.forEach(order => {
+
+    orderDetails.forEach((order) => {
       if (order?.status && order.status.length > 0) {
         const orderLatestStatus = order.status[order.status.length - 1];
         if (orderLatestStatus?.timeStamp > latestTimestamp) {
@@ -981,7 +984,7 @@ function OrderBooked() {
         }
       }
     });
-    
+
     return latestStatus;
   };
 
@@ -990,83 +993,85 @@ function OrderBooked() {
     // First, check if AWB numbers were passed from OrderCreation
     if (passedData?.awbNumbers && passedData.awbNumbers.length > 0) {
       // return passedData.awbNumbers;
-      return passedData.awbNumbers.map(awb => awb.toString());
-
+      return passedData.awbNumbers.map((awb) => awb.toString());
     }
-    
+
     // Otherwise, try to extract them from the orderDetails
     const awbs: string[] = [];
-    
+
     // Iterate through all order objects
-    orderDetails.forEach(order => {
+    orderDetails.forEach((order) => {
       // Check if AWBs exist in order
       if (order?.awbs && order.awbs.length > 0) {
-        order.awbs.forEach(awbItem => {
-          if (awbItem.tracking?.awb && !awbs.includes(awbItem.tracking.awb.toString())) {
+        order.awbs.forEach((awbItem) => {
+          if (
+            awbItem.tracking?.awb &&
+            !awbs.includes(awbItem.tracking.awb.toString())
+          ) {
             awbs.push(awbItem.tracking.awb?.toString());
           }
         });
       }
-      
+
       // Check status or boxInfo for AWBs
-      order?.status?.forEach(status => {
+      order?.status?.forEach((status) => {
         if (status.awb && !awbs.includes(status.awb.toString())) {
           awbs.push(status.awb.toString());
         }
       });
-      
-      order?.boxInfo?.forEach(box => {
+
+      order?.boxInfo?.forEach((box) => {
         if (box.tracking?.awb && !awbs.includes(box.tracking.awb.toString())) {
           awbs.push(box.tracking.awb.toString());
         }
       });
     });
-    
+
     return awbs;
   };
 
   // Get all products from all order objects and their boxes
   const getAllProducts = (): Product[] => {
     let allProducts: Product[] = [];
-    
+
     // Iterate through all order objects
-    orderDetails.forEach(order => {
+    orderDetails.forEach((order) => {
       if (order?.boxInfo) {
-        order.boxInfo.forEach(box => {
+        order.boxInfo.forEach((box) => {
           if (box.products && box.products.length > 0) {
             allProducts = [...allProducts, ...box.products];
           }
         });
       }
     });
-    
+
     return allProducts;
   };
 
   // Calculate total value across all orders and all boxes
   const calculateTotal = (): number => {
     let total = 0;
-    
-    orderDetails.forEach(order => {
+
+    orderDetails.forEach((order) => {
       if (order?.boxInfo) {
-        order.boxInfo.forEach(box => {
-          box.products?.forEach(product => {
-            total += (product.unitPrice * product.qty);
+        order.boxInfo.forEach((box) => {
+          box.products?.forEach((product) => {
+            total += product.unitPrice * product.qty;
           });
         });
       }
     });
-    
+
     return total;
   };
 
   // Get shipping charges summed from all orders and all boxes
   const getShippingCharges = (): number => {
     let total = 0;
-    
-    orderDetails.forEach(order => {
+
+    orderDetails.forEach((order) => {
       if (order?.boxInfo) {
-        order.boxInfo.forEach(box => {
+        order.boxInfo.forEach((box) => {
           if (box.service) {
             if (box.service.yaariCash > 0) {
               total += box.service.totalAfterCashback || 0;
@@ -1077,7 +1082,7 @@ function OrderBooked() {
         });
       }
     });
-    
+
     return total;
   };
 
@@ -1095,10 +1100,10 @@ function OrderBooked() {
   const getCustomerContact = (): string => {
     const contact = orderDetails[0]?.deliveryAddress?.contact;
     if (!contact) return "N/A";
-    
+
     const phone = contact.mobileNo ? contact.mobileNo.toString() : "N/A";
-    const email = contact?.emailId ;
-    
+    const email = contact?.emailId;
+
     return `${phone} | ${email}`;
   };
 
@@ -1106,8 +1111,10 @@ function OrderBooked() {
   const getCustomerAddress = (): string => {
     const address = orderDetails[0]?.deliveryAddress;
     if (!address) return "N/A";
-    
-    return `${address.flatNo || ""} ${address.locality || ""}, ${address.landmark || ""}, 
+
+    return `${address.flatNo || ""} ${address.locality || ""}, ${
+      address.landmark || ""
+    }, 
     ${address.city}, ${address.state} ${address.pincode}`;
   };
 
@@ -1119,41 +1126,46 @@ function OrderBooked() {
   // Handle email button click
   const handleEmail = async () => {
     const awbNumbers = getAllAwbNumbers();
-    
+
     if (awbNumbers.length === 0) {
       console.error("No AWB numbers available");
       return;
     }
-    
+
     setEmailLoading(true);
-    
+
     try {
       const { sellerInfo } = sessionManager({});
       const payload = { awbs: awbNumbers };
-      
+
       let headers = {
         Accept: "/",
         Authorization: `Bearer ${sellerInfo?.token}`,
         "Content-Type": "application/json",
       };
-      
-      console.log("Calling FETCH_BULK_LABELS_REPORT_DOWNLOAD with AWBs:", awbNumbers);
-      
+
+      console.log(
+        "Calling FETCH_BULK_LABELS_REPORT_DOWNLOAD with AWBs:",
+        awbNumbers
+      );
+
       const response = await fetch(FETCH_BULK_LABELS_REPORT_DOWNLOAD, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(payload),
       });
-      
+
       if (!response.ok) {
         console.error("Error calling bulk labels API:", response);
         return;
       }
-      
+
       console.log("FETCH_BULK_LABELS_REPORT_DOWNLOAD API called successfully");
-      
+
       // Show toast notification
-      toast.success("The email has been sent to your registered email address.");
+      toast.success(
+        "The email has been sent to your registered email address."
+      );
     } catch (error) {
       console.error("Error calling bulk labels API:", error);
     } finally {
@@ -1167,24 +1179,26 @@ function OrderBooked() {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-2">
           <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-6 w-6 text-green-500" 
-              fill="none" 
-              viewBox="0 0 24 24" 
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-green-500"
+              fill="none"
+              viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M5 13l4 4L19 7" 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
               />
             </svg>
           </div>
         </div>
         <h1 className="text-2xl font-bold mb-1">Order Confirmed!</h1>
-        <p className="text-gray-600">Thank you for your order. Your shipment is being prepared.</p>
+        <p className="text-gray-600">
+          Thank you for your order. Your shipment is being prepared.
+        </p>
       </div>
 
       {loading ? (
@@ -1194,7 +1208,9 @@ function OrderBooked() {
       ) : orderDetails.length === 0 ? (
         <div className="text-center p-8 bg-red-50 rounded-lg">
           <p className="text-red-500">No order details available.</p>
-          <p className="text-sm mt-2">Please check your API response format and ensure the order exists.</p>
+          <p className="text-sm mt-2">
+            Please check your API response format and ensure the order exists.
+          </p>
         </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
@@ -1202,22 +1218,36 @@ function OrderBooked() {
           <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
             <div className="p-6 border-b">
               <h1 className="text-2xl font-bold mb-2">Order Summary</h1>
-              
+
               <div className="mb-6">
                 <h2 className="text-lg font-semibold mb-2">Order Details</h2>
-                <p><span className="font-medium">Order ID:</span> {orderDetails[0]?.orderId || "N/A"}</p>
-                <p><span className="font-medium">Date & Time:</span> {formatDate(orderDetails[0]?.createdAt)}</p>
-                <p><span className="font-medium">Status:</span> <span className="text-green-500">{getLatestStatus()}</span></p>
-                <p><span className="font-medium">Order Type:</span> {orderDetails[0]?.orderType || "N/A"}</p>
+                <p>
+                  <span className="font-medium">Order ID:</span>{" "}
+                  {orderDetails[0]?.orderId || "N/A"}
+                </p>
+                <p>
+                  <span className="font-medium">Date & Time:</span>{" "}
+                  {formatDate(orderDetails[0]?.createdAt)}
+                </p>
+                <p>
+                  <span className="font-medium">Status:</span>{" "}
+                  <span className="text-green-500">{getLatestStatus()}</span>
+                </p>
+                <p>
+                  <span className="font-medium">Order Type:</span>{" "}
+                  {orderDetails[0]?.orderType || "N/A"}
+                </p>
               </div>
-              
+
               <div className="mb-6">
                 <h2 className="text-lg font-semibold mb-2">Customer Details</h2>
                 <p className="font-medium">{getCustomerName()}</p>
                 <p>{getCustomerContact()}</p>
-                <p className="text-base text-gray-600">{getCustomerAddress()}</p>
+                <p className="text-base text-gray-600">
+                  {getCustomerAddress()}
+                </p>
               </div>
-              
+
               <div className="mb-6">
                 <h2 className="text-lg font-semibold mb-2">Shipping Details</h2>
                 <p>{getCourierName()}</p>
@@ -1234,7 +1264,7 @@ function OrderBooked() {
                   )}
                 </div>
               </div>
-              
+
               <div className="mb-6">
                 <h2 className="text-lg font-semibold mb-2">Order Items</h2>
                 {/* Get all products from all boxes */}
@@ -1242,30 +1272,35 @@ function OrderBooked() {
                   const allProducts = getAllProducts();
                   // Count total products
                   const totalProducts = allProducts.length;
-                  
+
                   // Determine which products to show based on showAllProducts state
-                  const productsToShow = showAllProducts 
-                    ? allProducts 
+                  const productsToShow = showAllProducts
+                    ? allProducts
                     : allProducts.slice(0, 2);
-                  
+
                   return (
                     <div>
                       {productsToShow.map((product, productIndex) => (
-                        <div key={productIndex} className="py-2 border-b border-gray-100 flex justify-between items-center">
+                        <div
+                          key={productIndex}
+                          className="py-2 border-b border-gray-100 flex justify-between items-center"
+                        >
                           <div>
                             <p className="font-medium">{product.name}</p>
                           </div>
                           <div className="text-right">
-                            <p>{product.qty} × ₹ {product.unitPrice}</p>
+                            <p>
+                              {product.qty} × ₹ {product.unitPrice}
+                            </p>
                           </div>
                         </div>
                       ))}
-                      
+
                       {/* Only show View More button if there are more than 2 products */}
                       {totalProducts > 2 && (
                         <div className="mt-2 text-right">
-                          <button 
-                            className="text-blue-500 text-sm" 
+                          <button
+                            className="text-blue-500 text-sm"
                             onClick={() => setShowAllProducts(!showAllProducts)}
                           >
                             {showAllProducts ? "View Less" : "View More"}
@@ -1276,11 +1311,13 @@ function OrderBooked() {
                   );
                 })()}
               </div>
-              
+
               <div className="bg-gray-50 p-4 rounded-md">
                 <div className="flex justify-between py-2">
                   <p className="font-medium">Total Invoice Value</p>
-                  <p className="font-medium">₹ {calculateTotal().toLocaleString()}</p>
+                  <p className="font-medium">
+                    ₹ {calculateTotal().toLocaleString()}
+                  </p>
                 </div>
                 <div className="flex justify-between py-2">
                   <p className="font-medium">Shipping Charges</p>
@@ -1288,44 +1325,67 @@ function OrderBooked() {
                 </div>
               </div>
             </div>
-            
+
             <div className="p-4 bg-gray-50">
-              <button 
+              <button
                 onClick={handleBackClick}
                 className="w-full flex items-center justify-center py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
                 </svg>
                 Back to Dashboard
               </button>
             </div>
           </div>
-          
+
           {/* Document Tabs - Right Side */}
           <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden flex flex-col border border-gray-200">
             {/* Tab Navigation */}
             <div className="flex border-b">
               <button
-                className={`flex-1 py-3 text-center ${activeTab === 'shipping' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('shipping')}
+                className={`flex-1 py-3 text-center ${
+                  activeTab === "shipping"
+                    ? "text-[#160783] border-b-2 border-blue-600 font-medium"
+                    : "text-gray-500"
+                }`}
+                onClick={() => setActiveTab("shipping")}
               >
                 Shipping Label
               </button>
               <button
-                className={`flex-1 py-3 text-center ${activeTab === 'manifest' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('manifest')}
+                className={`flex-1 py-3 text-center ${
+                  activeTab === "manifest"
+                    ? "text-[#160783] border-b-2 border-blue-600 font-medium"
+                    : "text-gray-500"
+                }`}
+                onClick={() => setActiveTab("manifest")}
               >
                 Manifest
               </button>
               <button
-                className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
-                onClick={() => setActiveTab('invoice')}
+                className={`flex-1 py-3 text-center ${
+                  activeTab === "invoice"
+                    ? "text-[#160783] border-b-2 border-blue-600 font-medium"
+                    : "text-gray-500"
+                }`}
+                onClick={() => setActiveTab("invoice")}
               >
                 Invoice
               </button>
             </div>
-            
+
             {/* PDF Viewer */}
             <div className="flex-grow p-4 flex flex-col">
               {loadingPdf[activeTab] ? (
@@ -1336,11 +1396,12 @@ function OrderBooked() {
               ) : !pdfData[activeTab] ? (
                 <div className="flex justify-center items-center h-full flex-col">
                   <p className="mb-4">No {activeTab} data available</p>
-                  <button 
+                  <button
                     onClick={() => fetchPdfData(activeTab)}
                     className="px-4 py-2 bg-blue-500 text-white rounded-md"
                   >
-                    Load {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+                    Load{" "}
+                    {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
                   </button>
                 </div>
               ) : (
@@ -1352,27 +1413,40 @@ function OrderBooked() {
                       title={`${activeTab} PDF`}
                     />
                   </div>
-                  {activeTab === 'shipping' && (<div className="mt-auto flex gap-4">
-                    <button 
-                      onClick={handleEmail}
-                      disabled={emailLoading}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {emailLoading ? (
-                        <>
-                          <div className="animate-spin h-5 w-5 mr-2 border-b-2 border-gray-600 rounded-full"></div>
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                          </svg>
-                          Email
-                        </>
-                      )}
-                    </button>
-                  </div>)}
+                  {activeTab === "shipping" && (
+                    <div className="mt-auto flex gap-4">
+                      <button
+                        onClick={handleEmail}
+                        disabled={emailLoading}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {emailLoading ? (
+                          <>
+                            <div className="animate-spin h-5 w-5 mr-2 border-b-2 border-gray-600 rounded-full"></div>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 mr-2"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                              />
+                            </svg>
+                            Email
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -1385,18 +1459,15 @@ function OrderBooked() {
 
 export default OrderBooked;
 
-
-
-
 // import React, { useState, useEffect } from "react";
 // import { useNavigate, useLocation } from "react-router-dom";
 // import OneButton from "../../components/Button/OneButton";
 // import { POST } from "../../utils/webService";
-// import { 
-//   GET_SELLER_ORDER_SUMMARY, 
-//   FETCH_LABELS_REPORT_DOWNLOAD, 
-//   FETCH_MANIFEST_DATA, 
-//   FETCH_MULTI_TAX_REPORT_DOWNLOAD 
+// import {
+//   GET_SELLER_ORDER_SUMMARY,
+//   FETCH_LABELS_REPORT_DOWNLOAD,
+//   FETCH_MANIFEST_DATA,
+//   FETCH_MULTI_TAX_REPORT_DOWNLOAD
 // } from "../../utils/ApiUrls";
 // import sessionManager from "../../utils/sessionManager";
 
@@ -1544,9 +1615,9 @@ export default OrderBooked;
 //     shipping: false,
 //     manifest: false
 //   });
-//   const [downloadLoading, setDownloadLoading] = useState<{ 
+//   const [downloadLoading, setDownloadLoading] = useState<{
 //     isLoading: boolean;
-//     identifier?: string; 
+//     identifier?: string;
 //   }>({ isLoading: false });
 //   const [showEmailModal, setShowEmailModal] = useState<boolean>(false);
 //   const [emailInput, setEmailInput] = useState<string>('');
@@ -1589,14 +1660,14 @@ export default OrderBooked;
 
 //   const fetchPdfData = async (type: 'invoice' | 'shipping' | 'manifest') => {
 //     const awbNumbers = getAllAwbNumbers();
-    
+
 //     if (awbNumbers.length === 0) {
 //       console.error(`No AWB numbers available to fetch ${type}`);
 //       return;
 //     }
 
 //     setLoadingPdf(prev => ({ ...prev, [type]: true }));
-    
+
 //     try {
 //       let endpoint;
 //       switch (type) {
@@ -1613,32 +1684,32 @@ export default OrderBooked;
 
 //       const { sellerInfo } = sessionManager({});
 //       const payload = { awbs: awbNumbers };
-      
+
 //       let headers = {
 //         Accept: "/",
 //         Authorization: `Bearer ${sellerInfo?.token}`,
 //         "Content-Type": "application/json",
 //       };
-      
+
 //       const response = await fetch(endpoint, {
 //         method: "POST",
 //         headers: headers,
 //         body: JSON.stringify(payload),
 //       });
-      
+
 //       if (!response.ok) {
 //         console.error(`Error fetching ${type} PDF:`, response);
 //         return;
 //       }
-      
+
 //       const data = await response.blob();
 //       const reader = new FileReader();
-      
+
 //       reader.onloadend = function() {
 //         const base64data = reader.result?.toString().split(',')[1] || '';
 //         setPdfData(prev => ({ ...prev, [type]: base64data }));
 //       };
-      
+
 //       reader.readAsDataURL(data);
 //     } catch (error) {
 //       console.error(`Error fetching ${type} PDF:`, error);
@@ -1653,7 +1724,7 @@ export default OrderBooked;
 //       fetchPdfData(activeTab);
 //     }
 //   }, [activeTab]);
-  
+
 //   // Initialize by loading the first tab's data once order details are loaded
 //   useEffect(() => {
 //     if (orderDetails.length > 0 && getAllAwbNumbers().length > 0 && !pdfData[activeTab]) {
@@ -1681,11 +1752,11 @@ export default OrderBooked;
 //   // Get latest status from all orders
 //   const getLatestStatus = (): string => {
 //     if (orderDetails.length === 0) return "Pending";
-    
+
 //     // Look for the most recent status across all orders
 //     let latestTimestamp = 0;
 //     let latestStatus = "Pending";
-    
+
 //     orderDetails.forEach(order => {
 //       if (order?.status && order.status.length > 0) {
 //         const orderLatestStatus = order.status[order.status.length - 1];
@@ -1695,7 +1766,7 @@ export default OrderBooked;
 //         }
 //       }
 //     });
-    
+
 //     return latestStatus;
 //   };
 
@@ -1705,10 +1776,10 @@ export default OrderBooked;
 //     if (passedData?.awbNumbers && passedData.awbNumbers.length > 0) {
 //       return passedData.awbNumbers;
 //     }
-    
+
 //     // Otherwise, try to extract them from the orderDetails
 //     const awbs: string[] = [];
-    
+
 //     // Iterate through all order objects
 //     orderDetails.forEach(order => {
 //       // Check if AWBs exist in order
@@ -1719,28 +1790,28 @@ export default OrderBooked;
 //           }
 //         });
 //       }
-      
+
 //       // Check status or boxInfo for AWBs
 //       order?.status?.forEach(status => {
 //         if (status.awb && !awbs.includes(status.awb)) {
 //           awbs.push(status.awb);
 //         }
 //       });
-      
+
 //       order?.boxInfo?.forEach(box => {
 //         if (box.tracking?.awb && !awbs.includes(box.tracking.awb)) {
 //           awbs.push(box.tracking.awb);
 //         }
 //       });
 //     });
-    
+
 //     return awbs;
 //   };
 
 //   // Get all products from all order objects and their boxes
 //   const getAllProducts = (): Product[] => {
 //     let allProducts: Product[] = [];
-    
+
 //     // Iterate through all order objects
 //     orderDetails.forEach(order => {
 //       if (order?.boxInfo) {
@@ -1751,14 +1822,14 @@ export default OrderBooked;
 //         });
 //       }
 //     });
-    
+
 //     return allProducts;
 //   };
 
 //   // Calculate total value across all orders and all boxes
 //   const calculateTotal = (): number => {
 //     let total = 0;
-    
+
 //     orderDetails.forEach(order => {
 //       if (order?.boxInfo) {
 //         order.boxInfo.forEach(box => {
@@ -1768,14 +1839,14 @@ export default OrderBooked;
 //         });
 //       }
 //     });
-    
+
 //     return total;
 //   };
 
 //   // Get shipping charges summed from all orders and all boxes
 //   const getShippingCharges = (): number => {
 //     let total = 0;
-    
+
 //     orderDetails.forEach(order => {
 //       if (order?.boxInfo) {
 //         order.boxInfo.forEach(box => {
@@ -1789,7 +1860,7 @@ export default OrderBooked;
 //         });
 //       }
 //     });
-    
+
 //     return total;
 //   };
 
@@ -1807,10 +1878,10 @@ export default OrderBooked;
 //   const getCustomerContact = (): string => {
 //     const contact = orderDetails[0]?.deliveryAddress?.contact;
 //     if (!contact) return "N/A";
-    
+
 //     const phone = contact.mobileNo ? contact.mobileNo.toString() : "N/A";
 //     const email = contact.emailId || "N/A";
-    
+
 //     return `${phone} | ${email}`;
 //   };
 
@@ -1818,8 +1889,8 @@ export default OrderBooked;
 //   const getCustomerAddress = (): string => {
 //     const address = orderDetails[0]?.deliveryAddress;
 //     if (!address) return "N/A";
-    
-//     return `${address.flatNo || ""} ${address.locality || ""}, ${address.landmark || ""}, 
+
+//     return `${address.flatNo || ""} ${address.locality || ""}, ${address.landmark || ""},
 //     ${address.city}, ${address.state} ${address.pincode}`;
 //   };
 
@@ -1892,7 +1963,7 @@ export default OrderBooked;
 //           <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden">
 //             <div className="p-6 border-b">
 //               <h1 className="text-2xl font-bold mb-2">Order Summary</h1>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Order Details</h2>
 //                 <p><span className="font-medium">Order ID:</span> {orderDetails[0]?.orderId || "N/A"}</p>
@@ -1900,14 +1971,14 @@ export default OrderBooked;
 //                 <p><span className="font-medium">Status:</span> <span className="text-green-500">{getLatestStatus()}</span></p>
 //                 <p><span className="font-medium">Order Type:</span> {orderDetails[0]?.orderType || "N/A"}</p>
 //               </div>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Customer Details</h2>
 //                 <p className="font-medium">{getCustomerName()}</p>
 //                 <p>{getCustomerContact()}</p>
 //                 <p className="text-sm text-gray-600">{getCustomerAddress()}</p>
 //               </div>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Shipping Details</h2>
 //                 <p>{getCourierName()}</p>
@@ -1924,7 +1995,7 @@ export default OrderBooked;
 //                   )}
 //                 </div>
 //               </div>
-              
+
 //               <div className="mb-6">
 //                 <h2 className="text-lg font-semibold mb-2">Order Items</h2>
 //                 {/* Get all products from all boxes */}
@@ -1932,12 +2003,12 @@ export default OrderBooked;
 //                   const allProducts = getAllProducts();
 //                   // Count total products
 //                   const totalProducts = allProducts.length;
-                  
+
 //                   // Determine which products to show based on showAllProducts state
-//                   const productsToShow = showAllProducts 
-//                     ? allProducts 
+//                   const productsToShow = showAllProducts
+//                     ? allProducts
 //                     : allProducts.slice(0, 2);
-                  
+
 //                   return (
 //                     <div>
 //                       {productsToShow.map((product, productIndex) => (
@@ -1950,12 +2021,12 @@ export default OrderBooked;
 //                           </div>
 //                         </div>
 //                       ))}
-                      
+
 //                       {/* Only show View More button if there are more than 2 products */}
 //                       {totalProducts > 2 && (
 //                         <div className="mt-2 text-right">
-//                           <button 
-//                             className="text-blue-500 text-sm" 
+//                           <button
+//                             className="text-blue-500 text-sm"
 //                             onClick={() => setShowAllProducts(!showAllProducts)}
 //                           >
 //                             {showAllProducts ? "View Less" : "View More"}
@@ -1966,7 +2037,7 @@ export default OrderBooked;
 //                   );
 //                 })()}
 //               </div>
-              
+
 //               <div className="bg-gray-50 p-4 rounded-md">
 //                 <div className="flex justify-between py-2">
 //                   <p className="font-medium">Total Invoice Value</p>
@@ -1978,9 +2049,9 @@ export default OrderBooked;
 //                 </div>
 //               </div>
 //             </div>
-            
+
 //             <div className="p-4 bg-gray-50">
-//               <button 
+//               <button
 //                 onClick={handleBackClick}
 //                 className="w-full flex items-center justify-center py-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors"
 //               >
@@ -1991,31 +2062,31 @@ export default OrderBooked;
 //               </button>
 //             </div>
 //           </div>
-          
+
 //           {/* Document Tabs - Right Side */}
 //           <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
 //             {/* Tab Navigation */}
 //             <div className="flex border-b">
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'shipping' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 className={`flex-1 py-3 text-center ${activeTab === 'shipping' ? 'text-[#160783] border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('shipping')}
 //               >
 //                 Shipping Label
 //               </button>
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'manifest' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 className={`flex-1 py-3 text-center ${activeTab === 'manifest' ? 'text-[#160783] border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('manifest')}
 //               >
 //                 Manifest
 //               </button>
 //               <button
-//                 className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-blue-600 border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
+//                 className={`flex-1 py-3 text-center ${activeTab === 'invoice' ? 'text-[#160783] border-b-2 border-blue-600 font-medium' : 'text-gray-500'}`}
 //                 onClick={() => setActiveTab('invoice')}
 //               >
 //                 Invoice
 //               </button>
 //             </div>
-            
+
 //             {/* PDF Viewer */}
 //             <div className="flex-grow p-4 flex flex-col">
 //               {loadingPdf[activeTab] ? (
@@ -2026,7 +2097,7 @@ export default OrderBooked;
 //               ) : !pdfData[activeTab] ? (
 //                 <div className="flex justify-center items-center h-full flex-col">
 //                   <p className="mb-4">No {activeTab} data available</p>
-//                   <button 
+//                   <button
 //                     onClick={() => fetchPdfData(activeTab)}
 //                     className="px-4 py-2 bg-blue-500 text-white rounded-md"
 //                   >
@@ -2043,7 +2114,7 @@ export default OrderBooked;
 //                     />
 //                   </div>
 //                   <div className="mt-auto flex gap-4">
-//                     <button 
+//                     <button
 //                       onClick={handleEmail}
 //                       className="flex-1 px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
 //                     >
@@ -2052,7 +2123,7 @@ export default OrderBooked;
 //                       </svg>
 //                       Email
 //                     </button>
-//                     <button 
+//                     <button
 //                       onClick={handlePrint}
 //                       className="flex-1 px-4 py-2 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
 //                     >

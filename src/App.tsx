@@ -423,9 +423,9 @@ const App = () => {
   return (
     <>
       <div className="relative  min-h-screen">
-        <div className="py-2 z-20 absolute flex w-40">
+        {/* <div className="py-2 z-20 absolute flex w-40">
           <img src={LARGE_LOGO} alt="" />
-        </div>
+        </div> */}
         <Helmet>
           <title>{COMPANY_NAME || "Drivaa.Run"}</title>
           <link rel="icon" href={SMALL_LOGO} type="image/png" />

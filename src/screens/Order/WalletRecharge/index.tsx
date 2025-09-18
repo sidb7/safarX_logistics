@@ -1109,7 +1109,7 @@ const WalletRecharge = () => {
                           text={`${
                             loadingForCoupon ? "Verifying..." : "Verify"
                           }`}
-                          className=" !rounded-[20px] !py-2 !px-4"
+                          className=" !rounded-[20px] !py-2 !px-4 !bg-transparent"
                           disabled={loadingForCoupon || selectedCoupon !== null}
                         />
                       )}
@@ -1212,7 +1212,7 @@ const WalletRecharge = () => {
                               <p
                                 className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
                                   isActives && coupon.couponStatus !== "Expired"
-                                    ? "text-blue-600"
+                                    ? "text-[#160783]"
                                     : "text-gray-500"
                                 }`}
                               >
@@ -1394,7 +1394,7 @@ const WalletRecharge = () => {
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-12">
                           <p className="font-Open text-base font-semibold leading-[22px]">
-                            {companyName === "Shipyaari"
+                            {companyName === "Drivaa.Run"
                               ? "Drivaa Miles are availed after first"
                               : "Reward points are availed after first"}
                             {/* Drivaa Miles are availed after first */}

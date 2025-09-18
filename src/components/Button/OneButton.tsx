@@ -21,14 +21,20 @@ const OneButton = (props: any) => {
   return (
     <>
       {
-        <div className="flex  justify-center">
+        <div className="flex justify-center">
           <button
             type={type}
-            className={`${className} ${
-              disabled
-                ? `bg-[#150783a2] cursor-not-allowed`
-                : `${backgroundColour} cursor-pointer`
-            }`}
+            className={`
+      text-white rounded-lg 
+      ${
+        disabled
+          ? `${
+              backgroundColour !== "bg-transparent" && "bg-[#160783]"
+            } cursor-not-allowed`
+          : `${backgroundColour} cursor-pointer`
+      }
+      ${className}  // default if no className passed
+    `}
             onClick={onClick}
             disabled={disabled}
             onKeyDown={(e) => {
@@ -37,19 +43,19 @@ const OneButton = (props: any) => {
                 onClick?.(e);
               }
             }}
-            ref={ref} // Added this line
+            ref={ref}
           >
-            {showIcon && (
-              <img className={`${iconClassName}`} src={icon} alt="" />
-            )}
+            <div className="flex items-center justify-center gap-2">
+              {showIcon && <img className={iconClassName} src={icon} alt="" />}
 
-            <p className={textClassName}>
-              {loading ? (
-                <div>Loading...</div>
-              ) : (
-                capitalizeFirstLetterWithExclude(text)
-              )}
-            </p>
+              <p className={textClassName}>
+                {loading ? (
+                  <div>Loading...</div>
+                ) : (
+                  capitalizeFirstLetterWithExclude(text)
+                )}
+              </p>
+            </div>
           </button>
         </div>
       }

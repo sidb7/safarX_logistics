@@ -37,7 +37,7 @@ describe("Sign up", () => {
     cy.visit("https://sysellerdev.yaarilabs.com/auth/login");
 
     // Verify the title of the page
-    cy.title().should("include", "Shipyaari");
+    cy.title().should("include", "Drivaa.Run");
   });
 
   it(" Newly Onboarding process", () => {

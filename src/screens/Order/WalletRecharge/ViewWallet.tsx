@@ -712,7 +712,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                 </div>
                 <div>
                   <p className="font-DMOpen text-sm text-[#A3AED0] font-medium leading-6 tracking-wider">
-                    Yaari Cash
+                    Drivaa miles
                   </p>
                   <p className="font-DMOpen text-xl lg:text-2xl text-[#2B3674] font-bold leading-8 tracking-wide">
                     ₹&nbsp;
@@ -1129,9 +1129,10 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                     <OneButton
                       type="button"
                       onClick={handleVerifyCoupon}
+                      backgroundColour="bg-transparent"
                       variant="primary"
                       text={`${loadingForCoupon ? "Verifying..." : "Verify"}`}
-                      className="!rounded-[20px] !py-2 !px-4"
+                      className="rounded-lg !py-2 !px-4 bg-transparent border border-[#160783] text-[#160783] hover:!bg-[#F2F6FF] hover:shadow-cardShadow2a focus:!bg-[#F2F6FF] focus:!border focus:!border-[#CCDCFF] !text-sm !font-Open !font-semibold !leading-5 whitespace-nowrap"
                       disabled={loadingForCoupon || selectedCoupon !== null}
                     />
                   )}
@@ -1226,7 +1227,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                             <p
                               className={`font-Lato text-lg font-bold tracking-wider leading-6 ${
                                 isActives && coupon.couponStatus !== "Expired"
-                                  ? "text-blue-600"
+                                  ? "text-[#160783]"
                                   : "text-gray-500"
                               }`}
                             >
@@ -1341,7 +1342,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                       <p
                         className={`font-Lato text-lg text-[#575757] font-semibold leading-6 `}
                       >
-                        Yaari Cash & Offers
+                        Drivaa miles & Offers
                       </p>
                     </div>
                     <p className="font-Lato text-lg text-[#575757] font-semibold leading-6">

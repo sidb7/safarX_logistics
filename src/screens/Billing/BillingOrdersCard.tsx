@@ -351,10 +351,10 @@ export default BillingOrdersCard;
 //         {/* remaining */}
 
 //         {/* <div className="flex space-x-2">
-//           <button className="flex-1 py-2 px-4 bg-blue-50 text-blue-600 rounded-md text-sm font-semibold">
+//           <button className="flex-1 py-2 px-4 bg-blue-50 text-[#160783] rounded-md text-sm font-semibold">
 //             General Tag
 //           </button>
-//           <button className="flex-1 py-2 px-4 bg-blue-50 text-blue-600 rounded-md text-sm font-semibold">
+//           <button className="flex-1 py-2 px-4 bg-blue-50 text-[#160783] rounded-md text-sm font-semibold">
 //             Service Tag
 //           </button>
 

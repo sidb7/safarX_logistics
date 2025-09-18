@@ -33,7 +33,7 @@ function ForgotPassword({ setForgotPasswordON }: any) {
   });
   const [formData, setFormData] = useState({
     email: "",
-    companyName: "shipyaari",
+    companyName: "Drivaa.Run",
   });
   const [response, setResponse] = useState<any>(null);
   const signUpUser = useSelector((state: any) => state);

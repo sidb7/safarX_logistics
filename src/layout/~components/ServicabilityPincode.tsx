@@ -70,7 +70,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         if (isMasked) {
           let slice = tempArray?.slice(0, 1);
           slice.forEach((element: any, i: number) => {
-            element.partnerServiceName = COMPANY_NAME || "Shipyaari";
+            element.partnerServiceName = COMPANY_NAME || "Drivaa.Run";
           });
           setResponse(slice);
         } else {

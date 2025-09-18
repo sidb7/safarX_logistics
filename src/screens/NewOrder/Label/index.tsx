@@ -42,7 +42,7 @@ const Index: React.FC<IPropsTypes> = (props: IPropsTypes) => {
           </div>
         </div>
         <div className="flex justify-center items-center mt-10">
-          <Link className="text-blue-600 underline underline-offset-4" to="/">
+          <Link className="text-[#160783] underline underline-offset-4" to="/">
             GO TO ORDER
           </Link>
         </div>

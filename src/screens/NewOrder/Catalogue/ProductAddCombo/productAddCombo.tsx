@@ -201,7 +201,7 @@ const ProductAddCombo = () => {
         </div>
         <div className="flex mt-6 mb-28">
           <img src={ButtonIcon} alt="Add Product" width="16px" />
-          <span className="ml-2 text-blue-600 text-base" onClick={handleData}>
+          <span className="ml-2 text-[#160783] text-base" onClick={handleData}>
             Add Product
           </span>
         </div>

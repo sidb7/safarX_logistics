@@ -287,7 +287,7 @@ const CancellationRequestTable = (props: Props) => {
         const requestType = info?.row?.original?.requestType;
 
         return (
-          <p className="text-blue-600">
+          <p className="text-[#160783]">
             {" "}
             <button
               className={`bg-white text-[#160783] border border-[#160783] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}

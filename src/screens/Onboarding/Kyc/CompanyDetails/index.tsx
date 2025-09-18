@@ -24,7 +24,7 @@ const Index = (props: Props) => {
         </div>
         <WelcomeHeader
           className="mt-[58px]"
-          title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
+          title={`Welcome to ${COMPANY_NAME || "Drivaa.Run"}`}
           content="Tell us more about your company"
         />
         <div className="flex flex-col px-5 gap-y-5 mb-5">
@@ -58,7 +58,7 @@ const Index = (props: Props) => {
               </div>
               <WelcomeHeader
                 className="lg:!mt-[58px]"
-                title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
+                title={`Welcome to ${COMPANY_NAME || "Drivaa.Run"}`}
                 content="Tell us more about your company"
               />
               <div className="flex flex-col gap-y-5 mb-5 mx-[90px]">

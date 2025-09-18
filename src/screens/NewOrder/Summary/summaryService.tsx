@@ -82,7 +82,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
           {isMasked ? (
-            COMPANY_NAME || "Shipyaari"
+            COMPANY_NAME || "Drivaa.Run"
           ) : (
             <>
               <p className=" text-[12px] font-medium font-Open text-[#160783]  lg:text-[16px] font-semibold">

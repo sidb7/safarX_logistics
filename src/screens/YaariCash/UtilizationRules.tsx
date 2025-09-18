@@ -57,7 +57,7 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
       ) : (
         <p className="text-gray-600 text-base lg:text-lg font-Open font-normal lg:leading-5 mb-4">
           {`${
-            companyName?.toLowerCase() === "shipyaari"
+            companyName?.toLowerCase() === "Drivaa.Run"
               ? "  Important information about using your YaariCash"
               : "  Important information about using your Cashback"
           }`}
@@ -102,36 +102,36 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
                     {index === 0
                       ? summary?.latestUtilizationRule?.toLowerCase() === "full"
                         ? `You can apply the full amount of your ${
-                            companyName?.toLowerCase() === "shipyaari"
+                            companyName?.toLowerCase() === "Drivaa.Run"
                               ? "YaariCash"
                               : "cashback"
                           } for any order.`
                         : `You can apply a maximum of ${
                             summary?.latestUtilizationRule || 0
                           }% of your order value as ${
-                            companyName?.toLowerCase() === "shipyaari"
+                            companyName?.toLowerCase() === "Drivaa.Run"
                               ? "YaariCash"
                               : "cashback"
                           } for any order.`
                       : index === 1
                       ? `Your ${
-                          companyName?.toLowerCase() === "shipyaari"
+                          companyName?.toLowerCase() === "Drivaa.Run"
                             ? "YaariCash"
                             : "cashback"
                         } expires on ${formatDate(summary?.expiryDate)}.`
                       : index === 2
                       ? `${
-                          companyName?.toLowerCase() === "shipyaari"
+                          companyName?.toLowerCase() === "Drivaa.Run"
                             ? "YaariCash"
                             : "Cashback"
                         } is non-transferable and cannot be exchanged for real cash.`
                       : index === 3
                       ? `The latest ${
-                          companyName?.toLowerCase() === "shipyaari"
+                          companyName?.toLowerCase() === "Drivaa.Run"
                             ? "YaariCash"
                             : "cashback"
                         } utilization rule for the maximum utilization amount shall be applicable for all ${
-                          companyName?.toLowerCase() === "shipyaari"
+                          companyName?.toLowerCase() === "Drivaa.Run"
                             ? "YaariCash"
                             : "cashback"
                         } redemptions.`
@@ -146,12 +146,12 @@ const UtilizationRules: React.FunctionComponent<IUtilizationRulesProps> = ({
         <>
           <div className="flex flex-col items-center justify-center gap-y-2 pt-2">
             <p className="text-lg lg:text-lg font-Open font-semibold leading-6">{`No ${
-              companyName?.toLowerCase() === "shipyaari"
+              companyName?.toLowerCase() === "Drivaa.Run"
                 ? "YaariCash."
                 : "cashback."
             }`}</p>
             <p className="text-gray-600 font-Open text-sm lg:text-base font-normal leading-7">{`Complete purchases or refer friends to earn ${
-              companyName?.toLowerCase() === "shipyaari"
+              companyName?.toLowerCase() === "Drivaa.Run"
                 ? "YaariCash."
                 : "cashback."
             } Once earned,`}</p>

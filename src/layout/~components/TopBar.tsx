@@ -6,6 +6,7 @@ import NotificationLogo from "../../assets/Navbar/notification.svg";
 import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import HamMenu from "../../assets/Navbar/hamMenu.svg";
 import { BsCashCoin } from "react-icons/bs";
+import { FaRegUser } from "react-icons/fa";
 import {
   GetCurrentPath,
   clearLocalStorage,
@@ -48,9 +49,7 @@ import { useSelector } from "react-redux";
 import { setWalletBalance } from "../../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { io, Socket } from "socket.io-client";
-import { GlobalToast } from "../../components/GlobalToast/GlobalToast";
-import { initSocket } from "../../Socket";
-import ProfileIcon from "../../assets/ProfileIconBlue.png";
+import { PiCoinsThin } from "react-icons/pi";
 import SentryFeedback from "./SentryFeedback";
 import ReportAbugIcon from "../../assets/ReportABug.svg";
 import sessionManager from "../../utils/sessionManager";
@@ -217,7 +216,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
         if (isMasked) {
           let slice = filterData?.slice(0, 2);
           slice.forEach((element: any, i: number) => {
-            element.partnerName = COMPANY_NAME || "Shipyaari";
+            element.partnerName = COMPANY_NAME || "Drivaa.Run";
             if (i === 0) {
               element.companyServiceName = "Air";
             } else {
@@ -306,33 +305,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     sessionStorage.clear();
   };
   const { sellerInfo } = sessionManager({});
-  // let sellerId = localStorage.getItem("sellerId");
+
   let sellerId = sellerInfo?.sellerId;
-
-  // const socket = initSocket();
-
-  // useEffect(() => {
-  //   if (socket) {
-  //     console.log("socketwallet", socket);
-  //     socket.emit("joinRoom", `${localStorage.getItem("sellerId")}`);
-  //     socket.on("wallet_balance_update", (newBalance: string) => {
-  //       console.log("newWalletBalance", newBalance);
-  //       dispatch(setWalletBalance({ amt: Number(newBalance) }));
-  //     });
-  //     socket.on("bulkOrderFailed", (data) => {
-  //       console.log(
-  //         `Received bulk order failed event: ${JSON.stringify(data)}`
-  //       );
-  //       GlobalToast(data);
-  //     });
-
-  //     return () => {
-  //       if (socket) {
-  //         socket.off("wallet_balance_update");
-  //       }
-  //     };
-  //   }
-  // }, []);
 
   const finalImageUrl =
     profileImageurl &&
@@ -420,14 +394,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               {/* {yaariCash > 0 && ( */}
               <div className="hidden lg:block">
                 <div
-                  className="flex items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
+                  className="flex gap-1 items-center cursor-pointer h-[36px]  rounded-lg p-4 bg-[#E5EDFF]"
                   onClick={() => navigate("/wallet/rewards")}
                 >
-                  <img src={WalletIcon} width={35} alt="" />
+                  <PiCoinsThin size={20} />
                   <div className="flex gap-x-1 items-center text-[#160783] text-sm font-Open font-semibold">
                     <div>
-                      {COMPANY_NAME?.toLowerCase() === "shipyaari"
-                        ? "Yaari Cash:"
+                      {COMPANY_NAME?.toLowerCase() === "drivaa.run"
+                        ? "Drivaa miles:"
                         : "Cashback:"}
                       &nbsp;
                       {yaariCash ? yaariCash.toLocaleString("en-IN") : "0"}
@@ -442,7 +416,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 sellerId && (
                   <div className="hidden lg:block">
                     <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
-                      <img src={ProfileIcon} width={16} alt="" />
+                      <FaRegUser />
                       <div className="ml-1 flex gap-x-1 items-center text-[#160783] text-sm font-Open font-semibold">
                         <div>Seller ID: </div>
                         <div>
@@ -577,18 +551,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     {/* <hr className="h-[1px]" /> */}
 
                     <div className="py-0.5" role="none">
-                      {/* <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-Open"
-                        role="menuitem"
-                        onClick={() => {
-                          navigate("/profile");
-                          setIsOpen(false);
-                        }}
-                      >
-                       
-                        My Profile
-                      </button> */}
-
                       <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#F9FAFB] hover:text-gray-900 font-Open"
                         role="menuitem"

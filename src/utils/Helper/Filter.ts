@@ -32,7 +32,7 @@ export const inputRegexFilter = async (
     .trim()
     .replace(/^,|,$/g, "");
   const mapper: any = MappingFilter;
-  mapper[`${`/${COMPANY_NAME?.toLowerCase() || "shipyaari"}-tracking`}`] = {
+  mapper[`${`/${COMPANY_NAME?.toLowerCase() || "Drivaa.Run"}-tracking`}`] = {
     query_key: "trackingNo",
     req_type: "GET_CUSTOM",
     api: "/api/v1/tracking/getTrackingforSystem",

@@ -48,7 +48,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     <>
       <div className="min-h-screen bg-gray-50 pb-6 customScroll">
         <Breadcrum
-          label={`${companyName === "Shipyaari" ? "YaariCash" : "Cashback"}`}
+          label={`${companyName === "Drivaa.Run" ? "YaariCash" : "Cashback"}`}
         />
 
         <div className="space-y-8 px-5 ">

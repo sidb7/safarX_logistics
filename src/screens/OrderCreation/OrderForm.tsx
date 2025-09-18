@@ -4450,7 +4450,7 @@
 
 //           <div className="flex-grow">
 //             <div className="flex items-center mb-4 bg-blue-50 p-4 rounded-md">
-//               <Package className="w-6 h-6 mr-3 text-blue-600" />
+//               <Package className="w-6 h-6 mr-3 text-[#160783]" />
 //               <div>
 //                 <p className="text-gray-800 mb-2">
 //                   You are about to make all {boxCount} boxes identical using the
@@ -8272,7 +8272,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
           <div className="flex-grow">
             <div className="flex items-center mb-4 bg-blue-50 p-4 rounded-md">
-              <Package className="w-6 h-6 mr-3 text-blue-600" />
+              <Package className="w-6 h-6 mr-3 text-[#160783]" />
               <div>
                 <p className="text-gray-800 mb-2">
                   You are about to make all {boxCount} boxes identical using the

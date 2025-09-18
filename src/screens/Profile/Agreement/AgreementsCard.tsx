@@ -38,9 +38,9 @@ const AgreementsCard: React.FC = () => {
   const handleDownload = (agreement: any) => {
     // Create a temporary link and trigger download
     if (agreement?.fileUrl) {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = agreement.fileUrl;
-      link.download = agreement.name || 'agreement.pdf';
+      link.download = agreement.name || "agreement.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -53,17 +53,28 @@ const AgreementsCard: React.FC = () => {
   const formatDate = (timestamp: number) => {
     if (!timestamp) return "N/A";
     const date = new Date(timestamp);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   return (
     <div className="bg-white rounded-lg border border-[#E8E8E8] overflow-hidden mt-4 mb-4">
       <div className="flex items-center bg-[#F5F5F5] py-3 px-4 border-b border-[#E8E8E8]">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-blue-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="mr-2 text-[#160783]"
+        >
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
           <polyline points="14 2 14 8 20 8"></polyline>
           <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -72,7 +83,7 @@ const AgreementsCard: React.FC = () => {
         </svg>
         <h3 className="text-[#1C1C1C] font-semibold text-lg">Agreements</h3>
       </div>
-      
+
       <div style={{ maxHeight: "calc(3 * 64px)" }} className="overflow-y-auto">
         {isLoading ? (
           <div className="flex justify-center items-center py-10">
@@ -86,30 +97,38 @@ const AgreementsCard: React.FC = () => {
           <div>
             {agreements.map((agreement, index) => {
               // Get the properties that are not 'createdAt' (which are the agreement names)
-              const agreementProps = Object.keys(agreement).filter(key => key !== 'createdAt' && key !== 'id');
-              
+              const agreementProps = Object.keys(agreement).filter(
+                (key) => key !== "createdAt" && key !== "id"
+              );
+
               return agreementProps.map((propName, propIndex) => {
                 // Format the name nicely (e.g., "sampleAgreement" → "Sample Agreement")
                 const displayName = propName
-                  .replace(/([A-Z])/g, ' $1') // Add space before capital letters
-                  .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
-                  .replace(/([0-9]+)/g, ' $1'); // Add space before numbers
-                
+                  .replace(/([A-Z])/g, " $1") // Add space before capital letters
+                  .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+                  .replace(/([0-9]+)/g, " $1"); // Add space before numbers
+
                 return (
-                  <div 
-                    key={`${index}-${propIndex}`} 
+                  <div
+                    key={`${index}-${propIndex}`}
                     className="py-4 px-4 h-16 flex items-center justify-between border-b border-gray-100 hover:bg-gray-50"
                   >
                     <div className="flex flex-col">
-                      <span className="text-gray-800 font-medium">{displayName}</span>
-                      <span className="text-gray-500 text-sm">{formatDate(agreement.createdAt)}</span>
+                      <span className="text-gray-800 font-medium">
+                        {displayName}
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        {formatDate(agreement.createdAt)}
+                      </span>
                     </div>
                     <button
-                      onClick={() => handleDownload({
-                        fileUrl: agreement[propName],
-                        name: propName
-                      })}
-                      className="text-gray-500 hover:text-blue-600"
+                      onClick={() =>
+                        handleDownload({
+                          fileUrl: agreement[propName],
+                          name: propName,
+                        })
+                      }
+                      className="text-gray-500 hover:text-[#160783]"
                       title="Download Agreement"
                     >
                       <svg

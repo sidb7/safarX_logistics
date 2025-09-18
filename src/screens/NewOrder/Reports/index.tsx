@@ -199,17 +199,14 @@ const Reports = () => {
                 <Spinner />
               </div>
             ) : (
-              // <ServiceButton
-              //   text={"FETCH REPORT"}
-              //   className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
-              //   onClick={() => fetchReport()}
-              // />
-              <OneButton
-                onClick={() => fetchReport()}
-                text="FETCH REPORT"
-                className=" px-3 py-6  w-[200px]"
-                variant="primary"
-              />
+              <div>
+                <OneButton
+                  onClick={() => fetchReport()}
+                  text="FETCH REPORT"
+                  className="px-2 !py-3"
+                  variant="primary"
+                />
+              </div>
             )}
           </div>
         </div>

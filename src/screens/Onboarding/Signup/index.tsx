@@ -287,17 +287,6 @@ const Index = () => {
                     alt="CompanyLogo"
                   />
 
-                  {/* <a
-                    href="https://app.shipyaari.com/shipyaari-tracking"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`ml-auto text-[#160783] underline p-4 font-Lato font-bold ${
-                      isMobileScreen ? "text-xs" : "text-sm"
-                    } leading-4 tracking-wide`}
-                  >
-                    TRACK ORDER
-                  </a> */}
-
                   <OneButton
                     text="TRACK ORDER"
                     onClick={() => {

@@ -77,7 +77,7 @@ const YaariCashBalance: React.FunctionComponent<IYaariCashBalanceProps> = ({
             <>
               <p className="text-gray-500 text-lg lg:text-xl font-Open font-semibold leading-7 capitalize tracking-wide mb-2 lg:mb-1">
                 {`${
-                  companyName?.toLowerCase() === "Shipyaari"
+                  companyName?.toLowerCase() === "Drivaa.Run"
                     ? "  Your YaariCash Balance"
                     : "  Your Cashback Balance"
                 }`}

@@ -117,7 +117,7 @@ export default function NotificationBell() {
                 <div className="flex">
                   <button
                     onClick={() => dispatch(markAllAsRead())}
-                    className="text-[14px] text-blue-600 hover:text-blue-800 rounded-md hover:bg-blue-100 px-3 py-2 font-Open font-semibold transition-colors"
+                    className="text-[14px] text-[#160783] hover:text-[#160783] rounded-md hover:bg-[#E7E4FF] px-3 py-2 font-Open font-semibold transition-colors"
                   >
                     Mark all as read
                   </button>
@@ -141,7 +141,7 @@ export default function NotificationBell() {
                       onClick={() => setActiveTab(tab)}
                       className={`px-3 py-2 text-sm font-medium rounded-md transition-colors capitalize ${
                         activeTab === tab
-                          ? "bg-blue-100 text-blue-700"
+                          ? "bg-blue-100 text-[#160783]"
                           : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                       }`}
                     >
@@ -161,7 +161,8 @@ export default function NotificationBell() {
                   }}
                   text={"View All"}
                   variant="tertiary"
-                  className="!text-xs !font-Open !font-semibold !leading-5"
+                  className="!text-xs !font-Open !font-semibold !leading-5 border rounded-lg px-2"
+                  backgroundColour="bg-transparent"
                 />
               </div>
             </div>
@@ -202,7 +203,7 @@ export default function NotificationBell() {
                       {/* Simple notification icon */}
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                         <svg
-                          className="w-4 h-4 text-blue-600"
+                          className="w-4 h-4 text-[#160783]"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -239,7 +240,7 @@ export default function NotificationBell() {
                       <div className="flex items-center space-x-2">
                         {!notification.read && (
                           <div
-                            className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"
+                            className="w-2 h-2 bg-[#E7E4FF]rounded-full flex-shrink-0"
                             title="Mark as Read"
                           ></div>
                         )}

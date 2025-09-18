@@ -435,7 +435,7 @@ const AccordianRightModal: React.FC<AccordianRightModalProps> = ({
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="font-semibold text-gray-700">
-                {COMPANY_NAME || "Shipyaari"} ID
+                {COMPANY_NAME || "Drivaa.Run"} ID
               </span>
               <span>{orderData?.tempOrderId || "N/A"}</span>
             </div>

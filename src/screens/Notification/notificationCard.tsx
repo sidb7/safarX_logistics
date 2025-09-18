@@ -91,7 +91,7 @@ const NotificationCard: React.FunctionComponent<INotificationCardProps> = (
           {/* Links */}
 
           {media?.length > 0 && (
-            <div className="flex gap-x-3 px-2 pt-2 text-sm font-medium text-blue-600">
+            <div className="flex gap-x-3 px-2 pt-2 text-sm font-medium text-[#160783]">
               {media.map((item: any, idx: any) => (
                 <Link
                   key={idx}

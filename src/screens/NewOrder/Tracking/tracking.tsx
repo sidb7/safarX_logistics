@@ -194,7 +194,7 @@ const Tracking = () => {
           <Breadcrum label="Tracking" />
           {/*shipyaari icon */}
           {/* <div className="flex justify-center p-3">
-          <img src={shipyaari} alt="Shipyaari" />
+          <img src={shipyaari} alt="Drivaa.Run" />
         </div> */}
           <div className="flex mx-3 md:mx-5 md:my-5 ">
             <div className="flex w-[100%] max-w-[1300px] gap-5 max-md:flex-col">

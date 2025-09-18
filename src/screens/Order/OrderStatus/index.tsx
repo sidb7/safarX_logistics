@@ -129,14 +129,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const stateValue = useSelector((state: any) => state?.paginationSlice);
   const [pageToOpen, setPageToOpen] = useState<any>("Home");
 
-  const getIndexFromActiveTab = (arr: any, tabName: any) => {
-    let tabIndex = arr.findIndex((e: any) => e.value === tabName);
-    if (tabIndex > -1) {
-      return +tabIndex;
-    } else {
-      return 0;
-    }
-  };
+  // Helper to get tab index
+  const getIndexFromActiveTab = (arr: any, tabName: any) =>
+    arr.findIndex((e: any) => e.value === tabName) || 0;
   const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
   const [searchResult, setSearchResult]: any = useState([]);
   const [bulkReportDownloadLoading, setBulkReportDownloadLoading]: any =
@@ -632,43 +627,38 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const filterComponent = (className?: string) => {
-    console.log(draftOrderCount, "FILTER DATA");
-    return (
-      <div
-        className={`flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] lg:hidden ${className}`}
-      >
-        {filterData?.map((singleData, index) => {
-          let data = singleData?.label;
-          data =
-            data +
-            " (" +
-            draftOrderCount?.[singleData?.value]?.toLocaleString("en-US", {
-              minimumIntegerDigits: 2,
-              useGrouping: false,
-            }) +
-            ")";
-          return (
-            <span
-              key={index}
-              className={`flex flex-1 min-w-fit items-center py-[8px] px-[16px] border-[1px] ${
-                index === 0 && "rounded-l-md"
-              } ${
-                index === filterData.length - 1 && "rounded-r-md"
-              } cursor-pointer border-[#A4A4A4] ${
-                filterId === index
-                  ? ` bg-[#D2D2D2] font-medium text-[#1C1C1C]`
-                  : ""
-              }`}
-              onClick={() => handleFilterOrders(index)}
-            >
-              {data}
-            </span>
-          );
-        })}
-      </div>
-    );
-  };
+  // Optimize filterComponent
+  const filterComponent = (className?: string) => (
+    <div
+      className={`flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] lg:hidden ${className}`}
+    >
+      {filterData?.map((singleData, index) => {
+        const data = `${singleData?.label} (${draftOrderCount?.[
+          singleData?.value
+        ]?.toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        })})`;
+        return (
+          <span
+            key={index}
+            className={`flex flex-1 min-w-fit items-center py-[8px] px-[16px] border-[1px] ${
+              index === 0 && "rounded-l-md"
+            } ${
+              index === filterData.length - 1 && "rounded-r-md"
+            } cursor-pointer border-[#A4A4A4] ${
+              filterId === index
+                ? ` bg-[#D2D2D2] font-medium text-[#1C1C1C]`
+                : ""
+            }`}
+            onClick={() => handleFilterOrders(index)}
+          >
+            {data}
+          </span>
+        );
+      })}
+    </div>
+  );
 
   const handleFilterOrders = (index: any) => {
     setFilterId(index);

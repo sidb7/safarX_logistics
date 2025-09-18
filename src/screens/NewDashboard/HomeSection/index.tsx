@@ -16,7 +16,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     {
       title: "Verify Your Account",
       content: `Verify your account to unlock all features of ${
-        COMPANY_NAME || "Shipyaari"
+        COMPANY_NAME || "Drivaa.Run"
       }. Complete this step of verification process and start managing your shipments seamlessly.`,
       section: "verifyAccount",
       completed: false,
@@ -24,7 +24,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     {
       title: "Complete Your KYC",
       content: `Complete your KYC to access ${
-        COMPANY_NAME || "Shipyaari"
+        COMPANY_NAME || "Drivaa.Run"
       }'s full range of services. Complete this step for a quick and easy KYC process to ensure seamless shipping.`,
       section: "kyc",
       completed: false,
@@ -46,7 +46,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     {
       title: "View your Plan Details",
       content: `Easily view your plan details to manage your shipping services. This guide will help you access and understand your plan information with ${
-        COMPANY_NAME || "Shipyaari"
+        COMPANY_NAME || "Drivaa.Run"
       }.`,
       section: "planDetails",
       completed: false,
@@ -61,6 +61,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   ];
   const [accordianItems, setAccordianItems]: any = useState(items);
   const [userName, setUserName] = useState<any>("");
+  const [profilePicture, setProfilePicture] = useState<any>("");
   const [mandatoryCheck, setMandatoryCheck] = useState<any>();
   const [completedStatus, setCompletedStatus] = useState<{
     [key: string]: boolean;
@@ -105,6 +106,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     const kycValue = sellerInfo;
     // const userName = localStorage.getItem("userName");
     const userName = sellerInfo?.name;
+    const profilePicture = sellerInfo?.profileImageUrl;
     // const brandDetails = localStorage.getItem("brandDetails");
     const brandDetails = kycValue?.brandDetails;
     const brandName = kycValue?.privateCompany?.brandName;
@@ -121,6 +123,15 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
 
     if (userName !== null && userName !== undefined) {
       setUserName(userName);
+    }
+    if (
+      profilePicture &&
+      profilePicture !== undefined &&
+      profilePicture !== null &&
+      profilePicture !== "N/A" &&
+      profilePicture.trim() !== ""
+    ) {
+      setProfilePicture(profilePicture);
     }
 
     if (kycValue?.nextStep) {
@@ -154,7 +165,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   return (
     <>
       {/* welcome message */}
-      <WelcomeHeader userName={userName} completedStatus={completedStatus} />
+      <WelcomeHeader
+        userName={userName}
+        profilePicture={profilePicture}
+        completedStatus={completedStatus}
+      />
       {/* top reroute section  */}
       <TopCardSection completedStatus={completedStatus} />
       {/* the center accordian part  */}

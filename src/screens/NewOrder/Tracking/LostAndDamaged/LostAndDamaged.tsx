@@ -84,14 +84,13 @@ const LostAndDamaged: React.FC = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-  const itemsPerPageOptions = [5, 10, 20, 50,100,200,500,1000,2000,5000,10000];
+  const itemsPerPageOptions = [
+    5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000,
+  ];
   const [totalCount, setTotalCount] = useState<number>(0);
   const isInitialRender = useRef(true);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isFirstLoadComplete, setIsFirstLoadComplete] = useState(false);
-
-
-
 
   const [filterState, setFilterState] = useState<FilterState>({
     name: "",
@@ -190,9 +189,9 @@ const LostAndDamaged: React.FC = () => {
         setFallback(response?.data?.fallback === true);
         // toast.error(response?.data?.message || "Failed to fetch orders");
         // Only show error toast if fallback is not true
-      if (!response?.data?.fallback) {
-        toast.error(response?.data?.message || "Failed to fetch orders");
-      }
+        if (!response?.data?.fallback) {
+          toast.error(response?.data?.message || "Failed to fetch orders");
+        }
       }
     } catch (error) {
       console.error("Error fetching order details:", error);
@@ -559,81 +558,79 @@ const LostAndDamaged: React.FC = () => {
   //   fetchOrderDetailsTable();
   // }, []);
 
-useEffect(() => {
-  console.log('Initial data fetch starting');
-  
-  const initialFetch = async () => {
-    try {
-      await fetchOrderDetailsTable();
-      setIsFirstLoadComplete(true);
-    } catch (error) {
-      console.error('Error in initial fetch:', error);
-      setIsFirstLoadComplete(true);
+  useEffect(() => {
+    console.log("Initial data fetch starting");
+
+    const initialFetch = async () => {
+      try {
+        await fetchOrderDetailsTable();
+        setIsFirstLoadComplete(true);
+      } catch (error) {
+        console.error("Error in initial fetch:", error);
+        setIsFirstLoadComplete(true);
+      }
+    };
+
+    initialFetch();
+  }, []);
+
+  useEffect(() => {
+    if (isFirstLoadComplete) {
+      console.log("First load complete, enabling other effects");
+      isInitialRender.current = false;
     }
-  };
-  
-  initialFetch();
-}, []); 
+  }, [isFirstLoadComplete]);
 
+  useEffect(() => {
+    if (isInitialRender.current || !isFirstLoadComplete) return;
 
-useEffect(() => {
-  if (isFirstLoadComplete) {
-    console.log('First load complete, enabling other effects');
-    isInitialRender.current = false;
-  }
-}, [isFirstLoadComplete]);
-
-
-useEffect(() => {
-  if (isInitialRender.current || !isFirstLoadComplete) return;
-  
-  console.log('Pagination changed, fetching data');
-  fetchOrderDetailsTable();
-}, [currentPage, itemsPerPage]);
-
-useEffect(() => {
-  if (isInitialRender.current || !isFirstLoadComplete) return;
-  
-  if ((startDate && endDate) || (startDate === null && endDate === null)) {
-    console.log('Date range changed, fetching data');
+    console.log("Pagination changed, fetching data");
     fetchOrderDetailsTable();
-  }
-}, [startDate, endDate]);
+  }, [currentPage, itemsPerPage]);
 
-useEffect(() => {
-  if (isInitialRender.current || !isFirstLoadComplete) return;
-  
-  const debounceTimeout = setTimeout(() => {
-    console.log('Search value changed, fetching data');
-    setCurrentPage(1); 
-    fetchOrderDetailsTable(searchValue);
-  }, 300);
+  useEffect(() => {
+    if (isInitialRender.current || !isFirstLoadComplete) return;
 
-  return () => clearTimeout(debounceTimeout);
-}, [searchValue]);
+    if ((startDate && endDate) || (startDate === null && endDate === null)) {
+      console.log("Date range changed, fetching data");
+      fetchOrderDetailsTable();
+    }
+  }, [startDate, endDate]);
 
-useEffect(() => {
-  if (filterState?.name && filterState?.menu) {
-    getObjectWithIsActiveTrue(filterState.menu, filterState.name);
-  }
-}, [filterState]);
+  useEffect(() => {
+    if (isInitialRender.current || !isFirstLoadComplete) return;
 
-useEffect(() => {
-  if (isInitialRender.current || !isFirstLoadComplete) return;
-  
-  if (filterPayLoad.filterArrOne.length === 0) {
-    console.log('All filters cleared, fetching data');
-    fetchOrderDetailsTable();
-  }
-}, [filterPayLoad]);
+    const debounceTimeout = setTimeout(() => {
+      console.log("Search value changed, fetching data");
+      setCurrentPage(1);
+      fetchOrderDetailsTable(searchValue);
+    }, 300);
 
-useEffect(() => {
-  if (formSubmitted) {
-    console.log('Form submitted, refreshing data');
-    fetchOrderDetailsTable();
-    setFormSubmitted(false);
-  }
-}, [formSubmitted]);
+    return () => clearTimeout(debounceTimeout);
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (filterState?.name && filterState?.menu) {
+      getObjectWithIsActiveTrue(filterState.menu, filterState.name);
+    }
+  }, [filterState]);
+
+  useEffect(() => {
+    if (isInitialRender.current || !isFirstLoadComplete) return;
+
+    if (filterPayLoad.filterArrOne.length === 0) {
+      console.log("All filters cleared, fetching data");
+      fetchOrderDetailsTable();
+    }
+  }, [filterPayLoad]);
+
+  useEffect(() => {
+    if (formSubmitted) {
+      console.log("Form submitted, refreshing data");
+      fetchOrderDetailsTable();
+      setFormSubmitted(false);
+    }
+  }, [formSubmitted]);
   return (
     <div>
       <div className=" flex justify-between w-full">
@@ -911,7 +908,6 @@ useEffect(() => {
             {selectedOption === "DAMAGE" && (
               <div className="space-y-4 mt-4 mb-4">
                 <div>
-                  
                   <div className="relative w-full h-12 border border-gray-300 !rounded-full overflow-hidden">
                     <input
                       type="file"
@@ -930,7 +926,7 @@ useEffect(() => {
                         height="24"
                         viewBox="0 0 24 24"
                         fill="none"
-                        className="text-blue-600"
+                        className="text-[#160783]"
                       >
                         <path
                           d="M12 16V8M8 12l4-4 4 4"
@@ -979,7 +975,7 @@ useEffect(() => {
                         height="24"
                         viewBox="0 0 24 24"
                         fill="none"
-                        className="text-blue-600"
+                        className="text-[#160783]"
                       >
                         <path
                           d="M12 16V8M8 12l4-4 4 4"

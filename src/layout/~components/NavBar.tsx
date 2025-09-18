@@ -17,6 +17,7 @@ import { sideBarMenusData } from "../../utils/dummyData";
 import { POST } from "../../utils/webService";
 import toast from "react-hot-toast";
 import sessionManager from "../../utils/sessionManager";
+import { FaChevronDown } from "react-icons/fa";
 
 interface INavBarProps {
   openMobileSideBar: any;
@@ -35,35 +36,9 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const [sideBarMenus, setSideBarMenus]: any = useState<any>(
     sideBarMenusData || []
   );
-  // console.log("🚀 ~ sideBarMenus:", sideBarMenus)
-  // console.log("🚀 ~ sideBarMenus:", sideBarMenus);
+
   const { isLgScreen } = ResponsiveState();
   const [isHover, setIsHover]: any = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   let { roles: data, loading } = roles;
-  //   let tempArr = JSON.parse(JSON.stringify(data[0]?.menu || []));
-  //   if (loading === false && data?.length > 0) {
-  //     const filterActiveMenus: any = (menuArray: any[]) => {
-  //       return menuArray
-  //         .filter((menuItem) => menuItem.isActive)
-  //         .map((menuItem) => ({
-  //           ...menuItem,
-  //           isChild: false,
-  //           isActivePath: false,
-  //           menu: menuItem.menu ? filterActiveMenus(menuItem.menu) : [],
-  //           pages: menuItem.pages?.filter((page: any) => page.isActive) || [],
-  //         }));
-  //     };
-
-  //     let tempArr = filterActiveMenus(data[0]?.menu || []);
-
-  //     setSideBarMenus([...tempArr]);
-  //     if (tempArr.length > 0) {
-  //       updateActivetab(tempArr);
-  //     }
-  //   }
-  // }, [roles]);
 
   useEffect(() => {
     if (!sideBarMenus.length) return;
@@ -81,36 +56,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     }`,
     mobileWidth: `${openMobileSideBar ? "100%" : "0"}`,
   };
-
-  // const updateActivetab = (arr: any = []) => {
-  //   const { pathname } = location;
-  //   const [parent, ...childs] = pathname
-  //     .split("/")
-  //     .filter((path: any) => path !== "");
-  //   arr?.forEach((e: any) => {
-  //     if (e.menu) {
-  //       if (e.isActivePath) e.isActivePath = !e.isActivePath;
-  //       e.menu?.forEach((e1: any) => {
-  //         if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
-  //         const [parentFromPaths, ...restChild] = e1.path
-  //           .split("/")
-  //           .filter((path: any) => path !== "");
-  //         if (parent === parentFromPaths) {
-  //           e.isActivePath = true;
-  //         }
-  //         if (pathname === e1.path) {
-  //           e1.isActivePath = true;
-  //         }
-  //         if (e1.menu.menu) {
-  //           e1.menu.menu.forEach((e2: any) => {
-  //             if (e2.isActivePath) e2.isActivePath = !e2.isActivePath;
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  //   setSideBarMenus([...arr]);
-  // };
 
   const filterMenuItems = (menu: any): any => {
     const checks = [
@@ -186,22 +131,27 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       window.open(path, "_blank");
       return;
     }
-    let tempArr = sideBarMenus;
-    tempArr?.forEach((e: any) => {
-      e.isActivePath = false;
+    let tempArr = sideBarMenus.map((e: any, i: number) => {
+      let newE = { ...e, isActivePath: false };
       if (e.menu) {
-        e.menu?.forEach((e1: any) => {
-          e1.isActivePath = false;
-          if (e1.menu.menu) {
-            e1.menu.menu.forEach((e2: any) => {
-              e2.isActivePath = false;
-            });
+        newE.menu = e.menu.map((e1: any, j: number) => {
+          let newE1 = { ...e1, isActivePath: false };
+          if (e1.menu && e1.menu.menu) {
+            newE1.menu.menu = e1.menu.menu.map((e2: any) => ({
+              ...e2,
+              isActivePath: false,
+            }));
           }
+          // Highlight the selected child
+          if (i === index && j === childIndex) {
+            newE1.isActivePath = true;
+            newE.isActivePath = true;
+          }
+          return newE1;
         });
       }
+      return newE;
     });
-    tempArr[index].isActivePath = true;
-    tempArr[index].menu[childIndex].isActivePath = true;
     setSideBarMenus([...tempArr]);
     if (!isLgScreen) {
       setMobileSideBar(false);
@@ -210,7 +160,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     navigate(path);
   };
 
-  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME || "shipyaari";
+  const companyName = process.env.REACT_APP_WHITE_COMPANYNAME || "Drivaa.Run";
 
   const handleMenuClick = (index: number, element: any) => {
     // If menu is empty and path exists, navigate directly
@@ -256,7 +206,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const opneAndCloseChild = async (index: number, element: any) => {
     const { name, isChild } = element;
     if (name === "Help") {
-      if (companyName && companyName?.trim()?.toLowerCase() === "shipyaari") {
+      if (companyName && companyName?.trim()?.toLowerCase() === "Drivaa.Run") {
         const { data: response }: any = await POST(POST_SSO_URL, {});
 
         if (response?.success) {
@@ -267,10 +217,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       } else {
         window.open("https://wa.me/8700391426", "_blank");
       }
-      // companyName === "Shipyaari"
-      //   // ? window.open("https://support.shipyaari.com/tickets", "_blank")
-      //   ? window.open("https://shipyaari.freshdesk.com/support/login", "_blank")  // mentioned by yuvika
-      //   : window.open("https://wa.me/8700391426", "_blank");
+
       return;
     }
 
@@ -306,31 +253,32 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     <>
       {sellerId ? (
         <>
-          {" "}
           <nav
             key="1"
             onMouseEnter={handleOpner}
             onMouseLeave={handleClose}
-            className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-20 rounded-r-lg customScroll`}
+            className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-gradient-to-b from-[#f8faff] via-[#CFDFFF] to-[#f0f0ff] z-20 rounded-r-2xl customScroll`}
             style={{
-              boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
+              boxShadow: "2px 0 16px 0 rgba(80, 80, 180, 0.10)",
+              borderRight: "1.5px solid #e0e0e0",
               transition: `all .2s `,
               transitionTimingFunction: "ease-in-out",
               width: conditinalClass.width,
             }}
           >
             <div
-              className="flex w-full !h-10 mb-6"
+              className="flex w-full !h-10 mb-3 justify-center items-center cursor-pointer"
               onClick={() => navigate(`/dashboard/overview`)}
             >
-              {isHover ? (
-                <img src={LARGE_LOGO} alt="" className="!w-32 !h-8" />
-              ) : (
-                <img src={SMALL_LOGO} alt="" />
-              )}
+              <img
+                src={isHover ? LARGE_LOGO : SMALL_LOGO}
+                alt="logo"
+                className={isHover ? "w-52" : "w-auto h-12"}
+              />
             </div>
+
+            <div className="w-full border-b border-[#e0e0e0] mb-3"></div>
             {sideBarMenus?.map((e: any, index: number) => {
-              // console.log("🚀 ~ {sideBarMenus?.map ~ e:", e);
               if (e?.name !== "Notifications") {
                 let iconName = e?.icon?.toLowerCase() || "";
                 const iconPath =
@@ -339,87 +287,50 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   <div className="w-full flex-col" key={index}>
                     <div
                       key={`${e.name + index}`}
-                      className={`h-10 flex items-center rounded-lg px-2
-} w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
+                      className={`h-10 flex items-center rounded-xl px-3 my-1 hover:bg-[#c8dbff] hover:scale-[1.03] transition-all duration-150 w-full  cursor-pointer ${
+                        e.isActivePath
+                          ? "bg-[#91b4fa] text-white scale-[1.04]"
+                          : ""
+                      }`}
                       onClick={() => {
-                        // opneAndCloseChild(index, e);
                         handleMenuClick(index, e);
                       }}
                     >
                       <img
                         src={iconPath}
-                        className={`ml-[2px] ${
-                          e.isActivePath ? " invert" : ""
+                        className={`ml-[2px] w-6 h-6 ${
+                          e.isActivePath ? "invert" : "grayscale"
                         }`}
                         alt=""
                       />
+
                       {isHover ? (
                         <div
-                          className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize`}
+                          className={`flex items-center justify-between w-full text-base font-semibold leading-5 capitalize ml-3`}
                         >
                           <p
-                            className={`px-2 whitespace-nowrap ${
-                              e.isActivePath ? " invert" : ""
+                            className={`whitespace-nowrap ${
+                              e.isActivePath ? "invert" : ""
                             }`}
                           >
                             {e.name}
                           </p>
                           {e.menu && e.menu.length > 0 && (
                             <div
-                              className={`${
-                                e.isActivePath ? "text-white" : ""
+                              className={`$${
+                                e.isActivePath
+                                  ? "text-[#fff]"
+                                  : "text-[#9082FF]"
                               } flex items-center gap-2`}
                             >
-                              <CustomButton
-                                icon={downArrow}
-                                showIcon={true}
-                                onlyIcon={true}
-                                className={`${
-                                  e.isActivePath ? " invert" : ""
-                                } bg-white w-fit !p-0 !h-fit`}
-                                text={""}
-                                onClick={() => {}}
-                              />
+                              <FaChevronDown />
                             </div>
                           )}
                         </div>
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                     </div>
                     {e.isChild ? (
-                      <div className="flex flex-col overflow-hidden">
-                        {/* {e.menu?.map((child: any, childIndex: number) => {
-                      console.log("e.target.child", e?.menu?.[1]?.name);
-                      // if (e?.menu?.[1]?.name !== "Orders") {
-                      return (
-                        <div
-                          key={childIndex}
-                          className={`py-2 pl-10 rounded-lg ${
-                            child.isActivePath ? "bg-[#E8E8E8]" : ""
-                          }`}
-                          onClick={() =>
-                            setIsActivePath(index, childIndex, child.path)
-                          }
-                        >
-                          {child.name}
-                        </div>
-                      );
-                      // }
-                      // return (
-                      //   <div
-                      //     key={childIndex}
-                      //     className={`py-2 pl-10 rounded-lg ${
-                      //       child.isActivePath ? "bg-[#E8E8E8]" : ""
-                      //     }`}
-                      //     onClick={() =>
-                      //       setIsActivePath(index, childIndex, child.path)
-                      //     }
-                      //   >
-                      //     {child.name}
-                      //   </div>
-                      // );
-                    })} */}
+                      <div className="flex flex-col overflow-hidden ml-8 border-l-2 border-[#e0e0e0] pl-3 py-1">
                         {e.menu?.map((child: any, childIndex: number) => {
                           if (
                             e?.name === "Dashboard" &&
@@ -427,7 +338,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                           ) {
                             return null;
                           }
-
                           if (
                             child?.name !== "Exception" &&
                             child?.name !== "SY Performance" &&
@@ -438,9 +348,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                             return (
                               <div
                                 key={childIndex}
-                                className={`py-2 pl-10 rounded-lg ${
-                                  child.isActivePath ? "bg-[#E8E8E8]" : ""
-                                }`}
+                                className={`py-2 pl-2 rounded-lg text-[15px] font-medium ${
+                                  child.isActivePath
+                                    ? "bg-[#91b4fa] transition-all"
+                                    : "text-[#444]"
+                                } hover:bg-[#c8dbff] transition-all`}
                                 onClick={() =>
                                   setIsActivePath(index, childIndex, child.path)
                                 }
@@ -452,9 +364,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                           return null;
                         })}
                       </div>
-                    ) : (
-                      ""
-                    )}
+                    ) : null}
                   </div>
                 );
               }
@@ -466,16 +376,17 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               transitionTimingFunction: "ease-in-out",
               backdropFilter: conditinalClass.backdropFilter,
             }}
-            className={`fixed h-screen z-10 top-0 left-0" ${
+            className={`fixed h-screen z-10 top-0 left-0 ${
               isHover ? "w-full" : "w-0"
-            } `}
+            }`}
           ></div>
           {/* Mobile Nav Bar */}
           <>
             <nav
-              className={`lg:hidden absolute h-full font-Open bg-white z-20 customScroll`}
+              className={`lg:hidden absolute h-full font-Open bg-gradient-to-b from-[#f8faff] via-[#e7e4ff] to-[#f0f0ff] z-20 customScroll`}
               style={{
-                boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
+                boxShadow: "2px 0 16px 0 rgba(80, 80, 180, 0.10)",
+                borderRight: "1.5px solid #e0e0e0",
                 transition: `all .2s `,
                 transitionTimingFunction: "ease-in-out",
                 width: conditinalClass.mobileWidth,
@@ -492,38 +403,37 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   onClick={() => setMobileSideBar(false)}
                 />
               </div>
+              <div className="w-full border-b border-[#e0e0e0] mb-2"></div>
               {sideBarMenus?.length > 0 &&
                 sideBarMenus?.map((e: any, index: number) => {
                   let iconName = e?.icon?.toLowerCase() || "";
                   const iconPath =
                     require(`../../assets/Navbar/${iconName}.svg`) || "";
-
                   return (
                     <div
-                      className="w-full flex-col px-6 py-4"
+                      className="w-full flex-col px-6 py-2"
                       key={`${e.name + index}`}
                     >
                       <div
-                        className={`flex items-center gap-x-4 cursor-pointer rounded-lg p-4 justify-start w-full`}
+                        className={`flex items-center gap-x-4 cursor-pointer rounded-xl p-3 justify-start w-full hover:bg-[#e7e4ff] ${
+                          e.isActivePath
+                            ? "bg-[#91b4fa] text-white scale-[1.04]"
+                            : ""
+                        } transition-all`}
+                        onClick={() => handleMenuClick(index, e)}
                       >
-                        <img src={iconPath} alt="" />
+                        <img src={iconPath} className="w-6 h-6" alt="" />
                         <div
-                          className={` flex items-center justify-between w-full text-sm font-semibold leading-5 capitalize overflow-hidden`}
-                          onClick={() => {
-                            // opneAndCloseChild(index, e);
-                            handleMenuClick(index, e);
-                          }}
+                          className={`flex items-center justify-between w-full text-base font-semibold leading-5 capitalize overflow-hidden`}
                         >
-                          <p className={` whitespace-nowrap`}>{e.name} </p>
-
+                          <p className={`whitespace-nowrap`}>{e.name} </p>
                           {e.menu && e.menu.length > 0 && (
-                            <div className={` flex items-center gap-2`}>
+                            <div className={`flex items-center gap-2`}>
                               <CustomButton
                                 icon={downArrow}
                                 showIcon={true}
                                 onlyIcon={true}
-                                className={`
-bg-white w-fit !p-0 !h-fit`}
+                                className="bg-white w-fit !p-0 !h-fit"
                                 text={""}
                                 onClick={() => {}}
                               />
@@ -532,12 +442,16 @@ bg-white w-fit !p-0 !h-fit`}
                         </div>
                       </div>
                       {e.isChild ? (
-                        <div className="flex flex-col overflow-hidden ">
+                        <div className="flex flex-col overflow-hidden ml-6 border-l-2 border-[#e0e0e0] pl-3 py-1">
                           {e.menu?.map((child: any, childIndex: number) => {
                             return (
                               <div
                                 key={`${child.path + childIndex}`}
-                                className={` rounded-lg text-sm font-semibold cursor-pointer leading-5 capitalize p-4 `}
+                                className={`rounded-lg text-[15px] font-medium cursor-pointer leading-5 capitalize p-2 ${
+                                  child.isActivePath
+                                    ? "bg-[#e8e8e8] text-[#004EFF]"
+                                    : "text-[#444]"
+                                } hover:bg-[#f0f0ff] transition-all`}
                                 onClick={() =>
                                   setIsActivePath(index, childIndex, child.path)
                                 }
@@ -547,9 +461,7 @@ bg-white w-fit !p-0 !h-fit`}
                             );
                           })}
                         </div>
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                     </div>
                   );
                 })}

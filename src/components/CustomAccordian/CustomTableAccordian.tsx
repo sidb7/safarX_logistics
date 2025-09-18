@@ -4521,7 +4521,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                   />
                   {/* Show multiplication indicator for B2B */}
                   {/* {orderData?.orderType === "B2B" && (
-                  <div className="text-xs text-blue-600 mt-1">
+                  <div className="text-xs text-[#160783] mt-1">
                     Base Price123: ₹{baseBoxPrice.toFixed(2)} × {box.qty || 1} = ₹{totalPrice.toFixed(2)}
                   </div>
                 )} */}
@@ -4941,7 +4941,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
               <div className="flex justify-between">
                 <span className="font-medium">Partner Name:</span>
                 <span>
-                  {isMasked ? "Shipyaari" : orderData.service.partnerName}
+                  {isMasked ? "Drivaa.Run" : orderData.service.partnerName}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -5035,7 +5035,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                         type="radio"
                         checked={selectedServiceIndex === index}
                         onChange={() => setSelectedServiceIndex(index)}
-                        className="text-blue-600"
+                        className="text-[#160783]"
                       />
                       <div>
                         <p className="font-medium">
@@ -5376,7 +5376,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                     }
                   }}
                   disabled={isEnabled}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  className="h-4 w-4 text-[#160783] focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">B2C</span>
               </span>
@@ -5397,7 +5397,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                   disabled={
                     isEnabled || !isProductEditingAllowed || isB2BDisabled()
                   }
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  className="h-4 w-4 text-[#160783] focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">B2B</span>
               </span>
@@ -5428,7 +5428,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                     }
                   }}
                   disabled={isEnabled || !isProductEditingAllowed}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  className="h-4 w-4 text-[#160783] focus:ring-blue-500 border-gray-300"
                 />
                 <span className="text-sm text-gray-700 font-medium">
                   Prepaid
@@ -5456,7 +5456,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                     orderData?.transit === "REVERSE" ||
                     !isProductEditingAllowed
                   }
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  className="h-4 w-4 text-[#160783] focus:ring-blue-500 border-gray-300"
                 />
                 <span
                   className={`text-sm text-gray-700 font-medium ${
@@ -5518,7 +5518,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                     clearOrderDetailValidationError("orderId");
                     setOrderIdExistsError(false);
                   }}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-100 hover:bg-blue-200 text-blue-600 text-xs px-2 py-1 rounded transition-colors duration-200 font-medium"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-100 hover:bg-blue-200 text-[#160783] text-xs px-2 py-1 rounded transition-colors duration-200 font-medium"
                   title="Auto Generate Order ID"
                 >
                   AUTO GENERATE
@@ -5644,7 +5644,7 @@ const CustomTableAccordian: React.FC<CustomTableAccordianProps> = ({
                 <h2 className="text-xl font-semibold text-blue-800">
                   Step 1: Order Details
                 </h2>
-                <p className="text-blue-600">
+                <p className="text-[#160783]">
                   Fill in all order details before proceeding to service
                   selection.
                 </p>

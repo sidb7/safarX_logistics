@@ -275,12 +275,12 @@ const CashbackTable: React.FunctionComponent<ICashbackTableProps> = ({
         <>
           <div className="flex flex-col items-center justify-center gap-y-2 pt-5">
             <p className="text-lg lg:text-lg font-Open font-semibold leading-6">{`No ${
-              companyName?.toLowerCase() === "shipyaari"
+              companyName?.toLowerCase() === "Drivaa.Run"
                 ? "YaariCash."
                 : "cashback."
             }`}</p>
             <p className="text-gray-600 font-Open text-sm lg:text-base font-normal leading-7">{`Complete purchases or refer friends to earn ${
-              companyName?.toLowerCase() === "shipyaari"
+              companyName?.toLowerCase() === "Drivaa.Run"
                 ? "YaariCash."
                 : "cashback."
             } Once earned,`}</p>

@@ -82,14 +82,7 @@ const Index = (props: ITypeProps) => {
                 }}
                 variant="secondary"
               />
-              {/* <ServiceButton
-                text="Yes"
-                className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
-                onClick={() => {
-                  assignPlan(onSelectPlan);
-                  setIsModalOpen(false);
-                }}
-              /> */}
+
               <OneButton
                 text="No"
                 className=" px-4 py-2"
@@ -187,29 +180,7 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           let tempPlan = response?.data;
           tempPlan.sort(sortByPrice);
-          // const selectedPlans = tempPlan.filter((plan: any) => plan.isSelected);
-          // const unselectedPlans = tempPlan.filter(
-          //   (plan: any) => !plan.isSelected
-          // );
-          // const reorderedPlans = selectedPlans.concat(unselectedPlans);
-          // tempPlan.push({
-          //   planId: "123445",
-          //   planName: "Enterprise",
-          //   validity: "YEARLY",
-          //   description:
-          //     "Enterprise 12sdfsdfdfsdf fsdfsdfsdf efsdfsdfsdf sfasasd sadasdasd SSDASdsad sadasdas asdasdsa sdasdsad asdasd asdas adsadsadsdsds ",
-          //   shortDescription: "Enterprise",
-          //   price: 0,
-          //   isPublic: true,
-          //   rateCards: [],
-          //   currency: "INR",
-          //   created_At: "2024-05-09T13:10:58.000Z",
-          //   updated_At: "2024-05-09T13:11:31.000Z",
-          //   isActive: true,
-          //   isDeleted: false,
-          //   variantId: "5ac217ed-d307-4d4d-a158-6efd2943d507",
-          //   isSelected: false,
-          // });
+
           setAllPlans(tempPlan);
           callFeaturesRateCard();
         } else {
@@ -223,132 +194,6 @@ const Index = (props: ITypeProps) => {
     })();
   }, [activePlanId]);
 
-  // const featureRateCardData = [
-  //   {
-  //     rateCardName: "Bronze",
-  //     featureRateCard: [
-  //       {
-  //         featureTitle: "Pre-Shipment",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Catalog Management",
-  //             isActive: true,
-  //           },
-  //           {
-  //             featureSubTitle: "AI based Carrier allocation",
-  //             isActive: false,
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         featureTitle: "Order Creation",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Single dashboard for all orders",
-  //             isActive: true,
-  //           },
-  //           {
-  //             featureSubTitle: "Real-time serviceability check",
-  //             isActive: true,
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     rateCardName: "Silver",
-  //     featureRateCard: [
-  //       {
-  //         featureTitle: "Pre-Shipment",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Catalog Management",
-  //             isActive: false,
-  //           },
-  //           {
-  //             featureSubTitle: "AI based Carrier allocation",
-  //             isActive: true,
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         featureTitle: "Order Creation",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Single dashboard for all orders",
-  //             isActive: true,
-  //           },
-  //           {
-  //             featureSubTitle: "Real-time serviceability check",
-  //             isActive: false,
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     rateCardName: "Gold",
-  //     featureRateCard: [
-  //       {
-  //         featureTitle: "Pre-Shipment",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Catalog Management",
-  //             isActive: true,
-  //           },
-  //           {
-  //             featureSubTitle: "AI based Carrier allocation",
-  //             isActive: false,
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         featureTitle: "Order Creation",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Single dashboard for all orders",
-  //             isActive: true,
-  //           },
-  //           {
-  //             featureSubTitle: "Real-time serviceability check",
-  //             isActive: true,
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     rateCardName: "Platium",
-  //     featureRateCard: [
-  //       {
-  //         featureTitle: "Pre-Shipment",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Catalog Management",
-  //             isActive: false,
-  //           },
-  //           {
-  //             featureSubTitle: "AI based Carrier allocation",
-  //             isActive: true,
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         featureTitle: "Order Creation",
-  //         featureSubMenu: [
-  //           {
-  //             featureSubTitle: "Single dashboard for all orders",
-  //             isActive: true,
-  //           },
-  //           {
-  //             featureSubTitle: "Real-time serviceability check",
-  //             isActive: false,
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ];
   useEffect(() => {
     (async () => {
       try {
@@ -448,16 +293,7 @@ const Index = (props: ITypeProps) => {
                     );
                   })}
                 </div>
-                {/*Compare Button */}
-                {/* <div className="flex justify-center ml-5  lg:hidden">
-                  <ServiceButton
-                    text="COMPARE"
-                    className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
-                    onClick={() => {
-                      navigate("/plans/compare-plans");
-                    }}
-                  />
-                </div> */}
+
                 {/* feature rate card details */}
                 {featureRateCardPlan?.length > 0 && (
                   <div className="border-t-2 mt-20 p-6">
@@ -526,7 +362,7 @@ const Index = (props: ITypeProps) => {
                       onClick={() => {
                         {
                           const supportUrl =
-                            COMPANY_NAME === "Shipyaari"
+                            COMPANY_NAME === "Drivaa.Run"
                               ? "https://shipyaari.freshdesk.com"
                               : SUPPORT_LINK;
                           window.open(supportUrl, "_blank");

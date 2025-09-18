@@ -141,7 +141,7 @@ const PickUp = (props: ITypeProps) => {
             </div>
             <WelcomeHeader
               className="!mt-[44px] md:!mt-6"
-              title={`Welcome to ${COMPANY_NAME || "Shipyaari"}`}
+              title={`Welcome to ${COMPANY_NAME || "Drivaa.Run"}`}
               content="Select your"
               whichAddress="Pickup"
               Address="Address"

@@ -105,12 +105,12 @@ const ViewTicketDetails = (props: ITypesProps) => {
 wrote:`}</p>
           <div className="mb-12">
             <p className="lg:mb-4 font-semibold">
-              Hi {COMPANY_NAME || "Shipyaari"} Team,
+              Hi {COMPANY_NAME || "Drivaa.Run"} Team,
             </p>
             <p className="lg:mb-4">Noted.</p>
           </div>
           <p className="mb-2 lg:mb-6 ">{`On Fri 20 May 10:00AM, ${
-            COMPANY_NAME || "Shipyaari"
+            COMPANY_NAME || "Drivaa.Run"
           } Support Team
 <technicalsupport@shipyaari.com> wrote:`}</p>
           <p className="mb-3 lg:mb-5 font-semibold">Hi Ritu Sen,</p>

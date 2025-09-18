@@ -34,11 +34,11 @@ const LogisticsServicesAgreement: React.FC = () => {
         agreement, including the service terms and conditions for each service
         you register for or use on{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         website or{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         mobile application.
       </p>
@@ -56,7 +56,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         Your access to use the Services will be solely at the discretion of{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         .
       </p>
@@ -96,7 +96,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         d. ‘Manifest’ means the data uploaded by the customer (in the format
         shared by the{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         ) containing the details of the shipment for which the service provider
         is to provide delivery services or cash pickup services as the case may
@@ -110,7 +110,7 @@ const LogisticsServicesAgreement: React.FC = () => {
 
       <p className="font-Open text-base font-normal leading-5">
         1.1. This master agreement governs one or more e-commerce logistics
-        services offered by <strong>{COMPANY_NAME || "Shipyaari"}</strong> to
+        services offered by <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> to
         Customer.
       </p>
 
@@ -125,7 +125,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         2.1. Subject to the provisions of this Agreement, the Customer will pay
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         the fees and other amounts as mentioned against each service more
         particularly described in Annexure II for Domestic Logistics, Annexure
@@ -142,13 +142,13 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         2.3.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         may add new services for additional fees and charges or may amend fees
         and charges for existing services, at any time in its sole discretion.
         Any change in the rate becomes effective from the date when{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         intimates the customer of such rate revision.
       </p>
@@ -156,7 +156,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         2.4.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         is registered under MSME and late payments shall attract penalty as
         specified under MSMED Act 2006 (The Micro, Small and Medium Enterprises
@@ -174,7 +174,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         stolen, infringing any third party rights, hazardous, or dangerous or in
         breach of any laws in force.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         shall not be liable for the Delivery of any such Shipments. Without
         prejudice to the generality of the aforesaid, an indicative list of the
@@ -184,22 +184,22 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         3.2. Any person delivering any dangerous, hazardous or banned goods to
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         or causing{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         to handle or deal with any such goods shall be liable for all loss or
         damage caused thereby and shall indemnify{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         against all penalties, claims, damages, costs and expenses arising in
         connection therewith and the goods may be destroyed or otherwise dealt
         with at the sole discretion of{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         or any other person in whose custody they may be at the relevant time.
         The expression “goods” likely to cause “damage” include goods likely to
@@ -210,7 +210,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         3.3. The Customer warrants and represents that any information customer
         gives to{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         will always be true, accurate, correct, complete and up to date, to the
         best of his/her knowledge.
@@ -227,7 +227,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         safe, proper and adequate to withstand the normal transportation and
         environmental hazards and in compliance with applicable laws.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         shall not be liable or responsible for any loss or damages to the
         Customer if the Customer is not in strict compliance with this Clause.
@@ -244,7 +244,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         3.7.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         will not accept or deal with any noxious, dangerous, hazardous or
         inflammable or explosive goods or any goods likely to cause damage.
@@ -277,7 +277,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         shall insure the consignments from point of origin to point of final
         destination at his/her own cost.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         shall not be liable for insuring the consignment.
       </p>
@@ -285,13 +285,13 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         5.2. Upon specific request made by the customer,{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         may arrange insurance of consignment on behalf of customer for the
         declared value of goods in respect of loss of physical damage to such
         consignment(s).
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         shall be only responsible for the administrative facilitation and
         arrangement of the insurance policy. The policy will be subject to
@@ -310,11 +310,11 @@ const LogisticsServicesAgreement: React.FC = () => {
         6.2. The customer shall remain owner of the goods in consignment
         transported by{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         at all times.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         will act as a custodian, not being an agent of the customer.
       </p>
@@ -359,7 +359,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         7.3. Customer agrees and provides his consent to receive communications,
         correspondences, updates, notifications, etc. from{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         through email, SMS, Whatsapp and any other mode as agreed by the Parties
         from time to time.
@@ -372,7 +372,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         The customer hereby agrees to indemnify, defend and hold{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         , its affiliates, officers, directors, employees, contractors,
         sub-contractors, consultants, licensors, other third party service
@@ -381,7 +381,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         any nature whatsoever (including all legal and other costs, charges and
         expenses) incurred or suffered (directly or indirectly) by{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         or its employees, on account of: (a) customer’s access to or use of
         services; (b) violation of this agreement or any terms of use of the
@@ -390,7 +390,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         act or omission of customer (and/or its officers, directors and
         employees); (e) any third party action or claim made against{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         , by reason of any actions undertaken by the customer (and/or its
         officers, directors and employees); (f) any duties, taxes, octroi, cess,
@@ -403,7 +403,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         9.1.{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         or any of its directors, employees, agents, contractors shall not be
         liable to the customer, whether in tort, contract or otherwise, for any
@@ -414,13 +414,13 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         9.2. The maximum liability of{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         and the sole and exclusive remedy of the customer for the damage or loss
         or theft or misappropriation of any consignment caused due to gross
         negligence or willful misconduct of{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         shall be as per Annexure II.
       </p>
@@ -444,12 +444,12 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         10.2. Customer agrees that{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         may use customer’s name and logo on their website and social media
         platform with the intent to list the customer as a customer of{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         . It is clarified that all rights, title and interest in the logo and
         name remain with the Customer.
@@ -480,7 +480,7 @@ const LogisticsServicesAgreement: React.FC = () => {
 
       <p className="font-Open text-base font-normal leading-5">
         11.4. In case of non-payment of undisputed amounts within agreed
-        timelines, <strong>{COMPANY_NAME || "Shipyaari"}</strong> will be
+        timelines, <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> will be
         permitted to terminate this Agreement effective immediately.
       </p>
 
@@ -490,7 +490,7 @@ const LogisticsServicesAgreement: React.FC = () => {
 
       <p className="font-Open text-base font-normal leading-5">
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         shall not be liable for any loss or damage to the consignment or a delay
         in picking up or delivery of the consignment or delay in delivery is
@@ -498,7 +498,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         limited to strikes, riots, political or other disturbances, fire,
         floods, tsunami, pandemic, accident of the vehicle or caused due to any
         factors beyond the control of{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong>.
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong>.
       </p>
 
       <h2 className="font-Open text-base font-semibold leading-[22px]">
@@ -552,7 +552,7 @@ const LogisticsServicesAgreement: React.FC = () => {
       <p className="font-Open text-base font-normal leading-5">
         In the case of notices to{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         : <br />
         <strong className="font-Open text-base font-semibold leading-[22px]">
@@ -567,11 +567,11 @@ const LogisticsServicesAgreement: React.FC = () => {
           </div>
         </strong>
         <br />
-        {COMPANY_NAME.toLowerCase() === "shipyaari" ? (
+        {COMPANY_NAME.toLowerCase() === "Drivaa.Run" ? (
           <a href="email:legal@<strong>Shipyaari</strong>.com">
             legal@
             <strong className="font-Open text-base font-semibold leading-[22px]">
-              {COMPANY_NAME.toLowerCase() || "Shipyaari"}
+              {COMPANY_NAME.toLowerCase() || "Drivaa.Run"}
             </strong>
             .com
           </a>
@@ -686,7 +686,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         in the relevant invoice issued by the customer to the customer. Such
         cash will be held by the service provider as a limited agent of the
         customer and in trust for the customer and will be transferred by
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> to the bank account
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> to the bank account
         designated by the customer within seven (7) to (fifteen) 15 business
         days after the day of collection of the cash based on agreed COD terms.
       </p>
@@ -706,7 +706,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         extended storage of such shipments for any period exceeding 7 (seven)
         days from initiation of the return of shipments and up to 45
         (forty-five) days from such date. After 45 days,{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> shall have right to
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> shall have right to
         recover the demurrages by selling the shipment.
       </p>
 
@@ -715,30 +715,30 @@ const LogisticsServicesAgreement: React.FC = () => {
       </h2>
       <p className="font-Open text-base font-normal leading-5">
         6.1. Not (directly or indirectly) use{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> platform while being in
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> platform while being in
         the capacity of a reseller, OTC (Over the Counter) or franchise of any
         courier/logistics company (including that of Blue Dart).
       </p>
       <p className="font-Open text-base font-normal leading-5">
         6.2. use the Blue Dart account/any other direct courier services through
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> platform only for
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> platform only for
         ecommerce sales related transactions; and
       </p>
       <p className="font-Open text-base font-normal leading-5">
         6.3. not already have a direct courier account since you understand that
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> is not authorized to
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> is not authorized to
         offer Blue Dart services to sellers who already hold Blue Dart account.
       </p>
 
       <p className="font-Open text-base font-normal leading-5">
-        In the event <strong>{COMPANY_NAME || "Shipyaari"}</strong> believes
+        In the event <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> believes
         that you have breached any of the above provisions, then{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> would inter alia, have
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> would inter alia, have
         the right to deactivate your service account, retain the custody of your
         shipment and levy damages/charges (along with applicable GST and
         freight) of INR 1,00,000 (Rupees One lakh only) per incident/consignment
         of such other amount as decided by{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> in its sole discretion.
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> in its sole discretion.
       </p>
       <h2 className="font-Open text-base font-semibold leading-[22px]">
         7. In case of damaged/pilfered/tempered/pressed/leaked consignment,
@@ -748,11 +748,11 @@ const LogisticsServicesAgreement: React.FC = () => {
         remarks on POD copy to get claim for the consignment. In the absence of
         any negative remarks on POD copy clearly stating such
         damaged/pilfered/tempered/pressed/leaked, no claim shall be entertained
-        by <strong>{COMPANY_NAME || "Shipyaari"}</strong>.
+        by <strong>{COMPANY_NAME || "Drivaa.Run"}</strong>.
       </p>
 
       <h2 className="font-Open text-base font-semibold leading-[22px]">
-        8. <strong>{COMPANY_NAME || "Shipyaari"}</strong> shall not entertain
+        8. <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> shall not entertain
         any dispute regarding damaged/pilfered/tempered/pressed/leaked/non
       </h2>
       <p className="font-Open text-base font-normal leading-5">
@@ -760,7 +760,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         of the said article/goods/shipment. Any claim needs to be submitted
         along with unpacking/packing video or other valid evidence to
         substantiate the claim. Further,{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> shall not entertain any
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> shall not entertain any
         request if POD does not mention any remarks with respect to
         damaged/pilfered/tempered/pressed/leaked/non receipt.
       </p>
@@ -769,7 +769,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         9. For shipment of easily breakable goods, customer is required to
         submit an indemnity letter along. Also, a sticker mentioning “Fragile”
         needs to be compulsory stuck for such goods.{" "}
-        <strong>{COMPANY_NAME || "Shipyaari"}</strong> will not be liable for
+        <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> will not be liable for
         any damage to such goods in absence of ‘Fragile’ sticker.
       </p>
 
@@ -829,8 +829,8 @@ const LogisticsServicesAgreement: React.FC = () => {
         </li>
         <li>
           If the customer defaults in making payment of the fees within due
-          date, then <strong>{COMPANY_NAME || "Shipyaari"}</strong> shall levy a
-          penalty on the unpaid invoiced amount at a rate equivalent to 2% per
+          date, then <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> shall levy
+          a penalty on the unpaid invoiced amount at a rate equivalent to 2% per
           month.
         </li>
         <li>
@@ -844,15 +844,15 @@ const LogisticsServicesAgreement: React.FC = () => {
         <li>Any charges recoverable from customer may be adjusted from COD.</li>
         <li>
           The maximum liability of{" "}
-          <strong>{COMPANY_NAME || "Shipyaari"}</strong> and the sole and
+          <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> and the sole and
           exclusive remedy of the customer for the damage or loss or theft or
           misappropriation of any consignment caused due to gross negligence or
-          willful misconduct of <strong>{COMPANY_NAME || "Shipyaari"}</strong>{" "}
+          willful misconduct of <strong>{COMPANY_NAME || "Drivaa.Run"}</strong>{" "}
           shall be limited to INR 5000 (five thousand only) per consignment or
           the consignment value mentioned in manifest whichever is lower.
         </li>
         <li>
-          The liability of the <strong>{COMPANY_NAME || "Shipyaari"}</strong>{" "}
+          The liability of the <strong>{COMPANY_NAME || "Drivaa.Run"}</strong>{" "}
           for any loss or damage/liquid damage to a Shipment for an amount
           higher than INR 5,000, shall be limited to providing the Customer with
           a Certificate of Fact (‘COF’) to enable Customer to claim the amount
@@ -977,7 +977,7 @@ const LogisticsServicesAgreement: React.FC = () => {
           If the invoice amount is more than the credit in your account: If the
           outstanding is more than the limit provided and any amount paid
           earlier, the same shall be adjusted from the COD remittances which are
-          due to be paid by <strong>{COMPANY_NAME || "Shipyaari"}</strong> to
+          due to be paid by <strong>{COMPANY_NAME || "Drivaa.Run"}</strong> to
           the user. Post adjustment, the limit of the user shall be released,
           and the user then can start using the service again. If the user
           specifically requests that amount not be deducted from COD remittance,
@@ -1057,7 +1057,7 @@ const LogisticsServicesAgreement: React.FC = () => {
         </strong>
         (Hereinafter Referred to as "
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>
         ”) to open a logistics services account as they cater to many
         value-added services which are not available from a particular direct
@@ -1068,11 +1068,11 @@ const LogisticsServicesAgreement: React.FC = () => {
         I state that the services provided by a direct carrier as compared to
         those provided by{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         are different & as{" "}
         <strong className="font-Open text-base font-semibold leading-[22px]">
-          {COMPANY_NAME || "Shipyaari"}
+          {COMPANY_NAME || "Drivaa.Run"}
         </strong>{" "}
         is enabling more comprehensive logistics solutions which are essential
         for business growth.

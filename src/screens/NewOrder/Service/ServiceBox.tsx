@@ -214,7 +214,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
               <div className=" ">
                 <p className="text-[16px] font-semibold font-Open pt-2">
                   {isMasked
-                    ? COMPANY_NAME || "Shipyaari"
+                    ? COMPANY_NAME || "Drivaa.Run"
                     : `${toPascalCase(
                         option.text?.partnerName
                       )}: ${toPascalCase(option.text?.companyServiceName)}`}

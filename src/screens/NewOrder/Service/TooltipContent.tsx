@@ -46,7 +46,7 @@ const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
           Courier Partner: <span>{`${option.text?.partnerName}`}</span>
         </p>
         <p>
-          {COMPANY_NAME || "Shipyaari"} Service Name:{" "}
+          {COMPANY_NAME || "Drivaa.Run"} Service Name:{" "}
           <span>{`${option.text?.companyServiceName}`}</span>
         </p>
         <p className="">

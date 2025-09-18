@@ -77,7 +77,7 @@ const PlanCard = (props: ITypeProps) => {
             <div className="flex items-center mb-8">
               <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
                 <span className="font-Open text-[12px] font-semibold leading-4 ">
-                  ₹
+                  ₹&nbsp;
                 </span>
                 {`${planName === "FREEMIUM" ? "Free" : "Price On Request"}`}
               </p>
@@ -87,7 +87,7 @@ const PlanCard = (props: ITypeProps) => {
               <div className="flex items-end gap-x-1">
                 <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
                   <span className="font-Open text-[12px] font-semibold leading-4 text-[#777777] ">
-                    {`${currencyType === "USD" ? "$" : "₹"}`}
+                    {`${currencyType === "USD" ? "$" : "₹"}`}&nbsp;
                   </span>
                   {`${price}`}
                 </p>
@@ -132,11 +132,13 @@ const PlanCard = (props: ITypeProps) => {
           text={isSelected ? "SELECTED" : "SELECT"}
           onClick={onClick}
           variant={isSelected ? "primary" : "secondary"}
-          disabled={planName?.toUpperCase() === "PLATINUM"}
-          className={`!py-2 !px-4 !w-[272px] lg:!w-[209px] !font-Open !border-[1px] !border-black ${
-            isSelected &&
-            "!bg-[#1C1C1C] !text-[#FFFFFF] cursor-not-allowed pointer-events-none"
-          }`}
+          disabled={planName?.toUpperCase() === "PLATINUM" || isSelected}
+          className={`py-2 px-4 w-[272px] lg:w-[209px] font-Open border rounded-md transition-all duration-200
+    ${
+      isSelected
+        ? "bg-[#160783] border-[#160783] !text-white cursor-not-allowed pointer-events-none"
+        : "bg-transparent border-[#160783] !text-[#160783] hover:bg-[#160783] hover:!text-white"
+    }`}
         />
       </div>
     </div>

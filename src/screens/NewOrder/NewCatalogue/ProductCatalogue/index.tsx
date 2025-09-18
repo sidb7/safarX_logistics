@@ -390,7 +390,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                                   ? WooCommerceRibbon
                                   : data?.source === "UNICOMMERCE"
                                   ? UniCommerceRibbon
-                                  : COMPANY_NAME.toLowerCase() !== "shipyaari"
+                                  : COMPANY_NAME.toLowerCase() !== "Drivaa.Run"
                                   ? ""
                                   : ShipyaariRibbon
                               }
