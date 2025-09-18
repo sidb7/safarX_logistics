@@ -370,11 +370,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="mt-1 p-1"
                 onClick={() => navigate("/dashboard/overview")}
               >
-                <img
+                {/* <img
                   className="h-[30px] w-[100px] object-contain"
                   src={LARGE_LOGO}
                   alt=""
-                />
+                /> */}
               </div>
             </div>
 
@@ -777,7 +777,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               className="mt-1 p-1 cursor-pointer"
               onClick={() => navigate("/dashboard/overview")}
             >
-              {isLgScreen ? (
+              {/* {isLgScreen ? (
                 <img
                   className="h-[30px] w-[100px] object-contain"
                   src={LARGE_LOGO}
@@ -785,7 +785,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 />
               ) : (
                 <img className=" object-contain" src={SMALL_LOGO} alt="" />
-              )}
+              )} */}
             </div>{" "}
           </>
         )}

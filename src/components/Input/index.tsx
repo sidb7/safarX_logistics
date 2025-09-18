@@ -177,35 +177,12 @@ const CustomInputBox = forwardRef<HTMLInputElement, CustomInputProps>(
               <img
                 src={rightIcon}
                 alt="right-icon"
-                className={`${imageClassName} absolute right-6 top-[30%] cursor-pointer w-[16px] h-[20px]`}
+                className={`${imageClassName} absolute right-1 top-[30%] cursor-pointer w-[16px] h-[20px]`}
                 onClick={() => {
                   setVisibility?.(!visibility);
                   onClick?.();
                 }}
               />
-            )}
-
-            {isInfoIcon && (
-              <>
-                <img
-                  src={informativeIcon}
-                  alt="info-icon"
-                  className={`${imageClassName} absolute right-1 top-[34%] cursor-pointer`}
-                  data-tooltip-id="my-tooltip-landing"
-                  data-tooltip-content={tooltipContent}
-                />
-                <Tooltip
-                  id="my-tooltip-landing"
-                  style={{
-                    backgroundColor: "#4D83FF",
-                    color: "#FFFFFF",
-                    width: "270px",
-                    fontSize: "12px",
-                    lineHeight: "14px",
-                    textTransform: "capitalize",
-                  }}
-                />
-              </>
             )}
           </div>
 

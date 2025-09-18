@@ -46,7 +46,7 @@ const Card = (props: any) => {
         } else if (channel.channel === "SHOPIFY_APP") {
           const url = `https://apps.shopify.com/blaze-2`;
           window.location.href = url;
-        }else {
+        } else {
           setModalData({ isOpen: true, modalData: channel });
         }
     }
@@ -139,7 +139,7 @@ const Card = (props: any) => {
         <div className="w-[70%]">
           <OneButton
             text={channel.integrated ? "Integrated" : "Integrate"}
-            onClick={(e) => !channel?.expiredToken && handleIntegration(e)}
+            onClick={(e: any) => !channel?.expiredToken && handleIntegration(e)}
             className={` ${channel.integrated ? "bg-black" : ""}`}
             variant={channel.integrated ? "primary" : "secondary"}
             disabled={channel?.expiredToken}

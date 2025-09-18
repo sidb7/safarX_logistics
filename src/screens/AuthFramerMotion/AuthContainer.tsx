@@ -4,9 +4,10 @@ import Login from "./LoginComponent";
 import Signup from "./SignUpComponent";
 import { LARGE_LOGO } from "../../utils/ApiUrls";
 import "./AuthContainerStyle.css";
+import ForgotPassword from "./ForgotPassword";
 export default function AuthContainer() {
   const [isLogin, setIsLogin] = useState(false);
-
+  const [forgotPasswordON, setForgotPasswordON] = useState(false);
   const spring = { type: "spring", stiffness: 50, damping: 14 };
 
   // form animation variants
@@ -80,7 +81,11 @@ export default function AuthContainer() {
                   exit="exitRight"
                   className="absolute w-full  max-w-md"
                 >
-                  <Login />
+                  {forgotPasswordON ? (
+                    <ForgotPassword setForgotPasswordON={setForgotPasswordON} />
+                  ) : (
+                    <Login setForgotPasswordON={setForgotPasswordON} />
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

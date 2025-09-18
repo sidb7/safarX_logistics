@@ -1,4 +1,6 @@
 import React from "react";
+import OneButton from "../../components/Button/OneButton";
+import { SELLER_WEB_URL } from "../../utils/ApiUrls";
 
 const TrackCardComponent = () => {
   return (
@@ -18,9 +20,21 @@ const TrackCardComponent = () => {
           </p>
 
           {/* Button */}
-          <button className="w-full border-[#160783] border text-sm rounded-lg hover:text-white hover:bg-[#160783] scale-95 group-hover:scale-100 text-[#160783] py-2 duration-150 transition mt-4">
+          {/* <button className="w-full border-[#160783] border text-sm rounded-lg hover:text-white hover:bg-[#160783] scale-95 group-hover:scale-100 text-[#160783] py-2 duration-150 transition mt-4">
             Track Order
-          </button>
+          </button> */}
+          <div>
+            <OneButton
+              className="w-full border-[#160783] border text-sm rounded-lg hover:text-white hover:bg-[#160783] scale-95 group-hover:scale-100 text-[#160783] py-2 duration-150 transition mt-4"
+              onClick={() => {
+                window.open(`${SELLER_WEB_URL}/tracking`, "_blank");
+              }}
+              text="Track Order"
+              variant="primary"
+              disabled={false}
+              backgroundColour=""
+            />
+          </div>
         </div>
       </div>
     </div>
