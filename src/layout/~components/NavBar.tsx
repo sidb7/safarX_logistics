@@ -267,13 +267,20 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             }}
           >
             <div
-              className="flex w-full !h-10 mb-3 justify-center items-center cursor-pointer"
+              className=" w-full !h-10 mb-3  items-center flex cursor-pointer"
               onClick={() => navigate(`/dashboard/overview`)}
             >
+              {isHover && (
+                <img
+                  src={SMALL_LOGO}
+                  alt="logo"
+                  className={"w-auto h-12 me-2"}
+                />
+              )}
               <img
                 src={isHover ? LARGE_LOGO : SMALL_LOGO}
                 alt="logo"
-                className={isHover ? "w-52 me-2" : "w-auto h-12 me-2"}
+                className={isHover ? "w-40 me-2" : "w-auto h-12 me-2"}
               />
             </div>
 
@@ -382,20 +389,45 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           ></div>
           {/* Mobile Nav Bar */}
           <>
+            {/* Backdrop for mobile nav */}
+            <div
+              className={`lg:hidden fixed inset-0 z-30 transition-all duration-300 ${
+                openMobileSideBar
+                  ? "bg-black/30 backdrop-blur-sm"
+                  : "pointer-events-none bg-transparent"
+              }`}
+              style={{ opacity: openMobileSideBar ? 1 : 0 }}
+              onClick={() => setMobileSideBar(false)}
+            />
             <nav
-              className={`lg:hidden absolute h-full font-Open bg-gradient-to-b from-[#f8faff] via-[#e7e4ff] to-[#f0f0ff] z-20 customScroll`}
+              className={`lg:hidden fixed top-0 left-0 h-full z-40 font-Open bg-gradient-to-b from-[#f8faff] via-[#CFDFFF] to-[#f0f0ff] rounded-r-2xl shadow-2xl transition-all duration-300 customScroll ${
+                openMobileSideBar ? "translate-x-0" : "-translate-x-full"
+              }`}
               style={{
                 boxShadow: "2px 0 16px 0 rgba(80, 80, 180, 0.10)",
                 borderRight: "1.5px solid #e0e0e0",
-                transition: `all .2s `,
-                transitionTimingFunction: "ease-in-out",
-                width: conditinalClass.mobileWidth,
+                width: "80vw",
+                minWidth: 260,
+                maxWidth: 340,
               }}
             >
-              <div className="py-3 pl-6 pr-3 flex justify-between ">
-                <p className="text-base font-semibold leading-5 capitalize ">
-                  Menu
-                </p>
+              <div className="py-3 pl-6 pr-3 flex justify-between items-center">
+                <div className="flex items-center">
+                  {openMobileSideBar && (
+                    <img
+                      src={SMALL_LOGO}
+                      alt="logo"
+                      className={"w-auto h-12 me-2"}
+                    />
+                  )}
+                  <img
+                    src={openMobileSideBar ? LARGE_LOGO : SMALL_LOGO}
+                    alt="logo"
+                    className={
+                      openMobileSideBar ? "w-32 me-2" : "w-auto h-9 me-1"
+                    }
+                  />
+                </div>
                 <img
                   className="cursor-pointer !w-6 !h-6"
                   src={CloseMenu}
@@ -411,13 +443,13 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                     require(`../../assets/Navbar/${iconName}.svg`) || "";
                   return (
                     <div
-                      className="w-full flex-col px-6 py-2"
+                      className="w-full flex-col px-4 py-2"
                       key={`${e.name + index}`}
                     >
                       <div
-                        className={`flex items-center gap-x-4 cursor-pointer rounded-xl p-3 justify-start w-full hover:bg-[#e7e4ff] ${
+                        className={`flex items-center gap-x-4 cursor-pointer rounded-xl p-3 justify-start w-full hover:bg-[#c8dbff] ${
                           e.isActivePath
-                            ? "bg-[#91b4fa] text-white scale-[1.04]"
+                            ? "bg-white border text-[#160783] scale-[1.04]"
                             : ""
                         } transition-all`}
                         onClick={() => handleMenuClick(index, e)}
@@ -429,14 +461,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                           <p className={`whitespace-nowrap`}>{e.name} </p>
                           {e.menu && e.menu.length > 0 && (
                             <div className={`flex items-center gap-2`}>
-                              <CustomButton
-                                icon={downArrow}
-                                showIcon={true}
-                                onlyIcon={true}
-                                className="bg-white w-fit !p-0 !h-fit"
-                                text={""}
-                                onClick={() => {}}
-                              />
+                              <FaChevronDown className="text-[#9082FF]" />
                             </div>
                           )}
                         </div>

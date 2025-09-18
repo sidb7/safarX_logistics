@@ -685,8 +685,6 @@ const LostAndDamaged: React.FC = () => {
               text="FILTER"
               onClick={() => setFilterModal(true)}
               variant="quad"
-              showIcon={true}
-              icon={FilterIcon}
               className="ml-2 !uppercase"
             />
             {filterPayLoad.filterArrOne.length > 0 && (
@@ -730,7 +728,7 @@ const LostAndDamaged: React.FC = () => {
             Missing Or Damaged Shipment?
             <br />
             <span
-              className="text-blue-500 cursor-pointer hover:underline font-Lato text-[28px] leading-[36px] tracking-[0%] text-center font-semibold"
+              className="text-[#9082FF] cursor-pointer hover:underline font-Lato text-[28px] leading-[36px] tracking-[0%] text-center font-semibold"
               onClick={handleClick}
             >
               Click Here
