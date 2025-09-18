@@ -257,7 +257,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             key="1"
             onMouseEnter={handleOpner}
             onMouseLeave={handleClose}
-            className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-gradient-to-b from-[#f8faff] via-[#CFDFFF] to-[#f0f0ff] z-20 rounded-r-2xl customScroll`}
+            className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 ps-4 py-4 font-Open items-center bg-gradient-to-b from-[#f8faff] via-[#CFDFFF] to-[#f0f0ff] z-20 rounded-r-2xl customScroll`}
             style={{
               boxShadow: "2px 0 16px 0 rgba(80, 80, 180, 0.10)",
               borderRight: "1.5px solid #e0e0e0",
@@ -273,7 +273,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               <img
                 src={isHover ? LARGE_LOGO : SMALL_LOGO}
                 alt="logo"
-                className={isHover ? "w-52" : "w-auto h-12"}
+                className={isHover ? "w-52 me-2" : "w-auto h-12 me-2"}
               />
             </div>
 
@@ -287,9 +287,9 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   <div className="w-full flex-col" key={index}>
                     <div
                       key={`${e.name + index}`}
-                      className={`h-10 flex items-center rounded-xl px-3 my-1 hover:bg-[#c8dbff] hover:scale-[1.03] transition-all duration-150 w-full  cursor-pointer ${
+                      className={`h-10 flex items-center rounded-s-xl px-3 my-1 hover:bg-[#c8dbff] hover:scale-[1.03] transition-all duration-150 w-full  cursor-pointer ${
                         e.isActivePath
-                          ? "bg-[#91b4fa] text-white scale-[1.04]"
+                          ? "bg-white  border text-white scale-[1.05]"
                           : ""
                       }`}
                       onClick={() => {
@@ -299,7 +299,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                       <img
                         src={iconPath}
                         className={`ml-[2px] w-6 h-6 ${
-                          e.isActivePath ? "invert" : "grayscale"
+                          e.isActivePath ? "" : "grayscale"
                         }`}
                         alt=""
                       />
@@ -317,9 +317,9 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                           </p>
                           {e.menu && e.menu.length > 0 && (
                             <div
-                              className={`$${
+                              className={`absoulte ${
                                 e.isActivePath
-                                  ? "text-[#fff]"
+                                  ? "text-[#9082FF] me-1"
                                   : "text-[#9082FF]"
                               } flex items-center gap-2`}
                             >

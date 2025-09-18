@@ -636,7 +636,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                 onClick={() => navigate("/wallet/transaction-history")}
                 variant="secondary"
                 text={`${"Transaction History"}`}
-                className="!bg-[#ffffff] !border !border-[#eef1f4] !shadow-sm !rounded-xl !px-4 !py-2 !h-10  hover:!bg-[#F4F7FE] hover:!text-[#1C1C1C] hover:!shadow-md text-![#1C1C1C] !text-lg !font-medium !hover:font-semibold !leading-5 "
+                className="!bg-[#ffffff] !border !border-[#eef1f4] !shadow-sm !rounded-xl !px-4 !py-2 !h-10  hover:!bg-[#F4F7FE]  hover:!text-[#1C1C1C] !text-[#1C1C1C] hover:!shadow-md text-![#1C1C1C] !text-lg !font-medium !hover:font-semibold !leading-5 "
                 icon={transactionHistoryIcon}
                 showIcon={true}
               />
@@ -1132,7 +1132,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                       backgroundColour="bg-transparent"
                       variant="primary"
                       text={`${loadingForCoupon ? "Verifying..." : "Verify"}`}
-                      className="rounded-lg !py-2 !px-4 bg-transparent border border-[#160783] text-[#160783] hover:!bg-[#F2F6FF] hover:shadow-cardShadow2a focus:!bg-[#F2F6FF] focus:!border focus:!border-[#CCDCFF] !text-sm !font-Open !font-semibold !leading-5 whitespace-nowrap"
+                      className="w-full h-[35px] items-center flex justify-center  hover:bg-[#160783] border border-[#160783] !text-[#160783] rounded-lg hover:shadow-md transition duration-200 hover:!text-white "
                       disabled={loadingForCoupon || selectedCoupon !== null}
                     />
                   )}

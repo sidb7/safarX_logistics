@@ -33,7 +33,7 @@ const OneButton = (props: any) => {
             } cursor-not-allowed`
           : `${backgroundColour} cursor-pointer`
       }
-      ${className}  // default if no className passed
+      ${className}  py-2 px-2 // default if no className passed
     `}
             onClick={onClick}
             disabled={disabled}

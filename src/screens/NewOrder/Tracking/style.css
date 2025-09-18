@@ -9,3 +9,6 @@
   height: 100%;
   border-right: 5px dotted #80a7ff;
 }
+html {
+  font-size: 95%; /* everything using rem/em shrinks */
+}

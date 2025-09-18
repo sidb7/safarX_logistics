@@ -639,7 +639,7 @@ const Index = () => {
                           text={`${
                             loadingForCoupon ? "Verifying..." : "Verify"
                           }`}
-                          className="!h-[42px] !w-[90px] !p-0 !rounded-lg"
+                          className="w-full h-[35px] items-center flex justify-center  hover:bg-[#160783] border border-[#160783] !text-[#160783] rounded-lg hover:shadow-md transition duration-200 hover:text-white py-2 mt-4"
                           disabled={loadingForCoupon}
                         />
                       </div>

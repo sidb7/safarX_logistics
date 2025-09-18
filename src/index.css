@@ -45,6 +45,9 @@ th {
   text-wrap: wrap;
 }
 
+html {
+  font-size: 95%; /* everything using rem/em shrinks */
+}
 /* iframe {
   width: 360px !important;
   height: 100px !important;

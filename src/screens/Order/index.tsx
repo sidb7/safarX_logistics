@@ -592,7 +592,7 @@ const Index = () => {
 
           <OneButton
             text="Bulk Upload"
-            className="bg-transparent"
+            className="bg-transparent !text-[#160783] !border-[#160783] !font-Open !font-semibold !text-[14px] !leading-5 hover:!bg-blue-50"
             onClick={() => navigate("/orders/add-bulk")}
             variant="secondary"
             showIcon={true}
@@ -640,8 +640,8 @@ const Index = () => {
               onClick={handleSyncOrder}
               className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
             >
-              <img src={SyncIcon} alt="" width="16px" className="z-10" />
-              <span className="text-[#160783] z-10  text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
+              <img src={SyncIcon} alt="" width="16px" />
+              <span className="text-[#160783]  text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
                 {syncChannelText}
               </span>
               <div
@@ -1959,6 +1959,7 @@ const Index = () => {
                 setFilterId={setFilterId}
                 handleTabChange={handleTabChanges}
                 statusData={statusData}
+                setStatusData={setStatusData}
                 setOrders={setOrders}
                 allOrders={allOrders}
                 currentStatus={tabs[globalIndex].value}
@@ -1989,6 +1990,7 @@ const Index = () => {
                 isBulkCheckedBooked={isBulkCheckedBooked}
                 totalCount={totalCount}
                 getAllOrders={getAllOrders}
+                refreshCounts={getStatusCount}
               />
             </div>
             <div ref={scrollRef} className="my-0 h-[calc(100%-180px)]">
@@ -1997,7 +1999,7 @@ const Index = () => {
                   {[1, 2, 3].map((_, i) => (
                     <div
                       key={i}
-                      className="h-24 bg-[#E7E4FF] rounded-2xl animate-pulse"
+                      className="h-24 bg-[#f8faff] rounded-2xl animate-pulse"
                     />
                   ))}
                 </div>

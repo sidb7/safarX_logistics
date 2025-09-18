@@ -1109,7 +1109,7 @@ const WalletRecharge = () => {
                           text={`${
                             loadingForCoupon ? "Verifying..." : "Verify"
                           }`}
-                          className=" !rounded-[20px] !py-2 !px-4 !bg-transparent"
+                          className="w-full h-[35px] items-center flex justify-center  hover:bg-[#160783] border border-[#160783] !text-[#160783] rounded-lg hover:shadow-md transition duration-200 hover:text-white py-2 mt-4"
                           disabled={loadingForCoupon || selectedCoupon !== null}
                         />
                       )}

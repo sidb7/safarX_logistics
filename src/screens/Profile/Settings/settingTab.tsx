@@ -56,223 +56,88 @@ export const SettingTab = () => {
   return (
     <>
       {isActive ? (
-        <div className="h-full">
+        <div className="min-h-screen bg-gradient-to-br  px-0 md:px-8">
           <Breadcrum label="Settings" />
-          <div className="mx-4 mt-2">
+          <div className="max-w-4xl mx-auto mt-6 grid grid-cols-2 md:grid-cols-3 gap-8">
+            {/* Settings options as modern square tiles */}
             <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 cursor-pointer hover:bg-gray-100 `}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
+              className="aspect-square rounded-3xl shadow-lg bg-white border border-[#E8E8E8] transition-all duration-200 hover:shadow-2xl hover:border-[#9082FF] cursor-pointer flex flex-col items-center justify-center group"
+              onClick={() => navigateTo("settings")}
             >
-              <div
-                className={`flex justify-between items-center h-[44px]`}
-                onClick={() => navigateTo("settings")}
-              >
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    Change Password
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img
-                    src={RightArrowIcon}
-                    alt=""
-                    className="ml-4"
-                    onClick={() => {}}
-                  />
-                </div>
-              </div>
+              <span className="font-Open text-lg font-semibold text-[#160783] group-hover:text-[#9082FF] text-center">
+                Change Password
+              </span>
+              <img
+                src={RightArrowIcon}
+                alt=""
+                className="mt-4 w-8 h-8 opacity-70 group-hover:opacity-100"
+              />
             </div>
-
-            {/* <div
-            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
-            onClick={() => navigateTo()}
-            style={{
-              boxShadow:
-                "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-            }}
-          >
-            <div className={`flex justify-between items-center h-[44px]`}>
-              <div className="flex">
-                <span className="text-base font-semibold text-[#1C1C1C] ml-2">
-                  Edit Profile
-                </span>
-              </div>
-              <div className="mr-4">
-                <img
-                  src={RightArrowIcon}
-                  alt=""
-                  className="ml-4"
-                  onClick={() => {}}
-                />
-              </div>
-            </div>
-          </div> */}
-
-            {/* <div
-            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
-            onClick={() => setIsDeleteModalOpen(true)}
-            style={{
-              boxShadow:
-                "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-            }}
-          >
-            <div className={`flex justify-between items-center h-[44px]`}>
-              <div className="flex">
-                <span className="text-base font-semibold text-[#1C1C1C] ml-2">
-                  Delete account
-                </span>
-              </div>
-              <div className="mr-4">
-                <img src={RightArrowIcon} alt="" className="ml-4" />
-              </div>
-            </div>
-          </div> */}
-
             <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+              className="aspect-square rounded-2xl shadow-lg bg-white border border-[#E8E8E8] transition-all duration-200 hover:shadow-2xl hover:border-[#9082FF] cursor-pointer flex flex-col items-center justify-center group"
               onClick={() => navigate(`/settings/role-management`)}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
             >
-              <div className={`flex justify-between items-center h-[44px]`}>
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    Role Management
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img src={RightArrowIcon} alt="" className="ml-4" />
-                </div>
-              </div>
+              <span className="font-Open text-lg font-semibold text-[#160783] group-hover:text-[#9082FF] text-center">
+                Role Management
+              </span>
+              <img
+                src={RightArrowIcon}
+                alt=""
+                className="mt-4 w-8 h-8 opacity-70 group-hover:opacity-100"
+              />
             </div>
-
             <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+              className="aspect-square rounded-2xl shadow-lg bg-white border border-[#E8E8E8] transition-all duration-200 hover:shadow-2xl hover:border-[#9082FF] cursor-pointer flex flex-col items-center justify-center group"
               onClick={() => navigate(`/settings/user-management`)}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
             >
-              <div className={`flex justify-between items-center h-[44px]`}>
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    User Management
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img src={RightArrowIcon} alt="" className="ml-4" />
-                </div>
-              </div>
+              <span className="font-Open text-lg font-semibold text-[#160783] group-hover:text-[#9082FF] text-center">
+                User Management
+              </span>
+              <img
+                src={RightArrowIcon}
+                alt=""
+                className="mt-4 w-8 h-8 opacity-70 group-hover:opacity-100"
+              />
             </div>
-
-            {/* <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
-              onClick={() => navigate(`/settings/system-logs`)}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
-            >
-              <div className={`flex justify-between items-center h-[44px]`}>
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    System Logs
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img src={RightArrowIcon} alt="" className="ml-4" />
-                </div>
-              </div>
-            </div> */}
-
-            {/* /////////// ---- Impersonation Logs ----- */}
-
-            {/* <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
-              onClick={() => navigate(`impersonation-logs`)}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
-            >
-              <div className={`flex justify-between items-center h-[44px]`}>
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    Impersonation Logs
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img src={RightArrowIcon} alt="" className="ml-4" />
-                </div>
-              </div>
-            </div> */}
-
-            {/* ///////////// */}
-
             <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+              className="aspect-square rounded-2xl shadow-lg bg-white border border-[#E8E8E8] transition-all duration-200 hover:shadow-2xl hover:border-[#9082FF] cursor-pointer flex flex-col items-center justify-center group"
               onClick={() => navigate(`/settings/label-settings`)}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
             >
-              <div className={`flex justify-between items-center h-[44px]`}>
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    Label Settings
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img src={RightArrowIcon} alt="" className="ml-4" />
-                </div>
-              </div>
+              <span className="font-Open text-lg font-semibold text-[#160783] group-hover:text-[#9082FF] text-center">
+                Label Settings
+              </span>
+              <img
+                src={RightArrowIcon}
+                alt=""
+                className="mt-4 w-8 h-8 opacity-70 group-hover:opacity-100"
+              />
             </div>
-
             <div
-              className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+              className="aspect-square rounded-2xl shadow-lg bg-white border border-[#E8E8E8] transition-all duration-200 hover:shadow-2xl hover:border-[#9082FF] cursor-pointer flex flex-col items-center justify-center group"
               onClick={() => navigate(`/settings/bulk-label-list`)}
-              style={{
-                boxShadow:
-                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-              }}
             >
-              <div className={`flex justify-between items-center h-[44px]`}>
-                <div className="flex">
-                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                    Bulk Label List
-                  </span>
-                </div>
-                <div className="mr-4">
-                  <img src={RightArrowIcon} alt="" className="ml-4" />
-                </div>
-              </div>
+              <span className="font-Open text-lg font-semibold text-[#160783] group-hover:text-[#9082FF] text-center">
+                Bulk Label List
+              </span>
+              <img
+                src={RightArrowIcon}
+                alt=""
+                className="mt-4 w-8 h-8 opacity-70 group-hover:opacity-100"
+              />
             </div>
             {kycValue?.communicationRateCardExists && (
               <div
-                className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+                className="aspect-square rounded-2xl shadow-lg bg-white border border-[#E8E8E8] transition-all duration-200 hover:shadow-2xl hover:border-[#9082FF] cursor-pointer flex flex-col items-center justify-center group"
                 onClick={() => setOpenRightModalForDelta(true)}
-                style={{
-                  boxShadow:
-                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                }}
               >
-                <div className={`flex justify-between items-center h-[44px]`}>
-                  <div className="flex">
-                    <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                      Delivery Max
-                    </span>
-                  </div>
-                  <div className="mr-4">
-                    <img src={RightArrowIcon} alt="" className="ml-4" />
-                  </div>
-                </div>
+                <span className="font-Open text-lg font-semibold text-[#160783] group-hover:text-[#9082FF] text-center">
+                  Delivery Max
+                </span>
+                <img
+                  src={RightArrowIcon}
+                  alt=""
+                  className="mt-4 w-8 h-8 opacity-70 group-hover:opacity-100"
+                />
               </div>
             )}
           </div>

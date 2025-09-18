@@ -25,7 +25,7 @@ const TrackCardComponent = () => {
           </button> */}
           <div>
             <OneButton
-              className="w-full border-[#160783] border text-sm rounded-lg hover:text-white hover:bg-[#160783] scale-95 group-hover:scale-100 text-[#160783] py-2 duration-150 transition mt-4"
+              className="w-full border-[#160783] border text-sm rounded-lg hover:!text-white hover:bg-[#160783] scale-95 group-hover:scale-100 !text-[#160783] py-2 duration-150 transition mt-4"
               onClick={() => {
                 window.open(`${SELLER_WEB_URL}/tracking`, "_blank");
               }}

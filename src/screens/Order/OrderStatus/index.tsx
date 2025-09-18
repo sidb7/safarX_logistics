@@ -43,6 +43,7 @@ interface IOrderstatusProps {
   filterId: any;
   setFilterId: any;
   statusData: any;
+  setStatusData?: any;
   handleTabChange: Function;
   setOrders: any;
   currentStatus: string;
@@ -79,6 +80,7 @@ interface IOrderstatusProps {
   setSubStatus?: any;
   getAllOrders?: any;
   setIsOrderPlaced?: any;
+  refreshCounts?: any;
 }
 
 let dummyCalculativeObject: any = { length: 1, breadth: 1, height: 1 };
@@ -115,6 +117,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   orders,
   getAllOrders,
   setIsOrderPlaced,
+  setStatusData,
+  refreshCounts,
 }) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -1336,6 +1340,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         setIsBulkModalOpen(false);
         getAllOrders();
         setPageToOpen("Home");
+        if (refreshCounts) refreshCounts();
       } else {
         toast.error(data?.message || "Failed While Updating Address");
       }
@@ -1362,6 +1367,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           setIsBulkModalOpen(false);
           getAllOrders();
           setPageToOpen("Home");
+          if (refreshCounts) refreshCounts();
           return toast.success(data?.message);
         } else {
           return toast.error(data?.message);

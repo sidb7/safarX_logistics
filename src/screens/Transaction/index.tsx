@@ -333,10 +333,10 @@ export const Transaction = () => {
     setEndDate(null);
   };
 
-const openFilterModal = () => {
-  // Set the filter modal to open
-  setFilterModal(true);
-};
+  const openFilterModal = () => {
+    // Set the filter modal to open
+    setFilterModal(true);
+  };
 
   //column for wallet NEFT
   const columnsHelper = createColumnHelper<any>();
