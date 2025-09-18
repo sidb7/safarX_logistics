@@ -113,11 +113,11 @@ const ReturningDelivery: React.FunctionComponent<
           onClick={handleNavgigate}
         >
           <img src={PlusIcon} alt="" />
-          <span className="text-[#004EFF] text-[14px] w-[240px]">
+          <span className="text-[#160783] text-[14px] w-[240px]">
             ADD ADDRESS
           </span>
         </div>
-        <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">
+        <p className="mt-2 border-b-2 border-[#160783] text-[#160783] text-[14px]">
           CHANGE
         </p>
       </div> */}
@@ -140,11 +140,11 @@ const ReturningDelivery: React.FunctionComponent<
           onClick={handleNavgigate}
         >
           <img src={PlusIcon} alt="" />
-          <span className="text-[#004EFF] text-[14px] w-[240px]">
+          <span className="text-[#160783] text-[14px] w-[240px]">
             ADD CONTACT
           </span>
         </div>
-        <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">
+        <p className="mt-2 border-b-2 border-[#160783] text-[#160783] text-[14px]">
           CHANGE
         </p>
       </div> */}

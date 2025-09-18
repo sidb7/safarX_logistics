@@ -27,7 +27,7 @@ const GuidelinesSection: React.FunctionComponent<IGuidelinesSectionProps> = (
               ensuring a smooth delivery process and item protection. For expert
               tips and details,{" "}
               <span
-                className="font-Open text-[15px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer"
+                className="font-Open text-[15px] lg:text-base font-normal leading-6 text-[#160783] cursor-pointer"
                 onClick={handleDownload}
               >
                 [Get the Full Guide]

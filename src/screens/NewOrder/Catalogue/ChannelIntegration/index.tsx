@@ -116,7 +116,7 @@ const Index = (props: IPropsTypes) => {
               <div
                 className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 ${
                   catalogueState?.channelName === statusName
-                    ? "!border-[#004EFF]"
+                    ? "!border-[#160783]"
                     : ""
                 }`}
                 onClick={() => dispatch(channelName(statusName))}
@@ -125,7 +125,7 @@ const Index = (props: IPropsTypes) => {
                 <span
                   className={`text-[#777777] text-[14px] lg:text-[18px] ${
                     catalogueState?.channelName === statusName
-                      ? "!text-[#004EFF] lg:text-[18px]"
+                      ? "!text-[#160783] lg:text-[18px]"
                       : ""
                   }`}
                 >

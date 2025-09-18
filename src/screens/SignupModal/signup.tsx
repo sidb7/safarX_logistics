@@ -70,7 +70,7 @@ const Index = (props: any) => {
           <button
             type="button"
             onClick={logInOnClick}
-            className="text-[#004EFF] text-[12px]"
+            className="text-[#160783] text-[12px]"
           >
             Log In
           </button>

@@ -245,7 +245,7 @@ const CancellationModal = ({
             <>
               <div className="flex justify-center  my-12 ">
                 <p
-                  className="text-[16px] md:text-[18px] text-center text-[#004EFF] underline underline-offset-4 font-Open font-semibold cursor-pointer  whitespace-nowrap"
+                  className="text-[16px] md:text-[18px] text-center text-[#160783] underline underline-offset-4 font-Open font-semibold cursor-pointer  whitespace-nowrap"
                   onClick={() => {
                     setCancelSuccess(true);
                   }}
@@ -260,7 +260,7 @@ const CancellationModal = ({
                 }}
               >
                 <p
-                  className="text-[16px] md:text-[18px] text-[#004EFF] text-center underline underline-offset-4 font-Open font-semibold  cursor-pointer"
+                  className="text-[16px] md:text-[18px] text-[#160783] text-center underline underline-offset-4 font-Open font-semibold  cursor-pointer"
                   onClick={() => {
                     setCancellationModalOpen && setCancellationModalOpen();
                   }}

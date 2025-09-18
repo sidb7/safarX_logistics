@@ -155,7 +155,7 @@ const InvoiceCard: React.FC<InvoiceCardProps> = ({ invoiceData }) => {
                   <div className="flex gap-x-6 px-4 my-1 mb-4">
                     {/* <div className="flex gap-x-2">
                       <img src={BlueBill} alt="" />
-                      <p className="text-[#004EFF] text-[14px] font-medium cursor-pointer">
+                      <p className="text-[#160783] text-[14px] font-medium cursor-pointer">
                         PAY NOW
                       </p>
                     </div> */}
@@ -164,7 +164,7 @@ const InvoiceCard: React.FC<InvoiceCardProps> = ({ invoiceData }) => {
                       onClick={() => handleDownload(invoice?.invoiceNo, "MIS")}
                     >
                       <img src={DowbloadIcon} alt="" />
-                      <p className="text-[#004EFF] text-[14px] font-medium cursor-pointer">
+                      <p className="text-[#160783] text-[14px] font-medium cursor-pointer">
                         MIS
                       </p>
                     </div>
@@ -175,13 +175,13 @@ const InvoiceCard: React.FC<InvoiceCardProps> = ({ invoiceData }) => {
                       }
                     >
                       <img src={DowbloadIcon} alt="" />
-                      <p className="text-[#004EFF] text-[14px] font-medium cursor-pointer">
+                      <p className="text-[#160783] text-[14px] font-medium cursor-pointer">
                         INVOICE
                       </p>
                     </div>
                     {/* <div className="flex gap-x-2">
                       <img src={SendButton} alt="" />
-                      <p className="text-[#004EFF] text-[14px] font-medium cursor-pointer">
+                      <p className="text-[#160783] text-[14px] font-medium cursor-pointer">
                         SHARE
                       </p>
                     </div> */}

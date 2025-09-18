@@ -402,7 +402,7 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
                 <div className="">
                   <p
                     className={`${
-                      accordionOpen[index] ? "text-[#004EFF]" : ""
+                      accordionOpen[index] ? "text-[#160783]" : ""
                     } text-sm font-Open font-normal leading-5 pl-[3px]`}
                   >
                     {capitalizeFirstLetter(each?.status) || "N/A"}

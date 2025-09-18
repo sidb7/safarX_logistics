@@ -572,7 +572,7 @@ const PickupLocation = () => {
               }}
               id="return-address-same-as-pickup"
             />
-            <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+            <p className="text-[14px] font-Open text-[#160783] lg:font-semibold">
               Return Address Same As Pickup
             </p>
           </div>

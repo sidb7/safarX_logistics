@@ -47,7 +47,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
     <div className={`${data?.recommended ? "relative py-2" : "py-2"} `}>
       <div
         className={`flex flex-col py-3 px-4 justify-center  ${
-          selected ? "border-[#004EFF]" : ""
+          selected ? "border-[#160783]" : ""
         }  lg:w-full border-2 rounded-md  package-box `}
       >
         {data?.recommended ? (

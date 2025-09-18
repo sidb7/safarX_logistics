@@ -23,7 +23,7 @@ export const KycActivation = () => {
         <CustomButton text="PROCEED FOR KYC" onClick={() => {}} />
       </div>
 
-      <div className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4">
+      <div className="flex justify-center text-[#160783] text-sm underline underline-offset-4	decoration-[#160783] mt-4">
         SKIP FOR NOW
       </div>
 

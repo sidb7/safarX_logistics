@@ -155,7 +155,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("partnerName", {
       header: () => {
         return (
-          <p className=" flex items-center justify-start font-Open text-sm font-semibold leading-[18px] text-[#004EFF] whitespace-nowrap ">
+          <p className=" flex items-center justify-start font-Open text-sm font-semibold leading-[18px] text-[#160783] whitespace-nowrap ">
             Partner Name
           </p>
         );
@@ -172,7 +172,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("companyServiceName", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"Service Name"}
           </p>
         );
@@ -188,7 +188,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("appliedWeight", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"Weight"}
           </p>
         );
@@ -204,7 +204,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("one", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"Zone"}
           </p>
         );
@@ -220,7 +220,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("deliveryCharges", {
       header: () => {
         return (
-          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"Delivery Charges"}
           </p>
         );
@@ -239,7 +239,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("cod", {
       header: () => {
         return (
-          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"COD"}
           </p>
         );
@@ -255,7 +255,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("insurance", {
       header: () => {
         return (
-          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"Insurance"}
           </p>
         );
@@ -271,7 +271,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("gst", {
       header: () => {
         return (
-          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"GST"}
           </p>
         );
@@ -288,7 +288,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("total", {
       header: () => {
         return (
-          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"Total"}
           </p>
         );
@@ -304,7 +304,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("edt_epoch", {
       header: () => {
         return (
-          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {"EDD"}
           </p>
         );
@@ -329,7 +329,6 @@ const Serviceability = (props: ITypeProps) => {
 
   setWeightData();
 
-
   const tableComponent = () => {
     return (
       <div className=" h-full m-4 ">
@@ -344,7 +343,7 @@ const Serviceability = (props: ITypeProps) => {
     );
   };
 
-    useEffect(() => {
+  useEffect(() => {
     fetchAllPartner();
   }, []);
 
@@ -357,7 +356,7 @@ const Serviceability = (props: ITypeProps) => {
       ) : (
         <div className="flex flex-col h-full w-full">
           <div className="flex justify-between p-5">
-            <p className="font-Open text-base text-[#004eff] font-semibold">
+            <p className="font-Open text-base text-[#160783] font-semibold">
               {`${showTable ? "Availability & Pricing" : "Check Availability"}`}
             </p>
             <img
@@ -511,7 +510,6 @@ const Serviceability = (props: ITypeProps) => {
                     }}
                   />
                 </div>
-             
 
                 <CustomDropDown
                   onChange={(e: any) => setCourierPartner(e.target.value)}

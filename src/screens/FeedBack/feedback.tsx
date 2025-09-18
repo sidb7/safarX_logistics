@@ -84,21 +84,21 @@ function Feedback() {
           <Breadcrum label="Feedback" component={renderHeaderComponent()} />
           <div className="flex flex-col pt-7 ">
             <div className="mx-5">
-                {/* <div className="flex font-medium customScroll whitespace-nowrap mt-2 h-[45px] ">
+              {/* <div className="flex font-medium customScroll whitespace-nowrap mt-2 h-[45px] ">
                   {feedbackTabs?.map(({ statusName }: any, index: number) => {
                     return (
                       <div
                         key={index}
                         style={{ borderBottomWidth: "3px" }}
                         className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
-                          renderingComponents === index ? "!border-[#004EFF]" : ""
+                          renderingComponents === index ? "!border-[#160783]" : ""
                         }`}
                         onClick={() => setRenderingComponents(index)}
                       >
                         <span
                           className={`text-[#777777] text-[15px] lg:text-[18px] ${
                             renderingComponents === index
-                              ? "!text-[#004EFF] lg:text-[18px]"
+                              ? "!text-[#160783] lg:text-[18px]"
                               : ""
                           }`}
                         >

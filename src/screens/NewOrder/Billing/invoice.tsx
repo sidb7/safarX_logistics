@@ -94,7 +94,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
       tabs.push(
         <div
           className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
-            ${renderingComponents === index && "!border-[#004EFF]"}
+            ${renderingComponents === index && "!border-[#160783]"}
           `}
           onClick={() => {
             localStorage.setItem("billingTab", statusName);
@@ -106,7 +106,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             className={`text-[#777777] text-[14px] lg:text-[18px]
               ${
                 renderingComponents === index &&
-                "!text-[#004EFF] lg:text-[18px]"
+                "!text-[#160783] lg:text-[18px]"
               }`}
           >
             {statusName}

@@ -18,7 +18,7 @@ const Card: React.FC<IProps> = (props: IProps) => {
         <p className="ml-2 mt-2 text-[12px] font-normal text-[#606060]">
           {cardBodyText}
         </p>
-        <p className="ml-2 mt-5 text-[12px] mb-1 font-light text-[#004EFF]">
+        <p className="ml-2 mt-5 text-[12px] mb-1 font-light text-[#160783]">
           {cardFooterText}
         </p>
       </div>

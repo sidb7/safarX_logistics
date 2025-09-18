@@ -83,7 +83,7 @@ const Index = () => {
               <button
                 type="button"
                 onClick={skipForNowOnClick}
-                className="text-[#004EFF] border-b-[1px] border-[#004EFF]"
+                className="text-[#160783] border-b-[1px] border-[#160783]"
               >
                 SKIP FOR NOW
               </button>

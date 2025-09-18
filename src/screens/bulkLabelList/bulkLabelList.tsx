@@ -70,7 +70,7 @@ const BulkLabelList = () => {
     columnsHelper.accessor("userId", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             Start Date
           </p>
         );
@@ -87,7 +87,7 @@ const BulkLabelList = () => {
     columnsHelper.accessor("userName", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             End Date
           </p>
         );
@@ -104,7 +104,7 @@ const BulkLabelList = () => {
     columnsHelper.accessor("eventName", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center ">
             Label Link
           </p>
         );
@@ -114,7 +114,7 @@ const BulkLabelList = () => {
         return (
           <div className="flex items-center justify-center font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
             <a
-              className={`text-[#004EFF] ${
+              className={`text-[#160783] ${
                 data?.status !== "SUCCESS"
                   ? "pointer-events-none opacity-40"
                   : "cursor-pointer"
@@ -130,7 +130,7 @@ const BulkLabelList = () => {
     columnsHelper.accessor("logType", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold w-[100px] leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold w-[100px] leading-[18px] text-[#160783] text-center  ">
             Filter
           </p>
         );
@@ -160,7 +160,7 @@ const BulkLabelList = () => {
     columnsHelper.accessor("ipAddress", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             Status
           </p>
         );

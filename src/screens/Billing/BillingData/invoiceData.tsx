@@ -279,7 +279,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
                   <img
                     src={downloadIcon}
                     alt="download"
-                    className="text-[#004Eff]"
+                    className="text-[#160783]"
                   />
                 )}
                 <p className="text-xs">INVOICE</p>
@@ -294,11 +294,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = ({
   return (
     <div>
       {isLgScreen ? (
-        <CustomTable
-          columnsData={billingOrdersHeading}
-          rowData={invoiceData}
-       
-        />
+        <CustomTable columnsData={billingOrdersHeading} rowData={invoiceData} />
       ) : (
         <InvoiceCardMobile invoiceData={invoiceData} />
       )}

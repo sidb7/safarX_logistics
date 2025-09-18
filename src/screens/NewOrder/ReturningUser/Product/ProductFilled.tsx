@@ -50,7 +50,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           <div key={i}>
             <div className="flex justify-between mt-3">
               <div >
-                <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
+                <h2 className="text-[#160783] text-sm font-bold leading-18px">
                   Product {i + 1}
                 </h2>
               </div>
@@ -86,7 +86,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           <div key={i}>
             <div className="flex justify-between mt-3">
               <div>
-                <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
+                <h2 className="text-[#160783] text-sm font-bold leading-18px">
                   Product {i + 1}
                 </h2>
               </div>
@@ -125,7 +125,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
       >
         <div className="flex justify-between mt-3">
           <div>
-            <h2 className="text-[#004EFF] text-sm font-bold leading-18px ">
+            <h2 className="text-[#160783] text-sm font-bold leading-18px ">
               Product {addedProductTotal + 1}
             </h2>
           </div>
@@ -207,7 +207,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           <img src={ButtonIcon} alt="Add Product" width="16px" />
 
           <button
-            className="ml-2 text-[#004EFF] text-sm font-semibold leading-5"
+            className="ml-2 text-[#160783] text-sm font-semibold leading-5"
             type="submit"
           >
             ADD PRODUCT

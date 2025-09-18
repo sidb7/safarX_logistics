@@ -147,7 +147,7 @@ const TimerCounter = (props: IProps) => {
         <p className="text-[#494949] font-Open font-normal text-xs leading-7">
           {!clickedOnce && <span>Didn't Receive Code ?</span>}
           <span
-            className={`mx-1 text-[#004EFF] text-[12px] font-extrabold leading-5  ${
+            className={`mx-1 text-[#160783] text-[12px] font-extrabold leading-5  ${
               seconds > 0 || (seconds > 0 && minutes === 0)
                 ? "text-[#8e8e8e] cursor-not-allowed"
                 : "cursor-pointer"

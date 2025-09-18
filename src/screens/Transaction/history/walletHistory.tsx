@@ -41,7 +41,7 @@ export const WalletHistory: React.FunctionComponent<IWalletProps> = ({
               <CustomButton
                 text={data?.rupee}
                 onClick={() => {}}
-                className="p-2 !bg-[#004EFF] text-white text-[12p] h-[28px]"
+                className="p-2 !bg-[#160783] text-white text-[12p] h-[28px]"
                 showIcon={true}
                 icon={RupeeIcon}
                 iconClass={"w-[7px] mr-1"}

@@ -20,7 +20,7 @@ const Card: React.FC<IProps> = (props: IProps) => {
         <p className="ml-2 mt-2 text-[12px] font-semibold leading-4 font-Open text-[#606060]">
           {cardBodyText}
         </p>
-        <p className="ml-2 mt-5 text-[12px] mb-1 font-normal font-Open leading-4 text-[#004EFF]">
+        <p className="ml-2 mt-5 text-[12px] mb-1 font-normal font-Open leading-4 text-[#160783]">
           {cardFooterText}
         </p>
       </div>

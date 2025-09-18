@@ -413,7 +413,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                               productId={data?.productId}
                               className={`cursor-pointer p-[16px] pl-0  ${
                                 viewed === index
-                                  ? "border-2 border-solid border-[#004EFF]"
+                                  ? "border-2 border-solid border-[#160783]"
                                   : ""
                               } !border-0`}
                               onClickEdit={() => {
@@ -440,7 +440,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                             dimension={`${data?.totalPrice}`}
                             className={`cursor-pointer p-[16px] ${
                               viewed === index
-                                ? "border-2 border-solid border-[#004EFF]"
+                                ? "border-2 border-solid border-[#160783]"
                                 : ""
                             }`}
                             label={`Product: ${data?.products?.length || ""}`}
@@ -521,7 +521,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                       isActiveChannel={isActiveChannel}
                       className={`cursor-pointer p-[16px] ${
                         viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
+                          ? "border-2 border-solid border-[#160783]"
                           : ""
                       }`}
                     />
@@ -586,7 +586,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     breadth={data?.breadth}
                     length={data?.length}
                     className={`cursor-pointer p-[16px] ${viewed === index
-                      ? "border-2 border-solid border-[#004EFF]"
+                      ? "border-2 border-solid border-[#160783]"
                       : ""
                       }`}
                   />
@@ -605,7 +605,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     Value={data?.totalValue}
                     dimension={`${data?.totalPrice}`}
                     className={`cursor-pointer p-[16px] ${viewed === index
-                      ? "border-2 border-solid border-[#004EFF]"
+                      ? "border-2 border-solid border-[#160783]"
                       : ""
                       }`}
                     label={`Product: ${data?.products?.length}`}

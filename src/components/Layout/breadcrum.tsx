@@ -109,7 +109,7 @@ export const Breadcrum = ({
               <p className="font-Lato text-base font-normal">KYC Pending</p>
             </div>
 
-            <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
+            <p className="text-base font-Lato text-[#160783] font-normal underline cursor-pointer">
               Click Here
             </p>
           </div>
@@ -138,7 +138,7 @@ export const Breadcrum = ({
               </div>
             </div>
 
-            <p className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer">
+            <p className="text-base font-Lato text-[#160783] font-normal underline cursor-pointer">
               Click Here
             </p>
           </div>

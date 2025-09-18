@@ -53,7 +53,7 @@ const BulkOrder = () => {
           </p>
           <div className="flex justify-center  gap-2">
             <img src={downArrow} alt="" />
-            <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
+            <p className="text-[14px] text-[#160783] font-semibold border-b-2 border-[#160783]">
               SAMPLE FILE
             </p>
           </div>

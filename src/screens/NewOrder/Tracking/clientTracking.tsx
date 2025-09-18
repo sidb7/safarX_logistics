@@ -622,7 +622,7 @@ const Tracking = () => {
                                           >
                                             <p className="text-xs font-bold font-Open flex gap-x-1">
                                               Tracking ID&nbsp;:&nbsp;
-                                              <span className="font-bold font-Open text-[#004EFF]">
+                                              <span className="font-bold font-Open text-[#160783]">
                                                 {each?.awb ? each?.awb : "NA"}
                                               </span>
                                               <CopyTooltip
@@ -677,7 +677,7 @@ const Tracking = () => {
                                                   <div>
                                                     <p className="text-xs font-Open font-bold md:pt-2">
                                                       Order Type&nbsp;:&nbsp;
-                                                      <span className="text-[#004EFF] text-xs font-Open font-bold">
+                                                      <span className="text-[#160783] text-xs font-Open font-bold">
                                                         RTO
                                                       </span>
                                                     </p>
@@ -688,7 +688,7 @@ const Tracking = () => {
                                                   <div>
                                                     <p className="text-xs font-Open font-bold md:pt-2">
                                                       RTO AWB&nbsp;:&nbsp;
-                                                      <span className="text-[#004EFF] text-xs font-Open font-bold">
+                                                      <span className="text-[#160783] text-xs font-Open font-bold">
                                                         {each?.rtoInfo?.rtoAwb
                                                           ? each?.rtoInfo
                                                               ?.rtoAwb
@@ -700,7 +700,7 @@ const Tracking = () => {
 
                                                 <p className="text-xs font-bold font-Open flex">
                                                   Order ID&nbsp;:&nbsp;
-                                                  <span className="font-bold font-Open text-[#004EFF]">
+                                                  <span className="font-bold font-Open text-[#160783]">
                                                     {each?.otherDetails
                                                       ?.orderNumber
                                                       ? each?.otherDetails
@@ -927,7 +927,7 @@ const Tracking = () => {
                                                           each?.awb
                                                         ) && (
                                                           <p
-                                                            className="text-sm font-Open font-semibold text-[#004EFF] underline underline-offset-3 cursor-pointer"
+                                                            className="text-sm font-Open font-semibold text-[#160783] underline underline-offset-3 cursor-pointer"
                                                             onClick={() => {
                                                               setLogginModal(
                                                                 true
@@ -1190,7 +1190,7 @@ const Tracking = () => {
                                                     </div>
                                                     <div className="flex  items-center my-3">
                                                       <p
-                                                        className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
+                                                        className="cursor-pointer text-[#160783] underline underline-offset-4 font-Open text-[14px] font-semibold"
                                                         onClick={() => {
                                                           setAwb(each?.awb);
                                                           setReschedulingModal(
@@ -1203,7 +1203,7 @@ const Tracking = () => {
                                                     </div>
                                                     <div className="flex  items-center my-3">
                                                       <p
-                                                        className="cursor-pointer text-[#004EFF] underline underline-offset-4 font-Open text-[14px] font-semibold"
+                                                        className="cursor-pointer text-[#160783] underline underline-offset-4 font-Open text-[14px] font-semibold"
                                                         onClick={() => {
                                                           setAwb(each?.awb);
                                                           setCancellationModalOpen(

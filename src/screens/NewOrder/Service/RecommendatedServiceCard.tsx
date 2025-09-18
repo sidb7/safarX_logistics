@@ -108,7 +108,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
               className={`relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === cheapestService?.value &&
                 selectedOption?.type === "cheapest"
-                  ? "border-[#004EFF] border-2"
+                  ? "border-[#160783] border-2"
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(cheapestService)}
@@ -151,10 +151,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   )}{" "}
                 </p>
                 <div className="flex justify-between">
-                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
+                  <p className="text-[#160783] text-[14px] pt-6 font-semibold font-Open">
                     ETA: {cheapestService.text?.EDT || "N/A"}{" "}
                   </p>
-                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open pl-4">
+                  <p className="text-[#160783] text-[14px] pt-6 font-semibold font-Open pl-4">
                     {cheapestService.text?.zoneName || ""}
                   </p>
                 </div>
@@ -168,7 +168,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
               className={`relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === fastestService?.value &&
                 selectedOption?.type === "fastest"
-                  ? "border-[#004EFF] border-2"
+                  ? "border-[#160783] border-2"
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(fastestService)}
@@ -209,10 +209,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   )}{" "}
                 </p>
                 <div className="flex justify-between">
-                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
+                  <p className="text-[#160783] text-[14px] pt-6 font-semibold font-Open">
                     ETA: {fastestService.text?.EDT || "N/A"}{" "}
                   </p>
-                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open ml-4">
+                  <p className="text-[#160783] text-[14px] pt-6 font-semibold font-Open ml-4">
                     {fastestService.text?.zoneName || ""}
                   </p>
                 </div>
@@ -226,7 +226,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
               className={`relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === balancedService?.value &&
                 selectedOption?.type === "balanced"
-                  ? "border-[#004EFF] border-2"
+                  ? "border-[#160783] border-2"
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(balancedService)}
@@ -269,10 +269,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   )}{" "}
                 </p>
                 <div className="flex justify-between">
-                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
+                  <p className="text-[#160783] text-[14px] pt-6 font-semibold font-Open">
                     ETA: {balancedService.text?.EDT || "N/A"}{" "}
                   </p>
-                  <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open min-w-0 pl-4">
+                  <p className="text-[#160783] text-[14px] pt-6 font-semibold font-Open min-w-0 pl-4">
                     {balancedService.text?.zoneName || ""}
                   </p>
                 </div>

@@ -1001,7 +1001,7 @@ const Index = () => {
             <div
               className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
                 saveAddress.office === true
-                  ? "!border-[#004EFF] !text-[#004EFF] "
+                  ? "!border-[#160783] !text-[#160783] "
                   : "border-gray-300 text-[#1C1C1C]"
               }`}
               onClick={(e) => {
@@ -1022,7 +1022,7 @@ const Index = () => {
             <div
               className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
                 saveAddress.warehouse === true
-                  ? "border-[#004EFF] !text-[#004EFF] "
+                  ? "border-[#160783] !text-[#160783] "
                   : "border-gray-300 text-[#1C1C1C]"
               }`}
               onClick={(e) => {
@@ -1043,7 +1043,7 @@ const Index = () => {
             <div
               className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
                 saveAddress.other === true
-                  ? "border-[#004EFF] text-[#004EFF] "
+                  ? "border-[#160783] text-[#160783] "
                   : "border-gray-300  text-[#1C1C1C]"
               }`}
               onClick={(e) => {
@@ -1089,7 +1089,7 @@ const Index = () => {
 
           <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
             <div className="mr-2">
-              <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
+              <span className="text-[14px] font-semibold font-Open text-[#160783] lg:text-[16px]">
                 Opening Hours:
               </span>
             </div>
@@ -1105,7 +1105,7 @@ const Index = () => {
               checked={isChecked}
               onChange={handleCheckboxChange}
             />
-            <p className="text-[14px] font-medium text-[#004EFF] lg:font-semibold lg:font-Open">
+            <p className="text-[14px] font-medium text-[#160783] lg:font-semibold lg:font-Open">
               Billing Details Is Same As Delivery
             </p>
           </div>
@@ -1357,7 +1357,7 @@ const Index = () => {
                 <div
                   className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
                     saveContact.shopkeeper === true
-                      ? "border-[#004EFF] text-[#004EFF] "
+                      ? "border-[#160783] text-[#160783] "
                       : "border-gray-300 text-[#1C1C1C]"
                   }`}
                   onClick={(e) => {
@@ -1380,7 +1380,7 @@ const Index = () => {
                 <div
                   className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
                     saveContact.warehouse === true
-                      ? "border-[#004EFF] text-[#004EFF] "
+                      ? "border-[#160783] text-[#160783] "
                       : "border-gray-300 text-[#1C1C1C]"
                   }`}
                   onClick={() => {
@@ -1410,7 +1410,7 @@ const Index = () => {
                 <div
                   className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
                     saveContact.dispatcher === true
-                      ? "border-[#004EFF] text-[#004EFF] "
+                      ? "border-[#160783] text-[#160783] "
                       : "border-gray-300 text-[#1C1C1C]"
                   }`}
                   onClick={() => {
@@ -1442,7 +1442,7 @@ const Index = () => {
           {/* 
           <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
             <div className="mr-2">
-              <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
+              <span className="text-[14px] font-semibold font-Open text-[#160783] lg:text-[16px]">
                 Opening Hours:
               </span>
             </div>
@@ -1511,7 +1511,7 @@ const Index = () => {
               <div
                 className={`flex flex-row justify-center whitespace-nowrap text-[16px] h-[35px] items-center gap-[8px]  border-[0.5px]   px-8 rounded bg-[#FEFEFE] cursor-pointer ${
                   saveContact.shopkeeper === true
-                    ? "border-[#004EFF] text-[#004EFF] "
+                    ? "border-[#160783] text-[#160783] "
                     : "border-gray-300"
                 }`}
                 onClick={() => {
@@ -1532,7 +1532,7 @@ const Index = () => {
               <div
                 className={`flex flex-row justify-center whitespace-nowrap h-[35px] text-[16px] items-center gap-[8px]  border-[0.5px]   px-8 rounded bg-[#FEFEFE] cursor-pointer ${
                   saveContact.warehouse === true
-                    ? "border-[#004EFF] text-[#004EFF] "
+                    ? "border-[#160783] text-[#160783] "
                     : "border-gray-300"
                 }`}
                 onClick={() => {
@@ -1558,7 +1558,7 @@ const Index = () => {
               <div
                 className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
                   saveContact.dispatcher === true
-                    ? "border-[#004EFF] text-[#004EFF] "
+                    ? "border-[#160783] text-[#160783] "
                     : "border-gray-300 text-[#1C1C1C]"
                 }`}
                 onClick={() => {

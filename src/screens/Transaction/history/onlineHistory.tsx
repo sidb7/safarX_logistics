@@ -276,11 +276,11 @@ export const OnlineHistory: React.FunctionComponent<IOnlineProps> = ({
           <div className="flex mx-4 my-2">
             <div className="flex items-center">
               <img src={CopyIcon} alt="Copy" />
-              <span className="ml-2 text-[#004EFF] text-sm">COPY</span>
+              <span className="ml-2 text-[#160783] text-sm">COPY</span>
             </div>
             <div className="flex items-center ml-4">
               <img src={ShareIcon} alt="Share" />
-              <span className="ml-2 text-[#004EFF] text-sm">SHARE</span>
+              <span className="ml-2 text-[#160783] text-sm">SHARE</span>
             </div>
           </div>
         </Collapsible>

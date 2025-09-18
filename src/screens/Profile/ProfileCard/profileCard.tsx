@@ -35,7 +35,7 @@ const LabelComponent: React.FC<{
         {label}
       </span>
       <span
-        className={`font-Lato font-semibold leading-9 text-[#004EFF] text-[28px] capitalize lg:mt-1  ${classNameInfo}`}
+        className={`font-Lato font-semibold leading-9 text-[#160783] text-[28px] capitalize lg:mt-1  ${classNameInfo}`}
       >
         {info}
       </span>
@@ -67,10 +67,10 @@ export const ProfileCard = (props: ProfileCardProps) => {
     props?.ProfileDetails?.privateCompany?.operationDetails?.email;
   const { getProfileData } = props;
 
-
-
-  const accountDetails = props?.ProfileDetails?.privateCompany?.accountDetails || [];
-const operationDetails = props?.ProfileDetails?.privateCompany?.operationDetails || [];
+  const accountDetails =
+    props?.ProfileDetails?.privateCompany?.accountDetails || [];
+  const operationDetails =
+    props?.ProfileDetails?.privateCompany?.operationDetails || [];
 
   const [kycValue, setKycValue] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -89,7 +89,6 @@ const operationDetails = props?.ProfileDetails?.privateCompany?.operationDetails
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 768px)",
   });
-
 
   const operationCount = operationDetails?.length || 0;
   const accountCount = accountDetails?.length || 0;
@@ -227,31 +226,31 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                
+
                 {accountDetails?.[0]?.email ? (
-                      accountDetails[0].email
-                    ) : (
-                      <span className="text-gray-400 text-sm">Not Available</span>
-                    )}
+                  accountDetails[0].email
+                ) : (
+                  <span className="text-gray-400 text-sm">Not Available</span>
+                )}
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-              
-                {accountDetails?.[0]?.contactNumber ? (
-                    `+91 ${accountDetails[0].contactNumber}`
-                  ) : (
-                    <span className="text-gray-400 text-sm">Not Available</span>
-                  )}
-                    </span>
 
-                  {accountCount > 1 && (
-  <span
-    onClick={() => setShowModal(true)}
-    className="text-[14px] font-Open cursor-pointer leading-5 text-[#2563EB]"
-  >
-    + {accountCount - 1} More
-  </span>
-)}
+                {accountDetails?.[0]?.contactNumber ? (
+                  `+91 ${accountDetails[0].contactNumber}`
+                ) : (
+                  <span className="text-gray-400 text-sm">Not Available</span>
+                )}
+              </span>
+
+              {accountCount > 1 && (
+                <span
+                  onClick={() => setShowModal(true)}
+                  className="text-[14px] font-Open cursor-pointer leading-5 text-[#2563EB]"
+                >
+                  + {accountCount - 1} More
+                </span>
+              )}
             </div>
 
             {/* Operations Details Section */}
@@ -261,21 +260,21 @@ ding-6">
               </h3>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={EmailIcon} alt="Email" className="w-4 mr-2" />
-                
+
                 {operationDetails?.[0]?.email ? (
-                      operationDetails[0].email
-                    ) : (
-                      <span className="text-gray-400 text-sm">Not Available</span>
-                    )}
+                  operationDetails[0].email
+                ) : (
+                  <span className="text-gray-400 text-sm">Not Available</span>
+                )}
               </span>
               <span className="flex items-center font-Lato text-base font-normal leading-6">
                 <img src={PhoneIcon} alt="Phone" className="w-4 mr-2" />
-              
-                 {operationDetails?.[0]?.contactNumber ? (
-                    `+91 ${operationDetails[0].contactNumber}`
-                  ) : (
-                    <span className="text-gray-400 text-sm">Not Available</span>
-                  )}
+
+                {operationDetails?.[0]?.contactNumber ? (
+                  `+91 ${operationDetails[0].contactNumber}`
+                ) : (
+                  <span className="text-gray-400 text-sm">Not Available</span>
+                )}
               </span>
 
               {operationCount > 1 && (
@@ -311,7 +310,7 @@ ding-6">
               </div>
               {/* <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
                 <LabelComponent
-                  label="Yaari Points"
+                  label="Drivaa Miles"
                   className={"!text-[14px] !leading-5 pl-2 py-2"}
                   info={yaariPoints || "0"}
                   classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
@@ -320,7 +319,7 @@ ding-6">
               {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
                 <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
                   <LabelComponent
-                    label="Yaari Points"
+                    label="Drivaa Miles"
                     className={"!text-[14px] !leading-5 pl-2 py-2"}
                     info={yaariPoints || "0"}
                     classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
@@ -337,7 +336,7 @@ ding-6">
                   {activePlan || "Not Assigned Yet"}
                 </span>
                 {/* <span
-                                className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]"
+                                className="text-[14px] text-[#160783] underline underline-offset-4 decoration-[#160783]"
                                 onClick={() => {
                                     navigate("/subscription/plans");
                                 }}
@@ -346,7 +345,7 @@ ding-6">
                             </span> */}
                 <OneButton
                   text={"UPGRADE"}
-                  className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]"
+                  className="text-[14px] text-[#160783] underline underline-offset-4 decoration-[#160783]"
                   onClick={() => navigate("/subscription/plans")}
                   variant="primary"
                 />
@@ -380,7 +379,7 @@ ding-6">
             {COMPANY_NAME?.toLowerCase() === "shipyaari" ? (
               <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
                 <LabelComponent
-                  label="Yaari Points"
+                  label="Drivaa Miles"
                   className={"pl-3"}
                   info={yaariPoints || "0"}
                   classNameInfo="pl-3"

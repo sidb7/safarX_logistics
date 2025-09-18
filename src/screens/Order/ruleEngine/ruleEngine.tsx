@@ -73,7 +73,7 @@ const DraggablePartner: React.FC<{
   return (
     <div
       ref={ref}
-      className={`flex justify-between items-center bg-[#FFFFFF] text-[#004EFF] border border-[#A4A4A4] text-[14px] font-Open font-semibold leading-5 whitespace-nowrap p-2 rounded-md max-w-fit ${
+      className={`flex justify-between items-center bg-[#FFFFFF] text-[#160783] border border-[#A4A4A4] text-[14px] font-Open font-semibold leading-5 whitespace-nowrap p-2 rounded-md max-w-fit ${
         isDragging ? "opacity-50" : ""
       } cursor-grab hover:cursor-grabbing`}
     >
@@ -199,12 +199,12 @@ const RuleEngine: React.FC = () => {
               key={index}
               style={{ borderBottomWidth: "3px" }}
               className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
-                ${activeTab === value && "!border-[#004EFF]"}`}
+                ${activeTab === value && "!border-[#160783]"}`}
               onClick={() => setActiveTab(value)}
             >
               <span
                 className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
-                  ${activeTab === value && "!text-[#004EFF] lg:text-[18px]"}`}
+                  ${activeTab === value && "!text-[#160783] lg:text-[18px]"}`}
               >
                 {statusName}
               </span>
@@ -414,12 +414,12 @@ export default RuleEngine;
 //               key={index}
 //               style={{ borderBottomWidth: "3px" }}
 //               className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
-//                 ${activeTab === value && "!border-[#004EFF]"}`}
+//                 ${activeTab === value && "!border-[#160783]"}`}
 //               onClick={() => setActiveTab(value)}
 //             >
 //               <span
 //                 className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
-//                   ${activeTab === value && "!text-[#004EFF] lg:text-[18px]"}`}
+//                   ${activeTab === value && "!text-[#160783] lg:text-[18px]"}`}
 //               >
 //                 {statusName}
 //               </span>
@@ -465,7 +465,7 @@ export default RuleEngine;
 //                     {selectedPartners.map((partner, index) => (
 //                       <div
 //                         key={partner.id}
-//                         className="flex justify-between items-center bg-[#FFFFFF] text-[#004EFF] border border-[#A4A4A4] text-[14px] font-Open font-semibold leading-5 whitespace-nowrap p-2 rounded-md max-w-fit"
+//                         className="flex justify-between items-center bg-[#FFFFFF] text-[#160783] border border-[#A4A4A4] text-[14px] font-Open font-semibold leading-5 whitespace-nowrap p-2 rounded-md max-w-fit"
 //                       >
 //                         <span>
 //                           {index + 1}. {partner.name}

@@ -107,7 +107,7 @@ const AddProduct = () => {
             {productsArray?.map((each: any, index: any) => {
               return (
                 <>
-                  <h1 className="text-[14px] font-semibold mt-4 text-[#004EFF]">
+                  <h1 className="text-[14px] font-semibold mt-4 text-[#160783]">
                     Product {index + 1}
                   </h1>
                   <div className="flex gap-x-3 border-2 border-[#E8E8E8] p-3 rounded-lg mt-3">
@@ -135,7 +135,7 @@ const AddProduct = () => {
         )} */}
       <div className="m-5">
         <div className="mt-6 w-[221px] h-[71px]">
-          <h1 className="font-semibold text-[#004EFF] text-[22px]">
+          <h1 className="font-semibold text-[#160783] text-[22px]">
             Product {length + 1}
           </h1>
         </div>
@@ -243,7 +243,7 @@ const AddProduct = () => {
             width="16px"
           />
           <span
-            className="ml-2 text-[#004EFF] text-[14px]"
+            className="ml-2 text-[#160783] text-[14px]"
             onClick={handleData}
           >
             Add Product

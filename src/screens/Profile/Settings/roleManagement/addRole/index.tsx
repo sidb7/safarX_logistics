@@ -519,7 +519,7 @@ function AddRole() {
 
       const { data } = await POST(POST_CREATE_NEW_ROLL, reqBody);
       if (data?.success) {
-        toast.success(data?.message)
+        toast.success(data?.message);
         navigate("/settings/role-management");
       } else {
         toast.error(data?.message);
@@ -563,7 +563,7 @@ function AddRole() {
                   // onClick={() => setFilterModal(true)}
                 >
                   //  <img src={FilterIcon} alt="" /> 
-                  <span className="text-[#004EFF] text-[14px] font-semibold">
+                  <span className="text-[#160783] text-[14px] font-semibold">
                     FILTER
                   </span>
                 </div>

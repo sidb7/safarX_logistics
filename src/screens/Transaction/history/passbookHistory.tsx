@@ -629,7 +629,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
             <div className="flex items-center cursor-pointer">
               <CopyTooltip stringToBeCopied={copyString} />
 
-              <span className="ml-2 text-[#004EFF] text-sm">COPY</span>
+              <span className="ml-2 text-[#160783] text-sm">COPY</span>
             </div>
           </div>
         </Collapsible>

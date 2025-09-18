@@ -291,7 +291,7 @@ const Index = () => {
                     href="https://app.shipyaari.com/shipyaari-tracking"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`ml-auto text-[#004EFF] underline p-4 font-Lato font-bold ${
+                    className={`ml-auto text-[#160783] underline p-4 font-Lato font-bold ${
                       isMobileScreen ? "text-xs" : "text-sm"
                     } leading-4 tracking-wide`}
                   >
@@ -674,7 +674,7 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={logInOnClick}
-                      className="text-[#004EFF] ml-1 font-bold text-xs leading-4 font-Open "
+                      className="text-[#160783] ml-1 font-bold text-xs leading-4 font-Open "
                     >
                       Log In
                     </button>

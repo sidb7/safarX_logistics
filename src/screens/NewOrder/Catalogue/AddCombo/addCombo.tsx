@@ -111,7 +111,7 @@ const ProductCatalogue = () => {
                   dimension="12 x 12 x 12"
                   className={`cursor-pointer p-[16px] ${
                     viewed === index
-                      ? "border-2 border-solid border-[#004EFF]"
+                      ? "border-2 border-solid border-[#160783]"
                       : ""
                   }`}
                 />
@@ -127,7 +127,7 @@ const ProductCatalogue = () => {
             width="16px"
           />
           <span
-            className="ml-2 text-[#004EFF] text-[14px]"
+            className="ml-2 text-[#160783] text-[14px]"
             onClick={function (): void {
               navigate("/neworder/channel-integration/addcomboproduct");
             }}

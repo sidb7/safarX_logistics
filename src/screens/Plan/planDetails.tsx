@@ -145,7 +145,7 @@ const PlanDetails = (props: ITypeProps) => {
         return (
           <p
             className={`font-Open  
-               text-base leading-[22px] text-[#004EFF]
+               text-base leading-[22px] text-[#160783]
              font-semibold   text-start  whitespace-nowrap  lg:w-[642px]`}
           >
             Pricing
@@ -165,7 +165,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("freemium", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center ">
             {allPlans[0]?.planName || "FREEMIUM"}
           </p>
         );
@@ -181,7 +181,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("silver", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             {allPlans[1]?.planName || "SILVER"}
           </p>
         );
@@ -197,7 +197,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("gold", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             {allPlans[2]?.planName || "GOLD"}
           </p>
         );
@@ -213,7 +213,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("platinum", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             {allPlans[3]?.planName || "PLATINUM"}
           </p>
         );
@@ -315,7 +315,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("overview", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap lg:w-[642px] ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap lg:w-[642px] ">
             Features
           </p>
         );
@@ -468,7 +468,7 @@ const PlanDetails = (props: ITypeProps) => {
         ) : (
           <div className="flex items-center justify-center">
             <div
-              className="rounded  py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 "
+              className="rounded  py-1 px-2 bg-[#160783] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 "
               data-tooltip-id="my-tooltip-inline"
               data-tooltip-content="Get more custom labels & channel integrations"
             >
@@ -477,7 +477,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Tooltip
               id="my-tooltip-inline"
               style={{
-                backgroundColor: "#004EFF",
+                backgroundColor: "#160783",
                 color: "#FFFFFF",
                 width: "166px",
                 fontFamily: "font-Open",
@@ -694,7 +694,7 @@ const PlanDetails = (props: ITypeProps) => {
     return (
       <div className="flex items-center justify-center">
         <div
-          className={`rounded   py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 `}
+          className={`rounded   py-1 px-2 bg-[#160783] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 `}
         >
           Active
         </div>
@@ -847,7 +847,7 @@ const PlanDetails = (props: ITypeProps) => {
                 className="lg:mr-8"
               />
               <div className="flex flex-col   justify-center gap-y-1 lg:gap-y-2  lg:h-[120px]  lg:mr-5">
-                <p className="font-Open lg:font-Lato text-[#004EFF] font-semibold text-sm lg:text-[22px] leading-5 lg:leading-7  ">
+                <p className="font-Open lg:font-Lato text-[#160783] font-semibold text-sm lg:text-[22px] leading-5 lg:leading-7  ">
                   PLATINUM PLAN
                 </p>
                 <p className="font-Open lg:font-Lato font-semibold text-sm lg:text-lg leading-4 lg:leading-6 text-[#323232]">
@@ -1116,10 +1116,10 @@ const PlanDetails = (props: ITypeProps) => {
                     <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
                       <div className="flex flex-col gap-y-6">
                         <div className="flex justify-between">
-                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#004EFF]">
+                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#160783]">
                             Total:
                           </p>
-                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#004EFF]">
+                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#160783]">
                             ₹ {pendingPlan?.price || 0}
                           </p>
                         </div>

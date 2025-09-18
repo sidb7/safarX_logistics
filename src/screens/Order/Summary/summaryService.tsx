@@ -17,7 +17,7 @@ const SummaryService = () => {
           </div>
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
-          <p className="text-[12px] font-medium  text-[#004EFF]  lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium  text-[#160783]  lg:text-[16px] lg:font-semibold">
             Service Name
           </p>
           <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">

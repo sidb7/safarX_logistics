@@ -37,7 +37,7 @@ const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
                   id="my-tooltip-sign-wth-stamp-individual"
                   style={{
                     zIndex: 10,
-                    backgroundColor: "#004EFF",
+                    backgroundColor: "#160783",
                     borderRadius: "2px",
                     position: "absolute",
                     color: "#FFFFFF",
@@ -135,7 +135,7 @@ const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
                   id="my-tooltip-AD-Details"
                   style={{
                     zIndex: 10,
-                    backgroundColor: "#004EFF",
+                    backgroundColor: "#160783",
                     borderRadius: "2px",
                     position: "absolute",
                     color: "#FFFFFF",
@@ -175,7 +175,7 @@ const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
                   id="my-tooltip-IEC-Details"
                   style={{
                     zIndex: 10,
-                    backgroundColor: "#004EFF",
+                    backgroundColor: "#160783",
                     borderRadius: "2px",
                     position: "absolute",
                     color: "#FFFFFF",
@@ -218,7 +218,7 @@ const EditDocuments: React.FunctionComponent<IEditDocumentsProps> = (props) => {
                   id="my-tooltip-Sign-With-Stamp-Company"
                   style={{
                     zIndex: 10,
-                    backgroundColor: "#004EFF",
+                    backgroundColor: "#160783",
                     borderRadius: "2px",
                     position: "absolute",
                     color: "#FFFFFF",

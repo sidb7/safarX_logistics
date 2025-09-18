@@ -239,7 +239,7 @@ function RoleManagement() {
                   className="flex justify-between items-center p-2 gap-x-2"
                   // onClick={() => setFilterModal(true)}
                 >
-                  <span className="text-[#004EFF] text-[14px] font-semibold">
+                  <span className="text-[#160783] text-[14px] font-semibold">
                     FILTER
                   </span>
                 </div>

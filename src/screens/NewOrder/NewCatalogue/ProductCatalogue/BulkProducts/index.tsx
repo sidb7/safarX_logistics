@@ -318,7 +318,7 @@ const BulkUpload = (props: ITypeProps) => {
             {uploadFile && (
               <div className="flex items-center">
                 <div className="text-[16px] py-2 font-semibold font-Open lg:text-[16px] flex">
-                  <div className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
+                  <div className="font-semibold font-Open text-[12px] text-[#160783] lg:text-[16px]">
                     Selected File:
                   </div>
                   <div className="px-2">{uploadFile?.name || null}</div>

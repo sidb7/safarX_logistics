@@ -287,7 +287,7 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                     <OneButton
                       text={"CLICK HERE"}
                       onClick={() => navigate("/tracking")}
-                      className=" !bg-[#3371FF] !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
+                      className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
                     />
                   </div>
                 ) : (
@@ -338,7 +338,7 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                     <OneButton
                       text={"CLICK HERE"}
                       onClick={() => navigate("/subscription/plans")}
-                      className=" !bg-[#3371FF] !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
+                      className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
                     />
                   </div>
                 )}
@@ -383,7 +383,7 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                         setShowServiceability(true);
                         onClickServiceability();
                       }}
-                      className=" !bg-[#3371FF] !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
+                      className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
                     />
                   </div>
                 )}
@@ -425,14 +425,14 @@ const TopCardSection: React.FunctionComponent<ITopCardSectionProps> = ({
                       <OneButton
                         text={"Single"}
                         onClick={() => navigate("/orders/place-order")}
-                        className=" !bg-[#3371FF] !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
+                        className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
                       />
                     </div>
                     <div className="">
                       <OneButton
                         text={"Bulk"}
                         onClick={() => navigate("/orders/add-bulk")}
-                        className=" !bg-[#3371FF] !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
+                        className="  !rounded-3xl text-white px-4 py-2 !font-Open !font-semibold !text-sm !leading-5"
                       />
                     </div>
                   </div>

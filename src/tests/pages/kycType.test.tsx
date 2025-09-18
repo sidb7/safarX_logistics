@@ -70,7 +70,7 @@ describe("test cases for the kyc type screen", () => {
     render(
       <ServiceButton
         text="SKIP FOR NOW"
-        className="!text-[#004EFF] !font-Open  underline !border-none"
+        className="!text-[#160783] !font-Open  underline !border-none"
         onClick={mockOnClick}
       />
     );

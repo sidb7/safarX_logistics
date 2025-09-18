@@ -26,14 +26,14 @@
 //           <div
 //             key={index}
 //             className={`flex justify-center items-center  border-[#777777] px-6 ${
-//               selectedId === index ? "!border-[#004EFF]" : ""
+//               selectedId === index ? "!border-[#160783]" : ""
 //             }`}
 //             style={{ borderBottom: "3px solid #777777" }}
 //             onClick={() => setValue(index)}
 //           >
 //             <span
 //               className={`text-[#777777] font-Open text-sm leading-[18px] font-semibold lg:text-[18px] lg:font-Lato lg:leading-6 ${
-//                 selectedId === index ? "!text-[#004EFF] " : ""
+//                 selectedId === index ? "!text-[#160783] " : ""
 //               }`}
 //             >
 //               {singleData.label}
@@ -41,7 +41,7 @@
 //             {showNumber && (
 //               <span
 //                 className={`flex justify-center items-center rounded-full ml-2 text-[8px] text-white bg-[#777777] h-[16px] w-[16px] ${
-//                   selectedId === index ? "!bg-[#004EFF]" : ""
+//                   selectedId === index ? "!bg-[#160783]" : ""
 //                 }`}
 //               >
 //                 {singleData.number}
@@ -81,14 +81,14 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
           <div
             key={index}
             className={`flex justify-center items-center border-[#777777] px-6 ${
-              selectedId === index ? "!border-[#004EFF]" : ""
+              selectedId === index ? "!border-[#160783]" : ""
             }`}
             style={{ borderBottom: "3px solid #777777" }}
             onClick={() => setValue(index)}
           >
             <span
               className={`text-[#777777] font-Open text-sm leading-[18px] font-semibold lg:text-[18px] lg:font-Lato lg:leading-6 ${
-                selectedId === index ? "!text-[#004EFF] " : ""
+                selectedId === index ? "!text-[#160783] " : ""
               }`}
             >
               {singleData.label}
@@ -96,7 +96,7 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
             {showNumber && (
               <span
                 className={`flex justify-center items-center ml-2 px-2 text-[12px] text-white bg-[#777777] h-[20px] min-w-[20px] ${
-                  selectedId === index ? "!bg-[#004EFF]" : ""
+                  selectedId === index ? "!bg-[#160783]" : ""
                 }`}
               >
                 {singleData?.number !== undefined ? singleData.number : "0"}

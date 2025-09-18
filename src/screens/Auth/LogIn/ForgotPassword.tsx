@@ -355,7 +355,7 @@ const ForgotPassword = (props: ITypeProps) => {
               <p className="text-[#494949] font-Open font-normal text-xs leading-4 mb-1">
                 Didn't Receive Code ?
                 <span
-                  className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
+                  className={`mx-1 font-normal text-[#160783] text-[12px]  ${
                     seconds > 0 || (seconds > 0 && minutes === 0)
                       ? "text-[#494949]"
                       : "cursor-pointer"

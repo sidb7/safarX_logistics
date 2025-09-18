@@ -20,14 +20,14 @@ interface LostAndFoundTableProps {
 const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const safeOrders = orders || [];
-  
+
   // Add these state variables for image/video modals
   const [isImagesModalOpen, setIsImagesModalOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
+
   // Add state for claim success modal
   const [isClaimSuccessModalOpen, setIsClaimSuccessModalOpen] = useState(false);
   const [claimedShipmentInfo, setClaimedShipmentInfo] = useState<any>(null);
@@ -50,14 +50,14 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       }
     });
   };
-  
+
   // Add these handler functions for images and video
   const handleViewImages = (data: any) => {
     const images = data?.images_url?.[0] || {};
     const imageUrls = Object.entries(images)
-      .filter(([key]) => key.includes('image'))
+      .filter(([key]) => key.includes("image"))
       .map(([key, value]) => value as string);
-    
+
     setSelectedImages(imageUrls);
     setCurrentImageIndex(0); // Reset to first image
     setIsImagesModalOpen(true);
@@ -65,14 +65,14 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
 
   // Function to navigate to the next image
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => 
+    setCurrentImageIndex((prevIndex) =>
       prevIndex === selectedImages.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   // Function to navigate to the previous image
   const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => 
+    setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? selectedImages.length - 1 : prevIndex - 1
     );
   };
@@ -93,22 +93,20 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
     setIsVideoModalOpen(false);
     setSelectedVideo(null);
   };
-  
+
   // New handler for claim functionality
   const handleClaim = async (shipmentData: any) => {
     if (isClaimingShipment) return;
-    
+
     setIsClaimingShipment(true);
     try {
-      
       const payload = {
         awb: shipmentData?.awb,
         isClaimed: true,
       };
-       
-      
+
       const response = await POST(UPDATE_LD_CLAIM, payload);
-      
+
       if (response?.data?.success) {
         setClaimedShipmentInfo(shipmentData);
         setIsClaimSuccessModalOpen(true);
@@ -172,10 +170,10 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         const eddDate = data?.shipmentStatus?.EDD;
         const formattedDate = eddDate
           ? new Date(eddDate).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
           : "N/A";
         return (
           <div>
@@ -212,7 +210,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       cell: (info) => {
         const data = info?.row?.original;
         // const partnerInfo = data?.orderInfo?.boxInfo?.[0]?.products?.[0];
-        const partnerInfo = data?.orderInfo?.boxInfo?.[0]
+        const partnerInfo = data?.orderInfo?.boxInfo?.[0];
         return (
           <div>
             <div className="mb-4">
@@ -221,8 +219,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
               </p>
               <h2 className="font-Open text-sm font-semibold leading-5 block ">
                 {/* {partnerInfo?.name || "N/A"} */}
-                                {partnerInfo?.name || "N/A"}
-
+                {partnerInfo?.name || "N/A"}
               </h2>
             </div>
             <div className="mb-4">
@@ -253,7 +250,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         const data = info?.row?.original;
         const boxInfo = data?.orderInfo?.boxInfo[0];
         const service = data?.service;
-        const value = boxInfo?.codInfo?.invoiceValue ;
+        const value = boxInfo?.codInfo?.invoiceValue;
         const weight = service?.appliedWeight;
         const hasInsurance = service?.insurance > 0;
 
@@ -319,28 +316,33 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       cell: (info) => {
         const data = info.row.original;
         const images = data?.images_url?.[0] || {};
-        const imagesCount = Object.keys(images).filter(key => key.includes('image')).length;
+        const imagesCount = Object.keys(images).filter((key) =>
+          key.includes("image")
+        ).length;
         const hasVideo = images.video ? true : false;
-        
+
         return (
           <div className="mt-3">
             <span className="text-sm font-semibold">
-              {capitalizeFirstLetter(data?.ldStatusHistory?.[0]?.reason) || "N/A"}
+              {capitalizeFirstLetter(data?.ldStatusHistory?.[0]?.reason) ||
+                "N/A"}
             </span>
             <div className="mt-2 flex flex-col gap-1">
               {imagesCount > 0 && (
-                <button 
+                <button
                   onClick={() => handleViewImages(data)}
-                  className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#004EFF] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
+                  className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#160783] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
                 >
                   <span className="mr-1">View Images</span>
-                  <span className="border border-blue-200 px-1.5 py-0.5 rounded-full font-Open font-semibold text-sm leading-5 tracking-normal text-center">{imagesCount}</span>
+                  <span className="border border-blue-200 px-1.5 py-0.5 rounded-full font-Open font-semibold text-sm leading-5 tracking-normal text-center">
+                    {imagesCount}
+                  </span>
                 </button>
               )}
               {hasVideo && (
-                <button 
+                <button
                   onClick={() => handleViewVideo(data)}
-                  className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#004EFF] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
+                  className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#160783] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
                 >
                   <span className="mr-1">View Video</span>
                 </button>
@@ -356,10 +358,10 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
         const data = info?.row?.original;
         const currentStatus = data?.currentStatus;
         let ldStatus = data?.ldStatus;
-        if(currentStatus === "LOST/DAMAGE" && !ldStatus)  {
-         ldStatus = "PARTNER";
+        if (currentStatus === "LOST/DAMAGE" && !ldStatus) {
+          ldStatus = "PARTNER";
         }
-        const sellerRemark = data?.sellerRemark || "N/A";  
+        const sellerRemark = data?.sellerRemark || "N/A";
         return (
           <div>
             <div className="mt-3">
@@ -374,7 +376,9 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
               <span className="font-Open text-xs font-normal leading-4">
                 Remark:{" "}
                 <div className="font-Open text-sm font-semibold leading-5">
-                  { Array.isArray(sellerRemark) || !sellerRemark ?  "N/A" : sellerRemark}
+                  {Array.isArray(sellerRemark) || !sellerRemark
+                    ? "N/A"
+                    : sellerRemark}
                 </div>
               </span>
             </div>
@@ -388,7 +392,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
     //     const data = info?.row?.original;
     //     const isAlreadyClaimed = data?.isClaimed === true ;
     //     const claimButton = data?.claimButton;
-        
+
     //     return (
     //       <div>
     //         {/* {isAlreadyClaimed ? (
@@ -426,9 +430,13 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
   return (
     <div className="overflow-x-auto">
       <CustomTable columnsData={columns} rowData={safeOrders} />
-      
+
       {/* Images Modal */}
-      <CenterModal isOpen={isImagesModalOpen} onRequestClose={handleCloseImagesModal} className="!h-[700px]">
+      <CenterModal
+        isOpen={isImagesModalOpen}
+        onRequestClose={handleCloseImagesModal}
+        className="!h-[700px]"
+      >
         <div className="w-full h-full flex flex-col overflow-hidden">
           <div className="flex justify-between items-center p-4 border-b">
             <h2 className="text-xl font-medium">Proof Images</h2>
@@ -451,41 +459,61 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
               </svg>
             </button>
           </div>
-          
+
           {selectedImages.length > 0 && (
             <div className="flex-1 relative" style={{ minHeight: "300px" }}>
               <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src={selectedImages[currentImageIndex]} 
-                  alt={`Proof ${currentImageIndex + 1}`} 
+                <img
+                  src={selectedImages[currentImageIndex]}
+                  alt={`Proof ${currentImageIndex + 1}`}
                   className="max-h-full max-w-full object-contain p-2"
                   style={{ maxHeight: "calc(100% - 20px)" }}
                 />
               </div>
-              
+
               {/* Navigation controls */}
               <div className="absolute inset-y-0 left-0 flex items-center">
-                <button 
+                <button
                   onClick={prevImage}
                   className="bg-black bg-opacity-30 hover:bg-opacity-50 text-white rounded-r p-1 ml-2"
                 >
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                  <svg
+                    className="w-8 h-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                 </button>
               </div>
-              
+
               <div className="absolute inset-y-0 right-0 flex items-center">
-                <button 
+                <button
                   onClick={nextImage}
                   className="bg-black bg-opacity-30 hover:bg-opacity-50 text-white rounded-l p-1 mr-2"
                 >
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  <svg
+                    className="w-8 h-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </div>
-              
+
               {/* Image counter */}
               <div className="absolute bottom-4 left-0 right-0 flex justify-center">
                 <div className="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
@@ -498,7 +526,11 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
       </CenterModal>
 
       {/* Video Modal */}
-      <CenterModal isOpen={isVideoModalOpen} onRequestClose={handleCloseVideoModal} className="h-[700px]">
+      <CenterModal
+        isOpen={isVideoModalOpen}
+        onRequestClose={handleCloseVideoModal}
+        className="h-[700px]"
+      >
         <div className="w-full h-full flex flex-col overflow-hidden">
           <div className="flex justify-between items-center p-4 border-b">
             <h2 className="text-xl font-medium">Proof Video</h2>
@@ -521,12 +553,15 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
               </svg>
             </button>
           </div>
-          
+
           {selectedVideo && (
-            <div className="flex-1 flex items-center justify-center" style={{ minHeight: "300px" }}>
+            <div
+              className="flex-1 flex items-center justify-center"
+              style={{ minHeight: "300px" }}
+            >
               <div className="w-full h-full flex items-center justify-center p-4">
-                <video 
-                  controls 
+                <video
+                  controls
                   className="max-h-full max-w-full object-contain"
                   style={{ maxHeight: "calc(100% - 20px)" }}
                   src={selectedVideo}
@@ -538,7 +573,7 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
           )}
         </div>
       </CenterModal>
-      
+
       {/* Claim Success Modal */}
       {/* <CenterModal isOpen={isClaimSuccessModalOpen} onRequestClose={() => setIsClaimSuccessModalOpen(false)} className="!h-[600px] !w-[500px]">
         <div className="w-full flex flex-col">
@@ -607,7 +642,11 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
           </div>
         </div>
       </CenterModal> */}
-        <CenterModal isOpen={isClaimSuccessModalOpen} onRequestClose={() => setIsClaimSuccessModalOpen(false)} className="!h-[500px] !w-[600px]">
+      <CenterModal
+        isOpen={isClaimSuccessModalOpen}
+        onRequestClose={() => setIsClaimSuccessModalOpen(false)}
+        className="!h-[500px] !w-[600px]"
+      >
         <div className="w-full h-full flex flex-col">
           <div className="flex justify-between items-center p-3 border-b">
             <h2 className="text-lg font-medium">Claim Successful</h2>
@@ -630,43 +669,63 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
               </svg>
             </button>
           </div>
-          
+
           <div className="p-4 flex-1 flex flex-col justify-between">
             <div>
               <div className="mb-4 flex items-center justify-center">
                 <div className="bg-green-100 p-3 rounded-full">
-                  <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-12 h-12 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </div>
               </div>
-              
-              <h3 className="text-lg font-semibold text-center mb-3">Shipment Claimed Successfully</h3>
-              
+
+              <h3 className="text-lg font-semibold text-center mb-3">
+                Shipment Claimed Successfully
+              </h3>
+
               {claimedShipmentInfo && (
                 <div className="bg-gray-50 p-3 rounded-lg mb-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <p className="text-xs text-gray-500 mb-1">AWB Number</p>
-                      <p className="font-medium text-sm">{claimedShipmentInfo.awb}</p>
+                      <p className="font-medium text-sm">
+                        {claimedShipmentInfo.awb}
+                      </p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 mb-1">Order ID</p>
-                      <p className="font-medium text-sm">{claimedShipmentInfo.orderId}</p>
+                      <p className="font-medium text-sm">
+                        {claimedShipmentInfo.orderId}
+                      </p>
                     </div>
                   </div>
                   <div className="mt-3">
                     <p className="text-xs text-gray-500 mb-1">Package</p>
-                    <p className="font-medium text-sm">{claimedShipmentInfo?.orderInfo?.boxInfo?.[0]?.products?.[0]?.name || "N/A"}</p>
+                    <p className="font-medium text-sm">
+                      {claimedShipmentInfo?.orderInfo?.boxInfo?.[0]
+                        ?.products?.[0]?.name || "N/A"}
+                    </p>
                   </div>
                 </div>
               )}
-              
+
               <p className="text-gray-600 text-center text-sm mb-4">
-                Your claim has been registered successfully. You will receive updates on the status of your claim.
+                Your claim has been registered successfully. You will receive
+                updates on the status of your claim.
               </p>
             </div>
-            
+
             <div className="mt-auto">
               <button
                 className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 text-sm font-medium"
@@ -683,8 +742,6 @@ const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
 };
 
 export default LostAndFoundTable;
-
-
 
 // import React, { useState } from "react";
 // import { CustomTable } from "../../../../components/Table";
@@ -704,7 +761,7 @@ export default LostAndFoundTable;
 // const LostAndFoundTable: React.FC<LostAndFoundTableProps> = ({ orders }) => {
 //   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 //   const safeOrders = orders || [];
-  
+
 //   // Add these state variables for image/video modals
 //   const [isImagesModalOpen, setIsImagesModalOpen] = useState(false);
 //   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -729,14 +786,14 @@ export default LostAndFoundTable;
 //       }
 //     });
 //   };
-  
+
 //   // Add these handler functions for images and video
 //   const handleViewImages = (data: any) => {
 //     const images = data?.images_url?.[0] || {};
 //     const imageUrls = Object.entries(images)
 //       .filter(([key]) => key.includes('image'))
 //       .map(([key, value]) => value as string);
-    
+
 //     setSelectedImages(imageUrls);
 //     setCurrentImageIndex(0); // Reset to first image
 //     setIsImagesModalOpen(true);
@@ -744,14 +801,14 @@ export default LostAndFoundTable;
 
 //   // Function to navigate to the next image
 //   const nextImage = () => {
-//     setCurrentImageIndex((prevIndex) => 
+//     setCurrentImageIndex((prevIndex) =>
 //       prevIndex === selectedImages.length - 1 ? 0 : prevIndex + 1
 //     );
 //   };
 
 //   // Function to navigate to the previous image
 //   const prevImage = () => {
-//     setCurrentImageIndex((prevIndex) => 
+//     setCurrentImageIndex((prevIndex) =>
 //       prevIndex === 0 ? selectedImages.length - 1 : prevIndex - 1
 //     );
 //   };
@@ -969,7 +1026,7 @@ export default LostAndFoundTable;
 //         const images = data?.images_url?.[0] || {};
 //         const imagesCount = Object.keys(images).filter(key => key.includes('image')).length;
 //         const hasVideo = images.video ? true : false;
-        
+
 //         return (
 //           <div className="mt-3">
 //             <span className="text-sm font-semibold">
@@ -977,18 +1034,18 @@ export default LostAndFoundTable;
 //             </span>
 //             <div className="mt-2 flex flex-col gap-1">
 //               {imagesCount > 0 && (
-//                 <button 
+//                 <button
 //                   onClick={() => handleViewImages(data)}
-//                   className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#004EFF] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
+//                   className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#160783] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
 //                 >
 //                   <span className="mr-1">View Images</span>
 //                   <span className="border border-blue-200 px-1.5 py-0.5 rounded-full font-Open font-semibold text-sm leading-5 tracking-normal text-center">{imagesCount}</span>
 //                 </button>
 //               )}
 //               {hasVideo && (
-//                 <button 
+//                 <button
 //                   onClick={() => handleViewVideo(data)}
-//                   className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#004EFF] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
+//                   className="px-2 py-1 rounded-md hover:bg-blue-200 text-[#160783] flex items-center w-fit font-Open font-semibold text-sm leading-5 tracking-normal text-center"
 //                 >
 //                   <span className="mr-1">View Video</span>
 //                 </button>
@@ -1046,7 +1103,7 @@ export default LostAndFoundTable;
 //   return (
 //     <div className="overflow-x-auto">
 //       <CustomTable columnsData={columns} rowData={safeOrders} />
-      
+
 //       {/* Images Modal */}
 //       <CenterModal isOpen={isImagesModalOpen} onRequestClose={handleCloseImagesModal} className="!h-[700px]">
 //         <div className="w-full h-full flex flex-col overflow-hidden">
@@ -1071,21 +1128,21 @@ export default LostAndFoundTable;
 //               </svg>
 //             </button>
 //           </div>
-          
+
 //           {selectedImages.length > 0 && (
 //             <div className="flex-1 relative" style={{ minHeight: "300px" }}>
 //               <div className="absolute inset-0 flex items-center justify-center">
-//                 <img 
-//                   src={selectedImages[currentImageIndex]} 
-//                   alt={`Proof ${currentImageIndex + 1}`} 
+//                 <img
+//                   src={selectedImages[currentImageIndex]}
+//                   alt={`Proof ${currentImageIndex + 1}`}
 //                   className="max-h-full max-w-full object-contain p-2"
 //                   style={{ maxHeight: "calc(100% - 20px)" }}
 //                 />
 //               </div>
-              
+
 //               {/* Navigation controls */}
 //               <div className="absolute inset-y-0 left-0 flex items-center">
-//                 <button 
+//                 <button
 //                   onClick={prevImage}
 //                   className="bg-black bg-opacity-30 hover:bg-opacity-50 text-white rounded-r p-1 ml-2"
 //                 >
@@ -1094,9 +1151,9 @@ export default LostAndFoundTable;
 //                   </svg>
 //                 </button>
 //               </div>
-              
+
 //               <div className="absolute inset-y-0 right-0 flex items-center">
-//                 <button 
+//                 <button
 //                   onClick={nextImage}
 //                   className="bg-black bg-opacity-30 hover:bg-opacity-50 text-white rounded-l p-1 mr-2"
 //                 >
@@ -1105,7 +1162,7 @@ export default LostAndFoundTable;
 //                   </svg>
 //                 </button>
 //               </div>
-              
+
 //               {/* Image counter */}
 //               <div className="absolute bottom-4 left-0 right-0 flex justify-center">
 //                 <div className="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
@@ -1141,12 +1198,12 @@ export default LostAndFoundTable;
 //               </svg>
 //             </button>
 //           </div>
-          
+
 //           {selectedVideo && (
 //             <div className="flex-1 flex items-center justify-center" style={{ minHeight: "300px" }}>
 //               <div className="w-full h-full flex items-center justify-center p-4">
-//                 <video 
-//                   controls 
+//                 <video
+//                   controls
 //                   className="max-h-full max-w-full object-contain"
 //                   style={{ maxHeight: "calc(100% - 20px)" }}
 //                   src={selectedVideo}
@@ -1163,4 +1220,3 @@ export default LostAndFoundTable;
 // };
 
 // export default LostAndFoundTable;
-

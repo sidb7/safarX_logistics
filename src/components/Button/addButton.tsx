@@ -37,7 +37,7 @@ const AddButton = (props: IAddButtonProps) => {
     >
       {showIcon && <img className={`${iconClass} mr-2`} src={icon} alt={alt} />}
       <p
-        className={`${textClassName} text-[#004EFF] text-sm font-semibold leading-5`}
+        className={`${textClassName} text-[#160783] text-sm font-semibold leading-5`}
       >
         {capitalizeFirstLetterWithExclude(text, excludeWords)}
       </p>

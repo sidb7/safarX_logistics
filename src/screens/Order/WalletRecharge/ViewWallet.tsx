@@ -840,7 +840,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                       />
                     </div>
                     <div className="space-y-2 mt-5">
-                      <p className="font-Open text-base text-[#004EFF] font-normal leading-5 opacity-[0.4]">
+                      <p className="font-Open text-base text-[#160783] font-normal leading-5 opacity-[0.4]">
                         Recharge using COD Balance
                       </p>
                       <p className="font-Open text-xs text-[#777777] font-normal leading-4 opacity-[0.4]">
@@ -922,7 +922,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                                 }}
                                 className={`border cursor-pointer text-sm min-w-[6rem] py-[10px] text-center flex justify-center items-center  px-[10px] rounded-[9px] transition-transform ${
                                   el?.paymentId === paymentGateway
-                                    ? "border-[#004EFF] border-[0.5px] text-white scale-105"
+                                    ? "border-[#160783] border-[0.5px] text-white scale-105"
                                     : "hover:bg-[#f4f0f0] hover:shadow-cardShadow2a"
                                 }`}
                               >
@@ -1136,7 +1136,7 @@ const ViewWallet: React.FunctionComponent<IViewWalletProps> = (props) => {
                     />
                   )}
                   <div
-                    className={`flex gap-x-2 items-center bg-[#FFFFFF] text-[#004EFF] underline underline-offset-4 hover:bg-[#F2F6FF] hover:shadow-cardShadow2a focus:bg-[#F2F6FF] focus:border focus:border-[#CCDCFF] hover:rounded-md px-2 py-4 ${
+                    className={`flex gap-x-2 items-center bg-[#FFFFFF] text-[#160783] underline underline-offset-4 hover:bg-[#F2F6FF] hover:shadow-cardShadow2a focus:bg-[#F2F6FF] focus:border focus:border-[#CCDCFF] hover:rounded-md px-2 py-4 ${
                       isCouponVerified ? "pb-14 lg:pb-10" : ""
                     } ${couponDetails?.length === 0 ? "hidden" : ""}`}
                     onClick={toggleCoupons}

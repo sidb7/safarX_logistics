@@ -35,21 +35,21 @@ input {
 }
 
 /* input:focus {
-  border-color: #004eff;
+  border-color: #160783;
   border-width: 1px;
 } */
 
 .filled {
   top: 0;
   transform: translateY(-50%) scale(0.9);
-  color: #004eff;
+  color: #160783;
   background-color: white;
 }
 
 input:focus + label {
   top: 0;
   transform: translateY(-50%) scale(0.9);
-  color: #004eff;
+  color: #160783;
   background-color: white;
 }
 

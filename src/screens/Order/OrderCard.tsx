@@ -297,7 +297,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
 
           <div className="">
             <div className="mt-3 mb-2 flex items-center justify-between">
-              <div className="text-[#004EFF] flex items-center justify-center  text-[12px]">
+              <div className="text-[#160783] flex items-center justify-center  text-[12px]">
                 {cartData?.status?.latestStatus === "CANCELLED" && (
                   <img src={blueCar} alt="" className="mr-2 w-[22px]" />
                 )}
@@ -317,7 +317,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
 
               <div className="flex items-center text-[14px]">
                 <div> ₹ {cartData?.invoiceValue} </div>
-                <div className="ml-2 text-[#004EFF]">
+                <div className="ml-2 text-[#160783]">
                   <span>
                     {codInfo ? (codInfo?.isCod ? "COD" : "PREPAID") : "-"}
                   </span>
@@ -512,17 +512,17 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
               }`}
             >
               {/* <div className="">
-                <button className="border  border-[#004EFF] text-[#004EFF] text-[12px] px-3 py-2 rounded">
+                <button className="border  border-[#160783] text-[#160783] text-[12px] px-3 py-2 rounded">
                   General Tag
                 </button>
-                <button className="border ml-4 border-[#004EFF] text-[#004EFF] text-[12px] px-3 py-2 rounded">
+                <button className="border ml-4 border-[#160783] text-[#160783] text-[12px] px-3 py-2 rounded">
                   Service Tag
                 </button>
               </div> */}
 
               <div className="cursor-pointer">
                 {/* <div className="flex gap-x-1">
-                  <p className="text-sm text-[#004EFF] font-Open font-semibold">
+                  <p className="text-sm text-[#160783] font-Open font-semibold">
                     RESCHEDULE
                   </p>
                 </div> */}

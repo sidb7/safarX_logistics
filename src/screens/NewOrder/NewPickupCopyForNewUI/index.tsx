@@ -338,7 +338,7 @@ const PickupLocationUpdatedUI = () => {
                 setIsReturnAddress(e.target.checked);
               }}
             />
-            <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+            <p className="text-[14px] font-Open text-[#160783] lg:font-semibold">
               Return Address Same As Pickup
             </p>
           </div>

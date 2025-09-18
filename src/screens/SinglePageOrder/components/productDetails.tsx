@@ -60,7 +60,7 @@ const ProductDetails: React.FunctionComponent<IPackageBoxProps> = ({
   return (
     <div
       className={` ${className} items-center product-box  flex w-fit itisActiveChannelems-center border-2 rounded-md min-w-[200px] relative ${
-        isSelected && "border-[#004EFF]"
+        isSelected && "border-[#160783]"
       }`}
       onClick={onClick}
       style={{

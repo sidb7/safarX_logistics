@@ -31,7 +31,6 @@ import { capitalizeFirstLetter } from "../../utils/utility";
 import sessionManager from "../../utils/sessionManager";
 import { COMPANY_NAME, SUPPORT_LINK } from "../../utils/ApiUrls";
 
-
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
@@ -68,7 +67,7 @@ const Index = (props: ITypeProps) => {
           <div className="flex flex-col  items-center  ">
             <p className="font-Open text-sm md:text-base font-semibold text-center">
               Are you sure you want to select
-              <span className="text-[#004EFF]"> {onSelectPlan?.planName} </span>
+              <span className="text-[#160783]"> {onSelectPlan?.planName} </span>
               plan?
             </p>
             <div className="flex  items-center gap-x-4 mt-10">
@@ -527,8 +526,7 @@ const Index = (props: ITypeProps) => {
                       onClick={() => {
                         {
                           const supportUrl =
-                            COMPANY_NAME ===
-                            "Shipyaari"
+                            COMPANY_NAME === "Shipyaari"
                               ? "https://shipyaari.freshdesk.com"
                               : SUPPORT_LINK;
                           window.open(supportUrl, "_blank");
@@ -632,10 +630,10 @@ const Index = (props: ITypeProps) => {
                     <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
                       <div className="flex flex-col gap-y-6">
                         <div className="flex justify-between">
-                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#004EFF]">
+                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#160783]">
                             Total:
                           </p>
-                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#004EFF]">
+                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#160783]">
                             ₹ {pendingPlan?.price || 0}
                           </p>
                         </div>

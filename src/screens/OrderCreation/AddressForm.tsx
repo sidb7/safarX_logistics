@@ -1,5 +1,5 @@
 // import { useState, ReactNode, useEffect, useRef } from "react";
-// import FloatingLabelInput from "./FloatingLabelInput"; 
+// import FloatingLabelInput from "./FloatingLabelInput";
 // import OneButton from "../../components/Button/OneButton";
 // import userguide from "../../assets/Order/User guide.svg";
 // import locationIcon from "../../assets/Order/Location.svg";
@@ -21,7 +21,6 @@
 // import { POST } from "../../utils/webService";
 // import { toast } from "react-hot-toast"; // Assuming this is available since it's used in OrderForm
 // import sessionManager from "../../utils/sessionManager";
-
 
 // // Import the Save and Bookmark icons like in OrderForm
 // const Save = ({ className = "w-5 h-5" }) => (
@@ -74,7 +73,6 @@
 //   ORDER_TYPE: "order-creation-order-type",
 //   REVERSE_STATE: "order-creation-reverse-state",
 // };
-
 
 // interface VerifiedAddress {
 //   person_name: string;
@@ -187,7 +185,7 @@
 //       // email: boolean;
 //     };
 //     delivery: {
-//       contactNo: boolean; 
+//       contactNo: boolean;
 //       address: boolean;
 //       name: boolean;
 //       pincode: boolean;
@@ -289,12 +287,6 @@
 // const [gstSetFromAddress, setGstSetFromAddress] = useState(false);
 // const gstFromSessionAttempted = useRef(false);
 
-
-
-
-
-
-
 //   // Function to validate phone number - 10 digits starting with 6, 7, 8, or 9
 //   const isValidPhoneNumber = (phone: string): boolean => {
 //     // Remove any non-digit characters (like spaces, dashes, etc.)
@@ -302,7 +294,7 @@
 //     const phoneRegex = /^[6-9]\d{9}$/;
 //     return phoneRegex.test(cleanPhone);
 //   };
-   
+
 //   const sessionData = sessionManager({});
 //   const { sellerInfo } = sessionManager({});
 //   console.log("Session Data:", sessionData);
@@ -312,13 +304,13 @@
 //   //   // Check for GST number in the correct path: sellerInfo.kycDetails.gstNumber
 //   //   if (sellerInfo?.kycDetails?.gstNumber) {
 //   //     console.log("Found GST in session:", sellerInfo.kycDetails.gstNumber);
-      
+
 //   //     // Update the pickup form state with the GST number
 //   //     setPickupFormValues(prev => ({
 //   //       ...prev,
 //   //       gstNo: sellerInfo.kycDetails.gstNumber
 //   //     }));
-      
+
 //   //     // Clear any validation error for GST
 //   //     clearFieldError("pickup", "gstNo");
 //   //   }
@@ -327,16 +319,16 @@
 //   //   // Only set the GST once when component mounts, and only if not already set
 //   //   if (sellerInfo?.kycDetails?.gstNumber && !gstInitialized && !pickupFormValues.gstNo) {
 //   //     console.log("Setting GST from session:", sellerInfo.kycDetails.gstNumber);
-      
+
 //   //     // Update the pickup form state with the GST number
 //   //     setPickupFormValues(prev => ({
 //   //       ...prev,
 //   //       gstNo: sellerInfo.kycDetails.gstNumber
 //   //     }));
-      
+
 //   //     // Mark as initialized so we don't override user edits
 //   //     setGstInitialized(true);
-      
+
 //   //     // Clear any validation error for GST
 //   //     clearFieldError("pickup", "gstNo");
 //   //   }
@@ -344,26 +336,25 @@
 //    // Only run once on mount to potentially set GST from session
 //    useEffect(() => {
 //     // Only try to set from session once, and only if not already set
-//     if (sellerInfo?.kycDetails?.gstNumber && 
-//         !gstFromSessionAttempted.current && 
+//     if (sellerInfo?.kycDetails?.gstNumber &&
+//         !gstFromSessionAttempted.current &&
 //         !pickupFormValues.gstNo) {
-      
+
 //       console.log("Setting GST from session:", sellerInfo.kycDetails.gstNumber);
 //       setPickupFormValues(prev => ({
 //         ...prev,
 //         gstNo: sellerInfo.kycDetails.gstNumber
 //       }));
-      
+
 //       clearFieldError("pickup", "gstNo");
 //     }
-    
+
 //     // Mark that we've attempted to set GST from session, regardless of result
 //     gstFromSessionAttempted.current = true;
-    
+
 //     // Only run this effect once on mount
 //     // eslint-disable-next-line react-hooks/exhaustive-deps
 //   }, []);
-
 
 //   // Fetch default pickup address on component mount
 //   useEffect(() => {
@@ -374,33 +365,33 @@
 //   // Magic Fill function for pickup address
 // const handlePickupMagicFill = async () => {
 //   if (isMagicFilling.pickup) return;
-  
+
 //   setIsMagicFilling(prev => ({ ...prev, pickup: true }));
-  
+
 //   try {
 //     // Get current address to verify
 //     const addressToVerify = pickupFormValues.address || '';
-    
+
 //     if (!addressToVerify.trim()) {
 //       toast.error("Please enter an address to use Magic Fill");
 //       return;
 //     }
-    
+
 //     const payload = {
 //       data: addressToVerify
 //     };
-    
+
 //     const response = await POST(VERIFY_ADDRESS, payload);
-    
+
 //     if (response?.data?.success) {
 //       const verifiedData = response.data.data.message as VerifiedAddress;
-      
+
 //       // Fill in the form fields with verified data
 //       const addressLine1Parts:any = [];
 //       if (verifiedData.floor) addressLine1Parts.push(verifiedData.floor);
 //       if (verifiedData.building_name) addressLine1Parts.push(verifiedData.building_name);
 //       if (verifiedData.house_number) addressLine1Parts.push(verifiedData.house_number);
-      
+
 //       setPickupFormValues(prev => ({
 //         ...prev,
 //         addressLine1: addressLine1Parts.join(', '),
@@ -415,7 +406,7 @@
 //       if (verifiedData.pincode && verifiedData.pincode.length === 6) {
 //         fetchPincodeData(verifiedData.pincode, "pickup");
 //       }
-      
+
 //       // Clear any errors in the updated fields
 //       clearFieldError("pickup", "addressLine1");
 //       clearFieldError("pickup", "addressLine2");
@@ -423,12 +414,12 @@
 //       clearFieldError("pickup", "state");
 //       clearFieldError("pickup", "landmark");
 //       clearFieldError("pickup", "pincode");
-      
+
 //       // Ensure pickup details are shown after using Magic Fill
 //       if (!showPickupDetails) {
 //         setShowPickupDetails(true);
 //       }
-      
+
 //       toast.success("Address verified and filled successfully!");
 //     } else {
 //       toast.error(response?.data?.message || "Failed to verify address");
@@ -444,33 +435,33 @@
 // // Magic Fill function for delivery address
 // const handleDeliveryMagicFill = async () => {
 //   if (isMagicFilling.delivery) return;
-  
+
 //   setIsMagicFilling(prev => ({ ...prev, delivery: true }));
-  
+
 //   try {
 //     // Get current address to verify
 //     const addressToVerify = deliveryFormValues.address || '';
-    
+
 //     if (!addressToVerify.trim()) {
 //       toast.error("Please enter an address to use Magic Fill");
 //       return;
 //     }
-    
+
 //     const payload = {
 //       data: addressToVerify
 //     };
-    
+
 //     const response = await POST(VERIFY_ADDRESS, payload);
-    
+
 //     if (response?.data?.success) {
 //       const verifiedData = response.data.data.message as VerifiedAddress;
-      
+
 //       // Fill in the form fields with verified data
 //       const addressLine1Parts:any = [];
 //       if (verifiedData.floor) addressLine1Parts.push(verifiedData.floor);
 //       if (verifiedData.building_name) addressLine1Parts.push(verifiedData.building_name);
 //       if (verifiedData.house_number) addressLine1Parts.push(verifiedData.house_number);
-      
+
 //       setDeliveryFormValues(prev => ({
 //         ...prev,
 //         addressLine1: addressLine1Parts.join(', '),
@@ -485,7 +476,7 @@
 //       if (verifiedData.pincode && verifiedData.pincode.length === 6) {
 //         fetchPincodeData(verifiedData.pincode, "delivery");
 //       }
-      
+
 //       // Clear any errors in the updated fields
 //       clearFieldError("delivery", "addressLine1");
 //       clearFieldError("delivery", "addressLine2");
@@ -493,12 +484,12 @@
 //       clearFieldError("delivery", "state");
 //       clearFieldError("delivery", "landmark");
 //       clearFieldError("delivery", "pincode");
-      
+
 //       // Ensure delivery details are shown after using Magic Fill
 //       if (!showDeliveryDetails) {
 //         setShowDeliveryDetails(true);
 //       }
-      
+
 //       toast.success("Address verified and filled successfully!");
 //     } else {
 //       toast.error(response?.data?.message || "Failed to verify address");
@@ -514,24 +505,24 @@
 //   // Function to fetch pincode data from API
 //   const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
 //     if (!pincode || pincode.length < 6) return;
-    
+
 //     // Set loading state for the pincode
 //     if (addressType === "pickup") {
 //       setIsPincodeLoading({ ...isPincodeLoading, pickup: true });
 //     } else {
 //       setIsPincodeLoading({ ...isPincodeLoading, delivery: true });
 //     }
-    
+
 //     try {
 //       const payload = {
 //         pincode: pincode
 //       };
-      
+
 //       const response = await POST(GET_PINCODE_DATA, payload);
-      
+
 //       if (response?.data?.success && response.data.data.length > 0) {
 //         const pincodeData = response.data.data[0];
-        
+
 //         // Update form values based on response
 //         if (addressType === "pickup") {
 //           setPickupFormValues(prev => ({
@@ -539,11 +530,11 @@
 //             city: pincodeData.city || prev.city,
 //             state: pincodeData.state || prev.state,
 //           }));
-          
+
 //           // Clear any errors in the updated fields
 //           clearFieldError("pickup", "city");
 //           clearFieldError("pickup", "state");
-          
+
 //           // Ensure pickup details are shown after auto-filling
 //           if (!showPickupDetails) {
 //             setShowPickupDetails(true);
@@ -554,11 +545,11 @@
 //             city: pincodeData.city || prev.city,
 //             state: pincodeData.state || prev.state,
 //           }));
-          
+
 //           // Clear any errors in the updated fields
 //           clearFieldError("delivery", "city");
 //           clearFieldError("delivery", "state");
-          
+
 //           // Ensure delivery details are shown after auto-filling
 //           if (!showDeliveryDetails) {
 //             setShowDeliveryDetails(true);
@@ -609,7 +600,7 @@
 // //   try {
 // //     // Store the current GST value from localStorage before making the API call
 // //     const existingGstNo = pickupFormValues.gstNo;
-    
+
 // //     const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
 
 // //     if (response?.data?.success && response.data.data) {
@@ -619,7 +610,7 @@
 
 // //       // Extract and set form values
 // //       const formValues = extractFormValues(address);
-      
+
 // //       // Prioritized GST number handling:
 // //       // 1. Use API response GST if available
 // //       // 2. If not, use localStorage GST if available
@@ -631,7 +622,7 @@
 // //         // No GST from API or localStorage, try sellerInfo
 // //         formValues.gstNo = sellerInfo.kycDetails.gstNumber;
 // //       }
-      
+
 // //       setPickupFormValues(formValues);
 
 // //       // If address is already saved in system, mark it as saved
@@ -653,7 +644,7 @@
 //     const tempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
 //     // Store current form values before API call
 //     const currentFormValues = { ...pickupFormValues };
-    
+
 //     const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
 
 //     if (response?.data?.success && response.data.data) {
@@ -663,7 +654,7 @@
 
 //       // Extract values from API response
 //       const apiFormValues = extractFormValues(address);
-      
+
 //       // Create a merged object that prioritizes current values
 //       // that have been modified by the user
 //       // const mergedValues = {
@@ -675,7 +666,7 @@
 //       //   addressLine1: currentFormValues.addressLine1 || apiFormValues.addressLine1,
 //       //   addressLine2: currentFormValues.addressLine2 || apiFormValues.addressLine2,
 //       //   landmark: currentFormValues.landmark || apiFormValues.landmark,
-//       //   gstNo: currentFormValues.gstNo || apiFormValues.gstNo || 
+//       //   gstNo: currentFormValues.gstNo || apiFormValues.gstNo ||
 //       //          (sellerInfo?.kycDetails?.gstNumber || ""),
 //       // };
 //         // If tempOrderId exists, prioritize localStorage values (current form values)
@@ -683,7 +674,7 @@
 
 //         if (tempOrderId) {
 //           mergedValues = {
-            
+
 //             ...currentFormValues,
 //             // Prioritize current values for in-progress orders
 //             pincode: currentFormValues.pincode || apiFormValues.pincode,
@@ -708,7 +699,7 @@
 //             gstNo: (sellerInfo?.kycDetails?.gstNumber || "") || apiFormValues.gstNo || currentFormValues.gstNo ,
 //           };
 //         }
-      
+
 //       // Update form values with merged data
 //       setPickupFormValues(mergedValues);
 
@@ -886,7 +877,7 @@
 //         if (!address.gstNo && !formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
 //           formValues.gstNo = sellerInfo.kycDetails.gstNumber;
 //         }
-        
+
 //       // Update pickup form values
 //       setPickupFormValues(formValues);
 //       // Also store the original address object if needed
@@ -954,7 +945,7 @@
 //   const handlePickupInputChange = (field: keyof FormValues, value: string) => {
 
 //     let newValue = value;
-  
+
 //     // Special handling for GST number
 //     if (field === "gstNo") {
 //       // Remove non-alphanumeric characters
@@ -963,7 +954,7 @@
 //       newValue = newValue.toUpperCase();
 //       // Limit to 15 characters
 //       newValue = newValue.slice(0, 15);
-      
+
 //       // Add validation error if GST is entered but not exactly 15 chars for B2B
 //       if (orderType === "B2B" && newValue.length > 0 && newValue.length !== 15) {
 //         setGstValidationErrors(prev => ({
@@ -992,8 +983,6 @@
 //         pickup: !isValid
 //       }));
 //     }
-
-    
 
 //     // Special handling for pincode - fetch city and state data
 //     if (field === "pincode" && value.length === 6) {
@@ -1025,7 +1014,7 @@
 //   ) => {
 
 //     let newValue = value;
-  
+
 //   // Special handling for GST number
 //   if (field === "gstNo") {
 //     // Remove non-alphanumeric characters
@@ -1034,7 +1023,7 @@
 //     newValue = newValue.toUpperCase();
 //     // Limit to 15 characters
 //     newValue = newValue.slice(0, 15);
-    
+
 //     // Add validation error if GST is entered but not exactly 15 chars for B2B
 //     if (orderType === "B2B" && newValue.length > 0 && newValue.length !== 15) {
 //       setGstValidationErrors(prev => ({
@@ -1048,9 +1037,6 @@
 //       }));
 //     }
 //   }
-  
-
-
 
 //     setDeliveryFormValues((prev) => ({
 //       ...prev,
@@ -1470,7 +1456,7 @@
 //             if (!address.gstNo && !formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
 //               formValues.gstNo = sellerInfo.kycDetails.gstNumber;
 //             }
-      
+
 //       // Update pickup form values
 //       setPickupFormValues(formValues);
 //       // Also store the original address object if needed
@@ -1669,7 +1655,7 @@
 //       if (response?.data?.success) {
 //         toast.success("Pickup address saved successfully!");
 //         setSavedAddresses({ ...savedAddresses, pickup: true });
-        
+
 //         // Update pickupAddress with the saved address if response contains the data
 //         if (response.data.data) {
 //           setPickupAddress(response.data.data);
@@ -1755,7 +1741,7 @@
 //       if (response?.data?.success) {
 //         toast.success("Delivery address saved successfully!");
 //         setSavedAddresses({ ...savedAddresses, delivery: true });
-        
+
 //         // Update deliveryAddress with the saved address if response contains the data
 //         if (response.data.data) {
 //           setDeliveryAddress(response.data.data);
@@ -1797,8 +1783,8 @@
 //               {isSavingAddress.pickup ? (
 //                 <LoadingIcon />
 //               ) : (
-//                 <Bookmark 
-//                   className="w-5 h-5" 
+//                 <Bookmark
+//                   className="w-5 h-5"
 //                   isFilled={savedAddresses.pickup}
 //                 />
 //               )}
@@ -1869,7 +1855,7 @@
 //                 variant="primary"
 //                 showIcon={true}
 //                 icon={locationIcon}
-//                 className="!rounded-full !bg-[#004EFF] hover:!bg-blue-500"
+//                 className="!rounded-full !bg-[#160783] hover:!bg-blue-500"
 //               />
 //             </div> */}
 
@@ -2010,8 +1996,8 @@
 //                       error={formErrors.pickup.gstNo || gstValidationErrors.pickup}
 
 //                       // errorMessage="GST No is required for B2B orders"
-//                       errorMessage={gstValidationErrors.pickup 
-//                         ? "GST number must be exactly 15 characters" 
+//                       errorMessage={gstValidationErrors.pickup
+//                         ? "GST number must be exactly 15 characters"
 //                         : "GST No is required for B2B orders"}
 
 //                         maxLength={15}
@@ -2060,8 +2046,8 @@
 //               {isSavingAddress.delivery ? (
 //                 <LoadingIcon />
 //               ) : (
-//                 <Bookmark 
-//                   className="w-5 h-5" 
+//                 <Bookmark
+//                   className="w-5 h-5"
 //                   isFilled={savedAddresses.delivery}
 //                 />
 //               )}
@@ -2131,7 +2117,7 @@
 //                 variant="primary"
 //                 showIcon={true}
 //                 icon={locationIcon}
-//                 className="!rounded-full !bg-[#004EFF] hover:!bg-blue-500"
+//                 className="!rounded-full !bg-[#160783] hover:!bg-blue-500"
 //               />
 //             </div> */}
 
@@ -2272,8 +2258,8 @@
 //                       error={formErrors.delivery.gstNo || gstValidationErrors.delivery}
 
 //                       // errorMessage="GST No is required for B2B orders"
-//                       errorMessage={gstValidationErrors.delivery 
-//                         ? "GST number must be exactly 15 characters" 
+//                       errorMessage={gstValidationErrors.delivery
+//                         ? "GST number must be exactly 15 characters"
 //                         : "GST No is required for B2B orders"}
 
 //                         maxLength={15}
@@ -2416,9 +2402,8 @@
 
 // export default AddressForm;
 
-
 import { useState, ReactNode, useEffect, useRef } from "react";
-import FloatingLabelInput from "./FloatingLabelInput"; 
+import FloatingLabelInput from "./FloatingLabelInput";
 import OneButton from "../../components/Button/OneButton";
 import userguide from "../../assets/Order/User guide.svg";
 import locationIcon from "../../assets/Order/Location.svg";
@@ -2435,12 +2420,12 @@ import {
   ADD_PICKUP_ADDRESS_CATALOGUE,
   ADD_DELIVERY_ADDRESS,
   VERIFY_ADDRESS,
-  GET_PINCODE_DATA
+  GET_PINCODE_DATA,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast"; // Assuming this is available since it's used in OrderForm
 import sessionManager from "../../utils/sessionManager";
-import { Trash } from './Icons';
+import { Trash } from "./Icons";
 
 // Import the Save and Bookmark icons like in OrderForm
 const Save = ({ className = "w-5 h-5" }) => (
@@ -2493,7 +2478,6 @@ const STORAGE_KEYS = {
   ORDER_TYPE: "order-creation-order-type",
   REVERSE_STATE: "order-creation-reverse-state",
 };
-
 
 interface VerifiedAddress {
   person_name: string;
@@ -2605,7 +2589,7 @@ interface AddressFormProps {
       // email: boolean;
     };
     delivery: {
-      contactNo: boolean; 
+      contactNo: boolean;
       name: boolean;
       pincode: boolean;
       city: boolean;
@@ -2690,58 +2674,58 @@ const AddressForm: React.FC<AddressFormProps> = ({
   // Add new validation errors state
   const [phoneValidationErrors, setPhoneValidationErrors] = useState({
     pickup: false,
-    delivery: false
+    delivery: false,
   });
 
   // Add new state for pincode loading
   const [isPincodeLoading, setIsPincodeLoading] = useState({
     pickup: false,
-    delivery: false
+    delivery: false,
   });
   const [gstValidationErrors, setGstValidationErrors] = useState({
-  pickup: false,
-  delivery: false
-});
-const [gstInitialized, setGstInitialized] = useState(false);
-const [gstSetFromAddress, setGstSetFromAddress] = useState(false);
-const gstFromSessionAttempted = useRef(false);
+    pickup: false,
+    delivery: false,
+  });
+  const [gstInitialized, setGstInitialized] = useState(false);
+  const [gstSetFromAddress, setGstSetFromAddress] = useState(false);
+  const gstFromSessionAttempted = useRef(false);
 
   // Function to validate phone number - 10 digits starting with 6, 7, 8, or 9
   const isValidPhoneNumber = (phone: string): boolean => {
     // Remove any non-digit characters (like spaces, dashes, etc.)
-    const cleanPhone = phone.replace(/\D/g, '');
+    const cleanPhone = phone.replace(/\D/g, "");
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(cleanPhone);
   };
-   
+
   const sessionData = sessionManager({});
   const { sellerInfo } = sessionManager({});
   console.log("Session Data:", sessionData);
   console.log("Seller Info:", sellerInfo);
 
-   // Only run once on mount to potentially set GST from session
-   useEffect(() => {
+  // Only run once on mount to potentially set GST from session
+  useEffect(() => {
     // Only try to set from session once, and only if not already set
-    if (sellerInfo?.kycDetails?.gstNumber && 
-        !gstFromSessionAttempted.current && 
-        !pickupFormValues.gstNo) {
-      
+    if (
+      sellerInfo?.kycDetails?.gstNumber &&
+      !gstFromSessionAttempted.current &&
+      !pickupFormValues.gstNo
+    ) {
       console.log("Setting GST from session:", sellerInfo.kycDetails.gstNumber);
-      setPickupFormValues(prev => ({
+      setPickupFormValues((prev) => ({
         ...prev,
-        gstNo: sellerInfo.kycDetails.gstNumber
+        gstNo: sellerInfo.kycDetails.gstNumber,
       }));
-      
+
       clearFieldError("pickup", "gstNo");
     }
-    
+
     // Mark that we've attempted to set GST from session, regardless of result
     gstFromSessionAttempted.current = true;
-    
+
     // Only run this effect once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   // Fetch default pickup address on component mount
   useEffect(() => {
@@ -2758,183 +2742,187 @@ const gstFromSessionAttempted = useRef(false);
       formValues.city,
       formValues.state,
       "India",
-      formValues.pincode
-    ].filter(part => part && part.trim() !== "");
-    
+      formValues.pincode,
+    ].filter((part) => part && part.trim() !== "");
+
     return addressParts.join(", ");
   };
 
   // Magic Fill function for pickup address
-const handlePickupMagicFill = async () => {
-  if (isMagicFilling.pickup) return;
-  
-  setIsMagicFilling(prev => ({ ...prev, pickup: true }));
-  
-  try {
-    // Get current address to verify
-    const addressToVerify = pickupFormValues.address || '';
-    
-    if (!addressToVerify.trim()) {
-      toast.error("Please enter an address to use Magic Fill");
-      return;
-    }
-    
-    const payload = {
-      data: addressToVerify
-    };
-    
-    const response = await POST(VERIFY_ADDRESS, payload);
-    
-    if (response?.data?.success) {
-      const verifiedData = response.data.data.message as VerifiedAddress;
-      
-      // Fill in the form fields with verified data
-      const addressLine1Parts:any = [];
-      if (verifiedData.floor) addressLine1Parts.push(verifiedData.floor);
-      if (verifiedData.building_name) addressLine1Parts.push(verifiedData.building_name);
-      if (verifiedData.house_number) addressLine1Parts.push(verifiedData.house_number);
-      
-      const updatedFormValues = {
-        ...pickupFormValues,
-        addressLine1: addressLine1Parts.join(', '),
-        addressLine2: verifiedData.locality_name || '',
-        city: verifiedData.city_name || '',
-        state: verifiedData.state_name || '',
-        landmark: verifiedData.landmark || '',
-        pincode: verifiedData.pincode || '',
+  const handlePickupMagicFill = async () => {
+    if (isMagicFilling.pickup) return;
+
+    setIsMagicFilling((prev) => ({ ...prev, pickup: true }));
+
+    try {
+      // Get current address to verify
+      const addressToVerify = pickupFormValues.address || "";
+
+      if (!addressToVerify.trim()) {
+        toast.error("Please enter an address to use Magic Fill");
+        return;
+      }
+
+      const payload = {
+        data: addressToVerify,
       };
-      
-      // Auto-generate address field
-      updatedFormValues.address = generateFullAddress(updatedFormValues);
-      
-      setPickupFormValues(updatedFormValues);
 
-      // Now call fetchPincodeData to ensure consistent behavior with manual pincode entry
-      if (verifiedData.pincode && verifiedData.pincode.length === 6) {
-        fetchPincodeData(verifiedData.pincode, "pickup");
-      }
-      
-      // Clear any errors in the updated fields
-      clearFieldError("pickup", "addressLine1");
-      clearFieldError("pickup", "addressLine2");
-      clearFieldError("pickup", "city");
-      clearFieldError("pickup", "state");
-      clearFieldError("pickup", "landmark");
-      clearFieldError("pickup", "pincode");
-      
-      // Ensure pickup details are shown after using Magic Fill
-      if (!showPickupDetails) {
-        setShowPickupDetails(true);
-      }
-      
-      toast.success("Address verified and filled successfully!");
-    } else {
-      toast.error(response?.data?.message || "Failed to verify address");
-    }
-  } catch (error) {
-    console.error("Error using Magic Fill for pickup address:", error);
-    toast.error("An error occurred while verifying the address");
-  } finally {
-    setIsMagicFilling(prev => ({ ...prev, pickup: false }));
-  }
-};
+      const response = await POST(VERIFY_ADDRESS, payload);
 
-// Magic Fill function for delivery address
-const handleDeliveryMagicFill = async () => {
-  if (isMagicFilling.delivery) return;
-  
-  setIsMagicFilling(prev => ({ ...prev, delivery: true }));
-  
-  try {
-    // Get current address to verify
-    const addressToVerify = deliveryFormValues.address || '';
-    
-    if (!addressToVerify.trim()) {
-      toast.error("Please enter an address to use Magic Fill");
-      return;
+      if (response?.data?.success) {
+        const verifiedData = response.data.data.message as VerifiedAddress;
+
+        // Fill in the form fields with verified data
+        const addressLine1Parts: any = [];
+        if (verifiedData.floor) addressLine1Parts.push(verifiedData.floor);
+        if (verifiedData.building_name)
+          addressLine1Parts.push(verifiedData.building_name);
+        if (verifiedData.house_number)
+          addressLine1Parts.push(verifiedData.house_number);
+
+        const updatedFormValues = {
+          ...pickupFormValues,
+          addressLine1: addressLine1Parts.join(", "),
+          addressLine2: verifiedData.locality_name || "",
+          city: verifiedData.city_name || "",
+          state: verifiedData.state_name || "",
+          landmark: verifiedData.landmark || "",
+          pincode: verifiedData.pincode || "",
+        };
+
+        // Auto-generate address field
+        updatedFormValues.address = generateFullAddress(updatedFormValues);
+
+        setPickupFormValues(updatedFormValues);
+
+        // Now call fetchPincodeData to ensure consistent behavior with manual pincode entry
+        if (verifiedData.pincode && verifiedData.pincode.length === 6) {
+          fetchPincodeData(verifiedData.pincode, "pickup");
+        }
+
+        // Clear any errors in the updated fields
+        clearFieldError("pickup", "addressLine1");
+        clearFieldError("pickup", "addressLine2");
+        clearFieldError("pickup", "city");
+        clearFieldError("pickup", "state");
+        clearFieldError("pickup", "landmark");
+        clearFieldError("pickup", "pincode");
+
+        // Ensure pickup details are shown after using Magic Fill
+        if (!showPickupDetails) {
+          setShowPickupDetails(true);
+        }
+
+        toast.success("Address verified and filled successfully!");
+      } else {
+        toast.error(response?.data?.message || "Failed to verify address");
+      }
+    } catch (error) {
+      console.error("Error using Magic Fill for pickup address:", error);
+      toast.error("An error occurred while verifying the address");
+    } finally {
+      setIsMagicFilling((prev) => ({ ...prev, pickup: false }));
     }
-    
-    const payload = {
-      data: addressToVerify
-    };
-    
-    const response = await POST(VERIFY_ADDRESS, payload);
-    
-    if (response?.data?.success) {
-      const verifiedData = response.data.data.message as VerifiedAddress;
-      
-      // Fill in the form fields with verified data
-      const addressLine1Parts:any = [];
-      if (verifiedData.floor) addressLine1Parts.push(verifiedData.floor);
-      if (verifiedData.building_name) addressLine1Parts.push(verifiedData.building_name);
-      if (verifiedData.house_number) addressLine1Parts.push(verifiedData.house_number);
-      
-      const updatedFormValues = {
-        ...deliveryFormValues,
-        addressLine1: addressLine1Parts.join(', '),
-        addressLine2: verifiedData.locality_name || '',
-        city: verifiedData.city_name || '',
-        state: verifiedData.state_name || '',
-        landmark: verifiedData.landmark || '',
-        pincode: verifiedData.pincode || '',
+  };
+
+  // Magic Fill function for delivery address
+  const handleDeliveryMagicFill = async () => {
+    if (isMagicFilling.delivery) return;
+
+    setIsMagicFilling((prev) => ({ ...prev, delivery: true }));
+
+    try {
+      // Get current address to verify
+      const addressToVerify = deliveryFormValues.address || "";
+
+      if (!addressToVerify.trim()) {
+        toast.error("Please enter an address to use Magic Fill");
+        return;
+      }
+
+      const payload = {
+        data: addressToVerify,
       };
-      
-      // Auto-generate address field
-      updatedFormValues.address = generateFullAddress(updatedFormValues);
-      
-      setDeliveryFormValues(updatedFormValues);
 
-      // Now call fetchPincodeData to ensure consistent behavior with manual pincode entry
-      if (verifiedData.pincode && verifiedData.pincode.length === 6) {
-        fetchPincodeData(verifiedData.pincode, "delivery");
+      const response = await POST(VERIFY_ADDRESS, payload);
+
+      if (response?.data?.success) {
+        const verifiedData = response.data.data.message as VerifiedAddress;
+
+        // Fill in the form fields with verified data
+        const addressLine1Parts: any = [];
+        if (verifiedData.floor) addressLine1Parts.push(verifiedData.floor);
+        if (verifiedData.building_name)
+          addressLine1Parts.push(verifiedData.building_name);
+        if (verifiedData.house_number)
+          addressLine1Parts.push(verifiedData.house_number);
+
+        const updatedFormValues = {
+          ...deliveryFormValues,
+          addressLine1: addressLine1Parts.join(", "),
+          addressLine2: verifiedData.locality_name || "",
+          city: verifiedData.city_name || "",
+          state: verifiedData.state_name || "",
+          landmark: verifiedData.landmark || "",
+          pincode: verifiedData.pincode || "",
+        };
+
+        // Auto-generate address field
+        updatedFormValues.address = generateFullAddress(updatedFormValues);
+
+        setDeliveryFormValues(updatedFormValues);
+
+        // Now call fetchPincodeData to ensure consistent behavior with manual pincode entry
+        if (verifiedData.pincode && verifiedData.pincode.length === 6) {
+          fetchPincodeData(verifiedData.pincode, "delivery");
+        }
+
+        // Clear any errors in the updated fields
+        clearFieldError("delivery", "addressLine1");
+        clearFieldError("delivery", "addressLine2");
+        clearFieldError("delivery", "city");
+        clearFieldError("delivery", "state");
+        clearFieldError("delivery", "landmark");
+        clearFieldError("delivery", "pincode");
+
+        // Ensure delivery details are shown after using Magic Fill
+        if (!showDeliveryDetails) {
+          setShowDeliveryDetails(true);
+        }
+
+        toast.success("Address verified and filled successfully!");
+      } else {
+        toast.error(response?.data?.message || "Failed to verify address");
       }
-      
-      // Clear any errors in the updated fields
-      clearFieldError("delivery", "addressLine1");
-      clearFieldError("delivery", "addressLine2");
-      clearFieldError("delivery", "city");
-      clearFieldError("delivery", "state");
-      clearFieldError("delivery", "landmark");
-      clearFieldError("delivery", "pincode");
-      
-      // Ensure delivery details are shown after using Magic Fill
-      if (!showDeliveryDetails) {
-        setShowDeliveryDetails(true);
-      }
-      
-      toast.success("Address verified and filled successfully!");
-    } else {
-      toast.error(response?.data?.message || "Failed to verify address");
+    } catch (error) {
+      console.error("Error using Magic Fill for delivery address:", error);
+      toast.error("An error occurred while verifying the address");
+    } finally {
+      setIsMagicFilling((prev) => ({ ...prev, delivery: false }));
     }
-  } catch (error) {
-    console.error("Error using Magic Fill for delivery address:", error);
-    toast.error("An error occurred while verifying the address");
-  } finally {
-    setIsMagicFilling(prev => ({ ...prev, delivery: false }));
-  }
-};
+  };
 
   // Function to fetch pincode data from API
   // const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
   //   if (!pincode || pincode.length < 6) return;
-    
+
   //   // Set loading state for the pincode
   //   if (addressType === "pickup") {
   //     setIsPincodeLoading({ ...isPincodeLoading, pickup: true });
   //   } else {
   //     setIsPincodeLoading({ ...isPincodeLoading, delivery: true });
   //   }
-    
+
   //   try {
   //     const payload = {
   //       pincode: pincode
   //     };
-      
+
   //     const response = await POST(GET_PINCODE_DATA, payload);
-      
+
   //     if (response?.data?.success && response.data.data.length > 0) {
   //       const pincodeData = response.data.data[0];
-        
+
   //       // Update form values based on response
   //       if (addressType === "pickup") {
   //         const updatedFormValues = {
@@ -2942,16 +2930,16 @@ const handleDeliveryMagicFill = async () => {
   //           city: pincodeData.city || pickupFormValues.city,
   //           state: pincodeData.state || pickupFormValues.state,
   //         };
-          
+
   //         // Auto-generate address field
   //         updatedFormValues.address = generateFullAddress(updatedFormValues);
-          
+
   //         setPickupFormValues(updatedFormValues);
-          
+
   //         // Clear any errors in the updated fields
   //         clearFieldError("pickup", "city");
   //         clearFieldError("pickup", "state");
-          
+
   //         // Ensure pickup details are shown after auto-filling
   //         if (!showPickupDetails) {
   //           setShowPickupDetails(true);
@@ -2962,16 +2950,16 @@ const handleDeliveryMagicFill = async () => {
   //           city: pincodeData.city || deliveryFormValues.city,
   //           state: pincodeData.state || deliveryFormValues.state,
   //         };
-          
+
   //         // Auto-generate address field
   //         updatedFormValues.address = generateFullAddress(updatedFormValues);
-          
+
   //         setDeliveryFormValues(updatedFormValues);
-          
+
   //         // Clear any errors in the updated fields
   //         clearFieldError("delivery", "city");
   //         clearFieldError("delivery", "state");
-          
+
   //         // Ensure delivery details are shown after auto-filling
   //         if (!showDeliveryDetails) {
   //           setShowDeliveryDetails(true);
@@ -2990,152 +2978,165 @@ const handleDeliveryMagicFill = async () => {
   //   }
   // };
   // Function to fetch pincode data from API - FIXED VERSION
-const fetchPincodeData = async (pincode: string, addressType: "pickup" | "delivery") => {
-  if (!pincode || pincode.length < 6) return;
-  
-  // Set loading state for the pincode
-  setIsPincodeLoading(prev => ({
-    ...prev,
-    [addressType]: true
-  }));
-  
-  try {
-    const payload = {
-      pincode: pincode
-    };
-    
-    const response = await POST(GET_PINCODE_DATA, payload);
-    
-    if (response?.data?.success && response.data.data.length > 0) {
-      const pincodeData = response.data.data[0];
-      
-      // Update form values based on response - USING FUNCTIONAL UPDATES
-      if (addressType === "pickup") {
-        setPickupFormValues(prev => {
-          const updatedFormValues = {
-            ...prev,
-            city: pincodeData.city || prev.city,
-            state: pincodeData.state || prev.state,
-          };
-          
-          // Auto-generate address field
-          updatedFormValues.address = generateFullAddress(updatedFormValues);
-          
-          return updatedFormValues;
-        });
-        
-        // Clear any errors in the updated fields
-        clearFieldError("pickup", "city");
-        clearFieldError("pickup", "state");
-        
-        // Ensure pickup details are shown after auto-filling
-        if (!showPickupDetails) {
-          setShowPickupDetails(true);
-        }
-      } else {
-        setDeliveryFormValues(prev => {
-          const updatedFormValues = {
-            ...prev,
-            city: pincodeData.city || prev.city,
-            state: pincodeData.state || prev.state,
-          };
-          
-          // Auto-generate address field
-          updatedFormValues.address = generateFullAddress(updatedFormValues);
-          
-          return updatedFormValues;
-        });
-        
-        // Clear any errors in the updated fields
-        clearFieldError("delivery", "city");
-        clearFieldError("delivery", "state");
-        
-        // Ensure delivery details are shown after auto-filling
-        if (!showDeliveryDetails) {
-          setShowDeliveryDetails(true);
+  const fetchPincodeData = async (
+    pincode: string,
+    addressType: "pickup" | "delivery"
+  ) => {
+    if (!pincode || pincode.length < 6) return;
+
+    // Set loading state for the pincode
+    setIsPincodeLoading((prev) => ({
+      ...prev,
+      [addressType]: true,
+    }));
+
+    try {
+      const payload = {
+        pincode: pincode,
+      };
+
+      const response = await POST(GET_PINCODE_DATA, payload);
+
+      if (response?.data?.success && response.data.data.length > 0) {
+        const pincodeData = response.data.data[0];
+
+        // Update form values based on response - USING FUNCTIONAL UPDATES
+        if (addressType === "pickup") {
+          setPickupFormValues((prev) => {
+            const updatedFormValues = {
+              ...prev,
+              city: pincodeData.city || prev.city,
+              state: pincodeData.state || prev.state,
+            };
+
+            // Auto-generate address field
+            updatedFormValues.address = generateFullAddress(updatedFormValues);
+
+            return updatedFormValues;
+          });
+
+          // Clear any errors in the updated fields
+          clearFieldError("pickup", "city");
+          clearFieldError("pickup", "state");
+
+          // Ensure pickup details are shown after auto-filling
+          if (!showPickupDetails) {
+            setShowPickupDetails(true);
+          }
+        } else {
+          setDeliveryFormValues((prev) => {
+            const updatedFormValues = {
+              ...prev,
+              city: pincodeData.city || prev.city,
+              state: pincodeData.state || prev.state,
+            };
+
+            // Auto-generate address field
+            updatedFormValues.address = generateFullAddress(updatedFormValues);
+
+            return updatedFormValues;
+          });
+
+          // Clear any errors in the updated fields
+          clearFieldError("delivery", "city");
+          clearFieldError("delivery", "state");
+
+          // Ensure delivery details are shown after auto-filling
+          if (!showDeliveryDetails) {
+            setShowDeliveryDetails(true);
+          }
         }
       }
+    } catch (error) {
+      console.error(`Error fetching pincode data for ${addressType}:`, error);
+    } finally {
+      // Clear loading state
+      setIsPincodeLoading((prev) => ({
+        ...prev,
+        [addressType]: false,
+      }));
     }
-  } catch (error) {
-    console.error(`Error fetching pincode data for ${addressType}:`, error);
-  } finally {
-    // Clear loading state
-    setIsPincodeLoading(prev => ({
-      ...prev,
-      [addressType]: false
-    }));
-  }
-};
+  };
 
-const fetchDefaultPickupAddress = async () => {
-  setIsLoading((prev) => ({ ...prev, pickup: true }));
-  try {
+  const fetchDefaultPickupAddress = async () => {
+    setIsLoading((prev) => ({ ...prev, pickup: true }));
+    try {
+      // Check if there's a temporary order ID in localStorage
+      const tempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
+      // Store current form values before API call
+      const currentFormValues = { ...pickupFormValues };
 
-    // Check if there's a temporary order ID in localStorage
-    const tempOrderId = localStorage.getItem(STORAGE_KEYS.TEMP_ORDER_ID);
-    // Store current form values before API call
-    const currentFormValues = { ...pickupFormValues };
-    
-    const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
+      const response = await POST(DEFAULT_PICKUP_ADDRESS, {});
 
-    if (response?.data?.success && response.data.data) {
-      const address = response.data.data;
-      // Set pickup address object
-      setPickupAddress(address);
+      if (response?.data?.success && response.data.data) {
+        const address = response.data.data;
+        // Set pickup address object
+        setPickupAddress(address);
 
-      // Extract values from API response
-      const apiFormValues = extractFormValues(address);
-      
-      // Create a merged object that prioritizes current values
-      // that have been modified by the user
+        // Extract values from API response
+        const apiFormValues = extractFormValues(address);
+
+        // Create a merged object that prioritizes current values
+        // that have been modified by the user
         // If tempOrderId exists, prioritize localStorage values (current form values)
         let mergedValues;
 
         if (tempOrderId) {
           mergedValues = {
-            
             ...currentFormValues,
             // Prioritize current values for in-progress orders
             pincode: currentFormValues.pincode || apiFormValues.pincode,
             city: currentFormValues.city || apiFormValues.city,
             state: currentFormValues.state || apiFormValues.state,
-            addressLine1: currentFormValues.addressLine1 || apiFormValues.addressLine1,
-            addressLine2: currentFormValues.addressLine2 || apiFormValues.addressLine2,
+            addressLine1:
+              currentFormValues.addressLine1 || apiFormValues.addressLine1,
+            addressLine2:
+              currentFormValues.addressLine2 || apiFormValues.addressLine2,
             landmark: currentFormValues.landmark || apiFormValues.landmark,
-            gstNo:  (sellerInfo?.kycDetails?.gstNumber || "") || currentFormValues.gstNo || apiFormValues.gstNo   ,
+            gstNo:
+              sellerInfo?.kycDetails?.gstNumber ||
+              "" ||
+              currentFormValues.gstNo ||
+              apiFormValues.gstNo,
           };
         } else {
           // For new orders, prioritize API values for these specific fields
           mergedValues = {
             ...apiFormValues,
             pincode: apiFormValues.pincode || currentFormValues.pincode,
-            addressLine1: apiFormValues.addressLine1 || currentFormValues.addressLine1,
-            addressLine2: apiFormValues.addressLine2 || currentFormValues.addressLine2,
+            addressLine1:
+              apiFormValues.addressLine1 || currentFormValues.addressLine1,
+            addressLine2:
+              apiFormValues.addressLine2 || currentFormValues.addressLine2,
             landmark: apiFormValues.landmark || currentFormValues.landmark,
             city: apiFormValues.city || currentFormValues.city,
             state: apiFormValues.state || currentFormValues.state,
             // Still maintain GST priority from different sources
-            gstNo: (sellerInfo?.kycDetails?.gstNumber || "") || apiFormValues.gstNo || currentFormValues.gstNo ,
+            gstNo:
+              sellerInfo?.kycDetails?.gstNumber ||
+              "" ||
+              apiFormValues.gstNo ||
+              currentFormValues.gstNo,
           };
         }
-      
-      // Auto-generate address field from components
-      mergedValues.address = generateFullAddress(mergedValues);
-      
-      // Update form values with merged data
-      setPickupFormValues(mergedValues);
 
-      // If address is already saved in system, mark it as saved
-      if (address.pickupAddressId) {
-        setSavedAddresses(prev => ({ ...prev, pickup: true }));
+        // Auto-generate address field from components
+        mergedValues.address = generateFullAddress(mergedValues);
+
+        // Update form values with merged data
+        setPickupFormValues(mergedValues);
+
+        // If address is already saved in system, mark it as saved
+        if (address.pickupAddressId) {
+          setSavedAddresses((prev) => ({ ...prev, pickup: true }));
+        }
       }
+    } catch (error) {
+      console.error("Error fetching default pickup address:", error);
+    } finally {
+      setIsLoading((prev) => ({ ...prev, pickup: false }));
     }
-  } catch (error) {
-    console.error("Error fetching default pickup address:", error);
-  } finally {
-    setIsLoading((prev) => ({ ...prev, pickup: false }));
-  }
-};
+  };
 
   // Fetch default delivery address
   const fetchDefaultDeliveryAddress = async () => {
@@ -3150,15 +3151,15 @@ const fetchDefaultPickupAddress = async () => {
 
         // Extract and set form values
         const formValues = extractFormValues(address);
-        
+
         // Auto-generate address field from components
         formValues.address = generateFullAddress(formValues);
-        
+
         setDeliveryFormValues(formValues);
 
         // If address is already saved in system, mark it as saved
         if (address.deliveryAddressId) {
-          setSavedAddresses(prev => ({ ...prev, delivery: true }));
+          setSavedAddresses((prev) => ({ ...prev, delivery: true }));
         }
       }
     } catch (error) {
@@ -3299,100 +3300,107 @@ const fetchDefaultPickupAddress = async () => {
     const formValues = extractFormValues(address);
 
     if (currentModalType === "pickup") {
-        // If address doesn't have GST but session does, and user hasn't entered one
-        if (!address.gstNo && !formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
-          formValues.gstNo = sellerInfo.kycDetails.gstNumber;
-        }
-        
-        // Auto-generate address field from components
-        formValues.address = generateFullAddress(formValues);
-        
+      // If address doesn't have GST but session does, and user hasn't entered one
+      if (
+        !address.gstNo &&
+        !formValues.gstNo &&
+        sellerInfo?.kycDetails?.gstNumber
+      ) {
+        formValues.gstNo = sellerInfo.kycDetails.gstNumber;
+      }
+
+      // Auto-generate address field from components
+      formValues.address = generateFullAddress(formValues);
+
       // Update pickup form values
       setPickupFormValues(formValues);
       // Also store the original address object if needed
       setPickupAddress(address);
       // Check if address is already saved
-      setSavedAddresses(prev => ({
+      setSavedAddresses((prev) => ({
         ...prev,
-        pickup: !!address.pickupAddressId
+        pickup: !!address.pickupAddressId,
       }));
       // Validate phone number if available
       if (formValues.contactNo) {
-        setPhoneValidationErrors(prev => ({
+        setPhoneValidationErrors((prev) => ({
           ...prev,
-          pickup: !isValidPhoneNumber(formValues.contactNo)
+          pickup: !isValidPhoneNumber(formValues.contactNo),
         }));
       }
       // Clear all validation errors for pickup fields
-    clearFieldError("pickup", "contactNo");
-    clearFieldError("pickup", "name");
-    clearFieldError("pickup", "pincode");
-    clearFieldError("pickup", "city");
-    clearFieldError("pickup", "state");
-    clearFieldError("pickup", "addressLine1");
-    clearFieldError("pickup", "addressLine2");
-    clearFieldError("pickup", "landmark");
-    clearFieldError("pickup", "gstNo");
+      clearFieldError("pickup", "contactNo");
+      clearFieldError("pickup", "name");
+      clearFieldError("pickup", "pincode");
+      clearFieldError("pickup", "city");
+      clearFieldError("pickup", "state");
+      clearFieldError("pickup", "addressLine1");
+      clearFieldError("pickup", "addressLine2");
+      clearFieldError("pickup", "landmark");
+      clearFieldError("pickup", "gstNo");
       closePickupModal();
     } else if (currentModalType === "delivery") {
       // Auto-generate address field from components
       formValues.address = generateFullAddress(formValues);
-      
+
       // Update delivery form values
       setDeliveryFormValues(formValues);
       // Also store the original address object if needed
       setDeliveryAddress(address);
       // Check if address is already saved
-      setSavedAddresses(prev => ({
+      setSavedAddresses((prev) => ({
         ...prev,
-        delivery: !!address.deliveryAddressId
+        delivery: !!address.deliveryAddressId,
       }));
       // Validate phone number if available
       if (formValues.contactNo) {
-        setPhoneValidationErrors(prev => ({
+        setPhoneValidationErrors((prev) => ({
           ...prev,
-          delivery: !isValidPhoneNumber(formValues.contactNo)
+          delivery: !isValidPhoneNumber(formValues.contactNo),
         }));
       }
 
       // Clear all validation errors for delivery fields
-    clearFieldError("delivery", "contactNo");
-    clearFieldError("delivery", "name");
-    clearFieldError("delivery", "pincode");
-    clearFieldError("delivery", "city");
-    clearFieldError("delivery", "state");
-    clearFieldError("delivery", "addressLine1");
-    clearFieldError("delivery", "addressLine2");
-    clearFieldError("delivery", "landmark");
-    clearFieldError("delivery", "gstNo");
+      clearFieldError("delivery", "contactNo");
+      clearFieldError("delivery", "name");
+      clearFieldError("delivery", "pincode");
+      clearFieldError("delivery", "city");
+      clearFieldError("delivery", "state");
+      clearFieldError("delivery", "addressLine1");
+      clearFieldError("delivery", "addressLine2");
+      clearFieldError("delivery", "landmark");
+      clearFieldError("delivery", "gstNo");
 
       closeDeliveryModal();
     }
   };
 
   const handlePickupInputChange = (field: keyof FormValues, value: string) => {
-
     let newValue = value;
-  
+
     // Special handling for GST number
     if (field === "gstNo") {
       // Remove non-alphanumeric characters
-      newValue = value.replace(/[^a-zA-Z0-9]/g, '');
+      newValue = value.replace(/[^a-zA-Z0-9]/g, "");
       // Convert to uppercase
       newValue = newValue.toUpperCase();
       // Limit to 15 characters
       newValue = newValue.slice(0, 15);
-      
+
       // Add validation error if GST is entered but not exactly 15 chars for B2B
-      if (orderType === "B2B" && newValue.length > 0 && newValue.length !== 15) {
-        setGstValidationErrors(prev => ({
+      if (
+        orderType === "B2B" &&
+        newValue.length > 0 &&
+        newValue.length !== 15
+      ) {
+        setGstValidationErrors((prev) => ({
           ...prev,
-          pickup: true
+          pickup: true,
         }));
       } else {
-        setGstValidationErrors(prev => ({
+        setGstValidationErrors((prev) => ({
           ...prev,
-          pickup: false
+          pickup: false,
         }));
       }
     }
@@ -3404,7 +3412,16 @@ const fetchDefaultPickupAddress = async () => {
     };
 
     // Auto-generate address field from components
-    if (['addressLine1', 'addressLine2', 'landmark', 'city', 'state', 'pincode'].includes(field)) {
+    if (
+      [
+        "addressLine1",
+        "addressLine2",
+        "landmark",
+        "city",
+        "state",
+        "pincode",
+      ].includes(field)
+    ) {
       updatedFormValues.address = generateFullAddress(updatedFormValues);
     }
 
@@ -3415,9 +3432,9 @@ const fetchDefaultPickupAddress = async () => {
     if (field === "contactNo") {
       // Validate phone number
       const isValid = value.length === 0 || isValidPhoneNumber(value);
-      setPhoneValidationErrors(prev => ({
+      setPhoneValidationErrors((prev) => ({
         ...prev,
-        pickup: !isValid
+        pickup: !isValid,
       }));
     }
 
@@ -3428,7 +3445,7 @@ const fetchDefaultPickupAddress = async () => {
 
     // If we're changing any field, address may not be saved anymore
     if (savedAddresses.pickup) {
-      setSavedAddresses(prev => ({ ...prev, pickup: false }));
+      setSavedAddresses((prev) => ({ ...prev, pickup: false }));
     }
 
     // If the field is contactNo or name and has 3 or more characters, trigger search
@@ -3449,32 +3466,35 @@ const fetchDefaultPickupAddress = async () => {
     field: keyof FormValues,
     value: string
   ) => {
-
     let newValue = value;
-  
-  // Special handling for GST number
-  if (field === "gstNo") {
-    // Remove non-alphanumeric characters
-    newValue = value.replace(/[^a-zA-Z0-9]/g, '');
-    // Convert to uppercase
-    newValue = newValue.toUpperCase();
-    // Limit to 15 characters
-    newValue = newValue.slice(0, 15);
-    
-    // Add validation error if GST is entered but not exactly 15 chars for B2B
-    if (orderType === "B2B" && newValue.length > 0 && newValue.length !== 15) {
-      setGstValidationErrors(prev => ({
-        ...prev,
-        delivery: true
-      }));
-    } else {
-      setGstValidationErrors(prev => ({
-        ...prev,
-        delivery: false
-      }));
+
+    // Special handling for GST number
+    if (field === "gstNo") {
+      // Remove non-alphanumeric characters
+      newValue = value.replace(/[^a-zA-Z0-9]/g, "");
+      // Convert to uppercase
+      newValue = newValue.toUpperCase();
+      // Limit to 15 characters
+      newValue = newValue.slice(0, 15);
+
+      // Add validation error if GST is entered but not exactly 15 chars for B2B
+      if (
+        orderType === "B2B" &&
+        newValue.length > 0 &&
+        newValue.length !== 15
+      ) {
+        setGstValidationErrors((prev) => ({
+          ...prev,
+          delivery: true,
+        }));
+      } else {
+        setGstValidationErrors((prev) => ({
+          ...prev,
+          delivery: false,
+        }));
+      }
     }
-  }
-  
+
     // Update the form values
     const updatedFormValues = {
       ...deliveryFormValues,
@@ -3482,7 +3502,16 @@ const fetchDefaultPickupAddress = async () => {
     };
 
     // Auto-generate address field from components
-    if (['addressLine1', 'addressLine2', 'landmark', 'city', 'state', 'pincode'].includes(field)) {
+    if (
+      [
+        "addressLine1",
+        "addressLine2",
+        "landmark",
+        "city",
+        "state",
+        "pincode",
+      ].includes(field)
+    ) {
       updatedFormValues.address = generateFullAddress(updatedFormValues);
     }
 
@@ -3493,9 +3522,9 @@ const fetchDefaultPickupAddress = async () => {
     if (field === "contactNo") {
       // Validate phone number
       const isValid = value.length === 0 || isValidPhoneNumber(value);
-      setPhoneValidationErrors(prev => ({
+      setPhoneValidationErrors((prev) => ({
         ...prev,
-        delivery: !isValid
+        delivery: !isValid,
       }));
     }
 
@@ -3506,7 +3535,7 @@ const fetchDefaultPickupAddress = async () => {
 
     // If we're changing any field, address may not be saved anymore
     if (savedAddresses.delivery) {
-      setSavedAddresses(prev => ({ ...prev, delivery: false }));
+      setSavedAddresses((prev) => ({ ...prev, delivery: false }));
     }
 
     // If the field is contactNo or name and has 3 or more characters, trigger search
@@ -3897,14 +3926,18 @@ const fetchDefaultPickupAddress = async () => {
     const formValues = extractFormValues(address);
 
     if (type === "pickup") {
-            // If search result doesn't have GST but session does, and user hasn't entered one
-            if (!address.gstNo && !formValues.gstNo && sellerInfo?.kycDetails?.gstNumber) {
-              formValues.gstNo = sellerInfo.kycDetails.gstNumber;
-            }
-      
-            // Auto-generate address field from components
-            formValues.address = generateFullAddress(formValues);
-      
+      // If search result doesn't have GST but session does, and user hasn't entered one
+      if (
+        !address.gstNo &&
+        !formValues.gstNo &&
+        sellerInfo?.kycDetails?.gstNumber
+      ) {
+        formValues.gstNo = sellerInfo.kycDetails.gstNumber;
+      }
+
+      // Auto-generate address field from components
+      formValues.address = generateFullAddress(formValues);
+
       // Update pickup form values
       setPickupFormValues(formValues);
       // Also store the original address object if needed
@@ -3912,21 +3945,21 @@ const fetchDefaultPickupAddress = async () => {
       // Hide search results
       setShowPickupSearchResults(false);
       // If this is a saved address from search, mark it as saved
-      setSavedAddresses(prev => ({
+      setSavedAddresses((prev) => ({
         ...prev,
-        pickup: !!address.pickupAddressId
+        pickup: !!address.pickupAddressId,
       }));
       // Validate phone number
       if (formValues.contactNo) {
-        setPhoneValidationErrors(prev => ({
+        setPhoneValidationErrors((prev) => ({
           ...prev,
-          pickup: !isValidPhoneNumber(formValues.contactNo)
+          pickup: !isValidPhoneNumber(formValues.contactNo),
         }));
       }
     } else {
       // Auto-generate address field from components
       formValues.address = generateFullAddress(formValues);
-      
+
       // Update delivery form values
       setDeliveryFormValues(formValues);
       // Also store the original address object if needed
@@ -3934,15 +3967,15 @@ const fetchDefaultPickupAddress = async () => {
       // Hide search results
       setShowDeliverySearchResults(false);
       // If this is a saved address from search, mark it as saved
-      setSavedAddresses(prev => ({
+      setSavedAddresses((prev) => ({
         ...prev,
-        delivery: !!address.deliveryAddressId
+        delivery: !!address.deliveryAddressId,
       }));
       // Validate phone number
       if (formValues.contactNo) {
-        setPhoneValidationErrors(prev => ({
+        setPhoneValidationErrors((prev) => ({
           ...prev,
-          delivery: !isValidPhoneNumber(formValues.contactNo)
+          delivery: !isValidPhoneNumber(formValues.contactNo),
         }));
       }
     }
@@ -4004,9 +4037,9 @@ const fetchDefaultPickupAddress = async () => {
                 className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
                 // onClick={() => handleSelectSearchResult(type, address)}
                 onMouseDown={(e) => {
-                e.preventDefault();
-                handleSelectSearchResult(type, address);
-              }}
+                  e.preventDefault();
+                  handleSelectSearchResult(type, address);
+                }}
               >
                 {/* Show different content based on which field is being searched */}
                 {field === "contactNo" && (
@@ -4060,7 +4093,9 @@ const fetchDefaultPickupAddress = async () => {
 
     // Validate phone number
     if (!isValidPhoneNumber(pickupFormValues.contactNo)) {
-      toast.error("Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9");
+      toast.error(
+        "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9"
+      );
       return;
     }
 
@@ -4085,8 +4120,10 @@ const fetchDefaultPickupAddress = async () => {
           pickupFormValues.city,
           pickupFormValues.state,
           "India",
-          pickupFormValues.pincode
-        ].filter(Boolean).join(", "),
+          pickupFormValues.pincode,
+        ]
+          .filter(Boolean)
+          .join(", "),
         workingDays: {
           monday: true,
           tuesday: true,
@@ -4099,9 +4136,9 @@ const fetchDefaultPickupAddress = async () => {
         workingHours: "09:00",
         contact: {
           name: pickupFormValues.name,
-          mobileNo: parseInt(pickupFormValues.contactNo.replace(/\D/g, '')),
+          mobileNo: parseInt(pickupFormValues.contactNo.replace(/\D/g, "")),
           type: "warehouse associate",
-        }
+        },
       };
 
       // Call API to save pickup address
@@ -4110,7 +4147,7 @@ const fetchDefaultPickupAddress = async () => {
       if (response?.data?.success) {
         toast.success("Pickup address saved successfully!");
         setSavedAddresses({ ...savedAddresses, pickup: true });
-        
+
         // Update pickupAddress with the saved address if response contains the data
         if (response.data.data) {
           setPickupAddress(response.data.data);
@@ -4127,25 +4164,25 @@ const fetchDefaultPickupAddress = async () => {
   };
 
   // 1. Add Clear icon component after the Bookmark icon
-const ClearIcon = ({ className = "w-5 h-5" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <polyline points="3,6 5,6 21,6"></polyline>
-    <path d="m19,6v14c0,1-1,2-2,2H7c-1,0-2-1-2-2V6m3,0V4c0-1,1-2,2-2h4c0-1,1-2,2-2v2"></path>
-    <line x1="10" y1="11" x2="10" y2="17"></line>
-    <line x1="14" y1="11" x2="14" y2="17"></line>
-  </svg>
-);
+  const ClearIcon = ({ className = "w-5 h-5" }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <polyline points="3,6 5,6 21,6"></polyline>
+      <path d="m19,6v14c0,1-1,2-2,2H7c-1,0-2-1-2-2V6m3,0V4c0-1,1-2,2-2h4c0-1,1-2,2-2v2"></path>
+      <line x1="10" y1="11" x2="10" y2="17"></line>
+      <line x1="14" y1="11" x2="14" y2="17"></line>
+    </svg>
+  );
 
   // New function to save delivery address
   const saveDeliveryAddress = async () => {
@@ -4167,7 +4204,9 @@ const ClearIcon = ({ className = "w-5 h-5" }) => (
 
     // Validate phone number
     if (!isValidPhoneNumber(deliveryFormValues.contactNo)) {
-      toast.error("Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9");
+      toast.error(
+        "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9"
+      );
       return;
     }
 
@@ -4192,8 +4231,10 @@ const ClearIcon = ({ className = "w-5 h-5" }) => (
           deliveryFormValues.city,
           deliveryFormValues.state,
           "India",
-          deliveryFormValues.pincode
-        ].filter(Boolean).join(", "),
+          deliveryFormValues.pincode,
+        ]
+          .filter(Boolean)
+          .join(", "),
         workingDays: {
           monday: true,
           tuesday: true,
@@ -4206,9 +4247,9 @@ const ClearIcon = ({ className = "w-5 h-5" }) => (
         workingHours: "09:00",
         contact: {
           name: deliveryFormValues.name,
-          mobileNo: parseInt(deliveryFormValues.contactNo.replace(/\D/g, '')),
+          mobileNo: parseInt(deliveryFormValues.contactNo.replace(/\D/g, "")),
           type: "warehouse associate",
-        }
+        },
       };
 
       // Call API to save delivery address
@@ -4217,13 +4258,15 @@ const ClearIcon = ({ className = "w-5 h-5" }) => (
       if (response?.data?.success) {
         toast.success("Delivery address saved successfully!");
         setSavedAddresses({ ...savedAddresses, delivery: true });
-        
+
         // Update deliveryAddress with the saved address if response contains the data
         if (response.data.data) {
           setDeliveryAddress(response.data.data);
         }
       } else {
-        toast.error(response?.data?.message || "Failed to save delivery address");
+        toast.error(
+          response?.data?.message || "Failed to save delivery address"
+        );
       }
     } catch (error) {
       console.error("Error saving delivery address:", error);
@@ -4234,62 +4277,62 @@ const ClearIcon = ({ className = "w-5 h-5" }) => (
   };
 
   // Function to clear pickup address data
-const clearPickupAddress = () => {
-  const emptyFormValues = {
-    contactNo: "",
-    address: "",
-    name: "",
-    pincode: "",
-    city: "",
-    state: "",
-    addressLine1: "",
-    addressLine2: "",
-    landmark: "",
-    gstNo: "",
-    email: "",
-  };
-  
-  setPickupFormValues(emptyFormValues);
-  setPickupAddress(null);
-  setSavedAddresses(prev => ({ ...prev, pickup: false }));
-  setPhoneValidationErrors(prev => ({ ...prev, pickup: false }));
-  setGstValidationErrors(prev => ({ ...prev, pickup: false }));
-  
-  // Clear search results
-  setPickupSearchResults([]);
-  setShowPickupSearchResults(false);
-  
-  toast.success("Pickup address cleared successfully!");
-};
+  const clearPickupAddress = () => {
+    const emptyFormValues = {
+      contactNo: "",
+      address: "",
+      name: "",
+      pincode: "",
+      city: "",
+      state: "",
+      addressLine1: "",
+      addressLine2: "",
+      landmark: "",
+      gstNo: "",
+      email: "",
+    };
 
-// Function to clear delivery address data
-const clearDeliveryAddress = () => {
-  const emptyFormValues = {
-    contactNo: "",
-    address: "",
-    name: "",
-    pincode: "",
-    city: "",
-    state: "",
-    addressLine1: "",
-    addressLine2: "",
-    landmark: "",
-    gstNo: "",
-    email: "",
+    setPickupFormValues(emptyFormValues);
+    setPickupAddress(null);
+    setSavedAddresses((prev) => ({ ...prev, pickup: false }));
+    setPhoneValidationErrors((prev) => ({ ...prev, pickup: false }));
+    setGstValidationErrors((prev) => ({ ...prev, pickup: false }));
+
+    // Clear search results
+    setPickupSearchResults([]);
+    setShowPickupSearchResults(false);
+
+    toast.success("Pickup address cleared successfully!");
   };
-  
-  setDeliveryFormValues(emptyFormValues);
-  setDeliveryAddress(null);
-  setSavedAddresses(prev => ({ ...prev, delivery: false }));
-  setPhoneValidationErrors(prev => ({ ...prev, delivery: false }));
-  setGstValidationErrors(prev => ({ ...prev, delivery: false }));
-  
-  // Clear search results
-  setDeliverySearchResults([]);
-  setShowDeliverySearchResults(false);
-  
-  toast.success("Delivery address cleared successfully!");
-};
+
+  // Function to clear delivery address data
+  const clearDeliveryAddress = () => {
+    const emptyFormValues = {
+      contactNo: "",
+      address: "",
+      name: "",
+      pincode: "",
+      city: "",
+      state: "",
+      addressLine1: "",
+      addressLine2: "",
+      landmark: "",
+      gstNo: "",
+      email: "",
+    };
+
+    setDeliveryFormValues(emptyFormValues);
+    setDeliveryAddress(null);
+    setSavedAddresses((prev) => ({ ...prev, delivery: false }));
+    setPhoneValidationErrors((prev) => ({ ...prev, delivery: false }));
+    setGstValidationErrors((prev) => ({ ...prev, delivery: false }));
+
+    // Clear search results
+    setDeliverySearchResults([]);
+    setShowDeliverySearchResults(false);
+
+    toast.success("Delivery address cleared successfully!");
+  };
 
   return (
     <div className="flex flex-row gap-6 w-full max-w-full mx-auto px-4 pt-0 pb-2">
@@ -4304,13 +4347,13 @@ const clearDeliveryAddress = () => {
           </div>
           <div className="flex items-center gap-2">
             {/* Save Button - Modified from OrderForm pattern */}
-             <button
-    className=" text-gray-500 cursor-pointer hover:text-red-700"
-    onClick={clearPickupAddress}
-    title="Clear pickup address"
-  >
-    <Trash className="w-5 h-5" />
-  </button>
+            <button
+              className=" text-gray-500 cursor-pointer hover:text-red-700"
+              onClick={clearPickupAddress}
+              title="Clear pickup address"
+            >
+              <Trash className="w-5 h-5" />
+            </button>
             <button
               className={`p-2 ${
                 savedAddresses.pickup
@@ -4324,8 +4367,8 @@ const clearDeliveryAddress = () => {
               {isSavingAddress.pickup ? (
                 <LoadingIcon />
               ) : (
-                <Bookmark 
-                  className="w-5 h-5" 
+                <Bookmark
+                  className="w-5 h-5"
                   isFilled={savedAddresses.pickup}
                 />
               )}
@@ -4367,8 +4410,14 @@ const clearDeliveryAddress = () => {
                   onFocus={() => handleInputFocus("pickup", "contactNo")}
                   onBlur={handleInputBlur}
                   isPhoneField={true}
-                  error={formErrors.pickup.contactNo || phoneValidationErrors.pickup}
-                  errorMessage={phoneValidationErrors.pickup ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
+                  error={
+                    formErrors.pickup.contactNo || phoneValidationErrors.pickup
+                  }
+                  errorMessage={
+                    phoneValidationErrors.pickup
+                      ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9"
+                      : "Contact number is required"
+                  }
                 />
                 {renderFloatingSearchResults(
                   "pickup",
@@ -4408,11 +4457,7 @@ const clearDeliveryAddress = () => {
               <div className="relative">
                 <FloatingLabelInput
                   placeholder="Pin code"
-                  icon={
-                    isPincodeLoading.pickup ? (
-                      <LoadingIcon />
-                    ) : null
-                  }
+                  icon={isPincodeLoading.pickup ? <LoadingIcon /> : null}
                   value={pickupFormValues.pincode}
                   onChangeCallback={(value) =>
                     handlePickupInputChange("pincode", value)
@@ -4482,7 +4527,11 @@ const clearDeliveryAddress = () => {
             {/* GST No and Email ID */}
             <div className="grid grid-cols-2 gap-4">
               <FloatingLabelInput
-                placeholder={orderType === "B2B" ? "GST No (Required)" : "GST No (If Available)"}
+                placeholder={
+                  orderType === "B2B"
+                    ? "GST No (Required)"
+                    : "GST No (If Available)"
+                }
                 value={pickupFormValues.gstNo}
                 onChangeCallback={(value) =>
                   handlePickupInputChange("gstNo", value)
@@ -4514,12 +4563,12 @@ const clearDeliveryAddress = () => {
           <div className="flex items-center gap-2">
             {/* Save Button - Modified from OrderForm pattern */}
             <button
-    className=" text-gray-500 cursor-pointer hover:text-red-700"
-    onClick={clearDeliveryAddress}
-    title="Clear delivery address"
-  >
-    <Trash className="w-5 h-5" />
-  </button>
+              className=" text-gray-500 cursor-pointer hover:text-red-700"
+              onClick={clearDeliveryAddress}
+              title="Clear delivery address"
+            >
+              <Trash className="w-5 h-5" />
+            </button>
             <button
               className={`p-2 ${
                 savedAddresses.delivery
@@ -4533,8 +4582,8 @@ const clearDeliveryAddress = () => {
               {isSavingAddress.delivery ? (
                 <LoadingIcon />
               ) : (
-                <Bookmark 
-                  className="w-5 h-5" 
+                <Bookmark
+                  className="w-5 h-5"
                   isFilled={savedAddresses.delivery}
                 />
               )}
@@ -4575,8 +4624,15 @@ const clearDeliveryAddress = () => {
                   }
                   onFocus={() => handleInputFocus("delivery", "contactNo")}
                   onBlur={handleInputBlur}
-                  error={formErrors.delivery.contactNo || phoneValidationErrors.delivery}
-                  errorMessage={phoneValidationErrors.delivery ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9" : "Contact number is required"}
+                  error={
+                    formErrors.delivery.contactNo ||
+                    phoneValidationErrors.delivery
+                  }
+                  errorMessage={
+                    phoneValidationErrors.delivery
+                      ? "Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9"
+                      : "Contact number is required"
+                  }
                   isPhoneField={true}
                 />
                 {renderFloatingSearchResults(
@@ -4617,11 +4673,7 @@ const clearDeliveryAddress = () => {
               <div className="relative">
                 <FloatingLabelInput
                   placeholder="Pin code"
-                  icon={
-                    isPincodeLoading.delivery ? (
-                      <LoadingIcon />
-                    ) : null
-                  }
+                  icon={isPincodeLoading.delivery ? <LoadingIcon /> : null}
                   value={deliveryFormValues.pincode}
                   onChangeCallback={(value) =>
                     handleDeliveryInputChange("pincode", value)
@@ -4691,7 +4743,11 @@ const clearDeliveryAddress = () => {
             {/* GST No and Email ID */}
             <div className="grid grid-cols-2 gap-4">
               <FloatingLabelInput
-                placeholder={orderType === "B2B" ? "GST No (Required)" : "GST No (If Available)"}
+                placeholder={
+                  orderType === "B2B"
+                    ? "GST No (Required)"
+                    : "GST No (If Available)"
+                }
                 value={deliveryFormValues.gstNo}
                 onChangeCallback={(value) =>
                   handleDeliveryInputChange("gstNo", value)

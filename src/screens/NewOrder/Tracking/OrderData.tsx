@@ -133,7 +133,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
                 </span>
                 <span
                   // className="font-sans  text-sm leading-5 text-black font-semibold"
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer font-sans  text-sm leading-5 text-black font-semibold"
+                  className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer font-sans  text-sm leading-5 text-black font-semibold"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                   onClick={
@@ -296,7 +296,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
         return (
           <>
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal ${
+              className={`bg-white text-[#160783] border border-[#160783] m-1 px-2 py-1 rounded text-sm font-normal ${
                 hasAttemptReasons > 0
                   ? "hover:bg-blue-50"
                   : "opacity-50 cursor-not-allowed"
@@ -310,7 +310,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             </button>
 
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
+              className={`bg-white text-[#160783] border border-[#160783] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
               onClick={() => {
                 setRightModalSellerAction(true);
                 onSellerActionClick(awb);
@@ -363,7 +363,7 @@ const OrderData: React.FunctionComponent<IOrderDataProps> = ({
             </button> */}
 
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
+              className={`bg-white text-[#160783] border border-[#160783] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
               onClick={() => {
                 setRightModalEdit(true);
                 onActionModalClick(dataForAction);

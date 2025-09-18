@@ -1037,7 +1037,7 @@ const WalletRecharge = () => {
                       >
                         <p
                           className={`font-Lato text-lg font-semibold leading-[26px] uppercase ${
-                            isActive ? "text-gray-500" : "text-[#004EFF]"
+                            isActive ? "text-gray-500" : "text-[#160783]"
                           } `}
                         >
                           {coupon.couponCode}
@@ -1115,7 +1115,7 @@ const WalletRecharge = () => {
                       )}
 
                       <div
-                        className="flex gap-x-2 items-center bg-[#FFFFFF] text-[#004EFF] underline underline-offset-4 hover:bg-[#F2F6FF] hover:shadow-cardShadow2a focus:bg-[#F2F6FF] focus:border focus:border-[#CCDCFF] hover:rounded-md px-2 py-4"
+                        className="flex gap-x-2 items-center bg-[#FFFFFF] text-[#160783] underline underline-offset-4 hover:bg-[#F2F6FF] hover:shadow-cardShadow2a focus:bg-[#F2F6FF] focus:border focus:border-[#CCDCFF] hover:rounded-md px-2 py-4"
                         onClick={toggleCoupons}
                       >
                         {/* <OneButton
@@ -1278,15 +1278,15 @@ const WalletRecharge = () => {
                           onClick={() => setWalletValue(el?.value)}
                           className={`${
                             walletValue === el?.value
-                              ? "border-[#004EFF]"
+                              ? "border-[#160783]"
                               : "border-[#000000]"
                           } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
-                          // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
+                          // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#160783]: border-[#000000]`}
                         >
                           <p
                             className={`text-[12px] ${
                               walletValue === el?.value
-                                ? "!text-[#004EFF]"
+                                ? "!text-[#160783]"
                                 : "text-[#000000]"
                             } lg:font-semibold lg:text-[14px] `}
                           >
@@ -1314,9 +1314,9 @@ const WalletRecharge = () => {
                           <span
                             className="font-medium"
                             data-tooltip-id="my-tooltip-inline"
-                            data-tooltip-content="Welcome 100 yaari points has been added"
+                            data-tooltip-content="Welcome 100 Drivaa Miles has been added"
                           >
-                            Yaari Points
+                            Drivaa Miles
                           </span>
                           <span className="text-center text-[16px] font-bold">
                             100
@@ -1333,7 +1333,7 @@ const WalletRecharge = () => {
                     </div>
                     <div className="flex justify-center items-center mt-12">
                       <Checkbox checkboxClassName="gap-2" /> 
-                      <p className="text-[14px] font-medium lg:whitespace-nowrap uppercase text-[#004EFF]">
+                      <p className="text-[14px] font-medium lg:whitespace-nowrap uppercase text-[#160783]">
                         REDEEM ON EVERY ORDER
                       </p>
                     </div>
@@ -1395,15 +1395,15 @@ const WalletRecharge = () => {
                         <div className="flex flex-col mb-12">
                           <p className="font-Open text-base font-semibold leading-[22px]">
                             {companyName === "Shipyaari"
-                              ? "Yaari points are availed after first"
+                              ? "Drivaa Miles are availed after first"
                               : "Reward points are availed after first"}
-                            {/* Yaari points are availed after first */}
+                            {/* Drivaa Miles are availed after first */}
                           </p>
                           <p className="font-Open text-base font-semibold leading-[22px]">
                             order is placed
                           </p>
                         </div>
-                        {/* <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                        {/* <p className="text-[1rem] text-[#160783] font-semibold ">
                         Tap to know how it works
                       </p> */}
                       </div>
@@ -1430,10 +1430,10 @@ const WalletRecharge = () => {
                 }}
               >
                 {/* <Checkbox checkboxClassName="gap-2" /> */}
-                {/* <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
+                {/* <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#160783]">
                   INSTANT RECHARGE WITH COD
                 </p> */}
-                {/* <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
+                {/* <p className="cursor-pointer text-[14px] font-medium lg:font-semibold uppercase text-[#160783] underline underline-offset-4 decoration-[#160783]">
                   INSTANT RECHARGE WITH COD 
                 </p> */}
                 {/* commented bcuz for wrong cod */}
@@ -1616,7 +1616,7 @@ const WalletRecharge = () => {
                     Use standard charter Digismart credit card
                   </p>
                   <div className="w-[245px] flex flex-row justify-between my-3">
-                    <p className="text-[12px] text-[#004EFF] mt-1">
+                    <p className="text-[12px] text-[#160783] mt-1">
                       Save up to ₹500 with this code
                     </p>
                     <p className="text-[16px]">Apply</p>
@@ -1630,7 +1630,7 @@ const WalletRecharge = () => {
                     Use standard charter Digismart credit card
                   </p>
                   <div className="w-[245px] flex flex-row justify-between my-3">
-                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                    <p className="text-[0.875rem] text-[#160783] mt-1">
                       Save up to ₹500 with this code
                     </p>
                     <p className="text-[16px]">Apply</p>
@@ -1655,7 +1655,7 @@ const WalletRecharge = () => {
                     Use standard charter Digismart credit card
                   </p>
                   <div className="flex flex-row justify-between my-3">
-                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                    <p className="text-[0.875rem] text-[#160783] mt-1">
                       Save up to ₹500 with this code
                     </p>
                     <p className="text-[16px]">Apply</p>
@@ -1669,7 +1669,7 @@ const WalletRecharge = () => {
                     Use standard charter Digismart credit card
                   </p>
                   <div className="flex flex-row justify-between my-3">
-                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                    <p className="text-[0.875rem] text-[#160783] mt-1">
                       Save up to ₹500 with this code
                     </p>
                     <p className="text-[16px]">Apply</p>
@@ -1684,7 +1684,7 @@ const WalletRecharge = () => {
                     Use standard charter Digismart credit card
                   </p>
                   <div className="flex flex-row justify-between my-3">
-                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                    <p className="text-[0.875rem] text-[#160783] mt-1">
                       Save up to ₹500 with this code
                     </p>
                     <p className="text-[16px]">Apply</p>
@@ -1702,7 +1702,7 @@ const WalletRecharge = () => {
                     // value={locateAddress}
                   />
                 </div> */}
-              {/* Yaari Points Mobile */}
+              {/* Drivaa Miles Mobile */}
               <div className=" lg:hidden  grid grid-cols-2 w-100%  mb-7 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
                 {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
@@ -1712,9 +1712,9 @@ const WalletRecharge = () => {
                           <span
                             className="font-medium"
                             data-tooltip-id="my-tooltip-inline"
-                            data-tooltip-content="Welcome 100 yaari points has been added"
+                            data-tooltip-content="Welcome 100 Drivaa Miles has been added"
                           >
-                            Yaari Points
+                            Drivaa Miles
                           </span>
                           <span className="text-center text-[16px] font-bold">
                             100
@@ -1731,7 +1731,7 @@ const WalletRecharge = () => {
                     </div>
                     <div className="flex justify-center items-center mt-12">
                       <Checkbox checkboxClassName="gap-2" />
-                      <p className="text-[14px] font-medium uppercase text-[#004EFF]">
+                      <p className="text-[14px] font-medium uppercase text-[#160783]">
                         REDEEM ON EVERY ORDER
                       </p>
                     </div>
@@ -1747,9 +1747,9 @@ const WalletRecharge = () => {
                 ) : (
                   <div className="w-[200px] flex flex-col justify-between gap-y-5">
                     <p className="text-[12px]">
-                      Yaari points are availed after first order is placed
+                      Drivaa Miles are availed after first order is placed
                     </p>
-                    <p className="text-[12px] text-[#004EFF]">
+                    <p className="text-[12px] text-[#160783]">
                       Tap to know how it works
                     </p>
                   </div>
@@ -1808,13 +1808,13 @@ const WalletRecharge = () => {
                     <div className="flex flex-col h-full ">
                       <div className="flex flex-col mb-12">
                         <p className="font-Open text-base font-semibold leading-[22px]">
-                          Yaari points are availed after first
+                          Drivaa Miles are availed after first
                         </p>
                         <p className="font-Open text-base font-semibold leading-[22px]">
                           order is placed
                         </p>
                       </div>
-                      {/* <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                      {/* <p className="text-[1rem] text-[#160783] font-semibold ">
                         Tap to know how it works
                       </p> */}
                     </div>

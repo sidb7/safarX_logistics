@@ -390,7 +390,7 @@ function BoxInfo({
                 {codInfo?.codInfo?.invoiceValue >= 50000 &&
                   order?.orderType === "B2C" && (
                     <button
-                      className={`text-[#004EFF] ${
+                      className={`text-[#160783] ${
                         isLgScreen ? "" : "text-[14px]"
                       } font-bold font-Open`}
                       onClick={() => {
@@ -591,7 +591,7 @@ function BoxInfo({
                 />
 
                 <button
-                  className={`ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open ${
+                  className={`ml-2 text-[#160783] text-sm font-semibold leading-5 font-Open ${
                     !isLgScreen ? "!text-[15px]" : "!text-[16px]"
                   }`}
                   onClick={() => {

@@ -97,7 +97,7 @@ const CountAndType: React.FunctionComponent<ICountAndTypeProps> = (props) => {
         borderRadius: 2,
       },
     },
-    colors: ["#004EFF", "#7CCA62", "#F57960", "#F3B558"],
+    colors: ["#160783", "#7CCA62", "#F57960", "#F3B558"],
     legend: {
       position: "bottom",
       horizontalAlign: "center",

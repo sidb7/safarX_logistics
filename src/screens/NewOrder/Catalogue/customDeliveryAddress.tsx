@@ -19,7 +19,7 @@ const PickupAddress: React.FunctionComponent<IPickUpData> = ({ props }) => {
             key={index}
           >
             <div className="flex justify-between">
-              <p className="text-[#004EFF] text-[16px] font-medium">
+              <p className="text-[#160783] text-[16px] font-medium">
                 {each.header}
               </p>
               <img src={each.editImage} alt="" />

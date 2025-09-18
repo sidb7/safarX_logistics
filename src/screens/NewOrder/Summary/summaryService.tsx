@@ -85,7 +85,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
             COMPANY_NAME || "Shipyaari"
           ) : (
             <>
-              <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] font-semibold">
+              <p className=" text-[12px] font-medium font-Open text-[#160783]  lg:text-[16px] font-semibold">
                 {partnerName}
               </p>
               <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">

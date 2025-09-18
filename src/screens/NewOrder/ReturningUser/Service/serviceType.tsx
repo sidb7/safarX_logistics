@@ -25,12 +25,12 @@ const ServiceType: React.FunctionComponent<IServiceData> = ({ props }) => {
               <p className="text-[14px] font-medium ml-1">
                 {each.servicePrice}
               </p>
-              <p className="text-[14px] ml-1 text-[#004EFF]">
+              <p className="text-[14px] ml-1 text-[#160783]">
                 {each.serviceSpan}
               </p>
             </div>
             <div>
-              <p className="text-[14px] text-[#004EFF] ml-1">
+              <p className="text-[14px] text-[#160783] ml-1">
                 {each.serviceETA}
               </p>
             </div>

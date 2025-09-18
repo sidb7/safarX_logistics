@@ -501,7 +501,7 @@ const Catalogue = () => {
                         <div
                           style={{ borderBottomWidth: "3px" }}
                           className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
-                  ${tabName === statusName && "!border-[#004EFF]"}
+                  ${tabName === statusName && "!border-[#160783]"}
                   `}
                           onClick={() => {
                             localStorage.setItem("catalogueTab", statusName);
@@ -513,7 +513,7 @@ const Catalogue = () => {
                           <span
                             className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
                     ${
-                      tabName === statusName && "!text-[#004EFF] lg:text-[18px]"
+                      tabName === statusName && "!text-[#160783] lg:text-[18px]"
                     }`}
                           >
                             {statusName}

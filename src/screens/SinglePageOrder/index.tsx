@@ -837,7 +837,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   {/* Title Section */}
                   {/* <div className="flex items-center justify-between">
                     <div className="font-Open text-sm text-[#000000] font-semibold leading-5">
-                      Yaari Points
+                      Drivaa Miles
                     </div>
                     <span className="text-gray-400 cursor-pointer">ℹ️</span>
                   </div> */}
@@ -878,7 +878,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
 
                         {order?.orderType === "B2B" &&
                           variableServiceKeys.length > 0 && (
-                            <span className="ml-1 w-[14px] h-[14px] rounded-full p-1 bg-[#004EFF] text-white flex items-center justify-center text-xs font-bold">
+                            <span className="ml-1 w-[14px] h-[14px] rounded-full p-1 bg-[#160783] text-white flex items-center justify-center text-xs font-bold">
                               i
                             </span>
                           )}
@@ -897,10 +897,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                           className="absolute top-full left-0 mt-1 w-full max-w-[300px] p-3 bg-white border border-[#E0E8FF] rounded-lg shadow-lg z-10"
                         >
                           <div className="flex justify-between items-center mb-2 border-b border-[#E0E8FF] pb-2">
-                            <p className="text-[14px] font-medium text-[#004EFF]">
+                            <p className="text-[14px] font-medium text-[#160783]">
                               Order Price Breakdown
                             </p>
-                            <p className="text-[12px] font-medium text-[#004EFF]">
+                            <p className="text-[12px] font-medium text-[#160783]">
                               Total: {`\u20B9`}{" "}
                               {roundedOrderPrice?.toLocaleString("en-IN")}
                             </p>
@@ -1227,7 +1227,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                   <div
                     className={`!max-h-[450px] border-[1px] rounded-lg ${
                       highLightField?.addressDetails
-                        ? "border-[#004EFF]"
+                        ? "border-[#160783]"
                         : "border-[#E8E8E8]"
                     } overflow-auto scroll-smooth`}
                   >
@@ -1263,7 +1263,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     className={`border 
                   ${
                     highLightField?.packageDetails
-                      ? "border-[#004EFF]"
+                      ? "border-[#160783]"
                       : "border-[#E8E8E8]"
                   }
                   rounded-lg !max-h-[450px] w-full`}
@@ -1282,7 +1282,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     className={`border 
                   ${
                     highLightField?.orderDetails
-                      ? "border-[#004EFF]"
+                      ? "border-[#160783]"
                       : "border-[#E8E8E8]"
                   }
                   border-[#E8E8E8]
@@ -1366,7 +1366,8 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                             !isLgScreen && " overflow-auto scroll-smooth"
                           }`}
                         >
-                          {(order?.orderType === "B2C" || order?.orderType === "B2B")&&
+                          {(order?.orderType === "B2C" ||
+                            order?.orderType === "B2B") &&
                             order?.transit === "FORWARD" && (
                               <div className="flex justify-center items-center">
                                 <input
@@ -1481,7 +1482,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
                     <div
                       className={`border flex justify-between ${
                         highLightField?.pickupTimeDetails
-                          ? "border-[#004EFF]"
+                          ? "border-[#160783]"
                           : "border-[#E8E8E8]"
                       } items-center rounded-lg`}
                     >

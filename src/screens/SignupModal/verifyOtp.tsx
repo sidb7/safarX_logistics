@@ -61,7 +61,7 @@ const Index = (props: any) => {
               <p className="text-[#777777] font-light text-[12px] text-center">
                 Didn't Receive Code ?
               </p>
-              <button type="button" className="text-[#004EFF] text-[12px]">
+              <button type="button" className="text-[#160783] text-[12px]">
                 Resend
               </button>
             </div>

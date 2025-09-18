@@ -346,7 +346,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               />
               <div
                 onClick={() => setBoxBoolean({ isNewBox: true })}
-                className="cursor-pointer font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center my-2 py-2 px-1 rounded-md border-[1px] border-black-600"
+                className="cursor-pointer font-open text-[14px] text-[#160783] flex gap-x-1 items-center my-2 py-2 px-1 rounded-md border-[1px] border-black-600"
               >
                 <span>
                   <img src={AddBoxIcon} alt="boxImage" className="w-4 h-4" />

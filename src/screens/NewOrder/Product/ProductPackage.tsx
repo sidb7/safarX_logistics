@@ -559,7 +559,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
           <div className="flex justify-between py-4 lg:justify-start lg:gap-x-4">
-            <div className="text-[#004EFF] text-lg font-semibold font-Lato ">
+            <div className="text-[#160783] text-lg font-semibold font-Lato ">
               Package 1
             </div>
             <div className="flex items-center">

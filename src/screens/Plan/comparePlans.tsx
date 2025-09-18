@@ -123,7 +123,7 @@ const ComparePlans = (props: ITypeProps) => {
     columnsHelper.accessor("overview", {
       header: () => {
         return (
-          <p className=" flex items-center justify-start font-Open text-sm font-semibold leading-[18px] text-[#004EFF] whitespace-nowrap lg:w-[642px] ">
+          <p className=" flex items-center justify-start font-Open text-sm font-semibold leading-[18px] text-[#160783] whitespace-nowrap lg:w-[642px] ">
             Overview
           </p>
         );
@@ -140,7 +140,7 @@ const ComparePlans = (props: ITypeProps) => {
     columnsHelper.accessor("freemium", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {allPlans[0]?.planName || "FREEMIUM"}
           </p>
         );
@@ -161,7 +161,7 @@ const ComparePlans = (props: ITypeProps) => {
     columnsHelper.accessor("silver", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {allPlans[1]?.planName || "SILVER"}
           </p>
         );
@@ -182,7 +182,7 @@ const ComparePlans = (props: ITypeProps) => {
     columnsHelper.accessor("gold", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {allPlans[2]?.planName || "GOLD"}
           </p>
         );
@@ -203,7 +203,7 @@ const ComparePlans = (props: ITypeProps) => {
     columnsHelper.accessor("platinum", {
       header: () => {
         return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#160783] text-start whitespace-nowrap ">
             {allPlans[3]?.planName || "PLATINUM"}
           </p>
         );
@@ -229,11 +229,7 @@ const ComparePlans = (props: ITypeProps) => {
         <Breadcrum label="Compare" />
       </div>
       <div className="ml-5 ">
-        <CustomTable
-          columnsData={columns}
-          rowData={data}
- 
-        />
+        <CustomTable columnsData={columns} rowData={data} />
       </div>
       {/* <div className="lg:hidden mt-24">
         <BottomNavBar />

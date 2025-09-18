@@ -54,14 +54,14 @@ const AddressBook = () => {
           return (
             <div
               className={`flex justify-center items-center border-b-2 border-[#777777] px-4 ${
-                statusId === index ? "!border-[#004EFF]" : ""
+                statusId === index ? "!border-[#160783]" : ""
               }`}
               onClick={() => setStatusId(index)}
               key={index}
             >
               <span
                 className={`text-[#777777] text-[14px] ${
-                  statusId === index ? "!text-[#004EFF]" : ""
+                  statusId === index ? "!text-[#160783]" : ""
                 }`}
               >
                 {statusName}

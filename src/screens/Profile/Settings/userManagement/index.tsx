@@ -278,7 +278,7 @@ function UserManagement() {
                   className="flex justify-between items-center p-2 gap-x-2"
                   // onClick={() => setFilterModal(true)}
                 >
-                  <span className="text-[#004EFF] text-[14px] font-semibold">
+                  <span className="text-[#160783] text-[14px] font-semibold">
                     FILTER
                   </span>
                 </div>
@@ -286,7 +286,10 @@ function UserManagement() {
             </div> */}
 
             <div className=" mt-6">
-              <CustomTable rowData={usersData || []} columnsData={columns || []} />
+              <CustomTable
+                rowData={usersData || []}
+                columnsData={columns || []}
+              />
             </div>
 
             <CenterModal

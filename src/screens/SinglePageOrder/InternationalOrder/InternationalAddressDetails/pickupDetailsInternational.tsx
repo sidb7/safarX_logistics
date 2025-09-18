@@ -476,7 +476,7 @@ const PickupDetailsContentInternational: React.FunctionComponent<
                 <div
                   className={`flex justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer py-2 px-4  ${
                     pickupAddress?.pickupAddress?.addressType === "office"
-                      ? "!border-[#004EFF] !text-[#004EFF] "
+                      ? "!border-[#160783] !text-[#160783] "
                       : "border-gray-300 text-[#1C1C1C]"
                   }`}
                   onClick={() => handlePickupAddressChange("office")}
@@ -492,7 +492,7 @@ const PickupDetailsContentInternational: React.FunctionComponent<
                 <div
                   className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px] rounded bg-[#FEFEFE] cursor-pointer px-4 py-2 ${
                     pickupAddress?.pickupAddress?.addressType === "warehouse"
-                      ? "border-[#004EFF] !text-[#004EFF] "
+                      ? "border-[#160783] !text-[#160783] "
                       : "border-gray-300 text-[#1C1C1C]"
                   }`}
                   // onClick={(e) => {
@@ -523,7 +523,7 @@ const PickupDetailsContentInternational: React.FunctionComponent<
                   } px-4 py-2 ${
                     pickupAddress?.pickupAddress?.addressType !== "office" &&
                     pickupAddress?.pickupAddress?.addressType !== "warehouse"
-                      ? "border-[#004EFF] text-[#004EFF] "
+                      ? "border-[#160783] text-[#160783] "
                       : "border-gray-300  text-[#1C1C1C]"
                   }`}
                   // onClick={(e) => {

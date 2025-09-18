@@ -67,7 +67,7 @@ const Summary = (props: Props) => {
           <p className="text-[12px] text-[#1C1C1C] font-normal lg:text-[#777777]">
             Create order ID
           </p>
-          <p className="text-[#004EFF] text-[14px] font-semibold">
+          <p className="text-[#160783] text-[14px] font-semibold">
             AUTO GENERATE
           </p>
         </div>

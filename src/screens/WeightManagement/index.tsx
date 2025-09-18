@@ -461,7 +461,7 @@ const WeightFreeze: React.FunctionComponent = () => {
                           className={` flex-shrink-0 flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
                             ${
                               renderingComponents === index &&
-                              "!border-[#004EFF]"
+                              "!border-[#160783]"
                             }`}
                           onClick={() => {
                             // localStorage.setItem("WeightTab", statusName);
@@ -473,7 +473,7 @@ const WeightFreeze: React.FunctionComponent = () => {
                             className={`text-[#777777] text-[14px] lg:text-[18px]
                            ${
                              renderingComponents === index &&
-                             "!text-[#004EFF] lg:text-[18px]"
+                             "!text-[#160783] lg:text-[18px]"
                            }`}
                           >
                             {statusName}
@@ -481,7 +481,7 @@ const WeightFreeze: React.FunctionComponent = () => {
                           <span
                             className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] px-1 h-5 ${
                               renderingComponents === index
-                                ? "!bg-[#004EFF]"
+                                ? "!bg-[#160783]"
                                 : ""
                             }`}
                           >

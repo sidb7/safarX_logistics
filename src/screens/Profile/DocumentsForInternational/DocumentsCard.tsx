@@ -26,7 +26,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
           <LabelContainer
             label="Sign With Stamp"
             info={`Signature.pdf`}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
             className="text-[12px] xl:whitespace-nowrap"
           />
@@ -47,7 +47,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="Certificate of Incorporation"
             className="text-[12px] xl:whitespace-nowrap"
             info={"Incorporation.pdf"}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>
@@ -70,7 +70,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="AD File"
             className="text-[12px] xl:whitespace-nowrap"
             info={"AD.file.pdf"}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>
@@ -93,7 +93,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="IEC File"
             className="text-[12px] xl:whitespace-nowrap"
             info={"file.pdf"}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>
@@ -103,7 +103,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="Sign With Stamp"
             className="text-[12px] xl:whitespace-nowrap"
             info={"signature.pdf"}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>
@@ -117,7 +117,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="Certificate of Registration"
             className="text-[12px] xl:whitespace-nowrap"
             info={`registration.pdf`}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>
@@ -127,7 +127,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="Board Resolution of Authority"
             className="text-[12px] xl:whitespace-nowrap"
             info={`authority.pdf`}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>
@@ -141,7 +141,7 @@ const DocumentCard: React.FunctionComponent<IDocumentCardProps> = (props) => {
             label="Registered Office Address Proof"
             className="text-[12px] xl:whitespace-nowrap"
             info={`Address.pdf`}
-            classNameInfo="!text-[14px] !text-[#004EFF]"
+            classNameInfo="!text-[14px] !text-[#160783]"
             viewIconVisible={true}
           />
         </div>

@@ -23,7 +23,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       </div>
       <div className="flex justify-between mt-3">
         <div>
-          <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
+          <h2 className="text-[#160783] text-sm font-bold leading-18px">
             Package 1
           </h2>
         </div>
@@ -44,7 +44,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
       {/* <div className="inline-flex mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
         <img src={ButtonIcon} alt="Add Product" width="16px" />
-        <span className="ml-2 text-[#004EFF] text-sm font-semibold leading-5">
+        <span className="ml-2 text-[#160783] text-sm font-semibold leading-5">
           ADD PRODUCT
         </span>
       </div> */}

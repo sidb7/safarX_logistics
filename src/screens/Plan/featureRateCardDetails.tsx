@@ -52,7 +52,7 @@ const FeatureRateCard: React.FC<Props> = ({ featureRateCardData }) => {
             {featureRateCardData.map((rateCard) => (
               <th
                 key={rateCard.rateCardName}
-                className="py-2 px-4 font-Lato font-bold text-[18px] !text-left text-[#004EFF]"
+                className="py-2 px-4 font-Lato font-bold text-[18px] !text-left text-[#160783]"
               >
                 {rateCard.rateCardName}
               </th>

@@ -17,10 +17,10 @@ const BoxDetails = () => {
           </div>
         </div>
         <div className="flex flex-col gap-y-2 mb-10">
-          <p className="text-[12px] font-medium ml-[25px] text-[#004EFF] lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium ml-[25px] text-[#160783] lg:text-[16px] lg:font-semibold">
             Combo Product 1 | Combo Product 2 |
           </p>
-          <p className="text-[12px] font-medium ml-[25px] text-[#004EFF] lg:text-[16px] lg:font-semibold ">
+          <p className="text-[12px] font-medium ml-[25px] text-[#160783] lg:text-[16px] lg:font-semibold ">
             Combo Product 3
           </p>
           <p className="text-[12px] font-medium ml-[25px] lg:text-[16px] lg:font-semibold">

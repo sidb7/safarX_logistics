@@ -22,7 +22,7 @@ const ErrorFile: React.FunctionComponent<IProductData> = ({ props }) => {
               <div className="flex justify-between">
                 <p className="text-[16px] font-medium">{each.header}</p>
                 <div className="flex gap-x-4">
-                  <p className="border-b-[1.5px] border-[#004EFF] text-[#004EFF] text-[14px] font-medium">
+                  <p className="border-b-[1.5px] border-[#160783] text-[#160783] text-[14px] font-medium">
                     {each.header2}
                   </p>
                   <img src={ArrowDownIcon} alt="" />
@@ -33,25 +33,25 @@ const ErrorFile: React.FunctionComponent<IProductData> = ({ props }) => {
                 <>
                   <div className="flex justify-between mt-2">
                     <p>{each.nameOfTheOrder}</p>
-                    <p className="border-b-[1.5px] border-[#004EFF] text-[#004EFF]">
+                    <p className="border-b-[1.5px] border-[#160783] text-[#160783]">
                       {each.recharge}
                     </p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>{each.nameOfTheOrder}</p>
-                    <p className="border-b-[1.5px] border-[#004EFF] text-[#004EFF]">
+                    <p className="border-b-[1.5px] border-[#160783] text-[#160783]">
                       {each.recharge}
                     </p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>{each.nameOfTheOrder}</p>
-                    <p className="border-b-[1.5px] border-[#004EFF] text-[#004EFF]">
+                    <p className="border-b-[1.5px] border-[#160783] text-[#160783]">
                       {each.recharge}
                     </p>
                   </div>
                   <div className="flex justify-between mt-2">
                     <p>{each.nameOfTheOrder}</p>
-                    <p className="border-b-[1.5px] border-[#004EFF] text-[#004EFF]">
+                    <p className="border-b-[1.5px] border-[#160783] text-[#160783]">
                       {each.recharge}
                     </p>
                   </div>

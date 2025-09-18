@@ -1,10 +1,10 @@
-import CompanyLogo from "./../../assets/CompanyLogo/shipyaari icon.svg"
+import CompanyLogo from "./../../assets/CompanyLogo/shipyaari icon.svg";
 import MobileIcon from "../../assets/PhoneVerificationOtp/mobileVerificationIcon.svg";
 import { useNavigate } from "react-router-dom";
-import Card from "./offerCard";    
-import Cross from "../../assets/cross.svg";          
+import Card from "./offerCard";
+import Cross from "../../assets/cross.svg";
 
-const Index = (props:any) => {
+const Index = (props: any) => {
   const navigate = useNavigate();
 
   const skipForNowOnClick = () => {
@@ -15,7 +15,12 @@ const Index = (props:any) => {
     <div className="flex flex-col gap-y-1">
       <div className="product-box flex justify-between items-center">
         <img className="m-4 h-[25px] object-contain" src={CompanyLogo} />
-        <img src={Cross} alt="" className="w-[24px] h-[24px] m-4" onClick={(e)=>props.closeModal()}/>
+        <img
+          src={Cross}
+          alt=""
+          className="w-[24px] h-[24px] m-4"
+          onClick={(e) => props.closeModal()}
+        />
       </div>
 
       <div className="flex flex-col mt-5 mx-[100px]  gap-y-3">
@@ -26,28 +31,26 @@ const Index = (props:any) => {
       </div>
       <div className="mx-28 mt-5">
         <Card
-            cardHeaderText="10 % EXTRA up to ₹1000"
-            cardBodyText="Use standard charter Digismart credit card"
-            cardFooterText="Save up to ₹500 with this code"
-            wrapperClassName="!bg-[#FDF6EA] !p-2 !w-[260px]"
+          cardHeaderText="10 % EXTRA up to ₹1000"
+          cardBodyText="Use standard charter Digismart credit card"
+          cardFooterText="Save up to ₹500 with this code"
+          wrapperClassName="!bg-[#FDF6EA] !p-2 !w-[260px]"
         />
       </div>
       <div className="mx-28">
         <Card
-            cardHeaderText="10 % EXTRA up to ₹1000"
-            cardBodyText="Use standard charter Digismart credit card"
-            cardFooterText="Save up to ₹500 with this code"
-            wrapperClassName="!bg-[#F2FAEF] !p-2 !w-[260px]"
+          cardHeaderText="10 % EXTRA up to ₹1000"
+          cardBodyText="Use standard charter Digismart credit card"
+          cardFooterText="Save up to ₹500 with this code"
+          wrapperClassName="!bg-[#F2FAEF] !p-2 !w-[260px]"
         />
       </div>
-    
-      
-      
+
       <div className="flex justify-center mb-20 mt-6">
         <button
           type="button"
           onClick={skipForNowOnClick}
-          className="text-[#004EFF] border-b-[1px] border-[#004EFF] text-[14px]"
+          className="text-[#160783] border-b-[1px] border-[#160783] text-[14px]"
         >
           SKIP FOR NOW
         </button>

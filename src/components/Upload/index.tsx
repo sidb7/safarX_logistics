@@ -19,7 +19,7 @@ const Index = () => {
           width="16px"
         />
         {isLgScreen && (
-          <span className="text-[14px] text-[#004EFF] font-semibold">
+          <span className="text-[14px] text-[#160783] font-semibold">
             UPLOAD
           </span>
         )}

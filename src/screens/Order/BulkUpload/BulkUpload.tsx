@@ -313,7 +313,7 @@ const BulkUpload = (props: ITypeProps) => {
               {addButton && (
                 <>
                   <p className="text-[16px] mt-5 font-semibold font-Open lg:text-[16px]">
-                    <span className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
+                    <span className="font-semibold font-Open text-[12px] text-[#160783] lg:text-[16px]">
                       Selected File:
                     </span>{" "}
                     {uploadFile?.name || null}

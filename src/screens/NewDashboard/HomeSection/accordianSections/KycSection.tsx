@@ -624,14 +624,14 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
               {checked?.individual && (
                 <>
                   <span
-                    className="font-Open text-[13px] lg:text-base font-normal leading-8 text-[#004EFF] cursor-pointer"
+                    className="font-Open text-[13px] lg:text-base font-normal leading-8 text-[#160783] cursor-pointer"
                     onClick={() => setIsModalOpenForNonGstAgreement(true)}
                   >
                     [Declaration of GST Non-Enrolment]{" "}
                   </span>
                   <span className="text-[#697586] px-[2px]"> &</span>{" "}
                   <span
-                    className="font-Open text-[13px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer"
+                    className="font-Open text-[13px] lg:text-base font-normal leading-6 text-[#160783] cursor-pointer"
                     onClick={() => setIsModalOpenForServiceAgreement(true)}
                   >
                     [Service Agreement]
@@ -658,7 +658,7 @@ const KycSection: React.FunctionComponent<IKycSectionProps> = ({
               {checked?.company && (
                 <>
                   <span
-                    className="font-Open text-[13px] lg:text-base font-normal leading-6 text-[#004EFF] cursor-pointer"
+                    className="font-Open text-[13px] lg:text-base font-normal leading-6 text-[#160783] cursor-pointer"
                     onClick={() => setIsModalOpenForServiceAgreement(true)}
                   >
                     [Service Agreement]

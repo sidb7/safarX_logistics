@@ -83,7 +83,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
                 </span> */}
                 <span
                   // className="font-sans  text-sm leading-5 text-black font-semibold"
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer font-sans  text-sm leading-5 text-black font-semibold"
+                  className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer font-sans  text-sm leading-5 text-black font-semibold"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                   onClick={
@@ -312,7 +312,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
     //       {info.getValue()?.map((action: string, index: number) => (
     //         <button
     //           key={index}
-    //           className="bg-white text-[#004EFF] border border-[#004EFF] m-1  px-2 py-1 rounded text-sm font-normal"
+    //           className="bg-white text-[#160783] border border-[#160783] m-1  px-2 py-1 rounded text-sm font-normal"
     //           onClick={() => setRightModalNdr(true)}
     //         >
     //           {action}
@@ -353,7 +353,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
         return (
           <div className="space-y-1">
             <div
-              className="font-sans text-sm leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
+              className="font-sans text-sm leading-5 text-[#160783] font-Open cursor-pointer hover:underline"
               onClick={() => {
                 setRightModalNdr(true);
                 onNdrFollowUpClick(hasAttemptReasonsArr);
@@ -362,7 +362,7 @@ const RtoData: React.FunctionComponent<IOrderDataProps> = ({
               Partner Remarks ({hasAttemptReasons || 0})
             </div>
             <div
-              className="font-sans text-sm   leading-5 text-[#004EFF] font-Open cursor-pointer hover:underline"
+              className="font-sans text-sm   leading-5 text-[#160783] font-Open cursor-pointer hover:underline"
               onClick={() => {
                 setRightModalSellerAction(true);
                 onSellerActionClick(awb);

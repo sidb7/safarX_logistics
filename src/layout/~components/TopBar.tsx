@@ -409,7 +409,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     onClick={() => navigate("/wallet/view-wallet")}
                   >
                     <img src={WalletIcon} width={35} alt="" />
-                    <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                    <div className="flex gap-x-1 items-center text-[#160783] text-sm font-Open font-semibold">
                       <div>₹</div>
                       <div>{walletBalance?.toLocaleString("en-IN")}</div>
                     </div>
@@ -424,7 +424,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   onClick={() => navigate("/wallet/rewards")}
                 >
                   <img src={WalletIcon} width={35} alt="" />
-                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                  <div className="flex gap-x-1 items-center text-[#160783] text-sm font-Open font-semibold">
                     <div>
                       {COMPANY_NAME?.toLowerCase() === "shipyaari"
                         ? "Yaari Cash:"
@@ -443,7 +443,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   <div className="hidden lg:block">
                     <div className="flex items-center h-[36px]  rounded-lg p-4 bg-[#E5EDFF]">
                       <img src={ProfileIcon} width={16} alt="" />
-                      <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                      <div className="ml-1 flex gap-x-1 items-center text-[#160783] text-sm font-Open font-semibold">
                         <div>Seller ID: </div>
                         <div>
                           {
@@ -681,7 +681,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
                             Serviceability
                           </span>
-                          {/* <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
+                          {/* <span className="text-[#160783] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
                           ₹ {quickData?.walletBalance}
                         </span> */}
                         </div>

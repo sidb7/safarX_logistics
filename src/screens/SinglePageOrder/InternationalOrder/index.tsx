@@ -400,7 +400,7 @@ const InternationalOrders: React.FunctionComponent<
                     id="my-tooltip-prepaid-content"
                     style={{
                       zIndex: 10,
-                      backgroundColor: "#004EFF",
+                      backgroundColor: "#160783",
                       borderRadius: "2px",
                       position: "absolute",
                       color: "#FFFFFF",

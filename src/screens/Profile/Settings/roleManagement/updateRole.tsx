@@ -520,8 +520,8 @@ function UpdateRole() {
       };
 
       const { data } = await POST(POST_UPDATE_SELLER_ROLE, reqBody);
-      console.log("🚀 ~ constupdateRoleApi:any= ~ data:", data)
-      
+      console.log("🚀 ~ constupdateRoleApi:any= ~ data:", data);
+
       if (data?.success) {
         toast.success(data?.message);
         navigate("/settings/role-management");
@@ -563,7 +563,7 @@ function UpdateRole() {
                   // onClick={() => setFilterModal(true)}
                 >
                   {/* <img src={FilterIcon} alt="" /> */}
-                  <span className="text-[#004EFF] text-[14px] font-semibold">
+                  <span className="text-[#160783] text-[14px] font-semibold">
                     FILTER
                   </span>
                 </div>

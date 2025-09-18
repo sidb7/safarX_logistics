@@ -136,7 +136,7 @@ const CustomInputBox = forwardRef<HTMLInputElement, CustomInputProps>(
                 ${className} 
                 ${borderClass}
                 rounded border-[1px] w-full p-[10px] 
-                focus:border-[#004eff] h-[48px]  focus:shadow-blue-50 focus:shadow-lg
+                focus:border-[#160783] h-[48px]  focus:shadow-blue-50 focus:shadow-lg
                 font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask
               `}
               required={isRequired}

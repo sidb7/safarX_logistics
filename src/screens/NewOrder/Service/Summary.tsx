@@ -1,4 +1,4 @@
-export {}
+export {};
 // import ServiceButton from "../../../components/Button/ServiceButton";
 // import SummaryIcon from "../../../assets/Service/summary.svg";
 // import LocationIcon from "../../../assets/Service/location.svg";
@@ -20,7 +20,7 @@ export {}
 //         </div>
 //         <div className="flex flex-row justify-between items-center h-[48px] rounded  p-[10px] border-[1px] border-[#A4A4A4] ">
 //           <p className="text-[12px] text-[#1C1C1C]">Generate order ID</p>
-//           <p className="text-[#004EFF] text-[14px] font-bold">AUTO GENERATE</p>
+//           <p className="text-[#160783] text-[14px] font-bold">AUTO GENERATE</p>
 //         </div>
 //         {/* PickUp */}
 //         <div className="p-[12px] gap-[8px] shadow-lg rounded-lg border-[1px] border-[#E8E8E8] bg-[#FFFFFF]">

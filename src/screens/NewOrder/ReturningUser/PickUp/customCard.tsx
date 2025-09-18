@@ -38,7 +38,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
             //   setIsReturnAddress(e.target.checked);
             // }}
           />
-          <p className="text-[#004EFF] text-[16px] font-medium cursor-pointer capitalize">
+          <p className="text-[#160783] text-[16px] font-medium cursor-pointer capitalize">
             {label}
           </p>
         </div>

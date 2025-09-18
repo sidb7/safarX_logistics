@@ -163,7 +163,7 @@ const HelpScreen = () => {
                   return (
                     <div
                       className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
-${renderingComponents === index && "!border-[#004EFF]"}
+${renderingComponents === index && "!border-[#160783]"}
 `}
                       onClick={() => {
                         localStorage.setItem("helpTab", statusName);
@@ -174,7 +174,7 @@ ${renderingComponents === index && "!border-[#004EFF]"}
                     >
                       <span
                         className={`text-[#777777] font-Open  leading-[18px]   lg:leading-6  font-semibold text-sm lg:text-[18px]
-${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
+${renderingComponents === index && "!text-[#160783] lg:text-[18px]"}`}
                       >
                         {statusName}
                       </span>

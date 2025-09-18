@@ -69,7 +69,7 @@ const Index: React.FunctionComponent<IIndexProps> = ({
       <div
         className={`border-[1px] ${
           highLightField?.shippingDetails
-            ? "border-[#004EFF]"
+            ? "border-[#160783]"
             : "border-[#E8E8E8]"
         } rounded-md`}
       >

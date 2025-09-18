@@ -359,7 +359,7 @@ const RateCardTable = (props: any) => {
                           // value={data?.weight}
                           defaultValue={data?.weight || ""}
                           style={{
-                            color: "#004EFF",
+                            color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -389,7 +389,7 @@ const RateCardTable = (props: any) => {
                           // value={data?.weight}
                           defaultValue={data?.weight || ""}
                           style={{
-                            color: "#004EFF",
+                            color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -419,7 +419,7 @@ const RateCardTable = (props: any) => {
                           // value={data?.weight}
                           defaultValue={data?.weight || ""}
                           style={{
-                            color: "#004EFF",
+                            color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -494,7 +494,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 1"]?.add}
                           defaultValue={data["ZONE 1"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -538,7 +538,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 1"]?.add}
                           defaultValue={data["ZONE 1"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -582,7 +582,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 1"]?.add}
                           defaultValue={data["ZONE 1"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -657,7 +657,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 2"]?.add}
                           defaultValue={data["ZONE 2"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -702,7 +702,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 2"]?.add}
                           defaultValue={data["ZONE 2"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -747,7 +747,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 2"]?.add}
                           defaultValue={data["ZONE 2"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -822,7 +822,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 3"]?.add}
                           defaultValue={data["ZONE 3"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -867,7 +867,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 3"]?.add}
                           defaultValue={data["ZONE 3"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -912,7 +912,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 3"]?.add}
                           defaultValue={data["ZONE 3"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -987,7 +987,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 4"]?.add}
                           defaultValue={data["ZONE 4"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -1032,7 +1032,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 4"]?.add}
                           defaultValue={data["ZONE 4"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -1077,7 +1077,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 4"]?.add}
                           defaultValue={data["ZONE 4"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -1152,7 +1152,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 5"]?.add}
                           defaultValue={data["ZONE 5"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -1197,7 +1197,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 5"]?.add}
                           defaultValue={data["ZONE 5"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -1242,7 +1242,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 5"]?.add}
                           defaultValue={data["ZONE 5"]?.add || ""}
                           style={{
-                            // color: "#004EFF",
+                            // color: "#160783",
                             background: "#F3F3F3",
                           }}
                           readOnly
@@ -1260,7 +1260,9 @@ const RateCardTable = (props: any) => {
     }),
   ];
 
-  return <CustomTable rowData={activeServiceInfo || []} columnsData={columns} />;
+  return (
+    <CustomTable rowData={activeServiceInfo || []} columnsData={columns} />
+  );
 };
 
 export default RateCardTable;

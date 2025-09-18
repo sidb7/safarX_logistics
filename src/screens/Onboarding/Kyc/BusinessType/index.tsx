@@ -239,7 +239,7 @@ const BusinessType = (props: ITypeProps) => {
 
                   {/* <ServiceButton
                     text="SKIP FOR NOW"
-                    className="!text-[#004EFF] !font-Open  underline !border-none"
+                    className="!text-[#160783] !font-Open  underline !border-none"
                     // onClick={() => navigate("/dashboard/overview")}
                     onClick={() => handleSkipForNow()}
                   /> */}

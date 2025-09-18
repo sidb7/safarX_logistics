@@ -267,7 +267,7 @@ const LoginModal = ({
                   className={`ml-1 font-Open text-[12px] font-bold cursor-pointer ${
                     isButtonDisabled
                       ? "text-[#A4A4A4] cursor-not-allowed"
-                      : "text-[#004EFF] cursor-pointer"
+                      : "text-[#160783] cursor-pointer"
                   }`}
                   onClick={() => {
                     if (!isButtonDisabled) {

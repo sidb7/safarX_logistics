@@ -3041,7 +3041,7 @@
 //                                   className={`flex items-center border rounded-2xl px-3 py-1 cursor-pointer ${
 //                                     isSelected
 //                                       ? "bg-blue-100 border-blue-400 text-blue-700"
-//                                       : "bg-white border-gray-300 hover:bg-gray-50 text-[#004EFF]"
+//                                       : "bg-white border-gray-300 hover:bg-gray-50 text-[#160783]"
 //                                   }`}
 //                                 >
 //                                   <span
@@ -3884,8 +3884,8 @@
 //                       key={suggestion.boxId}
 //                       className={`flex items-center border rounded-2xl px-3 py-1 cursor-pointer ${
 //                         isSelected
-//                           ? "bg-blue-100 border-blue-400 text-[#004EFF]"
-//                           : "bg-white border-gray-300 hover:bg-gray-50 text-[#004EFF]"
+//                           ? "bg-blue-100 border-blue-400 text-[#160783]"
+//                           : "bg-white border-gray-300 hover:bg-gray-50 text-[#160783]"
 //                       }`}
 //                     >
 //                       <span
@@ -4752,44 +4752,44 @@ const OrderForm: React.FC<OrderFormProps> = ({
   const [isEditingCollectible, setIsEditingCollectible] = useState(false);
 
   // Function to clear box inputs
-const clearBoxInfo = () => {
-  setBoxes((prevBoxes) => {
-    if (allBoxesIdentical) {
-      // Clear all boxes in identical mode
-      return prevBoxes.map((box) => ({
-        ...box,
-        dimensions: {
-          l: "",
-          b: "",
-          h: "",
-          weight: "",
-          name: "",
-          isManuallyEdited: false,
-        },
-      }));
-    } else {
-      // Clear only the selected box
-      return prevBoxes.map((box) => {
-        if (box.id === selectedBox) {
-          return {
-            ...box,
-            dimensions: {
-              l: "",
-              b: "",
-              h: "",
-              weight: "",
-              name: "",
-              isManuallyEdited: false,
-            },
-          };
-        }
-        return box;
-      });
-    }
-  });
-  
-  toast.success("Box information cleared!");
-};
+  const clearBoxInfo = () => {
+    setBoxes((prevBoxes) => {
+      if (allBoxesIdentical) {
+        // Clear all boxes in identical mode
+        return prevBoxes.map((box) => ({
+          ...box,
+          dimensions: {
+            l: "",
+            b: "",
+            h: "",
+            weight: "",
+            name: "",
+            isManuallyEdited: false,
+          },
+        }));
+      } else {
+        // Clear only the selected box
+        return prevBoxes.map((box) => {
+          if (box.id === selectedBox) {
+            return {
+              ...box,
+              dimensions: {
+                l: "",
+                b: "",
+                h: "",
+                weight: "",
+                name: "",
+                isManuallyEdited: false,
+              },
+            };
+          }
+          return box;
+        });
+      }
+    });
+
+    toast.success("Box information cleared!");
+  };
 
   // Store boxes and their products in a single state
   const [boxes, setBoxes] = useState<BoxData[]>(
@@ -7030,7 +7030,7 @@ const clearBoxInfo = () => {
                                   className={`flex items-center border rounded-2xl px-3 py-1 cursor-pointer ${
                                     isSelected
                                       ? "bg-blue-100 border-blue-400 text-blue-700"
-                                      : "bg-white border-gray-300 hover:bg-gray-50 text-[#004EFF]"
+                                      : "bg-white border-gray-300 hover:bg-gray-50 text-[#160783]"
                                   }`}
                                 >
                                   <span
@@ -7817,13 +7817,13 @@ const clearBoxInfo = () => {
                   : `Box ${selectedBox} Info`}
               </div>
               <div className="flex space-x-2 w-full sm:w-auto justify-end">
-                 <button
-    className=" text-gray-500 cursor-pointer hover:text-red-700"
-    onClick={clearBoxInfo}
-    title="Clear box information"
-  >
-    <Trash className="w-5 h-5" />
-  </button>
+                <button
+                  className=" text-gray-500 cursor-pointer hover:text-red-700"
+                  onClick={clearBoxInfo}
+                  title="Clear box information"
+                >
+                  <Trash className="w-5 h-5" />
+                </button>
                 <button
                   className={`p-2 ${
                     savedBox
@@ -7861,8 +7861,8 @@ const clearBoxInfo = () => {
                       key={suggestion.boxId}
                       className={`flex items-center border rounded-2xl px-3 py-1 cursor-pointer ${
                         isSelected
-                          ? "bg-blue-100 border-blue-400 text-[#004EFF]"
-                          : "bg-white border-gray-300 hover:bg-gray-50 text-[#004EFF]"
+                          ? "bg-blue-100 border-blue-400 text-[#160783]"
+                          : "bg-white border-gray-300 hover:bg-gray-50 text-[#160783]"
                       }`}
                     >
                       <span

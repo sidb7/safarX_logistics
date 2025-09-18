@@ -36,7 +36,7 @@ const SystemLog = () => {
     columnsHelper.accessor("userId", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             User Id
           </p>
         );
@@ -52,7 +52,7 @@ const SystemLog = () => {
     columnsHelper.accessor("userName", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             User Name
           </p>
         );
@@ -68,7 +68,7 @@ const SystemLog = () => {
     columnsHelper.accessor("eventName", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center ">
             Event Name
           </p>
         );
@@ -84,7 +84,7 @@ const SystemLog = () => {
     columnsHelper.accessor("ipAddress", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             Ip Address
           </p>
         );
@@ -101,7 +101,7 @@ const SystemLog = () => {
     columnsHelper.accessor("logType", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
             Log Type
           </p>
         );
@@ -119,7 +119,7 @@ const SystemLog = () => {
       header: () => {
         return (
           <div className="flex items-center justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+            <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
               Created At
             </p>
             <img
@@ -146,7 +146,7 @@ const SystemLog = () => {
       header: () => {
         return (
           <div className="flex items-center justify-center">
-            <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+            <p className="font-Open text-sm font-semibold leading-[18px] text-[#160783] text-center  ">
               Event
             </p>
           </div>

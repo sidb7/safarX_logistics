@@ -73,7 +73,7 @@ const ProductAddCombo = () => {
             {productsArray?.map((each: any, index: any) => {
               return (
                 <div key={index}>
-                  <h1 className="text-[14px] font-semibold mt-4 text-[#004EFF]">
+                  <h1 className="text-[14px] font-semibold mt-4 text-[#160783]">
                     Product {index + 1}
                   </h1>
                   <div className="flex gap-x-3 border-2 border-[#E8E8E8] p-3 rounded-lg mt-3">
@@ -101,7 +101,7 @@ const ProductAddCombo = () => {
         )}
 
         <div className="mt-6">
-          <h1 className="font-semibold text-[#004EFF] text-[14px]">
+          <h1 className="font-semibold text-[#160783] text-[14px]">
             Product {length + 1}
           </h1>
         </div>

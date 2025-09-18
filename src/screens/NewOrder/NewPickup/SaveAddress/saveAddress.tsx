@@ -60,7 +60,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
             address.addressType === "office"
-              ? "!border-[#004EFF] !text-[#004EFF] "
+              ? "!border-[#160783] !text-[#160783] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={(e) => {
@@ -82,7 +82,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
             address.addressType === "warehouse"
-              ? "border-[#004EFF] !text-[#004EFF] "
+              ? "border-[#160783] !text-[#160783] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={(e) => {
@@ -110,7 +110,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           } px-4 py-2 ${
             address?.addressType !== "office" &&
             address?.addressType !== "warehouse"
-              ? "border-[#004EFF] text-[#004EFF] "
+              ? "border-[#160783] text-[#160783] "
               : "border-gray-300  text-[#1C1C1C]"
           }`}
           onClick={(e) => {

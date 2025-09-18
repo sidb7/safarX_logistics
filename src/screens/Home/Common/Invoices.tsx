@@ -68,7 +68,7 @@ const Invoices = (props: IInvoices) => {
                 className="h-full flex-col flex items-center text-center"
                 key={i}
               >
-                <div className=" rounded-md aspect-square	 w-full lg:w-2/4 flex justify-center items-center bg-[#F6F6F6] text-[#004EFF] text-[1.37rem] font-Lato font-semibold ">
+                <div className=" rounded-md aspect-square	 w-full lg:w-2/4 flex justify-center items-center bg-[#F6F6F6] text-[#160783] text-[1.37rem] font-Lato font-semibold ">
                   {ele?.count}
                 </div>
                 <div>

@@ -93,7 +93,7 @@ const WalletRecharge = () => {
             </div>
 
             <div className="flex justify-center mt-4">
-              <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
+              <p className="text-[14px] text-[#160783] font-semibold border-b-2 border-[#160783]">
                 SKIP FOR NOW{" "}
               </p>
             </div>

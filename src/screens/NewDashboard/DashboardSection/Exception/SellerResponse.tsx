@@ -1,88 +1,96 @@
-import React from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { ApexOptions } from 'apexcharts';
+import React from "react";
+import ReactApexChart from "react-apexcharts";
+import { ApexOptions } from "apexcharts";
 
 const SellerResponse = () => {
   const options: ApexOptions = {
     chart: {
-      type: 'line',
+      type: "line",
       toolbar: {
-        show: false
+        show: false,
       },
-      fontFamily: 'inherit',
-      stacked: false
+      fontFamily: "inherit",
+      stacked: false,
     },
     plotOptions: {
       bar: {
-        columnWidth: '40%',
-        borderRadius: 0
-      }
+        columnWidth: "40%",
+        borderRadius: 0,
+      },
     },
     stroke: {
       width: [0, 3],
-      curve: 'smooth'
+      curve: "smooth",
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     markers: {
       size: 5,
-      colors: ['#F0A22E'],
-      strokeColors: '#fff',
+      colors: ["#F0A22E"],
+      strokeColors: "#fff",
       strokeWidth: 2,
       hover: {
-        size: 7
-      }
+        size: 7,
+      },
     },
     xaxis: {
-      categories: ['10 JUL', '11 JUL', '12 JUL', '13 JUL', '14 JUL', '15 UL', '16 JUL'],
+      categories: [
+        "10 JUL",
+        "11 JUL",
+        "12 JUL",
+        "13 JUL",
+        "14 JUL",
+        "15 UL",
+        "16 JUL",
+      ],
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
-      }
+        show: false,
+      },
     },
     yaxis: {
       min: 0,
       max: 12,
       tickAmount: 6,
       labels: {
-        formatter: (value) => value.toFixed(0)
-      }
+        formatter: (value) => value.toFixed(0),
+      },
     },
     grid: {
-      borderColor: '#f1f1f1',
+      borderColor: "#f1f1f1",
       padding: {
         top: 0,
         right: 0,
         bottom: 0,
-        left: 10
-      }
+        left: 10,
+      },
     },
-    colors: ['#004EFF', '#F0A22E'],
+    colors: ["#160783", "#F0A22E"],
     legend: {
-      position: 'bottom',
-      horizontalAlign: 'center',
-      offsetY: 8
+      position: "bottom",
+      horizontalAlign: "center",
+      offsetY: 8,
     },
     tooltip: {
       shared: true,
-      intersect: false
-    }
+      intersect: false,
+    },
   };
 
   const series = [
     {
-      name: 'NDR Raised',
-      type: 'column',
-      data: [11, 6, 8.2, 4, 9.5, 5, 5.5]
+      name: "NDR Raised",
+      type: "column",
+      data: [11, 6, 8.2, 4, 9.5, 5, 5.5],
     },
     {
-      name: 'Seller Response',
-      type: 'line',
-      data: [6.5, 4.5, 8, 4, 7.5, 4, 5.5]
-    }
+      name: "Seller Response",
+      type: "line",
+      data: [6.5, 4.5, 8, 4, 7.5, 4, 5.5],
+    },
   ];
 
   return (
@@ -91,7 +99,7 @@ const SellerResponse = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-gray-600 font-semibold text-sm">
-            Seller Response
+              Seller Response
             </span>
           </div>
           <select className="border rounded-md px-3 py-1 text-sm bg-white">

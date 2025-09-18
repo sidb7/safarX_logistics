@@ -111,7 +111,7 @@ const Tickets: React.FunctionComponent = () => {
             <div
               className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer h-[35px] py-2 px-4  lg:w-[172px] ${
                 priority.high === true
-                  ? "!border-[#004EFF] !text-[#004EFF] "
+                  ? "!border-[#160783] !text-[#160783] "
                   : "border-gray-300 text-[#1C1C1C]"
               }`}
               onClick={(e) => {
@@ -120,7 +120,7 @@ const Tickets: React.FunctionComponent = () => {
             >
               <p
                 className={`font-Open font-normal text-sm leading-[18px] ${
-                  priority.high === true ? "!text-[#004EFF]" : "!text-[#1C1C1C]"
+                  priority.high === true ? "!text-[#160783]" : "!text-[#1C1C1C]"
                 }`}
               >
                 High
@@ -129,7 +129,7 @@ const Tickets: React.FunctionComponent = () => {
             <div
               className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer h-[35px] lg:w-[172px] px-4 py-2 ${
                 priority.medium === true
-                  ? "border-[#004EFF] !text-[#004EFF] "
+                  ? "border-[#160783] !text-[#160783] "
                   : "border-gray-300 text-[#1C1C1C]"
               }`}
               onClick={(e) => {
@@ -139,7 +139,7 @@ const Tickets: React.FunctionComponent = () => {
               <p
                 className={`font-normal text-sm leading-[18px]  font-Open text-[#1C1C1C] ${
                   priority.medium === true
-                    ? "!text-[#004EFF]"
+                    ? "!text-[#160783]"
                     : "!text-[#1C1C1C]"
                 }`}
               >
@@ -149,7 +149,7 @@ const Tickets: React.FunctionComponent = () => {
             <div
               className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer h-[35px] lg:w-[172px] px-4 py-2 ${
                 priority.low === true
-                  ? "border-[#004EFF] text-[#004EFF] "
+                  ? "border-[#160783] text-[#160783] "
                   : "border-gray-300  text-[#1C1C1C]"
               }`}
               onClick={(e) => {
@@ -158,7 +158,7 @@ const Tickets: React.FunctionComponent = () => {
             >
               <p
                 className={`font-normal text-sm leading-[18px]  font-Open text-[#1C1C1C] ${
-                  priority.low === true ? "!text-[#004EFF]" : "!text-[#1C1C1C]"
+                  priority.low === true ? "!text-[#160783]" : "!text-[#1C1C1C]"
                 } `}
               >
                 Low

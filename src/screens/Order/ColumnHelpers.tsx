@@ -870,7 +870,7 @@ const idHelper = (
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
                   <div
-                    className="flex gap-x-1 items-center cursor-pointer underline hover:text-[#004EFF] transition duration-300"
+                    className="flex gap-x-1 items-center cursor-pointer underline hover:text-[#160783] transition duration-300"
                     onClick={handleInformativeModal}
                   >
                     <div>
@@ -880,7 +880,7 @@ const idHelper = (
                     </div>
                     {setInfoModalContent && (
                       <div
-                        className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
+                        className="cursor-pointer  text-[#160783] hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
                       >
                         <img
@@ -898,7 +898,7 @@ const idHelper = (
 
                 {showAllTags && (
                   <div className="flex ">
-                    <div className="flex  w-fit px-1 text-xs py-0 m-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
+                    <div className="flex  w-fit px-1 text-xs py-0 m-0 text-center bg-white  items-center text-[#160783] border-[#160783] border rounded-md line-clamp-2">
                       {capitalizeFirstLetter(tags[0])}
                     </div>
                     {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
@@ -909,7 +909,7 @@ const idHelper = (
                           <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-md rounded-md">
                             {tags.map(
                               (tag: string, index: Key | null | undefined) => (
-                                <p className="bg-white text-[#004EFF] rounded-md px-2 border-[#004EFF] border shadow-inner-sm">
+                                <p className="bg-white text-[#160783] rounded-md px-2 border-[#160783] border shadow-inner-sm">
                                   {" "}
                                   {capitalizeFirstLetter(tag)}{" "}
                                 </p>
@@ -993,7 +993,7 @@ const idHelper = (
             //         </p>
             //         {setInfoModalContent && (
             //           <div
-            //             className="cursor-pointer text-[#004EFF] hover:text-blue-700 transition duration-300"
+            //             className="cursor-pointer text-[#160783] hover:text-blue-700 transition duration-300"
             //             onClick={handleInformativeModal}
             //           >
             //             <img
@@ -1169,7 +1169,7 @@ export const columnHelperForNewOrder = (
                         //   search: `?trackingNo=${awb}`,
                         // })
                       }
-                      className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                      className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer"
                       data-tooltip-id="my-tooltip-inline"
                       data-tooltip-content="Track"
                     >
@@ -1496,7 +1496,7 @@ export const columnHelperForNewOrder = (
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
                   <div
-                    className="flex gap-x-1 items-center cursor-pointer underline hover:text-[#004EFF] transition duration-300"
+                    className="flex gap-x-1 items-center cursor-pointer underline hover:text-[#160783] transition duration-300"
                     onClick={handleInformativeModal}
                   >
                     <div>
@@ -1557,7 +1557,7 @@ export const columnHelperForNewOrder = (
 
                 {showAllTags && (
                   <div className="flex ">
-                    <div className="flex  w-fit px-2  text-xs py-0 text-center bg-white  items-center text-[#004EFF] border-[#004EFF] border rounded-md line-clamp-2">
+                    <div className="flex  w-fit px-2  text-xs py-0 text-center bg-white  items-center text-[#160783] border-[#160783] border rounded-md line-clamp-2">
                       {capitalizeFirstLetter(tags[0])}
                     </div>
                     {/* <img src={InformativeIcon} alt="Info Icon" width="18px" /> */}
@@ -1568,7 +1568,7 @@ export const columnHelperForNewOrder = (
                           <div className="absolute flex gap-1 flex-wrap left-0 line-clamp-3 top-full mt-1 w-[150px] p-2 bg-white text-xs  shadow-md rounded-md">
                             {tags.map(
                               (tag: string, index: Key | null | undefined) => (
-                                <p className="bg-white text-[#004EFF] rounded-md px-2 border-[#004EFF] border shadow-inner-sm">
+                                <p className="bg-white text-[#160783] rounded-md px-2 border-[#160783] border shadow-inner-sm">
                                   {" "}
                                   {capitalizeFirstLetter(tag)}{" "}
                                 </p>
@@ -2054,7 +2054,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                         //   search: `?trackingNo=${awb}`,
                         // })
                       }
-                      className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                      className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer"
                       data-tooltip-id="my-tooltip-inline"
                       data-tooltip-content="Track"
                     >
@@ -2320,7 +2320,7 @@ export const columnHelpersForRest = (
                         //   search: `?trackingNo=${awb}`,
                         // })
                       }
-                      className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                      className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer"
                       data-tooltip-id="my-tooltip-inline"
                       data-tooltip-content="Track"
                     >

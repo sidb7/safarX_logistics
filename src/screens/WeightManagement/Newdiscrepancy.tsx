@@ -288,7 +288,7 @@ const NewDiscrepancyTable = ({
                       awbNo: rowData?.awb,
                     });
                   }}
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                 >
@@ -512,7 +512,7 @@ const NewDiscrepancyTable = ({
                       }}
                     >
                       Seller Images
-                      <button className="text-[#004EFF] text-[14px] mx-1">
+                      <button className="text-[#160783] text-[14px] mx-1">
                         ({SellerPhotoLength.length})
                       </button>
                     </div>
@@ -530,7 +530,7 @@ const NewDiscrepancyTable = ({
                       }
                     >
                       <img src={cameraIcon} alt="" />
-                      <p className="font-Open text-[13px] font-semibold leading-5 text-[#004EFF]">
+                      <p className="font-Open text-[13px] font-semibold leading-5 text-[#160783]">
                         UPLOAD
                       </p>
                     </button>
@@ -558,7 +558,7 @@ const NewDiscrepancyTable = ({
                   }}
                 >
                   Uploaded Images
-                  <span className="text-[#004EFF] mx-1">
+                  <span className="text-[#160783] mx-1">
                     ({SellerPhotoLength?.length})
                   </span>
                 </p>
@@ -607,7 +607,7 @@ const NewDiscrepancyTable = ({
     //         }}
     //       >
     //         Uploaded Images
-    //         <span className="text-[#004EFF] mx-1">
+    //         <span className="text-[#160783] mx-1">
     //           ({rowData?.partnerPhoto?.length})
     //         </span>
     //       </p>

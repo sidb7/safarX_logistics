@@ -71,10 +71,10 @@ export const UploadInput = () => {
           Upload package photo
         </p>
         <p className="absolute top-0 left-4 bg-sky-500 border-2 rounded-md border-sky-500 text-white text-xs font-semibold leading-4 px-4 h-[20px]">
-          Get 100 yaari points
+          Get 100 Drivaa Miles
         </p>
         {isLgScreen && (
-          <div className="absolute top-6 left-64 gap-x-2 text-[14px] font-semibold leading-4 px-4 h-[20px] text-[#004EFF] font-Open flex items-center">
+          <div className="absolute top-6 left-64 gap-x-2 text-[14px] font-semibold leading-4 px-4 h-[20px] text-[#160783] font-Open flex items-center">
             <img src={Upload} alt="" />
             <p>Upload</p>
           </div>

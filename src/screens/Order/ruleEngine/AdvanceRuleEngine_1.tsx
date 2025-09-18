@@ -671,7 +671,7 @@ const AdvanceRuleEngine_1 = () => {
                       }
                     >
                       <img src={AddIcon} className="w-[14px]" />
-                      <span className="text-[#004EFF] text-[14px]">
+                      <span className="text-[#160783] text-[14px]">
                         Add Condition
                       </span>
                     </div>
@@ -746,7 +746,7 @@ const AdvanceRuleEngine_1 = () => {
                       }
                     >
                       <img src={AddIcon} className="w-[14px]" />
-                      <span className="text-[#004EFF] text-[14px]">
+                      <span className="text-[#160783] text-[14px]">
                         Add Action
                       </span>
                     </div>
@@ -760,7 +760,7 @@ const AdvanceRuleEngine_1 = () => {
               onClick={() => dispatch({ type: "ADD_RULE_ENGINE" })}
             >
               <img src={AddIcon} className="w-[14px]" />
-              <span className="text-[#004EFF] text-[14px]">
+              <span className="text-[#160783] text-[14px]">
                 Add Rule Engine
               </span>
             </div>

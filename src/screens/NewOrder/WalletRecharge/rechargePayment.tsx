@@ -161,7 +161,7 @@ const RechargePayment = () => {
             Get welcome gift of 100 bonus point with wallet payments
           </p>
           <p className="hidden lg:block px-[16px] py-[13px] text-[16px] font-semibold">
-            Get welcome gift of 100 Yaari points with wallet payment
+            Get welcome gift of 100 Drivaa Miles with wallet payment
           </p>
         </div>
       </div>
@@ -185,8 +185,8 @@ const RechargePayment = () => {
               ₹2000
             </p>
             <div className="grid grid-cols-4 gap-2 mt-3">
-              <div className="border-[1.5px] p-2 rounded-lg items-center border-solid border-[#004EFF]">
-                <p className="text-[16px] text-[#004EFF] lg:font-semibold lg:text-[14px]">
+              <div className="border-[1.5px] p-2 rounded-lg items-center border-solid border-[#160783]">
+                <p className="text-[16px] text-[#160783] lg:font-semibold lg:text-[14px]">
                   ₹2000
                 </p>
               </div>
@@ -220,9 +220,9 @@ const RechargePayment = () => {
                         <span
                           className="font-medium"
                           data-tooltip-id="my-tooltip-inline"
-                          data-tooltip-content="Welcome 100 yaari points has been added"
+                          data-tooltip-content="Welcome 100 Drivaa Miles has been added"
                         >
-                          Yaari Points
+                          Drivaa Miles
                         </span>
                         <span className="text-center text-[16px] font-bold">
                           100
@@ -236,7 +236,7 @@ const RechargePayment = () => {
                   </div>
                   <div className="flex justify-center items-center mt-12">
                     <Checkbox checkboxClassName="gap-2" />
-                    <p className="text-[14px] font-medium lg:whitespace-nowrap uppercase text-[#004EFF]">
+                    <p className="text-[14px] font-medium lg:whitespace-nowrap uppercase text-[#160783]">
                       REDEEM ON EVERY ORDER
                     </p>
                   </div>
@@ -253,14 +253,14 @@ const RechargePayment = () => {
                 <div className="flex flex-col h-full ">
                   <div className="flex flex-col mb-12">
                     <p className="text-[12px] lg:text-[18px] lg:font-semibold lg:text-[#1C1C1C]  ">
-                      Yaari points are availed after first
+                      Drivaa Miles are availed after first
                     </p>
                     <p className="g:text-[18px] lg:font-semibold lg:text-[#1C1C1C] ">
                       order is placed
                     </p>
                   </div>
 
-                  <p className="text-[12px] text-[#004EFF] lg:font-semibold lg:text-[16px] ">
+                  <p className="text-[12px] text-[#160783] lg:font-semibold lg:text-[16px] ">
                     Tap to know how it works
                   </p>
                 </div>
@@ -279,7 +279,7 @@ const RechargePayment = () => {
 
         {/* <div className="flex items-center gap-[8px]">
           <Checkbox checkboxClassName="gap-2" />
-          <p className="text-[14px] font-medium  lg:font-semibold lg:text-[#004EFF] uppercase text-[#CCDCFF]">
+          <p className="text-[14px] font-medium  lg:font-semibold lg:text-[#160783] uppercase text-[#CCDCFF]">
             INSTANT RECHARGE WITH COD
           </p>
         </div> */}
@@ -303,7 +303,7 @@ const RechargePayment = () => {
               Use standard charter Digismart credit card
             </p>
             <div className="w-[245px] lg:w-full flex flex-row items-center justify-between my-3">
-              <p className="text-[12px] text-[#004EFF] mt-1 lg:font-semibold lg:text-[16px] lg:whitespace-nowrap ">
+              <p className="text-[12px] text-[#160783] mt-1 lg:font-semibold lg:text-[16px] lg:whitespace-nowrap ">
                 Save up to ₹500 with this code
               </p>
               <p className="text-[16px] lg:text-[#1C1C1C] lg:font-semibold">
@@ -319,7 +319,7 @@ const RechargePayment = () => {
               Use standard charter Digismart credit card
             </p>
             <div className="w-[245px] lg:w-full flex flex-row items-center justify-between my-3">
-              <p className="text-[12px] text-[#004EFF] mt-1 lg:font-semibold lg:text-[16px] lg:whitespace-nowrap ">
+              <p className="text-[12px] text-[#160783] mt-1 lg:font-semibold lg:text-[16px] lg:whitespace-nowrap ">
                 Save up to ₹500 with this code
               </p>
               <p className="text-[16px] lg:text-[#1C1C1C] lg:font-semibold">
@@ -335,7 +335,7 @@ const RechargePayment = () => {
               Use standard charter Digismart credit card
             </p>
             <div className="w-[245px] lg:w-full flex flex-row items-center justify-between my-3">
-              <p className="text-[12px] text-[#004EFF] mt-1 lg:font-semibold lg:text-[16px] lg:whitespace-nowrap ">
+              <p className="text-[12px] text-[#160783] mt-1 lg:font-semibold lg:text-[16px] lg:whitespace-nowrap ">
                 Save up to ₹500 with this code
               </p>
               <p className="text-[16px] lg:text-[#1C1C1C] lg:font-semibold">
@@ -362,9 +362,9 @@ const RechargePayment = () => {
                     <span
                       className="font-medium"
                       data-tooltip-id="my-tooltip-inline"
-                      data-tooltip-content="Welcome 100 yaari points has been added"
+                      data-tooltip-content="Welcome 100 Drivaa Miles has been added"
                     >
-                      Yaari Points
+                      Drivaa Miles
                     </span>
                     <span className="text-center text-[16px] font-bold">
                       100
@@ -378,7 +378,7 @@ const RechargePayment = () => {
               </div>
               <div className="flex justify-center items-center mt-12">
                 <Checkbox checkboxClassName="gap-2" />
-                <p className="text-[14px] font-medium uppercase text-[#004EFF]">
+                <p className="text-[14px] font-medium uppercase text-[#160783]">
                   REDEEM ON EVERY ORDER
                 </p>
               </div>
@@ -391,9 +391,9 @@ const RechargePayment = () => {
           ) : (
             <div className="w-[200px] flex flex-col justify-between gap-y-5">
               <p className="text-[12px]">
-                Yaari points are availed after first order is placed
+                Drivaa Miles are availed after first order is placed
               </p>
-              <p className="text-[12px] text-[#004EFF]">
+              <p className="text-[12px] text-[#160783]">
                 Tap to know how it works
               </p>
             </div>

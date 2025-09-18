@@ -15,7 +15,7 @@ const OneButton = (props: any) => {
     loading = false,
     spinnerClassName,
     ref,
-    backgroundColour,
+    backgroundColour = "bg-[#160783]",
   } = props;
 
   return (
@@ -26,7 +26,7 @@ const OneButton = (props: any) => {
             type={type}
             className={`${className} ${
               disabled
-                ? `${backgroundColour}/60 cursor-not-allowed`
+                ? `bg-[#150783a2] cursor-not-allowed`
                 : `${backgroundColour} cursor-pointer`
             }`}
             onClick={onClick}

@@ -1522,21 +1522,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               key={index}
               style={{ borderBottomWidth: "3px" }}
               className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
-                tabIndex === index ? "!border-[#004EFF]" : ""
+                tabIndex === index ? "!border-[#160783]" : ""
               }`}
               disabled={isLoading}
               onClick={() => setScrollIndex(index)}
             >
               <span
                 className={`text-[#777777] text-[15px] lg:text-[18px] ${
-                  tabIndex === index ? "!text-[#004EFF] lg:text-[18px]" : ""
+                  tabIndex === index ? "!text-[#160783] lg:text-[18px]" : ""
                 }`}
               >
                 {statusName}
               </span>
               <span
                 className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] px-1 h-5 ${
-                  tabIndex === index ? "!bg-[#004EFF]" : ""
+                  tabIndex === index ? "!bg-[#160783]" : ""
                 }`}
               >
                 {orderNumber}
@@ -1643,7 +1643,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   <div>
                     <div className="relative">
                       <SearchBox
-                        className="rounded removePaddingPlaceHolder !pl-[2.5rem] border-[1px] h-[48px] w-full border-[#A4A4A4] focus:border-[#004eff]  gap-[15px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
+                        className="rounded removePaddingPlaceHolder !pl-[2.5rem] border-[1px] h-[48px] w-full border-[#A4A4A4] focus:border-[#160783]  gap-[15px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                         label="Search"
                         value={searchedText}
                         onChange={(e: any) => {
@@ -1672,7 +1672,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             onClick={() =>
                               handleSearchedAddress(index, "pickupAddress")
                             }
-                            className={`cursor-pointer border-[1px] hover:bg-[#f7f7f6] text-[16px] removePaddingPlaceHolder w-full border-[#edebeb] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[#1C1C1C] outline-none custom-input sentry-unmask ${
+                            className={`cursor-pointer border-[1px] hover:bg-[#f7f7f6] text-[16px] removePaddingPlaceHolder w-full border-[#edebeb] p-[10px] focus:border-[#160783]  gap-[10px] h-[48px] font-Open text-[#1C1C1C] outline-none custom-input sentry-unmask ${
                               index === 0 ? "mt-[-2px] " : ""
                             }`}
                           >
@@ -1748,7 +1748,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   <textarea
                     placeholder="Address"
                     value={bulkActionObject?.pickupAddress?.fullAddress}
-                    className="rounded border-[1px] removePaddingPlaceHolder w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[80px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
+                    className="rounded border-[1px] removePaddingPlaceHolder w-full border-[#A4A4A4] p-[10px] focus:border-[#160783]  gap-[10px] h-[80px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                     name="fullAddress"
                     onChange={(e: any) =>
                       handleBulkActionAddress(
@@ -1862,7 +1862,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   <div>
                     <div className="relative">
                       <SearchBox
-                        className="rounded removePaddingPlaceHolder !pl-[2.5rem] border-[1px] h-[48px] w-full border-[#A4A4A4] focus:border-[#004eff]  gap-[15px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
+                        className="rounded removePaddingPlaceHolder !pl-[2.5rem] border-[1px] h-[48px] w-full border-[#A4A4A4] focus:border-[#160783]  gap-[15px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                         label="Search"
                         value={searchedText}
                         onChange={(e: any) => {
@@ -1892,7 +1892,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             onClick={() =>
                               handleSearchedAddress(index, "deliveryAddress")
                             }
-                            className={`cursor-pointer border-[1px] hover:bg-[#f7f7f6] text-[16px] removePaddingPlaceHolder w-full border-[#edebeb] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[#1C1C1C] outline-none custom-input sentry-unmask ${
+                            className={`cursor-pointer border-[1px] hover:bg-[#f7f7f6] text-[16px] removePaddingPlaceHolder w-full border-[#edebeb] p-[10px] focus:border-[#160783]  gap-[10px] h-[48px] font-Open text-[#1C1C1C] outline-none custom-input sentry-unmask ${
                               index === 0 ? "mt-[-2px] " : ""
                             }`}
                           >
@@ -1965,7 +1965,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
                   <textarea
                     placeholder="Address"
-                    className="rounded border-[1px] removePaddingPlaceHolder w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[70px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
+                    className="rounded border-[1px] removePaddingPlaceHolder w-full border-[#A4A4A4] p-[10px] focus:border-[#160783]  gap-[10px] h-[70px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask"
                     name="fullAddress"
                     value={bulkActionObject?.deliveryAddress?.fullAddress}
                     onChange={(e: any) =>
@@ -2089,7 +2089,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   />
                   <div
                     onClick={handleAddYourBox}
-                    className="cursor-pointer h-[2.6rem] font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center my-1 py-1 px-2 rounded-md border-[1px] border-black-600"
+                    className="cursor-pointer h-[2.6rem] font-open text-[14px] text-[#160783] flex gap-x-1 items-center my-1 py-1 px-2 rounded-md border-[1px] border-black-600"
                   >
                     <span>
                       <img

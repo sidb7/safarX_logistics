@@ -237,7 +237,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                   >
                     <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
                       <div>
-                        <h1 className="text-[#004EFF] text-  items-center font-bold leading-18px font-Lato">
+                        <h1 className="text-[#160783] text-  items-center font-bold leading-18px font-Lato">
                           Product {index + 1}
                         </h1>
                       </div>
@@ -278,48 +278,48 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         }
                       />
                       <div className="grid grid-cols-2 gap-2 md:gap-5">
-                      <CustomInputBox
-                        label="Product Price"
-                        name="unitPrice"
-                        errorMessage={validationErrors?.unitPrice}
-                        value={productInputState[index].unitPrice}
-                        onChange={(e: any) => {
-                          if (!isNaN(e.target.value)) {
-                            handleProductInputChange(
-                              {
-                                name: e.target.name,
-                                value: e.target.value.replace(
-                                  /[^0-9]+\\.?[0-9]*/g,
-                                  ""
-                                ),
-                              },
-                              index,
-                              [isRequired, checkNonNegative, greaterThenZero]
-                            );
-                          }
-                        }}
-                      />
-                      <CustomInputBox
-                        label="Product tax ₹"
-                        name="unitTax"
-                        errorMessage={validationErrors?.unitTax}
-                        value={productInputState[index].unitTax}
-                        onChange={(e: any) => {
-                          if (!isNaN(e.target.value)) {
-                            handleProductInputChange(
-                              {
-                                name: e.target.name,
-                                value: e.target.value.replace(
-                                  /[^0-9]+\\.?[0-9]*/g,
-                                  ""
-                                ),
-                              },
-                              index,
-                              [isRequired, checkNonNegative]
-                            );
-                          }
-                        }}
-                      />
+                        <CustomInputBox
+                          label="Product Price"
+                          name="unitPrice"
+                          errorMessage={validationErrors?.unitPrice}
+                          value={productInputState[index].unitPrice}
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                {
+                                  name: e.target.name,
+                                  value: e.target.value.replace(
+                                    /[^0-9]+\\.?[0-9]*/g,
+                                    ""
+                                  ),
+                                },
+                                index,
+                                [isRequired, checkNonNegative, greaterThenZero]
+                              );
+                            }
+                          }}
+                        />
+                        <CustomInputBox
+                          label="Product tax ₹"
+                          name="unitTax"
+                          errorMessage={validationErrors?.unitTax}
+                          value={productInputState[index].unitTax}
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                {
+                                  name: e.target.name,
+                                  value: e.target.value.replace(
+                                    /[^0-9]+\\.?[0-9]*/g,
+                                    ""
+                                  ),
+                                },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                            }
+                          }}
+                        />
                       </div>
                       <div className="flex gap-x-3 w-full">
                         <CustomInputBox
@@ -412,39 +412,39 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-2 md:gap-5">
-                      <CustomInputBox
-                        label="Weight (Kg)"
-                        name="deadWeight"
-                        value={productInputState[index]?.deadWeight || ""}
-                        errorMessage={validationErrors?.deadWeight}
-                        onChange={(e: any) => {
-                          if (!isNaN(e.target.value)) {
-                            handleProductInputChange(
-                              {
-                                name: e.target.name,
-                                value: e.target.value.replace(
-                                  /[^0-9]+\\.?[0-9]*/g,
-                                  ""
-                                ),
-                              },
-                              index,
-                              [checkNonNegative, greaterThenZero]
-                            );
-                          }
-                        }}
-                      />
+                        <CustomInputBox
+                          label="Weight (Kg)"
+                          name="deadWeight"
+                          value={productInputState[index]?.deadWeight || ""}
+                          errorMessage={validationErrors?.deadWeight}
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                {
+                                  name: e.target.name,
+                                  value: e.target.value.replace(
+                                    /[^0-9]+\\.?[0-9]*/g,
+                                    ""
+                                  ),
+                                },
+                                index,
+                                [checkNonNegative, greaterThenZero]
+                              );
+                            }
+                          }}
+                        />
 
-                      <CustomInputBox
-                        label="SKU"
-                        name="sku"
-                        value={productInputState[index].sku}
-                        onChange={(e: any) =>
-                          handleProductInputChange(
-                            { name: e.target.name, value: e.target.value },
-                            index
-                          )
-                        }
-                      />
+                        <CustomInputBox
+                          label="SKU"
+                          name="sku"
+                          value={productInputState[index].sku}
+                          onChange={(e: any) =>
+                            handleProductInputChange(
+                              { name: e.target.name, value: e.target.value },
+                              index
+                            )
+                          }
+                        />
                       </div>
 
                       {/* <div className="grid col-span-2">
@@ -469,7 +469,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                 <img src={ButtonIcon} alt="Add Product" width="16px" />
 
                 <button
-                  className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
+                  className="ml-2 text-[#160783] text-sm font-semibold leading-5 font-Open"
                   onClick={AddProductInfoData}
                   data-cy="add-product-button"
                 >

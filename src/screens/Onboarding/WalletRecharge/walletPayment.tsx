@@ -265,14 +265,14 @@ const WalletPayment = () => {
                   onClick={() => setMoney(el?.value)}
                   className={`${
                     walletValue === el?.value
-                      ? "border-[#004EFF]"
+                      ? "border-[#160783]"
                       : "border-[#000000]"
                   } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
-                  // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {walletValue ? border-[#004EFF]: border-[#000000]`}
+                  // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {walletValue ? border-[#160783]: border-[#000000]`}
                 >
                   <p
                     className={`text-[16px] ${
-                      walletValue === el?.value ? "!text-[#004EFF]" : "text-[#000000]"
+                      walletValue === el?.value ? "!text-[#160783]" : "text-[#000000]"
                     } font-semibold lg:text-[14px] `}
                   >
                     ₹{el?.value}
@@ -368,7 +368,7 @@ const WalletPayment = () => {
           className="flex justify-center  cursor-pointer"
           onClick={() => navigate("/dashboard/overview")}
         >
-          <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF] mt-3">
+          <p className="text-[14px] text-[#160783] font-semibold border-b-2 border-[#160783] mt-3">
             SKIP FOR NOW{" "}
           </p>
         </div> */}

@@ -3,17 +3,28 @@ import { useEffect, useState } from "react";
 import CustomInputBox from "../../components/Input";
 import { GoogleLogin } from "@react-oauth/google";
 import TrackCardComponent from "../TrackCard/TrackCardComponent";
+import EyeIcon from "../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../assets/Login/crosseye.svg";
+import InfoCircle from "../../assets/info-circle.svg";
 import {
   AMAZON_REDIRECT_URL,
   LARGE_LOGO,
   POST_SIGN_IN_URL,
   POST_SIGN_IN_WITH_GOOGLE_URL,
+  POST_SIGN_UP_URL,
+  POST_SIGN_UP_WITH_GOOGLE_URL,
+  POST_VERIFY_COUPON,
   REACT_APP_GTM_ID,
   VALIDATE_USER_TOKEN,
 } from "../../utils/ApiUrls";
 import { useErrorBoundary } from "react-error-boundary";
 import { POST } from "../../utils/webService";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { constructNavigationObject, getQueryJson } from "../../utils/utility";
@@ -22,410 +33,171 @@ import sessionManager from "../../utils/sessionManager";
 import { socketCallbacks } from "../../Socket";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { signUpUser } from "../../redux/reducers/signUpReducer";
+import { strongpasswordRegex, textRegex } from "../../utils/regexCheck";
+import OneButton from "../../components/Button/OneButton";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function SignUpComponent() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { isLgScreen, isMdScreen, isMobileScreen } = ResponsiveState();
-  const dispatch = useDispatch();
-  const { resetPassword, source, sellerEmail } = getQueryJson();
-  let companyName = source?.toUpperCase();
 
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+  const { genReferralCode } = useParams();
+
   const [loading, setLoading] = useState(false);
-  const [showBootScreen, setShowBootScreen] = useState(true);
+  const dispatch = useDispatch();
   const [viewPassWord, setViewPassWord] = useState(false);
-  const [loginCredentials, setLoginCredentials] = useState<any>({
+  const [loadingForCoupon, setLoadingForCoupon] = useState(false);
+  const [isCouponVerified, setIsCouponVerified] = useState(false);
+  const [sellerData, setsellerData] = useState({
     email: "",
+    firstName: "",
+    lastName: "",
     password: "",
+    referalCode: genReferralCode || "",
+    couponCode: "",
   });
 
-  const [loginError, setLoginError] = useState({
+  const [signUpError, setSignUpError] = useState<any>({
     email: "",
+    firstName: "",
+    lastName: "",
     password: "",
+    referalCode: "",
+    couponCode: "",
   });
 
-  const { showBoundary } = useErrorBoundary() || {};
-
-  const logInOnClick = async (value: any) => {
+  const signUpOnClick = async (value: any) => {
     try {
-      const { data: response } = await POST(POST_SIGN_IN_URL, value);
-
-      // if (sellerInfo?.nextStep) {
-      //   sellerInfo.nextStep.kyc = response?.data[0]?.nextStep?.kyc;
-      // } else {
-      //   sellerInfo.nextStep = { kyc: response?.data[0]?.nextStep?.kyc };
-      // }
-      // localStorage.setItem(
-      //   `sellerSession_${sessionId}`,
-      //   JSON.stringify(sellerInfo)
-      // );
-      // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
-
-      let signInUserReducerDetails = {
-        email: loginCredentials.email,
-        name: response?.data[0]?.name,
+      let signupUtm = {
+        utm_source: "",
+        utm_campaign: "",
+        utm_medium: "",
       };
 
-      dispatch(signInUser(signInUserReducerDetails));
+      let payload = {
+        sellerData: {
+          ...value,
+          otherDetails: {
+            signupUtm: {
+              ...signupUtm,
+              ...getQueryJson(),
+            },
+          },
+        },
+      };
 
-      if (response?.success) {
-        const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
-        //for hubspot sso
-        const params = getQueryJson();
+      // Sentry.setUser({
+      //   email: sellerData?.email,
+      // });
 
-        const supportedUrl =
-          "https://support.shipyaari.com/_hcms/mem/jwt/verify";
+      setLoading(true);
+      const { data: response } = await POST(`${POST_SIGN_UP_URL}`, payload);
 
-        if (params?.hasOwnProperty("redirect_url")) {
-          if (params?.redirect_url === supportedUrl) {
-            window.location.replace(
-              `${params?.redirect_url}?jwt=${response?.data[0]?.token}`
-            );
-          }
-          return;
-        }
+      // localStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
+      //setting the local storage  with site signing up to show in dataslayer
+      localStorage.setItem("key", "Site");
+      dispatch(signUpUser(sellerData));
+      if (response?.success === true) {
+        const { sessionId, sellerInfo } = sessionManager({
+          ...response?.data[0],
+          ...sellerData,
+        });
+        const { sellerId, email, isReturningUser, name, nextStep } =
+          response?.data[0];
         window?.dataLayer?.push({
-          event: "login",
-          seller_email: response?.data[0]?.email,
-          sellerId: response?.data[0]?.sellerId,
-          seller_name: response?.data[0]?.name,
-          seller_kyc: response?.data[0]?.nextStep.kyc,
-          seller_bank_verification_done: response?.data[0]?.nextStep.bank,
-          isReturningUser: response?.data[0]?.isReturningUser,
+          event: "reg1_ClickedOnSignup",
+          seller_email: value?.email,
+          sellerId: value?.sellerId,
+          seller_name: value.name,
+          seller_kyc: nextStep?.kyc,
+          seller_bank_verification_done: nextStep?.bank,
+          isReturningUser: isReturningUser,
         });
 
-        window.gtag("config", REACT_APP_GTM_ID, {
-          user_id: response?.data[0]?.sellerId,
-        });
-        let sellerId = sellerInfo?.sellerId;
-        const token =
-          // localStorage.getItem("sellerId")
-          sellerId ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d` : "";
+        // localStorage.setItem("userInfo", JSON.stringify(sellerData));
 
-        if (token !== "") {
-          console.log("socketConnectedAfterlogin");
-          socketCallbacks.connectSocket(dispatch);
-          socketCallbacks.connectNotificationSocket();
-        }
-
-        const [
-          selling_partner_id,
-          amazon_callback_uri,
-          amazon_state,
-          spapi_oauth_code,
-        ] = [
-          "selling_partner_id",
-          "amazon_callback_uri",
-          "amazon_state",
-          "spapi_oauth_code",
-        ].map((key) => localStorage.getItem(key));
-        const state = response?.data[0]?.sellerId;
-
-        if (
-          selling_partner_id &&
-          amazon_callback_uri &&
-          amazon_state &&
-          state
-        ) {
-          ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach(
-            (key) => localStorage.removeItem(key)
-          );
-          // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
-          const redirectUrl = AMAZON_REDIRECT_URL;
-          window.location.href =
-            amazon_callback_uri +
-            "?redirect_uri=" +
-            redirectUrl +
-            "&amazon_state=" +
-            amazon_state +
-            "&state=" +
-            state;
-        }
-
-        // redirect based on qna and kyc done or not
-        if (response?.data?.[0]?.nextStep?.qna === false) {
-          const navigationObject = constructNavigationObject(
-            "/onboarding/get-started",
-            window.location.search
-          );
-          navigate(navigationObject);
-        } else if (response?.data?.[0]?.nextStep?.kyc === false) {
-          const navigationObject = constructNavigationObject(
-            "/dashboard/overview",
-            window.location.search
-          );
-          navigate(navigationObject);
-        } else {
-          const navigationObject = constructNavigationObject(
-            "/dashboard/overview",
-            window.location.search
-          );
-          navigate(navigationObject);
-        }
+        setLoading(false);
+        const navigationObject = constructNavigationObject(
+          "/onboarding/sendotp",
+          window.location.search
+        );
+        navigate(navigationObject);
+        // navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
+        setLoading(false);
       }
     } catch (error) {
-      showBoundary("Something Wrong");
+      return error;
     }
   };
 
-  const signUpOnClick = () => {
-    const navigationObject = constructNavigationObject(
-      "/onboarding/signup",
-      window.location.search
-    );
-    navigate(navigationObject);
-  };
+  const signUpWithGoogle = async (googleData: any) => {
+    try {
+      let signupUtm = {
+        utm_source: "",
+        utm_campaign: "",
+        utm_medium: "",
+      };
 
-  const signInWithGoogle = async (googleData: any) => {
-    const payload = {
-      clientId: googleData?.clientId,
-      credential: googleData?.credential,
-    };
-    setLoading(true);
-    const { data: response } = await POST(
-      POST_SIGN_IN_WITH_GOOGLE_URL,
-      payload
-    );
-
-    dispatch(signInUser(loginCredentials));
-    if (response?.success) {
-      const { sessionId, sellerInfo } = sessionManager(response?.data[0]);
-
-      window?.dataLayer?.push({
-        event: "login",
-        seller_email: response?.data[0]?.email,
-        sellerId: response?.data[0]?.sellerId,
-        seller_name: response?.data[0]?.name,
-        seller_kyc: response?.data[0]?.nextStep.kyc,
-        seller_bank_verification_done: response?.data[0]?.nextStep.bank,
-        isReturningUser: response?.data[0]?.isReturningUser,
-      });
-
-      window.gtag("config", REACT_APP_GTM_ID, {
-        user_id: response?.data[0]?.sellerId,
-      });
-
-      // setLocalStorage(
-      //   `${response?.data[0]?.sellerId}_${tokenKey}`,
-      //   response?.data[0]?.token
-      // );
-
-      let sellerId = sellerInfo?.sellerId;
-      const token =
-        // localStorage.getItem("sellerId")
-        sellerId ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d` : "";
-
-      if (token !== "") {
-        console.log("socketConnectedAfterlogin");
-        socketCallbacks.connectSocket(dispatch);
-        socketCallbacks.connectNotificationSocket(dispatch);
-      }
-
-      const [
-        selling_partner_id,
-        amazon_callback_uri,
-        amazon_state,
-        spapi_oauth_code,
-      ] = [
-        "selling_partner_id",
-        "amazon_callback_uri",
-        "amazon_state",
-        "spapi_oauth_code",
-      ].map((key) => localStorage.getItem(key));
-      const state = response?.data[0]?.sellerId;
-      // const redirectUrl = 'http://localhost:8010/amazonCheckParams';
-      const redirectUrl = AMAZON_REDIRECT_URL;
-
-      if (selling_partner_id && amazon_callback_uri && amazon_state && state) {
-        ["selling_partner_id", "amazon_callback_uri", "amazon_state"].forEach(
-          (key) => localStorage.removeItem(key)
-        );
-
-        window.location.href =
-          amazon_callback_uri +
-          "?redirect_uri=" +
-          redirectUrl +
-          "&amazon_state=" +
-          amazon_state +
-          "&state=" +
-          state;
-      }
-
-      setLoading(false);
-      // redirect based on qna and kyc done or not
-      if (response?.data?.[0]?.nextStep?.qna === false) {
+      const payload = {
+        clientId: googleData?.clientId,
+        credential: googleData?.credential,
+        otherDetails: {
+          signupUtm: {
+            ...signupUtm,
+            ...getQueryJson(),
+          },
+        },
+      };
+      setLoading(true);
+      const { data: response } = await POST(
+        POST_SIGN_UP_WITH_GOOGLE_URL,
+        payload
+      );
+      if (response?.success === true) {
+        // localStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        sessionManager(response.data[0]);
+        dispatch(signUpUser(response.data[0]));
+        setLoading(false);
         const navigationObject = constructNavigationObject(
-          "/onboarding/questionnaire/question1",
+          "/onboarding/sendotp",
           window.location.search
         );
         navigate(navigationObject);
-      } else if (response?.data?.[0]?.nextStep?.kyc === false) {
-        const navigationObject = constructNavigationObject(
-          "/onboarding/kyc-type",
-          window.location.search
-        );
-        navigate(navigationObject);
+        // navigate("/onboarding/sendotp");
+        //setting the local storage  with google signing up to show in dataslayer
+        localStorage.setItem("key", "Google");
       } else {
-        const navigationObject = constructNavigationObject(
-          "/dashboard/overview",
-          window.location.search
-        );
-        navigate(navigationObject);
+        toast.error(response?.message);
+        setLoading(false);
       }
-    } else {
-      toast.error(response?.message);
-      setLoading(false);
+    } catch (error) {
+      return error;
     }
   };
 
-  useEffect(() => {
-    const { sessionId, sellerInfo } = sessionManager({});
-    let sellerIdInfo = sellerInfo?.sellerId;
-    const token =
-      // localStorage.getItem("sellerId")
-      sellerIdInfo
-        ? `${sellerIdInfo}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-        : "";
-
-    const params = getQueryJson();
-
-    const keys = [
-      "selling_partner_id",
-      "amazon_callback_uri",
-      "amazon_state",
-      "spapi_oauth_code",
-    ];
-
-    let urlToken = "";
-    if (params?.token) {
-      urlToken = params?.token;
-    } else {
-      urlToken = sellerInfo?.token;
+  const handleVerifyCoupon = async () => {
+    try {
+      setLoadingForCoupon(true);
+      let payload = {
+        couponCode: sellerData.couponCode,
+      };
+      const { data: response } = await POST(POST_VERIFY_COUPON, payload);
+      if (response?.success === true) {
+        toast.success(response?.message);
+        setLoadingForCoupon(false);
+        setIsCouponVerified(true);
+      } else {
+        toast.error(response?.message);
+        setLoadingForCoupon(false);
+      }
+    } catch (error) {
+      return error;
     }
-
-    const sellerId = params.sellerId;
-
-    const header = {
-      Accept: "/",
-      // Authorization: `Bearer ${localStorage.getItem(
-      //   `${sellerId}_${tokenKey}`
-      // )}`,
-      Authorization: `Bearer ${sellerInfo?.token}`,
-    };
-
-    keys.forEach((key) => {
-      if (params?.hasOwnProperty(key)) {
-        localStorage.setItem(key, params[key]);
-      }
-    });
-
-    const [
-      selling_partner_id,
-      amazon_callback_uri,
-      amazon_state,
-      spapi_oauth_code,
-    ] = [
-      "selling_partner_id",
-      "amazon_callback_uri",
-      "amazon_state",
-      "spapi_oauth_code",
-    ].map((key) => localStorage.getItem(key));
-
-    setTimeout(() => {
-      setShowBootScreen(false);
-    }, 2000);
-    (async () => {
-      if (urlToken) {
-        try {
-          const response = await axios.post(
-            VALIDATE_USER_TOKEN,
-            {},
-            { headers: { ...header, Authorization: `Bearer ${urlToken}` } }
-          );
-
-          if (response?.data?.success) {
-            let sellerData = {};
-            if (params?.token) {
-              sellerData = {
-                ...response?.data?.data[0],
-                token: urlToken,
-                name: (response?.data?.data[0]?.kycDetails?.fullName)
-                  .toString()
-                  .split(" ")[0],
-              };
-            } else {
-              sellerData = {
-                ...response?.data?.data[0],
-                token: urlToken,
-              };
-            }
-            const { sessionId, sellerInfo } = sessionManager(sellerData);
-
-            // Navigate to the dashboard directly if the token is valid
-            navigate("/dashboard/overview");
-            return; // Skip the rest of the logic
-          } else {
-            console.error("Invalid token from URL");
-          }
-        } catch (error) {
-          console.error("Error validating token from URL", error);
-        }
-      }
-
-      if (token) {
-        // Validate the token from localStorage (existing logic)
-        try {
-          const response = await POST(VALIDATE_USER_TOKEN);
-
-          const amazonsellerId = sellerInfo?.sellerId;
-          const state = amazonsellerId;
-          const redirectUrl = AMAZON_REDIRECT_URL;
-
-          if (response?.data?.success) {
-            if (
-              selling_partner_id &&
-              amazon_callback_uri &&
-              amazon_state &&
-              state
-            ) {
-              [
-                "selling_partner_id",
-                "amazon_callback_uri",
-                "amazon_state",
-              ].forEach((key) => localStorage.removeItem(key));
-
-              window.location.href =
-                amazon_callback_uri +
-                "?redirect_uri=" +
-                redirectUrl +
-                "&amazon_state=" +
-                amazon_state +
-                "&state=" +
-                state;
-            } else {
-              navigate("/dashboard/overview");
-            }
-          }
-        } catch (error) {
-          console.error("Error validating token from localStorage", error);
-        }
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (sellerEmail !== undefined && companyName !== undefined) {
-      setForgotPasswordModal(true);
-    }
-  }, [sellerEmail]);
-
+  };
   function validatePassword(password: string) {
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=;':"|,.<>/?])([A-Za-z\d!@#$%^&*()_+\-=;':"|,.<>/?]+)$/;
@@ -458,20 +230,6 @@ export default function SignUpComponent() {
     return "";
   }
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setLoginCredentials((prev: any) => ({ ...prev, [name]: value }));
-
-    // Clear error on change
-    setLoginError((prev) => ({ ...prev, [name]: "" }));
-  };
-
-  const validateEmail = (value: any) => {
-    if (!value) return "Please enter your email ID";
-    if (!emailRegex.test(value)) return "Incorrect Email ID";
-    return "";
-  };
-
   // const validatePassword = (value: any) => {
   //   if (!value) return "Please enter your password";
   //   if (value.length < 6) return "Password must be at least 6 characters";
@@ -493,11 +251,46 @@ export default function SignUpComponent() {
               name="firstName"
               inputType="text"
               fixedLabel
-              value={""}
-              onChange={() => {}}
-              onBlur={(e) => {}}
-              errorCondition={{}}
+              value={sellerData?.firstName}
+              maxLength={16}
+              onChange={(e) => {
+                setSignUpError({
+                  ...signUpError,
+                  firstName: "",
+                });
+                setsellerData({
+                  ...sellerData,
+                  firstName: e.target.value,
+                });
+              }}
+              onBlur={(e) => {
+                if (!sellerData?.firstName) {
+                  setSignUpError({
+                    ...signUpError,
+                    firstName: "Please Enter Your First Name",
+                  });
+                } else if (!textRegex.test(e.target.value)) {
+                  setSignUpError({
+                    ...signUpError,
+                    firstName: "Enter a valid name. ",
+                  });
+                } else {
+                  setSignUpError({
+                    ...signUpError,
+                    firstName: "",
+                  });
+                }
+              }}
             />
+
+            {signUpError.firstName !== "" && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {signUpError.firstName}
+                </span>
+              </div>
+            )}
           </div>
           <div className="w-full">
             <CustomInputBox
@@ -508,11 +301,44 @@ export default function SignUpComponent() {
               name="lastName"
               inputType="text"
               fixedLabel
-              value={""}
-              onChange={() => {}}
-              onBlur={(e) => {}}
-              errorCondition={{}}
+              value={sellerData?.lastName}
+              onChange={(e) => {
+                setSignUpError({
+                  ...signUpError,
+                  lastName: "",
+                });
+                setsellerData({
+                  ...sellerData,
+                  lastName: e.target.value,
+                });
+              }}
+              onBlur={(e) => {
+                if (!sellerData?.lastName) {
+                  setSignUpError({
+                    ...signUpError,
+                    lastName: "Please Enter Your Last Name",
+                  });
+                } else if (!textRegex.test(e.target.value)) {
+                  setSignUpError({
+                    ...signUpError,
+                    lastName: "Enter a valid name",
+                  });
+                } else {
+                  setSignUpError({
+                    ...signUpError,
+                    lastName: "",
+                  });
+                }
+              }}
             />
+            {signUpError.lastName !== "" && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {signUpError.lastName}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -525,17 +351,44 @@ export default function SignUpComponent() {
           name="email"
           inputType="email"
           fixedLabel
-          value={loginCredentials.email}
-          onChange={handleChange}
-          onBlur={(e) => {
-            const errorMsg = validateEmail(e.target.value);
-            setLoginError((prev) => ({ ...prev, email: errorMsg }));
+          value={sellerData?.email}
+          onChange={(e) => {
+            setSignUpError({
+              ...signUpError,
+              email: "",
+            });
+            setsellerData({
+              ...sellerData,
+              email: e.target.value,
+            });
           }}
-          errorCondition={{
-            message: loginError.email,
+          onBlur={(e) => {
+            if (!sellerData?.email) {
+              setSignUpError({
+                ...signUpError,
+                email: "Please Enter Your Email ID",
+              });
+            } else if (!emailRegex.test(e.target.value)) {
+              setSignUpError({
+                ...signUpError,
+                email: "Enter a valid Email id",
+              });
+            } else {
+              setSignUpError({
+                ...signUpError,
+                email: "",
+              });
+            }
           }}
         />
-
+        {signUpError.email !== "" && (
+          <div className="flex items-center gap-x-1 mt-1">
+            <img src={InfoCircle} alt="" width={10} height={10} />
+            <span className="font-normal text-[#F35838] text-xs leading-3">
+              {signUpError.email}
+            </span>
+          </div>
+        )}
         {/* Password */}
         <CustomInputBox
           containerStyle="mt-4"
@@ -543,16 +396,45 @@ export default function SignUpComponent() {
           label="Password"
           id="password"
           name="password"
-          inputType="password"
-          fixedLabel
-          value={loginCredentials.password}
-          onChange={handleChange}
-          onBlur={(e) => {
-            const errorMsg = validatePassword(e.target.value);
-            setLoginError((prev) => ({ ...prev, password: errorMsg }));
+          inputType={viewPassWord ? "text" : "password"}
+          minLength={8}
+          maxLength={16}
+          fixedLabel={true}
+          tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
+          isRightIcon={true}
+          isInfoIcon={true}
+          visibility={viewPassWord}
+          onClick={() => {}}
+          rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
+          setVisibility={setViewPassWord}
+          onChange={(e) => {
+            setSignUpError({
+              ...signUpError,
+              password: "",
+            });
+            setsellerData({
+              ...sellerData,
+              password: e.target.value,
+            });
           }}
-          errorCondition={{
-            message: loginError.password,
+          onBlur={(e) => {
+            if (
+              !strongpasswordRegex.test(e.target.value) ||
+              sellerData.password.length < 8 ||
+              sellerData.password.length > 16
+            ) {
+              const passwordError = validatePassword(e.target.value);
+
+              setSignUpError({
+                ...signUpError,
+                password: passwordError,
+              });
+            } else {
+              setSignUpError({
+                ...signUpError,
+                password: "",
+              });
+            }
           }}
         />
 
@@ -565,10 +447,15 @@ export default function SignUpComponent() {
           name="referralCode"
           inputType="text"
           fixedLabel
-          value={""}
-          onChange={() => {}}
-          onBlur={(e) => {}}
-          errorCondition={{}}
+          maxLength={20}
+          value={sellerData.referalCode}
+          onChange={(e) => {
+            setsellerData({
+              ...sellerData,
+              referalCode: e.target.value,
+            });
+          }}
+          isDisabled={false}
         />
         <div className="w-full flex gap-2">
           <div className="w-full">
@@ -580,27 +467,54 @@ export default function SignUpComponent() {
               name="couponCode"
               inputType="text"
               fixedLabel
-              value={""}
-              onChange={() => {}}
-              onBlur={(e) => {}}
-              errorCondition={{}}
+              value={sellerData.couponCode}
+              onChange={(e) => {
+                const upperCaseValue = e.target.value.toUpperCase();
+                setSignUpError({
+                  ...signUpError,
+                  couponCode: "",
+                });
+                setsellerData({
+                  ...sellerData,
+                  couponCode: upperCaseValue,
+                });
+              }}
+              isDisabled={false}
             />
           </div>
           <div className="w-1/2">
-            <button className="w-full h-[35px] items-center flex justify-center hover:bg-[#160783] border border-[#160783] text-[#160783] rounded-lg hover:shadow-md transition duration-200 hover:text-white py-2 mt-4">
-              Verify
-            </button>
+            <OneButton
+              className="w-full h-[35px] items-center flex justify-center hover:bg-[#160783] border border-[#160783] text-[#160783] rounded-lg hover:shadow-md transition duration-200 hover:text-white py-2 mt-4"
+              onClick={handleVerifyCoupon}
+              text={`${loadingForCoupon ? "Verifying..." : "Verify"}`}
+              variant="primary"
+              disabled={loadingForCoupon}
+              backgroundColour=""
+            />
           </div>
         </div>
       </div>
 
       {/* Login Button */}
-      <button
-        onClick={signUpOnClick}
-        className="w-full bg-[#160783] rounded-lg hover:shadow-md transition duration-200 text-white py-2 mt-4"
-      >
-        Sign Up
-      </button>
+
+      <div>
+        <OneButton
+          className="rounded-lg font-Open w-full hover:shadow-md transition duration-200 text-white py-2  mt-2"
+          onClick={(e: any) => signUpOnClick(sellerData)}
+          text="    Sign Up"
+          disabled={
+            sellerData.email == "" ||
+            sellerData.password == "" ||
+            sellerData.firstName == "" ||
+            sellerData.lastName == "" ||
+            signUpError.email != "" ||
+            signUpError.password != "" ||
+            signUpError.firstName != "" ||
+            signUpError.lastName != ""
+          }
+          backgroundColour="bg-[#160783]"
+        />
+      </div>
 
       {/* Terms */}
       <p className="text-[9px] my-2 text-gray-500">
@@ -619,7 +533,8 @@ export default function SignUpComponent() {
       {/* Google Login */}
       <div className="flex justify-center">
         <GoogleLogin
-          onSuccess={(googleData) => signInWithGoogle(googleData)}
+          text="continue_with"
+          onSuccess={(googleData) => signUpWithGoogle(googleData)}
           onError={() => {}}
         />
       </div>

@@ -159,7 +159,7 @@ const WalletMain = () => {
                   // onClick={() => navigate("/onboarding/cash-on-delivery")}
                   onClick={() => handleSkipForNow()}
                 >
-                  <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
+                  <p className="text-[14px] font-semibold font-Open leading-5  text-[#160783] text-sm underline underline-offset-4	decoration-[#160783]">
                     SKIP FOR NOW
                   </p>
                 </div> */}

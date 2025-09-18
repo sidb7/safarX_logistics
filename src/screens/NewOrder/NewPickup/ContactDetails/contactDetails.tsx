@@ -234,7 +234,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
             address.type === "shopkeeper"
-              ? "border-[#004EFF] text-[#004EFF] "
+              ? "border-[#160783] text-[#160783] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={(e) => {
@@ -251,7 +251,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
             address.type === "warehouse associate"
-              ? "border-[#004EFF] text-[#004EFF] "
+              ? "border-[#160783] text-[#160783] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={() => {
@@ -268,7 +268,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
             address.type === "dispatcher"
-              ? "border-[#004EFF] text-[#004EFF] "
+              ? "border-[#160783] text-[#160783] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={() => {

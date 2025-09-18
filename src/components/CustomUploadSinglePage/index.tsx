@@ -99,7 +99,7 @@ const CustomUploadSinglePage: React.FunctionComponent<
             <div className="flex gap-2">
               <img src={UploadIcon} height={16} width={16} alt="" />
               {showUploadText && (
-                <span className="font-Open font-semibold text-sm leading-5 text-center items-center text-[#004EFF]">
+                <span className="font-Open font-semibold text-sm leading-5 text-center items-center text-[#160783]">
                   UPLOAD
                 </span>
               )}

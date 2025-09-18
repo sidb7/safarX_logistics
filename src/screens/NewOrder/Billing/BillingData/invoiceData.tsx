@@ -168,7 +168,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
           >
             <img className="cursor-pointer" src={exportIcon} alt="" />
             {/* {info.row.original.status === "Unpaid" ? (
-              <span className="underline text-[#004EFF]">PAY NOW</span>
+              <span className="underline text-[#160783]">PAY NOW</span>
             ) : (
               <>
                 <img className="cursor-pointer" src={downloadIcon} alt="" />
@@ -182,11 +182,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
   ];
   return (
     <div>
-      <CustomTable
-        columnsData={billingOrdersHeading}
-        rowData={data}
-
-      />
+      <CustomTable columnsData={billingOrdersHeading} rowData={data} />
     </div>
   );
 };

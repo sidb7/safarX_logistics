@@ -254,7 +254,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
               <div className="py-4" key={index}>
                 <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
                   <div>
-                    <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
+                    <h2 className="text-[#160783] text-base items-center font-bold leading-18px font-Lato">
                       Product {index + 1}
                     </h2>
                   </div>
@@ -438,7 +438,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         <img src={ButtonIcon} alt="Add Product" width="16px" />
 
                         <button
-                          className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
+                          className="ml-2 text-[#160783] text-sm font-semibold leading-5 font-Open"
                           onClick={AddProductInfoData}
                         >
                           ADD PRODUCT

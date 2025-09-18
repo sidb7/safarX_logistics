@@ -42,7 +42,7 @@ const Card = (props: ITypesProps) => {
     setTimeout(() => {
       boxRef.current && boxRef.current.focus();
       if (boxRef.current) {
-        boxRef.current.style.border = "2px solid #004EFF";
+        boxRef.current.style.border = "2px solid #160783";
       }
     }, 100);
 

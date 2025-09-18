@@ -19,7 +19,7 @@ const SearchProductFilterItems: React.FunctionComponent<
               key={index}
               className={`${
                 eachItem.selected === true
-                  ? "border-[#004EFF]"
+                  ? "border-[#160783]"
                   : "border-[#1C1C1C]"
               } flex items-center whitespace-nowrap   cursor-pointer   rounded border-[0.5px]  px-5 pr-10   py-2 gap-x-2 h-[35px]`}
               onClick={() => {
@@ -39,7 +39,7 @@ const SearchProductFilterItems: React.FunctionComponent<
               <img src={eachItem.icon} alt="" className="!w-5 !h-5" />
               <span
                 className={`${
-                  eachItem.selected ? "text-[#004EFF]" : "text-[#1C1C1C]"
+                  eachItem.selected ? "text-[#160783]" : "text-[#1C1C1C]"
                 } font-Open  font-semibold text-sm leading-[18px]`}
               >
                 {eachItem.label}

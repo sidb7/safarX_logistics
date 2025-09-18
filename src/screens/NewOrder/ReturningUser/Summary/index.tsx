@@ -82,7 +82,7 @@ const ReturningSummary = (props: Props) => {
         </div>
         <div className="flex flex-row justify-between items-center h-[48px] rounded  p-[10px] border-[1px] border-[#A4A4A4] mx-5">
           <p className="text-[12px] text-[#1C1C1C]">Generate order ID</p>
-          <p className="text-[#004EFF] text-[14px] font-bold">AUTO GENERATE</p>
+          <p className="text-[#160783] text-[14px] font-bold">AUTO GENERATE</p>
         </div>
         <div className="mx-5">
           <SummaryAddressBox

@@ -320,7 +320,7 @@ const BusinessType = (props: ITypeProps) => {
                 <div className="md:mx-[65px] flex justify-end">
                   <div className="flex gap-x-2" onClick={() => addAddress()}>
                     <img src={PlusIcon} alt="" />
-                    <p className="  font-Open font-semibold text-sm cursor-pointer text-[#004EFF] max-[768px]:pr-8 pb-2  ">
+                    <p className="  font-Open font-semibold text-sm cursor-pointer text-[#160783] max-[768px]:pr-8 pb-2  ">
                       ADD ADDRESS
                     </p>
                   </div>

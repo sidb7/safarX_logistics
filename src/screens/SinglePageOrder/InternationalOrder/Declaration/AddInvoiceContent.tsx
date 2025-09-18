@@ -158,7 +158,7 @@ const AddInvoiceContent: React.FunctionComponent<IAddInvoiceContentProps> = ({
             </p>{" "}
             <span className="text-red-500">*</span>{" "}
           </div>
-          <div className="text-[#004EFF] flex gap-2 font-Open font-semibold text-sm leading-5 text-center items-center">
+          <div className="text-[#160783] flex gap-2 font-Open font-semibold text-sm leading-5 text-center items-center">
             <img src={UploadIcon} height={16} width={16} alt="" />
             <div>UPLOAD</div>
             <input

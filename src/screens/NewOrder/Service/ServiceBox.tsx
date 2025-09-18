@@ -193,7 +193,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
               key={option?.value}
               className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === option?.value
-                  ? "border-[#004EFF] border-2"
+                  ? "border-[#160783] border-2"
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(option)}
@@ -227,11 +227,11 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
                   </span>
                 </p>
                 <div className="flex justify-between text-center space-x-2 w-[191px]">
-                  <p className="text-[#004EFF] text-[14px] pt-2 font-semibold font-Open flex-shrink-0">
+                  <p className="text-[#160783] text-[14px] pt-2 font-semibold font-Open flex-shrink-0">
                     ETA: {option.text?.EDT || "N/A"}
                   </p>
                   <p
-                    className="text-[#004EFF] text-[14px] pt-2 font-semibold font-Open whitespace-nowrap text-ellipsis overflow-hidden min-w-0"
+                    className="text-[#160783] text-[14px] pt-2 font-semibold font-Open whitespace-nowrap text-ellipsis overflow-hidden min-w-0"
                     title={`${capitalizeFirstLetter(
                       option?.text?.partnerServiceName
                     )?.replace(/_/g, " ")} [${option?.text?.zoneName}]`}

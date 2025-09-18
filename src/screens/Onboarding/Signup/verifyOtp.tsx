@@ -283,7 +283,7 @@ const Index = () => {
                 <p className="text-[#494949] font-Open font-normal text-xs leading-4">
                   Didn't Receive Code ?
                   <span
-                    className={`mx-1 font-extrabold text-[#004EFF] text-[12px] leading-5 ${
+                    className={`mx-1 font-extrabold text-[#160783] text-[12px] leading-5 ${
                       seconds > 0 || (seconds > 0 && minutes === 0)
                         ? "cursor-not-allowed  text-[#494949]"
                         : "cursor-pointer"
@@ -299,7 +299,7 @@ const Index = () => {
                 </p>
                 {/* <button
                   type="button"
-                  className="text-[#004EFF] font-Open font-semibold ml-1 text-xs leading-4"
+                  className="text-[#160783] font-Open font-semibold ml-1 text-xs leading-4"
                 >
                   Resend
                 </button> */}

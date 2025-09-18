@@ -462,7 +462,7 @@ const Tracking = () => {
                 </p>
               </div>
               <div className="flex gap-x-4 my-3">
-                <p className="text-[#004EFF] text-lg font-semibold">
+                <p className="text-[#160783] text-lg font-semibold">
                   Follow us on{" "}
                 </p>
                 <a

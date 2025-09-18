@@ -76,7 +76,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
     <>
       <div
         className={` ${className} p-2 product-box flex justify-between border-2 rounded-md h-[6rem] relative z-0 ${
-          isSelected && "border-[#004EFF]"
+          isSelected && "border-[#160783]"
         }`}
         onClick={() => (!selectMode ? setIsModalOpen(true) : onClick())}
         style={{

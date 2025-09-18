@@ -130,7 +130,7 @@ export const OrderDetails = () => {
           <div className="flex">
             <img src={ShipIcon} alt="" />
             <span className="ml-1 text-[12px] text-[#3371FF] ">ETA: </span>
-            <span className="ml-1 text-[12px] text-[#004EFF] whitespace-nowrap ">
+            <span className="ml-1 text-[12px] text-[#160783] whitespace-nowrap ">
               02 Jun
             </span>
           </div>

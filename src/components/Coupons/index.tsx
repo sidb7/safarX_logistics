@@ -105,7 +105,7 @@ const Index: React.FunctionComponent<IIndexProps> = () => {
         <div className="flex-col py-[10px] justify-center items-center">
           <h1 className="font-Lato text-[22px] text-[#1C1C1C] font-semibold leading-[30px]">
             Complete KYC & Bank Verification to get{" "}
-            <span className="font-Lato text-[22px] text-[#004EFF] font-semibold leading-[30px]">
+            <span className="font-Lato text-[22px] text-[#160783] font-semibold leading-[30px]">
               {" "}
               ₹500
             </span>{" "}

@@ -34,7 +34,7 @@ const PlanCard = (props: ITypeProps) => {
   return (
     <div className="">
       {/* {planName?.toUpperCase() === "PLATINUM" ? (
-        <div className="p-3  border-[1px] rounded-t-lg  bg-[#004EFF] w-[273px] h-[44px] ">
+        <div className="p-3  border-[1px] rounded-t-lg  bg-[#160783] w-[273px] h-[44px] ">
           <p className="text-[#FFFFFF] font-Open lg:font-Lato text-sm lg:text-base font-bold leading-4 lg:leading-5 text-center  ">
             MOST POPULAR
           </p>
@@ -44,7 +44,7 @@ const PlanCard = (props: ITypeProps) => {
       )} */}
 
       {isSelected === true && (
-        <div className="p-3  border-[1px] border-[#004EFF] rounded-t-lg  bg-[#004EFF] w-[288px] lg:w-[273px] h-[40px] lg:h-[44px] ">
+        <div className="p-3  border-[1px] border-[#160783] rounded-t-lg  bg-[#160783] w-[288px] lg:w-[273px] h-[40px] lg:h-[44px] ">
           <p className="text-[#FFFFFF] font-Open lg:font-Lato text-sm lg:text-base font-bold leading-4 lg:leading-5 text-center  ">
             ACTIVE
           </p>
@@ -55,7 +55,7 @@ const PlanCard = (props: ITypeProps) => {
         className={`${
           planName?.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
         } ${
-          isSelected && "!border-[#004EFF] rounded-t-none rounded-b-lg"
+          isSelected && "!border-[#160783] rounded-t-none rounded-b-lg"
         } py-5 px-4 shadow-sm border-[1px]   border-[#E8E8E8] bg-[#FFFFFF] w-[288px] lg:w-[273px]`}
         // h-[504px] relative  ---- remove css for new changes
       >
@@ -68,7 +68,7 @@ const PlanCard = (props: ITypeProps) => {
             className="mb-6 lg:mb-4"
           />
 
-          <p className="text-[#004EFF] font-Lato text-[22px]  font-semibold leading-7 uppercase mb-2 ">
+          <p className="text-[#160783] font-Lato text-[22px]  font-semibold leading-7 uppercase mb-2 ">
             {planName}
           </p>
 

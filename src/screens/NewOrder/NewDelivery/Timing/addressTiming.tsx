@@ -99,7 +99,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
 
       <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
         <div className="mr-2">
-          <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
+          <span className="text-[14px] font-semibold font-Open text-[#160783] lg:text-[16px]">
             Operational Hours:-
           </span>
         </div>

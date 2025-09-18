@@ -704,7 +704,7 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={() => setForgotPasswordModal(true)}
-                      className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
+                      className="text-[#160783]  font-normal text-xs leading-4 font-Open "
                     >
                       Forgot Password
                     </button>
@@ -726,7 +726,7 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={signUpOnClick}
-                      className="text-[#004EFF] ml-1 font-bold text-xs leading-4 font-Open "
+                      className="text-[#160783] ml-1 font-bold text-xs leading-4 font-Open "
                     >
                       Sign Up
                     </button>

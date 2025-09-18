@@ -212,17 +212,17 @@ const CancellationRequestTable = (props: Props) => {
       },
     }),
     columnsHelper.accessor("courierPartner", {
-  header: () => <div className="text-left">Courier Partner</div>,
-  cell: (info) => {
-    const courierPartnerName = info?.row?.original?.courierPartnerName;
+      header: () => <div className="text-left">Courier Partner</div>,
+      cell: (info) => {
+        const courierPartnerName = info?.row?.original?.courierPartnerName;
 
-    return (
-      <div className="font-sans text-sm leading-5 text-black w-[120px]">
-        <span>{courierPartnerName || "NA"}</span>
-      </div>
-    );
-  },
-}),
+        return (
+          <div className="font-sans text-sm leading-5 text-black w-[120px]">
+            <span>{courierPartnerName || "NA"}</span>
+          </div>
+        );
+      },
+    }),
     columnsHelper.accessor("custContactDetail", {
       header: () => <div className="text-left">Cust Contact Details</div>,
       cell: (info) => {
@@ -290,7 +290,7 @@ const CancellationRequestTable = (props: Props) => {
           <p className="text-blue-600">
             {" "}
             <button
-              className={`bg-white text-[#004EFF] border border-[#004EFF] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
+              className={`bg-white text-[#160783] border border-[#160783] m-1 px-2 py-1 rounded text-sm font-normal hover:bg-blue-50 `}
               onClick={() => {
                 setAwb(awb);
                 setRequestType(requestType);
@@ -307,9 +307,7 @@ const CancellationRequestTable = (props: Props) => {
 
   return (
     <div>
-
-      
-      { <CustomTable columnsData={columns} rowData={cancelRequestData} />}
+      {<CustomTable columnsData={columns} rowData={cancelRequestData} />}
 
       {openRightSideModal && (
         <RightSideModal

@@ -152,11 +152,6 @@ const tabs = [
     value: "CANCELLED",
     orderNumber: 0,
   },
-  // {
-  //   statusName: "All Orders",
-  //   value: "ALL",
-  //   orderNumber: 0,
-  // },
 ];
 
 const Index = () => {
@@ -177,7 +172,7 @@ const Index = () => {
     isOpen: false,
     awbNo: "",
     orderId: "",
-    orderSources: [], // Add this line
+    orderSources: [],
   });
   const [isChannelPartner, setIsChannelPartner] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
@@ -587,6 +582,7 @@ const Index = () => {
           <div className="grid col-span-2">
             <OneButton
               text=" ADD ORDER"
+              className="bg-transparent"
               onClick={() => navigate("/orders/place-order")}
               variant="primary"
               showIcon={true}
@@ -594,21 +590,9 @@ const Index = () => {
             />
           </div>
 
-          {/* <div
-            ref={syncRef}
-            onClick={handleSyncOrder}
-            className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
-          >
-            <img src={SyncIcon} alt="" width="16px" className="z-10" />
-            <span className="text-[#004EFF] z-10 text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
-              {syncChannelText}
-            </span>
-            <div
-              className={`absolute top-0 right-0 transition-all duration-500 ease-in-out transform w-[0px] bg-[#fff] h-[34px] rounded-md `}
-            ></div>
-          </div> */}
           <OneButton
             text="Bulk Upload"
+            className="bg-transparent"
             onClick={() => navigate("/orders/add-bulk")}
             variant="secondary"
             showIcon={true}
@@ -645,7 +629,7 @@ const Index = () => {
                 /* Add your function here */
               }}
               variant="secondary"
-              className="!justify-start !font-medium !text-[#1C1C1C] !py-[6px] !px-[10px] !h-auto !h-auto hover:bg-[#FFFFFF] !hover:shadow-none !cursor-not-allowed"
+              className="!justify-start bg-transparent !font-medium !text-[#1C1C1C] !py-[6px] !px-[10px] !h-auto hover:bg-[#FFFFFF] !hover:shadow-none !cursor-not-allowed"
               textTransform="none"
             />
           </div>
@@ -657,7 +641,7 @@ const Index = () => {
               className="flex relative flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:gap-x-2 lg:h-[36px] cursor-pointer"
             >
               <img src={SyncIcon} alt="" width="16px" className="z-10" />
-              <span className="text-[#004EFF] z-10  text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
+              <span className="text-[#160783] z-10  text-[10px] whitespace-nowrap font-medium lg:text-[14px] lg:text-[#1C1C1C]">
                 {syncChannelText}
               </span>
               <div
@@ -832,7 +816,7 @@ const Index = () => {
           onClick={() => navigate("/orders/add-bulk")}
         >
           <img src={BlukOrderIcon} alt="" />
-          <div className="text-[#004EFF] text-[12px]">BULK ORDER</div>
+          <div className="text-[#160783] text-[12px]">BULK ORDER</div>
         </div>
       </div>
     );
@@ -965,7 +949,7 @@ const Index = () => {
           setDeleteModalDraftOrder({
             isOpen: true,
             payload: payLoad,
-            orderSources: data?.source ? [data.source] : [], // Add order source for single order deletion
+            orderSources: data?.source ? [data.source] : [],
           });
         }
         break;
@@ -980,7 +964,7 @@ const Index = () => {
           setCancellationModal({
             isOpen: true,
             payload: payLoad?.awbs,
-            orderSources: data?.source ? [data.source] : [], // Add order source for single order cancellation
+            orderSources: data?.source ? [data.source] : [],
           });
         } else if (actionType === "download_label") {
           getSingleFile(payLoad, actionType);
@@ -1861,27 +1845,6 @@ const Index = () => {
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (!infoModalContent.isOpen && currentTap == "DRAFT") {
-  //       const data: any = await getSellerOrderByStatus(
-  //         activeTab,
-  //         1,
-  //         { _id: -1 },
-  //         0,
-  //         itemsPerPage,
-  //         true,
-  //         searchedText,
-  //         startDate,
-  //         endDate,
-  //         filterPayLoad
-  //       );
-  //       const { OrderData } = data;
-  //       setOrders(OrderData);
-  //     }
-  //   })();
-  // }, [infoModalContent]);
-
   useEffect(() => {
     getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
   }, [filterState]);
@@ -2141,7 +2104,7 @@ const Index = () => {
         }
         deleteTextMessage={warningMessageForCancel(cancellationModal?.payload)}
         payloadBody={cancellationModal.payload}
-        orderSources={cancellationModal.orderSources} // Add this line
+        orderSources={cancellationModal.orderSources}
         deleteURL={CANCEL_MULTIPLE_WAYBILLS}
         setIsDeleted={setIsDeleted}
         reloadData={handleTabChanges}
@@ -2152,7 +2115,7 @@ const Index = () => {
         postData={deleteModalDraftOrder?.payload}
         isOpen={deleteModalDraftOrder?.isOpen}
         reloadData={handleTabChanges}
-        orderSources={deleteModalDraftOrder?.orderSources} // Add this line
+        orderSources={deleteModalDraftOrder?.orderSources}
         closeModal={() => {
           setDeleteModalDraftOrder({
             ...deleteModalDraftOrder,

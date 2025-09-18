@@ -228,7 +228,7 @@ const CompletedTable = ({
                       awbNo: rowData?.awb,
                     });
                   }}
-                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  className="hover:text-[#160783] underline-offset-4 underline  decoration-2 cursor-pointer"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                 >
@@ -449,7 +449,7 @@ const CompletedTable = ({
                 }}
               >
                 Uploaded Images
-                <span className="text-[#004EFF] mx-1">
+                <span className="text-[#160783] mx-1">
                   ({SellerPhotoLength?.length})
                 </span>
               </p>
@@ -501,7 +501,7 @@ const CompletedTable = ({
     //         }}
     //       >
     //         Uploaded Images
-    //         <span className="text-[#004EFF] mx-1">
+    //         <span className="text-[#160783] mx-1">
     //           ({partnerPhotoLength?.length})
     //         </span>
     //       </p>
